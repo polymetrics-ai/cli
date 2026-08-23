@@ -3,7 +3,7 @@
   "connector": "buildkite",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/buildkite-operation-source-lock.json",
+    "source_lock": "sources/buildkite-parity-source-lock.json",
     "source_url": "https://buildkite.com/docs/apis/rest-api",
     "source_sha256": "350d758449efdfcf9e0522cf10731c824a8cde8570869187a2ea1bb95982eedd",
     "source_bytes": 440978,
@@ -111,7 +111,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-access-token-1-1",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -153,7 +153,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-access-token-2-2",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -195,7 +195,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-builds-3-3",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -237,7 +237,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-meta-4-4",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -274,7 +274,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-5-5",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -322,7 +322,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-6-6",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -359,7 +359,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-agents-7-7",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -407,7 +407,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-agents-id-8-8",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -444,7 +444,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-agents-id-pause-9-9",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -494,7 +494,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-agents-id-resume-10-10",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -544,7 +544,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-agents-id-stop-11-11",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -599,7 +599,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-api-settings-12-12",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -641,7 +641,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.patch-v2-organizations-org-slug-api-settings-13-13",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -683,7 +683,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-audit-events-14-14",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -725,7 +725,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-audit-events-uuid-15-15",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -767,7 +767,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-builds-16-16",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -804,7 +804,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-clusters-17-17",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -852,7 +852,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-clusters-18-18",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -894,7 +894,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-agent-images-19-19",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -936,7 +936,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-clusters-cluster-id-agent-images-20-20",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -978,7 +978,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-clusters-cluster-id-agent-images-id-21-21",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1020,7 +1020,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-agent-images-id-22-22",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1062,7 +1062,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-clusters-cluster-id-cache-volumes-23-23",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1104,7 +1104,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-cache-volumes-24-24",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1146,7 +1146,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-network-ranges-25-25",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1188,7 +1188,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-queues-26-26",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1230,7 +1230,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-clusters-cluster-id-queues-27-27",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1272,7 +1272,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-clusters-cluster-id-queues-id-28-28",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1314,7 +1314,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-queues-id-29-29",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1356,7 +1356,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-clusters-cluster-id-queues-id-30-30",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1398,7 +1398,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-clusters-cluster-id-queues-id-pause-dispatch-31-31",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1440,7 +1440,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-clusters-cluster-id-queues-id-resume-dispatch-32-32",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1482,7 +1482,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-tokens-33-33",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1522,7 +1522,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-clusters-cluster-id-tokens-34-34",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1562,7 +1562,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-clusters-cluster-id-tokens-id-35-35",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1602,7 +1602,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-tokens-id-36-36",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1642,7 +1642,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-clusters-cluster-id-tokens-id-37-37",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1682,7 +1682,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-clusters-id-38-38",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1724,7 +1724,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-clusters-id-39-39",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1766,7 +1766,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-clusters-id-40-40",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1808,7 +1808,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-emojis-41-41",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1850,7 +1850,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-jobs-job-id-ssh-session-42-42",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1892,7 +1892,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-jobs-job-id-vnc-session-43-43",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1934,7 +1934,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-members-44-44",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -1976,7 +1976,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-members-user-uuid-45-45",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2018,7 +2018,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-members-user-uuid-46-46",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2060,7 +2060,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.patch-v2-organizations-org-slug-members-user-uuid-47-47",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2102,7 +2102,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipeline-settings-48-48",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2144,7 +2144,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.patch-v2-organizations-org-slug-pipeline-settings-49-49",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2186,7 +2186,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-pipeline-settings-advanced-queue-metrics-50-50",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2228,7 +2228,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-pipeline-settings-build-export-51-51",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2270,7 +2270,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-pipeline-settings-build-export-52-52",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2312,7 +2312,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-pipeline-settings-hosted-agents-ssh-53-53",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2354,7 +2354,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-pipeline-settings-hosted-agents-ssh-54-54",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2396,7 +2396,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-pipeline-settings-public-pipelines-55-55",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2438,7 +2438,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-pipeline-settings-public-pipelines-56-56",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2480,7 +2480,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipeline-templates-57-57",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2522,7 +2522,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-pipeline-templates-58-58",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2564,7 +2564,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-pipeline-templates-uuid-59-59",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2606,7 +2606,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipeline-templates-uuid-60-60",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2648,7 +2648,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.patch-v2-organizations-org-slug-pipeline-templates-uuid-61-61",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2685,7 +2685,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipelines-62-62",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2728,7 +2728,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-pipelines-63-63",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2778,7 +2778,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-64-64",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2821,7 +2821,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-65-65",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2876,7 +2876,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-66-66",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2918,7 +2918,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-annotations-67-67",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -2960,7 +2960,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-annotations-68-68",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3002,7 +3002,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-annotations-uuid-69-69",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3044,7 +3044,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-artifacts-70-70",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3081,7 +3081,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-cancel-71-71",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3136,7 +3136,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-72-72",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3178,7 +3178,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-id-73-73",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3220,7 +3220,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-id-74-74",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3262,7 +3262,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-id-download-75-75",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3304,7 +3304,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-env-76-76",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3346,7 +3346,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-log-77-77",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3388,7 +3388,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-log-78-78",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3430,7 +3430,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-reprioritize-79-79",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3472,7 +3472,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-retry-80-80",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3514,7 +3514,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-unblock-81-81",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3551,7 +3551,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-rebuild-82-82",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3601,7 +3601,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-pipelines-slug-83-83",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3656,7 +3656,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-pipelines-slug-84-84",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3693,7 +3693,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.patch-v2-organizations-org-slug-pipelines-slug-85-85",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3743,7 +3743,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-pipelines-slug-archive-86-86",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3793,7 +3793,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-pipelines-slug-unarchive-87-87",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3848,7 +3848,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-pipelines-slug-webhook-88-88",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3890,7 +3890,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-portals-89-89",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3932,7 +3932,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-portals-90-90",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -3974,7 +3974,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-portals-portal-slug-91-91",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4016,7 +4016,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-portals-portal-slug-92-92",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4058,7 +4058,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-portals-portal-slug-93-93",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4100,7 +4100,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-rate-limit-94-94",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4142,7 +4142,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-repository-connections-95-95",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4184,7 +4184,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-repository-connections-id-96-96",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4226,7 +4226,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-rules-97-97",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4266,7 +4266,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-rules-98-98",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4306,7 +4306,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-rules-uuid-99-99",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4346,7 +4346,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-rules-uuid-100-100",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4386,7 +4386,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-services-101-101",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4428,7 +4428,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-services-102-102",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4470,7 +4470,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-services-uuid-103-103",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4512,7 +4512,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-services-uuid-104-104",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4554,7 +4554,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.patch-v2-organizations-org-slug-services-uuid-105-105",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4596,7 +4596,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-services-uuid-disable-106-106",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4638,7 +4638,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.put-v2-organizations-org-slug-services-uuid-enable-107-107",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4675,7 +4675,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-teams-108-108",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4718,7 +4718,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-teams-109-109",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4768,7 +4768,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-teams-team-uuid-110-110",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4823,7 +4823,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-111-111",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4860,7 +4860,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.patch-v2-organizations-org-slug-teams-team-uuid-112-112",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4915,7 +4915,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-members-113-113",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4957,7 +4957,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-teams-team-uuid-members-114-114",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -4999,7 +4999,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-teams-team-uuid-members-user-uuid-115-115",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5041,7 +5041,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-members-user-uuid-116-116",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5083,7 +5083,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.patch-v2-organizations-org-slug-teams-team-uuid-members-user-uuid-117-117",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5125,7 +5125,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-pipelines-118-118",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5167,7 +5167,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-teams-team-uuid-pipelines-119-119",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5209,7 +5209,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid-120-120",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5251,7 +5251,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid-121-121",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5293,7 +5293,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.patch-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid-122-122",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5335,7 +5335,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-suites-123-123",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5377,7 +5377,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-teams-team-uuid-suites-124-124",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5419,7 +5419,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.delete-v2-organizations-org-slug-teams-team-uuid-suites-uuid-125-125",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5461,7 +5461,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-suites-uuid-126-126",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5503,7 +5503,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.patch-v2-organizations-org-slug-teams-team-uuid-suites-uuid-127-127",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5545,7 +5545,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.post-v2-organizations-org-slug-teams-enable-128-128",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5587,7 +5587,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.provider.get-v2-user-129-129",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "rendered-endpoint-table",
@@ -5624,7 +5624,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.local-api-surface.put-organizations-org-slug-jobs-job-id-retry-130",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "api_surface.json:endpoints[129]",
@@ -5674,7 +5674,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.local-api-surface.put-organizations-org-slug-jobs-job-id-unblock-131",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "api_surface.json:endpoints[130]",
@@ -5724,7 +5724,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/buildkite-operation-source-lock.json",
+        "source_lock": "sources/buildkite-parity-source-lock.json",
         "source_id": "buildkite.local-api-surface.post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-annotations-132",
         "source_url": "https://buildkite.com/docs/apis/rest-api",
         "source_location": "api_surface.json:endpoints[131]",

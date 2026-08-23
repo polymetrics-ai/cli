@@ -3,7 +3,7 @@
   "connector": "squarespace",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/squarespace-operation-source-lock.json",
+    "source_lock": "sources/squarespace-parity-source-lock.json",
     "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
     "source_sha256": "eff1274e6e87cfa998a5125c2ebf53ee459202d108598dacf6507b32b2b2debc",
     "source_bytes": 345839,
@@ -111,7 +111,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getmemberprofile-1",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/authorization/member.get",
@@ -153,7 +153,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getwebsiteprofile-2",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/authorization/website.get",
@@ -190,7 +190,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getinventoryitems-3",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/commerce/inventory.get",
@@ -238,7 +238,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getspecificinventoryitems-4",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/commerce/inventory/{variantIdCsvs}.get",
@@ -280,7 +280,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.adjustinventorystocklevels-5",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/commerce/inventory/adjustments.post",
@@ -317,7 +317,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getorders-6",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/commerce/orders.get",
@@ -365,7 +365,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.createorder-7",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/commerce/orders.post",
@@ -407,7 +407,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getorder-8",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/commerce/orders/{id}.get",
@@ -449,7 +449,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.fulfillorder-9",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/commerce/orders/{id}/fulfillments.post",
@@ -486,7 +486,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getstorepages-10",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/commerce/store_pages.get",
@@ -529,7 +529,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getdocumentsbyupdatedon-11",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/commerce/transactions.get",
@@ -577,7 +577,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getdocumentsbyid-12",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/commerce/transactions/{documentIds}.get",
@@ -614,7 +614,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getprofiles-13",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/profiles.get",
@@ -662,7 +662,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getspecificprofiles-14",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/profiles/{profileIdCsvs}.get",
@@ -699,7 +699,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getwebhooksubscriptions-15",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/webhook_subscriptions.get",
@@ -742,7 +742,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.createwebhooksubscription-16",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/webhook_subscriptions.post",
@@ -792,7 +792,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.deletewebhooksubscription-17",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}.delete",
@@ -847,7 +847,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getwebhooksubscription-18",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}.get",
@@ -889,7 +889,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.updatewebhooksubscription-19",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}.post",
@@ -931,7 +931,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.rotatesubscriptionsecret-20",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret.post",
@@ -973,7 +973,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.sendtestnotificationforwebhooksubscription-21",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}/actions/sendTestNotification.post",
@@ -1015,7 +1015,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.gettransactionssummaries-22",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/analytics/transaction-summaries.post",
@@ -1057,7 +1057,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.listdiscounts-23",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/commerce/discounts.get",
@@ -1099,7 +1099,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.creatediscount-24",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/commerce/discounts.post",
@@ -1141,7 +1141,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.deletediscount-25",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/commerce/discounts/{discountId}.delete",
@@ -1183,7 +1183,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getdiscount-26",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/commerce/discounts/{discountId}.get",
@@ -1225,7 +1225,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.updatediscount-27",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/commerce/discounts/{discountId}.put",
@@ -1262,7 +1262,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getcontacts-28",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/contacts.get",
@@ -1310,7 +1310,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.createcontact-29",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/contacts.post",
@@ -1352,7 +1352,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.deletecontact-30",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/contacts/{contactId}.delete",
@@ -1394,7 +1394,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getcontact-31",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/contacts/{contactId}.get",
@@ -1436,7 +1436,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.patchcontact-32",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/contacts/{contactId}.patch",
@@ -1478,7 +1478,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getaddressbook-33",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/contacts/{contactId}/address-book.get",
@@ -1520,7 +1520,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.createaddressbookentry-34",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/contacts/{contactId}/address-book.post",
@@ -1562,7 +1562,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.deleteaddressbookentry-35",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/contacts/{contactId}/address-book/{addressBookEntryId}.delete",
@@ -1604,7 +1604,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getaddressbookentry-36",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/contacts/{contactId}/address-book/{addressBookEntryId}.get",
@@ -1646,7 +1646,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.updateaddressbookentry-37",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/contacts/{contactId}/address-book/{addressBookEntryId}.put",
@@ -1688,7 +1688,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.querycontacts-38",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/contacts/query.post",
@@ -1730,7 +1730,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getfulfillmentoptions-39",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v1/fulfillments/fulfillment-options.get",
@@ -1767,7 +1767,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getproducts-40",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products.get",
@@ -1815,7 +1815,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.createproduct-41",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products.post",
@@ -1857,7 +1857,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.deleteproduct-42",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products/{productId}.delete",
@@ -1899,7 +1899,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.updateproduct-43",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products/{productId}.post",
@@ -1941,7 +1941,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.uploadproductimage-44",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products/{productId}/images.post",
@@ -1983,7 +1983,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.deleteproductimage-45",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products/{productId}/images/{imageId}.delete",
@@ -2025,7 +2025,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.updateproductimage-46",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products/{productId}/images/{imageId}.post",
@@ -2067,7 +2067,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.updateproductimageorder-47",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products/{productId}/images/{imageId}/order.post",
@@ -2109,7 +2109,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getproductimageprocessingstatus-48",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products/{productId}/images/{imageId}/status.get",
@@ -2151,7 +2151,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.createproductvariant-49",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products/{productId}/variants.post",
@@ -2193,7 +2193,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.deleteproductvariant-50",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products/{productId}/variants/{variantId}.delete",
@@ -2235,7 +2235,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.updateproductvariant-51",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products/{productId}/variants/{variantId}.post",
@@ -2277,7 +2277,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.associateproductvariantimage-52",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products/{productId}/variants/{variantId}/image.post",
@@ -2319,7 +2319,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/squarespace-operation-source-lock.json",
+        "source_lock": "sources/squarespace-parity-source-lock.json",
         "source_id": "squarespace.provider.getspecificproducts-53",
         "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
         "source_location": "paths./v2/commerce/products/{productIdCsvs}.get",

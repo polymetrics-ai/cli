@@ -3,7 +3,7 @@
   "connector": "launchdarkly",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/launchdarkly-operation-source-lock.json",
+    "source_lock": "sources/launchdarkly-parity-source-lock.json",
     "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
     "source_sha256": "41fc8c76b779790f405bc0f1f500ab54a6a3695bb14a9916c537c180e5469419",
     "source_bytes": 2953979,
@@ -96,7 +96,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getroot-1",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2.get",
@@ -138,7 +138,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getipallowlist-2",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/account/ip-allowlist.get",
@@ -180,7 +180,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchipallowlistconfig-3",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/account/ip-allowlist.patch",
@@ -222,7 +222,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createipallowlistentry-4",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/account/ip-allowlist.post",
@@ -264,7 +264,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteipallowlistentry-5",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/account/ip-allowlist/{id}.delete",
@@ -306,7 +306,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchipallowlistentry-6",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/account/ip-allowlist/{id}.patch",
@@ -348,7 +348,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getrelayproxyconfigs-7",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/account/relay-auto-configs.get",
@@ -390,7 +390,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postrelayautoconfig-8",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/account/relay-auto-configs.post",
@@ -432,7 +432,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleterelayautoconfig-9",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/account/relay-auto-configs/{id}.delete",
@@ -474,7 +474,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getrelayproxyconfig-10",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/account/relay-auto-configs/{id}.get",
@@ -516,7 +516,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchrelayautoconfig-11",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/account/relay-auto-configs/{id}.patch",
@@ -558,7 +558,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.resetrelayautoconfig-12",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/account/relay-auto-configs/{id}/reset.post",
@@ -600,7 +600,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getannouncementspublic-13",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/announcements.get",
@@ -642,7 +642,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createannouncementpublic-14",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/announcements.post",
@@ -684,7 +684,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteannouncementpublic-15",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/announcements/{announcementId}.delete",
@@ -726,7 +726,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.updateannouncementpublic-16",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/announcements/{announcementId}.patch",
@@ -768,7 +768,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getapplications-17",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/applications.get",
@@ -810,7 +810,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteapplication-18",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/applications/{applicationKey}.delete",
@@ -852,7 +852,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getapplication-19",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/applications/{applicationKey}.get",
@@ -894,7 +894,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchapplication-20",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/applications/{applicationKey}.patch",
@@ -936,7 +936,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getapplicationversions-21",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/applications/{applicationKey}/versions.get",
@@ -978,7 +978,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteapplicationversion-22",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/applications/{applicationKey}/versions/{versionKey}.delete",
@@ -1020,7 +1020,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchapplicationversion-23",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/applications/{applicationKey}/versions/{versionKey}.patch",
@@ -1062,7 +1062,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getapprovalrequests-24",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/approval-requests.get",
@@ -1104,7 +1104,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postapprovalrequest-25",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/approval-requests.post",
@@ -1146,7 +1146,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteapprovalrequest-26",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/approval-requests/{id}.delete",
@@ -1188,7 +1188,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getapprovalrequest-27",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/approval-requests/{id}.get",
@@ -1230,7 +1230,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchapprovalrequest-28",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/approval-requests/{id}.patch",
@@ -1272,7 +1272,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postapprovalrequestapply-29",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/approval-requests/{id}/apply.post",
@@ -1314,7 +1314,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postapprovalrequestreview-30",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/approval-requests/{id}/reviews.post",
@@ -1356,7 +1356,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getapprovalrequestsettings-31",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/approval-requests/projects/{projectKey}/settings.get",
@@ -1398,7 +1398,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchapprovalrequestsettings-32",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/approval-requests/projects/{projectKey}/settings.patch",
@@ -1435,7 +1435,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getauditlogentries-33",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/auditlog.get",
@@ -1483,7 +1483,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postauditlogentries-34",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/auditlog.post",
@@ -1525,7 +1525,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getauditlogentry-35",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/auditlog/{id}.get",
@@ -1567,7 +1567,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postauditlogentrycounts-36",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/auditlog/counts.post",
@@ -1609,7 +1609,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcalleridentity-37",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/caller-identity.get",
@@ -1651,7 +1651,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getextinctions-38",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/extinctions.get",
@@ -1693,7 +1693,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getrepositories-39",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/repositories.get",
@@ -1735,7 +1735,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postrepository-40",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/repositories.post",
@@ -1777,7 +1777,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleterepository-41",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/repositories/{repo}.delete",
@@ -1819,7 +1819,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getrepository-42",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/repositories/{repo}.get",
@@ -1861,7 +1861,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchrepository-43",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/repositories/{repo}.patch",
@@ -1903,7 +1903,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletebranches-44",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/repositories/{repo}/branch-delete-tasks.post",
@@ -1945,7 +1945,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getbranches-45",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/repositories/{repo}/branches.get",
@@ -1987,7 +1987,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getbranch-46",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/repositories/{repo}/branches/{branch}.get",
@@ -2029,7 +2029,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.putbranch-47",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/repositories/{repo}/branches/{branch}.put",
@@ -2071,7 +2071,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postextinction-48",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/repositories/{repo}/branches/{branch}/extinction-events.post",
@@ -2113,7 +2113,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getrootstatistic-49",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/statistics.get",
@@ -2155,7 +2155,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getstatistics-50",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/code-refs/statistics/{projectKey}.get",
@@ -2197,7 +2197,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getdestinations-51",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/destinations.get",
@@ -2239,7 +2239,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postdestination-52",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/destinations/{projectKey}/{environmentKey}.post",
@@ -2281,7 +2281,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletedestination-53",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/destinations/{projectKey}/{environmentKey}/{id}.delete",
@@ -2323,7 +2323,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getdestination-54",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/destinations/{projectKey}/{environmentKey}/{id}.get",
@@ -2365,7 +2365,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchdestination-55",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/destinations/{projectKey}/{environmentKey}/{id}.patch",
@@ -2407,7 +2407,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postgeneratewarehousedestinationkeypair-56",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/destinations/generate-warehouse-destination-key-pair.post",
@@ -2449,7 +2449,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postgeneratetrustpolicy-57",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/destinations/projects/{projKey}/environments/{envKey}/generate-trust-policy.post",
@@ -2491,7 +2491,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postgenerateprojectenvwarehousedestinationkeypair-58",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/destinations/projects/{projKey}/environments/{envKey}/generate-warehouse-destination-key-pair.post",
@@ -2533,7 +2533,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postcompletewarehousedestinationsetup-59",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/destinations/projects/{projKey}/environments/{envKey}/kinds/{kind}/complete-setup.post",
@@ -2575,7 +2575,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postgeneratewarehousedestinationsetupscript-60",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/destinations/projects/{projKey}/environments/{envKey}/kinds/{kind}/setup.post",
@@ -2617,7 +2617,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getdeploymentfrequencychart-61",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/charts/deployments/frequency.get",
@@ -2659,7 +2659,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getstaleflagschart-62",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/charts/flags/stale.get",
@@ -2701,7 +2701,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getflagstatuschart-63",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/charts/flags/status.get",
@@ -2743,7 +2743,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getleadtimechart-64",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/charts/lead-time.get",
@@ -2785,7 +2785,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getreleasefrequencychart-65",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/charts/releases/frequency.get",
@@ -2827,7 +2827,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createdeploymentevent-66",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/deployment-events.post",
@@ -2869,7 +2869,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getdeployments-67",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/deployments.get",
@@ -2911,7 +2911,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getdeployment-68",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/deployments/{deploymentID}.get",
@@ -2953,7 +2953,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.updatedeployment-69",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/deployments/{deploymentID}.patch",
@@ -2995,7 +2995,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getflagevents-70",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/flag-events.get",
@@ -3037,7 +3037,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createinsightgroup-71",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/insights/group.post",
@@ -3079,7 +3079,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getinsightgroups-72",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/insights/groups.get",
@@ -3121,7 +3121,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteinsightgroup-73",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/insights/groups/{insightGroupKey}.delete",
@@ -3163,7 +3163,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getinsightgroup-74",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/insights/groups/{insightGroupKey}.get",
@@ -3205,7 +3205,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchinsightgroup-75",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/insights/groups/{insightGroupKey}.patch",
@@ -3247,7 +3247,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getinsightsscores-76",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/insights/scores.get",
@@ -3289,7 +3289,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getpullrequests-77",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/pull-requests.get",
@@ -3331,7 +3331,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getinsightsrepositories-78",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/repositories.get",
@@ -3373,7 +3373,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleterepositoryproject-79",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/repositories/{repositoryKey}/projects/{projectKey}.delete",
@@ -3415,7 +3415,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.associaterepositoriesandprojects-80",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/engineering-insights/repositories/projects.put",
@@ -3457,7 +3457,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getflaglinks-81",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flag-links/projects/{projectKey}/flags/{featureFlagKey}.get",
@@ -3499,7 +3499,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createflaglink-82",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flag-links/projects/{projectKey}/flags/{featureFlagKey}.post",
@@ -3541,7 +3541,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteflaglink-83",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flag-links/projects/{projectKey}/flags/{featureFlagKey}/{id}.delete",
@@ -3583,7 +3583,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.updateflaglink-84",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flag-links/projects/{projectKey}/flags/{featureFlagKey}/{id}.patch",
@@ -3625,7 +3625,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getfeatureflagstatusacrossenvironments-85",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flag-status/{projectKey}/{featureFlagKey}.get",
@@ -3667,7 +3667,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getfeatureflagstatuses-86",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flag-statuses/{projectKey}/{environmentKey}.get",
@@ -3709,7 +3709,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getfeatureflagstatus-87",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flag-statuses/{projectKey}/{environmentKey}/{featureFlagKey}.get",
@@ -3751,7 +3751,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getfeatureflags-88",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}.get",
@@ -3793,7 +3793,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postfeatureflag-89",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}.post",
@@ -3835,7 +3835,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getdependentflagsbyenv-90",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{environmentKey}/{featureFlagKey}/dependent-flags.get",
@@ -3877,7 +3877,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletefeatureflag-91",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}.delete",
@@ -3919,7 +3919,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getfeatureflag-92",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}.get",
@@ -3961,7 +3961,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchfeatureflag-93",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}.patch",
@@ -4003,7 +4003,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.copyfeatureflag-94",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}/copy.post",
@@ -4045,7 +4045,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getdependentflags-95",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}/dependent-flags.get",
@@ -4087,7 +4087,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getexpiringcontexttargets-96",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}/expiring-targets/{environmentKey}.get",
@@ -4129,7 +4129,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchexpiringtargets-97",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}/expiring-targets/{environmentKey}.patch",
@@ -4171,7 +4171,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getexpiringusertargets-98",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}/expiring-user-targets/{environmentKey}.get",
@@ -4213,7 +4213,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchexpiringusertargets-99",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}/expiring-user-targets/{environmentKey}.patch",
@@ -4255,7 +4255,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.gettriggerworkflows-100",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}/triggers/{environmentKey}.get",
@@ -4297,7 +4297,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createtriggerworkflow-101",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}/triggers/{environmentKey}.post",
@@ -4339,7 +4339,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletetriggerworkflow-102",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}/triggers/{environmentKey}/{id}.delete",
@@ -4381,7 +4381,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.gettriggerworkflowbyid-103",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}/triggers/{environmentKey}/{id}.get",
@@ -4423,7 +4423,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchtriggerworkflow-104",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{featureFlagKey}/triggers/{environmentKey}/{id}.patch",
@@ -4465,7 +4465,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletereleasebyflagkey-105",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{flagKey}/release.delete",
@@ -4507,7 +4507,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getreleasebyflagkey-106",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{flagKey}/release.get",
@@ -4549,7 +4549,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchreleasebyflagkey-107",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/flags/{projectKey}/{flagKey}/release.patch",
@@ -4591,7 +4591,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getbigsegmentstoreintegrations-108",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/big-segment-store.get",
@@ -4633,7 +4633,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createbigsegmentstoreintegration-109",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/big-segment-store/{projectKey}/{environmentKey}/{integrationKey}.post",
@@ -4675,7 +4675,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletebigsegmentstoreintegration-110",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/big-segment-store/{projectKey}/{environmentKey}/{integrationKey}/{integrationId}.delete",
@@ -4717,7 +4717,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getbigsegmentstoreintegration-111",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/big-segment-store/{projectKey}/{environmentKey}/{integrationKey}/{integrationId}.get",
@@ -4759,7 +4759,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchbigsegmentstoreintegration-112",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/big-segment-store/{projectKey}/{environmentKey}/{integrationKey}/{integrationId}.patch",
@@ -4801,7 +4801,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getintegrationdeliveryconfigurations-113",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/featureStore.get",
@@ -4843,7 +4843,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getintegrationdeliveryconfigurationbyenvironment-114",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/featureStore/{projectKey}/{environmentKey}.get",
@@ -4885,7 +4885,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createintegrationdeliveryconfiguration-115",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/featureStore/{projectKey}/{environmentKey}/{integrationKey}.post",
@@ -4927,7 +4927,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteintegrationdeliveryconfiguration-116",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/featureStore/{projectKey}/{environmentKey}/{integrationKey}/{id}.delete",
@@ -4969,7 +4969,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getintegrationdeliveryconfigurationbyid-117",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/featureStore/{projectKey}/{environmentKey}/{integrationKey}/{id}.get",
@@ -5011,7 +5011,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchintegrationdeliveryconfiguration-118",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/featureStore/{projectKey}/{environmentKey}/{integrationKey}/{id}.patch",
@@ -5053,7 +5053,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.validateintegrationdeliveryconfiguration-119",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/featureStore/{projectKey}/{environmentKey}/{integrationKey}/{id}/validate.post",
@@ -5095,7 +5095,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getflagimportconfigurations-120",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/flag-import.get",
@@ -5137,7 +5137,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createflagimportconfiguration-121",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/flag-import/{projectKey}/{integrationKey}.post",
@@ -5179,7 +5179,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteflagimportconfiguration-122",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/flag-import/{projectKey}/{integrationKey}/{integrationId}.delete",
@@ -5221,7 +5221,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getflagimportconfiguration-123",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/flag-import/{projectKey}/{integrationKey}/{integrationId}.get",
@@ -5263,7 +5263,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchflagimportconfiguration-124",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/flag-import/{projectKey}/{integrationKey}/{integrationId}.patch",
@@ -5305,7 +5305,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.triggerflagimportjob-125",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-capabilities/flag-import/{projectKey}/{integrationKey}/{integrationId}/trigger.post",
@@ -5347,7 +5347,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteintegrationconfiguration-126",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-configurations/{integrationConfigurationId}.delete",
@@ -5389,7 +5389,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getintegrationconfiguration-127",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-configurations/{integrationConfigurationId}.get",
@@ -5431,7 +5431,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.updateintegrationconfiguration-128",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-configurations/{integrationConfigurationId}.patch",
@@ -5473,7 +5473,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getallintegrationconfigurations-129",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-configurations/keys/{integrationKey}.get",
@@ -5515,7 +5515,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createintegrationconfiguration-130",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integration-configurations/keys/{integrationKey}.post",
@@ -5557,7 +5557,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getsubscriptions-131",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integrations/{integrationKey}.get",
@@ -5599,7 +5599,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createsubscription-132",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integrations/{integrationKey}.post",
@@ -5641,7 +5641,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletesubscription-133",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integrations/{integrationKey}/{id}.delete",
@@ -5683,7 +5683,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getsubscriptionbyid-134",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integrations/{integrationKey}/{id}.get",
@@ -5725,7 +5725,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.updatesubscription-135",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/integrations/{integrationKey}/{id}.patch",
@@ -5762,7 +5762,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getmembers-136",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/members.get",
@@ -5810,7 +5810,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchmembers-137",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/members.patch",
@@ -5852,7 +5852,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postmembers-138",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/members.post",
@@ -5894,7 +5894,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletemember-139",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/members/{id}.delete",
@@ -5936,7 +5936,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getmember-140",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/members/{id}.get",
@@ -5978,7 +5978,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchmember-141",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/members/{id}.patch",
@@ -6020,7 +6020,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postmemberteams-142",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/members/{id}/teams.post",
@@ -6062,7 +6062,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getmetrics-143",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/metrics/{projectKey}.get",
@@ -6104,7 +6104,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postmetric-144",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/metrics/{projectKey}.post",
@@ -6146,7 +6146,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletemetric-145",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/metrics/{projectKey}/{metricKey}.delete",
@@ -6188,7 +6188,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getmetric-146",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/metrics/{projectKey}/{metricKey}.get",
@@ -6230,7 +6230,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchmetric-147",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/metrics/{projectKey}/{metricKey}.patch",
@@ -6272,7 +6272,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getoauthclients-148",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/oauth/clients.get",
@@ -6314,7 +6314,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createoauth2client-149",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/oauth/clients.post",
@@ -6356,7 +6356,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteoauthclient-150",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/oauth/clients/{clientId}.delete",
@@ -6398,7 +6398,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getoauthclientbyid-151",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/oauth/clients/{clientId}.get",
@@ -6440,7 +6440,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchoauthclient-152",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/oauth/clients/{clientId}.patch",
@@ -6482,7 +6482,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getopenapispec-153",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/openapi.json.get",
@@ -6519,7 +6519,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getprojects-154",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects.get",
@@ -6567,7 +6567,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postproject-155",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects.post",
@@ -6609,7 +6609,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteproject-156",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}.delete",
@@ -6651,7 +6651,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getproject-157",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}.get",
@@ -6693,7 +6693,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchproject-158",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}.patch",
@@ -6735,7 +6735,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listagentgraphs-159",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-graphs.get",
@@ -6777,7 +6777,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postagentgraph-160",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-graphs.post",
@@ -6819,7 +6819,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteagentgraph-161",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-graphs/{graphKey}.delete",
@@ -6861,7 +6861,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getagentgraph-162",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-graphs/{graphKey}.get",
@@ -6903,7 +6903,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchagentgraph-163",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-graphs/{graphKey}.patch",
@@ -6945,7 +6945,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listagentoptimizations-164",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-optimizations.get",
@@ -6987,7 +6987,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postagentoptimization-165",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-optimizations.post",
@@ -7029,7 +7029,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteagentoptimization-166",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}.delete",
@@ -7071,7 +7071,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getagentoptimization-167",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}.get",
@@ -7113,7 +7113,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchagentoptimization-168",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}.patch",
@@ -7155,7 +7155,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listallagentoptimizationresults-169",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/all-results.get",
@@ -7197,7 +7197,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listagentoptimizationresults-170",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/results.get",
@@ -7239,7 +7239,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postagentoptimizationresult-171",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/results.post",
@@ -7281,7 +7281,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchagentoptimizationresult-172",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/results/{resultId}.patch",
@@ -7323,7 +7323,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listagentoptimizationruns-173",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/runs.get",
@@ -7365,7 +7365,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteagentoptimizationrun-174",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/runs/{runId}.delete",
@@ -7407,7 +7407,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listagentoptimizationresultsbyrunid-175",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/agent-optimizations/{optimizationKey}/runs/{runId}/results.get",
@@ -7449,7 +7449,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getaiconfigs-176",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs.get",
@@ -7491,7 +7491,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postaiconfig-177",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs.post",
@@ -7533,7 +7533,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteaiconfig-178",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/{configKey}.delete",
@@ -7575,7 +7575,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getaiconfig-179",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/{configKey}.get",
@@ -7617,7 +7617,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchaiconfig-180",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/{configKey}.patch",
@@ -7659,7 +7659,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getaiconfigmetrics-181",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/{configKey}/metrics.get",
@@ -7701,7 +7701,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getaiconfigmetricsbyvariation-182",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/{configKey}/metrics-by-variation.get",
@@ -7743,7 +7743,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getaiconfigtargeting-183",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/{configKey}/targeting.get",
@@ -7785,7 +7785,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchaiconfigtargeting-184",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/{configKey}/targeting.patch",
@@ -7827,7 +7827,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postaiconfigvariation-185",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/{configKey}/variations.post",
@@ -7869,7 +7869,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteaiconfigvariation-186",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/{configKey}/variations/{variationKey}.delete",
@@ -7911,7 +7911,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getaiconfigvariation-187",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/{configKey}/variations/{variationKey}.get",
@@ -7953,7 +7953,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchaiconfigvariation-188",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/{configKey}/variations/{variationKey}.patch",
@@ -7995,7 +7995,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listmodelconfigs-189",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/model-configs.get",
@@ -8037,7 +8037,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postmodelconfig-190",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/model-configs.post",
@@ -8079,7 +8079,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletemodelconfig-191",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/model-configs/{modelConfigKey}.delete",
@@ -8121,7 +8121,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getmodelconfig-192",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/model-configs/{modelConfigKey}.get",
@@ -8163,7 +8163,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchmodelconfig-193",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/model-configs/{modelConfigKey}.patch",
@@ -8205,7 +8205,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listmodelconfigversions-194",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/model-configs/{modelConfigKey}/versions.get",
@@ -8247,7 +8247,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleterestrictedmodels-195",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/model-configs/restricted.delete",
@@ -8289,7 +8289,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postrestrictedmodels-196",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/model-configs/restricted.post",
@@ -8331,7 +8331,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listpromptsnippets-197",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/prompt-snippets.get",
@@ -8373,7 +8373,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postpromptsnippet-198",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/prompt-snippets.post",
@@ -8415,7 +8415,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletepromptsnippet-199",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/prompt-snippets/{snippetKey}.delete",
@@ -8457,7 +8457,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getpromptsnippet-200",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/prompt-snippets/{snippetKey}.get",
@@ -8499,7 +8499,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchpromptsnippet-201",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/prompt-snippets/{snippetKey}.patch",
@@ -8541,7 +8541,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listpromptsnippetreferences-202",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/prompt-snippets/{snippetKey}/references.get",
@@ -8583,7 +8583,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listpromptsnippetversions-203",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/prompt-snippets/{snippetKey}/versions.get",
@@ -8625,7 +8625,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getaiconfigquickstats-204",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/quick-stats.get",
@@ -8667,7 +8667,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listagentskills-205",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/skills.get",
@@ -8709,7 +8709,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postagentskill-206",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/skills.post",
@@ -8751,7 +8751,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteagentskill-207",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}.delete",
@@ -8793,7 +8793,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getagentskill-208",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}.get",
@@ -8835,7 +8835,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchagentskill-209",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}.patch",
@@ -8877,7 +8877,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listagentskillreferences-210",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}/references.get",
@@ -8919,7 +8919,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listagentskillversions-211",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-configs/skills/{skillKey}/versions.get",
@@ -8961,7 +8961,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listaitools-212",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-tools.get",
@@ -9003,7 +9003,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postaitool-213",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-tools.post",
@@ -9045,7 +9045,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteaitool-214",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-tools/{toolKey}.delete",
@@ -9087,7 +9087,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getaitool-215",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-tools/{toolKey}.get",
@@ -9129,7 +9129,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchaitool-216",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-tools/{toolKey}.patch",
@@ -9171,7 +9171,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listaitoolreferences-217",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-tools/{toolKey}/references.get",
@@ -9213,7 +9213,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.listaitoolversions-218",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/ai-tools/{toolKey}/versions.get",
@@ -9255,7 +9255,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcontextkindsbyprojectkey-219",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/context-kinds.get",
@@ -9297,7 +9297,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.putcontextkind-220",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/context-kinds/{key}.put",
@@ -9339,7 +9339,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getenvironmentsbyproject-221",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments.get",
@@ -9381,7 +9381,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postenvironment-222",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments.post",
@@ -9423,7 +9423,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteenvironment-223",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}.delete",
@@ -9465,7 +9465,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getenvironment-224",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}.get",
@@ -9507,7 +9507,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchenvironment-225",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}.patch",
@@ -9549,7 +9549,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.resetenvironmentsdkkey-226",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/apiKey.post",
@@ -9591,7 +9591,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcontextattributenames-227",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/context-attributes.get",
@@ -9633,7 +9633,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcontextattributevalues-228",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/context-attributes/{attributeName}.get",
@@ -9675,7 +9675,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletecontextinstances-229",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/context-instances/{id}.delete",
@@ -9717,7 +9717,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcontextinstances-230",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/context-instances/{id}.get",
@@ -9759,7 +9759,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.searchcontextinstances-231",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/context-instances/search.post",
@@ -9801,7 +9801,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.putcontextflagsetting-232",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/contexts/{contextKind}/{contextKey}/flags/{featureFlagKey}.put",
@@ -9843,7 +9843,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcontexts-233",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/contexts/{kind}/{key}.get",
@@ -9885,7 +9885,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.searchcontexts-234",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/contexts/search.post",
@@ -9927,7 +9927,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getexperiments-235",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/experiments.get",
@@ -9969,7 +9969,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createexperiment-236",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/experiments.post",
@@ -10011,7 +10011,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getexperiment-237",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/experiments/{experimentKey}.get",
@@ -10053,7 +10053,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchexperiment-238",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/experiments/{experimentKey}.patch",
@@ -10095,7 +10095,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createiteration-239",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/experiments/{experimentKey}/iterations.post",
@@ -10137,7 +10137,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.evaluatecontextinstance-240",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/flags/evaluate.post",
@@ -10179,7 +10179,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getfollowersbyprojenv-241",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/followers.get",
@@ -10221,7 +10221,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getallholdouts-242",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/holdouts.get",
@@ -10263,7 +10263,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postholdout-243",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/holdouts.post",
@@ -10305,7 +10305,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getholdout-244",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/holdouts/{holdoutKey}.get",
@@ -10347,7 +10347,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchholdout-245",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/holdouts/{holdoutKey}.patch",
@@ -10389,7 +10389,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getholdoutbyid-246",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/holdouts/id/{holdoutId}.get",
@@ -10431,7 +10431,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.resetenvironmentmobilekey-247",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/mobileKey.post",
@@ -10473,7 +10473,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getsdkkeys-248",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/sdk-keys.get",
@@ -10515,7 +10515,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postsdkkey-249",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/sdk-keys.post",
@@ -10557,7 +10557,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletesdkkeybykey-250",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/sdk-keys/{sdkKeyKey}.delete",
@@ -10599,7 +10599,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getsdkkeybykey-251",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/sdk-keys/{sdkKeyKey}.get",
@@ -10641,7 +10641,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchsdkkeybykey-252",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/sdk-keys/{sdkKeyKey}.patch",
@@ -10683,7 +10683,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcontextinstancesegmentsmembershipbyenv-253",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/environments/{environmentKey}/segments/evaluate.post",
@@ -10725,7 +10725,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createevaluation-254",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/evaluations.post",
@@ -10767,7 +10767,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getpublicevaluation-255",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/evaluations/{id}.get",
@@ -10809,7 +10809,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.updateevaluation-256",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/evaluations/{id}.patch",
@@ -10851,7 +10851,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getexperimentationsettings-257",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/experimentation-settings.get",
@@ -10893,7 +10893,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.putexperimentationsettings-258",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/experimentation-settings.put",
@@ -10935,7 +10935,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getexperimentsanyenv-259",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/experiments.get",
@@ -10977,7 +10977,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getflagdefaultsbyproject-260",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flag-defaults.get",
@@ -11019,7 +11019,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchflagdefaultsbyproject-261",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flag-defaults.patch",
@@ -11061,7 +11061,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.putflagdefaultsbyproject-262",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flag-defaults.put",
@@ -11103,7 +11103,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getapprovalsforflag-263",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests.get",
@@ -11145,7 +11145,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postapprovalrequestforflag-264",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests.post",
@@ -11187,7 +11187,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postflagcopyconfigapprovalrequest-265",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests-flag-copy.post",
@@ -11229,7 +11229,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteapprovalrequestforflag-266",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{id}.delete",
@@ -11271,7 +11271,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getapprovalforflag-267",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{id}.get",
@@ -11313,7 +11313,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchflagconfigapprovalrequest-268",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{id}.patch",
@@ -11355,7 +11355,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postapprovalrequestapplyforflag-269",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{id}/apply.post",
@@ -11397,7 +11397,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postapprovalrequestreviewforflag-270",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/approval-requests/{id}/reviews.post",
@@ -11439,7 +11439,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getflagfollowers-271",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/followers.get",
@@ -11481,7 +11481,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteflagfollower-272",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/followers/{memberId}.delete",
@@ -11523,7 +11523,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.putflagfollower-273",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/followers/{memberId}.put",
@@ -11565,7 +11565,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getflagconfigscheduledchanges-274",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes.get",
@@ -11607,7 +11607,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postflagconfigscheduledchanges-275",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes.post",
@@ -11649,7 +11649,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteflagconfigscheduledchanges-276",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes/{id}.delete",
@@ -11691,7 +11691,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getfeatureflagscheduledchange-277",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes/{id}.get",
@@ -11733,7 +11733,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchflagconfigscheduledchange-278",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/scheduled-changes/{id}.patch",
@@ -11775,7 +11775,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getworkflows-279",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/workflows.get",
@@ -11817,7 +11817,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postworkflow-280",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/workflows.post",
@@ -11859,7 +11859,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteworkflow-281",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/workflows/{workflowId}.delete",
@@ -11901,7 +11901,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcustomworkflow-282",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{featureFlagKey}/environments/{environmentKey}/workflows/{workflowId}.get",
@@ -11943,7 +11943,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postmigrationsafetyissues-283",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{flagKey}/environments/{environmentKey}/migration-safety-issues.post",
@@ -11985,7 +11985,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createreleaseforflag-284",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{flagKey}/release.put",
@@ -12027,7 +12027,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.updatephasestatus-285",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/flags/{flagKey}/release/phases/{phaseId}.put",
@@ -12069,7 +12069,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getlayers-286",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/layers.get",
@@ -12111,7 +12111,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createlayer-287",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/layers.post",
@@ -12153,7 +12153,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.updatelayer-288",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/layers/{layerKey}.patch",
@@ -12195,7 +12195,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getmetricgroups-289",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/metric-groups.get",
@@ -12237,7 +12237,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createmetricgroup-290",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/metric-groups.post",
@@ -12279,7 +12279,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletemetricgroup-291",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/metric-groups/{metricGroupKey}.delete",
@@ -12321,7 +12321,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getmetricgroup-292",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/metric-groups/{metricGroupKey}.get",
@@ -12363,7 +12363,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchmetricgroup-293",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/metric-groups/{metricGroupKey}.patch",
@@ -12405,7 +12405,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getallreleasepipelines-294",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/release-pipelines.get",
@@ -12447,7 +12447,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postreleasepipeline-295",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/release-pipelines.post",
@@ -12489,7 +12489,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletereleasepipeline-296",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/release-pipelines/{pipelineKey}.delete",
@@ -12531,7 +12531,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getreleasepipelinebykey-297",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/release-pipelines/{pipelineKey}.get",
@@ -12573,7 +12573,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.putreleasepipeline-298",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/release-pipelines/{pipelineKey}.put",
@@ -12615,7 +12615,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getallreleaseprogressionsforreleasepipeline-299",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/release-pipelines/{pipelineKey}/releases.get",
@@ -12657,7 +12657,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getreleasepolicies-300",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/release-policies.get",
@@ -12699,7 +12699,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postreleasepolicy-301",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/release-policies.post",
@@ -12741,7 +12741,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletereleasepolicy-302",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/release-policies/{policyKey}.delete",
@@ -12783,7 +12783,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getreleasepolicy-303",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/release-policies/{policyKey}.get",
@@ -12825,7 +12825,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.putreleasepolicy-304",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/release-policies/{policyKey}.put",
@@ -12867,7 +12867,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postreleasepoliciesorder-305",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/release-policies/order.post",
@@ -12909,7 +12909,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getlinkedviews-306",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/view-associations/{resourceType}/{resourceKey}.get",
@@ -12951,7 +12951,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getviews-307",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/views.get",
@@ -12993,7 +12993,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createview-308",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/views.post",
@@ -13035,7 +13035,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteview-309",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/views/{viewKey}.delete",
@@ -13077,7 +13077,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getview-310",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/views/{viewKey}.get",
@@ -13119,7 +13119,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.updateview-311",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/views/{viewKey}.patch",
@@ -13161,7 +13161,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.unlinkresource-312",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/views/{viewKey}/link/{resourceType}.delete",
@@ -13203,7 +13203,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.linkresource-313",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/views/{viewKey}/link/{resourceType}.post",
@@ -13245,7 +13245,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getlinkedresources-314",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/projects/{projectKey}/views/{viewKey}/linked/{resourceType}.get",
@@ -13287,7 +13287,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getips-315",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/public-ip-list.get",
@@ -13329,7 +13329,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcustomroles-316",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/roles.get",
@@ -13371,7 +13371,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postcustomrole-317",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/roles.post",
@@ -13413,7 +13413,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletecustomrole-318",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/roles/{customRoleKey}.delete",
@@ -13455,7 +13455,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcustomrole-319",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/roles/{customRoleKey}.get",
@@ -13497,7 +13497,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchcustomrole-320",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/roles/{customRoleKey}.patch",
@@ -13539,7 +13539,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getsegments-321",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}.get",
@@ -13581,7 +13581,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postsegment-322",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}.post",
@@ -13623,7 +13623,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletesegment-323",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}.delete",
@@ -13665,7 +13665,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getsegment-324",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}.get",
@@ -13707,7 +13707,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchsegment-325",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}.patch",
@@ -13749,7 +13749,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.updatebigsegmentcontexttargets-326",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/contexts.post",
@@ -13791,7 +13791,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getsegmentmembershipforcontext-327",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/contexts/{contextKey}.get",
@@ -13833,7 +13833,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createbigsegmentexport-328",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/exports.post",
@@ -13875,7 +13875,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getbigsegmentexport-329",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/exports/{exportID}.get",
@@ -13917,7 +13917,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createbigsegmentimport-330",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/imports.post",
@@ -13959,7 +13959,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getbigsegmentimport-331",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/imports/{importID}.get",
@@ -14001,7 +14001,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.updatebigsegmenttargets-332",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/users.post",
@@ -14043,7 +14043,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getsegmentmembershipforuser-333",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{environmentKey}/{segmentKey}/users/{userKey}.get",
@@ -14085,7 +14085,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getexpiringtargetsforsegment-334",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{segmentKey}/expiring-targets/{environmentKey}.get",
@@ -14127,7 +14127,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchexpiringtargetsforsegment-335",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{segmentKey}/expiring-targets/{environmentKey}.patch",
@@ -14169,7 +14169,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getexpiringusertargetsforsegment-336",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{segmentKey}/expiring-user-targets/{environmentKey}.get",
@@ -14211,7 +14211,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchexpiringusertargetsforsegment-337",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/segments/{projectKey}/{segmentKey}/expiring-user-targets/{environmentKey}.patch",
@@ -14253,7 +14253,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.gettags-338",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/tags.get",
@@ -14295,7 +14295,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getteams-339",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/teams.get",
@@ -14337,7 +14337,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchteams-340",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/teams.patch",
@@ -14379,7 +14379,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postteam-341",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/teams.post",
@@ -14421,7 +14421,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteteam-342",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/teams/{teamKey}.delete",
@@ -14463,7 +14463,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getteam-343",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/teams/{teamKey}.get",
@@ -14505,7 +14505,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchteam-344",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/teams/{teamKey}.patch",
@@ -14547,7 +14547,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getteammaintainers-345",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/teams/{teamKey}/maintainers.get",
@@ -14589,7 +14589,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postteammembers-346",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/teams/{teamKey}/members.post",
@@ -14631,7 +14631,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getteamroles-347",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/teams/{teamKey}/roles.get",
@@ -14673,7 +14673,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getworkflowtemplates-348",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/templates.get",
@@ -14715,7 +14715,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.createworkflowtemplate-349",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/templates.post",
@@ -14757,7 +14757,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deleteworkflowtemplate-350",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/templates/{templateKey}.delete",
@@ -14799,7 +14799,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.gettokens-351",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/tokens.get",
@@ -14841,7 +14841,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.posttoken-352",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/tokens.post",
@@ -14883,7 +14883,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletetoken-353",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/tokens/{id}.delete",
@@ -14925,7 +14925,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.gettoken-354",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/tokens/{id}.get",
@@ -14967,7 +14967,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchtoken-355",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/tokens/{id}.patch",
@@ -15009,7 +15009,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.resettoken-356",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/tokens/{id}/reset.post",
@@ -15051,7 +15051,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getairunsusage-357",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/ai-runs.get",
@@ -15093,7 +15093,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcontextsclientsideusage-358",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/clientside-contexts.get",
@@ -15135,7 +15135,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getmauclientsideusage-359",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/clientside-mau.get",
@@ -15177,7 +15177,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getdataexporteventsusage-360",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/data-export-events.get",
@@ -15219,7 +15219,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getevaluationsusage-361",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/evaluations/{projectKey}/{environmentKey}/{featureFlagKey}.get",
@@ -15261,7 +15261,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.geteventsusage-362",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/events/{type}.get",
@@ -15303,7 +15303,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getexperimentationeventsusage-363",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/experimentation-events.get",
@@ -15345,7 +15345,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getexperimentationkeysusage-364",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/experimentation-keys.get",
@@ -15387,7 +15387,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getmauusage-365",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/mau.get",
@@ -15429,7 +15429,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getmauusagebycategory-366",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/mau/bycategory.get",
@@ -15471,7 +15471,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getmausdksbytype-367",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/mau/sdks.get",
@@ -15513,7 +15513,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getobservabilityerrorsusage-368",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/observability/errors.get",
@@ -15555,7 +15555,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getobservabilitylogsusage-369",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/observability/logs.get",
@@ -15597,7 +15597,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getobservabilitymetricsusage-370",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/observability/metrics.get",
@@ -15639,7 +15639,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getobservabilitysessionsusage-371",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/observability/sessions.get",
@@ -15681,7 +15681,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getobservabilitytracesusage-372",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/observability/traces.get",
@@ -15723,7 +15723,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getsdkallversions-373",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/sdk-versions/all.get",
@@ -15765,7 +15765,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getsdkversionsdetails-374",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/sdk-versions/details.get",
@@ -15807,7 +15807,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcontextsserversideusage-375",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/serverside-contexts.get",
@@ -15849,7 +15849,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getserviceconnectionsusage-376",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/service-connections.get",
@@ -15891,7 +15891,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getstreamusage-377",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/streams/{source}.get",
@@ -15933,7 +15933,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getstreamusagebysdkversion-378",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/streams/{source}/bysdkversion.get",
@@ -15975,7 +15975,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getstreamusagesdkversion-379",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/streams/{source}/sdkversions.get",
@@ -16017,7 +16017,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getcontextstotalusage-380",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/total-contexts.get",
@@ -16059,7 +16059,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getmautotalusage-381",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/total-mau.get",
@@ -16101,7 +16101,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getvegaaiusage-382",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/vega-ai.get",
@@ -16143,7 +16143,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getwarehouseexportusage-383",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/usage/warehouse-export.get",
@@ -16185,7 +16185,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getsearchusers-384",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/user-search/{projectKey}/{environmentKey}.get",
@@ -16227,7 +16227,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getusers-385",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/users/{projectKey}/{environmentKey}.get",
@@ -16269,7 +16269,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getuser-386",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/users/{projectKey}/{environmentKey}/{userKey}.get",
@@ -16311,7 +16311,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getuserflagsettings-387",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/users/{projectKey}/{environmentKey}/{userKey}/flags.get",
@@ -16353,7 +16353,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getuserflagsetting-388",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/users/{projectKey}/{environmentKey}/{userKey}/flags/{featureFlagKey}.get",
@@ -16395,7 +16395,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.putflagsetting-389",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/users/{projectKey}/{environmentKey}/{userKey}/flags/{featureFlagKey}.put",
@@ -16437,7 +16437,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getexpiringflagsforuser-390",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/users/{projectKey}/{userKey}/expiring-user-targets/{environmentKey}.get",
@@ -16479,7 +16479,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchexpiringflagsforuser-391",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/users/{projectKey}/{userKey}/expiring-user-targets/{environmentKey}.patch",
@@ -16521,7 +16521,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getversions-392",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/versions.get",
@@ -16563,7 +16563,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getallwebhooks-393",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/webhooks.get",
@@ -16605,7 +16605,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.postwebhook-394",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/webhooks.post",
@@ -16647,7 +16647,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.deletewebhook-395",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/webhooks/{id}.delete",
@@ -16689,7 +16689,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.getwebhook-396",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/webhooks/{id}.get",
@@ -16731,7 +16731,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.provider.patchwebhook-397",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "paths./api/v2/webhooks/{id}.patch",
@@ -16768,7 +16768,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.local-api-surface.get-api-v2-flags-project-key-398",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "api_surface.json:endpoints[397]",
@@ -16811,7 +16811,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/launchdarkly-operation-source-lock.json",
+        "source_lock": "sources/launchdarkly-parity-source-lock.json",
         "source_id": "launchdarkly.local-api-surface.get-api-v2-projects-project-key-environments-399",
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "source_location": "api_surface.json:endpoints[398]",

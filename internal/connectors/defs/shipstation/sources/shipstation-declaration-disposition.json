@@ -3,7 +3,7 @@
   "connector": "shipstation",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/shipstation-operation-source-lock.json",
+    "source_lock": "sources/shipstation-parity-source-lock.json",
     "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
     "source_sha256": "c71c20d26559b1d0dad5c3718889fc8d4063cfad3abeaf5f63cc1651bef32307",
     "source_bytes": 186490,
@@ -96,7 +96,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-account-tags-1",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./accounts/listtags.get",
@@ -138,7 +138,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-carriers-2",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./carriers.get",
@@ -180,7 +180,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.add-funds-to-carrier-3",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./carriers/addfunds.post",
@@ -222,7 +222,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.get-carrier-4",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./carriers/getcarrier.get",
@@ -264,7 +264,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-packages-5",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./carriers/listpackages.get",
@@ -306,7 +306,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-services-6",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./carriers/listservices.get",
@@ -343,7 +343,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-customers-7",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./customers.get",
@@ -391,7 +391,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.get-customer-8",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./customers/{customerId}.get",
@@ -433,7 +433,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-fulfillments-9",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./fulfillments.get",
@@ -470,7 +470,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-orders-10",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders.get",
@@ -518,7 +518,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.delete-order-11",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/{orderId}.delete",
@@ -560,7 +560,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.get-order-12",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/{orderId}.get",
@@ -602,7 +602,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.add-tag-to-order-13",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/addtag.post",
@@ -644,7 +644,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.assign-user-to-order-14",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/assignuser.post",
@@ -686,7 +686,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.create-label-for-order-15",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/createlabelfororder.post",
@@ -728,7 +728,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.create-update-order-16",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/createorder.post",
@@ -770,7 +770,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.create-update-multiple-orders-17",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/createorders.post",
@@ -812,7 +812,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.hold-order-until-18",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/holduntil.post",
@@ -854,7 +854,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-orders-by-tag-19",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/listbytag.get",
@@ -896,7 +896,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.mark-order-as-shipped-20",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/markasshipped.post",
@@ -938,7 +938,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.remove-tag-from-order-21",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/removetag.post",
@@ -980,7 +980,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.restore-order-from-hold-22",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/restorefromhold.post",
@@ -1022,7 +1022,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.unassign-user-from-order-23",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./orders/unassignuser.post",
@@ -1059,7 +1059,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-products-24",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./products.get",
@@ -1107,7 +1107,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.get-product-25",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./products/{productId}.get",
@@ -1149,7 +1149,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.update-product-26",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./products/{productId}.put",
@@ -1186,7 +1186,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-shipments-27",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./shipments.get",
@@ -1234,7 +1234,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.create-shipment-label-28",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./shipments/createlabel.post",
@@ -1276,7 +1276,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.get-rates-29",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./shipments/getrates.post",
@@ -1318,7 +1318,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.void-label-30",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./shipments/voidlabel.post",
@@ -1360,7 +1360,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-stores-31",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./stores.get",
@@ -1402,7 +1402,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.get-store-32",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./stores/{storeId}.get",
@@ -1444,7 +1444,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.update-store-33",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./stores/{storeId}.put",
@@ -1486,7 +1486,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.deactivate-store-34",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./stores/deactivate.post",
@@ -1528,7 +1528,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.get-store-refresh-status-35",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./stores/getrefreshstatus.get",
@@ -1570,7 +1570,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-marketplaces-36",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./stores/marketplaces.get",
@@ -1612,7 +1612,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.reactivate-store-37",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./stores/reactivate.post",
@@ -1654,7 +1654,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.refresh-store-38",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./stores/refreshstore.post",
@@ -1696,7 +1696,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-users-39",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./users.get",
@@ -1738,7 +1738,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-warehouses-40",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./warehouses.get",
@@ -1780,7 +1780,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.delete-warehouse-41",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./warehouses/{warehouseId}.delete",
@@ -1822,7 +1822,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.get-warehouse-42",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./warehouses/{warehouseId}.get",
@@ -1864,7 +1864,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.create-warehouse-43",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./warehouses/createwarehouse.post",
@@ -1906,7 +1906,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.update-warehouse-44",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./warehouses/updatewarehouse.put",
@@ -1948,7 +1948,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.list-webhooks-45",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./webhooks.get",
@@ -1990,7 +1990,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.unsubscribe-webhook-46",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./webhooks/{webhookId}.delete",
@@ -2032,7 +2032,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/shipstation-operation-source-lock.json",
+        "source_lock": "sources/shipstation-parity-source-lock.json",
         "source_id": "shipstation.provider.subscribe-webhook-47",
         "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
         "source_location": "paths./webhooks/subscribe.post",

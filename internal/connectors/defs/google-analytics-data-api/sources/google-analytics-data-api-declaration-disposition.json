@@ -3,7 +3,7 @@
   "connector": "google-analytics-data-api",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+    "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
     "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
     "source_sha256": "cafd0552fe8ec00b7026bc15a223e8b6931c2eb653900e9375bc3b88702aa3f3",
     "source_bytes": 306884,
@@ -92,7 +92,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-operations-delete-1",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.delete",
@@ -130,7 +130,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-operations-list-2",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.list",
@@ -168,7 +168,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-operations-cancel-3",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.cancel",
@@ -206,7 +206,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-getpropertyquotassnapshot-4",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.getPropertyQuotasSnapshot",
@@ -244,7 +244,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-reporttasks-query-5",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.query",
@@ -282,7 +282,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-audiencelists-list-6",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.list",
@@ -320,7 +320,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-audiencelists-create-7",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.create",
@@ -358,7 +358,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-recurringaudiencelists-list-8",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.list",
@@ -396,7 +396,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-recurringaudiencelists-create-9",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.create",
@@ -434,7 +434,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-reporttasks-list-10",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.list",
@@ -472,7 +472,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-reporttasks-create-11",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.create",
@@ -510,7 +510,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-runfunnelreport-12",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.runFunnelReport",
@@ -548,7 +548,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-runreport-13",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.runReport",
@@ -586,7 +586,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-getmetadata-14",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.getMetadata",
@@ -624,7 +624,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-audienceexports-query-15",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.query",
@@ -662,7 +662,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-audienceexports-list-16",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.list",
@@ -700,7 +700,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-audienceexports-create-17",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.create",
@@ -738,7 +738,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-batchrunpivotreports-18",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.batchRunPivotReports",
@@ -776,7 +776,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-batchrunreports-19",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.batchRunReports",
@@ -814,7 +814,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-checkcompatibility-20",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.checkCompatibility",
@@ -852,7 +852,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-runpivotreport-21",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.runPivotReport",
@@ -890,7 +890,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-runrealtimereport-22",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.runRealtimeReport",
@@ -928,7 +928,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.provider.analyticsdata-properties-runreport-23",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "methods.runReport",
@@ -965,7 +965,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path-24",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "api_surface.json:endpoints[23]",
@@ -1008,7 +1008,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-website-overview-read-path-25",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "api_surface.json:endpoints[24]",
@@ -1051,7 +1051,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path-26",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "api_surface.json:endpoints[25]",
@@ -1094,7 +1094,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-devices-read-path-27",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "api_surface.json:endpoints[26]",
@@ -1137,7 +1137,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/google-analytics-data-api-operation-source-lock.json",
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
         "source_id": "google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-pages-read-path-28",
         "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
         "source_location": "api_surface.json:endpoints[27]",

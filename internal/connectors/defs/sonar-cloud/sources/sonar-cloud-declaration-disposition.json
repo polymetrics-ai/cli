@@ -3,7 +3,7 @@
   "connector": "sonar-cloud",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+    "source_lock": "sources/sonar-cloud-parity-source-lock.json",
     "source_url": "https://sonarcloud.io/api/webservices/list",
     "source_sha256": "76f39c511c7ab51254d2d2032baf9b1ff062d37a6b2eac766c6dba2d8553db5e",
     "source_bytes": 209845,
@@ -115,7 +115,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.logout-1",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/authentication.actions.logout",
@@ -157,7 +157,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.validate-2",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/authentication.actions.validate",
@@ -199,7 +199,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.activity-3",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/ce.actions.activity",
@@ -241,7 +241,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.activity-status-4",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/ce.actions.activity_status",
@@ -283,7 +283,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.component-5",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/ce.actions.component",
@@ -325,7 +325,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.task-6",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/ce.actions.task",
@@ -362,7 +362,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-7",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/components.actions.search",
@@ -410,7 +410,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.show-8",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/components.actions.show",
@@ -452,7 +452,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.tree-9",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/components.actions.tree",
@@ -494,7 +494,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.show-10",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/duplications.actions.show",
@@ -536,7 +536,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.add-11",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/favorites.actions.add",
@@ -578,7 +578,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.remove-12",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/favorites.actions.remove",
@@ -620,7 +620,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-13",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/favorites.actions.search",
@@ -662,7 +662,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.index-14",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/favourites.actions.index",
@@ -704,7 +704,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.change-status-15",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/hotspots.actions.change_status",
@@ -741,7 +741,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-16",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/hotspots.actions.search",
@@ -789,7 +789,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.show-17",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/hotspots.actions.show",
@@ -826,7 +826,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.add-comment-18",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.add_comment",
@@ -876,7 +876,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.assign-19",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.assign",
@@ -931,7 +931,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.authors-20",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.authors",
@@ -973,7 +973,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.bulk-change-21",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.bulk_change",
@@ -1015,7 +1015,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.changelog-22",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.changelog",
@@ -1057,7 +1057,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delete-comment-23",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.delete_comment",
@@ -1094,7 +1094,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.do-transition-24",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.do_transition",
@@ -1149,7 +1149,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.edit-comment-25",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.edit_comment",
@@ -1186,7 +1186,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-26",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.search",
@@ -1234,7 +1234,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.set-severity-27",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.set_severity",
@@ -1271,7 +1271,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.set-tags-28",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.set_tags",
@@ -1326,7 +1326,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.set-type-29",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.set_type",
@@ -1368,7 +1368,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.tags-30",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/issues.actions.tags",
@@ -1405,7 +1405,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.list-31",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/languages.actions.list",
@@ -1453,7 +1453,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.component-32",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/measures.actions.component",
@@ -1495,7 +1495,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.component-tree-33",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/measures.actions.component_tree",
@@ -1537,7 +1537,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-history-34",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/measures.actions.search_history",
@@ -1579,7 +1579,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.domains-35",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/metrics.actions.domains",
@@ -1616,7 +1616,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-36",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/metrics.actions.search",
@@ -1664,7 +1664,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.types-37",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/metrics.actions.types",
@@ -1706,7 +1706,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.add-38",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/notifications.actions.add",
@@ -1748,7 +1748,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.list-39",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/notifications.actions.list",
@@ -1790,7 +1790,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.remove-40",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/notifications.actions.remove",
@@ -1832,7 +1832,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.add-group-41",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.add_group",
@@ -1874,7 +1874,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.add-group-to-template-42",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.add_group_to_template",
@@ -1916,7 +1916,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.add-project-creator-to-template-43",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.add_project_creator_to_template",
@@ -1958,7 +1958,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.add-user-44",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.add_user",
@@ -2000,7 +2000,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.add-user-to-template-45",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.add_user_to_template",
@@ -2042,7 +2042,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.apply-template-46",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.apply_template",
@@ -2084,7 +2084,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.bulk-apply-template-47",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.bulk_apply_template",
@@ -2126,7 +2126,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.create-template-48",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.create_template",
@@ -2168,7 +2168,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delete-template-49",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.delete_template",
@@ -2210,7 +2210,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.remove-group-50",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.remove_group",
@@ -2252,7 +2252,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.remove-group-from-template-51",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.remove_group_from_template",
@@ -2294,7 +2294,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.remove-project-creator-from-template-52",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.remove_project_creator_from_template",
@@ -2336,7 +2336,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.remove-user-53",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.remove_user",
@@ -2378,7 +2378,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.remove-user-from-template-54",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.remove_user_from_template",
@@ -2420,7 +2420,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-templates-55",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.search_templates",
@@ -2460,7 +2460,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.set-default-template-56",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.set_default_template",
@@ -2502,7 +2502,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.update-template-57",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/permissions.actions.update_template",
@@ -2544,7 +2544,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.create-event-58",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_analyses.actions.create_event",
@@ -2586,7 +2586,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delete-59",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_analyses.actions.delete",
@@ -2628,7 +2628,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delete-event-60",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_analyses.actions.delete_event",
@@ -2665,7 +2665,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-61",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_analyses.actions.search",
@@ -2713,7 +2713,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.set-baseline-62",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_analyses.actions.set_baseline",
@@ -2753,7 +2753,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.unset-baseline-63",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_analyses.actions.unset_baseline",
@@ -2793,7 +2793,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.update-event-64",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_analyses.actions.update_event",
@@ -2835,7 +2835,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.ai-code-assurance-65",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_badges.actions.ai_code_assurance",
@@ -2877,7 +2877,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.measure-66",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_badges.actions.measure",
@@ -2919,7 +2919,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.quality-gate-67",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_badges.actions.quality_gate",
@@ -2961,7 +2961,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delete-68",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_branches.actions.delete",
@@ -3003,7 +3003,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.list-69",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_branches.actions.list",
@@ -3045,7 +3045,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.rename-70",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_branches.actions.rename",
@@ -3085,7 +3085,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.create-71",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_links.actions.create",
@@ -3127,7 +3127,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delete-72",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_links.actions.delete",
@@ -3169,7 +3169,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-73",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_links.actions.search",
@@ -3211,7 +3211,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delete-74",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_pull_requests.actions.delete",
@@ -3253,7 +3253,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.list-75",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_pull_requests.actions.list",
@@ -3295,7 +3295,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-76",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_tags.actions.search",
@@ -3332,7 +3332,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.set-77",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/project_tags.actions.set",
@@ -3387,7 +3387,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.bulk-delete-78",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/projects.actions.bulk_delete",
@@ -3429,7 +3429,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.bulk-update-key-79",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/projects.actions.bulk_update_key",
@@ -3471,7 +3471,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.create-80",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/projects.actions.create",
@@ -3511,7 +3511,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delete-81",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/projects.actions.delete",
@@ -3548,7 +3548,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-82",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/projects.actions.search",
@@ -3596,7 +3596,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.update-key-83",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/projects.actions.update_key",
@@ -3636,7 +3636,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.update-visibility-84",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/projects.actions.update_visibility",
@@ -3676,7 +3676,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.index-85",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/properties.actions.index",
@@ -3718,7 +3718,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.copy-86",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.copy",
@@ -3760,7 +3760,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.create-87",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.create",
@@ -3802,7 +3802,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.create-condition-88",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.create_condition",
@@ -3844,7 +3844,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delete-condition-89",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.delete_condition",
@@ -3886,7 +3886,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.deselect-90",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.deselect",
@@ -3928,7 +3928,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.destroy-91",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.destroy",
@@ -3970,7 +3970,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.get-by-project-92",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.get_by_project",
@@ -4007,7 +4007,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.list-93",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.list",
@@ -4055,7 +4055,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.project-status-94",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.project_status",
@@ -4097,7 +4097,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.rename-95",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.rename",
@@ -4139,7 +4139,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-96",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.search",
@@ -4181,7 +4181,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.select-97",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.select",
@@ -4223,7 +4223,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.set-as-default-98",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.set_as_default",
@@ -4265,7 +4265,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.show-99",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.show",
@@ -4307,7 +4307,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.unset-default-100",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.unset_default",
@@ -4349,7 +4349,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.update-condition-101",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualitygates.actions.update_condition",
@@ -4391,7 +4391,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.activate-rule-102",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.activate_rule",
@@ -4431,7 +4431,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.activate-rules-103",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.activate_rules",
@@ -4471,7 +4471,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.add-project-104",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.add_project",
@@ -4511,7 +4511,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.backup-105",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.backup",
@@ -4553,7 +4553,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.change-parent-106",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.change_parent",
@@ -4593,7 +4593,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.changelog-107",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.changelog",
@@ -4635,7 +4635,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.copy-108",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.copy",
@@ -4675,7 +4675,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.create-109",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.create",
@@ -4715,7 +4715,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.deactivate-rule-110",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.deactivate_rule",
@@ -4755,7 +4755,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.deactivate-rules-111",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.deactivate_rules",
@@ -4795,7 +4795,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delete-112",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.delete",
@@ -4837,7 +4837,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.export-113",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.export",
@@ -4879,7 +4879,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.exporters-114",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.exporters",
@@ -4921,7 +4921,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.importers-115",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.importers",
@@ -4963,7 +4963,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.inheritance-116",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.inheritance",
@@ -5005,7 +5005,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.projects-117",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.projects",
@@ -5047,7 +5047,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.remove-project-118",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.remove_project",
@@ -5087,7 +5087,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.rename-119",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.rename",
@@ -5127,7 +5127,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.restore-120",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.restore",
@@ -5167,7 +5167,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.restore-built-in-121",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.restore_built_in",
@@ -5209,7 +5209,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-122",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.search",
@@ -5251,7 +5251,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.set-default-123",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/qualityprofiles.actions.set_default",
@@ -5291,7 +5291,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.repositories-124",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/rules.actions.repositories",
@@ -5328,7 +5328,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-125",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/rules.actions.search",
@@ -5376,7 +5376,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.show-126",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/rules.actions.show",
@@ -5418,7 +5418,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.tags-127",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/rules.actions.tags",
@@ -5460,7 +5460,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.update-128",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/rules.actions.update",
@@ -5500,7 +5500,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.list-definitions-129",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/settings.actions.list_definitions",
@@ -5540,7 +5540,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.reset-130",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/settings.actions.reset",
@@ -5582,7 +5582,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.set-131",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/settings.actions.set",
@@ -5622,7 +5622,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.values-132",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/settings.actions.values",
@@ -5662,7 +5662,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.raw-133",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/sources.actions.raw",
@@ -5704,7 +5704,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.scm-134",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/sources.actions.scm",
@@ -5746,7 +5746,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.show-135",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/sources.actions.show",
@@ -5788,7 +5788,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.index-136",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/timemachine.actions.index",
@@ -5830,7 +5830,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.add-user-137",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/user_groups.actions.add_user",
@@ -5872,7 +5872,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.create-138",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/user_groups.actions.create",
@@ -5914,7 +5914,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delete-139",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/user_groups.actions.delete",
@@ -5956,7 +5956,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.remove-user-140",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/user_groups.actions.remove_user",
@@ -5998,7 +5998,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-141",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/user_groups.actions.search",
@@ -6038,7 +6038,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.update-142",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/user_groups.actions.update",
@@ -6080,7 +6080,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.users-143",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/user_groups.actions.users",
@@ -6120,7 +6120,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.index-144",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/user_properties.actions.index",
@@ -6162,7 +6162,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.generate-145",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/user_tokens.actions.generate",
@@ -6204,7 +6204,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.revoke-146",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/user_tokens.actions.revoke",
@@ -6246,7 +6246,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.search-147",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/user_tokens.actions.search",
@@ -6288,7 +6288,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.groups-148",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/users.actions.groups",
@@ -6323,7 +6323,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.create-149",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/webhooks.actions.create",
@@ -6373,7 +6373,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delete-150",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/webhooks.actions.delete",
@@ -6428,7 +6428,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.deliveries-151",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/webhooks.actions.deliveries",
@@ -6470,7 +6470,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.delivery-152",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/webhooks.actions.delivery",
@@ -6507,7 +6507,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.list-153",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/webhooks.actions.list",
@@ -6550,7 +6550,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.update-154",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/webhooks.actions.update",
@@ -6605,7 +6605,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.list-155",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/webservices.actions.list",
@@ -6647,7 +6647,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.provider.response-example-156",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "webServices.api/webservices.actions.response_example",
@@ -6684,7 +6684,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/sonar-cloud-operation-source-lock.json",
+        "source_lock": "sources/sonar-cloud-parity-source-lock.json",
         "source_id": "sonar-cloud.local-api-surface.get-api-measures-search-157",
         "source_url": "https://sonarcloud.io/api/webservices/list",
         "source_location": "api_surface.json:endpoints[156]",

@@ -3,7 +3,7 @@
   "connector": "salesforce",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/salesforce-operation-source-lock.json",
+    "source_lock": "sources/salesforce-parity-source-lock.json",
     "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
     "source_sha256": "609709e1726e5ff221f8b86d9f7408c5acb0b00e72e99e3ecc4d6635ecadf474",
     "source_bytes": 76875,
@@ -91,7 +91,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/salesforce-operation-source-lock.json",
+        "source_lock": "sources/salesforce-parity-source-lock.json",
         "source_id": "salesforce.local-api-surface.get-services-data-version-sobjects-1",
         "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
         "source_location": "api_surface.json:endpoints[0]",
@@ -134,7 +134,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/salesforce-operation-source-lock.json",
+        "source_lock": "sources/salesforce-parity-source-lock.json",
         "source_id": "salesforce.local-api-surface.get-services-data-version-query-select-from-account-2",
         "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
         "source_location": "api_surface.json:endpoints[1]",
@@ -177,7 +177,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/salesforce-operation-source-lock.json",
+        "source_lock": "sources/salesforce-parity-source-lock.json",
         "source_id": "salesforce.local-api-surface.get-services-data-version-query-select-from-contact-3",
         "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
         "source_location": "api_surface.json:endpoints[2]",
@@ -220,7 +220,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/salesforce-operation-source-lock.json",
+        "source_lock": "sources/salesforce-parity-source-lock.json",
         "source_id": "salesforce.local-api-surface.get-services-data-version-query-select-from-lead-4",
         "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
         "source_location": "api_surface.json:endpoints[3]",
@@ -264,7 +264,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/salesforce-operation-source-lock.json",
+        "source_lock": "sources/salesforce-parity-source-lock.json",
         "source_id": "salesforce.local-api-surface.get-services-data-version-query-arbitrary-soql-5",
         "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
         "source_location": "api_surface.json:endpoints[4]",
@@ -302,7 +302,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/salesforce-operation-source-lock.json",
+        "source_lock": "sources/salesforce-parity-source-lock.json",
         "source_id": "salesforce.local-api-surface.get-services-data-version-sobjects-sobject-describe-6",
         "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
         "source_location": "api_surface.json:endpoints[5]",
@@ -340,7 +340,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/salesforce-operation-source-lock.json",
+        "source_lock": "sources/salesforce-parity-source-lock.json",
         "source_id": "salesforce.local-api-surface.post-services-data-version-sobjects-sobject-7",
         "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
         "source_location": "api_surface.json:endpoints[6]",
@@ -378,7 +378,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/salesforce-operation-source-lock.json",
+        "source_lock": "sources/salesforce-parity-source-lock.json",
         "source_id": "salesforce.local-api-surface.patch-services-data-version-sobjects-sobject-id-8",
         "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
         "source_location": "api_surface.json:endpoints[7]",
@@ -416,7 +416,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/salesforce-operation-source-lock.json",
+        "source_lock": "sources/salesforce-parity-source-lock.json",
         "source_id": "salesforce.local-api-surface.delete-services-data-version-sobjects-sobject-id-9",
         "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
         "source_location": "api_surface.json:endpoints[8]",
@@ -454,7 +454,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/salesforce-operation-source-lock.json",
+        "source_lock": "sources/salesforce-parity-source-lock.json",
         "source_id": "salesforce.local-api-surface.get-services-data-version-jobs-query-bulk-api-10",
         "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
         "source_location": "api_surface.json:endpoints[9]",

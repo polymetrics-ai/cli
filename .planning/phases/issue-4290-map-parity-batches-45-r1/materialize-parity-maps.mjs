@@ -146,7 +146,7 @@ function classifiedDisposition(connector, endpoint, index, cli, hasTransport, so
   const isElevated = endpoint.excluded?.category === 'requires_elevated_scope' || endpoint.operation?.notes?.includes('requires_elevated_scope');
   const isNonData = ['non_data_endpoint', 'deprecated'].includes(endpoint.excluded?.category) || endpoint.operation?.model === 'deprecated';
   const source = {
-    source_lock: `sources/${connector}-operation-source-lock.json`,
+    source_lock: `sources/${connector}-parity-source-lock.json`,
     source_id: providerSource?.id || `${connector}.local-api-surface.${operationID}`,
     source_url: providerSource?.source_url || operationSourceURL(endpoint, sourceURL),
     source_location: providerSource?.source_location || `api_surface.json:endpoints[${index}]`,
@@ -1125,7 +1125,7 @@ async function writeSourceInventoryReport() {
     '| --- | ---: | ---: | ---: | ---: | --- | --- |',
   ];
   for (const connector of [...batches.batch4, ...batches.batch5]) {
-    const lock = await readJSON(join(root, 'internal/connectors/defs', connector, 'sources', `${connector}-operation-source-lock.json`));
+    const lock = await readJSON(join(root, 'internal/connectors/defs', connector, 'sources', `${connector}-parity-source-lock.json`));
     if (!lock) throw new Error(`${connector}: cannot report a missing source lock`);
     lines.push([
       connector,
@@ -1165,7 +1165,7 @@ async function writeSevenSurfaceLedger(checkOnly = false) {
       reverse_etl: transport.destination_transport ? 'definition-declared; app-dispatch-pending' : writes > 0 ? 'foundation-gap: application-generic-destination-dispatch' : 'declaration-pending',
       executable_cli_commands: cli.commands.filter(({ availability }) => availability === 'implemented').length,
       cli_commands: cli.commands.length,
-      source_lock: `internal/connectors/defs/${connector}/sources/${connector}-operation-source-lock.json`,
+      source_lock: `internal/connectors/defs/${connector}/sources/${connector}-parity-source-lock.json`,
     });
   }
   assert(rows.length === 20 && new Set(rows.map(({ connector }) => connector)).size === 20, 'seven-surface ledger must contain each assigned connector exactly once');
@@ -1263,7 +1263,7 @@ async function writeHardPreMergeGate(checkOnly = false) {
   for (const connector of [...batches.batch4, ...batches.batch5]) {
     const dir = join(root, 'internal/connectors/defs', connector);
     const map = await readJSON(join(dir, 'sources', `${connector}-declaration-disposition.json`));
-    const lock = await readJSON(join(dir, 'sources', `${connector}-operation-source-lock.json`));
+    const lock = await readJSON(join(dir, 'sources', `${connector}-parity-source-lock.json`));
     const sourceRecords = [...(lock.rest?.operations || []), ...(lock.graphql?.operations || [])];
     const sourceIDs = new Set(sourceRecords.map(({ id }) => id));
     assert(sourceIDs.size === sourceRecords.length, `${connector}: provider source record IDs must be unique`);
@@ -1290,7 +1290,7 @@ async function writeHardPreMergeGate(checkOnly = false) {
         path: disposition.path,
         parity_class: disposition.parity_class,
         provider_source: {
-          source_lock: `internal/connectors/defs/${connector}/sources/${connector}-operation-source-lock.json`,
+          source_lock: `internal/connectors/defs/${connector}/sources/${connector}-parity-source-lock.json`,
           source_id: sourceRecord.id,
           operation_id: sourceRecord.operation_id || null,
           source_location: sourceRecord.source_location || null,
@@ -1434,7 +1434,7 @@ async function writeFoundationGapLedger(checkOnly = false) {
   for (const connector of [...batches.batch4, ...batches.batch5]) {
     const dir = join(root, 'internal/connectors/defs', connector);
     const map = await readJSON(join(dir, 'sources', `${connector}-declaration-disposition.json`));
-    const lock = await readJSON(join(dir, 'sources', `${connector}-operation-source-lock.json`));
+    const lock = await readJSON(join(dir, 'sources', `${connector}-parity-source-lock.json`));
     const sourceRecords = new Map([...lock.rest?.operations || [], ...lock.graphql?.operations || []].map((record) => [record.id, record]));
     for (const disposition of map.ledger_dispositions) {
       const eligibility = disposition.declaration?.reverse_etl_eligibility;
@@ -1578,7 +1578,7 @@ async function materialize(connector) {
     // the public description.  Retain it when a later rematerialization meets
     // transient documentation CDN protection instead of downgrading a settled
     // inventory to partial or fabricating a new pin.
-    const priorLock = await readJSON(join(sources, `${connector}-operation-source-lock.json`));
+    const priorLock = await readJSON(join(sources, `${connector}-parity-source-lock.json`));
     const priorOperations = priorLock && [
       ...(priorLock.rest?.operations || []),
       ...(priorLock.graphql?.operations || []),
@@ -1653,7 +1653,7 @@ async function materialize(connector) {
     connector,
     generated_at: '2026-08-19T00:00:00Z',
     source_basis: {
-      source_lock: `sources/${connector}-operation-source-lock.json`,
+      source_lock: `sources/${connector}-parity-source-lock.json`,
       source_url: retrieval.source_url || sourceURL,
       source_sha256: retrieval.sha256 || null,
       source_bytes: retrieval.bytes || null,
@@ -1695,7 +1695,7 @@ async function materialize(connector) {
   };
   applyOpenFoundationGapState(map);
   await mkdir(sources, { recursive: true });
-  await writeFile(join(sources, `${connector}-operation-source-lock.json`), json(sourceLock));
+  await writeFile(join(sources, `${connector}-parity-source-lock.json`), json(sourceLock));
   await writeFile(join(sources, `${connector}-declaration-disposition.json`), json(map));
   await writeFile(join(sources, `${connector}-parity-map-summary.md`), summaryMarkdown(connector, map));
 }
@@ -1715,7 +1715,7 @@ function assert(condition, message) {
 async function check(connector) {
   const dir = join(root, 'internal/connectors/defs', connector);
   const apiSurface = JSON.parse(await readFile(join(dir, 'api_surface.json')));
-  const lock = JSON.parse(await readFile(join(dir, 'sources', `${connector}-operation-source-lock.json`)));
+  const lock = JSON.parse(await readFile(join(dir, 'sources', `${connector}-parity-source-lock.json`)));
   const map = JSON.parse(await readFile(join(dir, 'sources', `${connector}-declaration-disposition.json`)));
   const writes = await readJSON(join(dir, 'writes.json'));
   const wanted = apiSurface.endpoints.map(({ method, path }) => `${method}\u0000${path}`).sort();

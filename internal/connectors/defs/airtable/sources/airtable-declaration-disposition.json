@@ -3,7 +3,7 @@
   "connector": "airtable",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/airtable-operation-source-lock.json",
+    "source_lock": "sources/airtable-parity-source-lock.json",
     "source_url": "https://airtable.com/developers/web/api/introduction",
     "source_sha256": "9a61c17ca297d70ba6ec186a7acb03a00d15915b3007bc11db6263cf0b2cb239",
     "source_bytes": 623469,
@@ -111,7 +111,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-scim-groups-1",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./scim/v2/Groups.get",
@@ -153,7 +153,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-scim-group-2",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./scim/v2/Groups.post",
@@ -195,7 +195,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-scim-group-3",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./scim/v2/Groups/{groupId}.delete",
@@ -237,7 +237,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-scim-group-4",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./scim/v2/Groups/{groupId}.get",
@@ -279,7 +279,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.patch-scim-group-5",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./scim/v2/Groups/{groupId}.patch",
@@ -321,7 +321,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.put-scim-group-6",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./scim/v2/Groups/{groupId}.put",
@@ -363,7 +363,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-scim-users-7",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./scim/v2/Users.get",
@@ -405,7 +405,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-scim-user-8",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./scim/v2/Users.post",
@@ -447,7 +447,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-scim-user-9",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./scim/v2/Users/{userId}.delete",
@@ -489,7 +489,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-scim-user-10",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./scim/v2/Users/{userId}.get",
@@ -531,7 +531,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.patch-scim-user-11",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./scim/v2/Users/{userId}.patch",
@@ -573,7 +573,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.put-scim-user-12",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./scim/v2/Users/{userId}.put",
@@ -615,7 +615,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.upload-attachment-13",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{recordId}/{attachmentFieldIdOrName}/uploadAttachment.post",
@@ -657,7 +657,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-multiple-records-14",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}.delete",
@@ -694,7 +694,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-records-15",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}.get",
@@ -742,7 +742,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-multiple-records-16",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}.patch",
@@ -779,7 +779,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-records-17",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}.post",
@@ -834,7 +834,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-multiple-records-put-18",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}.put",
@@ -871,7 +871,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-record-19",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}.delete",
@@ -926,7 +926,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-record-20",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}.get",
@@ -963,7 +963,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-record-21",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}.patch",
@@ -1018,7 +1018,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-record-put-22",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}.put",
@@ -1055,7 +1055,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-comments-23",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}/comments.get",
@@ -1098,7 +1098,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-comment-24",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}/comments.post",
@@ -1153,7 +1153,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-comment-25",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}/comments/{rowCommentId}.delete",
@@ -1195,7 +1195,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-comment-26",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}/comments/{rowCommentId}.patch",
@@ -1237,7 +1237,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-date-dependency-metadata-27",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}/dateDependencyMetadata.patch",
@@ -1279,7 +1279,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.post-sync-api-endpoint-28",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{baseId}/{tableIdOrName}/sync/{apiEndpointSyncId}.post",
@@ -1321,7 +1321,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.hyperdb-delete-records-by-primary-keys-29",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{enterpriseAccountId}/{dataTableId}/deleteRecords.post",
@@ -1363,7 +1363,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.hyperdb-table-read-records-30",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{enterpriseAccountId}/{dataTableId}/getRecords.post",
@@ -1405,7 +1405,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.hyperdb-upsert-records-by-primary-keys-31",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/{enterpriseAccountId}/{dataTableId}/upsertRecords.put",
@@ -1442,7 +1442,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-webhooks-32",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/bases/{baseId}/webhooks.get",
@@ -1485,7 +1485,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-a-webhook-33",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/bases/{baseId}/webhooks.post",
@@ -1535,7 +1535,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-a-webhook-34",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/bases/{baseId}/webhooks/{webhookId}.delete",
@@ -1590,7 +1590,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.enable-disable-webhook-notifications-35",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/bases/{baseId}/webhooks/{webhookId}/enableNotifications.post",
@@ -1632,7 +1632,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-webhook-payloads-36",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/bases/{baseId}/webhooks/{webhookId}/payloads.get",
@@ -1674,7 +1674,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.refresh-a-webhook-37",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/bases/{baseId}/webhooks/{webhookId}/refresh.post",
@@ -1711,7 +1711,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-bases-38",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases.get",
@@ -1759,7 +1759,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-base-39",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases.post",
@@ -1799,7 +1799,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-base-40",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}.delete",
@@ -1841,7 +1841,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-base-collaborators-41",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}.get",
@@ -1883,7 +1883,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-block-installations-42",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/blockInstallations.get",
@@ -1925,7 +1925,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-block-installation-43",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/blockInstallations/{blockInstallationId}.delete",
@@ -1967,7 +1967,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.manage-block-installation-44",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/blockInstallations/{blockInstallationId}.patch",
@@ -2009,7 +2009,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.add-base-collaborator-45",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/collaborators.post",
@@ -2051,7 +2051,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-base-collaborator-46",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/collaborators/{userOrGroupId}.delete",
@@ -2093,7 +2093,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-collaborator-base-permission-47",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/collaborators/{userOrGroupId}.patch",
@@ -2135,7 +2135,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-interface-48",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/interfaces/{pageBundleId}.get",
@@ -2177,7 +2177,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.add-interface-collaborator-49",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators.post",
@@ -2219,7 +2219,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-interface-collaborator-50",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators/{userOrGroupId}.delete",
@@ -2261,7 +2261,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-interface-collaborator-51",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators/{userOrGroupId}.patch",
@@ -2303,7 +2303,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-interface-invite-52",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/interfaces/{pageBundleId}/invites/{inviteId}.delete",
@@ -2345,7 +2345,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-base-invite-53",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/invites/{inviteId}.delete",
@@ -2387,7 +2387,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-shares-54",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/shares.get",
@@ -2429,7 +2429,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-share-55",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/shares/{shareId}.delete",
@@ -2471,7 +2471,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.manage-share-56",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/shares/{shareId}.patch",
@@ -2508,7 +2508,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-base-schema-57",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/tables.get",
@@ -2551,7 +2551,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-table-58",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/tables.post",
@@ -2601,7 +2601,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-field-59",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/tables/{tableId}/fields.post",
@@ -2651,7 +2651,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-field-60",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/tables/{tableId}/fields/{columnId}.patch",
@@ -2701,7 +2701,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-table-61",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/tables/{tableIdOrName}.patch",
@@ -2756,7 +2756,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-views-62",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/views.get",
@@ -2798,7 +2798,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-view-63",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/views/{viewId}.delete",
@@ -2840,7 +2840,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-view-metadata-64",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/bases/{baseId}/views/{viewId}.get",
@@ -2882,7 +2882,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-enterprise-65",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}.get",
@@ -2924,7 +2924,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.audit-log-events-66",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogEvents.get",
@@ -2966,7 +2966,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-audit-log-requests-67",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs.get",
@@ -3008,7 +3008,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-audit-log-request-68",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs.post",
@@ -3050,7 +3050,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-audit-log-request-69",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs/{enterpriseAuditLogTaskId}.get",
@@ -3092,7 +3092,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.change-events-70",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/changeEvents.get",
@@ -3134,7 +3134,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-descendant-enterprise-71",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/descendants.post",
@@ -3176,7 +3176,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-ediscovery-export-72",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports.get",
@@ -3218,7 +3218,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-ediscovery-export-73",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports.post",
@@ -3260,7 +3260,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-ediscovery-export-74",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports/{enterpriseTaskId}.get",
@@ -3302,7 +3302,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.move-user-groups-75",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveGroups.post",
@@ -3344,7 +3344,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.move-workspaces-76",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveWorkspaces.post",
@@ -3386,7 +3386,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-enterprise-packages-77",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/packages.get",
@@ -3428,7 +3428,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-base-from-package-enterprise-78",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/packages/{packageId}/install.post",
@@ -3470,7 +3470,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.list-enterprise-personal-access-tokens-79",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/personalAccessTokens.get",
@@ -3512,7 +3512,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.revoke-enterprise-personal-access-tokens-80",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/personalAccessTokens/revoke.post",
@@ -3554,7 +3554,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-users-by-email-81",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users.delete",
@@ -3596,7 +3596,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-users-by-id-or-email-82",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users.get",
@@ -3638,7 +3638,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.manage-user-batched-83",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users.patch",
@@ -3680,7 +3680,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-user-by-id-84",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}.delete",
@@ -3722,7 +3722,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-user-by-id-85",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}.get",
@@ -3764,7 +3764,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.manage-user-86",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}.patch",
@@ -3806,7 +3806,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.logout-user-87",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}/logout.post",
@@ -3848,7 +3848,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.remove-user-from-enterprise-88",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}/remove.post",
@@ -3890,7 +3890,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.manage-user-membership-89",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/claim.post",
@@ -3932,7 +3932,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.grant-admin-access-90",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/grantAdminAccess.post",
@@ -3974,7 +3974,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.revoke-admin-access-91",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/revokeAdminAccess.post",
@@ -4016,7 +4016,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-workspace-ai-allowlist-92",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/workspaceAiAllowlist.post",
@@ -4058,7 +4058,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-user-group-93",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/groups/{groupId}.get",
@@ -4100,7 +4100,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-user-id-scopes-94",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/whoami.get",
@@ -4142,7 +4142,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.create-workspace-95",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/workspaces.post",
@@ -4184,7 +4184,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-workspace-96",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/workspaces/{workspaceId}.delete",
@@ -4226,7 +4226,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.get-workspace-collaborators-97",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/workspaces/{workspaceId}.get",
@@ -4268,7 +4268,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.add-workspace-collaborator-98",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/workspaces/{workspaceId}/collaborators.post",
@@ -4310,7 +4310,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-workspace-collaborator-99",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/workspaces/{workspaceId}/collaborators/{userOrGroupId}.delete",
@@ -4352,7 +4352,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-workspace-collaborator-100",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/workspaces/{workspaceId}/collaborators/{userOrGroupId}.patch",
@@ -4394,7 +4394,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.delete-workspace-invite-101",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/workspaces/{workspaceId}/invites/{inviteId}.delete",
@@ -4436,7 +4436,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.move-base-102",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/workspaces/{workspaceId}/moveBase.post",
@@ -4478,7 +4478,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.provider.update-workspace-restrictions-103",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "paths./v0/meta/workspaces/{workspaceId}/updateRestrictions.post",
@@ -4515,7 +4515,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.local-api-surface.patch-v0-baseid-tableidorname-recordid-comments-commentid-104",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "api_surface.json:endpoints[103]",
@@ -4565,7 +4565,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/airtable-operation-source-lock.json",
+        "source_lock": "sources/airtable-parity-source-lock.json",
         "source_id": "airtable.local-api-surface.delete-v0-baseid-tableidorname-recordid-comments-commentid-105",
         "source_url": "https://airtable.com/developers/web/api/introduction",
         "source_location": "api_surface.json:endpoints[104]",

@@ -3,7 +3,7 @@
   "connector": "ebay-fulfillment",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+    "source_lock": "sources/ebay-fulfillment-parity-source-lock.json",
     "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
     "source_sha256": null,
     "source_bytes": null,
@@ -91,7 +91,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_lock": "sources/ebay-fulfillment-parity-source-lock.json",
         "source_id": "ebay-fulfillment.local-api-surface.get-sell-fulfillment-v1-order-1",
         "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
         "source_location": "api_surface.json:endpoints[0]",
@@ -134,7 +134,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_lock": "sources/ebay-fulfillment-parity-source-lock.json",
         "source_id": "ebay-fulfillment.local-api-surface.get-sell-fulfillment-v1-order-exploded-lineitems-2",
         "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
         "source_location": "api_surface.json:endpoints[1]",
@@ -177,7 +177,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_lock": "sources/ebay-fulfillment-parity-source-lock.json",
         "source_id": "ebay-fulfillment.local-api-surface.get-sell-fulfillment-v1-order-shipping-projection-3",
         "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
         "source_location": "api_surface.json:endpoints[2]",
@@ -220,7 +220,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_lock": "sources/ebay-fulfillment-parity-source-lock.json",
         "source_id": "ebay-fulfillment.local-api-surface.get-sell-fulfillment-v1-payment-dispute-4",
         "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
         "source_location": "api_surface.json:endpoints[3]",
@@ -264,7 +264,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_lock": "sources/ebay-fulfillment-parity-source-lock.json",
         "source_id": "ebay-fulfillment.local-api-surface.get-sell-fulfillment-v1-order-orderid-5",
         "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
         "source_location": "api_surface.json:endpoints[4]",
@@ -302,7 +302,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_lock": "sources/ebay-fulfillment-parity-source-lock.json",
         "source_id": "ebay-fulfillment.local-api-surface.get-sell-fulfillment-v1-order-orderid-shipping-fulfillment-6",
         "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
         "source_location": "api_surface.json:endpoints[5]",
@@ -340,7 +340,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_lock": "sources/ebay-fulfillment-parity-source-lock.json",
         "source_id": "ebay-fulfillment.local-api-surface.get-sell-fulfillment-v1-order-orderid-shipping-fulfillment-fulfillmentid-7",
         "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
         "source_location": "api_surface.json:endpoints[6]",
@@ -378,7 +378,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_lock": "sources/ebay-fulfillment-parity-source-lock.json",
         "source_id": "ebay-fulfillment.local-api-surface.post-sell-fulfillment-v1-order-orderid-shipping-fulfillment-8",
         "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
         "source_location": "api_surface.json:endpoints[7]",
@@ -416,7 +416,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_lock": "sources/ebay-fulfillment-parity-source-lock.json",
         "source_id": "ebay-fulfillment.local-api-surface.get-sell-fulfillment-v1-payment-dispute-payment-dispute-id-9",
         "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
         "source_location": "api_surface.json:endpoints[8]",
@@ -454,7 +454,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_lock": "sources/ebay-fulfillment-parity-source-lock.json",
         "source_id": "ebay-fulfillment.local-api-surface.post-sell-fulfillment-v1-payment-dispute-payment-dispute-id-accept-10",
         "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
         "source_location": "api_surface.json:endpoints[9]",
@@ -492,7 +492,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/ebay-fulfillment-operation-source-lock.json",
+        "source_lock": "sources/ebay-fulfillment-parity-source-lock.json",
         "source_id": "ebay-fulfillment.local-api-surface.post-sell-fulfillment-v1-payment-dispute-payment-dispute-id-contest-11",
         "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
         "source_location": "api_surface.json:endpoints[10]",

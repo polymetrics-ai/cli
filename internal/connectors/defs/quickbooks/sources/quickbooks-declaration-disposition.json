@@ -3,7 +3,7 @@
   "connector": "quickbooks",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/quickbooks-operation-source-lock.json",
+    "source_lock": "sources/quickbooks-parity-source-lock.json",
     "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
     "source_sha256": "24c6accfab8236fdba4f03bff33214dab5b891e3a0c82b243cf6ca4f297fdb7a",
     "source_bytes": 387314,
@@ -96,7 +96,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.entitlements-read-0-1",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Entitlements.operations.READ[0]",
@@ -138,7 +138,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.account-create-0-2",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Account.operations.CREATE[0]",
@@ -180,7 +180,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.account-read-0-3",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Account.operations.READ[0]",
@@ -222,7 +222,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.attachable-create-0-4",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Attachable.operations.CREATE[0]",
@@ -264,7 +264,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.attachable-read-0-5",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Attachable.operations.READ[0]",
@@ -306,7 +306,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.batch-default-0-6",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Batch.operations.DEFAULT[0]",
@@ -348,7 +348,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.bill-create-0-7",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Bill.operations.CREATE[0]",
@@ -390,7 +390,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.bill-read-0-8",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Bill.operations.READ[0]",
@@ -432,7 +432,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.billpayment-create-0-9",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.BillPayment.operations.CREATE[0]",
@@ -474,7 +474,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.billpayment-read-0-10",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.BillPayment.operations.READ[0]",
@@ -516,7 +516,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.budget-create-0-11",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Budget.operations.CREATE[0]",
@@ -558,7 +558,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.budget-read-0-12",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Budget.operations.READ[0]",
@@ -600,7 +600,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.changedatacapture-default-0-13",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.ChangeDataCapture.operations.DEFAULT[0]",
@@ -642,7 +642,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.changeorder-create-0-14",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.ChangeOrder.operations.CREATE[0]",
@@ -684,7 +684,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.changeorder-read-0-15",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.ChangeOrder.operations.READ[0]",
@@ -726,7 +726,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.class-create-0-16",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Class.operations.CREATE[0]",
@@ -768,7 +768,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.class-read-0-17",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Class.operations.READ[0]",
@@ -810,7 +810,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.companycurrency-create-0-18",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CompanyCurrency.operations.CREATE[0]",
@@ -852,7 +852,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.companycurrency-read-0-19",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CompanyCurrency.operations.READ[0]",
@@ -894,7 +894,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.companyinfo-update-0-20",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CompanyInfo.operations.UPDATE[0]",
@@ -936,7 +936,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.companyinfo-read-0-21",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CompanyInfo.operations.READ[0]",
@@ -978,7 +978,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.creditcardpayment-create-0-22",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CreditCardPayment.operations.CREATE[0]",
@@ -1020,7 +1020,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.creditcardpayment-read-0-23",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CreditCardPayment.operations.READ[0]",
@@ -1062,7 +1062,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.creditmemo-create-0-24",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CreditMemo.operations.CREATE[0]",
@@ -1104,7 +1104,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.creditmemo-read-0-25",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CreditMemo.operations.READ[0]",
@@ -1146,7 +1146,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.creditmemo-pdf-0-26",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CreditMemo.operations.PDF[0]",
@@ -1188,7 +1188,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.creditmemo-send-0-27",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CreditMemo.operations.SEND[0]",
@@ -1230,7 +1230,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.customer-create-0-28",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Customer.operations.CREATE[0]",
@@ -1272,7 +1272,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.customer-read-0-29",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Customer.operations.READ[0]",
@@ -1314,7 +1314,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.customertype-read-0-30",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CustomerType.operations.READ[0]",
@@ -1356,7 +1356,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.department-create-0-31",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Department.operations.CREATE[0]",
@@ -1398,7 +1398,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.department-read-0-32",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Department.operations.READ[0]",
@@ -1440,7 +1440,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.deposit-create-0-33",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Deposit.operations.CREATE[0]",
@@ -1482,7 +1482,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.deposit-read-0-34",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Deposit.operations.READ[0]",
@@ -1524,7 +1524,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.attachable-download-0-35",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Attachable.operations.DOWNLOAD[0]",
@@ -1566,7 +1566,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.employee-create-0-36",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Employee.operations.CREATE[0]",
@@ -1608,7 +1608,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.employee-read-0-37",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Employee.operations.READ[0]",
@@ -1650,7 +1650,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.estimate-create-0-38",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Estimate.operations.CREATE[0]",
@@ -1692,7 +1692,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.estimate-read-0-39",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Estimate.operations.READ[0]",
@@ -1734,7 +1734,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.estimate-pdf-0-40",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Estimate.operations.PDF[0]",
@@ -1776,7 +1776,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.estimate-send-0-41",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Estimate.operations.SEND[0]",
@@ -1818,7 +1818,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.exchangerate-query-0-42",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Exchangerate.operations.QUERY[0]",
@@ -1860,7 +1860,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.exchangerate-update-0-43",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Exchangerate.operations.UPDATE[0]",
@@ -1902,7 +1902,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.inventoryadjustment-create-0-44",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.InventoryAdjustment.operations.CREATE[0]",
@@ -1944,7 +1944,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.inventoryadjustment-read-0-45",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.InventoryAdjustment.operations.READ[0]",
@@ -1986,7 +1986,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.invoice-create-0-46",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Invoice.operations.CREATE[0]",
@@ -2028,7 +2028,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.invoice-read-0-47",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Invoice.operations.READ[0]",
@@ -2070,7 +2070,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.invoice-pdf-0-48",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Invoice.operations.PDF[0]",
@@ -2112,7 +2112,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.invoice-send-0-49",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Invoice.operations.SEND[0]",
@@ -2154,7 +2154,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.item-create-0-50",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Item.operations.CREATE[0]",
@@ -2196,7 +2196,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.item-read-0-51",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Item.operations.READ[0]",
@@ -2238,7 +2238,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.journalentry-create-0-52",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.JournalEntry.operations.CREATE[0]",
@@ -2280,7 +2280,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.journalentry-read-0-53",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.JournalEntry.operations.READ[0]",
@@ -2322,7 +2322,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.payment-create-0-54",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Payment.operations.CREATE[0]",
@@ -2364,7 +2364,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.payment-read-0-55",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Payment.operations.READ[0]",
@@ -2406,7 +2406,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.payment-pdf-0-56",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Payment.operations.PDF[0]",
@@ -2448,7 +2448,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.payment-send-0-57",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Payment.operations.SEND[0]",
@@ -2490,7 +2490,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.paymentmethod-create-0-58",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.PaymentMethod.operations.CREATE[0]",
@@ -2532,7 +2532,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.paymentmethod-read-0-59",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.PaymentMethod.operations.READ[0]",
@@ -2574,7 +2574,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.preferences-read-0-60",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Preferences.operations.READ[0]",
@@ -2616,7 +2616,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.preferences-update-0-61",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Preferences.operations.UPDATE[0]",
@@ -2658,7 +2658,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.purchase-create-0-62",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Purchase.operations.CREATE[0]",
@@ -2700,7 +2700,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.purchase-read-0-63",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Purchase.operations.READ[0]",
@@ -2742,7 +2742,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.purchaseorder-create-0-64",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.PurchaseOrder.operations.CREATE[0]",
@@ -2784,7 +2784,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.purchaseorder-read-0-65",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.PurchaseOrder.operations.READ[0]",
@@ -2826,7 +2826,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.purchaseorder-pdf-0-66",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.PurchaseOrder.operations.PDF[0]",
@@ -2868,7 +2868,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.purchaseorder-send-0-67",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.PurchaseOrder.operations.SEND[0]",
@@ -2910,7 +2910,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.account-query-0-68",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Account.operations.QUERY[0]",
@@ -2952,7 +2952,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.recurringtransaction-create-0-69",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.RecurringTransaction.operations.CREATE[0]",
@@ -2994,7 +2994,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.recurringtransaction-read-0-70",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.RecurringTransaction.operations.READ[0]",
@@ -3036,7 +3036,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.refundreceipt-create-0-71",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.RefundReceipt.operations.CREATE[0]",
@@ -3078,7 +3078,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.refundreceipt-read-0-72",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.RefundReceipt.operations.READ[0]",
@@ -3120,7 +3120,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.refundreceipt-pdf-0-73",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.RefundReceipt.operations.PDF[0]",
@@ -3162,7 +3162,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.refundreceipt-send-0-74",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.RefundReceipt.operations.SEND[0]",
@@ -3204,7 +3204,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.reimbursecharge-read-0-75",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.ReimburseCharge.operations.READ[0]",
@@ -3246,7 +3246,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.accountlistdetail-query-0-76",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.AccountListDetail.operations.QUERY[0]",
@@ -3288,7 +3288,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.apagingdetail-query-0-77",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.APAgingDetail.operations.QUERY[0]",
@@ -3330,7 +3330,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.apagingsummary-query-0-78",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.APAgingSummary.operations.QUERY[0]",
@@ -3372,7 +3372,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.aragingdetail-query-0-79",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.ARAgingDetail.operations.QUERY[0]",
@@ -3414,7 +3414,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.aragingsummary-query-0-80",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.ARAgingSummary.operations.QUERY[0]",
@@ -3456,7 +3456,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.balancesheet-query-0-81",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.BalanceSheet.operations.QUERY[0]",
@@ -3498,7 +3498,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.cashflow-query-0-82",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CashFlow.operations.QUERY[0]",
@@ -3540,7 +3540,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.salesbyclasssummary-query-0-83",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.SalesByClassSummary.operations.QUERY[0]",
@@ -3582,7 +3582,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.customerbalance-query-0-84",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CustomerBalance.operations.QUERY[0]",
@@ -3624,7 +3624,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.customerbalancedetail-query-0-85",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CustomerBalanceDetail.operations.QUERY[0]",
@@ -3666,7 +3666,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.customerincome-query-0-86",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.CustomerIncome.operations.QUERY[0]",
@@ -3708,7 +3708,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.salesbycustomer-query-0-87",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.SalesByCustomer.operations.QUERY[0]",
@@ -3750,7 +3750,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.salesbydepartment-query-0-88",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.SalesByDepartment.operations.QUERY[0]",
@@ -3792,7 +3792,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.generalledger-query-0-89",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.GeneralLedger.operations.QUERY[0]",
@@ -3834,7 +3834,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.inventoryvaluationdetail-query-0-90",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.InventoryValuationDetail.operations.QUERY[0]",
@@ -3876,7 +3876,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.inventoryvaluationsummary-query-0-91",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.InventoryValuationSummary.operations.QUERY[0]",
@@ -3918,7 +3918,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.salesbyproduct-query-0-92",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.SalesByProduct.operations.QUERY[0]",
@@ -3960,7 +3960,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.journalreport-query-0-93",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.JournalReport.operations.QUERY[0]",
@@ -4002,7 +4002,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.profitandloss-query-0-94",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.ProfitAndLoss.operations.QUERY[0]",
@@ -4044,7 +4044,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.profitandlossdetail-query-0-95",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.ProfitAndLossDetail.operations.QUERY[0]",
@@ -4086,7 +4086,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.taxsummary-query-0-96",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TaxSummary.operations.QUERY[0]",
@@ -4128,7 +4128,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.transactionlist-query-0-97",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TransactionList.operations.QUERY[0]",
@@ -4170,7 +4170,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.transactionlistbycustomer-query-0-98",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TransactionListByCustomer.operations.QUERY[0]",
@@ -4212,7 +4212,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.transactionlistbyvendor-query-0-99",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TransactionListByVendor.operations.QUERY[0]",
@@ -4254,7 +4254,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.transactionlistwithsplits-query-0-100",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TransactionListWithSplits.operations.QUERY[0]",
@@ -4296,7 +4296,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.trialbalance-query-0-101",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TrialBalance.operations.QUERY[0]",
@@ -4338,7 +4338,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.trialbalance-query-0-102",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TrialBalance.operations.QUERY[0]",
@@ -4380,7 +4380,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.vendorbalance-query-0-103",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.VendorBalance.operations.QUERY[0]",
@@ -4422,7 +4422,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.vendorbalancedetail-query-0-104",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.VendorBalanceDetail.operations.QUERY[0]",
@@ -4464,7 +4464,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.vendorexpenses-query-0-105",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.VendorExpenses.operations.QUERY[0]",
@@ -4506,7 +4506,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.salesreceipt-create-0-106",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.SalesReceipt.operations.CREATE[0]",
@@ -4548,7 +4548,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.salesreceipt-read-0-107",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.SalesReceipt.operations.READ[0]",
@@ -4590,7 +4590,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.salesreceipt-pdf-0-108",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.SalesReceipt.operations.PDF[0]",
@@ -4632,7 +4632,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.salesreceipt-send-0-109",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.SalesReceipt.operations.SEND[0]",
@@ -4674,7 +4674,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.taxagency-create-0-110",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TaxAgency.operations.CREATE[0]",
@@ -4716,7 +4716,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.taxagency-read-0-111",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TaxAgency.operations.READ[0]",
@@ -4758,7 +4758,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.taxclassification-read-2-112",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TaxClassification.operations.READ[2]",
@@ -4800,7 +4800,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.taxclassification-read-1-113",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TaxClassification.operations.READ[1]",
@@ -4842,7 +4842,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.taxclassification-read-0-114",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TaxClassification.operations.READ[0]",
@@ -4884,7 +4884,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.taxcode-read-0-115",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TaxCode.operations.READ[0]",
@@ -4926,7 +4926,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.taxpayment-read-0-116",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TaxPayment.operations.READ[0]",
@@ -4968,7 +4968,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.taxrate-read-0-117",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TaxRate.operations.READ[0]",
@@ -5010,7 +5010,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.taxservice-create-0-118",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TaxService.operations.CREATE[0]",
@@ -5052,7 +5052,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.term-create-0-119",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Term.operations.CREATE[0]",
@@ -5094,7 +5094,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.term-read-0-120",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Term.operations.READ[0]",
@@ -5136,7 +5136,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.timeactivity-create-0-121",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TimeActivity.operations.CREATE[0]",
@@ -5178,7 +5178,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.timeactivity-read-0-122",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.TimeActivity.operations.READ[0]",
@@ -5220,7 +5220,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.transfer-create-0-123",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Transfer.operations.CREATE[0]",
@@ -5262,7 +5262,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.transfer-read-0-124",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Transfer.operations.READ[0]",
@@ -5304,7 +5304,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.attachable-upload-0-125",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Attachable.operations.UPLOAD[0]",
@@ -5346,7 +5346,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.vendor-create-0-126",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Vendor.operations.CREATE[0]",
@@ -5388,7 +5388,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.vendor-read-0-127",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.Vendor.operations.READ[0]",
@@ -5430,7 +5430,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.vendorcredit-create-0-128",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.VendorCredit.operations.CREATE[0]",
@@ -5472,7 +5472,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.provider.vendorcredit-read-0-129",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "entities.qbo.VendorCredit.operations.READ[0]",
@@ -5509,7 +5509,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-customer-startposition-n-maxresults-size-130",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "api_surface.json:endpoints[129]",
@@ -5552,7 +5552,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-invoice-startposition-n-maxresults-size-131",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "api_surface.json:endpoints[130]",
@@ -5595,7 +5595,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-payment-startposition-n-maxresults-size-132",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "api_surface.json:endpoints[131]",
@@ -5638,7 +5638,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-account-startposition-n-maxresults-size-133",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "api_surface.json:endpoints[132]",
@@ -5681,7 +5681,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/quickbooks-operation-source-lock.json",
+        "source_lock": "sources/quickbooks-parity-source-lock.json",
         "source_id": "quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-vendor-startposition-n-maxresults-size-134",
         "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
         "source_location": "api_surface.json:endpoints[133]",

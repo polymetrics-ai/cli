@@ -3,7 +3,7 @@
   "connector": "woocommerce",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/woocommerce-operation-source-lock.json",
+    "source_lock": "sources/woocommerce-parity-source-lock.json",
     "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
     "source_sha256": "a02e504ae56786d94f6a859e55b5c7e3229749ea3d43147424cfd987b2ec550e",
     "source_bytes": 4400931,
@@ -95,7 +95,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-1-1",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -132,7 +132,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-coupons-2-2",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -179,7 +179,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-coupons-3-3",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -220,7 +220,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-coupons-id-4-4",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -261,7 +261,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-coupons-id-5-5",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -302,7 +302,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-coupons-id-6-6",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -343,7 +343,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-coupons-batch-7-7",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -380,7 +380,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-customers-8-8",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -427,7 +427,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-customers-9-9",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -468,7 +468,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-customers-id-10-10",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -509,7 +509,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-customers-id-11-11",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -550,7 +550,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-customers-id-12-12",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -591,7 +591,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-customers-id-downloads-13-13",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -632,7 +632,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-customers-batch-14-14",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -673,7 +673,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-data-15-15",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -714,7 +714,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-data-continents-16-16",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -755,7 +755,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-data-continents-location-17-17",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -796,7 +796,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-data-countries-18-18",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -837,7 +837,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-data-countries-location-19-19",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -878,7 +878,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-data-currencies-20-20",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -919,7 +919,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-data-currencies-currency-21-21",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -960,7 +960,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-data-currencies-current-22-22",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -997,7 +997,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-orders-23-23",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1044,7 +1044,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-orders-24-24",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1085,7 +1085,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-orders-id-25-25",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1126,7 +1126,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-orders-id-26-26",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1167,7 +1167,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-orders-id-27-27",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1208,7 +1208,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-orders-id-actions-email-templates-28-28",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1249,7 +1249,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-orders-id-actions-send-email-29-29",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1290,7 +1290,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-orders-id-actions-send-order-details-30-30",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1331,7 +1331,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-orders-id-notes-31-31",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1372,7 +1372,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-orders-id-notes-32-32",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1413,7 +1413,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-orders-id-notes-note-id-33-33",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1454,7 +1454,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-orders-id-notes-note-id-34-34",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1495,7 +1495,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-orders-id-refunds-35-35",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1536,7 +1536,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-orders-id-refunds-36-36",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1577,7 +1577,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-orders-id-refunds-refund-id-37-37",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1618,7 +1618,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-orders-id-refunds-refund-id-38-38",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1659,7 +1659,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-orders-id-refunds-preview-39-39",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1700,7 +1700,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-orders-batch-40-40",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1741,7 +1741,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-payment-gateways-41-41",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1782,7 +1782,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-payment-gateways-id-42-42",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1823,7 +1823,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-payment-gateways-id-43-43",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1860,7 +1860,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-44-44",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1907,7 +1907,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-45-45",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1948,7 +1948,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-products-id-46-46",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -1989,7 +1989,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-id-47-47",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2030,7 +2030,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-products-id-48-48",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2071,7 +2071,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-product-id-duplicate-49-49",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2112,7 +2112,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-product-id-variations-50-50",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2153,7 +2153,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-product-id-variations-51-51",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2194,7 +2194,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-products-product-id-variations-id-52-52",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2235,7 +2235,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-product-id-variations-id-53-53",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2276,7 +2276,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-products-product-id-variations-id-54-54",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2317,7 +2317,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-product-id-variations-batch-55-55",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2358,7 +2358,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-attributes-56-56",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2399,7 +2399,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-attributes-57-57",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2440,7 +2440,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-attributes-attribute-id-terms-58-58",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2481,7 +2481,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-attributes-attribute-id-terms-59-59",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2522,7 +2522,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-products-attributes-attribute-id-terms-id-60-60",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2563,7 +2563,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-attributes-attribute-id-terms-id-61-61",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2604,7 +2604,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-products-attributes-attribute-id-terms-id-62-62",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2645,7 +2645,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-attributes-attribute-id-terms-batch-63-63",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2686,7 +2686,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-products-attributes-id-64-64",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2727,7 +2727,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-attributes-id-65-65",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2768,7 +2768,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-products-attributes-id-66-66",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2809,7 +2809,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-attributes-batch-67-67",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2850,7 +2850,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-batch-68-68",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2891,7 +2891,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-categories-69-69",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2932,7 +2932,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-categories-70-70",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -2973,7 +2973,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-products-categories-id-71-71",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3014,7 +3014,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-categories-id-72-72",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3055,7 +3055,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-products-categories-id-73-73",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3096,7 +3096,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-categories-batch-74-74",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3137,7 +3137,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-custom-fields-names-75-75",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3178,7 +3178,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-reviews-76-76",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3219,7 +3219,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-reviews-77-77",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3260,7 +3260,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-products-reviews-id-78-78",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3301,7 +3301,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-reviews-id-79-79",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3342,7 +3342,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-products-reviews-id-80-80",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3383,7 +3383,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-reviews-batch-81-81",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3424,7 +3424,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-shipping-classes-82-82",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3465,7 +3465,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-shipping-classes-83-83",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3506,7 +3506,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-products-shipping-classes-id-84-84",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3547,7 +3547,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-shipping-classes-id-85-85",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3588,7 +3588,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-products-shipping-classes-id-86-86",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3629,7 +3629,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-shipping-classes-batch-87-87",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3670,7 +3670,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-tags-88-88",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3711,7 +3711,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-tags-89-89",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3752,7 +3752,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-products-tags-id-90-90",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3793,7 +3793,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-products-tags-id-91-91",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3834,7 +3834,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-products-tags-id-92-92",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3875,7 +3875,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-products-tags-batch-93-93",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3916,7 +3916,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-refunds-94-94",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3957,7 +3957,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-reports-95-95",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -3998,7 +3998,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-reports-coupons-totals-96-96",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4039,7 +4039,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-reports-customers-totals-97-97",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4080,7 +4080,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-reports-orders-totals-98-98",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4121,7 +4121,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-reports-products-totals-99-99",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4162,7 +4162,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-reports-reviews-totals-100-100",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4203,7 +4203,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-reports-sales-101-101",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4244,7 +4244,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-reports-top-sellers-102-102",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4285,7 +4285,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-settings-103-103",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4326,7 +4326,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-settings-group-id-id-104-104",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4367,7 +4367,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-settings-group-id-id-105-105",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4408,7 +4408,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-settings-id-106-106",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4449,7 +4449,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-settings-id-batch-107-107",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4490,7 +4490,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-shipping-methods-108-108",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4531,7 +4531,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-shipping-methods-id-109-109",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4572,7 +4572,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-shipping-zones-110-110",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4613,7 +4613,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-shipping-zones-111-111",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4654,7 +4654,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-shipping-zones-id-112-112",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4695,7 +4695,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-shipping-zones-id-113-113",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4736,7 +4736,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-shipping-zones-id-114-114",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4777,7 +4777,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-shipping-zones-id-locations-115-115",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4818,7 +4818,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-shipping-zones-id-locations-116-116",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4859,7 +4859,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-shipping-zones-id-methods-117-117",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4900,7 +4900,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-shipping-zones-id-methods-118-118",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4941,7 +4941,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-shipping-zones-zone-id-methods-id-119-119",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -4982,7 +4982,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-shipping-zones-zone-id-methods-id-120-120",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5023,7 +5023,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-shipping-zones-zone-id-methods-id-121-121",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5064,7 +5064,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-system-status-122-122",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5105,7 +5105,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-system-status-tools-123-123",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5146,7 +5146,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-system-status-tools-id-124-124",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5187,7 +5187,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-system-status-tools-id-125-125",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5228,7 +5228,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-taxes-126-126",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5269,7 +5269,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-taxes-127-127",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5310,7 +5310,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-taxes-id-128-128",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5351,7 +5351,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-taxes-id-129-129",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5392,7 +5392,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-taxes-id-130-130",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5433,7 +5433,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-taxes-batch-131-131",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5474,7 +5474,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-taxes-classes-132-132",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5515,7 +5515,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-taxes-classes-133-133",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5556,7 +5556,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-taxes-classes-slug-134-134",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5597,7 +5597,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-webhooks-135-135",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5638,7 +5638,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-webhooks-136-136",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5679,7 +5679,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.delete-wp-json-wc-v3-webhooks-id-137-137",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5720,7 +5720,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.get-wp-json-wc-v3-webhooks-id-138-138",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5761,7 +5761,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.put-wp-json-wc-v3-webhooks-id-139-139",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",
@@ -5802,7 +5802,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/woocommerce-operation-source-lock.json",
+        "source_lock": "sources/woocommerce-parity-source-lock.json",
         "source_id": "woocommerce.provider.post-wp-json-wc-v3-webhooks-batch-140-140",
         "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
         "source_location": "rendered-api-endpoint",

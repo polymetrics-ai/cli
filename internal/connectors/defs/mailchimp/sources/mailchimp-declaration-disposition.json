@@ -3,7 +3,7 @@
   "connector": "mailchimp",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/mailchimp-operation-source-lock.json",
+    "source_lock": "sources/mailchimp-parity-source-lock.json",
     "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
     "source_sha256": "83a5375a94a2b80fa42bb971ea2cd551f049f76e16957815522f7fe956c5193e",
     "source_bytes": 518667,
@@ -111,7 +111,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getroot-1",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Root/Namespace.json",
         "source_location": "paths./.get",
@@ -148,7 +148,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getaccountexports-2",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/AccountExports/Collection.json",
         "source_location": "paths./account-exports.get",
@@ -190,7 +190,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postaccountexport-3",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/AccountExports/Collection.json",
         "source_location": "paths./account-exports.post",
@@ -244,7 +244,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getaccountexportid-4",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/AccountExports/Instance.json",
         "source_location": "paths./account-exports/{export_id}.get",
@@ -280,7 +280,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getactivityfeedchimpchatter-5",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/ActivityFeed/ChimpChatter/Collection.json",
         "source_location": "paths./activity-feed/chimp-chatter.get",
@@ -322,7 +322,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getaudiencecontacts-6",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Audiences/Collection.json",
         "source_location": "paths./audiences.get",
@@ -364,7 +364,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getaudienceid-7",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Audiences/Instance.json",
         "source_location": "paths./audiences/{audience_id}.get",
@@ -400,7 +400,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getaudiencecontactlist-8",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Audiences/Contacts/Collection.json",
         "source_location": "paths./audiences/{audience_id}/contacts.get",
@@ -442,7 +442,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.createaudiencecontact-9",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Audiences/Contacts/Collection.json",
         "source_location": "paths./audiences/{audience_id}/contacts.post",
@@ -496,7 +496,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getaudiencecontact-10",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Audiences/Contacts/Instance.json",
         "source_location": "paths./audiences/{audience_id}/contacts/{contact_id}.get",
@@ -532,7 +532,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchaudiencecontact-11",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Audiences/Contacts/Instance.json",
         "source_location": "paths./audiences/{audience_id}/contacts/{contact_id}.patch",
@@ -586,7 +586,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postaudiencescontactsactionsarchive-12",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Audiences/Contacts/Actions/Archive.json",
         "source_location": "paths./audiences/{audience_id}/contacts/{contact_id}/actions/archive.post",
@@ -640,7 +640,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postaudiencescontactsactionsforget-13",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Audiences/Contacts/Actions/Forget.json",
         "source_location": "paths./audiences/{audience_id}/contacts/{contact_id}/actions/forget.post",
@@ -694,7 +694,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getauthorizedapps-14",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/AuthorizedApps/Collection.json",
         "source_location": "paths./authorized-apps.get",
@@ -736,7 +736,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getauthorizedappsid-15",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/AuthorizedApps/Instance.json",
         "source_location": "paths./authorized-apps/{app_id}.get",
@@ -772,7 +772,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getautomations-16",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Collection.json",
         "source_location": "paths./automations.get",
@@ -814,7 +814,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postautomations-17",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Collection.json",
         "source_location": "paths./automations.post",
@@ -868,7 +868,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getautomationsid-18",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Instance.json",
         "source_location": "paths./automations/{workflow_id}.get",
@@ -904,7 +904,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postcampaignsidactionsschedule-19",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Actions/Archive.json",
         "source_location": "paths./automations/{workflow_id}/actions/archive.post",
@@ -958,7 +958,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postautomationsidactionspauseallemails-20",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Actions/Pause-All-Emails.json",
         "source_location": "paths./automations/{workflow_id}/actions/pause-all-emails.post",
@@ -1012,7 +1012,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postautomationsidactionsstartallemails-21",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Actions/Start-All-Emails.json",
         "source_location": "paths./automations/{workflow_id}/actions/start-all-emails.post",
@@ -1071,7 +1071,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postcampaignsidactionsunschedule-22",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Emails/Collection.json",
         "source_location": "paths./automations/{workflow_id}/emails.post",
@@ -1113,7 +1113,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postcampaignsidactionstest-23",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Emails/Instance.json",
         "source_location": "paths./automations/{workflow_id}/emails/{workflow_email_id}.post",
@@ -1150,7 +1150,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postcampaignsidactionscreateresend-24",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Emails/Actions/Pause.json",
         "source_location": "paths./automations/{workflow_id}/emails/{workflow_email_id}/actions/pause.post",
@@ -1209,7 +1209,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getcampaignsidcontent-25",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Emails/Actions/Start.json",
         "source_location": "paths./automations/{workflow_id}/emails/{workflow_email_id}/actions/start.get",
@@ -1251,7 +1251,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.putcampaignsidcontent-26",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Emails/Actions/Start.json",
         "source_location": "paths./automations/{workflow_id}/emails/{workflow_email_id}/actions/start.put",
@@ -1288,7 +1288,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postcampaignsidactionspause-27",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Emails/Queue/Collection.json",
         "source_location": "paths./automations/{workflow_id}/emails/{workflow_email_id}/queue.post",
@@ -1347,7 +1347,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postcampaignsidactionsresume-28",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/Emails/Queue/Instance.json",
         "source_location": "paths./automations/{workflow_id}/emails/{workflow_email_id}/queue/{subscriber_hash}.post",
@@ -1384,7 +1384,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getcampaignsidfeedback-29",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/RemovedSubscribers/Collection.json",
         "source_location": "paths./automations/{workflow_id}/removed-subscribers.get",
@@ -1426,7 +1426,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postcampaignsidfeedback-30",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/RemovedSubscribers/Collection.json",
         "source_location": "paths./automations/{workflow_id}/removed-subscribers.post",
@@ -1485,7 +1485,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletecampaignsidfeedbackid-31",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/RemovedSubscribers/Instance.json",
         "source_location": "paths./automations/{workflow_id}/removed-subscribers/{subscriber_hash}.delete",
@@ -1522,7 +1522,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getcampaignsidfeedbackid-32",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/RemovedSubscribers/Instance.json",
         "source_location": "paths./automations/{workflow_id}/removed-subscribers/{subscriber_hash}.get",
@@ -1563,7 +1563,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchcampaignsidfeedbackid-33",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Automations/RemovedSubscribers/Instance.json",
         "source_location": "paths./automations/{workflow_id}/removed-subscribers/{subscriber_hash}.patch",
@@ -1605,7 +1605,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteconnectedsitesid-34",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/BatchWebhooks/Collection.json",
         "source_location": "paths./batch-webhooks.delete",
@@ -1642,7 +1642,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getconnectedsitesid-35",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/BatchWebhooks/Collection.json",
         "source_location": "paths./batch-webhooks.get",
@@ -1689,7 +1689,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postconnectedsitesidactionsverifyscriptinstallation-36",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/BatchWebhooks/Instance.json",
         "source_location": "paths./batch-webhooks/{batch_webhook_id}.post",
@@ -1726,7 +1726,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getcampaignsidsendchecklist-37",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Batches/Collection.json",
         "source_location": "paths./batches.get",
@@ -1768,7 +1768,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getconnectedsites-38",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Batches/Instance.json",
         "source_location": "paths./batches/{batch_id}.get",
@@ -1809,7 +1809,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postconnectedsites-39",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Batches/Instance.json",
         "source_location": "paths./batches/{batch_id}.post",
@@ -1846,7 +1846,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getconversations-40",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/CampaignFolders/Collection.json",
         "source_location": "paths./campaign-folders.get",
@@ -1888,7 +1888,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getconversationsid-41",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/CampaignFolders/Instance.json",
         "source_location": "paths./campaign-folders/{folder_id}.get",
@@ -1924,7 +1924,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getconversationsidmessages-42",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json",
         "source_location": "paths./campaigns.get",
@@ -1966,7 +1966,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getconversationsidmessagesid-43",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Instance.json",
         "source_location": "paths./campaigns/{campaign_id}.get",
@@ -2002,7 +2002,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postcustomerjourneysjourneysidstepsidactionstrigger-44",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Cancel-Send.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/cancel-send.post",
@@ -2061,7 +2061,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidabusereports-45",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Create-Resend.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/create-resend.get",
@@ -2103,7 +2103,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlists-46",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Pause.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/pause.get",
@@ -2140,7 +2140,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlists-47",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Pause.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/pause.post",
@@ -2199,7 +2199,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getfilemanagerfiles-48",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Replicate.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/replicate.get",
@@ -2236,7 +2236,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postfilemanagerfiles-49",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Replicate.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/replicate.post",
@@ -2295,7 +2295,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletelistsid-50",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Resume.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/resume.delete",
@@ -2337,7 +2337,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsid-51",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Resume.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/resume.get",
@@ -2379,7 +2379,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchlistsid-52",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Resume.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/resume.patch",
@@ -2416,7 +2416,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsid-53",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Resume.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/resume.post",
@@ -2475,7 +2475,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getfilemanagerfolders-54",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Schedule.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/schedule.get",
@@ -2512,7 +2512,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postfilemanagerfolders-55",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Schedule.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/schedule.post",
@@ -2571,7 +2571,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletefilemanagerfilesid-56",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Send.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/send.delete",
@@ -2613,7 +2613,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getfilemanagerfilesid-57",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Send.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/send.get",
@@ -2655,7 +2655,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchfilemanagerfilesid-58",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Send.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/send.patch",
@@ -2697,7 +2697,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getfilemanagerfoldersfiles-59",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Test.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/test.get",
@@ -2739,7 +2739,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletefilemanagerfoldersid-60",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Unschedule.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/unschedule.delete",
@@ -2781,7 +2781,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getfilemanagerfoldersid-61",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Unschedule.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/unschedule.get",
@@ -2823,7 +2823,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchfilemanagerfoldersid-62",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Actions/Unschedule.json",
         "source_location": "paths./campaigns/{campaign_id}/actions/unschedule.patch",
@@ -2860,7 +2860,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidabusereportsid-63",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Content/Instance.json",
         "source_location": "paths./campaigns/{campaign_id}/content.get",
@@ -2896,7 +2896,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidactivity-64",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Feedback/Collection.json",
         "source_location": "paths./campaigns/{campaign_id}/feedback.get",
@@ -2938,7 +2938,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletecampaignsidfeedbackid-65",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Feedback/Instance.json",
         "source_location": "paths./campaigns/{campaign_id}/feedback/{feedback_id}.delete",
@@ -2992,7 +2992,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getcampaignsidfeedbackid-66",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Feedback/Instance.json",
         "source_location": "paths./campaigns/{campaign_id}/feedback/{feedback_id}.get",
@@ -3028,7 +3028,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchcampaignsidfeedbackid-67",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Feedback/Instance.json",
         "source_location": "paths./campaigns/{campaign_id}/feedback/{feedback_id}.patch",
@@ -3082,7 +3082,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getcampaignsidsendchecklist-68",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Campaigns/Checklist/Instance.json",
         "source_location": "paths./campaigns/{campaign_id}/send-checklist.get",
@@ -3118,7 +3118,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getconnectedsites-69",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/ConnectedSites/Collection.json",
         "source_location": "paths./connected-sites.get",
@@ -3160,7 +3160,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postconnectedsites-70",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/ConnectedSites/Collection.json",
         "source_location": "paths./connected-sites.post",
@@ -3214,7 +3214,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteconnectedsitesid-71",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/ConnectedSites/Instance.json",
         "source_location": "paths./connected-sites/{connected_site_id}.delete",
@@ -3268,7 +3268,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getconnectedsitesid-72",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/ConnectedSites/Instance.json",
         "source_location": "paths./connected-sites/{connected_site_id}.get",
@@ -3309,7 +3309,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.previewasegment-73",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/ConnectedSites/Actions/Disable-Pixel.json",
         "source_location": "paths./connected-sites/{connected_site_id}/actions/disable-pixel.get",
@@ -3346,7 +3346,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidsegments-74",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/ConnectedSites/Actions/Disable-Pixel.json",
         "source_location": "paths./connected-sites/{connected_site_id}/actions/disable-pixel.post",
@@ -3400,7 +3400,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postconnectedsitesidactionsenablepixel-75",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/ConnectedSites/Actions/Enable-Pixel.json",
         "source_location": "paths./connected-sites/{connected_site_id}/actions/enable-pixel.post",
@@ -3454,7 +3454,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postconnectedsitesidactionsverifyscriptinstallation-76",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/ConnectedSites/Actions/Verify-Script-Installation.json",
         "source_location": "paths./connected-sites/{connected_site_id}/actions/verify-script-installation.post",
@@ -3508,7 +3508,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getconversations-77",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Conversations/Collection.json",
         "source_location": "paths./conversations.get",
@@ -3550,7 +3550,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getconversationsid-78",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Conversations/Instance.json",
         "source_location": "paths./conversations/{conversation_id}.get",
@@ -3586,7 +3586,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getconversationsidmessages-79",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Conversations/Messages/Collection.json",
         "source_location": "paths./conversations/{conversation_id}/messages.get",
@@ -3628,7 +3628,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getconversationsidmessagesid-80",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Conversations/Messages/Instance.json",
         "source_location": "paths./conversations/{conversation_id}/messages/{message_id}.get",
@@ -3664,7 +3664,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postcustomerjourneysjourneysidstepsidactionstrigger-81",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/CustomerJourneys/Journeys/Steps/Actions/Trigger.json",
         "source_location": "paths./customer-journeys/journeys/{journey_id}/steps/{step_id}/actions/trigger.post",
@@ -3718,7 +3718,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommerceorders-82",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Orders/Collection.json",
         "source_location": "paths./ecommerce/orders.get",
@@ -3760,7 +3760,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestores-83",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Collection.json",
         "source_location": "paths./ecommerce/stores.get",
@@ -3802,7 +3802,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postecommercestores-84",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Collection.json",
         "source_location": "paths./ecommerce/stores.post",
@@ -3856,7 +3856,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteecommercestoresid-85",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}.delete",
@@ -3910,7 +3910,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresid-86",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}.get",
@@ -3946,7 +3946,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchecommercestoresid-87",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}.patch",
@@ -4000,7 +4000,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidcarts-88",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Carts/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/carts.get",
@@ -4042,7 +4042,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postecommercestoresidcarts-89",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Carts/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/carts.post",
@@ -4096,7 +4096,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteecommercestoresidcartsid-90",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Carts/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/carts/{cart_id}.delete",
@@ -4150,7 +4150,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidcartsid-91",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Carts/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/carts/{cart_id}.get",
@@ -4186,7 +4186,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchecommercestoresidcartsid-92",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Carts/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/carts/{cart_id}.patch",
@@ -4240,7 +4240,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidcartsidlines-93",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Carts/Lines/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/carts/{cart_id}/lines.get",
@@ -4282,7 +4282,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postecommercestoresidcartsidlines-94",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Carts/Lines/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/carts/{cart_id}/lines.post",
@@ -4336,7 +4336,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteecommercestoresidcartslinesid-95",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Carts/Lines/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/carts/{cart_id}/lines/{line_id}.delete",
@@ -4390,7 +4390,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidcartsidlinesid-96",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Carts/Lines/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/carts/{cart_id}/lines/{line_id}.get",
@@ -4426,7 +4426,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchecommercestoresidcartsidlinesid-97",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Carts/Lines/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/carts/{cart_id}/lines/{line_id}.patch",
@@ -4480,7 +4480,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidcustomers-98",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Customers/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/customers.get",
@@ -4522,7 +4522,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postecommercestoresidcustomers-99",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Customers/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/customers.post",
@@ -4576,7 +4576,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteecommercestoresidcustomersid-100",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Customers/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/customers/{customer_id}.delete",
@@ -4630,7 +4630,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidcustomersid-101",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Customers/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/customers/{customer_id}.get",
@@ -4666,7 +4666,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchecommercestoresidcustomersid-102",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Customers/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/customers/{customer_id}.patch",
@@ -4720,7 +4720,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.putecommercestoresidcustomersid-103",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Customers/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/customers/{customer_id}.put",
@@ -4774,7 +4774,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidorders-104",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Orders/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/orders.get",
@@ -4816,7 +4816,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postecommercestoresidorders-105",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Orders/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/orders.post",
@@ -4870,7 +4870,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteecommercestoresidordersid-106",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Orders/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/orders/{order_id}.delete",
@@ -4924,7 +4924,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidordersid-107",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Orders/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/orders/{order_id}.get",
@@ -4960,7 +4960,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchecommercestoresidordersid-108",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Orders/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/orders/{order_id}.patch",
@@ -5014,7 +5014,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.putecommercestoresidordersid-109",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Orders/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/orders/{order_id}.put",
@@ -5068,7 +5068,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidordersidlines-110",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Orders/Lines/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/orders/{order_id}/lines.get",
@@ -5110,7 +5110,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postecommercestoresidordersidlines-111",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Orders/Lines/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/orders/{order_id}/lines.post",
@@ -5164,7 +5164,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteecommercestoresidordersidlinesid-112",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Orders/Lines/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}.delete",
@@ -5218,7 +5218,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidordersidlinesid-113",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Orders/Lines/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}.get",
@@ -5254,7 +5254,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchecommercestoresidordersidlinesid-114",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Orders/Lines/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}.patch",
@@ -5308,7 +5308,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidproducts-115",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products.get",
@@ -5350,7 +5350,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postecommercestoresidproducts-116",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products.post",
@@ -5404,7 +5404,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteecommercestoresidproductsid-117",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}.delete",
@@ -5458,7 +5458,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidproductsid-118",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}.get",
@@ -5494,7 +5494,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchecommercestoresidproductsid-119",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}.patch",
@@ -5548,7 +5548,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.putecommercestoresidproductsid-120",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}.put",
@@ -5602,7 +5602,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidproductsidimages-121",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Images/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}/images.get",
@@ -5644,7 +5644,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postecommercestoresidproductsidimages-122",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Images/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}/images.post",
@@ -5698,7 +5698,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteecommercestoresidproductsidimagesid-123",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Images/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}/images/{image_id}.delete",
@@ -5752,7 +5752,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidproductsidimagesid-124",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Images/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}/images/{image_id}.get",
@@ -5788,7 +5788,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchecommercestoresidproductsidimagesid-125",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Images/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}/images/{image_id}.patch",
@@ -5842,7 +5842,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidproductsidvariants-126",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Variants/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}/variants.get",
@@ -5884,7 +5884,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postecommercestoresidproductsidvariants-127",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Variants/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}/variants.post",
@@ -5938,7 +5938,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteecommercestoresidproductsidvariantsid-128",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Variants/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}.delete",
@@ -5992,7 +5992,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidproductsidvariantsid-129",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Variants/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}.get",
@@ -6028,7 +6028,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchecommercestoresidproductsidvariantsid-130",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Variants/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}.patch",
@@ -6082,7 +6082,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.putecommercestoresidproductsidvariantsid-131",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Products/Variants/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}.put",
@@ -6136,7 +6136,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidpromorules-132",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Promorules/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/promo-rules.get",
@@ -6178,7 +6178,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postecommercestoresidpromorules-133",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Promorules/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/promo-rules.post",
@@ -6232,7 +6232,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteecommercestoresidpromorulesid-134",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Promorules/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}.delete",
@@ -6286,7 +6286,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidpromorulesid-135",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Promorules/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}.get",
@@ -6322,7 +6322,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchecommercestoresidpromorulesid-136",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Promorules/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}.patch",
@@ -6376,7 +6376,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidpromocodes-137",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Promorules/Promocodes/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes.get",
@@ -6418,7 +6418,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postecommercestoresidpromocodes-138",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Promorules/Promocodes/Collection.json",
         "source_location": "paths./ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes.post",
@@ -6472,7 +6472,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteecommercestoresidpromocodesid-139",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Promorules/Promocodes/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes/{promo_code_id}.delete",
@@ -6526,7 +6526,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getecommercestoresidpromocodesid-140",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Promorules/Promocodes/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes/{promo_code_id}.get",
@@ -6562,7 +6562,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchecommercestoresidpromocodesid-141",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ecommerce/Stores/Promorules/Promocodes/Instance.json",
         "source_location": "paths./ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes/{promo_code_id}.patch",
@@ -6616,7 +6616,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getallfacebookads-142",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FacebookAds/Collection.json",
         "source_location": "paths./facebook-ads.get",
@@ -6658,7 +6658,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getfacebookadsid-143",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FacebookAds/Instance.json",
         "source_location": "paths./facebook-ads/{outreach_id}.get",
@@ -6694,7 +6694,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getfilemanagerfiles-144",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FileManager/Files/Collection.json",
         "source_location": "paths./file-manager/files.get",
@@ -6736,7 +6736,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postfilemanagerfiles-145",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FileManager/Files/Collection.json",
         "source_location": "paths./file-manager/files.post",
@@ -6790,7 +6790,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletefilemanagerfilesid-146",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FileManager/Files/Instance.json",
         "source_location": "paths./file-manager/files/{file_id}.delete",
@@ -6844,7 +6844,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getfilemanagerfilesid-147",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FileManager/Files/Instance.json",
         "source_location": "paths./file-manager/files/{file_id}.get",
@@ -6880,7 +6880,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchfilemanagerfilesid-148",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FileManager/Files/Instance.json",
         "source_location": "paths./file-manager/files/{file_id}.patch",
@@ -6934,7 +6934,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getfilemanagerfolders-149",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FileManager/Folders/Collection.json",
         "source_location": "paths./file-manager/folders.get",
@@ -6976,7 +6976,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postfilemanagerfolders-150",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FileManager/Folders/Collection.json",
         "source_location": "paths./file-manager/folders.post",
@@ -7030,7 +7030,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletefilemanagerfoldersid-151",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FileManager/Folders/Instance.json",
         "source_location": "paths./file-manager/folders/{folder_id}.delete",
@@ -7084,7 +7084,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getfilemanagerfoldersid-152",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FileManager/Folders/Instance.json",
         "source_location": "paths./file-manager/folders/{folder_id}.get",
@@ -7120,7 +7120,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchfilemanagerfoldersid-153",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FileManager/Folders/Instance.json",
         "source_location": "paths./file-manager/folders/{folder_id}.patch",
@@ -7174,7 +7174,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getfilemanagerfoldersfiles-154",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/FileManager/Folders/Files/Collection.json",
         "source_location": "paths./file-manager/folders/{folder_id}/files.get",
@@ -7216,7 +7216,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getalllandingpages-155",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/LandingPages/Collection.json",
         "source_location": "paths./landing-pages.get",
@@ -7258,7 +7258,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postalllandingpages-156",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/LandingPages/Collection.json",
         "source_location": "paths./landing-pages.post",
@@ -7312,7 +7312,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletelandingpageid-157",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/LandingPages/Instance.json",
         "source_location": "paths./landing-pages/{page_id}.delete",
@@ -7366,7 +7366,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlandingpageid-158",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/LandingPages/Instance.json",
         "source_location": "paths./landing-pages/{page_id}.get",
@@ -7402,7 +7402,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchlandingpageid-159",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/LandingPages/Instance.json",
         "source_location": "paths./landing-pages/{page_id}.patch",
@@ -7456,7 +7456,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlandingpageidactionspublish-160",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/LandingPages/Actions/Publish.json",
         "source_location": "paths./landing-pages/{page_id}/actions/publish.post",
@@ -7510,7 +7510,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlandingpageidactionsunpublish-161",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/LandingPages/Actions/Unpublish.json",
         "source_location": "paths./landing-pages/{page_id}/actions/unpublish.post",
@@ -7564,7 +7564,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlandingpageidcontent-162",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/LandingPages/Content/Instance.json",
         "source_location": "paths./landing-pages/{page_id}/content.get",
@@ -7600,7 +7600,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlists-163",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Collection.json",
         "source_location": "paths./lists.get",
@@ -7642,7 +7642,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlists-164",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Collection.json",
         "source_location": "paths./lists.post",
@@ -7696,7 +7696,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletelistsid-165",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Instance.json",
         "source_location": "paths./lists/{list_id}.delete",
@@ -7750,7 +7750,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsid-166",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Instance.json",
         "source_location": "paths./lists/{list_id}.get",
@@ -7786,7 +7786,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchlistsid-167",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Instance.json",
         "source_location": "paths./lists/{list_id}.patch",
@@ -7840,7 +7840,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsid-168",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Instance.json",
         "source_location": "paths./lists/{list_id}.post",
@@ -7894,7 +7894,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidabusereports-169",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Abuse/Collection.json",
         "source_location": "paths./lists/{list_id}/abuse-reports.get",
@@ -7936,7 +7936,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidabusereportsid-170",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Abuse/Instance.json",
         "source_location": "paths./lists/{list_id}/abuse-reports/{report_id}.get",
@@ -7972,7 +7972,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidactivity-171",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Activity/Collection.json",
         "source_location": "paths./lists/{list_id}/activity.get",
@@ -8014,7 +8014,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidclients-172",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Clients/Collection.json",
         "source_location": "paths./lists/{list_id}/clients.get",
@@ -8056,7 +8056,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidgrowthhistory-173",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Growth/Collection.json",
         "source_location": "paths./lists/{list_id}/growth-history.get",
@@ -8098,7 +8098,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidgrowthhistoryid-174",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Growth/Instance.json",
         "source_location": "paths./lists/{list_id}/growth-history/{month}.get",
@@ -8134,7 +8134,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidinterestcategories-175",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/InterestCategories/Collection.json",
         "source_location": "paths./lists/{list_id}/interest-categories.get",
@@ -8176,7 +8176,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidinterestcategories-176",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/InterestCategories/Collection.json",
         "source_location": "paths./lists/{list_id}/interest-categories.post",
@@ -8230,7 +8230,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletelistsidinterestcategoriesid-177",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/InterestCategories/Instance.json",
         "source_location": "paths./lists/{list_id}/interest-categories/{interest_category_id}.delete",
@@ -8284,7 +8284,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidinterestcategoriesid-178",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/InterestCategories/Instance.json",
         "source_location": "paths./lists/{list_id}/interest-categories/{interest_category_id}.get",
@@ -8320,7 +8320,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchlistsidinterestcategoriesid-179",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/InterestCategories/Instance.json",
         "source_location": "paths./lists/{list_id}/interest-categories/{interest_category_id}.patch",
@@ -8374,7 +8374,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidinterestcategoriesidinterests-180",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Interests/Collection.json",
         "source_location": "paths./lists/{list_id}/interest-categories/{interest_category_id}/interests.get",
@@ -8416,7 +8416,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidinterestcategoriesidinterests-181",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Interests/Collection.json",
         "source_location": "paths./lists/{list_id}/interest-categories/{interest_category_id}/interests.post",
@@ -8470,7 +8470,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletelistsidinterestcategoriesidinterestsid-182",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Interests/Instance.json",
         "source_location": "paths./lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}.delete",
@@ -8524,7 +8524,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidinterestcategoriesidinterestsid-183",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Interests/Instance.json",
         "source_location": "paths./lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}.get",
@@ -8560,7 +8560,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchlistsidinterestcategoriesidinterestsid-184",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Interests/Instance.json",
         "source_location": "paths./lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}.patch",
@@ -8614,7 +8614,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidlocations-185",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Locations/Collection.json",
         "source_location": "paths./lists/{list_id}/locations.get",
@@ -8656,7 +8656,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidmembers-186",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json",
         "source_location": "paths./lists/{list_id}/members.get",
@@ -8698,7 +8698,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidmembers-187",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json",
         "source_location": "paths./lists/{list_id}/members.post",
@@ -8752,7 +8752,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletelistsidmembersid-188",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Instance.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}.delete",
@@ -8806,7 +8806,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidmembersid-189",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Instance.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}.get",
@@ -8842,7 +8842,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchlistsidmembersid-190",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Instance.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}.patch",
@@ -8896,7 +8896,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.putlistsidmembersid-191",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Instance.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}.put",
@@ -8950,7 +8950,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidmembershashactionsdeletepermanent-192",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Actions/Delete-Permanent.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/actions/delete-permanent.post",
@@ -9004,7 +9004,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidmembersidactivity-193",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Activity.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/activity.get",
@@ -9046,7 +9046,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidmembersidactivityfeed-194",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/ActivityFeed/Collection.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/activity-feed.get",
@@ -9082,7 +9082,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidmembersidevents-195",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Events.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/events.get",
@@ -9124,7 +9124,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistmemberevents-196",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Events.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/events.post",
@@ -9178,7 +9178,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidmembersidgoals-197",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Goals.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/goals.get",
@@ -9220,7 +9220,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidmembersidnotes-198",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Notes/Collection.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/notes.get",
@@ -9262,7 +9262,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidmembersidnotes-199",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Notes/Collection.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/notes.post",
@@ -9316,7 +9316,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletelistsidmembersidnotesid-200",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Notes/Instance.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/notes/{note_id}.delete",
@@ -9370,7 +9370,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidmembersidnotesid-201",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Notes/Instance.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/notes/{note_id}.get",
@@ -9406,7 +9406,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchlistsidmembersidnotesid-202",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Notes/Instance.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/notes/{note_id}.patch",
@@ -9460,7 +9460,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistmembertags-203",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Tags.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/tags.get",
@@ -9502,7 +9502,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistmembertags-204",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Tags.json",
         "source_location": "paths./lists/{list_id}/members/{subscriber_hash}/tags.post",
@@ -9556,7 +9556,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidmergefields-205",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/MergeFields/Collection.json",
         "source_location": "paths./lists/{list_id}/merge-fields.get",
@@ -9598,7 +9598,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidmergefields-206",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/MergeFields/Collection.json",
         "source_location": "paths./lists/{list_id}/merge-fields.post",
@@ -9652,7 +9652,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletelistsidmergefieldsid-207",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/MergeFields/Instance.json",
         "source_location": "paths./lists/{list_id}/merge-fields/{merge_id}.delete",
@@ -9706,7 +9706,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidmergefieldsid-208",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/MergeFields/Instance.json",
         "source_location": "paths./lists/{list_id}/merge-fields/{merge_id}.get",
@@ -9742,7 +9742,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchlistsidmergefieldsid-209",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/MergeFields/Instance.json",
         "source_location": "paths./lists/{list_id}/merge-fields/{merge_id}.patch",
@@ -9796,7 +9796,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.previewasegment-210",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Segments/Collection.json",
         "source_location": "paths./lists/{list_id}/segments.get",
@@ -9838,7 +9838,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidsegments-211",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Segments/Collection.json",
         "source_location": "paths./lists/{list_id}/segments.post",
@@ -9892,7 +9892,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletelistsidsegmentsid-212",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Segments/Instance.json",
         "source_location": "paths./lists/{list_id}/segments/{segment_id}.delete",
@@ -9946,7 +9946,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidsegmentsid-213",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Segments/Instance.json",
         "source_location": "paths./lists/{list_id}/segments/{segment_id}.get",
@@ -9982,7 +9982,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchlistsidsegmentsid-214",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Segments/Instance.json",
         "source_location": "paths./lists/{list_id}/segments/{segment_id}.patch",
@@ -10036,7 +10036,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidsegmentsid-215",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Segments/Instance.json",
         "source_location": "paths./lists/{list_id}/segments/{segment_id}.post",
@@ -10090,7 +10090,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidsegmentsidmembers-216",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Segments/Members/Collection.json",
         "source_location": "paths./lists/{list_id}/segments/{segment_id}/members.get",
@@ -10132,7 +10132,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidsegmentsidmembers-217",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Segments/Members/Collection.json",
         "source_location": "paths./lists/{list_id}/segments/{segment_id}/members.post",
@@ -10186,7 +10186,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletelistsidsegmentsidmembersid-218",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Segments/Members/Instance.json",
         "source_location": "paths./lists/{list_id}/segments/{segment_id}/members/{subscriber_hash}.delete",
@@ -10240,7 +10240,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidsignupforms-219",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/SignupForms/Collection.json",
         "source_location": "paths./lists/{list_id}/signup-forms.get",
@@ -10282,7 +10282,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidsignupforms-220",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/SignupForms/Collection.json",
         "source_location": "paths./lists/{list_id}/signup-forms.post",
@@ -10336,7 +10336,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidsurveys-221",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Surveys/Collection.json",
         "source_location": "paths./lists/{list_id}/surveys.get",
@@ -10378,7 +10378,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidsurveys-222",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Surveys/Collection.json",
         "source_location": "paths./lists/{list_id}/surveys.post",
@@ -10432,7 +10432,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletelistsidsurveysid-223",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Surveys/Instance.json",
         "source_location": "paths./lists/{list_id}/surveys/{survey_id}.delete",
@@ -10486,7 +10486,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidsurveysid-224",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Surveys/Instance.json",
         "source_location": "paths./lists/{list_id}/surveys/{survey_id}.get",
@@ -10522,7 +10522,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchlistsidsurveysid-225",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Surveys/Instance.json",
         "source_location": "paths./lists/{list_id}/surveys/{survey_id}.patch",
@@ -10576,7 +10576,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidsurveysidactionscreateemail-226",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Surveys/Actions/Create-Email.json",
         "source_location": "paths./lists/{list_id}/surveys/{survey_id}/actions/create-email.post",
@@ -10630,7 +10630,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidsurveysidactionspublish-227",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Surveys/Actions/Publish.json",
         "source_location": "paths./lists/{list_id}/surveys/{survey_id}/actions/publish.post",
@@ -10684,7 +10684,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidsurveysidactionsreplicate-228",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Surveys/Actions/Replicate.json",
         "source_location": "paths./lists/{list_id}/surveys/{survey_id}/actions/replicate.post",
@@ -10738,7 +10738,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidsurveysidactionsunpublish-229",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Surveys/Actions/Unpublish.json",
         "source_location": "paths./lists/{list_id}/surveys/{survey_id}/actions/unpublish.post",
@@ -10792,7 +10792,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.searchtagsbyname-230",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/TagSearch.json",
         "source_location": "paths./lists/{list_id}/tag-search.get",
@@ -10828,7 +10828,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidwebhooks-231",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Webhooks/Collection.json",
         "source_location": "paths./lists/{list_id}/webhooks.get",
@@ -10870,7 +10870,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postlistsidwebhooks-232",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Webhooks/Collection.json",
         "source_location": "paths./lists/{list_id}/webhooks.post",
@@ -10924,7 +10924,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletelistsidwebhooksid-233",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Webhooks/Instance.json",
         "source_location": "paths./lists/{list_id}/webhooks/{webhook_id}.delete",
@@ -10978,7 +10978,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getlistsidwebhooksid-234",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Webhooks/Instance.json",
         "source_location": "paths./lists/{list_id}/webhooks/{webhook_id}.get",
@@ -11014,7 +11014,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchlistsidwebhooksid-235",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Webhooks/Instance.json",
         "source_location": "paths./lists/{list_id}/webhooks/{webhook_id}.patch",
@@ -11073,7 +11073,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getping-236",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Ping/Namespace.json",
         "source_location": "paths./ping.get",
@@ -11110,7 +11110,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportingfacebookads-237",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reporting/FacebookAds/Collection.json",
         "source_location": "paths./reporting/facebook-ads.get",
@@ -11152,7 +11152,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportingfacebookadsid-238",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reporting/FacebookAds/Instance.json",
         "source_location": "paths./reporting/facebook-ads/{outreach_id}.get",
@@ -11188,7 +11188,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportingfacebookadsidecommerceproductactivity-239",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reporting/FacebookAds/EcommerceProductActivity/Collection.json",
         "source_location": "paths./reporting/facebook-ads/{outreach_id}/ecommerce-product-activity.get",
@@ -11230,7 +11230,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportinglandingpages-240",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reporting/LandingPages/Collection.json",
         "source_location": "paths./reporting/landing-pages.get",
@@ -11272,7 +11272,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportinglandingpagesid-241",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reporting/LandingPages/Instance.json",
         "source_location": "paths./reporting/landing-pages/{outreach_id}.get",
@@ -11308,7 +11308,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportingsurveys-242",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reporting/Surveys/Collection.json",
         "source_location": "paths./reporting/surveys.get",
@@ -11350,7 +11350,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportingsurveysid-243",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reporting/Surveys/Instance.json",
         "source_location": "paths./reporting/surveys/{survey_id}.get",
@@ -11386,7 +11386,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportingsurveysidquestions-244",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reporting/Surveys/Questions/Collection.json",
         "source_location": "paths./reporting/surveys/{survey_id}/questions.get",
@@ -11428,7 +11428,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportingsurveysidquestionsid-245",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reporting/Surveys/Questions/Instance.json",
         "source_location": "paths./reporting/surveys/{survey_id}/questions/{question_id}.get",
@@ -11464,7 +11464,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportingsurveysidquestionsidanswers-246",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reporting/Surveys/Questions/Answers/Collection.json",
         "source_location": "paths./reporting/surveys/{survey_id}/questions/{question_id}/answers.get",
@@ -11506,7 +11506,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportingsurveysidresponses-247",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reporting/Surveys/Responses/Collection.json",
         "source_location": "paths./reporting/surveys/{survey_id}/responses.get",
@@ -11548,7 +11548,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportingsurveysidresponsesid-248",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reporting/Surveys/Responses/Instance.json",
         "source_location": "paths./reporting/surveys/{survey_id}/responses/{response_id}.get",
@@ -11584,7 +11584,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreports-249",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/Collection.json",
         "source_location": "paths./reports.get",
@@ -11626,7 +11626,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsid-250",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/Instance.json",
         "source_location": "paths./reports/{campaign_id}.get",
@@ -11662,7 +11662,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidabusereportsid-251",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/Abuse/Collection.json",
         "source_location": "paths./reports/{campaign_id}/abuse-reports.get",
@@ -11704,7 +11704,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidabusereportsidid-252",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/Abuse/Instance.json",
         "source_location": "paths./reports/{campaign_id}/abuse-reports/{report_id}.get",
@@ -11740,7 +11740,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidadvice-253",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/Advice/Collection.json",
         "source_location": "paths./reports/{campaign_id}/advice.get",
@@ -11782,7 +11782,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidclickdetails-254",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/ClickDetails/Collection.json",
         "source_location": "paths./reports/{campaign_id}/click-details.get",
@@ -11824,7 +11824,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidclickdetailsid-255",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/ClickDetails/Instance.json",
         "source_location": "paths./reports/{campaign_id}/click-details/{link_id}.get",
@@ -11860,7 +11860,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidclickdetailsidmembers-256",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/ClickDetails/Members/Collection.json",
         "source_location": "paths./reports/{campaign_id}/click-details/{link_id}/members.get",
@@ -11902,7 +11902,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidclickdetailsidmembersid-257",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/ClickDetails/Members/Instance.json",
         "source_location": "paths./reports/{campaign_id}/click-details/{link_id}/members/{subscriber_hash}.get",
@@ -11938,7 +11938,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsiddomainperformance-258",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/DomainPerformance/Collection.json",
         "source_location": "paths./reports/{campaign_id}/domain-performance.get",
@@ -11980,7 +11980,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidecommerceproductactivity-259",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/EcommerceProductActivity/Collection.json",
         "source_location": "paths./reports/{campaign_id}/ecommerce-product-activity.get",
@@ -12022,7 +12022,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsideepurl-260",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/Eepurl/Collection.json",
         "source_location": "paths./reports/{campaign_id}/eepurl.get",
@@ -12064,7 +12064,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidemailactivity-261",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/EmailActivity/Collection.json",
         "source_location": "paths./reports/{campaign_id}/email-activity.get",
@@ -12106,7 +12106,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidemailactivityid-262",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/EmailActivity/Instance.json",
         "source_location": "paths./reports/{campaign_id}/email-activity/{subscriber_hash}.get",
@@ -12142,7 +12142,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidlocations-263",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/Locations/Collection.json",
         "source_location": "paths./reports/{campaign_id}/locations.get",
@@ -12184,7 +12184,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidopendetails-264",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/OpenDetails/Collection.json",
         "source_location": "paths./reports/{campaign_id}/open-details.get",
@@ -12226,7 +12226,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidopendetailsidmembersid-265",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/OpenDetails/Instance.json",
         "source_location": "paths./reports/{campaign_id}/open-details/{subscriber_hash}.get",
@@ -12262,7 +12262,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidsentto-266",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/SentTo/Collection.json",
         "source_location": "paths./reports/{campaign_id}/sent-to.get",
@@ -12304,7 +12304,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidsenttoid-267",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/SentTo/Instance.json",
         "source_location": "paths./reports/{campaign_id}/sent-to/{subscriber_hash}.get",
@@ -12340,7 +12340,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidsubreportsid-268",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/Sub/Collection.json",
         "source_location": "paths./reports/{campaign_id}/sub-reports.get",
@@ -12382,7 +12382,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidunsubscribed-269",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/Unsubs/Collection.json",
         "source_location": "paths./reports/{campaign_id}/unsubscribed.get",
@@ -12424,7 +12424,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getreportsidunsubscribedid-270",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Reports/Unsubs/Instance.json",
         "source_location": "paths./reports/{campaign_id}/unsubscribed/{subscriber_hash}.get",
@@ -12460,7 +12460,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getsearchcampaigns-271",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/SearchCampaigns/Collection.json",
         "source_location": "paths./search-campaigns.get",
@@ -12496,7 +12496,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getsearchmembers-272",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/SearchMembers/Collection.json",
         "source_location": "paths./search-members.get",
@@ -12532,7 +12532,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getsmscampaigns-273",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/SmsCampaigns/Collection.json",
         "source_location": "paths./sms-campaigns.get",
@@ -12574,7 +12574,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postsmscampaigns-274",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/SmsCampaigns/Collection.json",
         "source_location": "paths./sms-campaigns.post",
@@ -12628,7 +12628,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletesmscampaignsid-275",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/SmsCampaigns/Instance.json",
         "source_location": "paths./sms-campaigns/{sms_campaign_id}.delete",
@@ -12682,7 +12682,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getsmscampaignsid-276",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/SmsCampaigns/Instance.json",
         "source_location": "paths./sms-campaigns/{sms_campaign_id}.get",
@@ -12718,7 +12718,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchsmscampaignsid-277",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/SmsCampaigns/Instance.json",
         "source_location": "paths./sms-campaigns/{sms_campaign_id}.patch",
@@ -12772,7 +12772,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postsmscampaignsidactionscancelsend-278",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/SmsCampaigns/Actions/Cancel-Send.json",
         "source_location": "paths./sms-campaigns/{sms_campaign_id}/actions/cancel-send.post",
@@ -12826,7 +12826,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postsmscampaignsidactionsschedule-279",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/SmsCampaigns/Actions/Schedule.json",
         "source_location": "paths./sms-campaigns/{sms_campaign_id}/actions/schedule.post",
@@ -12880,7 +12880,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postsmscampaignsidactionssend-280",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/SmsCampaigns/Actions/Send.json",
         "source_location": "paths./sms-campaigns/{sms_campaign_id}/actions/send.post",
@@ -12934,7 +12934,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getsmscampaignsidcontent-281",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/SmsCampaigns/Content/Instance.json",
         "source_location": "paths./sms-campaigns/{sms_campaign_id}/content.get",
@@ -12970,7 +12970,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.putsmscampaignsidcontent-282",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/SmsCampaigns/Content/Instance.json",
         "source_location": "paths./sms-campaigns/{sms_campaign_id}/content.put",
@@ -13024,7 +13024,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postconnectedsitesidactionsenablepixel-283",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/TemplateFolders/Collection.json",
         "source_location": "paths./template-folders.post",
@@ -13083,7 +13083,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.postconnectedsitesidactionsdisablepixel-284",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/TemplateFolders/Instance.json",
         "source_location": "paths./template-folders/{folder_id}.post",
@@ -13120,7 +13120,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.gettemplates-285",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Templates/Collection.json",
         "source_location": "paths./templates.get",
@@ -13162,7 +13162,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.posttemplates-286",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Templates/Collection.json",
         "source_location": "paths./templates.post",
@@ -13216,7 +13216,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deletetemplatesid-287",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Templates/Instance.json",
         "source_location": "paths./templates/{template_id}.delete",
@@ -13270,7 +13270,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.gettemplatesid-288",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Templates/Instance.json",
         "source_location": "paths./templates/{template_id}.get",
@@ -13306,7 +13306,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.patchtemplatesid-289",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Templates/Instance.json",
         "source_location": "paths./templates/{template_id}.patch",
@@ -13360,7 +13360,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.gettemplatesiddefaultcontent-290",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Templates/Default-Content/Collection.json",
         "source_location": "paths./templates/{template_id}/default-content.get",
@@ -13396,7 +13396,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getverifieddomains-291",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/VerifiedDomains/Collection.json",
         "source_location": "paths./verified-domains.get",
@@ -13438,7 +13438,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.createverifieddomain-292",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/VerifiedDomains/Collection.json",
         "source_location": "paths./verified-domains.post",
@@ -13492,7 +13492,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.deleteverifieddomain-293",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/VerifiedDomains/Instance.json",
         "source_location": "paths./verified-domains/{domain_name}.delete",
@@ -13546,7 +13546,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.getverifieddomain-294",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/VerifiedDomains/Instance.json",
         "source_location": "paths./verified-domains/{domain_name}.get",
@@ -13582,7 +13582,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.provider.verifydomain-295",
         "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/VerifiedDomains/VerifyDomain.json",
         "source_location": "paths./verified-domains/{domain_name}/actions/verify.post",
@@ -13636,7 +13636,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.get-automations-workflow-id-emails-296",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[295]",
@@ -13678,7 +13678,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.delete-automations-workflow-id-emails-workflow-email-id-297",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[296]",
@@ -13732,7 +13732,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.get-automations-workflow-id-emails-workflow-email-id-298",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[297]",
@@ -13768,7 +13768,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.patch-automations-workflow-id-emails-workflow-email-id-299",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[298]",
@@ -13822,7 +13822,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.post-automations-workflow-id-emails-workflow-email-id-actions-start-300",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[299]",
@@ -13876,7 +13876,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.get-automations-workflow-id-emails-workflow-email-id-queue-301",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[300]",
@@ -13918,7 +13918,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.get-automations-workflow-id-emails-workflow-email-id-queue-subscriber-hash-302",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[301]",
@@ -13954,7 +13954,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.post-batch-webhooks-303",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[302]",
@@ -14008,7 +14008,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.delete-batch-webhooks-batch-webhook-id-304",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[303]",
@@ -14062,7 +14062,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.get-batch-webhooks-batch-webhook-id-305",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[304]",
@@ -14098,7 +14098,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.patch-batch-webhooks-batch-webhook-id-306",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[305]",
@@ -14152,7 +14152,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.delete-batches-batch-id-307",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[306]",
@@ -14206,7 +14206,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.post-campaign-folders-308",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[307]",
@@ -14260,7 +14260,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.delete-campaign-folders-folder-id-309",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[308]",
@@ -14314,7 +14314,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.patch-campaign-folders-folder-id-310",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[309]",
@@ -14368,7 +14368,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.post-campaigns-311",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[310]",
@@ -14422,7 +14422,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.delete-campaigns-campaign-id-312",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[311]",
@@ -14476,7 +14476,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.patch-campaigns-campaign-id-313",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[312]",
@@ -14530,7 +14530,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.post-campaigns-campaign-id-actions-create-resend-314",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[313]",
@@ -14584,7 +14584,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.post-campaigns-campaign-id-actions-send-315",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[314]",
@@ -14638,7 +14638,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.post-campaigns-campaign-id-actions-test-316",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[315]",
@@ -14692,7 +14692,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.post-campaigns-campaign-id-actions-unschedule-317",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[316]",
@@ -14746,7 +14746,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.put-campaigns-campaign-id-content-318",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[317]",
@@ -14800,7 +14800,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.post-campaigns-campaign-id-feedback-319",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[318]",
@@ -14854,7 +14854,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.get-template-folders-320",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[319]",
@@ -14896,7 +14896,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.delete-template-folders-folder-id-321",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[320]",
@@ -14950,7 +14950,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.get-template-folders-folder-id-322",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[321]",
@@ -14986,7 +14986,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/mailchimp-operation-source-lock.json",
+        "source_lock": "sources/mailchimp-parity-source-lock.json",
         "source_id": "mailchimp.local-api-surface.patch-template-folders-folder-id-323",
         "source_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
         "source_location": "api_surface.json:endpoints[322]",

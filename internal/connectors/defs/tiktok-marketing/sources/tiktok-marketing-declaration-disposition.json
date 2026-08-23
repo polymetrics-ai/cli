@@ -3,7 +3,7 @@
   "connector": "tiktok-marketing",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+    "source_lock": "sources/tiktok-marketing-parity-source-lock.json",
     "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
     "source_sha256": null,
     "source_bytes": null,
@@ -91,7 +91,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_lock": "sources/tiktok-marketing-parity-source-lock.json",
         "source_id": "tiktok-marketing.local-api-surface.get-advertiser-info-1",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[0]",
@@ -134,7 +134,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_lock": "sources/tiktok-marketing-parity-source-lock.json",
         "source_id": "tiktok-marketing.local-api-surface.get-campaign-get-2",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[1]",
@@ -177,7 +177,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_lock": "sources/tiktok-marketing-parity-source-lock.json",
         "source_id": "tiktok-marketing.local-api-surface.get-adgroup-get-3",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[2]",
@@ -220,7 +220,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_lock": "sources/tiktok-marketing-parity-source-lock.json",
         "source_id": "tiktok-marketing.local-api-surface.get-ad-get-4",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[3]",
@@ -264,7 +264,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_lock": "sources/tiktok-marketing-parity-source-lock.json",
         "source_id": "tiktok-marketing.local-api-surface.get-report-integrated-get-5",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[4]",
@@ -302,7 +302,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_lock": "sources/tiktok-marketing-parity-source-lock.json",
         "source_id": "tiktok-marketing.local-api-surface.post-campaign-create-6",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[5]",
@@ -340,7 +340,7 @@
         }
       },
       "source": {
-        "source_lock": "sources/tiktok-marketing-operation-source-lock.json",
+        "source_lock": "sources/tiktok-marketing-parity-source-lock.json",
         "source_id": "tiktok-marketing.local-api-surface.post-campaign-update-status-7",
         "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
         "source_location": "api_surface.json:endpoints[6]",

@@ -3,7 +3,7 @@
   "connector": "pipedrive",
   "generated_at": "2026-08-19T00:00:00Z",
   "source_basis": {
-    "source_lock": "sources/pipedrive-operation-source-lock.json",
+    "source_lock": "sources/pipedrive-parity-source-lock.json",
     "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
     "source_sha256": "302b0d7c2c1a6cb96a2d299717c6be0c2cf3eac6dfd884ea8352962ebf501c2b",
     "source_bytes": 1782400,
@@ -111,7 +111,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getactivityfields-1",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./activityFields.get",
@@ -148,7 +148,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getactivitytypes-2",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./activityTypes.get",
@@ -191,7 +191,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addactivitytype-3",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./activityTypes.post",
@@ -241,7 +241,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteactivitytype-4",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./activityTypes/{id}.delete",
@@ -291,7 +291,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updateactivitytype-5",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./activityTypes/{id}.put",
@@ -346,7 +346,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getcompanyaddons-6",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./billing/subscriptions/addons.get",
@@ -388,7 +388,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getusercalllogs-7",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./callLogs.get",
@@ -430,7 +430,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addcalllog-8",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./callLogs.post",
@@ -472,7 +472,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletecalllog-9",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./callLogs/{id}.delete",
@@ -514,7 +514,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getcalllog-10",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./callLogs/{id}.get",
@@ -556,7 +556,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addcalllogaudiofile-11",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./callLogs/{id}/recordings.post",
@@ -598,7 +598,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addchannel-12",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./channels.post",
@@ -640,7 +640,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteconversation-13",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./channels/{channel-id}/conversations/{conversation-id}.delete",
@@ -682,7 +682,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletechannel-14",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./channels/{id}.delete",
@@ -724,7 +724,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.receivemessage-15",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./channels/messages/receive.post",
@@ -761,7 +761,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getcurrencies-16",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./currencies.get",
@@ -809,7 +809,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletedealfields-17",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./dealFields.delete",
@@ -846,7 +846,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getdealfields-18",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./dealFields.get",
@@ -894,7 +894,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.adddealfield-19",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./dealFields.post",
@@ -936,7 +936,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletedealfield-20",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./dealFields/{id}.delete",
@@ -978,7 +978,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getdealfield-21",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./dealFields/{id}.get",
@@ -1020,7 +1020,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updatedealfield-22",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./dealFields/{id}.put",
@@ -1062,7 +1062,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getdealchangelog-23",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/changelog.get",
@@ -1104,7 +1104,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.duplicatedeal-24",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/duplicate.post",
@@ -1146,7 +1146,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getdealfiles-25",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/files.get",
@@ -1188,7 +1188,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getdealupdates-26",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/flow.get",
@@ -1230,7 +1230,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getdealfollowers-27",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/followers.get",
@@ -1272,7 +1272,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.adddealfollower-28",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/followers.post",
@@ -1314,7 +1314,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletedealfollower-29",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/followers/{follower_id}.delete",
@@ -1356,7 +1356,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getdealmailmessages-30",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/mailMessages.get",
@@ -1398,7 +1398,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.mergedeals-31",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/merge.put",
@@ -1440,7 +1440,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getdealparticipants-32",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/participants.get",
@@ -1482,7 +1482,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.adddealparticipant-33",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/participants.post",
@@ -1524,7 +1524,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletedealparticipant-34",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/participants/{deal_participant_id}.delete",
@@ -1566,7 +1566,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getdealparticipantschangelog-35",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/participantsChangelog.get",
@@ -1608,7 +1608,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getdealusers-36",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/{id}/permittedUsers.get",
@@ -1650,7 +1650,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getarchiveddeals-37",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/archived.get",
@@ -1692,7 +1692,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getdealssummary-38",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/summary.get",
@@ -1734,7 +1734,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getarchiveddealssummary-39",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/summary/archived.get",
@@ -1776,7 +1776,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getdealstimeline-40",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/timeline.get",
@@ -1818,7 +1818,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getarchiveddealstimeline-41",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./deals/timeline/archived.get",
@@ -1860,7 +1860,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getfiles-42",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./files.get",
@@ -1902,7 +1902,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addfile-43",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./files.post",
@@ -1944,7 +1944,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletefile-44",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./files/{id}.delete",
@@ -1986,7 +1986,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getfile-45",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./files/{id}.get",
@@ -2028,7 +2028,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updatefile-46",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./files/{id}.put",
@@ -2070,7 +2070,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.downloadfile-47",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./files/{id}/download.get",
@@ -2112,7 +2112,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addfileandlinkit-48",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./files/remote.post",
@@ -2154,7 +2154,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.linkfiletoitem-49",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./files/remoteLink.post",
@@ -2196,7 +2196,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletefilters-50",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./filters.delete",
@@ -2233,7 +2233,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getfilters-51",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./filters.get",
@@ -2276,7 +2276,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addfilter-52",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./filters.post",
@@ -2326,7 +2326,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletefilter-53",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./filters/{id}.delete",
@@ -2381,7 +2381,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getfilter-54",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./filters/{id}.get",
@@ -2418,7 +2418,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updatefilter-55",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./filters/{id}.put",
@@ -2473,7 +2473,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getfilterhelpers-56",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./filters/helpers.get",
@@ -2515,7 +2515,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addgoal-57",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./goals.post",
@@ -2557,7 +2557,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletegoal-58",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./goals/{id}.delete",
@@ -2599,7 +2599,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updategoal-59",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./goals/{id}.put",
@@ -2641,7 +2641,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getgoalresult-60",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./goals/{id}/results.get",
@@ -2683,7 +2683,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getgoals-61",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./goals/find.get",
@@ -2720,7 +2720,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getleadfields-62",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leadFields.get",
@@ -2763,7 +2763,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getleadlabels-63",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leadLabels.get",
@@ -2806,7 +2806,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addleadlabel-64",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leadLabels.post",
@@ -2856,7 +2856,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteleadlabel-65",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leadLabels/{id}.delete",
@@ -2906,7 +2906,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updateleadlabel-66",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leadLabels/{id}.patch",
@@ -2956,7 +2956,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getleads-67",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leads.get",
@@ -2999,7 +2999,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addlead-68",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leads.post",
@@ -3049,7 +3049,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletelead-69",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leads/{id}.delete",
@@ -3104,7 +3104,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getlead-70",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leads/{id}.get",
@@ -3141,7 +3141,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updatelead-71",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leads/{id}.patch",
@@ -3196,7 +3196,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getleadusers-72",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leads/{id}/permittedUsers.get",
@@ -3238,7 +3238,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getarchivedleads-73",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leads/archived.get",
@@ -3280,7 +3280,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.searchleads-74",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leads/search.get",
@@ -3317,7 +3317,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getleadsources-75",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./leadSources.get",
@@ -3360,7 +3360,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getteams-76",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./legacyTeams.get",
@@ -3408,7 +3408,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addteam-77",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./legacyTeams.post",
@@ -3450,7 +3450,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getteam-78",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./legacyTeams/{id}.get",
@@ -3492,7 +3492,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updateteam-79",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./legacyTeams/{id}.put",
@@ -3534,7 +3534,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteteamuser-80",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./legacyTeams/{id}/users.delete",
@@ -3576,7 +3576,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getteamusers-81",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./legacyTeams/{id}/users.get",
@@ -3618,7 +3618,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addteamuser-82",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./legacyTeams/{id}/users.post",
@@ -3660,7 +3660,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getuserteams-83",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./legacyTeams/user/{id}.get",
@@ -3702,7 +3702,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getmailmessage-84",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./mailbox/mailMessages/{id}.get",
@@ -3744,7 +3744,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getmailthreads-85",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./mailbox/mailThreads.get",
@@ -3786,7 +3786,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletemailthread-86",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./mailbox/mailThreads/{id}.delete",
@@ -3828,7 +3828,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getmailthread-87",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./mailbox/mailThreads/{id}.get",
@@ -3870,7 +3870,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updatemailthreaddetails-88",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./mailbox/mailThreads/{id}.put",
@@ -3912,7 +3912,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getmailthreadmessages-89",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./mailbox/mailThreads/{id}/mailMessages.get",
@@ -3954,7 +3954,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.saveuserproviderlink-90",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./meetings/userProviderLinks.post",
@@ -3996,7 +3996,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteuserproviderlink-91",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./meetings/userProviderLinks/{id}.delete",
@@ -4038,7 +4038,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getnotefields-92",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./noteFields.get",
@@ -4075,7 +4075,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getnotes-93",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./notes.get",
@@ -4118,7 +4118,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addnote-94",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./notes.post",
@@ -4168,7 +4168,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletenote-95",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./notes/{id}.delete",
@@ -4223,7 +4223,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getnote-96",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./notes/{id}.get",
@@ -4260,7 +4260,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updatenote-97",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./notes/{id}.put",
@@ -4315,7 +4315,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getnotecomments-98",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./notes/{id}/comments.get",
@@ -4357,7 +4357,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addnotecomment-99",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./notes/{id}/comments.post",
@@ -4399,7 +4399,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletecomment-100",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./notes/{id}/comments/{commentId}.delete",
@@ -4441,7 +4441,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getcomment-101",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./notes/{id}/comments/{commentId}.get",
@@ -4483,7 +4483,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updatecommentfornote-102",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./notes/{id}/comments/{commentId}.put",
@@ -4525,7 +4525,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.authorize-103",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./oauth/authorize.get",
@@ -4567,7 +4567,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.get-tokens-104",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./oauth/token.post",
@@ -4609,7 +4609,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.refresh-tokens-105",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./oauth/token/.post",
@@ -4651,7 +4651,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteorganizationfields-106",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizationFields.delete",
@@ -4688,7 +4688,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getorganizationfields-107",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizationFields.get",
@@ -4736,7 +4736,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addorganizationfield-108",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizationFields.post",
@@ -4778,7 +4778,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteorganizationfield-109",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizationFields/{id}.delete",
@@ -4820,7 +4820,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getorganizationfield-110",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizationFields/{id}.get",
@@ -4862,7 +4862,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updateorganizationfield-111",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizationFields/{id}.put",
@@ -4904,7 +4904,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getorganizationrelationships-112",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizationRelationships.get",
@@ -4946,7 +4946,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addorganizationrelationship-113",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizationRelationships.post",
@@ -4988,7 +4988,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteorganizationrelationship-114",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizationRelationships/{id}.delete",
@@ -5030,7 +5030,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getorganizationrelationship-115",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizationRelationships/{id}.get",
@@ -5072,7 +5072,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updateorganizationrelationship-116",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizationRelationships/{id}.put",
@@ -5114,7 +5114,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getorganizationchangelog-117",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizations/{id}/changelog.get",
@@ -5156,7 +5156,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getorganizationfiles-118",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizations/{id}/files.get",
@@ -5198,7 +5198,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getorganizationupdates-119",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizations/{id}/flow.get",
@@ -5240,7 +5240,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getorganizationfollowers-120",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizations/{id}/followers.get",
@@ -5282,7 +5282,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addorganizationfollower-121",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizations/{id}/followers.post",
@@ -5324,7 +5324,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteorganizationfollower-122",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizations/{id}/followers/{follower_id}.delete",
@@ -5366,7 +5366,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getorganizationmailmessages-123",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizations/{id}/mailMessages.get",
@@ -5408,7 +5408,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.mergeorganizations-124",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizations/{id}/merge.put",
@@ -5450,7 +5450,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getorganizationusers-125",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./organizations/{id}/permittedUsers.get",
@@ -5492,7 +5492,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpermissionsets-126",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./permissionSets.get",
@@ -5534,7 +5534,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpermissionset-127",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./permissionSets/{id}.get",
@@ -5576,7 +5576,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpermissionsetassignments-128",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./permissionSets/{id}/assignments.get",
@@ -5618,7 +5618,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletepersonfields-129",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./personFields.delete",
@@ -5655,7 +5655,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpersonfields-130",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./personFields.get",
@@ -5703,7 +5703,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addpersonfield-131",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./personFields.post",
@@ -5745,7 +5745,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletepersonfield-132",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./personFields/{id}.delete",
@@ -5787,7 +5787,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpersonfield-133",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./personFields/{id}.get",
@@ -5829,7 +5829,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updatepersonfield-134",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./personFields/{id}.put",
@@ -5871,7 +5871,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpersonchangelog-135",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./persons/{id}/changelog.get",
@@ -5913,7 +5913,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpersonfiles-136",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./persons/{id}/files.get",
@@ -5955,7 +5955,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpersonupdates-137",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./persons/{id}/flow.get",
@@ -5997,7 +5997,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpersonfollowers-138",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./persons/{id}/followers.get",
@@ -6039,7 +6039,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addpersonfollower-139",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./persons/{id}/followers.post",
@@ -6081,7 +6081,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletepersonfollower-140",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./persons/{id}/followers/{follower_id}.delete",
@@ -6123,7 +6123,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpersonmailmessages-141",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./persons/{id}/mailMessages.get",
@@ -6165,7 +6165,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.mergepersons-142",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./persons/{id}/merge.put",
@@ -6207,7 +6207,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpersonusers-143",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./persons/{id}/permittedUsers.get",
@@ -6249,7 +6249,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletepersonpicture-144",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./persons/{id}/picture.delete",
@@ -6291,7 +6291,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addpersonpicture-145",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./persons/{id}/picture.post",
@@ -6333,7 +6333,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpersonproducts-146",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./persons/{id}/products.get",
@@ -6375,7 +6375,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpipelineconversionstatistics-147",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./pipelines/{id}/conversion_statistics.get",
@@ -6417,7 +6417,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpipelinedeals-148",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./pipelines/{id}/deals.get",
@@ -6459,7 +6459,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getpipelinemovementstatistics-149",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./pipelines/{id}/movement_statistics.get",
@@ -6501,7 +6501,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteproductfields-150",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./productFields.delete",
@@ -6538,7 +6538,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getproductfields-151",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./productFields.get",
@@ -6586,7 +6586,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addproductfield-152",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./productFields.post",
@@ -6628,7 +6628,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteproductfield-153",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./productFields/{id}.delete",
@@ -6670,7 +6670,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getproductfield-154",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./productFields/{id}.get",
@@ -6712,7 +6712,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updateproductfield-155",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./productFields/{id}.put",
@@ -6754,7 +6754,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getproductdeals-156",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./products/{id}/deals.get",
@@ -6796,7 +6796,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getproductfiles-157",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./products/{id}/files.get",
@@ -6838,7 +6838,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getproductfollowers-158",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./products/{id}/followers.get",
@@ -6880,7 +6880,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addproductfollower-159",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./products/{id}/followers.post",
@@ -6922,7 +6922,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteproductfollower-160",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./products/{id}/followers/{follower_id}.delete",
@@ -6964,7 +6964,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getproductusers-161",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./products/{id}/permittedUsers.get",
@@ -7006,7 +7006,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getprojects-162",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects.get",
@@ -7048,7 +7048,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addproject-163",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects.post",
@@ -7090,7 +7090,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteproject-164",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/{id}.delete",
@@ -7132,7 +7132,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getproject-165",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/{id}.get",
@@ -7174,7 +7174,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updateproject-166",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/{id}.put",
@@ -7216,7 +7216,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getprojectactivities-167",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/{id}/activities.get",
@@ -7258,7 +7258,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.archiveproject-168",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/{id}/archive.post",
@@ -7300,7 +7300,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getprojectgroups-169",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/{id}/groups.get",
@@ -7342,7 +7342,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getprojectplan-170",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/{id}/plan.get",
@@ -7384,7 +7384,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.putprojectplanactivity-171",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/{id}/plan/activities/{activityId}.put",
@@ -7426,7 +7426,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.putprojectplantask-172",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/{id}/plan/tasks/{taskId}.put",
@@ -7468,7 +7468,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getprojecttasks-173",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/{id}/tasks.get",
@@ -7510,7 +7510,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getprojectsboards-174",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/boards.get",
@@ -7552,7 +7552,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getprojectsboard-175",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/boards/{id}.get",
@@ -7594,7 +7594,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getprojectsphases-176",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/phases.get",
@@ -7636,7 +7636,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getprojectsphase-177",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projects/phases/{id}.get",
@@ -7678,7 +7678,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getprojecttemplates-178",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projectTemplates.get",
@@ -7720,7 +7720,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getprojecttemplate-179",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./projectTemplates/{id}.get",
@@ -7762,7 +7762,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getrecents-180",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./recents.get",
@@ -7799,7 +7799,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getroles-181",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./roles.get",
@@ -7847,7 +7847,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addrole-182",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./roles.post",
@@ -7889,7 +7889,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleterole-183",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./roles/{id}.delete",
@@ -7931,7 +7931,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getrole-184",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./roles/{id}.get",
@@ -7973,7 +7973,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updaterole-185",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./roles/{id}.put",
@@ -8015,7 +8015,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deleteroleassignment-186",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./roles/{id}/assignments.delete",
@@ -8057,7 +8057,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getroleassignments-187",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./roles/{id}/assignments.get",
@@ -8099,7 +8099,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addroleassignment-188",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./roles/{id}/assignments.post",
@@ -8141,7 +8141,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getrolepipelines-189",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./roles/{id}/pipelines.get",
@@ -8183,7 +8183,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updaterolepipelines-190",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./roles/{id}/pipelines.put",
@@ -8225,7 +8225,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getrolesettings-191",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./roles/{id}/settings.get",
@@ -8267,7 +8267,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addorupdaterolesetting-192",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./roles/{id}/settings.post",
@@ -8309,7 +8309,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getstagedeals-193",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./stages/{id}/deals.get",
@@ -8351,7 +8351,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.gettasks-194",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./tasks.get",
@@ -8393,7 +8393,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addtask-195",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./tasks.post",
@@ -8435,7 +8435,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletetask-196",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./tasks/{id}.delete",
@@ -8477,7 +8477,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.gettask-197",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./tasks/{id}.get",
@@ -8519,7 +8519,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updatetask-198",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./tasks/{id}.put",
@@ -8561,7 +8561,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getuserconnections-199",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./userConnections.get",
@@ -8598,7 +8598,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getusers-200",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./users.get",
@@ -8646,7 +8646,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.adduser-201",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./users.post",
@@ -8688,7 +8688,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getuser-202",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./users/{id}.get",
@@ -8730,7 +8730,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.updateuser-203",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./users/{id}.put",
@@ -8772,7 +8772,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getuserfollowers-204",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./users/{id}/followers.get",
@@ -8814,7 +8814,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getuserpermissions-205",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./users/{id}/permissions.get",
@@ -8856,7 +8856,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getuserroleassignments-206",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./users/{id}/roleAssignments.get",
@@ -8898,7 +8898,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getuserrolesettings-207",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./users/{id}/roleSettings.get",
@@ -8940,7 +8940,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.findusersbyname-208",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./users/find.get",
@@ -8982,7 +8982,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getcurrentuser-209",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./users/me.get",
@@ -9024,7 +9024,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getusersettings-210",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./userSettings.get",
@@ -9061,7 +9061,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.getwebhooks-211",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./webhooks.get",
@@ -9104,7 +9104,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.addwebhook-212",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./webhooks.post",
@@ -9154,7 +9154,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.provider.deletewebhook-213",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "paths./webhooks/{id}.delete",
@@ -9204,7 +9204,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.local-api-surface.get-deals-214",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "api_surface.json:endpoints[213]",
@@ -9247,7 +9247,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.local-api-surface.get-persons-215",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "api_surface.json:endpoints[214]",
@@ -9290,7 +9290,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.local-api-surface.get-organizations-216",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "api_surface.json:endpoints[215]",
@@ -9333,7 +9333,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.local-api-surface.get-activities-217",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "api_surface.json:endpoints[216]",
@@ -9376,7 +9376,7 @@
         "excluded": null
       },
       "source": {
-        "source_lock": "sources/pipedrive-operation-source-lock.json",
+        "source_lock": "sources/pipedrive-parity-source-lock.json",
         "source_id": "pipedrive.local-api-surface.get-products-218",
         "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
         "source_location": "api_surface.json:endpoints[217]",
