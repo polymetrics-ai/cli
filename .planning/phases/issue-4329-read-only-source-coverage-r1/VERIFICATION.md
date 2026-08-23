@@ -2,10 +2,10 @@
 
 ## Status
 
-Implementation is green for the focused engine, source-projection, and
-operation-evidence behavior tests. A full serial `make verify` pass completed
-after the initial implementation checkpoint; the final evidence-rollup commit
-is queued for the same full verification before push.
+Implementation and final delivery commits are green. The final serial
+`GOFLAGS=-p=3 make verify` completed after the connector-keyed evidence-rollup
+and delivery-evidence commits, then `origin/main` was merged (already up to
+date) before push.
 
 ## Required final checks
 
@@ -17,7 +17,7 @@ is queued for the same full verification before push.
 - `GOFLAGS=-p=3 go vet ./cmd/connectorgen ./internal/connectors/engine` — passed
 - `GOFLAGS=-p=3 go build ./cmd/pm` — passed
 - Frozen GitHub artifacts measured: source lock `3,420,025` bytes / `281b1cfcc67eb63e19ef83daf06197bf3d3b23db0b6bc9b73e02fc18ee278fb6`; descriptor `43,354,021` bytes / `d1978c0c6fd0eb66e9fcd4d78d637864a6e486f558aaad1e51550bc43758b899`
-- `GOFLAGS=-p=3 make verify` — passed serially: format, tidy, vet, all tests, build, docs, smoke, lint, agent contract, connector validation/sync/evidence, GitHub parity artifacts, certification, boundary, canon, and release checks
+- `GOFLAGS=-p=3 make verify` — passed twice serially; the final pass covered the exact delivery commits and included format, tidy, vet, all tests, build, docs, smoke, lint, agent contract, connector validation/sync/evidence, GitHub parity artifacts, certification, boundary, canon, and release checks
 
 The Sentry/Vercel source locks are intentionally no longer in the production
 tree after the source-lock embed slimming work, so source-import checks for
