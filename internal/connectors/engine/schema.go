@@ -31,6 +31,7 @@ type schemaNode struct {
 
 	required             []string
 	properties           map[string]*schemaNode
+	patternProperties    []schemaPatternProperty
 	items                *schemaNode
 	prefixItems          []*schemaNode
 	oneOf                []*schemaNode
@@ -82,12 +83,21 @@ type schemaNode struct {
 	hasDefault bool
 }
 
+type schemaPatternProperty struct {
+	pattern *regexp.Regexp
+	schema  *schemaNode
+}
+
 // annotationKeywords are accepted by the schema compiler. Supported formats
 // participate in instance validation, and configuration-time validation
 // evaluates a bundled spec's declared top-level format constraints.
 var annotationKeywords = map[string]bool{
-	"format":      true,
-	"default":     true,
+	"format":  true,
+	"default": true,
+	// example is an OpenAPI/JSON Schema annotation. It documents a provider
+	// value but never changes whether an instance validates, so compilation
+	// accepts it without treating the example itself as executable input.
+	"example":     true,
 	"title":       true,
 	"description": true,
 	"$schema":     true,
@@ -99,6 +109,7 @@ var structuralKeywords = map[string]bool{
 	"type":                 true,
 	"required":             true,
 	"properties":           true,
+	"patternProperties":    true,
 	"items":                true,
 	"oneOf":                true,
 	"enum":                 true,
@@ -198,6 +209,33 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 				return nil, fmt.Errorf("compile schema: properties.%s: %w", name, err)
 			}
 			n.properties[name] = child
+		}
+	}
+
+	if raw, ok := m["patternProperties"]; ok {
+		var props map[string]map[string]json.RawMessage
+		if err := json.Unmarshal(raw, &props); err != nil || props == nil {
+			if err != nil {
+				return nil, fmt.Errorf("compile schema: patternProperties: %w", err)
+			}
+			return nil, fmt.Errorf("compile schema: patternProperties must be an object")
+		}
+		patterns := make([]string, 0, len(props))
+		for pattern := range props {
+			patterns = append(patterns, pattern)
+		}
+		sort.Strings(patterns)
+		n.patternProperties = make([]schemaPatternProperty, 0, len(patterns))
+		for _, pattern := range patterns {
+			compiled, err := regexp.Compile(pattern)
+			if err != nil {
+				return nil, fmt.Errorf("compile schema: patternProperties.%q: %w", pattern, err)
+			}
+			child, err := compileNode(props[pattern], allowPrefixItems)
+			if err != nil {
+				return nil, fmt.Errorf("compile schema: patternProperties.%s: %w", pattern, err)
+			}
+			n.patternProperties = append(n.patternProperties, schemaPatternProperty{pattern: compiled, schema: child})
 		}
 	}
 
@@ -633,33 +671,30 @@ func (n *schemaNode) validateObject(obj map[string]any, path string) error {
 		}
 	}
 
-	if n.hasAdditionalProps && !n.additionalProperties {
-		keys := make([]string, 0, len(obj))
-		for k := range obj {
-			keys = append(keys, k)
-		}
-		sort.Strings(keys)
-		for _, k := range keys {
-			if _, declared := n.properties[k]; !declared {
-				return fmt.Errorf("%s/%s: additional property not allowed", displayPath(path), k)
-			}
-		}
+	keys := make([]string, 0, len(obj))
+	for k := range obj {
+		keys = append(keys, k)
 	}
-
-	if n.properties != nil {
-		keys := make([]string, 0, len(obj))
-		for k := range obj {
-			keys = append(keys, k)
-		}
-		sort.Strings(keys)
-		for _, k := range keys {
-			child, ok := n.properties[k]
-			if !ok {
-				continue
-			}
+	sort.Strings(keys)
+	for _, k := range keys {
+		declared := false
+		if child, ok := n.properties[k]; ok {
+			declared = true
 			if err := child.validate(obj[k], path+"/"+k); err != nil {
 				return err
 			}
+		}
+		for _, pattern := range n.patternProperties {
+			if !pattern.pattern.MatchString(k) {
+				continue
+			}
+			declared = true
+			if err := pattern.schema.validate(obj[k], path+"/"+k); err != nil {
+				return err
+			}
+		}
+		if n.hasAdditionalProps && !n.additionalProperties && !declared {
+			return fmt.Errorf("%s/%s: additional property not allowed", displayPath(path), k)
 		}
 	}
 
