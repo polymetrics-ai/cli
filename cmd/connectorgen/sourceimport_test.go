@@ -12,7 +12,9 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 )
@@ -130,6 +132,94 @@ func TestSourceImportAcceptsStringScalarUnionPathWireContract(t *testing.T) {
 	arms, _ := schema["oneOf"].([]any)
 	if len(arms) != 2 {
 		t.Fatalf("path union arms = %#v, want exact two-arm source contract", schema)
+	}
+}
+
+func TestSourceImportRetainsRecursiveSchemaReferencesAsSourceBoundGaps(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name        string
+		components  string
+		responseRef string
+		wantPointer string
+		wantSchema  string
+		wantGap     bool
+	}{
+		{
+			name:        "direct self reference",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"children":{"type":"array","items":{"$ref":"#/components/schemas/Folder"}}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantPointer: "#/components/schemas/Folder",
+			wantSchema:  "Folder",
+			wantGap:     true,
+		},
+		{
+			name:        "mutually recursive schemas",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"parent":{"$ref":"#/components/schemas/Parent"}}},"Parent":{"type":"object","additionalProperties":false,"properties":{"folder":{"$ref":"#/components/schemas/Folder"}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantPointer: "#/components/schemas/Folder",
+			wantSchema:  "Folder",
+			wantGap:     true,
+		},
+		{
+			name:        "deeply nested cycle",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"metadata":{"type":"object","additionalProperties":false,"properties":{"tree":{"type":"object","additionalProperties":false,"properties":{"child":{"$ref":"#/components/schemas/Folder"}}}}}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantPointer: "#/components/schemas/Folder",
+			wantSchema:  "Folder",
+			wantGap:     true,
+		},
+		{
+			name:        "non cyclic schema",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string","maxLength":64}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantGap:     false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.1.0","info":{"title":"recursive fixture","version":"1"},"components":{"schemas":{` + tt.components + `}},"paths":{"/folders":{"get":{"operationId":"folders/get","responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"` + tt.responseRef + `"}}}}}}}}}`)
+			result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+			if len(result.Operations) != 1 {
+				t.Fatalf("operations = %d, want retained operation", len(result.Operations))
+			}
+			operation := result.Operations[0]
+			if operation.SourceID != "folders/get" || operation.ProviderOperationID != "folders/get" || operation.Source.Location != `paths["/folders"].get` || operation.Source.URL != "https://fixtures.polymetrics.invalid/inline-openapi.json" {
+				t.Fatalf("operation source trace = %#v", operation.Source)
+			}
+
+			var cycleGap *sourceContractGap
+			for index := range operation.Runtime.Gaps {
+				gap := &operation.Runtime.Gaps[index]
+				if gap.Foundation == "cli-recursive-schema-foundation-r1" {
+					cycleGap = gap
+					break
+				}
+			}
+			if !tt.wantGap {
+				if cycleGap != nil || operation.Runtime.MergeBlocked {
+					t.Fatalf("non-cyclic runtime gaps = %#v", operation.Runtime)
+				}
+				return
+			}
+			if cycleGap == nil || !operation.Runtime.MergeBlocked {
+				t.Fatalf("recursive schema runtime gap = %#v", operation.Runtime)
+			}
+			if !strings.Contains(cycleGap.Location, `response 200`) || !strings.Contains(cycleGap.Reason, tt.wantPointer) || !strings.Contains(cycleGap.Reason, tt.wantSchema) {
+				t.Fatalf("cycle gap = %#v, want response location and schema pointer %q", cycleGap, tt.wantPointer)
+			}
+
+			response := descriptorResponse(t, operation, "200")
+			encoded, err := json.Marshal(response.Declaration)
+			if err != nil {
+				t.Fatalf("marshal retained response declaration: %v", err)
+			}
+			if !strings.Contains(string(encoded), `"$ref":"`+tt.wantPointer+`"`) {
+				t.Fatalf("recursive schema was flattened or truncated: %s", encoded)
+			}
+		})
 	}
 }
 
@@ -347,7 +437,6 @@ func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 	}{
 		{name: "external reference", artifact: "external-ref.json", want: "external reference", limits: baseLimits},
 		{name: "unresolved reference", artifact: "unresolved-ref.json", want: "unresolved reference", limits: baseLimits},
-		{name: "cyclic reference", artifact: "cyclic-ref.json", want: "reference cycle", limits: baseLimits},
 		{name: "ambiguous request", artifact: "ambiguous-request.json", want: "ambiguous request schema", limits: baseLimits},
 		{name: "duplicate identity", artifact: "duplicate-id.json", want: "duplicate source identity", limits: baseLimits},
 		{name: "unbounded request", artifact: "unbounded-request.json", want: "unbounded request schema", limits: baseLimits},
@@ -751,6 +840,57 @@ func TestSourceImportRejectsDuplicateJSONAndYAMLMembersWithPointers(t *testing.T
 	}
 }
 
+func TestSourceImportNormalizesScalarYAMLMappingKeys(t *testing.T) {
+	t.Parallel()
+	numeric := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  /items:\n    get:\n      responses:\n        200: {description: ok}\n")
+	quoted := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  /items:\n    get:\n      responses:\n        '200': {description: ok}\n")
+	importArtifact := func(t *testing.T, sourceURL string, raw []byte) sourceImportResult {
+		t.Helper()
+		lock := sourceImportFixtureLock("alpha", sourceURL, raw)
+		result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+			return raw, nil
+		}), defaultSourceImportLimits())
+		if err != nil {
+			t.Fatalf("import %s: %v", sourceURL, err)
+		}
+		return result
+	}
+
+	numericResult := importArtifact(t, "https://fixtures.polymetrics.invalid/numeric.yaml", numeric)
+	quotedResult := importArtifact(t, "https://fixtures.polymetrics.invalid/quoted.yaml", quoted)
+	if len(numericResult.Operations) != 1 || len(quotedResult.Operations) != 1 {
+		t.Fatalf("operation counts numeric=%d quoted=%d", len(numericResult.Operations), len(quotedResult.Operations))
+	}
+	if response := descriptorResponse(t, numericResult.Operations[0], "200"); response.Declaration.(map[string]any)["description"] != "ok" {
+		t.Fatalf("numeric response = %#v", response)
+	}
+	numericDescriptor := numericResult.Operations[0]
+	quotedDescriptor := quotedResult.Operations[0]
+	// The source digest and URL intentionally differ because the two pinned
+	// artifacts have distinct bytes; their imported operation contract must not.
+	numericDescriptor.Source = sourceImportSource{}
+	quotedDescriptor.Source = sourceImportSource{}
+	if !reflect.DeepEqual(numericDescriptor, quotedDescriptor) {
+		t.Fatalf("numeric and quoted YAML imports differ\nnumeric: %#v\nquoted: %#v", numericDescriptor, quotedDescriptor)
+	}
+
+	duplicate := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  /items:\n    get:\n      responses:\n        200: {description: ok}\n        '200': {description: duplicate}\n")
+	duplicateLock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/duplicate-normalized.yaml", duplicate)
+	if _, err := importSourceLockResult(context.Background(), duplicateLock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return duplicate, nil
+	}), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "duplicate YAML mapping key") {
+		t.Fatalf("duplicate normalized YAML key error = %v", err)
+	}
+
+	nonScalar := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  ? [/items]\n  : get: {responses: {'200': {description: ok}}}\n")
+	nonScalarLock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/non-scalar-key.yaml", nonScalar)
+	if _, err := importSourceLockResult(context.Background(), nonScalarLock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return nonScalar, nil
+	}), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "must be a scalar") {
+		t.Fatalf("non-scalar YAML key error = %v", err)
+	}
+}
+
 func TestSourceImportPreservesLiteralReferenceFieldsAndReferenceSiblings(t *testing.T) {
 	t.Parallel()
 	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original","content":{"application/json":{"schema":{"type":"object","additionalProperties":false,"properties":{"$ref":{"type":"string","maxLength":8},"example":{"type":"string","maxLength":8}}}}}}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","description":"override"}}}}}}`)
@@ -768,6 +908,79 @@ func TestSourceImportPreservesLiteralReferenceFieldsAndReferenceSiblings(t *test
 	properties := schema["properties"].(map[string]any)
 	if _, exists := properties["$ref"]; !exists {
 		t.Fatalf("literal property named $ref was lost: %#v", properties)
+	}
+}
+
+func TestSourceImportRetainsBoundedOpenAPI30ReferenceSiblings(t *testing.T) {
+	t.Parallel()
+	for _, sibling := range []struct {
+		name  string
+		field string
+		value string
+	}{
+		{name: "description", field: "description", value: "provider description"},
+		{name: "summary", field: "summary", value: "provider summary"},
+	} {
+		sibling := sibling
+		t.Run(sibling.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","` + sibling.field + `":"` + sibling.value + `"}}}}}}`)
+			result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+			response := descriptorResponse(t, result.Operations[0], "200")
+			declaration, ok := response.Declaration.(map[string]any)
+			if !ok || declaration[sibling.field] != sibling.value {
+				t.Fatalf("OpenAPI 3.0 %s sibling declaration = %#v", sibling.field, response.Declaration)
+			}
+		})
+	}
+
+	extension := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","x-provider-note":"preserved"}}}}}}`)
+	if result := importInlineSourceResult(t, extension, defaultSourceImportLimits()); len(result.Operations) != 1 {
+		t.Fatalf("OpenAPI 3.0 extension sibling result = %#v", result.Operations)
+	}
+
+	readOnly := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"identifier":{"type":"string","maxLength":8}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/identifier","readOnly":true}}}}}}}}}`)
+	result := importInlineSourceResult(t, readOnly, defaultSourceImportLimits())
+	response := descriptorResponse(t, result.Operations[0], "200")
+	media := response.Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)
+	schema := media["schema"].(map[string]any)
+	if schema["readOnly"] != true {
+		t.Fatalf("OpenAPI 3.0 readOnly schema sibling = %#v", schema)
+	}
+
+	matchingType := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"identifier":{"type":"string","maxLength":8}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/identifier","type":"string"}}}}}}}}}`)
+	result = importInlineSourceResult(t, matchingType, defaultSourceImportLimits())
+	response = descriptorResponse(t, result.Operations[0], "200")
+	media = response.Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)
+	schema = media["schema"].(map[string]any)
+	if schema["type"] != "string" {
+		t.Fatalf("OpenAPI 3.0 matching schema type sibling = %#v", schema)
+	}
+
+	conflictingType := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"identifier":{"type":"string","maxLength":8}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/identifier","type":"integer"}}}}}}}}}`)
+	result = importInlineSourceResult(t, conflictingType, defaultSourceImportLimits())
+	response = descriptorResponse(t, result.Operations[0], "200")
+	media = response.Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)
+	schema = media["schema"].(map[string]any)
+	if schema["type"] != "integer" {
+		t.Fatalf("OpenAPI 3.0 retained type sibling = %#v", schema)
+	}
+	var typeGap *sourceContractGap
+	for index := range result.Operations[0].Runtime.Gaps {
+		gap := &result.Operations[0].Runtime.Gaps[index]
+		if gap.Foundation == "cli-openapi30-reference-sibling-foundation-r1" {
+			typeGap = gap
+			break
+		}
+	}
+	if typeGap == nil || !result.Operations[0].Runtime.MergeBlocked || result.Operations[0].Source.Location != `paths["/items"].get` || typeGap.Location != "schema reference #/components/schemas/identifier" || !strings.Contains(typeGap.Reason, `sibling field "type"`) {
+		t.Fatalf("OpenAPI 3.0 type sibling source-bound gap = %#v", result.Operations[0].Runtime)
+	}
+
+	semantic := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","content":{"application/json":{"schema":{"type":"string"}}}}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/openapi30-semantic-sibling.json", semantic)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return semantic, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), `ambiguous response reference with sibling field "content"`) {
+		t.Fatalf("OpenAPI 3.0 semantic reference sibling error = %v", err)
 	}
 }
 
@@ -1000,11 +1213,6 @@ func TestSourceImportPreservesExactFormAndSwaggerRouteBinding(t *testing.T) {
 			t.Fatalf("unsupported document form was accepted: %s", raw)
 		}
 	}
-	openAPI30Sibling := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"ok"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","description":"override"}}}}}}`)
-	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/openapi30-sibling.json", openAPI30Sibling)
-	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return openAPI30Sibling, nil }), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "ambiguous response reference") {
-		t.Fatalf("OpenAPI 3.0 reference sibling error = %v", err)
-	}
 	swagger := []byte(`{"swagger":"2.0","info":{"title":"x","version":"1"},"host":"api.example.invalid","basePath":"/v1","schemes":["https","http"],"paths":{"/items":{"get":{"schemes":["http"],"responses":{"200":{"description":"ok"}}}}}}`)
 	result := importInlineSourceResult(t, swagger, defaultSourceImportLimits())
 	descriptor := result.Operations[0]
@@ -1022,16 +1230,16 @@ func TestSourceImportPreservesExactFormAndSwaggerRouteBinding(t *testing.T) {
 	}
 }
 
-func TestSourceImportRejectsCrossKindIdentitiesAndNonStringYAMLKeys(t *testing.T) {
+func TestSourceImportRejectsCrossKindIdentitiesAndUnsupportedYAMLKeyTags(t *testing.T) {
 	t.Parallel()
 	collision := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"webhooks":{"invoice.created":{"post":{"responses":{"200":{"description":"ok"}}}}},"paths":{"/items":{"get":{"operationId":"alpha.inbound.webhook.invoice.created","responses":{"200":{"description":"ok"}}}}}}`)
 	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/collision.json", collision)
 	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return collision, nil }), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "duplicate source identity") {
 		t.Fatalf("cross-kind identity error = %v", err)
 	}
-	yaml := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  !!int \"01\": {}\n")
-	if _, _, err := parseSourceImportDocument(yaml); err == nil || !strings.Contains(err.Error(), "must be a string") {
-		t.Fatalf("non-string YAML key error = %v", err)
+	yaml := []byte("openapi: 3.1.0\ninfo: {title: x, version: '1'}\npaths:\n  !!timestamp \"2026-08-23\": {}\n")
+	if _, _, err := parseSourceImportDocument(yaml); err == nil || !strings.Contains(err.Error(), "must use a JSON scalar type") {
+		t.Fatalf("unsupported YAML key tag error = %v", err)
 	}
 }
 
@@ -1221,11 +1429,6 @@ func TestSourceImportPreflightsUnusedGrammarObjects(t *testing.T) {
 			want: "external reference",
 		},
 		{
-			name: "unused schema cycle",
-			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$ref":"#/components/schemas/Unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
-			want: "reference cycle",
-		},
-		{
 			name: "unused dynamic schema",
 			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$dynamicRef":"#unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
 			want: "cli-openapi-dynamic-ref-foundation-r1",
@@ -1245,6 +1448,48 @@ func TestSourceImportPreflightsUnusedGrammarObjects(t *testing.T) {
 				t.Fatalf("unused grammar error = %v, want %q", err, tc.want)
 			}
 		})
+	}
+
+	unusedCycle := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$ref":"#/components/schemas/Unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/unused-grammar-cycle.json", unusedCycle)
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return unusedCycle, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("unused recursive schema import: %v", err)
+	}
+	if len(result.Gaps) != 1 {
+		t.Fatalf("unused recursive schema gaps = %#v", result.Gaps)
+	}
+	gap := result.Gaps[0]
+	if gap.Foundation != sourceRecursiveSchemaFoundation || !strings.Contains(gap.Location, "#/components/schemas/Unused") || !strings.Contains(gap.Reason, "#/components/schemas/Unused") {
+		t.Fatalf("unused recursive schema gap = %#v", gap)
+	}
+	encoded, err := marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal unused recursive schema descriptor: %v", err)
+	}
+	if !strings.Contains(string(encoded), `"merge_blocked": true`) || !strings.Contains(string(encoded), `"foundation": "cli-recursive-schema-foundation-r1"`) {
+		t.Fatalf("unused recursive schema evidence disappeared from descriptor: %s", encoded)
+	}
+
+	unusedTypeSibling := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"Base":{"anyOf":[{"type":"object","additionalProperties":false,"properties":{}}]},"Unused":{"allOf":[{"$ref":"#/components/schemas/Base","type":"object"}]}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
+	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/unused-grammar-type-sibling.json", unusedTypeSibling)
+	result, err = importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return unusedTypeSibling, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("unused type sibling import: %v", err)
+	}
+	if len(result.Gaps) != 1 {
+		t.Fatalf("unused type sibling gaps = %#v", result.Gaps)
+	}
+	gap = result.Gaps[0]
+	if gap.Foundation != sourceOpenAPI30ReferenceSiblingFoundation || gap.Location != "schema reference #/components/schemas/Base" || !strings.Contains(gap.Reason, `sibling field "type"`) {
+		t.Fatalf("unused type sibling gap = %#v", gap)
+	}
+	encoded, err = marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal unused type sibling descriptor: %v", err)
+	}
+	if !strings.Contains(string(encoded), `"merge_blocked": true`) || !strings.Contains(string(encoded), `"foundation": "cli-openapi30-reference-sibling-foundation-r1"`) {
+		t.Fatalf("unused type sibling evidence disappeared from descriptor: %s", encoded)
 	}
 }
 
@@ -1698,9 +1943,23 @@ func TestSourceImportNormalizesDirectReferenceFragments(t *testing.T) {
 	}
 	literalPercentCycle := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Root":{"type":"object","additionalProperties":false,"properties":{"percent%2F":{"$ref":"#/components/schemas/Root/properties/percent%252F"}}}}},"paths":{"/items":{"get":{"parameters":[{"name":"filter","in":"query","schema":{"$ref":"#/components/schemas/Root"}}],"responses":{"200":{"description":"ok"}}}}}}`)
 	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/literal-percent-reference-cycle.json", literalPercentCycle)
-	_, err = importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return literalPercentCycle, nil }), defaultSourceImportLimits())
-	if err == nil || !strings.Contains(err.Error(), "reference cycle") {
-		t.Fatalf("literal percent reference cycle error = %v", err)
+	cycleResult, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return literalPercentCycle, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("literal percent recursive schema import: %v", err)
+	}
+	if len(cycleResult.Operations) != 1 || !cycleResult.Operations[0].Runtime.MergeBlocked {
+		t.Fatalf("literal percent recursive schema operation = %#v", cycleResult.Operations)
+	}
+	var cycleGap *sourceContractGap
+	for index := range cycleResult.Operations[0].Runtime.Gaps {
+		gap := &cycleResult.Operations[0].Runtime.Gaps[index]
+		if gap.Foundation == sourceRecursiveSchemaFoundation {
+			cycleGap = gap
+			break
+		}
+	}
+	if cycleGap == nil || !strings.Contains(cycleGap.Reason, "#/components/schemas/Root/properties/percent%2F") {
+		t.Fatalf("literal percent recursive schema gap = %#v", cycleResult.Operations[0].Runtime.Gaps)
 	}
 }
 
@@ -2007,4 +2266,218 @@ func descriptorResponse(t *testing.T, descriptor sourceOperationDescriptor, stat
 	}
 	t.Fatalf("descriptor %q is missing response status %q", descriptor.SourceID, status)
 	return sourceResponseDescriptor{}
+}
+
+type sourceImportV3FixtureDocument struct {
+	ID           string
+	Path         string
+	Artifact     []byte
+	PublishedURL string
+}
+
+func sourceImportV3FixtureLock(t *testing.T, connector string, documents []sourceImportV3FixtureDocument) []byte {
+	t.Helper()
+	sourceDocuments := make([]any, 0, len(documents))
+	for _, document := range documents {
+		artifactDigest := sha256.Sum256(document.Artifact)
+		publishedURL := document.PublishedURL
+		if publishedURL == "" {
+			publishedURL = "https://published.polymetrics.invalid/" + document.ID + "?slug=" + document.ID
+		}
+		sourceDocuments = append(sourceDocuments, map[string]any{
+			"id": document.ID,
+			"artifact": map[string]any{
+				"source_url": "https://fixtures.polymetrics.invalid/" + document.ID + ".openapi.json",
+				"sha256":     hex.EncodeToString(artifactDigest[:]),
+				"bytes":      len(document.Artifact),
+				"openapi":    "3.0.3",
+			},
+			"published_source": map[string]any{
+				"source_url":  publishedURL,
+				"capture_url": "https://fixtures.polymetrics.invalid/" + document.ID + ".capture.json",
+				"sha256":      hex.EncodeToString(artifactDigest[:]),
+				"bytes":       len(document.Artifact),
+				"adapter":     "fixture-openapi-capture-v1",
+			},
+			"info_version": "1",
+			"operations": []any{map[string]any{
+				"id":              connector + ".rest." + document.ID + ".shared",
+				"protocol":        "rest",
+				"method":          "GET",
+				"path":            document.Path,
+				"operation_id":    "shared",
+				"source_location": `paths["` + document.Path + `"].get`,
+			}},
+		})
+	}
+	lock := map[string]any{
+		"schema_version": 3,
+		"connector":      connector,
+		"rest": map[string]any{
+			"retrieval":        "hermetic multi-document fixture capture",
+			"openapi":          []any{"3.0.3"},
+			"source_documents": sourceDocuments,
+		},
+		"counts": map[string]any{"rest": len(documents), "graphql_query": 0, "graphql_mutation": 0, "total": len(documents)},
+	}
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatalf("encode v3 fixture lock: %v", err)
+	}
+	return raw
+}
+
+func TestSourceImportVersion3ImportsDocumentOwnedProvenanceAndDuplicateProviderIDs(t *testing.T) {
+	t.Parallel()
+	documents := []sourceImportV3FixtureDocument{
+		{ID: "alpha", Path: "/alpha", Artifact: []byte(`{"openapi":"3.0.3","info":{"title":"alpha","version":"1"},"paths":{"/alpha":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`)},
+		{ID: "bravo", Path: "/bravo", Artifact: []byte(`{"openapi":"3.0.3","info":{"title":"bravo","version":"1"},"paths":{"/bravo":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`)},
+	}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", documents), "fixture")
+	if err != nil {
+		t.Fatalf("parse v3 fixture lock: %v", err)
+	}
+	fetched := map[string]int{}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		fetched[sourceURL]++
+		for _, document := range documents {
+			if sourceURL == "https://fixtures.polymetrics.invalid/"+document.ID+".openapi.json" {
+				return document.Artifact, nil
+			}
+		}
+		return nil, fmt.Errorf("unexpected fixture source URL %q", sourceURL)
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import v3 fixture lock: %v", err)
+	}
+	if len(result.Operations) != 2 {
+		t.Fatalf("v3 imported operations = %d, want 2", len(result.Operations))
+	}
+	if fetched["https://published.polymetrics.invalid/alpha?slug=alpha"] != 0 || fetched["https://published.polymetrics.invalid/bravo?slug=bravo"] != 0 {
+		t.Fatalf("importer fetched a published citation: %#v", fetched)
+	}
+	byID := map[string]sourceOperationDescriptor{}
+	for _, operation := range result.Operations {
+		byID[operation.SourceID] = operation
+	}
+	for _, document := range documents {
+		identity := "fixture.rest." + document.ID + ".shared"
+		operation, ok := byID[identity]
+		if !ok {
+			t.Fatalf("v3 operation %q is absent: %#v", identity, result.Operations)
+		}
+		if operation.ProviderOperationID != "shared" || operation.Path != document.Path {
+			t.Fatalf("v3 operation identity = %#v", operation)
+		}
+		encoded, marshalErr := json.Marshal(operation)
+		if marshalErr != nil {
+			t.Fatalf("marshal v3 operation: %v", marshalErr)
+		}
+		for _, want := range []string{`"document_id":"` + document.ID + `"`, `"published_url":"https://published.polymetrics.invalid/` + document.ID + `?slug=` + document.ID + `"`, `"published_capture_url":"https://fixtures.polymetrics.invalid/` + document.ID + `.capture.json"`} {
+			if !strings.Contains(string(encoded), want) {
+				t.Fatalf("v3 provenance omitted %s from %s", want, encoded)
+			}
+		}
+	}
+	marshaled, err := marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal v3 descriptor: %v", err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(marshaled, &descriptor); err != nil {
+		t.Fatalf("decode v3 descriptor: %v", err)
+	}
+	if descriptor.SchemaVersion != 3 || !strings.Contains(string(marshaled), `"document_id": "alpha"`) || !strings.Contains(string(marshaled), `"published_url": "https://published.polymetrics.invalid/bravo?slug=bravo"`) {
+		t.Fatalf("v3 descriptor wire provenance = %s", marshaled)
+	}
+}
+
+func TestSourceImportVersion3RejectsMissingOrDriftedDocument(t *testing.T) {
+	t.Parallel()
+	documents := []sourceImportV3FixtureDocument{
+		{ID: "alpha", Path: "/alpha", Artifact: []byte(`{"openapi":"3.0.3","info":{"title":"alpha","version":"1"},"paths":{"/alpha":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`)},
+		{ID: "bravo", Path: "/bravo", Artifact: []byte(`{"openapi":"3.0.3","info":{"title":"bravo","version":"1"},"paths":{"/bravo":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`)},
+	}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", documents), "fixture")
+	if err != nil {
+		t.Fatalf("parse v3 fixture lock: %v", err)
+	}
+	_, err = importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		if strings.Contains(sourceURL, "bravo") {
+			return nil, fmt.Errorf("fixture source is missing")
+		}
+		return documents[0].Artifact, nil
+	}), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "fixture source is missing") {
+		t.Fatalf("missing v3 document error = %v", err)
+	}
+
+	_, err = importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return []byte(`{"openapi":"3.0.3","info":{"title":"drift","version":"1"},"paths":{}}`), nil
+	}), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "source-lock refresh required") {
+		t.Fatalf("drifted v3 document error = %v", err)
+	}
+}
+
+func TestSourceImportVersion3RejectsUnsafePublishedCitationQuery(t *testing.T) {
+	t.Parallel()
+	document := sourceImportV3FixtureDocument{
+		ID:           "alpha",
+		Path:         "/alpha",
+		Artifact:     []byte(`{"openapi":"3.0.3","info":{"title":"alpha","version":"1"},"paths":{"/alpha":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`),
+		PublishedURL: "https://published.polymetrics.invalid/alpha?access_token=value",
+	}
+	if _, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture"); err == nil || !strings.Contains(err.Error(), "published source URL") {
+		t.Fatalf("unsafe published citation query error = %v", err)
+	}
+}
+
+func TestSourceImportVersion3SynchronizesDuplicateArtifactDigests(t *testing.T) {
+	t.Parallel()
+	raw := []byte(`{"openapi":"3.0.3","info":{"title":"fixture","version":"1"},"paths":{}}`)
+	digest := sha256.Sum256(raw)
+	artifact := sourceImportArtifact{SourceURL: "https://fixtures.polymetrics.invalid/shared.openapi.json", SHA256: hex.EncodeToString(digest[:]), Bytes: int64(len(raw)), OpenAPI: "3.0.3"}
+	documents := []sourceImportRESTDocument{{ID: "alpha", Artifact: artifact}, {ID: "bravo", Artifact: artifact}}
+	var mu sync.Mutex
+	calls := 0
+	got, err := fetchSourceImportV3Documents(context.Background(), documents, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		mu.Lock()
+		calls++
+		mu.Unlock()
+		time.Sleep(10 * time.Millisecond)
+		return raw, nil
+	}))
+	if err != nil {
+		t.Fatalf("fetch duplicate digest documents: %v", err)
+	}
+	if calls != 1 || !bytes.Equal(got["alpha"], raw) || !bytes.Equal(got["bravo"], raw) {
+		t.Fatalf("duplicate digest synchronization calls=%d documents=%#v", calls, got)
+	}
+}
+
+func TestSourceImportPreservesFrozenGitHubArtifacts(t *testing.T) {
+	t.Parallel()
+	checks := []struct {
+		path   string
+		bytes  int
+		sha256 string
+	}{
+		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"), bytes: 3420025, sha256: "281b1cfcc67eb63e19ef83daf06197bf3d3b23db0b6bc9b73e02fc18ee278fb6"},
+		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-descriptor.json"), bytes: 43354021, sha256: "d1978c0c6fd0eb66e9fcd4d78d637864a6e486f558aaad1e51550bc43758b899"},
+		{path: filepath.Join("..", "..", ".planning", "phases", "github-parity-extract-r1", "GITHUB-COMBINED-OPERATION-LEDGER.json"), bytes: 2553169, sha256: "c4a904a919f30065fcc8453c6689e1a3dcc7be5ac8e11a7154d310b334972de3"},
+	}
+	for _, check := range checks {
+		check := check
+		t.Run(filepath.Base(check.path), func(t *testing.T) {
+			raw, err := os.ReadFile(check.path)
+			if err != nil {
+				t.Fatalf("read frozen artifact: %v", err)
+			}
+			digest := sha256.Sum256(raw)
+			if len(raw) != check.bytes || hex.EncodeToString(digest[:]) != check.sha256 {
+				t.Fatalf("frozen artifact %s = %d/%s, want %d/%s", check.path, len(raw), hex.EncodeToString(digest[:]), check.bytes, check.sha256)
+			}
+		})
+	}
 }
