@@ -136,6 +136,94 @@ func TestSourceImportAcceptsStringScalarUnionPathWireContract(t *testing.T) {
 	}
 }
 
+func TestSourceImportRetainsRecursiveSchemaReferencesAsSourceBoundGaps(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name        string
+		components  string
+		responseRef string
+		wantPointer string
+		wantSchema  string
+		wantGap     bool
+	}{
+		{
+			name:        "direct self reference",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"children":{"type":"array","items":{"$ref":"#/components/schemas/Folder"}}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantPointer: "#/components/schemas/Folder",
+			wantSchema:  "Folder",
+			wantGap:     true,
+		},
+		{
+			name:        "mutually recursive schemas",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"parent":{"$ref":"#/components/schemas/Parent"}}},"Parent":{"type":"object","additionalProperties":false,"properties":{"folder":{"$ref":"#/components/schemas/Folder"}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantPointer: "#/components/schemas/Folder",
+			wantSchema:  "Folder",
+			wantGap:     true,
+		},
+		{
+			name:        "deeply nested cycle",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"metadata":{"type":"object","additionalProperties":false,"properties":{"tree":{"type":"object","additionalProperties":false,"properties":{"child":{"$ref":"#/components/schemas/Folder"}}}}}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantPointer: "#/components/schemas/Folder",
+			wantSchema:  "Folder",
+			wantGap:     true,
+		},
+		{
+			name:        "non cyclic schema",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string","maxLength":64}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantGap:     false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.1.0","info":{"title":"recursive fixture","version":"1"},"components":{"schemas":{` + tt.components + `}},"paths":{"/folders":{"get":{"operationId":"folders/get","responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"` + tt.responseRef + `"}}}}}}}}}`)
+			result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+			if len(result.Operations) != 1 {
+				t.Fatalf("operations = %d, want retained operation", len(result.Operations))
+			}
+			operation := result.Operations[0]
+			if operation.SourceID != "folders/get" || operation.ProviderOperationID != "folders/get" || operation.Source.Location != `paths["/folders"].get` || operation.Source.URL != "https://fixtures.polymetrics.invalid/inline-openapi.json" {
+				t.Fatalf("operation source trace = %#v", operation.Source)
+			}
+
+			var cycleGap *sourceContractGap
+			for index := range operation.Runtime.Gaps {
+				gap := &operation.Runtime.Gaps[index]
+				if gap.Foundation == "cli-recursive-schema-foundation-r1" {
+					cycleGap = gap
+					break
+				}
+			}
+			if !tt.wantGap {
+				if cycleGap != nil || operation.Runtime.MergeBlocked {
+					t.Fatalf("non-cyclic runtime gaps = %#v", operation.Runtime)
+				}
+				return
+			}
+			if cycleGap == nil || !operation.Runtime.MergeBlocked {
+				t.Fatalf("recursive schema runtime gap = %#v", operation.Runtime)
+			}
+			if !strings.Contains(cycleGap.Location, `response 200`) || !strings.Contains(cycleGap.Reason, tt.wantPointer) || !strings.Contains(cycleGap.Reason, tt.wantSchema) {
+				t.Fatalf("cycle gap = %#v, want response location and schema pointer %q", cycleGap, tt.wantPointer)
+			}
+
+			response := descriptorResponse(t, operation, "200")
+			encoded, err := json.Marshal(response.Declaration)
+			if err != nil {
+				t.Fatalf("marshal retained response declaration: %v", err)
+			}
+			if !strings.Contains(string(encoded), `"$ref":"`+tt.wantPointer+`"`) {
+				t.Fatalf("recursive schema was flattened or truncated: %s", encoded)
+			}
+		})
+	}
+}
+
 func TestSourceImport_CheckedInGitHubLockCoversRESTAndGraphQL(t *testing.T) {
 	t.Parallel()
 	raw, err := os.ReadFile(filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"))
@@ -350,7 +438,6 @@ func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 	}{
 		{name: "external reference", artifact: "external-ref.json", want: "external reference", limits: baseLimits},
 		{name: "unresolved reference", artifact: "unresolved-ref.json", want: "unresolved reference", limits: baseLimits},
-		{name: "cyclic reference", artifact: "cyclic-ref.json", want: "reference cycle", limits: baseLimits},
 		{name: "ambiguous request", artifact: "ambiguous-request.json", want: "ambiguous request schema", limits: baseLimits},
 		{name: "duplicate identity", artifact: "duplicate-id.json", want: "duplicate source identity", limits: baseLimits},
 		{name: "unbounded request", artifact: "unbounded-request.json", want: "unbounded request schema", limits: baseLimits},
@@ -825,6 +912,79 @@ func TestSourceImportPreservesLiteralReferenceFieldsAndReferenceSiblings(t *test
 	}
 }
 
+func TestSourceImportRetainsBoundedOpenAPI30ReferenceSiblings(t *testing.T) {
+	t.Parallel()
+	for _, sibling := range []struct {
+		name  string
+		field string
+		value string
+	}{
+		{name: "description", field: "description", value: "provider description"},
+		{name: "summary", field: "summary", value: "provider summary"},
+	} {
+		sibling := sibling
+		t.Run(sibling.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","` + sibling.field + `":"` + sibling.value + `"}}}}}}`)
+			result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+			response := descriptorResponse(t, result.Operations[0], "200")
+			declaration, ok := response.Declaration.(map[string]any)
+			if !ok || declaration[sibling.field] != sibling.value {
+				t.Fatalf("OpenAPI 3.0 %s sibling declaration = %#v", sibling.field, response.Declaration)
+			}
+		})
+	}
+
+	extension := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","x-provider-note":"preserved"}}}}}}`)
+	if result := importInlineSourceResult(t, extension, defaultSourceImportLimits()); len(result.Operations) != 1 {
+		t.Fatalf("OpenAPI 3.0 extension sibling result = %#v", result.Operations)
+	}
+
+	readOnly := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"identifier":{"type":"string","maxLength":8}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/identifier","readOnly":true}}}}}}}}}`)
+	result := importInlineSourceResult(t, readOnly, defaultSourceImportLimits())
+	response := descriptorResponse(t, result.Operations[0], "200")
+	media := response.Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)
+	schema := media["schema"].(map[string]any)
+	if schema["readOnly"] != true {
+		t.Fatalf("OpenAPI 3.0 readOnly schema sibling = %#v", schema)
+	}
+
+	matchingType := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"identifier":{"type":"string","maxLength":8}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/identifier","type":"string"}}}}}}}}}`)
+	result = importInlineSourceResult(t, matchingType, defaultSourceImportLimits())
+	response = descriptorResponse(t, result.Operations[0], "200")
+	media = response.Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)
+	schema = media["schema"].(map[string]any)
+	if schema["type"] != "string" {
+		t.Fatalf("OpenAPI 3.0 matching schema type sibling = %#v", schema)
+	}
+
+	conflictingType := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"identifier":{"type":"string","maxLength":8}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/identifier","type":"integer"}}}}}}}}}`)
+	result = importInlineSourceResult(t, conflictingType, defaultSourceImportLimits())
+	response = descriptorResponse(t, result.Operations[0], "200")
+	media = response.Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)
+	schema = media["schema"].(map[string]any)
+	if schema["type"] != "integer" {
+		t.Fatalf("OpenAPI 3.0 retained type sibling = %#v", schema)
+	}
+	var typeGap *sourceContractGap
+	for index := range result.Operations[0].Runtime.Gaps {
+		gap := &result.Operations[0].Runtime.Gaps[index]
+		if gap.Foundation == "cli-openapi30-reference-sibling-foundation-r1" {
+			typeGap = gap
+			break
+		}
+	}
+	if typeGap == nil || !result.Operations[0].Runtime.MergeBlocked || result.Operations[0].Source.Location != `paths["/items"].get` || typeGap.Location != "schema reference #/components/schemas/identifier" || !strings.Contains(typeGap.Reason, `sibling field "type"`) {
+		t.Fatalf("OpenAPI 3.0 type sibling source-bound gap = %#v", result.Operations[0].Runtime)
+	}
+
+	semantic := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","content":{"application/json":{"schema":{"type":"string"}}}}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/openapi30-semantic-sibling.json", semantic)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return semantic, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), `ambiguous response reference with sibling field "content"`) {
+		t.Fatalf("OpenAPI 3.0 semantic reference sibling error = %v", err)
+	}
+}
+
 func TestSourceImportPreservesInboundEventsAndExtensionsAsMergeBlocked(t *testing.T) {
 	t.Parallel()
 	raw := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"webhooks":{"invoice.created":{"post":{"responses":{"200":{"description":"ok"}}}}},"paths":{"x-provider-metadata":{"tier":"test"},"/deliver":{"x-route-metadata":{"owner":"provider"},"post":{"operationId":"deliver","callbacks":{"notify":{"{$request.body#/callback_url}":{"post":{"responses":{"202":{"description":"accepted"}}}}}},"responses":{"202":{"description":"accepted"}}}}}}`)
@@ -1054,11 +1214,6 @@ func TestSourceImportPreservesExactFormAndSwaggerRouteBinding(t *testing.T) {
 			t.Fatalf("unsupported document form was accepted: %s", raw)
 		}
 	}
-	openAPI30Sibling := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"ok"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","description":"override"}}}}}}`)
-	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/openapi30-sibling.json", openAPI30Sibling)
-	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return openAPI30Sibling, nil }), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "ambiguous response reference") {
-		t.Fatalf("OpenAPI 3.0 reference sibling error = %v", err)
-	}
 	swagger := []byte(`{"swagger":"2.0","info":{"title":"x","version":"1"},"host":"api.example.invalid","basePath":"/v1","schemes":["https","http"],"paths":{"/items":{"get":{"schemes":["http"],"responses":{"200":{"description":"ok"}}}}}}`)
 	result := importInlineSourceResult(t, swagger, defaultSourceImportLimits())
 	descriptor := result.Operations[0]
@@ -1275,11 +1430,6 @@ func TestSourceImportPreflightsUnusedGrammarObjects(t *testing.T) {
 			want: "external reference",
 		},
 		{
-			name: "unused schema cycle",
-			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$ref":"#/components/schemas/Unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
-			want: "reference cycle",
-		},
-		{
 			name: "unused dynamic schema",
 			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$dynamicRef":"#unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
 			want: "cli-openapi-dynamic-ref-foundation-r1",
@@ -1299,6 +1449,48 @@ func TestSourceImportPreflightsUnusedGrammarObjects(t *testing.T) {
 				t.Fatalf("unused grammar error = %v, want %q", err, tc.want)
 			}
 		})
+	}
+
+	unusedCycle := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$ref":"#/components/schemas/Unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/unused-grammar-cycle.json", unusedCycle)
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return unusedCycle, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("unused recursive schema import: %v", err)
+	}
+	if len(result.Gaps) != 1 {
+		t.Fatalf("unused recursive schema gaps = %#v", result.Gaps)
+	}
+	gap := result.Gaps[0]
+	if gap.Foundation != sourceRecursiveSchemaFoundation || !strings.Contains(gap.Location, "#/components/schemas/Unused") || !strings.Contains(gap.Reason, "#/components/schemas/Unused") {
+		t.Fatalf("unused recursive schema gap = %#v", gap)
+	}
+	encoded, err := marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal unused recursive schema descriptor: %v", err)
+	}
+	if !strings.Contains(string(encoded), `"merge_blocked": true`) || !strings.Contains(string(encoded), `"foundation": "cli-recursive-schema-foundation-r1"`) {
+		t.Fatalf("unused recursive schema evidence disappeared from descriptor: %s", encoded)
+	}
+
+	unusedTypeSibling := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"Base":{"anyOf":[{"type":"object","additionalProperties":false,"properties":{}}]},"Unused":{"allOf":[{"$ref":"#/components/schemas/Base","type":"object"}]}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
+	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/unused-grammar-type-sibling.json", unusedTypeSibling)
+	result, err = importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return unusedTypeSibling, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("unused type sibling import: %v", err)
+	}
+	if len(result.Gaps) != 1 {
+		t.Fatalf("unused type sibling gaps = %#v", result.Gaps)
+	}
+	gap = result.Gaps[0]
+	if gap.Foundation != sourceOpenAPI30ReferenceSiblingFoundation || gap.Location != "schema reference #/components/schemas/Base" || !strings.Contains(gap.Reason, `sibling field "type"`) {
+		t.Fatalf("unused type sibling gap = %#v", gap)
+	}
+	encoded, err = marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal unused type sibling descriptor: %v", err)
+	}
+	if !strings.Contains(string(encoded), `"merge_blocked": true`) || !strings.Contains(string(encoded), `"foundation": "cli-openapi30-reference-sibling-foundation-r1"`) {
+		t.Fatalf("unused type sibling evidence disappeared from descriptor: %s", encoded)
 	}
 }
 
@@ -1752,9 +1944,23 @@ func TestSourceImportNormalizesDirectReferenceFragments(t *testing.T) {
 	}
 	literalPercentCycle := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Root":{"type":"object","additionalProperties":false,"properties":{"percent%2F":{"$ref":"#/components/schemas/Root/properties/percent%252F"}}}}},"paths":{"/items":{"get":{"parameters":[{"name":"filter","in":"query","schema":{"$ref":"#/components/schemas/Root"}}],"responses":{"200":{"description":"ok"}}}}}}`)
 	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/literal-percent-reference-cycle.json", literalPercentCycle)
-	_, err = importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return literalPercentCycle, nil }), defaultSourceImportLimits())
-	if err == nil || !strings.Contains(err.Error(), "reference cycle") {
-		t.Fatalf("literal percent reference cycle error = %v", err)
+	cycleResult, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return literalPercentCycle, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("literal percent recursive schema import: %v", err)
+	}
+	if len(cycleResult.Operations) != 1 || !cycleResult.Operations[0].Runtime.MergeBlocked {
+		t.Fatalf("literal percent recursive schema operation = %#v", cycleResult.Operations)
+	}
+	var cycleGap *sourceContractGap
+	for index := range cycleResult.Operations[0].Runtime.Gaps {
+		gap := &cycleResult.Operations[0].Runtime.Gaps[index]
+		if gap.Foundation == sourceRecursiveSchemaFoundation {
+			cycleGap = gap
+			break
+		}
+	}
+	if cycleGap == nil || !strings.Contains(cycleGap.Reason, "#/components/schemas/Root/properties/percent%2F") {
+		t.Fatalf("literal percent recursive schema gap = %#v", cycleResult.Operations[0].Runtime.Gaps)
 	}
 }
 
