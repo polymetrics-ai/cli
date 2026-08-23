@@ -2,8 +2,8 @@
   "schema_version": 3,
   "integration": "cli-current-foundations-main-integration-r1",
   "checkpoint": "foundation-0.3.0-release-candidate-r1-evidence-closure",
-  "code_sha": "1733dbfebf2f7b07187b0ceafe33dba4d94a6610",
-  "reviewed_sha": "1733dbfebf2f7b07187b0ceafe33dba4d94a6610",
+  "code_sha": "2c09e6c4594923c97c134e4820e52da8e143195b",
+  "reviewed_sha": "2c09e6c4594923c97c134e4820e52da8e143195b",
   "base_sha": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
   "component_inputs": [
     {
@@ -126,11 +126,11 @@
       "modes": ["generated_website_docs", "source_lock.parity", "implemented_but_uncertified"]
     },
     {
-      "command": "go run ./cmd/connectorgen certification-subject --pm ./pm --check (Red); go run ./cmd/connectorgen certification-subject --pm ./pm; go test -timeout 20m -count=1 ./cmd/connectorgen -run '^TestCertificationSubjectFingerprintIncludesEveryComponent$'",
+      "command": "go test -timeout 5m -count=1 ./cmd/connectorgen -run '^(TestCertificationSubjectFingerprintIncludesEveryRepositoryComponent|TestCertificationSubjectFingerprintExcludesProofTimeBuildProvenance|TestCertificationSubjectCheckRejectsEveryRepositoryInput|TestCertificationSubjectForBinarySeparatesProofTimeProvenance)$'; go run ./cmd/connectorgen certification-subject; go run ./cmd/connectorgen certification-subject --check; go run ./cmd/connectorgen certification-subject --pm ./pm --check; make connectorgen-certification-subject",
       "status": "passed",
-      "assertion": "RC-21 refreshes only the checked-in Foundation certification subject after the strict exact-head gate observed stale built-CLI, source-projection, command-mapping, and relevant-configuration hashes. The generator refreshes identity binding only; no provider path ran and no certification claim is promoted.",
-      "tests": ["TestCertificationSubjectFingerprintIncludesEveryComponent", "certification-subject --check"],
-      "modes": ["generated_certification_subject", "identity_binding", "implemented_but_uncertified"]
+      "assertion": "RC-22 makes the checked-in Foundation subject deterministic: its schema-2 fingerprint binds only repository declarations, source projection, CLI mapping, relevant configuration, and proof protocol. Each repository input mutation rejects --check, while raw binary/build provenance is separately retained only by proof-bearing evidence from real pm proof runs. No provider path ran and no certification claim is promoted.",
+      "tests": ["TestCertificationSubjectFingerprintIncludesEveryRepositoryComponent", "TestCertificationSubjectFingerprintExcludesProofTimeBuildProvenance", "TestCertificationSubjectCheckRejectsEveryRepositoryInput", "TestCertificationSubjectForBinarySeparatesProofTimeProvenance", "certification-subject --check"],
+      "modes": ["generated_certification_subject", "repository_identity_binding", "proof_time_build_provenance", "implemented_but_uncertified"]
     }
   ],
   "gate_ledger": [
@@ -187,13 +187,13 @@
     }
   ],
   "artifact_closure": {
-    "implementation_sha": "1733dbfebf2f7b07187b0ceafe33dba4d94a6610",
-    "subject_fingerprint": "948384469eeddd3b4ae5bb7ce2d77c4989dadc4dd1f0153956840f1ecfac6bee",
+    "implementation_sha": "2c09e6c4594923c97c134e4820e52da8e143195b",
+    "subject_fingerprint": "70effde0c1d434bcb75155e972b6c6c4e5de896eb7279dbd9e27ddc9d4093238",
     "artifacts": [
       {
         "category": "certification_subject",
         "path": "internal/connectors/certifications/current-subject.json",
-        "sha256": "f3db3166c142675ec3c7bf6109debd1bc040a446952697c0f74ecd528f3719ea"
+        "sha256": "a7dc07835d3eeb53aa98bb492d93395cc6933b7e93b0925cd3ffec41d8e6cb15"
       },
       {
         "category": "source",
@@ -223,7 +223,7 @@
       {
         "category": "ledger",
         "path": ".planning/phases/cli-current-foundations-main-integration-r1/TDD-LEDGER.md",
-        "sha256": "d6fef8cbb8556ce591111965f20afaa6098acafe4884b4024521acaff1c8b23f"
+        "sha256": "28a103c934121833c726f4ed2680c82e244f09e3bc93348c1dec028147fdcec8"
       },
       {
         "category": "matrix",
