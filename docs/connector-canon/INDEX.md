@@ -13,7 +13,8 @@ this index or a later captain ruling, the current canon wins.
    end-to-end path and its Foundation Check.
 2. [Remote reproducibility](REMOTE-REPRODUCIBILITY.md) — what a clean machine
    can prove without provider access, and what it cannot.
-3. The binding source reports in the table below.
+3. [Operation evidence](OPERATION-EVIDENCE.md) — generated source-operation
+   accounting and the fixed-100 executable regression gate.
 4. The mechanical authoring references:
    [migration conventions](../migration/conventions.md),
    [architecture v2 design](../architecture/connector-architecture-v2-design.md),

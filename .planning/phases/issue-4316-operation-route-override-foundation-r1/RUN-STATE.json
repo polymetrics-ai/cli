@@ -1,0 +1,14 @@
+{
+  "issue": 4316,
+  "phase": "issue-4316-operation-route-override-foundation-r1",
+  "status": "implemented",
+  "base": "main",
+  "working_branch": "fm/cli-operation-route-override-foundation-r1",
+  "gsd": {
+    "discuss_phase": "inline/manual fallback recorded",
+    "plan_phase_tdd": "inline/manual fallback recorded",
+    "execute_phase": "inline/manual fallback recorded",
+    "verify_work": "inline/manual fallback recorded",
+    "code_review": "inline/manual fallback recorded"
+  }
+}
