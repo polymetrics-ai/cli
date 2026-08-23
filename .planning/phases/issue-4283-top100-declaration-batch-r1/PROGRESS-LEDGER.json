@@ -72,6 +72,61 @@
       }
     ]
   },
+  "source_lock_refresh_e338cd301": {
+    "at": "2026-08-23T16:52:47Z",
+    "base": "e338cd30160be6d3e1b4eba21f74df1f580094ba",
+    "method": "Fetched each existing public HTTPS artifact without credentials; applied only its measured bytes/SHA-256/capture metadata to an isolated copied bundle, then ran the production source importer. Checked-in pins remain unchanged because no full source inventory reached a clean declaration projection.",
+    "results": [
+      {
+        "connector": "notion",
+        "artifact_bytes": 1304814,
+        "artifact_sha256": "dee5763763b0b9fbad2aa8d5adb173ca350ec26dda557e658c5dbe9d2ea2f258",
+        "state": "blocked-shared-schema-depth-limit",
+        "error": "GET /v1/blocks/meeting_notes response 200 application/json schema depth limit exceeded",
+        "evidence": "cmd/connectorgen/sourceimport.go:65 sets MaxReferenceDepth=32; response expansion refuses it at :4269-4272"
+      },
+      {
+        "connector": "bitbucket",
+        "artifact_bytes": 1359673,
+        "artifact_sha256": "3dbfe6a80143511a287e58c21a193d3551ab5d41e8b60e65c1ae121b7000dec3",
+        "state": "blocked-shared-schema-depth-limit",
+        "error": "GET /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments response 200 schema depth limit exceeded",
+        "evidence": "cmd/connectorgen/sourceimport.go:65 and :4269-4272"
+      },
+      {
+        "connector": "gitlab",
+        "artifact_bytes": 3576860,
+        "artifact_sha256": "6b6ad591ff1b54ab429d0502812a2b2955501f1f6bebdae1888ba0bea086cf82",
+        "state": "blocked-provider-path-parameter-contract",
+        "error": "POST /api/v4/groups/{id}/(-/)epics/{epic_iid}/issues/{epic_issue_id}: placeholder epic_issue_id has no required path parameter",
+        "evidence": "cmd/connectorgen/sourceimport.go:6036-6048 rejects missing required provider path parameters"
+      },
+      {
+        "connector": "circleci",
+        "artifact_bytes": 621321,
+        "artifact_sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
+        "state": "descriptor-imported-projection-blocked",
+        "error": "111 operations imported, then 27 source mutations have no complete executable action",
+        "evidence": "cmd/connectorgen/sourceprojection.go:137-143,210-211; includes PUT /context/{context_id}/environment-variable/{env_var_name} whose value is secret-bearing. PR #4334 remains open, unmerged, and behind main."
+      },
+      {
+        "connector": "vercel",
+        "artifact_bytes": 10463249,
+        "artifact_sha256": "74cb7ff3dc0b89cc344b13ac9c6d5f1d9b7d7a9356cfd6b5a779da51fd43da28",
+        "state": "blocked-shared-openapi30-pattern-properties",
+        "error": "POST /api-keys response 200 uses unsupported OpenAPI schema keyword patternProperties",
+        "evidence": "cmd/connectorgen/sourceimport.go:4311-4315 rejects a schema-bearing keyword the OpenAPI 3.0 grammar does not handle; read-only source coverage was not reached."
+      },
+      {
+        "connector": "jira",
+        "artifact_bytes": 2456011,
+        "artifact_sha256": "511d0b97390cc47aa0e1367189210a41f32088d9c869e7bb01f43698bdf7e5e8",
+        "state": "descriptor-imported-projection-blocked",
+        "error": "617 operations imported, then 16 source mutations have no complete executable action",
+        "evidence": "cmd/connectorgen/sourceprojection.go:137-143,210-211"
+      }
+    ]
+  },
   "connectors": [
     {
       "connector": "asana",

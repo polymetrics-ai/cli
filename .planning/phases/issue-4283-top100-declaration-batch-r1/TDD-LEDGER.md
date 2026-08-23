@@ -539,6 +539,32 @@ source pins. Resume source refresh only under an explicit captain decision;
 resume Stripe/Asana/Docker Hub after their precise importer gaps land; derive
 Sentry operation actions only from its emitted canonical descriptor.
 
+## e338cd301 source-lock refresh qualification — 2026-08-23
+
+**Red (measured after merge):** current `origin/main` at `e338cd301` admits
+the previously rejected cyclic schemas and `$ref` descriptive siblings, but no
+checked-in pin was rewritten before the full public-source contract could be
+verified. Each candidate artifact was fetched without credentials, measured,
+and applied only to an isolated copied bundle before invoking the production
+importer.
+
+| Connector | Measured result | Refusing boundary |
+| --- | --- | --- |
+| Notion | `1304814` bytes, `dee576…2f258`; blocked at `GET /v1/blocks/meeting_notes` response schema depth | `cmd/connectorgen/sourceimport.go:65,4269-4272` |
+| Bitbucket | `1359673` bytes, `3dbfe6…0dec3`; blocked at pull-request comments response schema depth | `cmd/connectorgen/sourceimport.go:65,4269-4272` |
+| GitLab | `3576860` bytes, `6b6ad5…6cf82`; `epic_issue_id` is not a required source path parameter | `cmd/connectorgen/sourceimport.go:6036-6048` |
+| CircleCI | `621321` bytes, `61c6ce…66d07`; imports 111, then 27 mutation actions are missing | `cmd/connectorgen/sourceprojection.go:137-143,210-211` |
+| Vercel | `10463249` bytes, `74cb7f…3da28`; `POST /api-keys` response uses `patternProperties` | `cmd/connectorgen/sourceimport.go:4311-4315` |
+| Jira | `2456011` bytes, `511d0b…7e5e8`; imports 617, then 16 mutation actions are missing | `cmd/connectorgen/sourceprojection.go:137-143,210-211` |
+
+CircleCI's missing actions include the secret-bearing context environment
+variable PUT. Its required `env_only` support remains PR #4334, verified open,
+unmerged, and behind `main`; that caveat is real but does not explain the other
+26 unmapped mutations. Vercel's read-only coverage caveat was not reached: the
+importer refuses `patternProperties` first. The expected Notion, Bitbucket,
+GitLab, and Jira clear result is not reproduced, so no pin, denominator, or
+derived declaration is changed on this evidence.
+
 ## Captain hard pre-merge gate — 2026-08-20
 
 ### Red

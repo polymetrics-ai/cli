@@ -353,3 +353,21 @@
   source-import blockers make its `connectorgen validate` gate deterministically
   fail. No push is attempted before captain decides the source-lock refresh and
   shared-importer recovery path.
+
+## e338cd301 source-lock refresh verification — 2026-08-23
+
+- [x] Merged `origin/main` without rebasing at `c8cd27cb9`; fetched tip
+  `e338cd30160be6d3e1b4eba21f74df1f580094ba` (`#4327`).
+- [x] Fetched six cited public artifacts without credentials and verified the
+  measured bytes/SHA-256 by applying them only in isolated copied bundles.
+- [x] Ran production `connectorgen source-import` for Notion, Bitbucket,
+  GitLab, CircleCI, Vercel, and Jira against those isolated refresh candidates.
+  No candidate reaches a clean source/declaration projection. Exact per-
+  connector evidence, artifact measurements, and refusing file/lines are in
+  `PROGRESS-LEDGER.json#source_lock_refresh_e338cd301` and `TDD-LEDGER.md`.
+- [x] Confirmed PR #4334 is still open, unmerged, and behind `main`; CircleCI
+  has the expected secret-bearing context env-var action among its 27 missing
+  actions, but the generic projection gap is broader.
+- [x] Vercel fails before the known read-only coverage work: its public
+  `/api-keys` POST response uses `patternProperties`, refused by the source
+  importer at `cmd/connectorgen/sourceimport.go:4311-4315`.

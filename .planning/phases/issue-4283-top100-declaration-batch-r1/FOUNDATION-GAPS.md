@@ -96,3 +96,28 @@ dispositions and recoverability remain in `REJECTION-LIST.json`.
   reconciled from the canonical descriptor after Docker Hub source import
   succeeds. Do not hand-edit derived body contracts or treat this as a source
   rewrite workaround.
+
+## e338cd301 source-lock refresh results
+
+- **Notion and Bitbucket:** their refreshed public artifacts pass hash/byte
+  qualification, but response-schema expansion exceeds the shared 32-reference
+  depth bound (`cmd/connectorgen/sourceimport.go:65,4269-4272`). The concrete
+  failures are Notion `GET /v1/blocks/meeting_notes` response `200` and
+  Bitbucket pull-request comments `GET` response `200`.
+- **GitLab:** the provider document declares
+  `POST /api/v4/groups/{id}/(-/)epics/{epic_iid}/issues/{epic_issue_id}`
+  without a required `epic_issue_id` path parameter. The importer refuses that
+  unrepresentable contract at `cmd/connectorgen/sourceimport.go:6036-6048`.
+- **Vercel:** its public `POST /api-keys` response carries
+  `patternProperties`, which the OpenAPI 3.0 source-schema grammar refuses at
+  `cmd/connectorgen/sourceimport.go:4311-4315`. This occurs before the
+  separately known read-only source-coverage work.
+- **CircleCI and Jira:** both imports emit canonical descriptors, then stop at
+  `cmd/connectorgen/sourceprojection.go:137-143,210-211` because 27 and 16
+  source mutations respectively have no existing complete executable action.
+  CircleCI includes its secret-bearing context environment-variable PUT; PR
+  #4334 is verified open, unmerged, and behind main, but the missing-action
+  count is broader than that one env-only requirement.
+- No checked-in source lock is refreshed from these measurements: a valid
+  refresh must retain a complete verified inventory and derived declaration,
+  not only a new byte count and SHA-256.
