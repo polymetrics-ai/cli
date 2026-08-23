@@ -1,0 +1,22 @@
+{
+  "issue": 4328,
+  "phase": "issue-4328-env-only-secret-flags-r1",
+  "status": "base_reconciled_pending_push",
+  "base_branch": "main",
+  "working_branch": "fm/cli-env-only-secret-flag-generalization-r1",
+  "delivery_mode": "direct_pr",
+  "manual_gsd_fallback": true,
+  "pr_number": 4334,
+  "pr_url": "https://github.com/polymetrics-ai/cli/pull/4334",
+  "pr_base": "main",
+  "pr_creation_head_sha": "a9ad7ed56025f0bc2bfe46d35bca1ce9a46054a1",
+  "production_scope": [
+    "cmd/connectorgen/validate.go",
+    "cmd/connectorgen/sourceprojection.go",
+    "cmd/connectorgen/*_test.go"
+  ],
+  "forbidden_paths": [
+    "cmd/connectorgen/sourceimport.go",
+    "internal/connectors/defs/github/rate_limits.json"
+  ]
+}

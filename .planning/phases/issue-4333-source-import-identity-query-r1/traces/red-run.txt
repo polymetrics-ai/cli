@@ -1,0 +1,5 @@
+--- FAIL: TestSourceImportVersion3FetchesDeclaredIdentityQuery (0.00s)
+    sourceimport_test.go:2145: parse v3 identity-query lock: parse source lock: json: unknown field "identity_query"
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	1.108s
+FAIL
