@@ -92,3 +92,79 @@ The consumer dry-run classified Slack's `swagger: "2.0"` source as a genuine con
 - `GOFLAGS='-p=3' go test -timeout 20m -run '^TestSourceImportVersion3SwaggerTwoProjectsWithoutOpenAPIVersionInventory$' -count=1 ./cmd/connectorgen`: **RED then PASS**.
 - `GOFLAGS='-p=3' go test -timeout 20m ./cmd/connectorgen`: **PASS** — `ok polymetrics.ai/cmd/connectorgen 192.468s`.
 - `GOFLAGS='-p=3' go vet ./cmd/connectorgen && GOFLAGS='-p=3' go build ./cmd/connectorgen && git diff --check`: **PASS**.
+
+## Final consumer failure classification and batch 6/7 delta
+
+The final migration dry-run intentionally wrote every mapped lock only below
+`t.TempDir` and parsed it through the production strict importer. The following
+is the complete classification of the 23 copies that remain invalid at
+`9df9e058e`. Consumer paths and line numbers name the read-only input evidence;
+the final column names the production contract check which refused the mapped
+copy.
+
+### Contract gap — none remaining
+
+Slack was the one genuine contract gap discovered by the first dry-run: its
+standalone `swagger: "2.0"` source was neither a rendered reference nor a 3.0/3.1
+OpenAPI document. Commit `9df9e058e` resolves that gap by retaining the existing
+strict Swagger parser with an explicit `artifact.swagger` form pin. It is now in
+the passing batch 2/3 count. No remaining copied lock needs a new document kind,
+weakened provenance check, or alternate projection path.
+
+### Mapping gaps — 20
+
+| Connector | Lane | Exact unmapped shape and read-only evidence | Production refusal |
+| --- | --- | --- | --- |
+| amazon-sqs | 2/3 | Botocore service-model JSON was mapped as `kind: openapi` with version `2012-11-05` at `.../46/cli/internal/connectors/defs/amazon-sqs/sources/amazon-sqs-operation-source-lock.json:6-10`. It is not an OpenAPI version. | `cmd/connectorgen/sourceimport.go:764-765` — OpenAPI version is outside the aggregate inventory. Map it as a rendered reference with captured evidence and citations instead. |
+| gmail | 2/3 | Google Discovery JSON was mapped as `kind: openapi` with version `v1` at `.../46/cli/internal/connectors/defs/gmail/sources/gmail-operation-source-lock.json:6-10`. It is not an OpenAPI version. | `cmd/connectorgen/sourceimport.go:764-765` — same refusal. Map it as a rendered reference with captured evidence and citations instead. |
+| google-ads | 2/3 | Google Discovery JSON at `.../46/cli/internal/connectors/defs/google-ads/sources/google-ads-operation-source-lock.json:6-13` has no OpenAPI pin; mapping it as `kind: openapi` does not establish one. | `cmd/connectorgen/sourceimport.go:764-765` — missing version is outside the aggregate inventory. Map it as a rendered reference with captured evidence and citations instead. |
+| google-calendar | 2/3 | Google Discovery JSON was mapped as `kind: openapi` with version `v3` at `.../46/cli/internal/connectors/defs/google-calendar/sources/google-calendar-operation-source-lock.json:6-10`. It is not an OpenAPI version. | `cmd/connectorgen/sourceimport.go:764-765` — same refusal. Map it as a rendered reference with captured evidence and citations instead. |
+| outreach | 6/7 | The source artifact publishes under `https://api.outreach.io` at `.../12/cli/internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json:6`, but `outreach.rest.delete.ApiV2CustomObjectsObjectNameId8` cites `https://developers.outreach.io/api/custom-objects` at `:93-100`. One rendered-reference document cannot legitimately vouch for both origins. | `cmd/connectorgen/sourceimport.go:804-805` — citation must be a well-formed absolute URL under its document's published-source origin. The mapping needs a separately captured `developers.outreach.io` document (or a retraced same-origin source), not a relaxed origin check. |
+| auth0 | 8/9/10 | The migrated `documents` entry has content/hash/bytes but no retained 3.0/3.1 version pin: `.../54/cli/internal/connectors/defs/auth0/sources/auth0-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| brex | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/brex/sources/brex-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| calendly | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/calendly/sources/calendly-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| coda | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/coda/sources/coda-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| commercetools | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/commercetools/sources/commercetools-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| datadog | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/datadog/sources/datadog-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| dbt | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/dbt/sources/dbt-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| docuseal | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/docuseal/sources/docuseal-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| firehydrant | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/firehydrant/sources/firehydrant-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| looker | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/looker/sources/looker-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| metabase | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/metabase/sources/metabase-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| mode | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/mode/sources/mode-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| okta | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/okta/sources/okta-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| pagerduty | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/pagerduty/sources/pagerduty-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+| posthog | 8/9/10 | Same missing 3.0/3.1 pin in the `machine-readable-spec` document at `.../54/cli/internal/connectors/defs/posthog/sources/posthog-operation-source-lock.json:6-16`. | `cmd/connectorgen/sourceimport.go:764-765` — missing OpenAPI version. |
+
+The final 15 rows are one systematic migration omission, not 15 new contract
+shapes: the mapper must retain a verified 3.0/3.1 `artifact.openapi` value when
+mapping a standalone OpenAPI document. The contract must not infer it from a
+URL, content type, or operation list.
+
+### Source defects — 3
+
+| Connector | Lane | Exact malformed consumer evidence | Production refusal |
+| --- | --- | --- | --- |
+| miro | 2/3 | Path `/v2/boards/{board_id}/groups/{group_id}?` is malformed at `.../46/cli/internal/connectors/defs/miro/sources/miro-operation-source-lock.json:1427-1434`. | `cmd/connectorgen/sourceimport.go:800-801` — invalid REST operation path. |
+| trello | 2/3 | `trello.rest.put-members-id-notificationChannelSettings-channel-blockedKeys` is duplicated at `.../46/cli/internal/connectors/defs/trello/sources/trello-operation-source-lock.json:2019`, `:2039`, and `:2049`. | `cmd/connectorgen/sourceimport.go:797-798` — duplicate REST operation identity. |
+| iterable | 6/7 | `iterable.rest.delete.delete` is duplicated at `.../12/cli/internal/connectors/defs/iterable/sources/iterable-operation-source-lock.json:53` and `:63` (with further repetitions later in the source inventory). | `cmd/connectorgen/sourceimport.go:797-798` — duplicate REST operation identity. |
+
+### Batch 6/7 19-to-18 delta: mapper correction, not a contract regression
+
+The earlier `9f5cd8672` dry-run reported 19/20 for batch 6/7 because its
+temporary copy mapper transformed each operation twice. On the first conversion
+it copied an operation's legacy `source_url` into the citation. On the second,
+that legacy field was already absent, so the mapper incorrectly substituted the
+document's `published_source.source_url` for every citation. That substitution
+made Outreach's `developers.outreach.io` citation appear to originate at
+`api.outreach.io` and hid the mapping gap.
+
+The final copy mapper preserves the original per-operation citation, so the
+production same-origin check correctly rejects the operation at Outreach line
+100. The source-code diff from `9f5cd8672` to `9df9e058e` is limited to Swagger
+2.0 `artifact.swagger` handling in `sourceimport.go:756-765` and its projected
+form in `sourceprojection.go:1869-1877`; neither executes for batch 6/7's
+rendered-reference documents. That Swagger correction gained Slack in batch
+2/3, while the mapper correction exposed Outreach in batch 6/7, leaving the
+total at 47/70. This is deliberately classified as a **mapping gap**, not a
+reason to weaken the contract's cross-origin citation protection.
