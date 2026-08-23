@@ -217,7 +217,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			if prepared.op.Kind == "graphql_mutation" {
 				message = "provider returned a GraphQL HTTP error"
 			}
-			if !prepared.sensitiveHTTPBinding {
+			if !prepared.sensitiveHTTPBinding || !operationDirectWriteErrorRequiresGenericDiagnostic(err) {
 				message = operationDirectWriteErrorText(
 					err,
 					prepared.identity,
@@ -423,6 +423,15 @@ func operationDirectWriteErrorMayExposeURL(err error) bool {
 	}
 	message := err.Error()
 	return strings.Contains(message, "http://") || strings.Contains(message, "https://")
+}
+
+// operationDirectWriteErrorRequiresGenericDiagnostic identifies transport
+// failures whose provider-controlled receipt or resolved URL can carry a
+// runtime-bound credential. Local pre-I/O validation errors remain useful
+// diagnostics and are redacted through operationDirectWriteErrorText instead.
+func operationDirectWriteErrorRequiresGenericDiagnostic(err error) bool {
+	var httpErr *connsdk.HTTPError
+	return errors.As(err, &httpErr) || operationDirectWriteErrorMayExposeURL(err)
 }
 
 func redactOperationDirectWriteErrorText(text string, redact bool, values []string) string {

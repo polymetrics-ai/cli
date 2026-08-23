@@ -65,3 +65,10 @@
 - Green: `go test -timeout 20m ./internal/connectors/commandrunner -count=1` passes after preserving the exact `json.Number` contract and emitting the flag name plus expected numeric domain without echoing the rejected value.
 - Green: final local CI-equivalent checks passed: `go build -trimpath -ldflags='-s -w' -o /dev/null ./cmd/pm`; `go vet ./...`; `go run ./cmd/connectorgen boundary . --json`; `go run golang.org/x/vuln/cmd/govulncheck@latest ./...`; `go test -timeout 20m ./cmd/connectorgen -run '^$' -count=1`; and the complete tagged GitHub fresh-binary fixture command from `.github/workflows/verify.yml` (1265.704s).
 - Scope: no production connector definition or generic HTTP/raw-body escape hatch was added. The repair remains confined to the declaration-bound engine, its regression fixtures, and this GSD/TDD evidence.
+
+### 2026-08-23 — active CI-phase multipart integrity diagnostic repair
+
+- Red: hosted Verify and `go test -timeout 20m -count=1 -run '^TestApprovedFixtureOperationRequestMultipartRejectsTamperAndStaleApprovalBeforeProviderIO$' -v ./internal/connectors/conformance` failed for the tampered multipart fixture with the generic `provider returned an HTTP error` diagnostic instead of `changed since approval`.
+- Root cause: the credential-safe direct-write diagnostic branch treated every error from a credential-bound request as a provider error. The multipart snapshot's local, pre-I/O digest mismatch was therefore hidden despite the existing fixture's zero-provider-capture assertion.
+- Green: only HTTP and URL-bearing transport errors retain the generic diagnostic; safe local errors pass through the existing literal-redaction path. The focused conformance regression, `go test -timeout 20m -count=1 ./internal/connectors/conformance`, and `go test -timeout 20m -count=1 ./internal/connectors/engine` pass. Credential-bound provider-error tests still prove provider echoes remain generic and secret-safe.
+- Scope: this assigned CI phase did not invoke no-mistakes controls, rerun CI, push, or mutate the PR; those remain with the outer executor.
