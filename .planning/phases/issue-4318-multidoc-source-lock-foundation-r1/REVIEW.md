@@ -29,3 +29,10 @@ duplicate detection on normalized scalar keys and still rejects compound/custom-
 - `go test -race -count=1 -timeout 20m ./cmd/connectorgen -run '^TestSourceImportVersion3SynchronizesDuplicateArtifactDigests$'` passed.
 - `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestSourceImportPreservesFrozenGitHubArtifacts$'` passed.
 - Full `make verify` passed with zero lint findings.
+
+## External review routing
+
+PR #4320 is non-draft, targets `main`, and its API-reported author association is `MEMBER`.
+No Claude automatic workflow run was created after the open trigger, so the repository's required
+fallback is one manual `@claude review` request. That request is pending; Copilot is not a parallel
+route and has not been requested.

@@ -74,6 +74,7 @@ fixtures rather than a connector capture.
 One coherent direct-PR checkpoint contains the completed plan/TDD evidence, implementation, tests,
 documentation, full verification, and manual standard-depth review. The base is `main`.
 
-Automated review route: `claude_auto` pending on this non-draft, main-targeted PR from a trusted
-repository author. No manual Claude request or Copilot backup has been made. Any automated finding
-will be dispositioned before merge; final human approval remains required.
+Automated review route: `claude_auto` did not create a workflow run after PR open, despite the
+GitHub API reporting the author association as `MEMBER`. Per the repository fallback policy, one
+`claude_manual` request has been made; its result is pending. No Copilot backup has been requested.
+Any automated finding will be dispositioned before merge; final human approval remains required.
