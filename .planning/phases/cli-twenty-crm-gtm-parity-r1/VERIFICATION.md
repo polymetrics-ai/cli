@@ -555,3 +555,19 @@ stale. The built binary supplied its own safe generation and validation path:
 The generator refreshed only the connector catalog and Twenty generated manual
 and skill, removing 114 stale lines. No documentation was manually edited and
 no command availability or batch-deferral classification changed.
+
+## 2026-08-23 CI recovery — certification subject checkpoint
+
+GitHub Verify `32658723411` supplied the last derived-artifact red finding:
+`connectorgen certification-subject --check` refused the stale current subject.
+The generator and its check ran directly against the recovered bundle:
+
+```text
+go run ./cmd/connectorgen certification-subject
+go run ./cmd/connectorgen certification-subject --check
+# PASS
+```
+
+The generated update touches only three values in
+`internal/connectors/certifications/current-subject.json`. It makes no live
+certification claim and does not alter any command or deferral classification.
