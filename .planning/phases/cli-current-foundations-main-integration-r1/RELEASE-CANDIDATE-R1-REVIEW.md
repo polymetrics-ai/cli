@@ -1,8 +1,8 @@
 # Foundation 0.3.0 release-candidate r1 review record
 
-source_sha: 7e0507e518a55ef2d8164c34cc39c0865555a963
+source_sha: da16e35b0f801f1b1f49f23651e33ee9e338cf37
 
-This is final code-and-generated implementation SHA **I10**. Its schema-3 evidence closure is deliberately the next commit: an evidence file cannot truthfully name the Git object that contains itself.
+This is final code-and-generated implementation SHA **I11**. Its schema-3 evidence closure is deliberately the next commit: an evidence file cannot truthfully name the Git object that contains itself.
 
 ## Intake and composition crosswalk
 
@@ -27,6 +27,7 @@ This is final code-and-generated implementation SHA **I10**. Its schema-3 eviden
 | RC-12 exact lint gate | CI-pinned `golangci-lint v2.12.2` directly found staticcheck S1008 in the PR’s source projection code: an expanded boolean return. The only correction is an equivalent direct predicate return. `make lint` reports zero issues; full `cmd/connectorgen` passes in 146.778s and the real-binary 97-stage fixture passes in 70.72s with the primary alias poisoned. No projection policy, candidate, declaration, or generated artifact changed. |
 | RC-13 generated manual parity | The exact docs gate directly reported GitHub’s connector manual stale. The owning `pm docs generate` command changed only `docs/connectors/github/MANUAL.md` and `SKILL.md`; a second run was idempotent, docs validation passed, and `pm help github` plus `pm github --help` matched the generated surface. |
 | CI website-data parity | Fresh CI directly failed because generator-owned website data was stale. A local `website` generator run reproduced it and changed only four generated website artifacts; its data now includes the required Recurly flags and current source-projection statuses. No provider/runtime declaration was altered. |
+| RC-18 skills-generator stall | Hosted Verify named `TestSkillsGenerateMatchesTrackedSkills` at its 20-minute alarm twice. Direct current-code inspection found no subprocess, network, prompt, or external lock: `runSkills` built a registry once, then `connectorSkill` rebuilt the complete registry once for each manifest. The real `cli.Run skills generate` test still produced the complete tracked tree but failed its new 30-second behavioral budget at 2m37.16s. The narrow fix passes the original registry into all connector-skill renders. The same full generated-tree assertion now passes in 2.09s; the ordinary package keeps its original 20-minute deadline and passes in 465.340s. |
 
 ## Conflict-invariant preservation
 
@@ -37,7 +38,7 @@ This is final code-and-generated implementation SHA **I10**. Its schema-3 eviden
 
 ## FND-B09 and FND-W01
 
-- **FND-B09 — reproduced and closed:** inherited schema-2 evidence failed strict decode because `component_inputs` was an object rather than the required typed list. Old closures `7c3d856…`, `133afe481…`, `596c90c…`, `25b2f844…`, `8ed5ab93…`, `4058b2fe…`, `30f944ca…`, `3e63dfdf…`, and the superseded I9 closure are replaced after the confirmed Recurly correction, CI-proven website-data drift, GitHub reachability regression, RC-09 CodeQL repair, RC-10 behavioral verdict correction, RC-11/14/15/16/17 fixture proof, RC-12 exact lint correction, and RC-13 generated-manual correction. This schema-3 closure binds I10, five typed component identities, current subject fingerprint, and exact artifact digests.
+- **FND-B09 — reproduced and closed:** inherited schema-2 evidence failed strict decode because `component_inputs` was an object rather than the required typed list. Old closures `7c3d856…`, `133afe481…`, `596c90c…`, `25b2f844…`, `8ed5ab93…`, `4058b2fe…`, `30f944ca…`, `3e63dfdf…`, and the superseded I9/I10 closures are replaced after the confirmed Recurly correction, CI-proven website-data drift, GitHub reachability regression, RC-09 CodeQL repair, RC-10 behavioral verdict correction, RC-11/14/15/16/17 fixture proof, RC-12 exact lint correction, RC-13 generated-manual correction, and RC-18 skills-generator correction. This schema-3 closure binds I11, five typed component identities, current subject fingerprint, and exact artifact digests.
 - **FND-W01 — deferred / non-reproducing:** current `sourceimport` flow and hermetic `TestSourceImport.*` evidence were inspected. No deterministic externally observable publication-order defect was established, so no speculative publication rewrite was made.
 
 ## Behavioral proof, provider proof, and certification claim
@@ -63,19 +64,20 @@ The certification matrix reports `connectors=3 capability_complete=0 certified=0
 | Initialized-project `pm recurly invoice pdf get --invoice-id …` and `pm recurly export files get --export-date …` | PASS for CLI reachability: each parsed the flag and reached only `missing --credential`; no provider I/O. |
 | `go test -tags github_fixture_sweep -timeout 35m -count=1 -v ./internal/cli -run '^(TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture|TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture|TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture|TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture|TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle|TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip)$'` | PASS (341.779s): three shared-admission stages (5.58s), 97 generated candidates (47.09s), 15 disputed aliases (28.45s), all 633 released targets (198.43s), issue-label transport (29.25s), and faithful warehouse flow (30.69s) retain their complete fresh-binary request/output assertions in the mandatory 45-minute job. |
 | Default fresh-fixture selection | PASS: the same six-test expression under the normal build tag selects no tests (2.289s); no fresh-binary GitHub fixture test remains in the shared package deadline. |
-| `go test -timeout 20m -count=1 ./internal/cli` at I10 | PASS (765.837s): the normal package retains its unchanged fixed deadline. |
+| RC-18 skills-generator Red/Green | RED: `go test -timeout 5m -count=1 -v ./internal/cli -run '^TestSkillsGenerateMatchesTrackedSkills$'` completed the unchanged tree comparison but failed the new 30-second behavioral budget at 2m37.16s. GREEN: the same command passes in 2.09s after registry reuse; no subprocess, network, prompt, or external coordinator participates. |
+| `go test -timeout 20m -count=1 ./internal/cli` at I11 | PASS (465.340s): the normal package retains its unchanged 20-minute deadline. |
 | RC-09 focused behavioral suites | PASS: write redaction preserves overlapping-mask behavior; parked rate-limit post-commit claim reconciliation preserves the durable retry; terminal requester retry retains its provider receipt and typed error. |
 | `TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture` in the tagged dedicated suite | PASS (28.45s): a fresh `pm` executes all fifteen disputed commands against the isolated authenticated fixture; each request matches the declared GET path template and its direct-read result validates. |
 | Candidate-output decoder | The historical malformed JSON report did not reproduce; stdout remains separated from diagnostics before JSON decode. Current candidate execution evidence is the split 97-command direct fixture proof above; no count-only result is used. |
 | `go test -timeout 20m -count=1 ./internal/connectors/commandrunner` | PASS (21.816s). |
-| `go test -timeout 20m -count=1 ./internal/cli` | PASS (765.837s). |
+| `go test -timeout 20m -count=1 ./internal/cli` | PASS (465.340s). |
 | `go test -timeout 20m -count=1 ./cmd/connectorgen` | PASS (152.312s). |
 | `go vet ./...`; `go build ./cmd/pm`; `go run ./cmd/connectorgen surface-sync --check` | PASS; surface sync reports 552 connectors and zero corrected fields. |
-| RC-11/14/15/16/17 red/green fixture split | RED: fresh Verify at I8 timed out its fixed package budget while the release-surface fixture was active. GREEN: every hermetic fresh-binary GitHub fixture proof is tagged and runs in one 45-minute job; the full six-test suite passes in 341.779s, while the unchanged ordinary CLI package passes in 765.837s. No stage or alias was omitted, the shared 20-minute deadline was not raised, and `rate_limits.json` is untouched. |
+| RC-11/14/15/16/17 red/green fixture split | RED: fresh Verify at I8 timed out its fixed package budget while the release-surface fixture was active. GREEN: every hermetic fresh-binary GitHub fixture proof is tagged and runs in one 45-minute job; the full six-test suite passes in 341.779s. The ordinary CLI package retains its unchanged 20-minute deadline and now passes in 465.340s after RC-18 removes repeated in-process registry work. No stage or alias was omitted and `rate_limits.json` is untouched. |
 | RC-12 exact lint proof | RED: CI-pinned staticcheck S1008 at `sourceprojection.go:1971`. GREEN: the exact predicate return makes `make lint` report zero issues; `surface-sync --check` and candidate checks have zero drift; full `cmd/connectorgen` passes (146.778s), followed by the 97-stage real-binary fixture (70.72s). |
 | RC-13 generated-manual proof | RED: `make docs-check-no-build` reported the GitHub manual stale. GREEN: `./pm docs generate --dir docs/cli --connectors-dir docs/connectors` changed only its two generated files, the second run was idempotent, docs validation passed, and current namespace help rendered. |
 | GitHub `source-import --check`, `surface-sync --check`, `certification-candidates --check`, generated `certification-sweep`, and direct-read candidate/cohort tests | PASS: 120 total direct-read candidates (23 manual, 97 generated); unchanged expectations. |
-| Exact GitHub release-surface parity at I10 | PASS: `v0.2.1` and I10 both have `endpoints=1225`, `blocked=1`, and `direct_read_candidates=120`; endpoint identity diff, blocked endpoint identity diff, and candidate identity diff are each zero. The sole blocked identity is `POST /user/{user_id}/projectsV2/{project_number}/drafts`. |
+| Exact GitHub release-surface parity at I11 | PASS: `v0.2.1` and I11 both have `endpoints=1225`, `blocked=1`, and `direct_read_candidates=120`; endpoint identity diff, blocked endpoint identity diff, and candidate identity diff are each zero. The sole blocked identity is `POST /user/{user_id}/projectsV2/{project_number}/drafts`. |
 | `go test -timeout 20m ./cmd/connectorgen -count=1` | PASS (152.312s). |
 | `go test -timeout 20m ./internal/app -count=1` | PASS (275.715s). |
 | `go test -timeout 20m ./internal/cli -count=1` | PASS (765.837s). |
@@ -88,4 +90,4 @@ The certification matrix reports `connectors=3 capability_complete=0 certified=0
 
 ## Merge recommendation
 
-The local Foundation implementation, all six dedicated GitHub fixture proofs, exact parity, lint, generated-manual/website parity, and release workflow gates are green at I10. Recurly and GitHub reads are implemented but explicitly not live certified. After the evidence-only closure’s strict gate, fresh automated review and GitHub CI remain the merge gates. PR #4314 remains unmerged against `fm/cli-current-foundations-main-integration-r1`.
+The local Foundation implementation, all six dedicated GitHub fixture proofs, exact parity, lint, generated-manual/website parity, release workflow gates, and RC-18 skills generation behavior are green at I11. Recurly and GitHub reads are implemented but explicitly not live certified. After the evidence-only closure’s strict gate, fresh automated review and GitHub CI remain the merge gates. PR #4314 remains unmerged against `fm/cli-current-foundations-main-integration-r1`.

@@ -2,8 +2,8 @@
   "schema_version": 3,
   "integration": "cli-current-foundations-main-integration-r1",
   "checkpoint": "foundation-0.3.0-release-candidate-r1-evidence-closure",
-  "code_sha": "7e0507e518a55ef2d8164c34cc39c0865555a963",
-  "reviewed_sha": "7e0507e518a55ef2d8164c34cc39c0865555a963",
+  "code_sha": "da16e35b0f801f1b1f49f23651e33ee9e338cf37",
+  "reviewed_sha": "da16e35b0f801f1b1f49f23651e33ee9e338cf37",
   "base_sha": "041d2ec7ed986aea15d2d3d64f2076b484c3f999",
   "component_inputs": [
     {
@@ -72,14 +72,14 @@
     {
       "command": "gofmt -d cmd internal; go mod tidy -diff; go vet ./...; go build -o ./pm ./cmd/pm; make docs-check-no-build; make smoke-no-build; make lint; make agent-contract-check; make connectorgen-validate; make connectorgen-surface-sync; make connectorgen-certification-subject; make connectorgen-certification-matrix; make connectorgen-certification-candidates; make connectorgen-certification-sweep; cd website && npm run gen:website-data",
       "status": "passed",
-      "assertion": "Formatting, module, vet, build, docs/manual generation, smoke, lint, agent contract, declaration validation, surface synchronization, generated certification gates, and CI-required website projection agree at I10; matrix reports certified=0.",
+      "assertion": "Formatting, module, vet, build, docs/manual generation, smoke, lint, agent contract, declaration validation, surface synchronization, generated certification gates, and CI-required website projection agree at I11; matrix reports certified=0.",
       "tests": ["gofmt-diff", "go-vet", "docs-validate", "smoke-no-build", "connectorgen-certification-matrix"],
       "modes": ["build", "docs", "generated_surfaces", "website_generated_data", "certification_metadata"]
     },
     {
       "command": "go test -tags github_fixture_sweep -timeout 35m -count=1 -v ./internal/cli -run '^(TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture|TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture|TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture|TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture|TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle|TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip)$'; go test -timeout 20m -count=1 ./internal/cli; go test -timeout 20m -count=1 -v ./cmd/connectorgen -run '^(TestSourceProjectionRequiresExistingPathFlagForRestoredNonCandidateDirectRead|TestSourceProjectionRestoresFieldCompleteNonCandidateSourceBoundRead|TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints)$'",
       "status": "passed",
-      "assertion": "At I10, one dedicated 45-minute CI job runs every hermetic fresh-binary GitHub proof: three shared-admission stages, all 97 generated candidates, all 15 disputed aliases, all 633 released-surface targets, issue-label transport, and warehouse flow. The unchanged ordinary package gate contains none of those fixture tests; source projection and inventory preserve the v0.2.1 reachable surface.",
+      "assertion": "At I11, one dedicated 45-minute CI job runs every hermetic fresh-binary GitHub proof: three shared-admission stages, all 97 generated candidates, all 15 disputed aliases, all 633 released-surface targets, issue-label transport, and warehouse flow. The unchanged ordinary package gate contains none of those fixture tests; source projection and inventory preserve the v0.2.1 reachable surface.",
       "tests": ["TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture", "TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture", "TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture", "TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture", "TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle", "TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip", "TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints"],
       "modes": ["source_projection", "direct_read.fixture_behavior", "shared_admission.fixture_behavior", "local_admission.fixture_behavior", "binary_download.fixture_behavior", "release_surface_parity"]
     },
@@ -103,6 +103,13 @@
       "assertion": "RC-11 proves the declared require_shared fence with an explicit ephemeral loopback coordinator and a three-stage fresh-binary certification cohort. RC-14 retains all 633 released-surface assertions, RC-15 retains all 97 generated-candidate request/output assertions, and RC-17 moves every hermetic fresh-binary GitHub fixture proof into one mandatory 45-minute job without raising the ordinary package deadline. RC-12 leaves source projection behavior unchanged while making exact lint clean; RC-13 restores only generated manual/skill parity.",
       "tests": ["TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture", "TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture", "TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture", "TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture", "TestPMBinaryRefusesRequiredSharedRateBudgetBeforeSend"],
       "modes": ["direct_read.fixture_behavior", "rate_limit.local_redis_fixture", "shared_coordinator.refusal_preserved", "local_admission.fixture_behavior", "implemented_but_uncertified", "lint.exact_gate", "docs.generated_parity"]
+    },
+    {
+      "command": "go test -timeout 5m -count=1 -v ./internal/cli -run '^TestSkillsGenerateMatchesTrackedSkills$' (Red); go test -timeout 2m -count=1 -v ./internal/cli -run '^(TestSkillsGenerateWritesAgentSkills|TestSkillsGenerateMatchesTrackedSkills|TestETLManualAndSkillDescribeDeliveredReconciliationTerminalRun)$'; go test -timeout 20m -count=1 ./internal/cli",
+      "status": "passed",
+      "assertion": "RC-18 keeps the exact full tracked-skill tree assertion while requiring ordinary skills generation to complete within 30 seconds. Red was 2m37.16s because each connector skill rebuilt the complete registry; Green reuses the registry created for the invocation, completes the exact assertion in 2.09s, and leaves the ordinary package at its unchanged 20-minute deadline (465.340s).",
+      "tests": ["TestSkillsGenerateMatchesTrackedSkills", "TestSkillsGenerateWritesAgentSkills", "TestETLManualAndSkillDescribeDeliveredReconciliationTerminalRun"],
+      "modes": ["cli.skills_generation", "connector_registry.reuse", "generated_skill_tree"]
     }
   ],
   "gate_ledger": [
@@ -159,7 +166,7 @@
     }
   ],
   "artifact_closure": {
-    "implementation_sha": "7e0507e518a55ef2d8164c34cc39c0865555a963",
+    "implementation_sha": "da16e35b0f801f1b1f49f23651e33ee9e338cf37",
     "subject_fingerprint": "6e718f8cd4b80497467e907ecb8ae49373afb1758920dfe7d18c83340061c86a",
     "artifacts": [
       {
@@ -174,8 +181,8 @@
       },
       {
         "category": "cli",
-        "path": "internal/cli/github_fixture_binary_sweep_ci_test.go",
-        "sha256": "e769dcb4d385d5106d82ed84dedcb6cb4436dc6e4aa3d093aa75ee4ecf110fa5"
+        "path": "internal/cli/skills.go",
+        "sha256": "71ea79c4e773e2b27a5ebc58f7b147af35a48c73f1a9eda43f11dfc8a56fd502"
       },
       {
         "category": "docs",
@@ -195,7 +202,7 @@
       {
         "category": "ledger",
         "path": ".planning/phases/cli-current-foundations-main-integration-r1/TDD-LEDGER.md",
-        "sha256": "38b4a61f87605f5b1d11ca148a92c6b35ff2ec11b683f87acc1f4287c11c14ea"
+        "sha256": "9c689224c5942196b4d6fe43e19818fb67a7bb8fa45bac18ea8a22e1a8ce1fb9"
       },
       {
         "category": "matrix",
