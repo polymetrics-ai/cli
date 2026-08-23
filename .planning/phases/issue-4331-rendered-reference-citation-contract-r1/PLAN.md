@@ -32,8 +32,8 @@
 
 ## Constraints and decisions
 
-- The kind is discriminated and optional. Absent `kind` is `openapi`, preserving the landed v3 wire projection; `rendered_reference` requires captured bytes, content type, coverage confidence, and per-operation citations, and never contributes an OpenAPI version.
-- The authorized scope extension covers 50 connectors: generic rendered captures, archive bundles (hash-verified and enumerated from the lock without archive extraction), confidence declarations, and explicit source-traced unavailable gaps. It intentionally does not accept the colliding batch 8/9/10 schema-3 field names.
+- The kind is discriminated and optional. Absent `kind` is `openapi`, preserving the landed v3 wire projection; `rendered_reference` is any captured document that is not a parseable **standalone** OpenAPI description (including structured JSON/YAML and path fragments). Import rejects a standalone OpenAPI/Swagger capture incorrectly declared as a rendered reference; rendered references require captured bytes, content type, coverage confidence, and per-operation citations, and never contribute an OpenAPI version.
+- The authorized scope extension covers generic rendered captures, archive bundles (hash-verified and enumerated from the lock without archive extraction), confidence declarations, and explicit source-traced unavailable gaps. Bundle media types admit ZIP plus gzip (`application/gzip` and `application/x-gzip`) captures; it intentionally does not accept the colliding batch schema-3 field names.
 - A citation URL is provenance only. Source import must never fetch it; captured bytes plus SHA-256 are the evidence.
 - This is shared foundation work only: do not modify the batch 6/7 connector locks or engine code.
 - Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, and `golang-documentation`.

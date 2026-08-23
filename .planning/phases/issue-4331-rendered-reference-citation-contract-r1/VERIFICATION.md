@@ -23,3 +23,15 @@ The full `go test ./...` and `make verify` commands are intentionally not run as
 - `make tidy-check && make docs-check && make smoke-no-build && make agent-contract-check`: **PASS**.
 - `make lint && make connectorgen-validate && make connectorgen-surface-sync && make connector-boundary && make release-workflow-check`: **PASS** — including a clean 552-connector boundary report and installed GitHub certification archive proof.
 - `git diff --check`: **PASS**.
+
+## Final contract refinements
+
+- `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportVersion3BundleProjectsGzipCapture$' -count=1`: **RED then PASS** — the red test showed `application/x-gzip` was incorrectly rejected; ZIP, registered gzip, and the provider-published gzip alias now share the existing hash-verified bundle path.
+- `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportVersion3RenderedReferenceRejectsStandaloneOpenAPIDescription$' -count=1`: **RED then PASS** — a full OpenAPI 3.0.3 capture cannot now be mislabeled `rendered_reference`.
+- `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportVersion3RenderedReferenceProjectsYAMLPathFragment$' -count=1`: **PASS** — a structured `application/yaml` OpenAPI path fragment remains a rendered reference and projects with its citation.
+- `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportVersion3(RenderedReferenceProjectsCapturedCitation|RenderedReferenceProjectsYAMLPathFragment|RenderedReferenceRejectsStandaloneOpenAPIDescription|MixedOpenAPIAndRenderedReferenceKeepsOpenAPIProjectionBytes|RenderedReferenceRejectsUnverifiableEvidenceAndCitations|BundleRejectsArchiveHashMismatch|BundleProjectsGzipCapture|UnavailableSourceProjectsBlockingGap)$|^TestSourceImportRenderedReferenceKeepsSchemaOneAndTwoLocksValid$' -count=1`: **PASS**.
+- `go test -timeout 20m ./cmd/connectorgen`: **PASS** — cached final run after the package suite completed.
+- `go vet ./cmd/connectorgen && go build ./cmd/connectorgen && git diff --check`: **PASS**.
+- `go run ./cmd/connectorgen validate`: **PASS** — `552 connector(s) checked, 0 findings`.
+- `go run ./cmd/connectorgen surface-sync --check`: **PASS** — `552 connector(s) scanned`, zero changes.
+- `make connector-boundary && make lint && make tidy-check && make docs-check && make smoke-no-build && make agent-contract-check && make release-workflow-check`: **PASS**. The release check was rerun in an attached terminal session and exited 0 with `installed GitHub certification archive proof passed`.

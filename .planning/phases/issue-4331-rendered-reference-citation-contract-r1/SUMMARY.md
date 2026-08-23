@@ -2,8 +2,8 @@
 
 Implemented the source-lock v3 document contract for `rendered_reference`, `bundle`, and explicit `unavailable` documents while retaining absent-kind OpenAPI behavior.
 
-- Rendered references require captured evidence, normalized media type, coverage confidence, and same-origin operation citations.
-- Bundles use their archive integrity and the already declared operation inventory; extraction is intentionally deferred to a separate parser foundation.
+- Rendered references require captured evidence, normalized media type, coverage confidence, and same-origin operation citations. Their bytes must not be a standalone OpenAPI/Swagger description, while structured JSON/YAML and OpenAPI path fragments remain valid.
+- Bundles use ZIP or gzip archive integrity and the already declared operation inventory; extraction is intentionally deferred to a separate parser foundation.
 - Unavailable evidence is reported as a blocking source-projection finding.
 - Source import never fetches cited URLs.
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"compress/gzip"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -77,6 +78,11 @@ func sourceImportV3RenderedReferenceLock(t *testing.T, citationURL string) ([]by
 func sourceImportV3BundleLock(t *testing.T) ([]byte, []byte) {
 	t.Helper()
 	archive := []byte("fixture archive bytes")
+	return sourceImportV3BundleLockWithCapture(t, "application/zip", archive)
+}
+
+func sourceImportV3BundleLockWithCapture(t *testing.T, contentType string, archive []byte) ([]byte, []byte) {
+	t.Helper()
 	digest := sha256.Sum256(archive)
 	lock := map[string]any{
 		"schema_version": 3,
@@ -90,7 +96,7 @@ func sourceImportV3BundleLock(t *testing.T) ([]byte, []byte) {
 			"source_documents": []any{map[string]any{
 				"id":           "bundle",
 				"kind":         "bundle",
-				"content_type": "application/zip",
+				"content_type": contentType,
 				"artifact": map[string]any{
 					"source_url": "https://fixtures.polymetrics.invalid/reference/api.zip",
 					"sha256":     hex.EncodeToString(digest[:]),
@@ -196,6 +202,122 @@ func TestSourceImportVersion3RenderedReferenceProjectsCapturedCitation(t *testin
 	}
 	if findings := validateSourceDescriptorAgainstLock("fixture", "sources/fixture-operation-descriptor.json", lock, sourceImportDescriptorDocument{SchemaVersion: 3, Operations: result.Operations}); len(findings) != 0 {
 		t.Fatalf("rendered-reference source projection findings = %+v", findings)
+	}
+}
+
+func TestSourceImportVersion3RenderedReferenceProjectsYAMLPathFragment(t *testing.T) {
+	fragment := []byte("get:\n  operationId: listAudit\n  responses:\n    '200':\n      description: listed audit records\n")
+	digest := sha256.Sum256(fragment)
+	document := map[string]any{
+		"id":           "audit-path-fragment",
+		"kind":         "rendered_reference",
+		"content_type": "application/yaml",
+		"artifact": map[string]any{
+			"source_url": "https://fixtures.polymetrics.invalid/reference/audit.yml",
+			"sha256":     hex.EncodeToString(digest[:]),
+			"bytes":      len(fragment),
+		},
+		"published_source": map[string]any{
+			"source_url":  "https://docs.polymetrics.invalid/public-api/audit",
+			"capture_url": "https://fixtures.polymetrics.invalid/reference/audit.yml",
+			"sha256":      hex.EncodeToString(digest[:]),
+			"bytes":       len(fragment),
+			"adapter":     "fixture-yaml-path-fragment-capture-v1",
+		},
+		"operations": []any{map[string]any{
+			"id":              "fixture.rest.reference.list-audit",
+			"protocol":        "rest",
+			"method":          "GET",
+			"path":            "/audit",
+			"operation_id":    "listAudit",
+			"source_location": "#/get",
+			"citation_url":    "https://docs.polymetrics.invalid/public-api/audit#list-audit",
+		}},
+	}
+	raw, err := json.Marshal(map[string]any{
+		"schema_version": 3,
+		"connector":      "fixture",
+		"rest": map[string]any{
+			"retrieval": "hermetic rendered-reference YAML fragment fixture capture",
+			"coverage_confidence": map[string]any{
+				"level": "documented",
+				"basis": "The captured YAML document is an OpenAPI path fragment, not a standalone OpenAPI description.",
+			},
+			"source_documents": []any{document},
+		},
+		"counts": map[string]any{"rest": 1, "graphql_query": 0, "graphql_mutation": 0, "total": 1},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	lock, err := parseSourceImportLock(raw, "fixture")
+	if err != nil {
+		t.Fatalf("parse YAML path-fragment lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return fragment, nil
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import YAML path-fragment lock: %v", err)
+	}
+	if len(result.Operations) != 1 || result.Operations[0].Source.Form != "rendered_reference" || result.Operations[0].Source.CitationURL != "https://docs.polymetrics.invalid/public-api/audit#list-audit" {
+		t.Fatalf("YAML path-fragment operation projection = %#v", result.Operations)
+	}
+}
+
+func TestSourceImportVersion3RenderedReferenceRejectsStandaloneOpenAPIDescription(t *testing.T) {
+	standalone := []byte(`{"openapi":"3.0.3","info":{"title":"fixture","version":"1"},"paths":{"/audit":{"get":{"operationId":"listAudit","responses":{"200":{"description":"listed audit records"}}}}}}`)
+	digest := sha256.Sum256(standalone)
+	lockRaw, err := json.Marshal(map[string]any{
+		"schema_version": 3,
+		"connector":      "fixture",
+		"rest": map[string]any{
+			"retrieval": "standalone OpenAPI fixture incorrectly declared as rendered reference",
+			"coverage_confidence": map[string]any{
+				"level": "documented",
+				"basis": "The source declaration must not use rendered_reference for a standalone OpenAPI document.",
+			},
+			"source_documents": []any{map[string]any{
+				"id":           "standalone",
+				"kind":         "rendered_reference",
+				"content_type": "application/json",
+				"artifact": map[string]any{
+					"source_url": "https://fixtures.polymetrics.invalid/reference/standalone.json",
+					"sha256":     hex.EncodeToString(digest[:]),
+					"bytes":      len(standalone),
+				},
+				"published_source": map[string]any{
+					"source_url":  "https://docs.polymetrics.invalid/public-api/audit",
+					"capture_url": "https://fixtures.polymetrics.invalid/reference/standalone.json",
+					"sha256":      hex.EncodeToString(digest[:]),
+					"bytes":       len(standalone),
+					"adapter":     "fixture-standalone-openapi-capture-v1",
+				},
+				"operations": []any{map[string]any{
+					"id":              "fixture.rest.reference.list-audit",
+					"protocol":        "rest",
+					"method":          "GET",
+					"path":            "/audit",
+					"operation_id":    "listAudit",
+					"source_location": "#/paths/~1audit/get",
+					"citation_url":    "https://docs.polymetrics.invalid/public-api/audit#list-audit",
+				}},
+			}},
+		},
+		"counts": map[string]any{"rest": 1, "graphql_query": 0, "graphql_mutation": 0, "total": 1},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	lock, err := parseSourceImportLock(lockRaw, "fixture")
+	if err != nil {
+		t.Fatalf("parse incorrectly typed standalone OpenAPI lock: %v", err)
+	}
+	_, err = importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return standalone, nil
+	}), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "must use kind openapi") {
+		t.Fatalf("standalone OpenAPI declared as rendered reference error = %v", err)
 	}
 }
 
@@ -366,6 +488,32 @@ func TestSourceImportVersion3BundleRejectsArchiveHashMismatch(t *testing.T) {
 	}), defaultSourceImportLimits())
 	if err == nil || !strings.Contains(err.Error(), "source-lock refresh required") {
 		t.Fatalf("bundle archive hash mismatch error = %v", err)
+	}
+}
+
+func TestSourceImportVersion3BundleProjectsGzipCapture(t *testing.T) {
+	var archive bytes.Buffer
+	writer := gzip.NewWriter(&archive)
+	if _, err := writer.Write([]byte("fixture gzip archive bytes")); err != nil {
+		t.Fatalf("write gzip fixture: %v", err)
+	}
+	if err := writer.Close(); err != nil {
+		t.Fatalf("close gzip fixture: %v", err)
+	}
+
+	raw, captured := sourceImportV3BundleLockWithCapture(t, "application/x-gzip", archive.Bytes())
+	lock, err := parseSourceImportLock(raw, "fixture")
+	if err != nil {
+		t.Fatalf("parse gzip bundle lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return captured, nil
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import gzip bundle lock: %v", err)
+	}
+	if len(result.Operations) != 1 || result.Operations[0].Source.Form != "bundle" {
+		t.Fatalf("gzip bundle operation projection = %#v", result.Operations)
 	}
 }
 

@@ -754,8 +754,8 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 			if err := validateSourceImportCapturedDocumentEvidence(document); err != nil {
 				return fmt.Errorf("source lock v3 REST document %q has invalid captured evidence: %w", document.ID, err)
 			}
-			if kind == sourceImportDocumentKindBundle && document.ContentType != "application/zip" {
-				return fmt.Errorf("source lock v3 REST bundle document %q must declare content type application/zip", document.ID)
+			if kind == sourceImportDocumentKindBundle && !sourceImportBundleContentType(document.ContentType) {
+				return fmt.Errorf("source lock v3 REST bundle document %q must declare an archive content type (application/zip, application/gzip, or application/x-gzip)", document.ID)
 			}
 		}
 		if kind == sourceImportDocumentKindUnavailable {
@@ -823,6 +823,19 @@ func validateSourceImportDocumentContentType(value string) error {
 		return fmt.Errorf("content type must be a normalized media type without parameters")
 	}
 	return nil
+}
+
+// sourceImportBundleContentType intentionally accepts both the registered
+// gzip media type and its widely published x-gzip alias. Bundle enumeration is
+// declared in the checked-in operation inventory until an archive parser is
+// added; captured archive bytes and their hash remain the evidence.
+func sourceImportBundleContentType(value string) bool {
+	switch value {
+	case "application/zip", "application/gzip", "application/x-gzip":
+		return true
+	default:
+		return false
+	}
 }
 
 func validateSourceImportCapturedDocumentEvidence(document sourceImportRESTDocument) error {
@@ -1233,6 +1246,11 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 			return sourceImportResult{}, fmt.Errorf("source document %q is unavailable: %s (%s)", document.ID, document.UnavailableReason, document.PublishedSource.SourceURL)
 		}
 		if kind := document.sourceKind(); kind == sourceImportDocumentKindRenderedReference || kind == sourceImportDocumentKindBundle {
+			if kind == sourceImportDocumentKindRenderedReference {
+				if err := validateSourceImportRenderedReferenceCapture(raw); err != nil {
+					return sourceImportResult{}, fmt.Errorf("validate rendered-reference document %q: %w", document.ID, err)
+				}
+			}
 			imported, err := importSourceLockedNonOpenAPIDocument(lock, document, limits, budget)
 			if err != nil {
 				return sourceImportResult{}, err
@@ -1275,11 +1293,24 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 	return result, nil
 }
 
+func validateSourceImportRenderedReferenceCapture(raw []byte) error {
+	_, form, err := parseSourceImportDocument(raw)
+	if err != nil {
+		// A rendered reference can be structured JSON or YAML, including an
+		// OpenAPI path fragment. It is only rejected when it is parseable as a
+		// complete standalone source description.
+		return nil
+	}
+	return fmt.Errorf("captured %s %s description is standalone and must use kind openapi", form.Family, form.Version)
+}
+
 // importSourceLockedNonOpenAPIDocument projects an immutable captured
 // reference or archive from its checked-in operation inventory. The capture
-// was already fetched and hash-verified by fetchSourceImportV3Documents; it
-// is deliberately not parsed as OpenAPI because its declared kind says it is
-// not an OpenAPI description.
+// was already fetched and hash-verified by fetchSourceImportV3Documents. A
+// rendered reference is not a parseable standalone OpenAPI description: it
+// may still be structured JSON or YAML, including an OpenAPI path fragment,
+// so this branch deliberately does not gate on its media type or parse it as
+// a complete OpenAPI document.
 func importSourceLockedNonOpenAPIDocument(lock sourceImportLock, document sourceImportRESTDocument, limits sourceImportLimits, budget *sourceImportBudget) (sourceImportResult, error) {
 	countBudget, err := budget.countBudget(limits)
 	if err != nil {
