@@ -911,7 +911,7 @@ func TestSourceImportPreservesLiteralReferenceFieldsAndReferenceSiblings(t *test
 	}
 }
 
-func TestSourceImportAllowsOnlyDescriptiveOpenAPI30ReferenceSiblings(t *testing.T) {
+func TestSourceImportRetainsBoundedOpenAPI30ReferenceSiblings(t *testing.T) {
 	t.Parallel()
 	for _, sibling := range []struct {
 		name  string
@@ -936,6 +936,44 @@ func TestSourceImportAllowsOnlyDescriptiveOpenAPI30ReferenceSiblings(t *testing.
 	extension := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","x-provider-note":"preserved"}}}}}}`)
 	if result := importInlineSourceResult(t, extension, defaultSourceImportLimits()); len(result.Operations) != 1 {
 		t.Fatalf("OpenAPI 3.0 extension sibling result = %#v", result.Operations)
+	}
+
+	readOnly := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"identifier":{"type":"string","maxLength":8}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/identifier","readOnly":true}}}}}}}}}`)
+	result := importInlineSourceResult(t, readOnly, defaultSourceImportLimits())
+	response := descriptorResponse(t, result.Operations[0], "200")
+	media := response.Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)
+	schema := media["schema"].(map[string]any)
+	if schema["readOnly"] != true {
+		t.Fatalf("OpenAPI 3.0 readOnly schema sibling = %#v", schema)
+	}
+
+	matchingType := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"identifier":{"type":"string","maxLength":8}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/identifier","type":"string"}}}}}}}}}`)
+	result = importInlineSourceResult(t, matchingType, defaultSourceImportLimits())
+	response = descriptorResponse(t, result.Operations[0], "200")
+	media = response.Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)
+	schema = media["schema"].(map[string]any)
+	if schema["type"] != "string" {
+		t.Fatalf("OpenAPI 3.0 matching schema type sibling = %#v", schema)
+	}
+
+	conflictingType := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"identifier":{"type":"string","maxLength":8}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/identifier","type":"integer"}}}}}}}}}`)
+	result = importInlineSourceResult(t, conflictingType, defaultSourceImportLimits())
+	response = descriptorResponse(t, result.Operations[0], "200")
+	media = response.Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)
+	schema = media["schema"].(map[string]any)
+	if schema["type"] != "integer" {
+		t.Fatalf("OpenAPI 3.0 retained type sibling = %#v", schema)
+	}
+	var typeGap *sourceContractGap
+	for index := range result.Operations[0].Runtime.Gaps {
+		gap := &result.Operations[0].Runtime.Gaps[index]
+		if gap.Foundation == "cli-openapi30-reference-sibling-foundation-r1" {
+			typeGap = gap
+			break
+		}
+	}
+	if typeGap == nil || !result.Operations[0].Runtime.MergeBlocked || result.Operations[0].Source.Location != `paths["/items"].get` || typeGap.Location != "schema reference #/components/schemas/identifier" || !strings.Contains(typeGap.Reason, `sibling field "type"`) {
+		t.Fatalf("OpenAPI 3.0 type sibling source-bound gap = %#v", result.Operations[0].Runtime)
 	}
 
 	semantic := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","content":{"application/json":{"schema":{"type":"string"}}}}}}}}}`)

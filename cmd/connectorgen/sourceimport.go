@@ -16,6 +16,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -1990,21 +1991,25 @@ func normalizeSourceYAML(value any) any {
 }
 
 type sourceReferenceResolver struct {
-	root               map[string]any
-	limits             sourceImportLimits
-	form               sourceDocumentForm
-	referenceIndex     *sourceReferenceIndex
-	schemaCycles       map[string]struct{}
-	references         int
-	expansion          sourceSchemaExpansionBudget
-	responseExpansion  sourceResponseExpansionBudget
-	responseScope      *sourceResponseExpansionBudget
-	mediaExpansion     sourceRetainedExpansionBudget
-	inboundExpansion   sourceRetainedExpansionBudget
-	referenceExpansion sourceRetainedExpansionBudget
+	root                       map[string]any
+	limits                     sourceImportLimits
+	form                       sourceDocumentForm
+	referenceIndex             *sourceReferenceIndex
+	schemaCycles               map[string]struct{}
+	references                 int
+	expansion                  sourceSchemaExpansionBudget
+	responseExpansion          sourceResponseExpansionBudget
+	responseScope              *sourceResponseExpansionBudget
+	mediaExpansion             sourceRetainedExpansionBudget
+	inboundExpansion           sourceRetainedExpansionBudget
+	referenceExpansion         sourceRetainedExpansionBudget
+	schemaReferenceSiblingGaps []sourceContractGap
 }
 
-const sourceRecursiveSchemaFoundation = "cli-recursive-schema-foundation-r1"
+const (
+	sourceRecursiveSchemaFoundation           = "cli-recursive-schema-foundation-r1"
+	sourceOpenAPI30ReferenceSiblingFoundation = "cli-openapi30-reference-sibling-foundation-r1"
+)
 
 type sourceSchemaReferenceCycleError struct {
 	Reference string
@@ -4751,12 +4756,22 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 				return nil, fmt.Errorf("ambiguous schema reference with sibling field %q", key)
 			}
 		}
+		if r.form.isOpenAPI() && !r.form.isOpenAPI31() {
+			if gap := sourceOpenAPI30SchemaReferenceSiblingGap(nil, object); gap != nil {
+				r.schemaReferenceSiblingGaps = append(r.schemaReferenceSiblingGaps, *gap)
+			}
+		}
 		return sourceCloneLiteral(object), nil
 	}
 	target, reference, next, hasReference, err := r.referenceTarget(object, sourceReferenceSchema, stack, depth)
 	if err != nil {
 		var cycle *sourceSchemaReferenceCycleError
 		if errors.As(err, &cycle) {
+			if r.form.isOpenAPI() && !r.form.isOpenAPI31() {
+				if gap := sourceOpenAPI30SchemaReferenceSiblingGap(nil, object); gap != nil {
+					r.schemaReferenceSiblingGaps = append(r.schemaReferenceSiblingGaps, *gap)
+				}
+			}
 			return sourceCloneLiteral(object), nil
 		}
 		return nil, err
@@ -4772,6 +4787,11 @@ func (r *sourceReferenceResolver) resolveSchema(value any, stack map[string]bool
 				return resolved, nil
 			}
 			return nil, fmt.Errorf("schema reference with siblings does not resolve to an object")
+		}
+		if r.form.isOpenAPI() && !r.form.isOpenAPI31() {
+			if gap := sourceOpenAPI30SchemaReferenceSiblingGap(targetObject, reference); gap != nil {
+				r.schemaReferenceSiblingGaps = append(r.schemaReferenceSiblingGaps, *gap)
+			}
 		}
 		object = sourceOverlayReferenceObject(targetObject, reference)
 	}
@@ -5172,6 +5192,15 @@ func (r *sourceReferenceResolver) referenceSiblingAllowed(kind sourceReferenceKi
 	if key == "$ref" || strings.HasPrefix(key, "x-") {
 		return true
 	}
+	// Provider OpenAPI 3.0 descriptions commonly annotate a referenced object.
+	// Description, summary, and a schema's readOnly directionality do not change
+	// the reference target or its resolved wire shape. A schema type assertion
+	// that differs from the target is retained as source-bound, merge-blocking
+	// evidence by resolveSchema. All other structural or semantic overrides stay
+	// rejected.
+	if r.form.isOpenAPI() && (key == "description" || key == "summary" || (kind == sourceReferenceSchema && (key == "readOnly" || key == "type"))) {
+		return true
+	}
 	if !r.form.allowsReferenceSiblings() {
 		return false
 	}
@@ -5179,6 +5208,26 @@ func (r *sourceReferenceResolver) referenceSiblingAllowed(kind sourceReferenceKi
 		return true
 	}
 	return key == "summary" || key == "description"
+}
+
+func sourceOpenAPI30SchemaReferenceSiblingGap(target, reference map[string]any) *sourceContractGap {
+	typeSibling, declared := reference["type"]
+	if !declared {
+		return nil
+	}
+	targetType, targetDeclaresType := target["type"]
+	if targetDeclaresType && reflect.DeepEqual(typeSibling, targetType) {
+		return nil
+	}
+	referencePointer, _ := reference["$ref"].(string)
+	if normalized, err := sourceNormalizeLocalReference(referencePointer); err == nil {
+		referencePointer = normalized
+	}
+	return &sourceContractGap{
+		Foundation: sourceOpenAPI30ReferenceSiblingFoundation,
+		Location:   fmt.Sprintf("schema reference %s", referencePointer),
+		Reason:     `OpenAPI 3.0 schema reference retains sibling field "type" as source-bound evidence because its target does not declare the same type`,
+	}
 }
 
 func (r *sourceReferenceResolver) validateReferenceTargetKind(target any, kind sourceReferenceKind, ref string) error {
@@ -5612,6 +5661,7 @@ func validateSourceImportPath(path string) error {
 func importSourceOperation(documentContext sourceImportDocumentContext, doc map[string]any, form sourceDocumentForm, resolver *sourceReferenceResolver, path, method string, pathParameters []sourceParameterValue, rootServers, pathServers sourceServerLayer, operation map[string]any, limits sourceImportLimits, remainingDescriptorBytes int64) (sourceOperationDescriptor, error) {
 	lock := documentContext.Lock
 	location := fmt.Sprintf("paths[%q].%s", path, method)
+	schemaReferenceSiblingGapsStart := len(resolver.schemaReferenceSiblingGaps)
 	operationParameters, err := sourceParameterValues(operation["parameters"], resolver, form)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s parameters: %w", location, err)
@@ -5698,6 +5748,7 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 	runtimeGaps := append(sourceRequestGaps(request, form, limits, method), servers.Gaps...)
 	runtimeGaps = append(runtimeGaps, resolver.requestSchemaCycleGaps(request)...)
 	runtimeGaps = append(runtimeGaps, resolver.responseSchemaCycleGaps(responses)...)
+	runtimeGaps = append(runtimeGaps, resolver.schemaReferenceSiblingGaps[schemaReferenceSiblingGapsStart:]...)
 	runtimeGaps = sourceSortedGaps(runtimeGaps)
 	runtime := sourceRuntimeReachability{MergeBlocked: len(runtimeGaps) > 0, Gaps: runtimeGaps}
 	return sourceOperationDescriptor{
