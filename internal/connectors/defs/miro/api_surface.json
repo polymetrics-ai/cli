@@ -42,27 +42,17 @@
     {
       "method": "POST",
       "path": "/v1/oauth/revoke",
-      "operation": {
-        "model": "deprecated",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Deprecated in the official Miro OpenAPI specification.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=deprecated; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "deprecated",
+        "reason": "Deprecated in the official Miro OpenAPI specification."
       }
     },
     {
       "method": "GET",
       "path": "/v1/oauth-token",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "OAuth token introspection is an authentication lifecycle endpoint, not a syncable business data resource.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=non_data_endpoint; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token introspection is an authentication lifecycle endpoint, not a syncable business data resource."
       }
     },
     {
@@ -236,14 +226,9 @@
     {
       "method": "POST",
       "path": "/v2/orgs/{org_id}/boards/export/jobs",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutation requires query parameter(s) request_id, but declarative writes currently model path and body fields only.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation requires query parameter(s) request_id, but declarative writes currently model path and body fields only."
       }
     },
     {
@@ -291,14 +276,9 @@
     {
       "method": "POST",
       "path": "/v2/sessions/reset_all",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutation requires query parameter(s) email, but declarative writes currently model path and body fields only.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation requires query parameter(s) email, but declarative writes currently model path and body fields only."
       }
     },
     {
@@ -430,14 +410,9 @@
     {
       "method": "PUT",
       "path": "/v2/boards",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutation requires query parameter(s) copy_from, but declarative writes currently model path and body fields only.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation requires query parameter(s) copy_from, but declarative writes currently model path and body fields only."
       }
     },
     {
@@ -765,14 +740,9 @@
     {
       "method": "POST",
       "path": "/v2/boards/{board_id}/items/bulk",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutation request body is a top-level JSON array; declarative writes build object bodies from record fields.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation request body is a top-level JSON array; declarative writes build object bodies from record fields."
       }
     },
     {
@@ -813,14 +783,9 @@
     {
       "method": "POST",
       "path": "/v2/boards/{board_id_Platformcreateitemsinbulkusingfilefromdevice}/items/bulk",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Multipart file upload requires binary payload support outside the declarative JSON write dialect.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Multipart file upload requires binary payload support outside the declarative JSON write dialect."
       }
     },
     {
@@ -959,53 +924,33 @@
     {
       "method": "POST",
       "path": "/v2/boards/{board_id_PlatformFileUpload}/documents",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Multipart file upload requires binary payload support outside the declarative JSON write dialect.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Multipart file upload requires binary payload support outside the declarative JSON write dialect."
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/boards/{board_id_PlatformFileUpload}/documents/{item_id}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Multipart file upload requires binary payload support outside the declarative JSON write dialect.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Multipart file upload requires binary payload support outside the declarative JSON write dialect."
       }
     },
     {
       "method": "POST",
       "path": "/v2/boards/{board_id_PlatformFileUpload}/images",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Multipart file upload requires binary payload support outside the declarative JSON write dialect.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Multipart file upload requires binary payload support outside the declarative JSON write dialect."
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/boards/{board_id_PlatformFileUpload}/images/{item_id}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Multipart file upload requires binary payload support outside the declarative JSON write dialect.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=binary_payload; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Multipart file upload requires binary payload support outside the declarative JSON write dialect."
       }
     },
     {
@@ -1053,27 +998,17 @@
     {
       "method": "DELETE",
       "path": "/v2/boards/{board_id}/groups/{group_id}?",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "The OpenAPI path contains a literal trailing query marker, which the declarative path-only dialect cannot represent safely.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "The OpenAPI path contains a literal trailing query marker, which the declarative path-only dialect cannot represent safely."
       }
     },
     {
       "method": "POST",
       "path": "/v2/oauth/revoke",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "OAuth token revocation is an authentication lifecycle mutation, not reverse-ETL data writing.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=non_data_endpoint; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token revocation is an authentication lifecycle mutation, not reverse-ETL data writing."
       }
     },
     {
@@ -1121,27 +1056,17 @@
     {
       "method": "POST",
       "path": "/v2/boards/{board_id_PlatformTags}/items/{item_id}",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutation requires query parameter(s) tag_id, but declarative writes currently model path and body fields only.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation requires query parameter(s) tag_id, but declarative writes currently model path and body fields only."
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/boards/{board_id_PlatformTags}/items/{item_id}",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutation requires query parameter(s) tag_id, but declarative writes currently model path and body fields only.",
-        "source_url": "https://developers.miro.com/reference/overview",
-        "notes": "legacy_exclusion=out_of_scope; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Mutation requires query parameter(s) tag_id, but declarative writes currently model path and body fields only."
       }
     },
     {
@@ -1473,6 +1398,5 @@
         "write": "delete_orgs_org_id_projects_project_id_groups_group_id"
       }
     }
-  ],
-  "operation_ledger_version": 1
+  ]
 }

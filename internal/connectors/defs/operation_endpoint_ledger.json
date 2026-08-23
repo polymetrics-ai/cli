@@ -3335,7 +3335,38 @@
   "harvest": [],
   "height": [],
   "hellobaton": [],
-  "help-scout": [],
+  "help-scout": [
+    {
+      "method": "GET",
+      "path": "/v3/conversations/{conversationId}",
+      "kind": "rest_read",
+      "max_bytes": 4194304
+    },
+    {
+      "method": "GET",
+      "path": "/v3/conversations/{conversationId}/threads",
+      "kind": "rest_read",
+      "max_bytes": 4194304
+    },
+    {
+      "method": "GET",
+      "path": "/v3/customers",
+      "kind": "rest_read",
+      "max_bytes": 4194304
+    },
+    {
+      "method": "GET",
+      "path": "/v3/system-users",
+      "kind": "rest_read",
+      "max_bytes": 4194304
+    },
+    {
+      "method": "GET",
+      "path": "/v3/system-users/{systemUserId}",
+      "kind": "rest_read",
+      "max_bytes": 4194304
+    }
+  ],
   "hibob": [],
   "high-level": [],
   "hoorayhr": [],

@@ -40,11 +40,22 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 		return connectors.OperationStatusCheckResult{}, err
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
-	path, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
+	effectivePathParams, err := materializeOperationDirectReadPathParams(op, cfg, req.PathParams)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
-	query, err := directReadQuery(req.Query)
+	path, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, effectivePathParams)
+	if err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	queryMap, err := operationDirectReadQuery(op, req.Query, nil)
+	if err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	if err := requireOperationQueryGroups(op, queryMap); err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	query, err := directReadQuery(queryMap)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
@@ -87,7 +98,7 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	if len(response.Body) > cap {
 		return result, fmt.Errorf("operation status response exceeded metadata cap")
 	}
-	responseHeaders, err := operationResponseHeaders(b, op, response.Header)
+	responseHeaders, err := operationResponseHeaders(b, op, response.Header, cfg.Secrets)
 	if err != nil {
 		return result, err
 	}

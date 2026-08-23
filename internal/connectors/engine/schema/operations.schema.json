@@ -91,6 +91,7 @@
             }
           },
           "audit_event": { "type": "string" },
+          "route": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
           "rest": {
             "type": "object",
             "required": ["method", "path"],

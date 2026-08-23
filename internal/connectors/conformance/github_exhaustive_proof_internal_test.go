@@ -298,7 +298,11 @@ func runGitHubWriteProviderDouble(t *testing.T, b engine.Bundle, action engine.W
 		State: "failed",
 	}
 	fixture, fixtureErr := loadWriteFixture(b.Fixtures, action.Name)
-	record := syntheticGitHubRecord(action)
+	record, synthesisErr := syntheticGitHubRecord(action)
+	if synthesisErr != nil {
+		row.Reason = synthesisErr.Error()
+		return row
+	}
 	if fixtureErr == nil {
 		record = connectors.Record(fixture.Record)
 	}
@@ -372,7 +376,7 @@ func runGitHubWriteProviderDouble(t *testing.T, b engine.Bundle, action engine.W
 
 func valuesFromMap(values map[string][]string) map[string][]string { return values }
 
-func syntheticGitHubRecord(action engine.WriteAction) connectors.Record {
+func syntheticGitHubRecord(action engine.WriteAction) (connectors.Record, error) {
 	record := connectors.Record{}
 	if len(action.RecordSchema) > 0 {
 		var schema struct {
@@ -382,7 +386,11 @@ func syntheticGitHubRecord(action engine.WriteAction) connectors.Record {
 		if json.Unmarshal(action.RecordSchema, &schema) == nil {
 			for _, name := range schema.Required {
 				if property, exists := schema.Properties[name]; exists {
-					record[name] = syntheticSchemaValue(property, name)
+					value, err := syntheticSchemaValue(property, name)
+					if err != nil {
+						return nil, fmt.Errorf("synthetic %s.%s: %w", action.Name, name, err)
+					}
+					record[name] = value
 				}
 			}
 		}
@@ -411,17 +419,17 @@ func syntheticGitHubRecord(action engine.WriteAction) connectors.Record {
 		record["name"] = "provider-double-label"
 		record["color"] = "ffffff"
 	}
-	return record
+	return record, nil
 }
 
-func syntheticSchemaValue(raw json.RawMessage, field string) any {
+func syntheticSchemaValue(raw json.RawMessage, field string) (any, error) {
 	var schema map[string]json.RawMessage
 	if json.Unmarshal(raw, &schema) != nil {
-		return syntheticFieldValue(field)
+		return syntheticFieldValue(field), nil
 	}
 	var enum []any
 	if json.Unmarshal(schema["enum"], &enum) == nil && len(enum) > 0 {
-		return enum[0]
+		return enum[0], nil
 	}
 	var union []json.RawMessage
 	for _, key := range []string{"oneOf", "anyOf"} {
@@ -434,28 +442,44 @@ func syntheticSchemaValue(raw json.RawMessage, field string) any {
 	_ = json.Unmarshal(schema["format"], &format)
 	switch kind {
 	case "integer":
-		return 1
+		return 1, nil
 	case "number":
-		return 1
+		return 1, nil
 	case "boolean":
-		return true
+		return true, nil
 	case "string":
 		// GitHub secret-set actions accept a caller-sealed ciphertext, not a
 		// plaintext value. The provider-double must exercise that declared
 		// encrypted_value schema without inventing or retaining secret material.
 		if strings.Contains(strings.ToLower(field), "encrypted_value") {
-			return base64.StdEncoding.EncodeToString([]byte("provider-double"))
+			return base64.StdEncoding.EncodeToString([]byte("provider-double")), nil
 		}
 		if format == "uri" {
-			return "https://provider-double.invalid/resource"
+			return "https://provider-double.invalid/resource", nil
 		}
 		return syntheticPatternString(schema, field)
 	case "array":
 		var items json.RawMessage
-		if json.Unmarshal(schema["items"], &items) == nil && len(items) > 0 {
-			return []any{syntheticSchemaValue(items, field)}
+		count := 1
+		_ = json.Unmarshal(schema["minItems"], &count)
+		if count < 1 {
+			count = 1
 		}
-		return []any{"provider-double-item"}
+		if count > 64 {
+			return nil, fmt.Errorf("unsupported minItems %d exceeds deterministic witness limit", count)
+		}
+		if json.Unmarshal(schema["items"], &items) == nil && len(items) > 0 {
+			values := make([]any, count)
+			for index := range values {
+				value, err := syntheticSchemaValue(items, field)
+				if err != nil {
+					return nil, err
+				}
+				values[index] = value
+			}
+			return values, nil
+		}
+		return make([]any, count), nil
 	case "object":
 		var properties map[string]json.RawMessage
 		_ = json.Unmarshal(schema["properties"], &properties)
@@ -464,12 +488,16 @@ func syntheticSchemaValue(raw json.RawMessage, field string) any {
 		_ = json.Unmarshal(schema["required"], &required)
 		for _, name := range required {
 			if property, exists := properties[name]; exists {
-				out[name] = syntheticSchemaValue(property, name)
+				value, err := syntheticSchemaValue(property, name)
+				if err != nil {
+					return nil, err
+				}
+				out[name] = value
 			}
 		}
-		return out
+		return out, nil
 	default:
-		return syntheticFieldValue(field)
+		return syntheticFieldValue(field), nil
 	}
 }
 
@@ -489,35 +517,49 @@ func syntheticSchemaType(raw json.RawMessage) string {
 	return ""
 }
 
-func syntheticPatternString(schema map[string]json.RawMessage, _ string) string {
+func syntheticPatternString(schema map[string]json.RawMessage, _ string) (string, error) {
 	fallback := "provider-double"
+	minLength := 0
+	_ = json.Unmarshal(schema["minLength"], &minLength)
 	var pattern string
 	if json.Unmarshal(schema["pattern"], &pattern) != nil || pattern == "" {
-		return fallback
+		return syntheticMinimumLengthString(fallback, minLength), nil
 	}
 	compiled, err := regexp.Compile(pattern)
 	if err != nil {
-		return fallback
+		return "", fmt.Errorf("unsupported invalid pattern %q", pattern)
 	}
 	candidates := []string{
 		fallback,
 		"1.0.0",
 		strings.Repeat("0", 40),
 		strings.Repeat("0", 64),
+		"sha256:" + strings.Repeat("0", 64),
 		"refs/heads/provider-double",
+		"https://provider-double.invalid/registry",
+		"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEZha2VQcm92aWRlckRvdWJsZUtleQ==",
+		"ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTY=",
 		base64.StdEncoding.EncodeToString([]byte("provider-double")),
 	}
 	for _, candidate := range candidates {
-		if compiled.MatchString(candidate) {
-			return candidate
+		if len(candidate) >= minLength && compiled.MatchString(candidate) {
+			return candidate, nil
 		}
 	}
-	return fallback
+	return "", fmt.Errorf("unsupported pattern %q with minLength %d", pattern, minLength)
 }
 
-// syntheticGraphQLVariables materializes the operation's required caller
-// inputs only. Pagination variables are optional and owned by the direct-read
-// executor, which prevents a fixture from selecting both directions at once.
+func syntheticMinimumLengthString(value string, minLength int) string {
+	if minLength <= len(value) {
+		return value
+	}
+	return value + strings.Repeat("x", minLength-len(value))
+}
+
+// syntheticGraphQLVariables materializes required caller inputs and one
+// declaration-owned forward pagination direction. The direct-read executor
+// refuses neither/both directions, so the provider double must make an
+// explicit, minimal choice rather than omit paging variables entirely.
 func syntheticGraphQLVariables(operation engine.OperationSpec) (map[string]any, error) {
 	if operation.GraphQL == nil {
 		return nil, fmt.Errorf("GraphQL operation has no declaration")
@@ -534,6 +576,9 @@ func syntheticGraphQLVariables(operation engine.OperationSpec) (map[string]any, 
 	sort.Strings(names)
 	for _, name := range names {
 		variables[name] = syntheticGraphQLSchemaValue(root.Properties[name], name)
+	}
+	if pagination := operation.GraphQL.Pagination; pagination != nil && pagination.PageSizeVariable != "" {
+		variables[pagination.PageSizeVariable] = 1
 	}
 	return variables, nil
 }
@@ -729,7 +774,7 @@ func githubGraphQLProviderDoubleResponse(operation engine.OperationSpec) ([]byte
 		connection := any(map[string]any{
 			"__typename": "ProviderDoubleConnection",
 			"nodes":      []any{},
-			"pageInfo":   map[string]any{"hasNextPage": false, "endCursor": nil},
+			"pageInfo":   map[string]any{"hasNextPage": false, "endCursor": nil, "hasPreviousPage": false, "startCursor": nil},
 		})
 		path := strings.Split(operation.GraphQL.Pagination.ConnectionPath, ".")
 		if len(path) == 0 || path[0] != root {

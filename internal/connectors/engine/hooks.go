@@ -216,15 +216,18 @@ type PreparedWriteHookRecord struct {
 	Steps []PreparedWriteHookStep
 }
 
-// PreparedWriteHookStep names an existing unhooked write declaration. Record
-// is validated against that declaration and sealed by the engine. A response
-// binding is intentionally limited to a previous step's one named JSON field
-// becoming one declared path field of this step; it is not a raw response/body
-// projection language.
+// PreparedWriteHookStep names an existing declaration-owned write action.
+// Record is validated against that declaration and sealed by the engine. A
+// response binding is intentionally limited to a previous step's one named
+// JSON field becoming one declared path field of this step; it is not a raw
+// response/body projection language. ResolvedDeclarative allows the root hook
+// to explicitly attest that a selected hook-backed action is already a fully
+// resolved declarative request, so the engine will not recurse into that hook.
 type PreparedWriteHookStep struct {
-	Action          string
-	Record          connectors.Record
-	ResponseBinding *PreparedWriteResponseBinding
+	Action              string
+	Record              connectors.Record
+	ResponseBinding     *PreparedWriteResponseBinding
+	ResolvedDeclarative bool
 }
 
 // PreparedWriteResponseBinding supplies one follow-up path field from one

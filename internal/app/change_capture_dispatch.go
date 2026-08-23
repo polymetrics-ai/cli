@@ -361,7 +361,7 @@ func (r *warehouseChangeCaptureReceiver) CommitDurableChangefeedCheckpoint(ctx c
 	}
 	var committed synccontract.CheckpointEnvelope
 	err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, r.acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
-		updated, err := r.workLease.commit(ctx, checkpoint)
+		updated, err := r.workLease.commit(ctx, checkpoint, nil)
 		if err != nil {
 			return fmt.Errorf("persist change capture warehouse checkpoint: %w", err)
 		}
@@ -467,7 +467,7 @@ func (a *App) runWarehouseChangeCapture(ctx context.Context, request etlModeDisp
 	}
 	changefeed := request.source.(connectors.ChangefeedExecutor)
 	stateKey := streamStateKey(request.connection.Name, request.streamName)
-	workLease, err := a.claimTransportWorkLease(ctx, stateKey, request.connection.Name, request.streamName, request.runID, request.sourceExpectation, false)
+	workLease, err := a.claimTransportWorkLease(ctx, stateKey, request.connection.Name, request.streamName, request.runID, request.sourceExpectation, false, request.transportAdmissionFence)
 	if err != nil {
 		return etlExecutionResult{}, err
 	}

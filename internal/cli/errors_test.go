@@ -145,7 +145,7 @@ func TestFreshBinaryProvider401IsCredentialErrorWithoutWritesOrCheckpointAdvance
 	checkpointBefore := githubFlowCheckpointSnapshot(t, root)
 
 	result := runGitHubFlowPM(t, binary, "", []string{token},
-		"github", "issues", "list", "--connection", "github-provider-401", "--root", root, "--json",
+		"github", "actions", "access", "view", "--connection", "github-provider-401", "--root", root, "--json",
 	)
 	assertGitHubFlowProviderFailureReceipt(t, result, "auth", "credential_error", token)
 	if got, want := reads.Load(), int32(1); got != want {

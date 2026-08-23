@@ -486,10 +486,15 @@ func decodeSourceStrictJSON(raw []byte, target any) error {
 }
 
 func validateSourceImportLockInventory(lock sourceImportLock) error {
-	if len(lock.Rest.Operations) > 0 {
-		if lock.Counts.REST != len(lock.Rest.Operations) {
-			return fmt.Errorf("source lock REST count %d does not match %d operations", lock.Counts.REST, len(lock.Rest.Operations))
-		}
+	restCount := len(lock.Rest.Operations)
+	if lock.Counts.REST != restCount {
+		return fmt.Errorf("source lock REST count %d does not match %d operations", lock.Counts.REST, restCount)
+	}
+	graphqlCount := len(lock.GraphQL.QueryFields) + len(lock.GraphQL.MutationFields)
+	if lock.Counts.Total != lock.Counts.REST+graphqlCount {
+		return fmt.Errorf("source lock total count does not match REST and GraphQL inventories")
+	}
+	if restCount > 0 {
 		seen := map[string]bool{}
 		for _, operation := range lock.Rest.Operations {
 			if operation.ID == "" || operation.Protocol != "rest" || operation.Method == "" || operation.Path == "" || operation.SourceLocation == "" {
@@ -501,7 +506,6 @@ func validateSourceImportLockInventory(lock sourceImportLock) error {
 			seen[operation.ID] = true
 		}
 	}
-	graphqlCount := len(lock.GraphQL.QueryFields) + len(lock.GraphQL.MutationFields)
 	if graphqlCount == 0 {
 		if lock.Counts.GraphQLQuery != 0 || lock.Counts.GraphQLMutation != 0 {
 			return fmt.Errorf("source lock GraphQL counts require a GraphQL inventory")
@@ -513,9 +517,6 @@ func validateSourceImportLockInventory(lock sourceImportLock) error {
 	}
 	if lock.Counts.GraphQLQuery != len(lock.GraphQL.QueryFields) || lock.Counts.GraphQLMutation != len(lock.GraphQL.MutationFields) {
 		return fmt.Errorf("source lock GraphQL counts do not match root fields")
-	}
-	if lock.Counts.Total != lock.Counts.REST+graphqlCount {
-		return fmt.Errorf("source lock total count does not match REST and GraphQL inventories")
 	}
 	seen := map[string]bool{}
 	for _, group := range []struct {
@@ -6852,6 +6853,14 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import:", err)
 		return 1
 	}
+	surface, err := sourceProjectionExecutionSurface(filepath.Join(opts.DefsDir, opts.Connector), opts.Connector)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: load declaration-owned execution surface:", err)
+		return 1
+	}
+	sourceProjectionNormalizeNonBlockingReadGaps(&result)
+	sourceProjectionRestoreSourceBoundDirectReadPathFlags(&surface, result)
+	sourceProjectionAnnotateUnreachableReadGaps(surface, &result)
 	raw, err := marshalSourceImportResult(result)
 	if err != nil {
 		logln(stderr, "connectorgen source-import: encode descriptors:", err)

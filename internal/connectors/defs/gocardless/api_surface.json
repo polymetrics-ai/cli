@@ -980,42 +980,26 @@
     {
       "method": "POST",
       "path": "/oauth/access_token",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "OAuth token exchange uses the Connect OAuth form flow on connect.gocardless.com, not a bearer-authenticated GoCardless API record mutation.",
-        "source_url": "https://developer.gocardless.com/api-reference/openapi",
-        "notes": "legacy_exclusion=non_data_endpoint; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token exchange uses the Connect OAuth form flow on connect.gocardless.com, not a bearer-authenticated GoCardless API record mutation."
       }
     },
     {
       "method": "POST",
       "path": "/oauth/introspect",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "OAuth token introspection uses the Connect OAuth form flow on connect.gocardless.com, not a bearer-authenticated GoCardless API record mutation.",
-        "source_url": "https://developer.gocardless.com/api-reference/openapi",
-        "notes": "legacy_exclusion=non_data_endpoint; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token introspection uses the Connect OAuth form flow on connect.gocardless.com, not a bearer-authenticated GoCardless API record mutation."
       }
     },
     {
       "method": "POST",
       "path": "/oauth/revoke",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "OAuth token revocation uses the Connect OAuth form flow on connect.gocardless.com, not a bearer-authenticated GoCardless API record mutation.",
-        "source_url": "https://developer.gocardless.com/api-reference/openapi",
-        "notes": "legacy_exclusion=non_data_endpoint; converted for the source-locked parity ledger"
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "OAuth token revocation uses the Connect OAuth form flow on connect.gocardless.com, not a bearer-authenticated GoCardless API record mutation."
       }
     }
-  ],
-  "operation_ledger_version": 1
+  ]
 }

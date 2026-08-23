@@ -327,7 +327,8 @@ func (a *App) normalizeLoadedState(loaded state, persist bool) error {
 	if err != nil {
 		return err
 	}
-	changed = changed || catalogRefsChanged || compatibilityChanged || coordinationChanged || identityChanged
+	receiptAssociationChanged := migrateLegacyTransportReceiptAssociations(&a.state)
+	changed = changed || catalogRefsChanged || compatibilityChanged || coordinationChanged || identityChanged || receiptAssociationChanged
 	if persist && changed {
 		if err := a.save(); err != nil {
 			return fmt.Errorf("persist project identity: %w", err)
@@ -621,6 +622,7 @@ func (a *App) save() error {
 
 func (a *App) updateState(update func(state) (state, error)) (state, error) {
 	updated, err := a.store.Update(func(current state) (state, error) {
+		migrateLegacyTransportReceiptAssociations(&current)
 		next, updateErr := update(current)
 		if updateErr != nil {
 			return current, updateErr
@@ -636,6 +638,7 @@ func (a *App) updateState(update func(state) (state, error)) (state, error) {
 
 func (a *App) updateStateAfterPreflight(preflight func(state) error, update func(state) (state, error)) (state, error) {
 	updated, err := a.store.UpdateAfterPreflight(preflight, func(current state) (state, error) {
+		migrateLegacyTransportReceiptAssociations(&current)
 		next, updateErr := update(current)
 		if updateErr != nil {
 			return current, updateErr
@@ -1418,6 +1421,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if delivered, pending := a.deliveredReconciliationFor(req.Connection, req.Stream); pending {
 		return a.reconcileDeliveredTransportRun(ctx, delivered)
 	}
+	transportAdmissionFence := a.state.StreamStates[streamStateKey(req.Connection, req.Stream)].ActiveWorkFence
 	if a.connectionMaterializesLocalWarehouse(conn) {
 		if err := a.validateConfiguredLocalWarehouseDestinationTables(); err != nil {
 			return Run{}, err
@@ -1500,6 +1504,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		destination:                 destination,
 		destinationRuntime:          destRuntime,
 		sourceExpectation:           sourceExpectation,
+		transportAdmissionFence:     transportAdmissionFence,
 		streamName:                  req.Stream,
 		stream:                      stream,
 		mode:                        mode,
@@ -1677,16 +1682,64 @@ func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecution
 	if !present {
 		return a.completeRun(runID, result)
 	}
-	return a.completeRunWithAcknowledgedTransportState(runID, result, &acknowledgedTransportCompletion{
+	// A concurrent state update may perform the receipt-association migration
+	// before this finalization rebases. Compare the same normalized historical
+	// representation so that migration metadata alone cannot discard a durable
+	// empty-publication replay fence; every execution-relevant field remains in
+	// the stale-state comparison below.
+	migrateLegacyTransportReceiptAssociation(&acknowledged)
+	completion := &acknowledgedTransportCompletion{
 		key:   result.PendingStreamState.Key,
 		state: cloneStreamState(acknowledged),
-	})
+	}
+	if result.DeliveryReconciliation != nil && (result.DeliveryReconciliation.EmptyPublication != nil || result.DeliveryReconciliation.EmptyPublicationReadBackPending != nil) {
+		return a.completeEmptyPublicationAcknowledgedTransportRun(runID, result, completion)
+	}
+	return a.completeRunWithAcknowledgedTransportState(runID, result, completion)
+}
+
+func (a *App) completeEmptyPublicationAcknowledgedTransportRun(runID string, result etlExecutionResult, completion *acknowledgedTransportCompletion) (Run, error) {
+	if result.persistedDeliveryReconciliation != nil {
+		fenced := *result.persistedDeliveryReconciliation
+		completed, finalizeErr := a.reconcileDeliveredTransportRun(context.Background(), fenced)
+		if finalizeErr != nil {
+			if completed.ID != "" && completed.Status == "completed" {
+				return completed, finalizeErr
+			}
+			return fenced, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("finalize empty full-overwrite replay fence: %w", finalizeErr))
+		}
+		completed.DestinationResults = cloneDestinationResults(result.DestinationResults)
+		return completed, nil
+	}
+	fenced, persistErr := a.persistDeliveredReconciliationRun(runID, result, nil, completion)
+	if persistErr != nil {
+		if fenced.ID != "" || stateStoreCommitMayHaveSucceeded(persistErr) || errors.Is(persistErr, errStateRevisionConflict) {
+			return fenced, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite replay fence: %w", persistErr))
+		}
+		retried, retryErr := a.persistDeliveredReconciliationRun(runID, result, nil, completion)
+		if retried.ID != "" {
+			return retried, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite replay fence: %w", errors.Join(persistErr, retryErr)))
+		}
+		return Run{}, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite replay fence: %w", errors.Join(persistErr, retryErr)))
+	}
+	completed, finalizeErr := a.reconcileDeliveredTransportRun(context.Background(), fenced)
+	if finalizeErr != nil {
+		if completed.ID != "" && completed.Status == "completed" {
+			return completed, finalizeErr
+		}
+		return fenced, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("finalize empty full-overwrite replay fence: %w", finalizeErr))
+	}
+	completed.DestinationResults = cloneDestinationResults(result.DestinationResults)
+	return completed, nil
 }
 
 // failAcknowledgedTransportRun uses a completed checkpoint only as an
 // eligibility witness for terminal failure. It does not refresh state, retry a
 // checkpoint, or replay destination work.
 func (a *App) failAcknowledgedTransportRun(runID string, result etlExecutionResult, runErr error) (Run, error) {
+	if result.persistedDeliveryReconciliation != nil {
+		return *result.persistedDeliveryReconciliation, runErr
+	}
 	if errors.Is(runErr, errTransportStreamStateConflict) {
 		return a.failRunWithResult(runID, result, runErr)
 	}
@@ -3008,14 +3061,8 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	}
 	writeRequest.Approval = evidence
 	result, err := writer.Write(ctx, writeRequest, records)
-	if err == nil && (result.RecordsWritten != len(records) || result.RecordsFailed != 0 || result.RecordsUnchanged != 0) {
-		err = fmt.Errorf(
-			"connector command acknowledgement is incomplete: wrote %d, unchanged %d, failed %d of %d records",
-			result.RecordsWritten,
-			result.RecordsUnchanged,
-			result.RecordsFailed,
-			len(records),
-		)
+	if err == nil {
+		err = validateCompleteReverseWriteAcknowledgement(len(records), result, a.reverseWriteAllowsUnchanged(plan.ID))
 	}
 	return a.finishReverseWrite(plan.ID, run, result, runtime, len(records), err)
 }
@@ -3275,6 +3322,9 @@ func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result c
 }
 
 func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, result connectors.WriteResult, runtime connectors.RuntimeConfig, staged int, writeErr error, errorText func(error) string) (ReverseRun, error) {
+	if writeErr == nil {
+		writeErr = validateCompleteReverseWriteAcknowledgement(staged, result, a.reverseWriteAllowsUnchanged(planID))
+	}
 	output, outputErr := json.Marshal(connectors.SanitizeWriteResultForOutput(result, runtime.Secrets))
 	if outputErr != nil && writeErr == nil {
 		writeErr = fmt.Errorf("encode complete reverse destination result: %w", outputErr)
@@ -3282,15 +3332,15 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	if outputErr == nil {
 		run.DestinationResult = append(json.RawMessage(nil), output...)
 	}
-	run.RecordsSucceeded = result.RecordsWritten
-	run.RecordsFailed = result.RecordsFailed
+	run.RecordsSucceeded = min(max(result.RecordsWritten, 0), max(staged, 0))
+	run.RecordsFailed = min(max(result.RecordsFailed, 0), max(staged, 0))
 	run.CompletedAt = time.Now().UTC()
 	planStatus := "executed"
 	if writeErr != nil {
 		run.Status = "failed"
 		planStatus = "failed"
 		if run.RecordsFailed == 0 {
-			run.RecordsFailed = staged - result.RecordsWritten
+			run.RecordsFailed = max(0, staged-run.RecordsSucceeded)
 		}
 		run.Error = errorText(writeErr)
 	} else {
@@ -3619,18 +3669,20 @@ func (a *App) failRun(runID string, runErr error) (Run, error) {
 func (a *App) failRunWithResult(runID string, result etlExecutionResult, runErr error) (Run, error) {
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
-	transportStateConflict := errors.Is(runErr, errTransportStreamStateConflict)
+	transportRunFinalizationRebase := errors.Is(runErr, errTransportStreamStateConflict) ||
+		errors.Is(runErr, errTransportStreamReconciliationPending) ||
+		errors.Is(runErr, errTransportStreamAdmissionStale)
 	transitionedInCallback := false
 	targetAlreadyTerminal := false
 	updated, persistErr := a.updateState(func(current state) (state, error) {
-		if !transportStateConflict && current.Revision != expectedRevision {
+		if !transportRunFinalizationRebase && current.Revision != expectedRevision {
 			return current, errStateRevisionConflict
 		}
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
 			}
-			if transportStateConflict && current.Runs[i].Status != "running" {
+			if transportRunFinalizationRebase && current.Runs[i].Status != "running" {
 				targetAlreadyTerminal = true
 				return current, fmt.Errorf("transport conflict run %q has status %q, want running before finalization", runID, current.Runs[i].Status)
 			}
@@ -3651,7 +3703,7 @@ func (a *App) failRunWithResult(runID string, result etlExecutionResult, runErr 
 		return current, fmt.Errorf("run %q not found", runID)
 	})
 	if persistErr != nil {
-		if transportStateConflict && targetAlreadyTerminal {
+		if transportRunFinalizationRebase && targetAlreadyTerminal {
 			if run, storedErr := terminalETLRunFromState(updated, runID); storedErr == nil {
 				return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 			} else {

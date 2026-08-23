@@ -48,16 +48,19 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 		result.CreditWaitElapsed = time.Duration(snapshot.WaitNanos)
 	}()
 
-	if err := authorizeDestinationEffect(ctx, request.Approval, "Arrow full-overwrite begin"); err != nil {
+	beginCtx, cancelBegin := transportUnitContext(ctx, request.unitDeadline())
+	if err := authorizeDestinationEffect(beginCtx, request.Approval, "Arrow full-overwrite begin"); err != nil {
+		cancelBegin()
 		return result, err
 	}
-	session, err := destination.BeginArrowFullOverwrite(ctx, cloneArrowFullOverwriteRunRequest(ArrowFullOverwriteRunRequest{
+	session, err := destination.BeginArrowFullOverwrite(beginCtx, cloneArrowFullOverwriteRunRequest(ArrowFullOverwriteRunRequest{
 		ConnectionID: request.ConnectionID, Generation: request.Generation, Plan: plan,
 		Runtime: request.DestinationRuntime, Source: request.Source,
 		SourceRuntime: request.SourceRuntime, Binding: request.DestinationBinding,
 		Stream: request.Stream, BatchSize: request.BatchSize, TransformPlanJSON: request.TransformPlanJSON,
 		TransformPlanHash: request.TransformPlanHash, Approval: request.Approval,
 	}))
+	cancelBegin()
 	if err != nil || isNilInterface(session) {
 		if err == nil {
 			err = ErrArrowFastPathInvalid
@@ -134,9 +137,20 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 	cancelPublish()
 	if publishErr == nil {
 		published = true
+		if lastCandidate == nil {
+			result.WallElapsed = time.Since(started)
+			if err := handoffEmptyPublicationReadBackPending(ctx, request, &result, acknowledgement, request.Destination.Name()); err != nil {
+				return result, err
+			}
+		}
 		readBackCtx, cancelReadBack := transportUnitContext(ctx, request.unitDeadline())
 		readBackStarted := time.Now()
-		publishErr = session.ReadBackArrowFullOverwrite(readBackCtx, acknowledgement)
+		if request.ReadBackAdmission != nil {
+			publishErr = request.ReadBackAdmission(readBackCtx)
+		}
+		if publishErr == nil {
+			publishErr = session.ReadBackArrowFullOverwrite(readBackCtx, acknowledgement)
+		}
 		result.ReadBackElapsed += time.Since(readBackStarted)
 		cancelReadBack()
 	}
@@ -147,6 +161,10 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 		result.IndexConstraintElapsed = reporter.ArrowBulkPhaseMeasurement().IndexConstraintBuildElapsed
 	}
 	if lastCandidate == nil {
+		result.WallElapsed = time.Since(started)
+		if err := handoffEmptyPublication(ctx, request, &result, acknowledgement, request.Destination.Name()); err != nil {
+			return result, err
+		}
 		return result, nil
 	}
 	checkpointStarted := time.Now()
@@ -154,7 +172,7 @@ func (o *Orchestrator) runArrowFullOverwritePipelined(ctx context.Context, reque
 		if acknowledgement.Sink != request.Destination.Name() {
 			return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, request.Destination.Name())
 		}
-		return request.Commit(checkpoint)
+		return request.commitAcknowledgedWorksets(checkpoint, nil)
 	}); err != nil {
 		result.CheckpointElapsed += time.Since(checkpointStarted)
 		return result, err

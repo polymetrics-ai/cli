@@ -1383,6 +1383,5 @@
         "write": "update_account"
       }
     }
-  ],
-  "operation_ledger_version": 1
+  ]
 }

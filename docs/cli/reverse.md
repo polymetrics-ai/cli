@@ -191,9 +191,10 @@ SECURITY
   declared in redact_fields. Engine direct-read, operation-direct-read, and binary-
   download executors preserve bounded HTTP URL/query/body diagnostics before
   downstream rendering. Persisted reverse-ETL output retains complete provider
-  results: provider-returned fields, keys, and values remain verbatim even when
-  they equal configured credential bytes. System-generated plans, logs,
-  request diagnostics, and synthetic errors remain secret-taint-safe.
+  results: concrete configured credential material is masked, while
+  provider-owned field names and ordinary values remain available.
+  System-generated plans, logs, request diagnostics, and synthetic errors
+  remain secret-taint-safe.
   Credential storage remains encrypted at rest.
 
 LEARN MORE

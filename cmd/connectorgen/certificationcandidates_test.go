@@ -802,7 +802,20 @@ func TestGitHubTrialCohortIsCompleteAndGeneratesOnlyReads(t *testing.T) {
 	if err != nil {
 		t.Fatalf("buildGeneratedReadCandidates() error = %v", err)
 	}
-	if len(generated) != 97 {
-		t.Fatalf("generated direct reads = %d, want 97", len(generated))
+	commands := make(map[string]engine.CLICommand, len(bundle.CLISurface.Commands))
+	for _, command := range bundle.CLISurface.Commands {
+		commands[command.Path] = command
+	}
+	wantGenerated := 0
+	for _, cohort := range generation.Cohorts {
+		for _, path := range cohort.Commands {
+			command := commands[path]
+			if command.Intent == "direct_read" && command.Availability == "implemented" {
+				wantGenerated++
+			}
+		}
+	}
+	if len(generated) != wantGenerated {
+		t.Fatalf("generated direct reads = %d, want %d executable direct-read cohort commands", len(generated), wantGenerated)
 	}
 }

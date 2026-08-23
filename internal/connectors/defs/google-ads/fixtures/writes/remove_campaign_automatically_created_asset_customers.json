@@ -2,7 +2,9 @@
   "record": {
     "operations": [
       {
-        "create": {}
+        "campaign": "customers/synthetic-conformance-value/campaigns/1",
+        "asset": "customers/synthetic-conformance-value/assets/1",
+        "fieldType": "HEADLINE"
       }
     ]
   },
@@ -12,7 +14,9 @@
     "body": {
       "operations": [
         {
-          "create": {}
+          "campaign": "customers/synthetic-conformance-value/campaigns/1",
+          "asset": "customers/synthetic-conformance-value/assets/1",
+          "fieldType": "HEADLINE"
         }
       ]
     }

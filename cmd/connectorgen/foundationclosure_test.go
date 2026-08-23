@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -122,10 +125,8 @@ func TestFoundationEvidenceRejectsEveryStaleGraphIdentityAndArtifact(t *testing.
 	})
 }
 
-func TestCertificationSubjectFingerprintIncludesEveryComponent(t *testing.T) {
+func TestCertificationSubjectFingerprintIncludesEveryRepositoryComponent(t *testing.T) {
 	base, err := newCertificationSubject(certificationSubjectComponents{
-		PMBinarySHA256:          sha256hex("pm binary"),
-		PMBuildSHA256:           sha256hex("pm build"),
 		DeclarationsSHA256:      sha256hex("declarations"),
 		SourceProjectionSHA256:  sha256hex("source projection"),
 		CLICommandMappingSHA256: sha256hex("CLI command mapping"),
@@ -140,8 +141,6 @@ func TestCertificationSubjectFingerprintIncludesEveryComponent(t *testing.T) {
 		name string
 		edit func(*certificationSubjectComponents)
 	}{
-		{"PM binary", func(value *certificationSubjectComponents) { value.PMBinarySHA256 = sha256hex("changed pm binary") }},
-		{"PM build", func(value *certificationSubjectComponents) { value.PMBuildSHA256 = sha256hex("changed pm build") }},
 		{"declarations", func(value *certificationSubjectComponents) {
 			value.DeclarationsSHA256 = sha256hex("changed declarations")
 		}},
@@ -171,10 +170,121 @@ func TestCertificationSubjectFingerprintIncludesEveryComponent(t *testing.T) {
 	}
 }
 
-func TestCertificationEvidenceBecomesStaleWhenSubjectChanges(t *testing.T) {
+func TestCertificationSubjectFingerprintExcludesProofTimeBuildProvenance(t *testing.T) {
 	base, err := newCertificationSubject(certificationSubjectComponents{
 		PMBinarySHA256:          sha256hex("pm binary"),
 		PMBuildSHA256:           sha256hex("pm build"),
+		DeclarationsSHA256:      sha256hex("declarations"),
+		SourceProjectionSHA256:  sha256hex("source projection"),
+		CLICommandMappingSHA256: sha256hex("CLI command mapping"),
+		RelevantConfigSHA256:    sha256hex("relevant config"),
+		ProofProtocol:           certificationSubjectProofProtocol,
+	})
+	if err != nil {
+		t.Fatalf("newCertificationSubject() = %v", err)
+	}
+
+	for _, tc := range []struct {
+		name string
+		edit func(*certificationSubjectComponents)
+	}{
+		{"pm binary", func(value *certificationSubjectComponents) { value.PMBinarySHA256 = sha256hex("other pm binary") }},
+		{"pm build", func(value *certificationSubjectComponents) { value.PMBuildSHA256 = sha256hex("other pm build") }},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			components := base.Components()
+			tc.edit(&components)
+			changed, err := newCertificationSubject(components)
+			if err != nil {
+				t.Fatalf("newCertificationSubject() = %v", err)
+			}
+			if changed.Fingerprint != base.Fingerprint {
+				t.Fatalf("%s changed deterministic subject fingerprint: got %q want %q", tc.name, changed.Fingerprint, base.Fingerprint)
+			}
+		})
+	}
+}
+
+func TestCertificationSubjectCheckRejectsEveryRepositoryInput(t *testing.T) {
+	root := t.TempDir()
+	inputs := map[string]string{
+		"internal/connectors/defs/example/operations.json":       `{"operations":[]}`,
+		"internal/connectors/defs/example/sources/contract.json": `{"source":"locked"}`,
+		"internal/connectors/defs/example/cli_surface.json":      `{"commands":[]}`,
+		"internal/connectors/defs/example/rate_limits.json":      `{"scopes":[]}`,
+	}
+	for path, contents := range inputs {
+		fullPath := filepath.Join(root, filepath.FromSlash(path))
+		if err := os.MkdirAll(filepath.Dir(fullPath), 0o755); err != nil {
+			t.Fatalf("mkdir %s: %v", path, err)
+		}
+		if err := os.WriteFile(fullPath, []byte(contents), 0o600); err != nil {
+			t.Fatalf("write %s: %v", path, err)
+		}
+	}
+
+	var stdout, stderr bytes.Buffer
+	if code := runCertificationSubject([]string{"certification-subject", root}, &stdout, &stderr); code != 0 {
+		t.Fatalf("write subject exit=%d stderr=%q", code, stderr.String())
+	}
+	for path := range inputs {
+		t.Run(path, func(t *testing.T) {
+			fullPath := filepath.Join(root, filepath.FromSlash(path))
+			if err := os.WriteFile(fullPath, []byte(`{"changed":true}`), 0o600); err != nil {
+				t.Fatalf("mutate %s: %v", path, err)
+			}
+			stdout.Reset()
+			stderr.Reset()
+			if code := runCertificationSubject([]string{"certification-subject", root, "--check"}, &stdout, &stderr); code != 1 {
+				t.Fatalf("check after %s mutation exit=%d stdout=%q stderr=%q, want stale failure", path, code, stdout.String(), stderr.String())
+			}
+			if err := os.WriteFile(fullPath, []byte(inputs[path]), 0o600); err != nil {
+				t.Fatalf("restore %s: %v", path, err)
+			}
+		})
+	}
+}
+
+func TestCertificationSubjectForBinarySeparatesProofTimeProvenance(t *testing.T) {
+	root := t.TempDir()
+	for path, contents := range map[string]string{
+		"internal/connectors/defs/example/operations.json":       `{"operations":[]}`,
+		"internal/connectors/defs/example/sources/contract.json": `{"source":"locked"}`,
+		"internal/connectors/defs/example/cli_surface.json":      `{"commands":[]}`,
+		"internal/connectors/defs/example/rate_limits.json":      `{"scopes":[]}`,
+	} {
+		fullPath := filepath.Join(root, filepath.FromSlash(path))
+		if err := os.MkdirAll(filepath.Dir(fullPath), 0o755); err != nil {
+			t.Fatalf("mkdir %s: %v", path, err)
+		}
+		if err := os.WriteFile(fullPath, []byte(contents), 0o600); err != nil {
+			t.Fatalf("write %s: %v", path, err)
+		}
+	}
+	binary, err := os.Executable()
+	if err != nil {
+		t.Fatalf("locate test binary: %v", err)
+	}
+	subject, provenance, err := certificationSubjectForBinary(root, binary)
+	if err != nil {
+		t.Fatalf("certificationSubjectForBinary() = %v", err)
+	}
+	if !evidenceSHA256.MatchString(provenance.PMBinarySHA256) || !evidenceSHA256.MatchString(provenance.PMBuildSHA256) {
+		t.Fatalf("proof-time provenance = %#v, want two SHA-256 digests", provenance)
+	}
+	raw, err := json.Marshal(subject)
+	if err != nil {
+		t.Fatalf("marshal deterministic subject: %v", err)
+	}
+	for _, digest := range []string{provenance.PMBinarySHA256, provenance.PMBuildSHA256} {
+		if bytes.Contains(raw, []byte(digest)) {
+			t.Fatalf("checked-in subject contains proof-time digest %q: %s", digest, raw)
+		}
+	}
+}
+
+func TestCertificationEvidenceBecomesStaleWhenSubjectChanges(t *testing.T) {
+	base, err := newCertificationSubject(certificationSubjectComponents{
 		DeclarationsSHA256:      sha256hex("declarations"),
 		SourceProjectionSHA256:  sha256hex("source projection"),
 		CLICommandMappingSHA256: sha256hex("CLI command mapping"),
@@ -194,8 +304,6 @@ func TestCertificationEvidenceBecomesStaleWhenSubjectChanges(t *testing.T) {
 		name string
 		edit func(*certificationSubjectComponents)
 	}{
-		{"PM binary", func(value *certificationSubjectComponents) { value.PMBinarySHA256 = sha256hex("changed pm binary") }},
-		{"PM build", func(value *certificationSubjectComponents) { value.PMBuildSHA256 = sha256hex("changed pm build") }},
 		{"declarations", func(value *certificationSubjectComponents) {
 			value.DeclarationsSHA256 = sha256hex("changed declarations")
 		}},
@@ -261,8 +369,6 @@ func newFoundationEvidenceFixture(t *testing.T) foundationEvidenceFixture {
 		"data/cli-current-foundations-main-integration-r1/report.md":                         []byte("foundation evidence"),
 	}
 	subject, err := newCertificationSubject(certificationSubjectComponents{
-		PMBinarySHA256:          sha256hex("pm binary"),
-		PMBuildSHA256:           sha256hex("pm build"),
 		DeclarationsSHA256:      sha256hex("declarations"),
 		SourceProjectionSHA256:  sha256hex("source projection"),
 		CLICommandMappingSHA256: sha256hex("CLI command mapping"),
@@ -274,7 +380,7 @@ func newFoundationEvidenceFixture(t *testing.T) foundationEvidenceFixture {
 	}
 	subjectPayload, err := marshalGeneratedJSON(currentCertificationSubjectArtifact{
 		SchemaVersion:    certificationSubjectSchemaVersion,
-		GeneratedCommand: "go run ./cmd/connectorgen certification-subject --pm ./pm",
+		GeneratedCommand: "go run ./cmd/connectorgen certification-subject",
 		Subject:          subject,
 	})
 	if err != nil {

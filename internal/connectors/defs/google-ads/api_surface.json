@@ -904,9 +904,35 @@
     },
     {
       "method": "POST",
+      "path": "/v22/{resource_name}:addOperations",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.offlineUserDataJobs.addOperations",
+        "notes": "Needs shared reserved-expansion path-variable support or a connector-local declarative raw-slash path field type."
+      }
+    },
+    {
+      "method": "POST",
       "path": "/v22/customers/{customer_id}/offlineUserDataJobs:create",
       "covered_by": {
         "write": "create_offline_user_data_jobs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v22/{resource_name}:run",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (resourceName) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.offlineUserDataJobs.run",
+        "notes": "Needs shared reserved-expansion path-variable support or a connector-local declarative raw-slash path field type."
       }
     },
     {
@@ -945,6 +971,19 @@
         "blocked_by_default": true,
         "reason": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (name) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
         "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.operations.get",
+        "notes": "Needs shared reserved-expansion path-variable support or a connector-local declarative raw-slash path field type."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v22/{name}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by connector-local path contract: Google Ads uses reserved-expansion resource-name path variables (name) that may contain slashes, while current direct/write path interpolation safely URL-encodes slash characters. Executing this without shared reserved-expansion support would call a different path.",
+        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.operations.list",
         "notes": "Needs shared reserved-expansion path-variable support or a connector-local declarative raw-slash path field type."
       }
     },
@@ -1256,19 +1295,6 @@
       "path": "/v22:listPlannableUserLists",
       "covered_by": {
         "direct_read": "v22 list-plannable-user-lists"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{+customerId}/googleAds:search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
-        "notes": "classification=declaration-pending; source_id=google-ads.rest.post.v22_customers_customerid_googleads_search.156; source_location=Discovery method \"googleads.customers.googleAds.search\""
       }
     }
   ]

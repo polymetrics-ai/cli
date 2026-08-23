@@ -127,7 +127,7 @@ func usage() string {
 	connectorgen certification-matrix [repo-root] (--connector <name> [--check] | --all | --check)
 	connectorgen certification-sweep [repo-root] --connector <name> [--check]
 	connectorgen certification-candidates [repo-root] --connector <name> [--check]
-	connectorgen certification-subject [repo-root] --pm <built-pm> [--check]
+	connectorgen certification-subject [repo-root] [--pm <built-pm>] [--check]
 	connectorgen certification-evidence (transport|change-capture) --connector <name> --report <path> --binary-sha <sha256> --from-env password=<ENV> --run-id <id> --record-prefix <id> [--repo-root <path>]
 	connectorgen certification-evidence report --connector <name> --report <path> --external-proof <path> --record-prefix <id> [--repo-root <path>]
 	connectorgen certification-evidence draft --draft <.tmp/live-certification/drafts/record.json> [--repo-root <path>]

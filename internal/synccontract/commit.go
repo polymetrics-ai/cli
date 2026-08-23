@@ -17,6 +17,12 @@ var ErrDownstreamAcknowledgementRequired = errors.New("durable downstream acknow
 // a generic destination can produce a checkpointed write.
 var ErrDurableETLDestinationRequired = errors.New("checkpointed sync requires a durable destination acknowledgement")
 
+// MaxPrivateReceiptBytes is the single hard bound for connector-owned
+// read-back continuations. Receipt constructors must use this value before
+// provider I/O, because WithPrivateReceipt cannot safely discover overflow
+// after a successful mutation.
+const MaxPrivateReceiptBytes = 8 << 10
+
 // DownstreamAcknowledgement is supplied only after the destination has made
 // the batch durable according to its own native protocol.
 type DownstreamAcknowledgement struct {
@@ -31,6 +37,26 @@ type DownstreamAcknowledgement struct {
 	// accessors; only the in-process destination adapter can consume it.
 	privateReceipt json.RawMessage
 	durable        bool
+}
+
+// PublicationWitness is the bounded durable evidence for an externally
+// visible publication that intentionally has no source checkpoint, such as a
+// full-overwrite of an explicitly empty source. Provider-owned output remains
+// on the acknowledgement and is persisted by the caller as its exact receipt.
+// This witness contains only the destination identity and durable timestamp
+// needed to prevent replay while local bookkeeping is repaired.
+type PublicationWitness struct {
+	Sink           string    `json:"sink"`
+	AcknowledgedAt time.Time `json:"acknowledged_at"`
+}
+
+// Validate proves that a persisted empty-publication witness still identifies
+// one acknowledged destination effect. It cannot grant checkpoint authority.
+func (w PublicationWitness) Validate() error {
+	if strings.TrimSpace(w.Sink) == "" || w.AcknowledgedAt.IsZero() {
+		return fmt.Errorf("durable publication witness requires a sink and acknowledgement timestamp")
+	}
+	return nil
 }
 
 // DurableETLDestination supplies an acknowledgement only after its writes are
@@ -93,7 +119,7 @@ func (a DownstreamAcknowledgement) WithPrivateReceipt(receipt json.RawMessage) (
 	if err := a.validate(); err != nil {
 		return DownstreamAcknowledgement{}, err
 	}
-	if len(receipt) == 0 || len(receipt) > 8<<10 || !json.Valid(receipt) {
+	if len(receipt) == 0 || len(receipt) > MaxPrivateReceiptBytes || !json.Valid(receipt) {
 		return DownstreamAcknowledgement{}, fmt.Errorf("durable acknowledgement private receipt must be valid bounded JSON")
 	}
 	a.privateReceipt = append(json.RawMessage(nil), receipt...)
@@ -107,6 +133,21 @@ func (a DownstreamAcknowledgement) PrivateReceipt() (json.RawMessage, bool) {
 		return nil, false
 	}
 	return append(json.RawMessage(nil), a.privateReceipt...), true
+}
+
+// PublicationWitness returns the non-payload durable evidence from this
+// acknowledgement. Only an acknowledgement constructed by the connector-owned
+// durability boundary can produce a witness, so callers cannot manufacture
+// post-publication replay authority from an arbitrary response.
+func (a DownstreamAcknowledgement) PublicationWitness() (PublicationWitness, error) {
+	if err := a.validate(); err != nil {
+		return PublicationWitness{}, err
+	}
+	witness := PublicationWitness{Sink: a.Sink, AcknowledgedAt: a.AcknowledgedAt}
+	if err := witness.Validate(); err != nil {
+		return PublicationWitness{}, err
+	}
+	return witness, nil
 }
 
 func (a DownstreamAcknowledgement) validate() error {

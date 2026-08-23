@@ -119,6 +119,412 @@ func TestSourceProjection_MissingOperationOrFieldFailsValidateAndSurfaceCheck(t 
 	}
 }
 
+func TestSourceProjectionRequiresReachableRESTReadOrConcreteGap(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/widgets",
+	}
+	empty := engine.Bundle{Name: "alpha", CLISurface: &engine.CLISurface{}}
+	if findings := validateSourceExecutableCoverage(empty, "sources/alpha-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "no reachable executable operation") {
+		t.Fatalf("missing REST read findings = %+v", findings)
+	}
+
+	reachable := engine.Bundle{
+		Name: "alpha",
+		Operations: []engine.OperationSpec{{
+			ID: "alpha.widgets.list", Kind: "rest_read", REST: &engine.RESTOperationSpec{Method: "GET", Path: "/widgets", MaxBytes: 1024},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "widgets list", Availability: "implemented", Operation: "alpha.widgets.list",
+		}}},
+	}
+	if findings := validateSourceExecutableCoverage(reachable, "sources/alpha-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 0 {
+		t.Fatalf("reachable REST read findings = %+v", findings)
+	}
+
+	source.Runtime.Gaps = []sourceContractGap{{Foundation: "typed-read-foundation-r1", Location: "response", Reason: "provider response is not yet representable"}}
+	if findings := validateSourceExecutableCoverage(empty, "sources/alpha-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 0 {
+		t.Fatalf("concrete deferred REST read findings = %+v", findings)
+	}
+}
+
+func TestSourceProjectionCountsDeclaredPaginationParametersAsReachableInputs(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/widgets",
+		Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{{
+			Name: "page", Schema: map[string]any{"type": "integer"},
+		}}},
+	}
+	bundle := engine.Bundle{
+		Name: "alpha",
+		Operations: []engine.OperationSpec{{
+			ID: "alpha.widgets.list", Kind: "rest_read",
+			REST: &engine.RESTOperationSpec{
+				Method: "GET", Path: "/widgets", MaxBytes: 1024,
+				PaginationParameters: []engine.OperationParameter{{Name: "page", In: "query"}},
+			},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "widgets list", Availability: "implemented", Operation: "alpha.widgets.list",
+		}}},
+	}
+	if findings := validateSourceExecutableCoverage(bundle, "sources/alpha-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 0 {
+		t.Fatalf("declared pagination parameter did not close source reachability: %+v", findings)
+	}
+}
+
+func TestSourceProjectionDowngradesUnboundImplementedAPICommandForSourceGap(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/widgets",
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+			Foundation: sourceOperationExecutionFoundation,
+			Location:   "source operation alpha.widgets.list",
+			Reason:     "locked provider operation has no declaration-owned executable stream, direct-read, binary, or status route",
+		}}},
+	}
+	bundle := engine.Bundle{Name: "alpha", CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+		Path: "widgets list", Intent: "direct_read", Availability: "implemented",
+		APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/widgets"}},
+	}}}}
+	if findings := validateSourceExecutableCoverage(bundle, "sources/alpha-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "retains an unresolved source-bound gap") {
+		t.Fatalf("unbound implemented API command was accepted: %+v", findings)
+	}
+
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{
+  "schema_version": 1,
+  "commands": [{
+    "path": "widgets list",
+    "summary": "list widgets",
+    "intent": "direct_read",
+    "availability": "implemented",
+    "api_surface": [{"method":"GET","path":"/widgets"}]
+  }]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), `{
+  "api": "alpha",
+  "endpoints": [{
+    "method": "GET",
+    "path": "/widgets",
+    "covered_by": {"direct_read":"widgets list"}
+  }]
+}`)
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{source}}, false)
+	if err != nil {
+		t.Fatalf("project source-bound read gap: %v", err)
+	}
+	if stats.CLI != 1 {
+		t.Fatalf("projected CLI stats = %+v, want one downgraded command", stats)
+	}
+	projected := readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"))
+	if !strings.Contains(projected, `"availability": "partial"`) || !strings.Contains(projected, source.SourceID) || !strings.Contains(projected, "declaration-owned executable") {
+		t.Fatalf("unbound command did not become source-bound partial capability:\n%s", projected)
+	}
+	projectedSurface := readProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"))
+	if strings.Contains(projectedSurface, `"covered_by"`) || !strings.Contains(projectedSurface, `"model": "direct_read"`) || !strings.Contains(projectedSurface, source.SourceID) || !strings.Contains(projectedSurface, "Named dependency:") {
+		t.Fatalf("source-bound partial command retained executable API coverage:\n%s", projectedSurface)
+	}
+}
+
+func TestSourceProjectionDoesNotBlockReadForUnusedOptionalAmbiguousParameter(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/orgs/{org}/widgets",
+		Request: sourceRequestDescriptor{
+			Path: []sourceParameterDescriptor{{Name: "org", Required: true, Schema: map[string]any{"type": "string"}}},
+			Query: []sourceParameterDescriptor{{Name: "has", Required: false, Schema: map[string]any{"oneOf": []any{
+				map[string]any{"type": "string"},
+				map[string]any{"type": "array", "items": map[string]any{"type": "string"}},
+			}}}},
+		},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+			Foundation: "cli-request-schema-foundation-r1",
+			Location:   "parameter has",
+			Reason:     "ambiguous request schema uses oneOf",
+		}}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{source}}
+	if blocked := sourceProjectionBlockedReadSources(result); len(blocked) != 0 {
+		t.Fatalf("unused optional ambiguous query parameter blocked executable read: %+v", blocked)
+	}
+	if reachable := sourceProjectionReachableReadSources(result); reachable[source.SourceID].SourceID != source.SourceID {
+		t.Fatalf("read with only an unused optional ambiguous parameter was not reachable: %+v", reachable)
+	}
+}
+
+func TestSourceProjectionDoesNotBlockReadForOmittedOptionalRequestBody(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.get", Method: "get", Path: "/widgets/{id}",
+		Request: sourceRequestDescriptor{
+			Path: []sourceParameterDescriptor{{Name: "id", Required: true, Schema: map[string]any{"type": "string"}}},
+			Body: &sourceRequestBodyDescriptor{Required: false, Schema: true},
+		},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+			Foundation: "cli-request-schema-foundation-r1",
+			Location:   "request body",
+			Reason:     "unsupported openapi boolean schema",
+		}}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{source}}
+	if blocked := sourceProjectionBlockedReadSources(result); len(blocked) != 0 {
+		t.Fatalf("omitted optional request body blocked executable read: %+v", blocked)
+	}
+	if reachable := sourceProjectionReachableReadSources(result); reachable[source.SourceID].SourceID != source.SourceID {
+		t.Fatalf("read with an omitted optional body was not reachable: %+v", reachable)
+	}
+}
+
+func TestSourceProjectionNormalizesOnlyOptionalReadSchemaGaps(t *testing.T) {
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{
+		{
+			Connector: "alpha", SourceID: "alpha.widgets.list", Method: "GET", Path: "/widgets",
+			Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{{Name: "has", Required: false}}},
+			Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+				Foundation: "cli-request-schema-foundation-r1", Location: "parameter has", Reason: "ambiguous request schema uses oneOf",
+			}}},
+		},
+		{
+			Connector: "alpha", SourceID: "alpha.widgets.get", Method: "GET", Path: "/widgets/{id}",
+			Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{{Name: "id", Required: true}}},
+			Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+				Foundation: "cli-request-schema-foundation-r1", Location: "parameter id", Reason: "ambiguous request schema uses oneOf",
+			}}},
+		},
+	}}
+
+	sourceProjectionNormalizeNonBlockingReadGaps(&result)
+	if got := result.Operations[0].Runtime; got.MergeBlocked || len(got.Gaps) != 0 {
+		t.Fatalf("optional omitted input runtime = %+v, want no availability gap", got)
+	}
+	if got := result.Operations[1].Runtime; !got.MergeBlocked || len(got.Gaps) != 1 {
+		t.Fatalf("required input runtime = %+v, want retained gap", got)
+	}
+}
+
+func TestSourceProjectionKeepsIndependentSurfaceCoverageWhenBlockingReadCommand(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.get", Method: "get", Path: "/widgets/{id}",
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+			Foundation: sourceOperationExecutionFoundation,
+			Location:   "source operation alpha.widgets.get",
+			Reason:     "locked provider operation has no field-complete declaration-owned executable route",
+		}}},
+	}
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{
+  "schema_version": 1,
+  "commands": [{
+    "path": "widgets get",
+    "summary": "get widget",
+    "intent": "direct_read",
+    "availability": "implemented",
+    "api_surface": [{"method":"GET","path":"/widgets/{id}"}]
+  }]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), `{
+  "api": "alpha",
+  "endpoints": [{
+    "method": "GET",
+    "path": "/widgets/{id}",
+    "covered_by": {"stream":"widgets", "direct_read":"widgets get"}
+  }]
+}`)
+	if _, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{source}}, false); err != nil {
+		t.Fatalf("project source-bound read gap with an independent stream: %v", err)
+	}
+	projectedSurface := readProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"))
+	if !strings.Contains(projectedSurface, `"stream": "widgets"`) || strings.Contains(projectedSurface, `"direct_read"`) || strings.Contains(projectedSurface, `"operation"`) {
+		t.Fatalf("blocked direct read changed independent stream coverage:\n%s", projectedSurface)
+	}
+}
+
+func TestSourceProjectionRequiresReachableGraphQLRootOrConcreteGap(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.graphql.query.widgets", Protocol: "graphql",
+		GraphQL: &sourceGraphQLOperationDescriptor{Root: "Query", Name: "widgets", Line: 1, Signature: "widgets: [Widget!]!"},
+	}
+	empty := engine.Bundle{Name: "alpha", CLISurface: &engine.CLISurface{}}
+	if findings := validateSourceExecutableCoverage(empty, "sources/alpha-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "no reachable executable operation") {
+		t.Fatalf("missing GraphQL root findings = %+v", findings)
+	}
+
+	reachable := engine.Bundle{
+		Name: "alpha",
+		Operations: []engine.OperationSpec{{
+			ID: "alpha.graphql.query.widgets", Kind: "graphql_query", OutputPolicy: "json", GraphQL: &engine.GraphQLOperationSpec{Document: "query Widgets { widgets { id } }", OperationName: "Widgets", Path: "/graphql", MaxBytes: 1024},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "widgets list", Availability: "implemented", Operation: "alpha.graphql.query.widgets",
+		}}},
+	}
+	if findings := validateSourceExecutableCoverage(reachable, "sources/alpha-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 0 {
+		t.Fatalf("reachable GraphQL root findings = %+v", findings)
+	}
+
+	source.Runtime.Gaps = []sourceContractGap{{Foundation: "graphql-output-foundation-r1", Location: "selection", Reason: "source selection is not yet representable"}}
+	if findings := validateSourceExecutableCoverage(empty, "sources/alpha-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 0 {
+		t.Fatalf("concrete deferred GraphQL root findings = %+v", findings)
+	}
+}
+
+func TestSourceProjectionAnnotatesUnreachableReadWithConcreteSourceGap(t *testing.T) {
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/widgets",
+	}}}
+	sourceProjectionAnnotateUnreachableReadGaps(engine.Bundle{Name: "alpha", CLISurface: &engine.CLISurface{}}, &result)
+	if !result.Operations[0].Runtime.MergeBlocked || len(result.Operations[0].Runtime.Gaps) != 1 {
+		t.Fatalf("unreachable read runtime = %+v, want one source-bound gap", result.Operations[0].Runtime)
+	}
+	gap := result.Operations[0].Runtime.Gaps[0]
+	if gap.Foundation != sourceOperationExecutionFoundation || !strings.Contains(gap.Location, result.Operations[0].SourceID) || !strings.Contains(gap.Reason, "declaration-owned") {
+		t.Fatalf("unreachable read gap = %+v, want exact source-bound execution gap", gap)
+	}
+
+	result = sourceImportResult{Operations: []sourceOperationDescriptor{{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/widgets",
+	}}}
+	reachable := engine.Bundle{
+		Name: "alpha",
+		Operations: []engine.OperationSpec{{
+			ID: "alpha.widgets.list", Kind: "rest_read", REST: &engine.RESTOperationSpec{Method: "GET", Path: "/widgets", MaxBytes: 1024},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{Path: "widgets list", Availability: "implemented", Operation: "alpha.widgets.list"}}},
+	}
+	sourceProjectionAnnotateUnreachableReadGaps(reachable, &result)
+	if result.Operations[0].Runtime.MergeBlocked || len(result.Operations[0].Runtime.Gaps) != 0 {
+		t.Fatalf("reachable read was marked deferred: %+v", result.Operations[0].Runtime)
+	}
+
+	result = sourceImportResult{Operations: []sourceOperationDescriptor{{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/widgets",
+		Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{{Name: "page", Required: true, Schema: map[string]any{"type": "integer"}}}},
+	}}}
+	partial := engine.Bundle{
+		Name: "alpha",
+		Operations: []engine.OperationSpec{{
+			ID: "alpha.widgets.list", Kind: "rest_read", REST: &engine.RESTOperationSpec{Method: "GET", Path: "/widgets", MaxBytes: 1024},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "widgets list", Availability: "implemented", Intent: "direct_read", Operation: "alpha.widgets.list",
+			APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/widgets"}},
+		}}},
+	}
+	sourceProjectionAnnotateUnreachableReadGaps(partial, &result)
+	if !result.Operations[0].Runtime.MergeBlocked || !sourceOperationHasFoundationGap(result.Operations[0], sourceOperationExecutionFoundation) {
+		t.Fatalf("incomplete declared read was not marked source-bound partial: %+v", result.Operations[0].Runtime)
+	}
+}
+
+func TestSourceProjectionRetainsRequiredFieldCompleteSourceBoundDirectRead(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "GET", Path: "/widgets/{owner}",
+		Request: sourceRequestDescriptor{
+			Path:  []sourceParameterDescriptor{{Name: "owner", Required: true, Schema: map[string]any{"type": "string"}}},
+			Query: []sourceParameterDescriptor{{Name: "state", Required: false, Schema: map[string]any{"type": "string"}}},
+		},
+	}
+	spec, err := engine.CompileSchema(json.RawMessage(`{
+  "type":"object","additionalProperties":false,
+  "required":["owner"],"properties":{"owner":{"type":"string"}}
+}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	bundle := engine.Bundle{
+		Name: "alpha", Spec: spec,
+		Certification: &engine.CertificationSpec{DirectReadGeneration: &engine.CertificationReadCandidateGeneration{Cohorts: []engine.CertificationReadCandidateCohort{{
+			Name: "fixture", CommandCount: 1, Commands: []string{"widgets list"},
+		}}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "widgets list", Intent: "direct_read", Availability: "partial",
+			APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/widgets/{owner}"}},
+			Notes:      sourceProjectionBlockedReadCommandNote(source.SourceID),
+		}}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{source}}
+	sourceProjectionAnnotateUnreachableReadGaps(bundle, &result)
+	if sourceProjectionHasBlockingGap(result.Operations[0].Runtime.Gaps) {
+		t.Fatalf("required-field-complete source-bound direct read was marked unreachable: %+v", result.Operations[0].Runtime.Gaps)
+	}
+}
+
+func TestSourceProjectionRestoresRequiredPathFlagForSourceBoundDirectRead(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.get", Method: "GET", Path: "/accounts/{account}/widgets/{widget}",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{
+			{Name: "account", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "widget", Required: true, Schema: map[string]any{"type": "string"}},
+		}},
+	}
+	spec, err := engine.CompileSchema(json.RawMessage(`{
+  "type":"object","additionalProperties":false,
+  "required":["account"],"properties":{"account":{"type":"string"}}
+}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	bundle := engine.Bundle{
+		Name: "alpha", Spec: spec,
+		Certification: &engine.CertificationSpec{DirectReadGeneration: &engine.CertificationReadCandidateGeneration{Cohorts: []engine.CertificationReadCandidateCohort{{
+			Name: "fixture", CommandCount: 1, Commands: []string{"widgets get"},
+		}}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "widgets get", Intent: "direct_read", Availability: "partial",
+			APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/accounts/{account}/widgets/{widget}"}},
+			Notes:      sourceProjectionBlockedReadCommandNote(source.SourceID),
+		}}},
+	}
+	if changed := sourceProjectionRestoreSourceBoundDirectReadPathFlags(&bundle, sourceImportResult{Operations: []sourceOperationDescriptor{source}}); changed != 1 {
+		t.Fatalf("restored source-bound direct-read path flags = %d, want 1", changed)
+	}
+	flags := bundle.CLISurface.Commands[0].Flags
+	if len(flags) != 1 || flags[0].Name != "widget" || flags[0].MapsTo != "path.widget" || !flags[0].Required {
+		t.Fatalf("restored source-bound direct-read path flags = %+v, want required path.widget", flags)
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{source}}
+	sourceProjectionAnnotateUnreachableReadGaps(bundle, &result)
+	if sourceProjectionHasBlockingGap(result.Operations[0].Runtime.Gaps) {
+		t.Fatalf("restored required path flag left source-bound direct read unreachable: %+v", result.Operations[0].Runtime.Gaps)
+	}
+}
+
+func TestSourceProjectionRequiresExistingPathFlagForRestoredNonCandidateDirectRead(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.get", Method: "GET", Path: "/accounts/{account}/widgets/{widget}",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{
+			{Name: "account", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "widget", Required: true, Schema: map[string]any{"type": "string"}},
+		}},
+	}
+	spec, err := engine.CompileSchema(json.RawMessage(`{
+  "type":"object","additionalProperties":false,
+  "required":["account"],"properties":{"account":{"type":"string"}}
+}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var cli orderedJSON
+	if err := json.Unmarshal([]byte(`{
+  "schema_version":1,
+  "commands":[{
+    "path":"widgets get","intent":"direct_read","availability":"partial",
+    "api_surface":[{"method":"GET","path":"/accounts/{account}/widgets/{widget}"}],
+    "flags":[{"name":"widget","type":"string","maps_to":"path.widget"}],
+    "notes":"Blocked: locked source operation alpha.widgets.get has no declaration-owned executable stream, direct-read, binary, or status route."
+  }]
+}`), &cli); err != nil {
+		t.Fatal(err)
+	}
+	if changed := sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli.root, spec, sourceImportResult{Operations: []sourceOperationDescriptor{source}}); changed != 1 {
+		t.Fatalf("restored noncandidate direct-read path flags = %d, want 1", changed)
+	}
+	command := arrayField(cli.root, "commands")[0].(*orderedObject)
+	flag := arrayField(command, "flags")[0].(*orderedObject)
+	if required, _ := flag.get("required"); required != true {
+		t.Fatalf("restored noncandidate path flag required = %#v, want true", required)
+	}
+}
+
 func TestSourceProjection_DerivesHyphenatedPathFieldsFromExecutableTemplate(t *testing.T) {
 	bundleDir := t.TempDir()
 	writesPath := filepath.Join(bundleDir, "writes.json")
@@ -733,6 +1139,274 @@ func TestSourceProjectionGapCoverageHonorsDeclaredConfigPathBinding(t *testing.T
 	}
 	if findings := validateSourceExecutableCoverage(bundle, "sources/alpha-operation-descriptor.json", sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{operation}}); len(findings) != 0 {
 		t.Fatalf("declared config path binding was mistaken for an incomplete caller input: %+v", findings)
+	}
+}
+
+func TestSourceProjectionExecutionSurfaceHonorsDeclaredConfigPathReachability(t *testing.T) {
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "spec.json"), `{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["owner", "repo"],
+  "properties": {
+    "owner": {"type": "string"},
+    "repo": {"type": "string"}
+  }
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "operations.json"), `{
+  "operations": [{
+    "id": "github.actions_permissions_artifact_and_log_retention",
+    "kind": "rest_read",
+    "output_policy": "json",
+    "rest": {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+      "max_bytes": 1024
+    }
+  }]
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), `{
+  "commands": [{
+    "path": "actions artifact-and-log-retention view",
+    "intent": "direct_read",
+    "availability": "implemented",
+    "operation": "github.actions_permissions_artifact_and_log_retention"
+  }]
+}`)
+
+	surface, err := sourceProjectionExecutionSurface(bundleDir, "github")
+	if err != nil {
+		t.Fatalf("sourceProjectionExecutionSurface() error = %v", err)
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{{
+		Connector: "github", SourceID: "actions/get-artifact-and-log-retention-settings-repository", Method: "GET",
+		Path: "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{
+			{Name: "owner", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "repo", Required: true, Schema: map[string]any{"type": "string"}},
+		}},
+	}}}
+	sourceProjectionAnnotateUnreachableReadGaps(surface, &result)
+	if sourceProjectionHasBlockingGap(result.Operations[0].Runtime.Gaps) {
+		t.Fatalf("config-owned GitHub path fields left source read unreachable: %+v", result.Operations[0].Runtime.Gaps)
+	}
+}
+
+func TestSourceProjectionRestoresReachableSourceBoundRead(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "GET", Path: "/widgets",
+	}
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), fmt.Sprintf(`{
+  "schema_version": 1,
+  "commands": [{
+    "path": "widgets list",
+    "summary": "list widgets",
+    "intent": "direct_read",
+    "availability": "partial",
+    "api_surface": [{"method":"GET","path":"/widgets"}],
+    "notes": %q
+  }]
+}`, sourceProjectionBlockedReadCommandNote(source.SourceID)))
+	writeProjectionFixture(t, filepath.Join(bundleDir, "certification.json"), `{
+  "schema_version": 1,
+  "direct_read_generation": {
+    "cohorts": [{"name":"fixture","command_count":1,"commands":["widgets list"]}]
+  }
+}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), fmt.Sprintf(`{
+  "api": "alpha",
+  "endpoints": [{
+    "method": "GET",
+    "path": "/widgets",
+    "operation": {
+      "model": "direct_read",
+      "status": "blocked",
+      "risk": "low",
+      "blocked_by_default": true,
+      "reason": %q,
+      "notes": %q
+    }
+  }]
+}`, sourceProjectionBlockedReadSurfaceReason(source.SourceID), sourceProjectionBlockedReadSurfaceNote(source.SourceID)))
+
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{source}}, false)
+	if err != nil {
+		t.Fatalf("project reachable source-bound read: %v", err)
+	}
+	if stats.CLI != 1 || stats.Surface != 1 {
+		t.Fatalf("reachable source-bound read stats = %+v, want CLI and surface restoration", stats)
+	}
+	cli := readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"))
+	if !strings.Contains(cli, `"availability": "implemented"`) || strings.Contains(cli, `"notes"`) {
+		t.Fatalf("reachable source-bound CLI was not restored:\n%s", cli)
+	}
+	surface := readProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"))
+	if strings.Contains(surface, `"operation"`) || !strings.Contains(surface, `"direct_read": "widgets list"`) {
+		t.Fatalf("reachable source-bound API surface was not restored:\n%s", surface)
+	}
+}
+
+func TestSourceProjectionRestoresFieldCompleteNonCandidateSourceBoundRead(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.get", Method: "GET", Path: "/widgets/{widget}",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{{
+			Name: "widget", Required: true, Schema: map[string]any{"type": "string"},
+		}}},
+	}
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), fmt.Sprintf(`{
+  "schema_version": 1,
+  "commands": [{
+    "path": "widgets get",
+    "summary": "get widget",
+    "intent": "direct_read",
+    "availability": "partial",
+    "api_surface": [{"method":"GET","path":"/widgets/{widget}"}],
+    "flags": [{"name":"widget","type":"string","maps_to":"path.widget","required":true}],
+    "notes": %q
+  }]
+}`, sourceProjectionBlockedReadCommandNote(source.SourceID)))
+	// This established route is deliberately absent from certification.json:
+	// cohort selection is evidence scope, not execution authority.
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), fmt.Sprintf(`{
+  "api": "alpha",
+  "endpoints": [{
+    "method": "GET",
+    "path": "/widgets/{widget}",
+    "operation": {
+      "model": "direct_read",
+      "status": "blocked",
+      "risk": "low",
+      "blocked_by_default": true,
+      "reason": %q,
+      "notes": %q
+    }
+  }]
+}`, sourceProjectionBlockedReadSurfaceReason(source.SourceID), sourceProjectionBlockedReadSurfaceNote(source.SourceID)))
+
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{source}}, false)
+	if err != nil {
+		t.Fatalf("project field-complete noncandidate source-bound read: %v", err)
+	}
+	if stats.CLI != 1 || stats.Surface != 1 {
+		t.Fatalf("field-complete noncandidate stats = %+v, want CLI and surface restoration", stats)
+	}
+	cli := readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"))
+	if !strings.Contains(cli, `"availability": "implemented"`) || strings.Contains(cli, `"notes"`) {
+		t.Fatalf("field-complete noncandidate CLI was not restored:\n%s", cli)
+	}
+	surface := readProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"))
+	if strings.Contains(surface, `"operation"`) || !strings.Contains(surface, `"direct_read": "widgets get"`) {
+		t.Fatalf("field-complete noncandidate API surface was not restored:\n%s", surface)
+	}
+}
+
+func TestSourceProjectionRestoresRepositorySourceReadWithPluralCoverage(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.repositories.get", Method: "GET", Path: "/repos/{owner}/{repo}/widgets/{widget}",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{
+			{Name: "owner", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "repo", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "widget", Required: true, Schema: map[string]any{"type": "string"}},
+		}},
+	}
+	bundleDir := t.TempDir()
+	writeProjectionFixture(t, filepath.Join(bundleDir, "writes.json"), `{"schema_version":1,"actions":[]}`)
+	writeProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"), fmt.Sprintf(`{
+  "schema_version": 1,
+  "commands": [{
+    "path": "widgets get",
+    "summary": "get widget",
+    "intent": "direct_read",
+    "availability": "partial",
+    "operation": "alpha.repositories.get",
+    "api_surface": [{"method":"GET","path":"/repos/{owner}/{repo}/widgets/{widget}"}],
+    "flags": [
+      {"name":"owner","type":"string","maps_to":"path.owner","required":true},
+      {"name":"repo","type":"string","maps_to":"path.repo","required":true},
+      {"name":"widget","type":"string","maps_to":"path.widget","required":true}
+    ],
+    "notes": %q
+  }]
+}`, sourceProjectionBlockedReadCommandNote(source.SourceID)))
+	writeProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"), fmt.Sprintf(`{
+  "api": "alpha",
+  "endpoints": [{
+    "method": "GET",
+    "path": "/repos/{owner}/{repo}/widgets/{widget}",
+    "operation": {
+      "model": "direct_read",
+      "status": "blocked",
+      "risk": "low",
+      "blocked_by_default": true,
+      "reason": %q,
+      "notes": %q
+    }
+  }]
+}`, sourceProjectionBlockedReadSurfaceReason(source.SourceID), sourceProjectionBlockedReadSurfaceNote(source.SourceID)))
+
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{source}}, false)
+	if err != nil {
+		t.Fatalf("project repository source-bound read: %v", err)
+	}
+	if stats.CLI != 1 || stats.Surface != 1 {
+		t.Fatalf("repository source-bound stats = %+v, want CLI and surface restoration", stats)
+	}
+	surface := readProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"))
+	if strings.Contains(surface, `"operation"`) || !strings.Contains(surface, `"direct_reads": [`) || !strings.Contains(surface, `"widgets get"`) {
+		t.Fatalf("repository source-bound API surface did not retain plural coverage:\n%s", surface)
+	}
+}
+
+func TestSourceProjectionKeepsSourceOnlyRepositoryReadCoverageSingular(t *testing.T) {
+	source := sourceOperationDescriptor{Path: "/repos/{owner}/{repo}/widgets/{widget}"}
+	command := newOrderedObject()
+	command.set("path", "widgets get")
+	endpoint := newOrderedObject()
+	endpoint.set("method", "GET")
+	endpoint.set("path", source.Path)
+	command.set("api_surface", []any{endpoint})
+	cli := newOrderedObject()
+	cli.set("commands", []any{command})
+
+	coverage := sourceProjectionReadSurfaceCoverage(source, cli, sourceProjectionEndpointKey("GET", source.Path), []string{"widgets get"})
+	if got := stringField(coverage, "direct_read"); got != "widgets get" {
+		t.Fatalf("source-only repository read coverage = %#v, want singular direct_read", coverage)
+	}
+	if _, plural := coverage.get("direct_reads"); plural {
+		t.Fatalf("source-only repository read coverage = %#v, want no plural direct_reads", coverage)
+	}
+}
+
+func TestSourceProjectionRetainsFieldCompleteBinaryDownloadSourceRead(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.exports.download", Method: "GET", Path: "/exports/{export_id}",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{{
+			Name: "export_id", Required: true, Schema: map[string]any{"type": "string"},
+		}}},
+	}
+	bundle := engine.Bundle{
+		Name: "alpha",
+		Operations: []engine.OperationSpec{{
+			ID: "alpha.exports.download", Kind: "binary_download",
+			Binary: &engine.BinaryOperationSpec{
+				Method: "GET", Path: "/exports/{export_id}", MaxBytes: 1024,
+				Parameters: []engine.OperationParameter{{Name: "export_id", In: "path", Required: true}},
+			},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "exports download", Intent: "binary_download", Availability: "implemented", Operation: "alpha.exports.download",
+			APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/exports/{export_id}"}},
+			Flags:      []engine.CLIFlag{{Name: "export-id", MapsTo: "path.export_id", Required: true}},
+		}}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{source}}
+	sourceProjectionAnnotateUnreachableReadGaps(bundle, &result)
+	if sourceProjectionHasBlockingGap(result.Operations[0].Runtime.Gaps) {
+		t.Fatalf("field-complete binary download was marked unreachable: %+v", result.Operations[0].Runtime.Gaps)
 	}
 }
 

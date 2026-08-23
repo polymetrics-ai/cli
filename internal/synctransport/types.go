@@ -248,6 +248,44 @@ type FullOverwriteRun interface {
 	AbortFullOverwrite(context.Context) error
 }
 
+type EmptyPublicationReadBackReceipt struct {
+	Witness synccontract.PublicationWitness `json:"witness"`
+	Output  json.RawMessage                 `json:"output,omitempty"`
+}
+
+func (r EmptyPublicationReadBackReceipt) Validate() error {
+	if err := r.Witness.Validate(); err != nil {
+		return err
+	}
+	if len(r.Output) != 0 && !json.Valid(r.Output) {
+		return fmt.Errorf("empty publication read-back receipt output must be valid JSON")
+	}
+	return nil
+}
+
+func (r EmptyPublicationReadBackReceipt) Clone() EmptyPublicationReadBackReceipt {
+	clone := r
+	clone.Output = append(json.RawMessage(nil), r.Output...)
+	return clone
+}
+
+type EmptyPublicationReadBackDestination interface {
+	ReadBackEmptyFullOverwrite(context.Context, EmptyPublicationReadBackRequest) error
+}
+
+type EmptyPublicationReadBackRequest struct {
+	Runtime           connectors.RuntimeConfig
+	Source            connectors.Connector
+	SourceRuntime     connectors.RuntimeConfig
+	Destination       connectors.Connector
+	Binding           DestinationBinding
+	Stream            string
+	DestinationAction string
+	TransformPlanJSON string
+	TransformPlanHash string
+	Receipt           EmptyPublicationReadBackReceipt
+}
+
 // FullOverwritePublicationRequest is payload-free aggregate evidence supplied
 // only after source emission completed. LastCheckpoint remains source-owned;
 // the destination cannot replace it, and the orchestrator remains responsible
@@ -459,9 +497,25 @@ type DestinationPlanRequest struct {
 }
 
 type DestinationPlan struct {
-	ApplyStrategy          connectors.DestinationApplyStrategy
-	TransformPlanHash      string
-	ActionDefinitionSHA256 string
+	ApplyStrategy                   connectors.DestinationApplyStrategy
+	TransformPlanHash               string
+	ActionDefinitionSHA256          string
+	TombstoneActionDefinitionSHA256 string
+	// PhysicalActions is the complete, declaration-owned provider mutation set
+	// admitted by this plan. It exists beside ApplyStrategy because one logical
+	// strategy may include an independently destructive tombstone delete.
+	PhysicalActions []DestinationPhysicalAction
+}
+
+// DestinationPhysicalAction is the reviewable identity of one provider
+// mutation covered by a destination approval. It names neither a URL nor a
+// request body; those remain owned by the compiled connector declaration.
+type DestinationPhysicalAction struct {
+	Action                 string `json:"action"`
+	ActionDefinitionSHA256 string `json:"action_definition_sha256"`
+	IdempotencyKeyHeader   string `json:"idempotency_key_header"`
+	Kind                   string `json:"kind"`
+	Destructive            bool   `json:"destructive"`
 }
 
 // DestinationIdempotencyProof is carried only from a sealed, independently
@@ -480,14 +534,20 @@ type DestinationIdempotencyProof struct {
 // non-serializable: warehouse receipts, runtime configuration, destination
 // plans, and evidence artifacts never retain the operator token.
 type DestinationApproval struct {
-	PlanID                 string                            `json:"-"`
-	ApprovalToken          string                            `json:"-"`
-	Confirmation           connectors.WriteConfirmation      `json:"-"`
-	Evidence               *connectors.WriteApprovalEvidence `json:"-"`
-	Target                 connectors.WriteApprovalTarget    `json:"-"`
-	PreviewDigest          string                            `json:"-"`
-	ActionDefinitionSHA256 string                            `json:"-"`
-	IdempotencyProof       DestinationIdempotencyProof       `json:"-"`
+	PlanID                          string                            `json:"-"`
+	ApprovalToken                   string                            `json:"-"`
+	Confirmation                    connectors.WriteConfirmation      `json:"-"`
+	Evidence                        *connectors.WriteApprovalEvidence `json:"-"`
+	Target                          connectors.WriteApprovalTarget    `json:"-"`
+	PreviewDigest                   string                            `json:"-"`
+	ActionDefinitionSHA256          string                            `json:"-"`
+	TombstoneActionDefinitionSHA256 string                            `json:"-"`
+	// PhysicalActions is the complete set presented and digest-bound before a
+	// token can be consumed. Apply rechecks it so a paired delete cannot be
+	// introduced after approval.
+	PhysicalActions           []DestinationPhysicalAction `json:"-"`
+	IdempotencyProof          DestinationIdempotencyProof `json:"-"`
+	TombstoneIdempotencyProof DestinationIdempotencyProof `json:"-"`
 	// AuthorizeNextUnit rechecks a standing authorization immediately before a
 	// staged batch can cause a destination side effect. It is in-memory only:
 	// receipts and checkpoints retain no token or authorization callback.
@@ -610,9 +670,13 @@ type RunRequest struct {
 	// immediately before a source executor begins physical I/O; it accepts no
 	// route, credential, or provider authority and is intentionally absent from
 	// receipts and generated declarations.
-	SourceAdmission func(context.Context) error `json:"-"`
-	Stage           WarehouseStage
-	Commit          func(synccontract.CheckpointEnvelope) error
+	SourceAdmission                        func(context.Context) error         `json:"-"`
+	ReadBackAdmission                      func(context.Context) error         `json:"-"`
+	EmptyPublicationReadBackPendingHandoff func(context.Context, Result) error `json:"-"`
+	EmptyPublicationHandoff                func(context.Context, Result) error `json:"-"`
+	Stage                                  WarehouseStage
+	Commit                                 func(synccontract.CheckpointEnvelope) error
+	CommitWorksets                         func(synccontract.CheckpointEnvelope, []WarehouseReceipt) error
 }
 
 type Result struct {
@@ -641,13 +705,21 @@ type Result struct {
 	ParquetBytes           int64
 	PeakCreditBytes        int64
 	CreditWaitElapsed      time.Duration
-	// DestinationResults retain every provider-returned response field, key,
-	// value, receipt, status, body, occurrence ID, and credential-equal byte
-	// verbatim. They remain opaque to the transport core: mapping and provider
-	// protocol stay connector-owned. Only system-generated diagnostics, plans,
-	// logs, and errors are rendered secret-safely.
+	// DestinationResults retain each adapter-returned provider response, including
+	// field names, ordinary values, receipts, status, body, and occurrence IDs.
+	// Adapters mask concrete configured credential material before placing results
+	// here; the transport core otherwise keeps them opaque so mapping and provider
+	// protocol stay connector-owned. System-generated diagnostics, plans, logs,
+	// and errors are rendered secret-safely.
 	DestinationResults  []json.RawMessage
 	CommittedCheckpoint *synccontract.CheckpointEnvelope
+	// EmptyPublication is sealed evidence that a full-overwrite publication of
+	// an explicitly empty source was made durable and verified. It is distinct
+	// from a source checkpoint: no source position was observed or advanced.
+	// App persists it with the exact provider receipt before any local repair,
+	// so retrying the run cannot publish the empty replacement a second time.
+	EmptyPublication                *synccontract.PublicationWitness
+	EmptyPublicationReadBackPending *EmptyPublicationReadBackReceipt
 	// DeliveredReconciliationRequired says the destination effect, read-back,
 	// and checkpoint are already durable but a subsequent local bookkeeping
 	// action (for example, retiring a bounded stage receipt) needs repair.
@@ -720,10 +792,20 @@ func (r RunRequest) unitDeadline() time.Duration {
 // absent stage cannot hide a missing executor, invalid mode, or unsafe
 // acknowledgement declaration. None of these checks can cause source I/O.
 func (r RunRequest) validateDispatchDependencies() error {
-	if r.Commit == nil {
+	if r.Commit == nil && r.CommitWorksets == nil {
 		return fmt.Errorf("checkpoint committer is required for transport dispatch")
 	}
 	return nil
+}
+
+func (r RunRequest) commitAcknowledgedWorksets(checkpoint synccontract.CheckpointEnvelope, receipts []WarehouseReceipt) error {
+	if len(receipts) != 0 && r.CommitWorksets != nil {
+		return r.CommitWorksets(checkpoint, append([]WarehouseReceipt(nil), receipts...))
+	}
+	if r.Commit != nil {
+		return r.Commit(checkpoint)
+	}
+	return r.CommitWorksets(checkpoint, nil)
 }
 
 func (r RunRequest) validateLegacyDispatchDependencies() error {

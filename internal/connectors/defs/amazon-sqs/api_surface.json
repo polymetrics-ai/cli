@@ -165,6 +165,5 @@
         "write": "untag_queue"
       }
     }
-  ],
-  "operation_ledger_version": 1
+  ]
 }

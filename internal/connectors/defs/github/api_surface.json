@@ -4236,8 +4236,8 @@
       "path": "/repos/{owner}/{repo}/contents/{path}",
       "covered_by": {
         "direct_reads": [
-          "repo read-file",
-          "repo read-dir"
+          "repo read-dir",
+          "repo read-file"
         ]
       }
     },

@@ -471,7 +471,7 @@ func TestCertificationSanitizesPreparedValuesBeforeProofPersistence(t *testing.T
 
 func TestCertificationEvidenceWriterUsesRepositoryLocalSaltBeforePersistence(t *testing.T) {
 	root := t.TempDir()
-	subject := writeTestCurrentCertificationSubject(t, root, strings.Repeat("d", 64))
+	subject := writeTestCurrentCertificationSubject(t, root)
 	path := filepath.Join(root, "internal", "connectors", "certifications", "evidence", "github.json")
 	secret := "credential-only-in-memory"
 	completed := completedLiveEvidence{
@@ -483,6 +483,7 @@ func TestCertificationEvidenceWriterUsesRepositoryLocalSaltBeforePersistence(t *
 		ExecutedAt:     "2026-08-10T00:00:00Z",
 		RunID:          "github-local-salt",
 		PMBinarySHA256: strings.Repeat("d", 64),
+		PMBuildSHA256:  strings.Repeat("e", 64),
 		PMCommand:      "pm etl read --connector github --json",
 		Passed:         true,
 		PreparedValues: []string{secret},
@@ -502,6 +503,9 @@ func TestCertificationEvidenceWriterUsesRepositoryLocalSaltBeforePersistence(t *
 	}
 	if len(evidence.Proof.CredentialFingerprints) != 1 {
 		t.Fatalf("credential fingerprints = %#v, want one", evidence.Proof.CredentialFingerprints)
+	}
+	if got, want := evidence.Proof.PMBuildSHA256, completed.PMBuildSHA256; got != want {
+		t.Fatalf("proof build provenance = %q, want %q", got, want)
 	}
 	if !certificationSubjectsEqual(evidence.Proof.CertificationSubject, subject) {
 		t.Fatalf("writer subject = %#v, want exact current subject", evidence.Proof.CertificationSubject)
@@ -1164,7 +1168,7 @@ func TestCertificationCheckIgnoresMalformedNonAllowlistedRuntimeLedgerEntry(t *t
 		t.Fatalf("read source PostgreSQL matrix before isolated generator: %v", err)
 	}
 	root := certificationCommandWorkspace(t)
-	writeTestCurrentCertificationSubject(t, root, strings.Repeat("a", 64))
+	writeTestCurrentCertificationSubject(t, root)
 	bootstrap := exec.Command("go", "run", "./cmd/connectorgen", "certification-matrix", "--all")
 	bootstrap.Dir = root
 	bootstrap.Env = append(os.Environ(), "GOCACHE="+t.TempDir())

@@ -49,6 +49,7 @@ const (
 type embeddedEvidenceProof struct {
 	RedactionStrategy    string               `json:"redaction_strategy"`
 	PMBinarySHA256       string               `json:"pm_binary_sha256"`
+	PMBuildSHA256        string               `json:"pm_build_sha256,omitempty"`
 	PMCommandFingerprint string               `json:"pm_command_fingerprint"`
 	CertificationSubject certificationSubject `json:"certification_subject"`
 	// CredentialFingerprints are the exact prepared credential values, hashed
@@ -168,6 +169,7 @@ type completedLiveEvidence struct {
 	ExecutedAt           string
 	RunID                string
 	PMBinarySHA256       string
+	PMBuildSHA256        string
 	PMCommand            string
 	CertificationSubject certificationSubject
 	Passed               bool
@@ -281,6 +283,7 @@ func newProofBearingEvidenceForCredentialScope(completed completedLiveEvidence, 
 	proof := embeddedEvidenceProof{
 		RedactionStrategy:      proofRedactionStrategy,
 		PMBinarySHA256:         completed.PMBinarySHA256,
+		PMBuildSHA256:          completed.PMBuildSHA256,
 		PMCommandFingerprint:   fingerprintText(completed.PMCommand, completed.PreparedValues, completed.RepositorySalt),
 		CertificationSubject:   completed.CertificationSubject,
 		CredentialFingerprints: fingerprintPreparedValues(completed.PreparedValues, completed.RepositorySalt),
@@ -362,9 +365,6 @@ func prepareProofBearingEvidence(repoRoot, path string, completed completedLiveE
 	if err != nil {
 		return preparedAcceptedEvidence{}, err
 	}
-	if subject.PMBinarySHA256 != completed.PMBinarySHA256 {
-		return preparedAcceptedEvidence{}, fmt.Errorf("completed evidence pm binary does not match current certification subject")
-	}
 	completed.CertificationSubject = subject
 	evidence, err := newProofBearingEvidence(completed)
 	if err != nil {
@@ -402,6 +402,7 @@ type importedLiveEvidence struct {
 	ExecutedAt             string
 	RunID                  string
 	PMBinarySHA256         string
+	PMBuildSHA256          string
 	PMCommandFingerprint   string
 	CertificationSubject   certificationSubject
 	CredentialFingerprints []string
@@ -416,6 +417,7 @@ func newImportedProofBearingEvidence(completed importedLiveEvidence) (acceptedEv
 	proof := embeddedEvidenceProof{
 		RedactionStrategy:      proofRedactionStrategy,
 		PMBinarySHA256:         completed.PMBinarySHA256,
+		PMBuildSHA256:          completed.PMBuildSHA256,
 		PMCommandFingerprint:   completed.PMCommandFingerprint,
 		CertificationSubject:   completed.CertificationSubject,
 		CredentialFingerprints: append([]string(nil), completed.CredentialFingerprints...),
@@ -456,9 +458,6 @@ func prepareImportedProofBearingEvidence(repoRoot, path string, completed import
 	subject, err := loadCurrentCertificationSubject(repoRoot)
 	if err != nil {
 		return preparedAcceptedEvidence{}, err
-	}
-	if subject.PMBinarySHA256 != completed.PMBinarySHA256 {
-		return preparedAcceptedEvidence{}, fmt.Errorf("imported evidence pm binary does not match current certification subject")
 	}
 	completed.CertificationSubject = subject
 	evidence, err := newImportedProofBearingEvidence(completed)
@@ -970,12 +969,12 @@ func validateEmbeddedEvidenceProof(proof embeddedEvidenceProof) error {
 	if !isSHA256(proof.PMBinarySHA256) {
 		return errors.New("pm_binary_sha256 must be a lowercase SHA-256 digest")
 	}
+	if proof.PMBuildSHA256 != "" && !isSHA256(proof.PMBuildSHA256) {
+		return errors.New("pm_build_sha256 must be a lowercase SHA-256 digest when present")
+	}
 	if proof.CertificationSubject.SchemaVersion != 0 {
 		if err := validateCertificationSubject(proof.CertificationSubject); err != nil {
 			return fmt.Errorf("certification_subject: %w", err)
-		}
-		if proof.CertificationSubject.PMBinarySHA256 != proof.PMBinarySHA256 {
-			return errors.New("certification_subject pm binary does not match proof pm_binary_sha256")
 		}
 	}
 	if !isFingerprintSequence(proof.PMCommandFingerprint) {

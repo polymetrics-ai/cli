@@ -148,10 +148,13 @@ type StreamConfig struct {
 }
 
 type StreamState struct {
-	Connection   string                           `json:"connection"`
-	Stream       string                           `json:"stream"`
-	Checkpoint   *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
-	GenerationID int64                            `json:"generation_id"`
+	Connection                         string                           `json:"connection"`
+	Stream                             string                           `json:"stream"`
+	Checkpoint                         *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
+	CommittedTransportReceipts         []TransportReceiptCommit         `json:"committed_transport_receipts,omitempty"`
+	TransportReceiptAssociationVersion uint                             `json:"transport_receipt_association_version,omitempty"`
+	LegacyCommittedTransportCheckpoint *synccontract.CheckpointEnvelope `json:"legacy_committed_transport_checkpoint,omitempty"`
+	GenerationID                       int64                            `json:"generation_id"`
 	// ActiveWorkID and ActiveWorkFence form one durable, connection-and-stream
 	// scoped work lease. They are present only while a source/stage/destination
 	// run owns the stream; effects and checkpoint commits renew the same fence
@@ -163,6 +166,21 @@ type StreamState struct {
 	LastSuccessfulRunID  string     `json:"last_successful_run_id,omitempty"`
 	RecordsLoaded        int        `json:"records_loaded,omitempty"`
 	UpdatedAt            time.Time  `json:"updated_at"`
+}
+
+type TransportReceiptCommit struct {
+	ReceiptID        string            `json:"receipt_id"`
+	Owner            string            `json:"owner"`
+	Generation       int64             `json:"generation"`
+	Stream           string            `json:"stream"`
+	Mode             synccontract.Mode `json:"mode"`
+	CheckpointSHA256 string            `json:"checkpoint_sha256"`
+	TombstonesSHA256 string            `json:"tombstones_sha256"`
+	ManifestSHA256   string            `json:"manifest_sha256"`
+	ContentSHA256    string            `json:"content_sha256"`
+	ParquetSHA256    string            `json:"parquet_sha256"`
+	Records          int               `json:"records"`
+	Tombstones       int               `json:"tombstones"`
 }
 
 type CreateConnectionRequest struct {
@@ -268,6 +286,12 @@ type DeliveryReconciliation struct {
 	StageRetirement                   bool   `json:"stage_retirement,omitempty"`
 	PostgresManagedTargetPlanID       string `json:"postgres_managed_target_plan_id,omitempty"`
 	DeclarativeTypedDestinationPlanID string `json:"declarative_typed_destination_plan_id,omitempty"`
+	// EmptyPublication is the sealed durable witness for an empty
+	// full-overwrite whose provider receipt has already been read back. It
+	// permits only local terminal-state repair; it never represents a source
+	// checkpoint or permission to re-enter the destination route.
+	EmptyPublication                *synccontract.PublicationWitness               `json:"empty_publication,omitempty"`
+	EmptyPublicationReadBackPending *synctransport.EmptyPublicationReadBackReceipt `json:"empty_publication_read_back_pending,omitempty"`
 }
 
 type Run struct {
@@ -290,8 +314,9 @@ type Run struct {
 	// contains counts and elapsed times only, never records, paths, tokens, or
 	// connector configuration.
 	TransportPhaseMeasurement *TransportPhaseMeasurement `json:"transport_phase_measurement,omitempty"`
-	// DestinationResults retains each completed declarative typed destination
-	// action's full provider result.
+	// DestinationResults retains each provider-successful declarative typed
+	// destination action's sanitized result, including evidence preserved when a
+	// later local receipt or acknowledgement step fails before checkpoint.
 	DestinationResults     []json.RawMessage       `json:"destination_results,omitempty"`
 	DeliveryReconciliation *DeliveryReconciliation `json:"delivery_reconciliation,omitempty"`
 	Error                  string                  `json:"error,omitempty"`
@@ -468,7 +493,11 @@ type ReversePlan struct {
 	TransportStream                 string `json:"transport_stream,omitempty"`
 	TransportBindingSHA256          string `json:"transport_binding_sha256,omitempty"`
 	TransportActionDefinitionSHA256 string `json:"transport_action_definition_sha256,omitempty"`
-	TransportForwardPlanID          string `json:"transport_forward_plan_id,omitempty"`
+	// TransportPhysicalActions is the complete provider mutation set visible in
+	// a persisted reverse-ETL plan. A paired tombstone delete is therefore
+	// reviewable before preview/token approval rather than materialized later.
+	TransportPhysicalActions []synctransport.DestinationPhysicalAction `json:"transport_physical_actions,omitempty"`
+	TransportForwardPlanID   string                                    `json:"transport_forward_plan_id,omitempty"`
 	// AuthorizationLifetime is a bounded day-scale lifetime requested when a
 	// PostgreSQL managed-target transport plan is created. It is included in
 	// the sealed plan hash before its single-use approval token is issued.
