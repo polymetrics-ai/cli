@@ -1,8 +1,9 @@
 package engine
 
 import (
+	"encoding/json"
 	"fmt"
-	"math"
+	"math/big"
 	"net/url"
 	"sort"
 	"strconv"
@@ -13,8 +14,15 @@ import (
 )
 
 const (
-	defaultOperationParameterMaxBytes = 4096
-	maxOperationParameterMaxBytes     = 64 << 10
+	// OperationParameterExecutionPolicyVersion identifies the shared PM
+	// resource policy attached to source-derived path/query inputs. Provider
+	// JSON Schema constraints remain a separate contract.
+	OperationParameterExecutionPolicyVersion = connectors.RequestContractExecutionPolicyVersion
+	DefaultOperationParameterMaxBytes        = 4096
+	MaxOperationParameterMaxBytes            = 64 << 10
+
+	defaultOperationParameterMaxBytes = DefaultOperationParameterMaxBytes
+	maxOperationParameterMaxBytes     = MaxOperationParameterMaxBytes
 )
 
 func operationParameterByteCap(parameter OperationParameter) int {
@@ -25,6 +33,35 @@ func operationParameterByteCap(parameter OperationParameter) int {
 		return maxOperationParameterMaxBytes
 	}
 	return parameter.MaxBytes
+}
+
+func validateOperationParameterNumericBounds(parameter OperationParameter) error {
+	if parameter.Minimum == nil && parameter.Maximum == nil {
+		return nil
+	}
+	typeName := strings.ToLower(strings.TrimSpace(parameter.Type))
+	if typeName != "integer" && typeName != "number" {
+		return fmt.Errorf("%s parameter %q numeric bounds require integer or number type", parameter.In, parameter.Name)
+	}
+	var minimum, maximum *big.Rat
+	if parameter.Minimum != nil {
+		var ok bool
+		minimum, ok = new(big.Rat).SetString(parameter.Minimum.String())
+		if !ok {
+			return fmt.Errorf("%s parameter %q has invalid minimum", parameter.In, parameter.Name)
+		}
+	}
+	if parameter.Maximum != nil {
+		var ok bool
+		maximum, ok = new(big.Rat).SetString(parameter.Maximum.String())
+		if !ok {
+			return fmt.Errorf("%s parameter %q has invalid maximum", parameter.In, parameter.Name)
+		}
+	}
+	if minimum != nil && maximum != nil && minimum.Cmp(maximum) > 0 {
+		return fmt.Errorf("%s parameter %q has contradictory numeric bounds", parameter.In, parameter.Name)
+	}
+	return nil
 }
 
 func operationParametersForLocation(op OperationSpec, location string) (map[string]OperationParameter, error) {
@@ -163,39 +200,6 @@ func validateOperationParameterWireValue(op OperationSpec, parameter OperationPa
 	if err := safety.RejectDangerousChars(value, location+" parameter "+parameter.Name); err != nil {
 		return err
 	}
-	switch strings.ToLower(strings.TrimSpace(parameter.Type)) {
-	case "", "string", "enum":
-	case "boolean":
-		if _, err := strconv.ParseBool(value); err != nil {
-			return fmt.Errorf("operation %q %s parameter %q must be boolean", op.ID, location, parameter.Name)
-		}
-	case "integer":
-		if _, err := strconv.ParseInt(value, 10, 64); err != nil {
-			return fmt.Errorf("operation %q %s parameter %q must be an integer", op.ID, location, parameter.Name)
-		}
-	case "number":
-		number, err := strconv.ParseFloat(value, 64)
-		if err != nil || math.IsNaN(number) || math.IsInf(number, 0) {
-			return fmt.Errorf("operation %q %s parameter %q must be a number", op.ID, location, parameter.Name)
-		}
-	default:
-		return fmt.Errorf("operation %q %s parameter %q has unsupported type %q", op.ID, location, parameter.Name, parameter.Type)
-	}
-	if len(parameter.Values) > 0 {
-		allowed := append([]string(nil), parameter.Values...)
-		sort.Strings(allowed)
-		matched := false
-		for _, candidate := range allowed {
-			if value == candidate {
-				matched = true
-				break
-			}
-		}
-		if !matched {
-			return fmt.Errorf("operation %q %s parameter %q must be one of %s", op.ID, location, parameter.Name, strings.Join(allowed, "|"))
-		}
-	}
-
 	encoded := ""
 	switch location {
 	case "path":
@@ -211,7 +215,67 @@ func validateOperationParameterWireValue(op OperationSpec, parameter OperationPa
 	}
 	capBytes := operationParameterByteCap(parameter)
 	if len(encoded) > capBytes {
-		return fmt.Errorf("operation %q %s parameter %q encoded value exceeds byte cap %d", op.ID, location, parameter.Name, capBytes)
+		return fmt.Errorf("operation %q %s parameter %q encoded value exceeds byte cap %d (PM execution limit, unit=encoded_bytes, policy=%s)", op.ID, location, parameter.Name, capBytes, OperationParameterExecutionPolicyVersion)
+	}
+	var parsedNumber *big.Rat
+	switch strings.ToLower(strings.TrimSpace(parameter.Type)) {
+	case "", "string", "enum":
+	case "boolean":
+		if _, err := strconv.ParseBool(value); err != nil {
+			return fmt.Errorf("operation %q %s parameter %q must be boolean", op.ID, location, parameter.Name)
+		}
+	case "integer":
+		if !json.Valid([]byte(value)) {
+			return fmt.Errorf("operation %q %s parameter %q must be an integer", op.ID, location, parameter.Name)
+		}
+		integer, ok := new(big.Int).SetString(value, 10)
+		if !ok {
+			return fmt.Errorf("operation %q %s parameter %q must be an integer", op.ID, location, parameter.Name)
+		}
+		parsedNumber = new(big.Rat).SetInt(integer)
+	case "number":
+		if !json.Valid([]byte(value)) {
+			return fmt.Errorf("operation %q %s parameter %q must be a number", op.ID, location, parameter.Name)
+		}
+		var ok bool
+		parsedNumber, ok = new(big.Rat).SetString(value)
+		if !ok {
+			return fmt.Errorf("operation %q %s parameter %q must be a number", op.ID, location, parameter.Name)
+		}
+	default:
+		return fmt.Errorf("operation %q %s parameter %q has unsupported type %q", op.ID, location, parameter.Name, parameter.Type)
+	}
+	if parameter.Minimum != nil {
+		minimum, ok := new(big.Rat).SetString(parameter.Minimum.String())
+		if !ok || parsedNumber == nil {
+			return fmt.Errorf("operation %q %s parameter %q has an invalid minimum", op.ID, location, parameter.Name)
+		}
+		if parsedNumber.Cmp(minimum) < 0 {
+			return fmt.Errorf("operation %q %s parameter %q must be at least %s", op.ID, location, parameter.Name, parameter.Minimum.String())
+		}
+	}
+	if parameter.Maximum != nil {
+		maximum, ok := new(big.Rat).SetString(parameter.Maximum.String())
+		if !ok || parsedNumber == nil {
+			return fmt.Errorf("operation %q %s parameter %q has an invalid maximum", op.ID, location, parameter.Name)
+		}
+		if parsedNumber.Cmp(maximum) > 0 {
+			return fmt.Errorf("operation %q %s parameter %q must be at most %s", op.ID, location, parameter.Name, parameter.Maximum.String())
+		}
+	}
+	if len(parameter.Values) > 0 {
+		allowed := append([]string(nil), parameter.Values...)
+		sort.Strings(allowed)
+		matched := false
+		for _, candidate := range allowed {
+			if value == candidate {
+				matched = true
+				break
+			}
+		}
+		if !matched {
+			return fmt.Errorf("operation %q %s parameter %q must be one of %s", op.ID, location, parameter.Name, strings.Join(allowed, "|"))
+		}
 	}
 	return nil
 }

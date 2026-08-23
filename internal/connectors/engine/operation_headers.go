@@ -16,7 +16,10 @@ import (
 // maxOperationHeaderBytes is an absolute ceiling in addition to each
 // declaration's smaller cap. It keeps a malformed bundle from converting an
 // otherwise bounded fixed operation into an oversized-header transport path.
-const maxOperationHeaderBytes = 16 << 10
+const (
+	MaxOperationHeaderBytes = 16 << 10
+	maxOperationHeaderBytes = MaxOperationHeaderBytes
+)
 
 // validateOperationHeaderParameters admits the closed declaration shape. Only
 // REST-like operation blocks have parameters; GraphQL variables remain the
@@ -33,6 +36,9 @@ func validateOperationHeaderParameters(op OperationSpec) error {
 	for _, parameter := range operationParameters(op) {
 		location := strings.ToLower(strings.TrimSpace(parameter.In))
 		if err := validateOperationParameterCLIName(parameter, location); err != nil {
+			return err
+		}
+		if err := validateOperationParameterNumericBounds(parameter); err != nil {
 			return err
 		}
 		switch location {

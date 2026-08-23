@@ -64,6 +64,9 @@ type sourceActionContract struct {
 // method/path union: semantic aliases remain narrow, while the broad action
 // proves the provider contract is reachable without double-counting aliases.
 func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult, check bool) (sourceProjectionStats, error) {
+	if err := validateSourceProjectionExecutionEnvelopes(result); err != nil {
+		return sourceProjectionStats{}, err
+	}
 	writesPath := filepath.Join(bundleDir, "writes.json")
 	cliPath := filepath.Join(bundleDir, "cli_surface.json")
 	writesRaw, err := os.ReadFile(writesPath)
@@ -231,6 +234,46 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 		}
 	}
 	return stats, nil
+}
+
+func validateSourceProjectionExecutionEnvelopes(result sourceImportResult) error {
+	if result.DescriptorSchemaVersion < 3 {
+		return nil
+	}
+	limits := sourceImportLimits{UseExecutionEnvelopes: true}
+	for _, operation := range result.Operations {
+		if operation.Protocol == "graphql" {
+			continue
+		}
+		for _, group := range []struct {
+			location   string
+			parameters []sourceParameterDescriptor
+		}{
+			{location: "path", parameters: operation.Request.Path},
+			{location: "query", parameters: operation.Request.Query},
+			{location: "header", parameters: operation.Request.Header},
+		} {
+			for _, parameter := range group.parameters {
+				if err := validateSourceParameterExecutionEnvelope(parameter, group.location, limits); err != nil {
+					return fmt.Errorf("source operation %q parameter %q: %w", operation.SourceID, parameter.Name, err)
+				}
+				if group.location == "header" && sourceScalarWireSchema(parameter.Schema) && sourceBoundedHeaderMaxBytes(parameter.Schema) == 0 && parameter.ExecutionEnvelope == nil && !operation.Runtime.MergeBlocked {
+					return fmt.Errorf("source operation %q unbounded header parameter %q is neither enveloped nor merge-blocked", operation.SourceID, parameter.Name)
+				}
+			}
+		}
+		if operation.Request.Body != nil {
+			if err := validateSourceRequestBodyExecutionEnvelope(operation.Request.Body.ExecutionEnvelope, operation.Request.MediaType, limits); err != nil {
+				return fmt.Errorf("source operation %q: %w", operation.SourceID, err)
+			}
+		}
+		for _, media := range operation.Request.Media {
+			if err := validateSourceRequestBodyExecutionEnvelope(media.ExecutionEnvelope, media.MediaType, limits); err != nil {
+				return fmt.Errorf("source operation %q media %q: %w", operation.SourceID, media.MediaType, err)
+			}
+		}
+	}
+	return nil
 }
 
 func sourceProjectionBundleSpec(bundleDir string) (*engine.Schema, error) {

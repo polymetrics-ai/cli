@@ -128,13 +128,15 @@ func TestOperationParametersPreserveExactFiniteNumericLexemes(t *testing.T) {
 	}))
 	defer srv.Close()
 
+	integerMinimum := connectors.ExactNumber("9999999999999999999999999999999999999998")
+	numberMaximum := connectors.ExactNumber("0.123456789012345678901234567890123456790")
 	op := OperationSpec{
 		ID: "acme.numeric", Kind: "rest_read", Summary: "numeric", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
 		REST: &RESTOperationSpec{
 			Method: http.MethodGet, Path: "/numeric", MaxBytes: 1024,
 			Parameters: []OperationParameter{
-				{Name: "integer", In: "query", Type: "integer", Required: true, MaxBytes: 128},
-				{Name: "number", In: "query", Type: "number", Required: true, MaxBytes: 128},
+				{Name: "integer", In: "query", Type: "integer", Required: true, Minimum: &integerMinimum, MaxBytes: 128},
+				{Name: "number", In: "query", Type: "number", Required: true, Maximum: &numberMaximum, MaxBytes: 128},
 			},
 		},
 	}
@@ -153,6 +155,32 @@ func TestOperationParametersPreserveExactFiniteNumericLexemes(t *testing.T) {
 	}
 	if hits.Load() != 1 {
 		t.Fatalf("provider hits = %d, want 1", hits.Load())
+	}
+	for _, test := range []struct {
+		name  string
+		query map[string]string
+		want  string
+	}{
+		{name: "below exact minimum", query: map[string]string{"integer": "9999999999999999999999999999999999999997", "number": number}, want: integerMinimum.String()},
+		{name: "above exact maximum", query: map[string]string{"integer": integer, "number": "0.123456789012345678901234567890123456791"}, want: numberMaximum.String()},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := OperationDirectRead(context.Background(), operationBindingTestBundle(srv.URL, op), connectors.OperationDirectReadRequest{Operation: op.ID, Query: test.query}, nil)
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("numeric bound error = %v, want exact bound %s", err, test.want)
+			}
+		})
+	}
+	oversizedExponent := "1e" + strings.Repeat("9", 256)
+	_, err = OperationDirectRead(context.Background(), operationBindingTestBundle(srv.URL, op), connectors.OperationDirectReadRequest{
+		Operation: op.ID,
+		Query:     map[string]string{"integer": integer, "number": oversizedExponent},
+	}, nil)
+	if err == nil || !strings.Contains(err.Error(), "PM execution limit") || !strings.Contains(err.Error(), "encoded_bytes") {
+		t.Fatalf("oversized numeric lexeme error = %v, want pre-parse PM byte limit", err)
+	}
+	if hits.Load() != 1 {
+		t.Fatalf("out-of-bound numerics reached provider; hits = %d, want 1", hits.Load())
 	}
 }
 
