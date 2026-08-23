@@ -1,0 +1,96 @@
+---
+name: pm-avni
+description: Avni connector knowledge and safe action guide.
+---
+
+# pm-avni
+
+## Purpose
+
+Reads Avni subjects and encounters through a read-only HTTP API using HTTP Basic authentication.
+
+## Icon
+
+- id: avni
+- asset: icons/avni.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+
+## Capabilities
+
+- check=true catalog=true read=true write=false query=false
+- Integration type: api
+
+## Authentication
+
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
+
+## Configuration
+
+- base_url
+- mode
+- page_size
+- start_date
+- username (required)
+- password (secret) (required)
+
+## ETL Streams
+
+- subjects:
+  - primary key: id
+  - cursor: updated_at
+  - fields: id(string), name(string), updated_at(string)
+- encounters:
+  - primary key: id
+  - cursor: updated_at
+  - fields: encounter_type(string), id(string), subject_id(string), updated_at(string)
+- program_enrolments:
+  - primary key: id
+  - cursor: updated_at
+  - fields: enrolment_date_time(string), exit_date_time(string), id(string), program(string), subject_id(string), updated_at(string)
+- program_encounters:
+  - primary key: id
+  - cursor: updated_at
+  - fields: encounter_date_time(string), encounter_type(string), enrolment_id(string), id(string), program(string), subject_id(string), updated_at(string)
+- group_subjects:
+  - primary key: id
+  - cursor: updated_at
+  - fields: group_subject_id(string), id(string), member_subject_id(string), membership_end_date(string), membership_start_date(string), updated_at(string)
+- locations:
+  - primary key: id
+  - cursor: updated_at
+  - fields: id(string), level(number), parent_id(string), title(string), type(string), updated_at(string)
+- approval_statuses:
+  - primary key: entity_id, entity_type
+  - cursor: status_date_time
+  - fields: approval_status(string), approval_status_comment(string), entity_id(string), entity_type(string), entity_type_id(string), status_date_time(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+## Security
+
+- read risk: external Avni API read of subjects and encounters
+- approval: none; read-only source connector
+- Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Commands
+
+### Inspect as a manual
+
+```bash
+pm connectors inspect avni
+```
+
+### Inspect as structured JSON
+
+```bash
+pm connectors inspect avni --json
+```
+
+## Agent Rules
+
+- Run pm connectors inspect avni before creating credentials or plans.
+- Use --json only when the caller needs structured output; use the manual for human-readable guidance.
+- Never ask the user to paste secret values into chat.

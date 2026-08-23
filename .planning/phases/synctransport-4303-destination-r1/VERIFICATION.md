@@ -31,9 +31,9 @@ second full `make verify` run exited `0`.
 
 ## Application dispatch and result-output checks
 
-- `go test -count=1 -timeout 20m ./internal/app -run '^TestPersistedConnectionSelectsDeclarativeTypedDestinationAction$'` — passed. The production-shaped synthetic bundles prove two named actions in one connector and one in another are selected only by the persisted `destination_action`; missing, foreign, unlisted, and stale selections refuse before I/O. The same test proves persisted `Run.destination_results` preserves ordinary response status, headers, nested fields, large numeric values, tier-specific fields, and credential-equal provider bytes verbatim; separately generated diagnostics remain secret-taint-safe.
+- `go test -count=1 -timeout 20m ./internal/app -run '^TestPersistedConnectionSelectsDeclarativeTypedDestinationAction$'` — passed. The production-shaped synthetic bundles prove two named actions in one connector and one in another are selected only by the persisted `destination_action`; missing, foreign, unlisted, and stale selections refuse before I/O. The same test proves persisted `Run.destination_results` preserves ordinary response status, headers, nested fields, large numeric values, and tier-specific fields while masking concrete configured credential material; separately generated diagnostics remain secret-taint-safe.
 - `go test -count=1 -timeout 20m ./internal/app -run '^TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields$'` — passed. Exact schema-valid provider-owned names, including snake_case, camelCase, and `http`, are admitted only when the selected action declares them; whitespace, malformed, unknown, cross-action, runtime-selected, and undeclared names refuse before I/O.
-- `go test -count=1 -timeout 20m ./internal/connectors -run 'TestSanitize.*Output'` — passed. Complete output retains provider-returned fields, keys, and values verbatim; separately generated diagnostics remain secret-taint-safe.
+- `go test -count=1 -timeout 20m ./internal/connectors -run 'TestSanitize.*Output'` — passed. Complete output retains provider-returned structure and ordinary values while masking concrete configured credential material; separately generated diagnostics remain secret-taint-safe.
 - `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies$'` — passed. `output_policy: none` retains complete non-empty output and accepts an intentional bodyless success without losing status or headers.
 - `go test -count=1 -timeout 20m ./internal/app -run '^TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies$'` — passed.
 - `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test -count=1 -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$'` regenerated the tracked CLI snapshots; the same command without the update variable then passed.
@@ -77,16 +77,30 @@ definition-owned boundary remained intact under a fresh run.
 - `git diff --check main...HEAD` — passed.
 - `gh api /repos/polymetrics-ai/cli/pulls/4304 --jq .base.ref` — returned `main`, matching the task delivery header.
 
-## Website generated-data repair
+## Follow-up foundation r1 checklist
 
-The fresh GitHub `Website Data` check for published head `d814875a9` exposed
-one stale derived documentation artifact: `website/lib/docs.generated.ts`.
-The source MDX was already correct; the artifact had not been regenerated.
+- [x] Action-owned mapping schema and loader validation: three same-source actions and one other connector action pass only their exact persisted action bindings; missing and cross-selected bindings refuse before I/O. Focused command: `go test -count=1 -timeout 20m ./internal/app -run '^(TestDeclarativeTypedDestinationRequiresActionOwnedSourceBindings|TestDeclarativeTypedDestinationBindsThreeActionsAndSeparateConnectorBeforeIO)$'` — passed.
+- [x] Batch boundaries and partial receipts: `TestDeclarativeTypedDestinationBatchLimitIsDefinitionOwned` proves normal and tombstone worksets above their declared two-record limit refuse before provider I/O; `TestDeclarativeTypedDestinationPersistsPartialProviderResultsOnFailedApply` retains ordered 2xx/5xx receipt facts. Engine retry/cancellation and orchestrator commit/cancellation regressions remain covered by `TestDeclarativeWriteRetryPolicy`, `TestWriteCtxCancelMidLoopAccounting`, `TestTransportFamilyHalfPathConformanceAcknowledgementAndCancellation`, and `TestOrchestratorCommitsAcknowledgedPageBeforeReturningCancellation`.
+- [x] Tombstone create/update/delete separation: `go test -count=1 -timeout 20m ./internal/app -run '^(TestDeclarativeTypedDestinationTombstonesRequireDeclaredDeleteAction|TestDeclarativeTypedDestinationTombstoneAppliesOnlyDeclaredDeleteAndReadsBackAbsence)$'` — passed. It uses a persisted project plan/preview/approval and a synthetic provider to prove only the declared delete action receives a durable tombstone key and provider read-back confirms absence.
+- [x] App and CLI persisted boundaries: `TestPersistedConnectionSelectsDeclarativeTypedDestinationAction` and `go test -count=1 -timeout 20m ./internal/cli -run '^(TestETLTransportBareAndLeafHelpAreContextual|TestDeclarativeTypedDestinationTransportRejectsCallerActionBeforeProjectIO)$'` — passed. The route remains stored-connection selected; no caller action override is accepted.
+- [x] Focused schema/engine/App/CLI/orchestration tests: `go test -count=1 -timeout 20m ./internal/connectors ./internal/synctransport` (passed), `go test -count=1 -timeout 20m ./internal/connectors/engine` (passed), and the focused App command above (passed). Race commands for changed core packages passed: `go test -race -count=1 -timeout 20m ./internal/connectors ./internal/synctransport` and the focused App race groups.
+- [x] Generator checks: `go run ./cmd/connectorgen validate` — `552 connector(s) checked, 0 findings`; `go run ./cmd/connectorgen surface-sync --check` — `552 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)`.
+- [x] One post-green tracked-artifact regeneration: `./pm docs generate --dir docs/cli` updated `docs/connectors/catalog/all-connectors.json`; no production connector definition changed. The command initially refused without its required `--dir`; `pm help docs` supplied the exact non-secret invocation.
+- [x] Final App regression and package verification: the full `go test -count=1 -timeout 20m ./internal/app` suite passed in `255.389s` after the defaulted-action admission fix. The focused regression set covering three action-owned mappings, cross-connector selection, tombstones, batch limits, partial provider output, persisted selection, default selected action, and malformed worksets also passed.
+- [x] Changed-package race verification: `go test -race -count=1 -timeout 20m ./internal/synctransport` passed (`2.181s`), and the focused App action-binding/tombstone/persisted-path group passed (`48.143s`).
+- [x] Final CLI verification: `go test -count=1 -timeout 20m ./internal/cli -run '^(TestETLTransportBareAndLeafHelpAreContextual|TestDeclarativeTypedDestinationTransportRejectsCallerActionBeforeProjectIO)$'` passed (`6.173s`).
+- [x] Static and repository gates: `go vet ./...`, `go build ./cmd/pm`, `make lint` (zero issues), `make connector-canon-check`, and `git diff --check` passed. The prior post-green chained run also passed `docs-check`, `smoke-no-build`, `agent-contract-check`, generator validation and `surface-sync --check`, `connector-boundary` (552 connectors; clean), and `release-workflow-check`.
+- [x] Manual-GSD code review: inline standard-depth review found no remaining actionable issue; the only full-package finding was the defaulted-action admission ordering above, which was red-tested, fixed, and revalidated before this evidence was recorded.
 
-- **Red:** GitHub run `32359923322`, job `96397130733`, failed its generated-file check because `website/lib/docs.generated.ts` changed after `npm run gen:website-data`.
-- **Green:** `cd website && pnpm run gen:website-data` regenerated only `lib/docs.generated.ts`; a second run was idempotent.
-- `cd website && pnpm run lint` — passed with 13 pre-existing warnings and no errors.
-- `cd website && pnpm run typecheck` — passed.
-- `cd website && pnpm run test:unit` — passed: 12 files, 80 tests.
-- `cd website && pnpm run test:scripts` — passed: 29 tests.
-- `cd website && pnpm run build` — passed.
+## 2026-08-23 merge integration (in progress)
+
+- [x] Non-rewriting merge preparation: `scripts/gsd doctor`, all required
+  source/prompt resolution, and `go run ./cmd/agentcontractgen check` passed.
+- [x] Focused merged-tree tests: `go test -count=1 -timeout 20m ./internal/app`
+  (270.191s), `./internal/connectors/engine` (13.250s),
+  `./internal/coordination` (4.333s), `./internal/connectors ./internal/synctransport`
+  (1.096s / 1.169s), and `./internal/cli` (459.905s) passed.
+- [x] `cd website && pnpm run gen:website-data` passed and produced no
+  working-tree delta, proving generated website data is current for the merged tree.
+- [ ] Full `make verify`, including standalone/polled `connector-boundary`, and
+  the post-push PR workflow rollup remain required before delivery.

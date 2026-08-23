@@ -100,6 +100,45 @@ func (p CheckpointPosition) validateOrdered(name string) error {
 	return nil
 }
 
+// SourceContinuation carries an exact engine-produced continuation between
+// durably acknowledged source runs. It has no provider-facing interpretation
+// at this layer: consumers may copy it to the same source executor only.
+type SourceContinuation struct {
+	Kind  string      `json:"kind"`
+	Token OpaqueToken `json:"token"`
+}
+
+// Clone returns an independent continuation or nil for an absent continuation.
+func (c *SourceContinuation) Clone() *SourceContinuation {
+	if c == nil {
+		return nil
+	}
+	clone := *c
+	clone.Token = cloneToken(c.Token)
+	return &clone
+}
+
+// ContinuationEqual reports whether two optional continuations have the same
+// presence, exact kind, and opaque token. Continuation is durable checkpoint
+// state, so callers must not treat a changed continuation as an equal source
+// position.
+func ContinuationEqual(left, right *SourceContinuation) bool {
+	if left == nil || right == nil {
+		return left == nil && right == nil
+	}
+	return left.Kind == right.Kind && bytes.Equal(left.Token, right.Token)
+}
+
+func (c SourceContinuation) validate() error {
+	if strings.TrimSpace(c.Kind) == "" {
+		return fmt.Errorf("source continuation kind is required")
+	}
+	if len(c.Token) == 0 || len(c.Token) > 4096 {
+		return fmt.Errorf("source continuation token is required and must not exceed 4096 bytes")
+	}
+	return nil
+}
+
 // PartitionState preserves an independently resumable partition. It is a
 // structured array entry rather than a delimited string or flattened map.
 type PartitionState struct {
@@ -172,20 +211,24 @@ func (d DedupeWindow) validate() error {
 // describes the source observation; CommittedAt is stamped only once a
 // downstream durable acknowledgement permits persistence.
 type CheckpointEnvelope struct {
-	StateVersion     uint               `json:"state_version"`
-	Source           SourceIdentity     `json:"source"`
-	Mechanism        string             `json:"mechanism"`
-	SnapshotBarrier  *SnapshotBarrier   `json:"snapshot_barrier"`
-	Position         CheckpointPosition `json:"position"`
-	PositionObserved *bool              `json:"position_observed,omitempty"`
-	Partitions       []PartitionState   `json:"partitions"`
-	SourceGeneration OpaqueToken        `json:"source_generation,omitempty"`
-	SchemaVersion    string             `json:"schema_version"`
-	ProtocolVersion  string             `json:"protocol_version"`
-	Dedupe           DedupeIdentity     `json:"dedupe_identity"`
-	DedupeWindow     DedupeWindow       `json:"dedupe_window"`
-	ObservedAt       time.Time          `json:"observed_at"`
-	CommittedAt      *time.Time         `json:"committed_at,omitempty"`
+	StateVersion    uint               `json:"state_version"`
+	Source          SourceIdentity     `json:"source"`
+	Mechanism       string             `json:"mechanism"`
+	SnapshotBarrier *SnapshotBarrier   `json:"snapshot_barrier"`
+	Position        CheckpointPosition `json:"position"`
+	// Continuation is optional engine-owned state for a deliberately incomplete
+	// bounded source scan. Its presence means this checkpoint is resumable but
+	// must never be presented as source exhaustion.
+	Continuation     *SourceContinuation `json:"continuation,omitempty"`
+	PositionObserved *bool               `json:"position_observed,omitempty"`
+	Partitions       []PartitionState    `json:"partitions"`
+	SourceGeneration OpaqueToken         `json:"source_generation,omitempty"`
+	SchemaVersion    string              `json:"schema_version"`
+	ProtocolVersion  string              `json:"protocol_version"`
+	Dedupe           DedupeIdentity      `json:"dedupe_identity"`
+	DedupeWindow     DedupeWindow        `json:"dedupe_window"`
+	ObservedAt       time.Time           `json:"observed_at"`
+	CommittedAt      *time.Time          `json:"committed_at,omitempty"`
 }
 
 // Clone returns a defensive copy that preserves opaque bytes exactly.
@@ -196,6 +239,7 @@ func (c CheckpointEnvelope) Clone() CheckpointEnvelope {
 		clone.SnapshotBarrier = &barrier
 	}
 	clone.Position = c.Position.Clone()
+	clone.Continuation = c.Continuation.Clone()
 	if c.PositionObserved != nil {
 		positionObserved := *c.PositionObserved
 		clone.PositionObserved = &positionObserved
@@ -236,6 +280,11 @@ func (c CheckpointEnvelope) Validate() error {
 	}
 	if err := c.Position.validate("global"); err != nil {
 		return err
+	}
+	if c.Continuation != nil {
+		if err := c.Continuation.validate(); err != nil {
+			return err
+		}
 	}
 	if c.Partitions == nil {
 		return fmt.Errorf("partition state must be an explicit array")

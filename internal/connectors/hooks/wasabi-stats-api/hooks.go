@@ -27,6 +27,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/credential"
 )
 
 func init() {
@@ -51,15 +52,14 @@ func (Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, sp
 	if err != nil {
 		return nil, fmt.Errorf("wasabi-stats-api custom auth: resolve api_key: %w", err)
 	}
-	key = strings.TrimSpace(key)
-	if key == "" {
-		return nil, fmt.Errorf("wasabi-stats-api custom auth: api_key is required")
+	if err := credential.RequireAuthenticationValue("api_key", key); err != nil {
+		return nil, fmt.Errorf("wasabi-stats-api custom auth: %w", err)
 	}
 
 	// Exactly legacy's branch: strings.SplitN(key, ":", 2) yielding 2 parts
 	// switches to Basic auth; anything else (zero ':' at all) stays Bearer.
 	if parts := strings.SplitN(key, ":", 2); len(parts) == 2 {
-		return connsdk.Basic(parts[0], parts[1]), nil
+		return connsdk.BasicWithRequirements(parts[0], parts[1], true, false), nil
 	}
 	return connsdk.APIKeyHeader("Authorization", key, "Bearer "), nil
 }

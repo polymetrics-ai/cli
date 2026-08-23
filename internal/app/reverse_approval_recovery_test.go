@@ -68,8 +68,8 @@ func testRunReverseETLRecoversUncertainApprovalConsumption(t *testing.T, configu
 		SourceTable:           "repo_deletes",
 		DestinationConnector:  "github",
 		DestinationCredential: "github",
-		Action:                "repo",
-		Mappings:              map[string]string{"id": "id"},
+		Action:                "delete_ref",
+		Mappings:              map[string]string{"id": "ref"},
 	}
 	plan, err := a.PlanReverseETL(ctx, planRequest)
 	if err != nil {

@@ -468,7 +468,7 @@ func requireClosedBoundedGraphQLVariables(operation string, node map[string]any,
 	return nil
 }
 
-func sortedMapKeys(values map[string]any) []string {
+func sortedMapKeys[V any](values map[string]V) []string {
 	keys := make([]string, 0, len(values))
 	for key := range values {
 		keys = append(keys, key)
@@ -499,6 +499,23 @@ func validateGraphQLOperationPagination(op OperationSpec, kind string, variables
 	}
 	if !graphQLVariablesSchemaHasProperty(variables, pagination.CursorVariable) {
 		return fmt.Errorf("operation %q graphql.pagination.cursor_variable %q is absent from variables_schema", op.ID, pagination.CursorVariable)
+	}
+	if (pagination.BackwardCursorVariable == "") != (pagination.BackwardPageSizeVariable == "") {
+		return fmt.Errorf("operation %q graphql.pagination backward cursor and page-size variables must be declared together", op.ID)
+	}
+	for field, name := range map[string]string{
+		"backward_cursor_variable":    pagination.BackwardCursorVariable,
+		"backward_page_size_variable": pagination.BackwardPageSizeVariable,
+	} {
+		if name == "" {
+			continue
+		}
+		if !graphQLNamePattern.MatchString(name) {
+			return fmt.Errorf("operation %q graphql.pagination.%s %q is not a valid GraphQL name", op.ID, field, name)
+		}
+		if !graphQLVariablesSchemaHasProperty(variables, name) {
+			return fmt.Errorf("operation %q graphql.pagination.%s %q is absent from variables_schema", op.ID, field, name)
+		}
 	}
 	if pagination.PageSizeVariable == "" && pagination.MaxPageSize != 0 {
 		return fmt.Errorf("operation %q graphql.pagination.max_page_size requires page_size_variable", op.ID)
@@ -554,21 +571,47 @@ func graphQLOperationVariables(op OperationSpec, supplied map[string]any, page i
 			return nil, fmt.Errorf("operation %q has no declared GraphQL cursor pagination", op.ID)
 		}
 	} else {
-		if _, suppliedCursor := variables[pagination.CursorVariable]; suppliedCursor {
+		_, forwardCursor := variables[pagination.CursorVariable]
+		_, forwardSize := variables[pagination.PageSizeVariable]
+		_, backwardCursor := variables[pagination.BackwardCursorVariable]
+		_, backwardSize := variables[pagination.BackwardPageSizeVariable]
+		if (forwardCursor || forwardSize) && (backwardCursor || backwardSize) {
+			return nil, fmt.Errorf("operation %q requires exactly one pagination direction; mixes forward and backward pagination variables", op.ID)
+		}
+		if forwardCursor {
 			return nil, fmt.Errorf("operation %q GraphQL cursor variable %q must be supplied with --page-cursor", op.ID, pagination.CursorVariable)
+		}
+		if backwardCursor {
+			return nil, fmt.Errorf("operation %q GraphQL cursor variable %q must be supplied with --page-cursor", op.ID, pagination.BackwardCursorVariable)
+		}
+		if pagination.BackwardPageSizeVariable != "" && !forwardSize && !backwardSize {
+			return nil, fmt.Errorf("operation %q requires exactly one pagination direction; provide %q or %q", op.ID, pagination.PageSizeVariable, pagination.BackwardPageSizeVariable)
+		}
+		if pagination.BackwardPageSizeVariable == "" && pagination.PageSizeVariable != "" && !forwardSize {
+			return nil, fmt.Errorf("operation %q requires exactly one pagination direction; provide %q", op.ID, pagination.PageSizeVariable)
 		}
 		if pageCursor != "" {
 			if err := safety.RejectDangerousChars(pageCursor, "page cursor"); err != nil {
 				return nil, err
 			}
-			variables[pagination.CursorVariable] = pageCursor
+			cursorVariable := pagination.CursorVariable
+			if backwardSize {
+				cursorVariable = pagination.BackwardCursorVariable
+			}
+			variables[cursorVariable] = pageCursor
 		}
 	}
-	if pagination != nil && pagination.PageSizeVariable != "" {
-		if value, ok := variables[pagination.PageSizeVariable]; ok {
-			n, ok := graphQLPositiveInt(value)
-			if !ok || n > pagination.MaxPageSize {
-				return nil, fmt.Errorf("operation %q GraphQL page size variable %q must be a positive integer at most %d", op.ID, pagination.PageSizeVariable, pagination.MaxPageSize)
+	if pagination != nil {
+		for _, variable := range []string{pagination.PageSizeVariable, pagination.BackwardPageSizeVariable} {
+			if variable == "" {
+				continue
+			}
+			value, ok := variables[variable]
+			if ok {
+				n, ok := graphQLPositiveInt(value)
+				if !ok || n > pagination.MaxPageSize {
+					return nil, fmt.Errorf("operation %q GraphQL page size variable %q must be a positive integer at most %d", op.ID, variable, pagination.MaxPageSize)
+				}
 			}
 		}
 	}
@@ -615,7 +658,11 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
 	defer cancel()
 	cfg := materializeConfigDefaults(b, req.Config)
-	rt, err := newRuntime(ctx, b, cfg, h)
+	baseURL, err := resolveOperationRoute(b, cfg, op.Route, op.ID, op.GraphQL.Path, op.SourceURL)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	rt, err := newRuntimeForOperationRoute(ctx, b, cfg, h, op.Route, op.ID, op.GraphQL.Path, op.SourceURL)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
@@ -623,8 +670,16 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, directReadBaseURL(b, cfg))
+	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, baseURL)
 	response, err := requester.DoLimited(ctx, http.MethodPost, requestPath, nil, payload, maxBytes)
+	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: http.MethodPost, Path: op.GraphQL.Path, OutputSecretFields: operationDirectReadOutputSecretFields(op)}
+	readResult.Receipt = providerResponseReceiptFromResponse(b, response, cfg.Secrets)
+	if readResult.Receipt == nil && err != nil {
+		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
+	}
+	if readResult.Receipt != nil {
+		readResult.Status = readResult.Receipt.Status
+	}
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		// Fixed GraphQL calls expose only the bounded, sanitized GraphQL error
@@ -638,20 +693,20 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 		if class != "" {
 			message = class + ": " + message
 		}
-		return connectors.DirectReadResult{}, formatResponseError(fmt.Sprintf("operation direct read POST %s: %s", op.GraphQL.Path, message), err)
+		return readResult, formatResponseError(fmt.Sprintf("operation direct read POST %s: %s", op.GraphQL.Path, message), err)
 	}
 	data, metadata, err := graphQLOperationResponse(response.Body, maxBytes)
 	if err != nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read GraphQL response: %w", err)
+		return readResult, fmt.Errorf("operation direct read GraphQL response: %w", err)
 	}
 	observeGraphQLRateLimit(ctx, requester, response, data)
-	page, err := graphQLOperationPage(data, op.GraphQL.Pagination, metadata.PartialData)
+	page, err := graphQLOperationPage(data, op.GraphQL.Pagination, graphQLPaginationDirectionForVariables(op.GraphQL.Pagination, variables), metadata.PartialData)
 	if err != nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read GraphQL pagination: %w", err)
+		return readResult, fmt.Errorf("operation direct read GraphQL pagination: %w", err)
 	}
 	body, err := applyDirectReadOutputPolicy(policy, data)
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return readResult, err
 	}
 	redactFields := append([]string(nil), req.RedactFields...)
 	if op.SensitivePolicy != nil {
@@ -660,15 +715,11 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 	if len(redactFields) != 0 {
 		body = redactNamedJSONFields(body, redactFields)
 	}
-	return connectors.DirectReadResult{
-		Connector: b.Name,
-		Method:    http.MethodPost,
-		Path:      op.GraphQL.Path,
-		Status:    response.Status,
-		Body:      body,
-		GraphQL:   metadata,
-		Page:      page,
-	}, nil
+	body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets)
+	readResult.Body = body
+	readResult.GraphQL = connectors.SanitizeGraphQLResponseMetadataForOutput(metadata, cfg.Secrets)
+	readResult.Page = connectors.SanitizeDirectReadPageForOutput(page, req.Config.Secrets)
+	return readResult, nil
 }
 
 func graphQLPositiveInt(value any) (int, bool) {
@@ -774,32 +825,15 @@ func boundedGraphQLErrorMetadata(items []struct {
 }
 
 func sanitizeGraphQLErrorMessage(value string) string {
-	value = strings.TrimSpace(safety.RedactErrorText(value))
+	value = strings.TrimSpace(value)
 	if value == "" {
 		return "provider returned a GraphQL error without a message"
-	}
-	lower := strings.ToLower(value)
-	for _, marker := range []string{"token", "secret", "password", "authorization", "credential", "private key"} {
-		if strings.Contains(lower, marker) {
-			return "provider GraphQL error message redacted"
-		}
 	}
 	value = safety.SanitizeTerminal(value)
 	if utf8.RuneCountInString(value) <= maxGraphQLErrorMessageSize {
 		return value
 	}
 	return string([]rune(value)[:maxGraphQLErrorMessageSize]) + "…"
-}
-
-func graphQLErrorSummary(metadata *connectors.GraphQLResponseMetadata) string {
-	if metadata == nil || len(metadata.Errors) == 0 {
-		return ""
-	}
-	parts := make([]string, 0, len(metadata.Errors))
-	for _, item := range metadata.Errors {
-		parts = append(parts, item.Message)
-	}
-	return strings.Join(parts, "; ")
 }
 
 func graphQLRateLimit(data map[string]any) *connectors.GraphQLRateLimit {
@@ -894,7 +928,27 @@ func graphQLInt(value any) (int, bool) {
 	}
 }
 
-func graphQLOperationPage(data map[string]any, pagination *GraphQLOperationPaginationSpec, partial bool) (connectors.DirectReadPage, error) {
+type graphQLPaginationDirection uint8
+
+const (
+	graphQLPaginationDirectionNone graphQLPaginationDirection = iota
+	graphQLPaginationDirectionForward
+	graphQLPaginationDirectionBackward
+)
+
+func graphQLPaginationDirectionForVariables(pagination *GraphQLOperationPaginationSpec, variables map[string]any) graphQLPaginationDirection {
+	if pagination == nil {
+		return graphQLPaginationDirectionNone
+	}
+	if pagination.BackwardPageSizeVariable != "" {
+		if _, backward := variables[pagination.BackwardPageSizeVariable]; backward {
+			return graphQLPaginationDirectionBackward
+		}
+	}
+	return graphQLPaginationDirectionForward
+}
+
+func graphQLOperationPage(data map[string]any, pagination *GraphQLOperationPaginationSpec, direction graphQLPaginationDirection, partial bool) (connectors.DirectReadPage, error) {
 	if pagination == nil {
 		return connectors.DirectReadPage{
 			Strategy: graphQLCursorStrategy,
@@ -930,17 +984,21 @@ func graphQLOperationPage(data map[string]any, pagination *GraphQLOperationPagin
 		}
 		return connectors.DirectReadPage{}, fmt.Errorf("GraphQL declared connection path %q has no pageInfo object", pagination.ConnectionPath)
 	}
-	hasMore, ok := pageInfo["hasNextPage"].(bool)
+	hasMoreField, cursorField := "hasNextPage", "endCursor"
+	if direction == graphQLPaginationDirectionBackward {
+		hasMoreField, cursorField = "hasPreviousPage", "startCursor"
+	}
+	hasMore, ok := pageInfo[hasMoreField].(bool)
 	if !ok {
-		return connectors.DirectReadPage{}, fmt.Errorf("GraphQL declared connection path %q pageInfo.hasNextPage is not boolean", pagination.ConnectionPath)
+		return connectors.DirectReadPage{}, fmt.Errorf("GraphQL declared connection path %q pageInfo.%s is not boolean", pagination.ConnectionPath, hasMoreField)
 	}
 	page := connectors.DirectReadPage{Strategy: graphQLCursorStrategy, Records: len(nodes), HasMore: hasMore, Complete: !hasMore}
 	if !hasMore {
 		return page, nil
 	}
-	next, ok := pageInfo["endCursor"].(string)
+	next, ok := pageInfo[cursorField].(string)
 	if !ok || strings.TrimSpace(next) == "" {
-		return connectors.DirectReadPage{}, fmt.Errorf("GraphQL declared connection path %q reports another page without endCursor", pagination.ConnectionPath)
+		return connectors.DirectReadPage{}, fmt.Errorf("GraphQL declared connection path %q reports another page without %s", pagination.ConnectionPath, cursorField)
 	}
 	page.NextCursor = next
 	page.Reason = connectors.DirectReadPageReasonMorePages

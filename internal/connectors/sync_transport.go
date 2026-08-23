@@ -106,9 +106,14 @@ const (
 // implementation of that named action; this package never invokes arbitrary
 // action strings.
 type DestinationApplyStrategy struct {
-	Mode     synccontract.Mode `json:"mode"`
-	Strategy ApplyStrategy     `json:"strategy"`
-	Action   string            `json:"action"`
+	Mode            synccontract.Mode `json:"mode"`
+	Strategy        ApplyStrategy     `json:"strategy"`
+	Action          string            `json:"action"`
+	TombstoneAction string            `json:"tombstone_action,omitempty"`
+	// ReadBack belongs to this exact physical apply action. A descriptor-wide
+	// policy cannot truthfully validate distinct action schemas after a write.
+	ReadBack          *DestinationReadBackPolicy          `json:"read_back,omitempty"`
+	TombstoneReadBack *DestinationTombstoneReadBackPolicy `json:"tombstone_read_back,omitempty"`
 }
 
 // SourceRecordMappingKind is the closed source-record behavior a destination
@@ -129,6 +134,87 @@ type SourceRecordInputBinding struct {
 	Field string `json:"field"`
 }
 
+// TombstoneRecordMappingImage is the durable tombstone image from which a
+// declaration-owned delete action may take its inputs. It is not a record
+// expression language: the only values admitted are the source contract's
+// key or before image.
+type TombstoneRecordMappingImage string
+
+const (
+	TombstoneRecordMappingImageKey    TombstoneRecordMappingImage = "key"
+	TombstoneRecordMappingImageBefore TombstoneRecordMappingImage = "before"
+)
+
+// TombstoneRecordMapping maps one delete action's inputs from the selected
+// tombstone image. It remains separate from SourceRecordMapping so a delete
+// cannot accidentally be treated as a create/update source record.
+type TombstoneRecordMapping struct {
+	Image  TombstoneRecordMappingImage `json:"image"`
+	Inputs []SourceRecordInputBinding  `json:"inputs"`
+}
+
+func (m TombstoneRecordMapping) Clone() TombstoneRecordMapping {
+	clone := m
+	clone.Inputs = append([]SourceRecordInputBinding(nil), m.Inputs...)
+	return clone
+}
+
+func (m TombstoneRecordMapping) Validate() error {
+	switch m.Image {
+	case TombstoneRecordMappingImageKey, TombstoneRecordMappingImageBefore:
+	default:
+		return fmt.Errorf("unsupported tombstone record mapping image %q", m.Image)
+	}
+	if len(m.Inputs) == 0 {
+		return fmt.Errorf("tombstone record mapping requires at least one input field")
+	}
+	seenInputs := make(map[string]struct{}, len(m.Inputs))
+	seenFields := make(map[string]struct{}, len(m.Inputs))
+	for _, input := range m.Inputs {
+		if input.Input == "" || input.Field == "" {
+			return fmt.Errorf("tombstone record mapping requires non-empty input and field names")
+		}
+		if _, duplicate := seenInputs[input.Input]; duplicate {
+			return fmt.Errorf("tombstone record mapping duplicates input %q", input.Input)
+		}
+		if _, duplicate := seenFields[input.Field]; duplicate {
+			return fmt.Errorf("tombstone record mapping duplicates field %q", input.Field)
+		}
+		seenInputs[input.Input] = struct{}{}
+		seenFields[input.Field] = struct{}{}
+	}
+	return nil
+}
+
+// DestinationBatchDisposition is the closed delivery unit declared beside an
+// action-owned source binding. It is deliberately not a provider bulk-write
+// instruction: the named writes.json action remains the only request shape.
+type DestinationBatchDisposition string
+
+const (
+	// DestinationBatchPerRecord preserves the engine's deterministic one
+	// declaration-owned request per record behavior while MaxRecords bounds the
+	// reopened warehouse workset that may be applied under one acknowledgement.
+	DestinationBatchPerRecord DestinationBatchDisposition = "per_record"
+)
+
+// DestinationBatch bounds one action-owned destination apply unit. A caller
+// may request a smaller source batch but cannot enlarge this declaration.
+type DestinationBatch struct {
+	Disposition DestinationBatchDisposition `json:"disposition"`
+	MaxRecords  int                         `json:"max_records"`
+}
+
+func (b DestinationBatch) Validate() error {
+	if b.Disposition != DestinationBatchPerRecord {
+		return fmt.Errorf("unsupported destination batch disposition %q", b.Disposition)
+	}
+	if b.MaxRecords < 1 || b.MaxRecords > 1000 {
+		return fmt.Errorf("destination batch max_records must be between 1 and 1000")
+	}
+	return nil
+}
+
 // SourceRecordMapping binds an admitted source record to one of the closed
 // mapping forms. config_match compares one source record field with a source
 // endpoint configuration value. input_fields supplies the declared action
@@ -145,9 +231,22 @@ type SourceRecordMapping struct {
 // definition-owned, so adding another connector cannot require shared
 // provider-named routing code.
 type DestinationSourceBinding struct {
+	// Action is the exact eligible destination action this source mapping may
+	// materialize. It is optional only for legacy specialized adapters; the
+	// reusable declarative typed destination requires it.
+	Action          string                     `json:"action,omitempty"`
 	Executor        TransportExecutorReference `json:"executor"`
 	EligibleStreams []string                   `json:"eligible_streams"`
-	RecordMapping   SourceRecordMapping        `json:"record_mapping"`
+	RecordMapping   SourceRecordMapping        `json:"record_mapping,omitempty"`
+	// TombstoneMapping maps the exact action's delete inputs from a durable
+	// tombstone key or before image. It is mutually exclusive with
+	// RecordMapping: one action is either an ordinary record action or an
+	// explicitly named tombstone delete action.
+	TombstoneMapping *TombstoneRecordMapping `json:"tombstone_mapping,omitempty"`
+	// Batch is required by the reusable declarative typed destination. Keeping
+	// it adjacent to Action makes the bound unit part of the sealed mapping,
+	// rather than a caller-selected provider request control.
+	Batch *DestinationBatch `json:"batch,omitempty"`
 }
 
 func (m SourceRecordMapping) Clone() SourceRecordMapping {
@@ -160,6 +259,14 @@ func (b DestinationSourceBinding) Clone() DestinationSourceBinding {
 	clone := b
 	clone.EligibleStreams = append([]string(nil), b.EligibleStreams...)
 	clone.RecordMapping = b.RecordMapping.Clone()
+	if b.Batch != nil {
+		batch := *b.Batch
+		clone.Batch = &batch
+	}
+	if b.TombstoneMapping != nil {
+		mapping := b.TombstoneMapping.Clone()
+		clone.TombstoneMapping = &mapping
+	}
 	return clone
 }
 
@@ -201,13 +308,169 @@ func (m SourceRecordMapping) Validate() error {
 }
 
 func (b DestinationSourceBinding) Validate() error {
+	if b.Action != "" && !isConcreteTransportIdentifier(b.Action) {
+		return fmt.Errorf("destination source binding action must be a concrete identifier")
+	}
 	if err := b.Executor.Validate(); err != nil {
 		return err
 	}
 	if err := validateSourceTransportStreams(b.EligibleStreams); err != nil {
 		return err
 	}
-	return b.RecordMapping.Validate()
+	if b.Batch != nil {
+		if err := b.Batch.Validate(); err != nil {
+			return err
+		}
+	}
+	hasRecordMapping := b.RecordMapping.Kind != ""
+	hasTombstoneMapping := b.TombstoneMapping != nil
+	if hasRecordMapping == hasTombstoneMapping {
+		return fmt.Errorf("destination source binding requires exactly one record_mapping or tombstone_mapping")
+	}
+	if hasRecordMapping {
+		return b.RecordMapping.Validate()
+	}
+	return b.TombstoneMapping.Validate()
+}
+
+// DestinationReadBackField maps one field in provider state to the
+// corresponding field in the destination record that was written.
+type DestinationReadBackField struct {
+	ProviderField string `json:"provider_field"`
+	ExpectedField string `json:"expected_field"`
+}
+
+// DestinationReceiptLocator is a deliberately small provider-response to
+// provider-read mapping. It allows a declared write response's one top-level
+// scalar field to fill one declared query parameter; it is not a JSONPath,
+// URL, method, header, or generic read capability.
+type DestinationReceiptLocator struct {
+	ResponseIndex  int    `json:"response_index"`
+	BodyField      string `json:"body_field"`
+	QueryParameter string `json:"query_parameter"`
+	MaxValueBytes  int    `json:"max_value_bytes"`
+	MaxPages       int    `json:"max_pages"`
+}
+
+func (l DestinationReceiptLocator) Validate() error {
+	if l.ResponseIndex < 0 || l.ResponseIndex > 1023 {
+		return fmt.Errorf("destination receipt locator response_index must be between 0 and 1023")
+	}
+	if !isConcreteTransportIdentifier(l.BodyField) || !isConcreteTransportIdentifier(l.QueryParameter) {
+		return fmt.Errorf("destination receipt locator requires concrete body_field and query_parameter")
+	}
+	if l.MaxValueBytes < 1 || l.MaxValueBytes > 4096 {
+		return fmt.Errorf("destination receipt locator max_value_bytes must be between 1 and 4096")
+	}
+	if l.MaxPages < 1 || l.MaxPages > 10 {
+		return fmt.Errorf("destination receipt locator max_pages must be between 1 and 10")
+	}
+	return nil
+}
+
+// DestinationReadBackPolicy declares the bounded provider read that proves a
+// typed destination write before its source checkpoint may advance. Operation
+// is interpreted only by the connector that owns the declaration.
+type DestinationReadBackPolicy struct {
+	Operation              string                       `json:"operation"`
+	Identity               []DestinationReadBackField   `json:"identity"`
+	Expected               []DestinationReadBackField   `json:"expected"`
+	MaxRecords             int                          `json:"max_records"`
+	MaxAttempts            int                          `json:"max_attempts"`
+	TimeoutMilliseconds    int                          `json:"timeout_milliseconds"`
+	RetryDelayMilliseconds int                          `json:"retry_delay_milliseconds,omitempty"`
+	ReceiptLocator         DestinationReceiptLocator    `json:"receipt_locator"`
+	Conformance            ConformanceEvidenceReference `json:"conformance"`
+}
+
+// DestinationTombstoneReadBackPolicy declares the bounded provider read that
+// proves a delete action removed its declared destination identity. It is
+// separate from ordinary read-back because the successful state is absence,
+// not a create/update payload that happens to omit fields.
+type DestinationTombstoneReadBackPolicy struct {
+	Operation              string                       `json:"operation"`
+	Identity               []DestinationReadBackField   `json:"identity"`
+	MaxRecords             int                          `json:"max_records"`
+	MaxAttempts            int                          `json:"max_attempts"`
+	TimeoutMilliseconds    int                          `json:"timeout_milliseconds"`
+	RetryDelayMilliseconds int                          `json:"retry_delay_milliseconds,omitempty"`
+	ReceiptLocator         DestinationReceiptLocator    `json:"receipt_locator"`
+	Conformance            ConformanceEvidenceReference `json:"conformance"`
+}
+
+func (p DestinationTombstoneReadBackPolicy) Validate() error {
+	if !isConcreteTransportIdentifier(p.Operation) {
+		return fmt.Errorf("destination tombstone read-back requires a concrete operation")
+	}
+	if p.MaxRecords < 1 || p.MaxRecords > 10000 {
+		return fmt.Errorf("destination tombstone read-back max_records must be between 1 and 10000")
+	}
+	if p.MaxAttempts < 1 || p.MaxAttempts > 10 {
+		return fmt.Errorf("destination tombstone read-back max_attempts must be between 1 and 10")
+	}
+	if p.TimeoutMilliseconds < 1 || p.TimeoutMilliseconds > 60000 {
+		return fmt.Errorf("destination tombstone read-back timeout_milliseconds must be between 1 and 60000")
+	}
+	if p.RetryDelayMilliseconds < 0 || p.RetryDelayMilliseconds > 10000 {
+		return fmt.Errorf("destination tombstone read-back retry_delay_milliseconds must be between 0 and 10000")
+	}
+	if err := validateDestinationReadBackFields("tombstone identity", p.Identity); err != nil {
+		return err
+	}
+	if err := p.ReceiptLocator.Validate(); err != nil {
+		return err
+	}
+	return p.Conformance.Validate()
+}
+
+func (p DestinationReadBackPolicy) Validate() error {
+	if !isConcreteTransportIdentifier(p.Operation) {
+		return fmt.Errorf("destination read-back requires a concrete operation")
+	}
+	if p.MaxRecords < 1 || p.MaxRecords > 10000 {
+		return fmt.Errorf("destination read-back max_records must be between 1 and 10000")
+	}
+	if p.MaxAttempts < 1 || p.MaxAttempts > 10 {
+		return fmt.Errorf("destination read-back max_attempts must be between 1 and 10")
+	}
+	if p.TimeoutMilliseconds < 1 || p.TimeoutMilliseconds > 60000 {
+		return fmt.Errorf("destination read-back timeout_milliseconds must be between 1 and 60000")
+	}
+	if p.RetryDelayMilliseconds < 0 || p.RetryDelayMilliseconds > 10000 {
+		return fmt.Errorf("destination read-back retry_delay_milliseconds must be between 0 and 10000")
+	}
+	if err := validateDestinationReadBackFields("identity", p.Identity); err != nil {
+		return err
+	}
+	if err := validateDestinationReadBackFields("expected", p.Expected); err != nil {
+		return err
+	}
+	if err := p.ReceiptLocator.Validate(); err != nil {
+		return err
+	}
+	return p.Conformance.Validate()
+}
+
+func validateDestinationReadBackFields(kind string, fields []DestinationReadBackField) error {
+	if len(fields) == 0 {
+		return fmt.Errorf("destination read-back %s fields are required", kind)
+	}
+	provider := make(map[string]struct{}, len(fields))
+	expected := make(map[string]struct{}, len(fields))
+	for _, field := range fields {
+		if strings.TrimSpace(field.ProviderField) == "" || len(field.ProviderField) > 256 || strings.TrimSpace(field.ExpectedField) == "" || len(field.ExpectedField) > 256 {
+			return fmt.Errorf("destination read-back %s fields require concrete provider and expected names", kind)
+		}
+		if _, duplicate := provider[field.ProviderField]; duplicate {
+			return fmt.Errorf("destination read-back %s duplicates provider field %q", kind, field.ProviderField)
+		}
+		if _, duplicate := expected[field.ExpectedField]; duplicate {
+			return fmt.Errorf("destination read-back %s duplicates expected field %q", kind, field.ExpectedField)
+		}
+		provider[field.ProviderField] = struct{}{}
+		expected[field.ExpectedField] = struct{}{}
+	}
+	return nil
 }
 
 // SourceTransportDescriptor is the source side of a connector's transport
@@ -237,12 +500,14 @@ type DestinationTransportDescriptor struct {
 	// CopyWorkerMaximum is the target-declared connection-pool ceiling that a
 	// future immutable full-overwrite COPY lane may consume. It is a bounded
 	// connection policy, never a generic per-run worker dial.
-	CopyWorkerMaximum int                          `json:"copy_worker_maximum,omitempty"`
-	Delivery          DeliveryGuarantees           `json:"delivery"`
-	Conformance       ConformanceEvidenceReference `json:"conformance"`
-	Acknowledgement   TransportAcknowledgement     `json:"acknowledgement"`
-	ApplyStrategies   []DestinationApplyStrategy   `json:"apply_strategies"`
-	SourceBindings    []DestinationSourceBinding   `json:"source_bindings,omitempty"`
+	CopyWorkerMaximum int                                 `json:"copy_worker_maximum,omitempty"`
+	Delivery          DeliveryGuarantees                  `json:"delivery"`
+	Conformance       ConformanceEvidenceReference        `json:"conformance"`
+	Acknowledgement   TransportAcknowledgement            `json:"acknowledgement"`
+	ApplyStrategies   []DestinationApplyStrategy          `json:"apply_strategies"`
+	SourceBindings    []DestinationSourceBinding          `json:"source_bindings,omitempty"`
+	ReadBack          *DestinationReadBackPolicy          `json:"read_back,omitempty"`
+	TombstoneReadBack *DestinationTombstoneReadBackPolicy `json:"tombstone_read_back,omitempty"`
 }
 
 // SyncTransportDescriptor declares one or both roles a connector can perform.
@@ -379,6 +644,16 @@ func (d DestinationTransportDescriptor) Validate() error {
 	if err := validateDestinationSourceBindings(d.SourceBindings); err != nil {
 		return err
 	}
+	if d.ReadBack != nil {
+		if err := d.ReadBack.Validate(); err != nil {
+			return err
+		}
+	}
+	if d.TombstoneReadBack != nil {
+		if err := d.TombstoneReadBack.Validate(); err != nil {
+			return err
+		}
+	}
 	switch d.Acknowledgement {
 	case TransportAcknowledgementDurableWarehouse, TransportAcknowledgementNone:
 	default:
@@ -387,6 +662,7 @@ func (d DestinationTransportDescriptor) Validate() error {
 
 	strategies := make(map[synccontract.Mode]struct{}, len(d.ApplyStrategies))
 	strategyActions := make(map[synccontract.Mode]map[string]struct{}, len(d.ApplyStrategies))
+	declaredActions := make(map[string]struct{}, len(d.ApplyStrategies)*2)
 	for _, strategy := range d.ApplyStrategies {
 		if err := strategy.Mode.Validate(); err != nil {
 			return err
@@ -397,6 +673,16 @@ func (d DestinationTransportDescriptor) Validate() error {
 		if err := strategy.Strategy.Validate(); err != nil {
 			return err
 		}
+		if strategy.ReadBack != nil {
+			if err := strategy.ReadBack.Validate(); err != nil {
+				return fmt.Errorf("destination action %q read-back: %w", strategy.Action, err)
+			}
+		}
+		if strategy.TombstoneReadBack != nil {
+			if err := strategy.TombstoneReadBack.Validate(); err != nil {
+				return fmt.Errorf("destination tombstone action %q read-back: %w", strategy.TombstoneAction, err)
+			}
+		}
 		if strategy.Mode == synccontract.ModeChangeCapture && strategy.Strategy != ApplyStrategyChangeApply {
 			return fmt.Errorf("destination change_capture mode requires change_apply strategy, got %q", strategy.Strategy)
 		}
@@ -406,6 +692,12 @@ func (d DestinationTransportDescriptor) Validate() error {
 		if !containsTransportName(d.EligibleActions, strategy.Action) {
 			return fmt.Errorf("destination apply strategy action %q is not an eligible action", strategy.Action)
 		}
+		if strategy.TombstoneAction != "" && !containsTransportName(d.EligibleActions, strategy.TombstoneAction) {
+			return fmt.Errorf("destination tombstone action %q is not an eligible action", strategy.TombstoneAction)
+		}
+		if strategy.TombstoneAction == strategy.Action && strategy.TombstoneAction != "" {
+			return fmt.Errorf("destination tombstone action %q cannot equal its ordinary apply action", strategy.Action)
+		}
 		if strategyActions[strategy.Mode] == nil {
 			strategyActions[strategy.Mode] = make(map[string]struct{})
 		}
@@ -413,11 +705,33 @@ func (d DestinationTransportDescriptor) Validate() error {
 			return fmt.Errorf("destination transport declares duplicate apply strategy action %q for sync mode %q", strategy.Action, strategy.Mode)
 		}
 		strategyActions[strategy.Mode][strategy.Action] = struct{}{}
+		declaredActions[strategy.Action] = struct{}{}
+		if strategy.TombstoneAction != "" {
+			declaredActions[strategy.TombstoneAction] = struct{}{}
+		}
 		strategies[strategy.Mode] = struct{}{}
 	}
 	for _, mode := range d.Modes {
 		if _, exists := strategies[mode]; !exists {
 			return fmt.Errorf("destination transport is missing declared apply strategy for sync mode %q", mode)
+		}
+	}
+	for _, action := range d.EligibleActions {
+		if _, found := declaredActions[action]; !found {
+			return fmt.Errorf("destination eligible action %q has no declared apply strategy", action)
+		}
+	}
+	for action := range declaredActions {
+		if !containsTransportName(d.EligibleActions, action) {
+			return fmt.Errorf("destination apply strategy action %q is not an eligible action", action)
+		}
+	}
+	for _, binding := range d.SourceBindings {
+		if binding.Action == "" {
+			continue
+		}
+		if _, found := declaredActions[binding.Action]; !found {
+			return fmt.Errorf("destination source binding action %q has no reachable apply strategy", binding.Action)
 		}
 	}
 	return nil
@@ -434,17 +748,33 @@ func validateDestinationTransportModes(modes []synccontract.Mode) error {
 }
 
 func validateDestinationSourceBindings(bindings []DestinationSourceBinding) error {
-	seen := make(map[TransportExecutorReference]struct{}, len(bindings))
-	for _, binding := range bindings {
+	for index, binding := range bindings {
 		if err := binding.Validate(); err != nil {
 			return fmt.Errorf("destination source binding: %w", err)
 		}
-		if _, duplicate := seen[binding.Executor]; duplicate {
-			return fmt.Errorf("destination source binding duplicates executor %q", binding.Executor.ID)
+		for previousIndex := 0; previousIndex < index; previousIndex++ {
+			previous := bindings[previousIndex]
+			if previous.Executor != binding.Executor || previous.Action != binding.Action || !sourceBindingStreamsOverlap(previous.EligibleStreams, binding.EligibleStreams) {
+				continue
+			}
+			if binding.Action == "" {
+				return fmt.Errorf("destination source binding duplicates legacy executor %q stream selection", binding.Executor.ID)
+			}
+			return fmt.Errorf("destination source binding duplicates action %q for executor %q stream selection", binding.Action, binding.Executor.ID)
 		}
-		seen[binding.Executor] = struct{}{}
 	}
 	return nil
+}
+
+func sourceBindingStreamsOverlap(left, right []string) bool {
+	for _, leftStream := range left {
+		for _, rightStream := range right {
+			if leftStream == "*" || rightStream == "*" || leftStream == rightStream {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // SourceBindingFor returns the definition-owned binding for an exact source
@@ -453,10 +783,41 @@ func validateDestinationSourceBindings(bindings []DestinationSourceBinding) erro
 // positive source admission allowlist.
 func (d DestinationTransportDescriptor) SourceBindingFor(source TransportExecutorReference, stream string) (DestinationSourceBinding, bool) {
 	for _, binding := range d.SourceBindings {
-		if binding.Executor != source || !containsSourceTransportStream(binding.EligibleStreams, stream) {
+		if binding.Action != "" || binding.Executor != source || !containsSourceTransportStream(binding.EligibleStreams, stream) {
 			continue
 		}
 		return binding.Clone(), true
+	}
+	return DestinationSourceBinding{}, false
+}
+
+// SourceBindingForAction resolves an exact persisted destination action. If a
+// source/stream has action-owned bindings, no legacy mapping can serve as a
+// fallback; that prevents one action's field mapping from being reused by a
+// neighboring action. Specialized legacy adapters may still use a binding
+// without Action through SourceBindingFor.
+func (d DestinationTransportDescriptor) SourceBindingForAction(source TransportExecutorReference, stream, action string) (DestinationSourceBinding, bool) {
+	var legacy DestinationSourceBinding
+	legacyFound := false
+	actionOwned := false
+	for _, binding := range d.SourceBindings {
+		if binding.Executor != source || !containsSourceTransportStream(binding.EligibleStreams, stream) {
+			continue
+		}
+		if binding.Action == "" {
+			legacy, legacyFound = binding, true
+			continue
+		}
+		actionOwned = true
+		if binding.Action == action {
+			return binding.Clone(), true
+		}
+	}
+	if actionOwned {
+		return DestinationSourceBinding{}, false
+	}
+	if legacyFound {
+		return legacy.Clone(), true
 	}
 	return DestinationSourceBinding{}, false
 }
@@ -540,10 +901,35 @@ func (d SyncTransportDescriptor) Clone() *SyncTransportDescriptor {
 		destination := *d.Destination
 		destination.EligibleActions = append([]string(nil), d.Destination.EligibleActions...)
 		destination.Modes = append([]synccontract.Mode(nil), d.Destination.Modes...)
-		destination.ApplyStrategies = append([]DestinationApplyStrategy(nil), d.Destination.ApplyStrategies...)
+		destination.ApplyStrategies = make([]DestinationApplyStrategy, len(d.Destination.ApplyStrategies))
+		for index, strategy := range d.Destination.ApplyStrategies {
+			destination.ApplyStrategies[index] = strategy
+			if strategy.ReadBack != nil {
+				readBack := *strategy.ReadBack
+				readBack.Identity = append([]DestinationReadBackField(nil), strategy.ReadBack.Identity...)
+				readBack.Expected = append([]DestinationReadBackField(nil), strategy.ReadBack.Expected...)
+				destination.ApplyStrategies[index].ReadBack = &readBack
+			}
+			if strategy.TombstoneReadBack != nil {
+				readBack := *strategy.TombstoneReadBack
+				readBack.Identity = append([]DestinationReadBackField(nil), strategy.TombstoneReadBack.Identity...)
+				destination.ApplyStrategies[index].TombstoneReadBack = &readBack
+			}
+		}
 		destination.SourceBindings = make([]DestinationSourceBinding, len(d.Destination.SourceBindings))
 		for index, binding := range d.Destination.SourceBindings {
 			destination.SourceBindings[index] = binding.Clone()
+		}
+		if d.Destination.ReadBack != nil {
+			readBack := *d.Destination.ReadBack
+			readBack.Identity = append([]DestinationReadBackField(nil), d.Destination.ReadBack.Identity...)
+			readBack.Expected = append([]DestinationReadBackField(nil), d.Destination.ReadBack.Expected...)
+			destination.ReadBack = &readBack
+		}
+		if d.Destination.TombstoneReadBack != nil {
+			readBack := *d.Destination.TombstoneReadBack
+			readBack.Identity = append([]DestinationReadBackField(nil), d.Destination.TombstoneReadBack.Identity...)
+			destination.TombstoneReadBack = &readBack
 		}
 		clone.Destination = &destination
 	}

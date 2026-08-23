@@ -23,7 +23,7 @@ Required skills: `golang-how-to`, `golang-cli`, `golang-design-patterns`, `golan
 5. **Documentation/review:** Update the declaration guide with exact typed action and acknowledgement requirements, no-generic-writer boundary, mode/action strategies, source binding constraints, and evidence admission. Run full local verification and record review disposition.
 6. **Red/Green — persisted multi-action dispatch:** Add a production-shaped synthetic connector with two declared actions in one mode and another connector with one. Show the persisted `StreamConfig.destination_action` selects the exact descriptor action through `App.RunETL`; no runtime request selects an action. Reject omitted, foreign, malformed, and cross-connector selections before source or provider I/O. Extend the application command manual to name the `pm etl transport declarative-typed-destination` plan/preview path and `pm etl run --approval-plan …` execute path.
 7. **Red/Green — exact action-schema source fields:** Add cross-connector synthetic snake_case and camelCase actions. Accept an `input_fields` name only when the exact selected action's top-level `record_schema` property exists; reject empty, malformed, unknown/cross-action, runtime-selected, generic/shell/http, and undeclared names before I/O, with no provider-specific branch.
-8. **Red/Green — complete persisted reverse result:** Add a provider-shaped synthetic typed-action response and show the persisted App run and CLI JSON projection retain ordinary response status, headers, nested fields, and tier-specific fields. Provider-returned fields, keys, and values remain verbatim even when equal to configured credential bytes; system-generated plans, logs, request diagnostics, and synthetic errors remain secret-taint-safe.
+8. **Red/Green — complete persisted reverse result:** Add a provider-shaped synthetic typed-action response and show the persisted App run and CLI JSON projection retain ordinary response status, headers, nested fields, and tier-specific fields. Concrete configured credential material is masked in provider results; system-generated plans, logs, request diagnostics, and synthetic errors remain secret-taint-safe.
 
 ## Commit checkpoints
 
@@ -46,8 +46,112 @@ Required skills: `golang-how-to`, `golang-cli`, `golang-design-patterns`, `golan
 
 The earlier generic-adapter evidence remains valid. The application-dispatch
 reconciliation is complete: its red/green evidence includes persisted exact
-multi-action selection, selected-action schema spelling, complete verbatim provider output and secret-safe system diagnostics,
+multi-action selection, selected-action schema spelling, complete credential-safe provider output and secret-safe system diagnostics,
 generated CLI documents and transcripts, a clean full `make verify`, and fresh
 inline review. The prior real-provider GitHub proof remains the compatibility
 evidence: this reconciliation keeps its specialized adapter and read-back
 unchanged.
+
+## Follow-up foundation r1 — action-owned mappings, batch, and tombstones
+
+### Task Delivery Header
+
+- Issue: Refs #4303 — feat(synctransport): compose connector-neutral typed reverse-ETL destinations.
+- Base branch: `fm/cli-current-foundations-postfix-fix-wave-r1` at `c3f83cbf6eabbae00219566fb02719ca2d6c480d`.
+- Merges into: `fm/cli-current-foundations-postfix-fix-wave-r1` → `main` (human-gated); this follow-up remains a separate stacked PR until Firstmate supplies the final base and merge instruction.
+- Delivery: A committed, non-force-pushed `fm/cli-reverse-etl-action-binding-foundation-r1` branch, ready for the Firstmate-directed no-mistakes PR/CI gate. No connector definition changes and no merge to `main`.
+- Working branch: `fm/cli-reverse-etl-action-binding-foundation-r1`.
+- Task: Extend the existing connector-neutral declarative typed-destination foundation with declaration-owned per-action source mappings plus closed, receipt-complete bounded batch and tombstone semantics. Preserve GitHub and all existing declarations without provider- or route-specific shared Go.
+- Verification: behavioral red/green tests in schema, connector, engine, synctransport, App, and CLI; generator validation and surface check; race checks for changed packages; binary/list-plan-apply-resume persisted-path assertions; repository boundary/canon gates; scoped local gates and, where the command timeout permits, full verification. Record exact commands and outcomes in `VERIFICATION.md`.
+
+### GSD execution record
+
+`scripts/gsd doctor`, every required `scripts/gsd sources` lookup, all five
+generated lifecycle prompts, and `go run ./cmd/agentcontractgen check` passed
+on this branch before planning. This is the required inline/manual fallback:
+the current runtime cannot host compatible isolated GSD workers and the
+canonical single-worker contract forbids role spawning. The repo-local adapter
+has no `programming-loop` command, so the mandatory lifecycle is executed as
+`discuss-phase` → `plan-phase --tdd` → `execute-phase` → `verify-work` →
+`code-review` with artifacts updated inline.
+
+Required skills loaded: `golang-how-to`, `golang-cli`,
+`golang-documentation`, `golang-design-patterns`,
+`golang-structs-interfaces`, `golang-error-handling`, `golang-security`,
+`golang-safety`, `golang-testing`, `golang-context`, `golang-concurrency`,
+and `no-mistakes`.
+
+### Frozen contract and TDD matrix
+
+1. **Red — action-owned source bindings.** A synthetic destination with three
+   selected actions over one source must use three different, exact input
+   mappings; a fourth action in a second connector must remain independently
+   selectable. A binding is keyed by its exact destination action and source
+   executor/stream, has no action-independent fallback, and is sealed by the
+   persisted connector/source/destination/action/mapping/mode/strategy/
+   credential-revision/configuration-digest/evidence/workset/approval identity.
+   Unknown, duplicate, malformed, stale, cross-action, cross-source, and
+   cross-connector selections refuse before stage, transport, plan, write, or
+   read-back I/O.
+2. **Red — closed batch disposition.** Each selected action declares its
+   bounded disposition. The adapter sends deterministic, ordered bounded units
+   only, retains one stable idempotency identity per sealed record/action,
+   returns every 2xx/4xx/5xx provider receipt, and preserves successful
+   partial evidence without treating a partial workset as acknowledged. Retry,
+   cancellation, duplicate records, and reordered input may not replay an
+   already acknowledged provider write.
+3. **Red — explicit tombstone routing.** A tombstone can select only an
+   action the same declaration identifies as delete-capable. It maps the
+   declaration-owned tombstone image/key to that delete action, never to a
+   create/update payload; its acknowledgement and read-back are included in
+   the same sealed workset evidence. A source that emits tombstones without
+   this exact disposition refuses before provider I/O.
+4. **Green — smallest neutral model.** Add only closed shared declarations,
+   schema/loader validation, persisted-plan sealing, and typed adapter/orchestrator
+   support required by the red tests. Keep existing source bindings backward
+   compatible only when unambiguous and preserve GitHub's specialized adapter
+   unchanged. Do not add a generic action, HTTP, route, method, body, mapping,
+   or credential parameter.
+5. **Refactor and integration.** Exercise connection listing, planning,
+   preview/approval, applying, durable terminal persistence, and resuming via
+   the real CLI/App path with synthetic bundles. Regenerate tracked artifacts
+   once after green behaviour, then run generator, race, boundary, and
+   verification gates. Update the declaration guide solely for the new shared
+   foundation; connector adoption and provider definitions stay out of scope.
+
+### Follow-up evidence table
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Three actions sharing one source use distinct definition-owned mappings | fake | Synthetic bundles are required because production connector definitions are expressly out of scope. Tests assert each declared request body and action name differs exactly by selected binding, and a mismatched mapping produces zero transport calls. |
+| A second connector cannot borrow a binding, evidence, or action | fake | A separate synthetic definition and recording provider prove only its declared action is planned/applied/read back; foreign selection leaves all I/O counters at zero. |
+| Batch and retry semantics are bounded, deterministic, and receipt-complete | fake | Deterministic in-memory provider fixtures return ordered 2xx, then 4xx/5xx/cancellation. They record stable keys, exact attempted records, retained receipts, and no re-attempt after an acknowledged record. |
+| Tombstones reach only declared delete actions | fake | Synthetic create/update/delete action schemas and recording provider prove tombstone data cannot materialize a non-delete request and undeclared cases make zero calls. |
+| Persisted CLI/App lifecycle seals and resumes the route | fake | Real project/CLI tests create, list, plan, preview, approve, apply, and resume a saved connection; observable stored run/receipt/checkpoint state proves no caller-shaped route exists. |
+| Existing declarations and GitHub behavior remain executable | live | Existing declaration/transport regression suites plus generator checks exercise the unchanged GitHub specialized contract; no production bundle is edited. |
+
+### Commit checkpoints
+
+1. This frozen plan, TDD ledger, and verification checklist (`Refs #4303`).
+2. Red behavioral tests only (`Refs #4303`).
+3. Green neutral implementation plus documentation and one artifact regeneration (`Refs #4303`).
+4. Verification/review remediation (`Refs #4303`).
+
+### 2026-08-23 published-branch merge integration
+
+`origin/main` advanced seven commits after the published destination branch.
+The branch is merged, never rebased or force-pushed, so its review-fix history
+and stacked descendants retain their shared ancestor. Conflicts are resolved
+against the maintained main-line declarative destination model: definition-owned
+action bindings, bounded receipts, tombstones, read-back, and credential-safe
+output all remain closed; the documentation retains the explicit prohibition on
+generic HTTP, shell, SQL, and arbitrary-action writers. No connector definition
+is changed.
+
+Inline/manual GSD fallback for this reconciliation ran `scripts/gsd doctor`,
+all five `scripts/gsd sources` and generated lifecycle prompts, and
+`go run ./cmd/agentcontractgen check`. Required skills reloaded for the merge:
+`golang-how-to`, `golang-cli`, `golang-documentation`,
+`golang-design-patterns`, `golang-structs-interfaces`,
+`golang-error-handling`, `golang-security`, `golang-safety`,
+`golang-testing`, `golang-context`, and `golang-concurrency`.

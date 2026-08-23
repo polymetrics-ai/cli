@@ -18,6 +18,7 @@ import (
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/coordination"
+	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
@@ -326,7 +327,8 @@ func (a *App) normalizeLoadedState(loaded state, persist bool) error {
 	if err != nil {
 		return err
 	}
-	changed = changed || catalogRefsChanged || compatibilityChanged || coordinationChanged || identityChanged
+	receiptAssociationChanged := migrateLegacyTransportReceiptAssociations(&a.state)
+	changed = changed || catalogRefsChanged || compatibilityChanged || coordinationChanged || identityChanged || receiptAssociationChanged
 	if persist && changed {
 		if err := a.save(); err != nil {
 			return fmt.Errorf("persist project identity: %w", err)
@@ -620,6 +622,7 @@ func (a *App) save() error {
 
 func (a *App) updateState(update func(state) (state, error)) (state, error) {
 	updated, err := a.store.Update(func(current state) (state, error) {
+		migrateLegacyTransportReceiptAssociations(&current)
 		next, updateErr := update(current)
 		if updateErr != nil {
 			return current, updateErr
@@ -635,6 +638,7 @@ func (a *App) updateState(update func(state) (state, error)) (state, error) {
 
 func (a *App) updateStateAfterPreflight(preflight func(state) error, update func(state) (state, error)) (state, error) {
 	updated, err := a.store.UpdateAfterPreflight(preflight, func(current state) (state, error) {
+		migrateLegacyTransportReceiptAssociations(&current)
 		next, updateErr := update(current)
 		if updateErr != nil {
 			return current, updateErr
@@ -650,6 +654,77 @@ func (a *App) updateStateAfterPreflight(preflight func(state) error, update func
 
 func stateStoreCommitMayHaveSucceeded(err error) bool {
 	return statestore.CommitOutcomeForError(err).MayHaveCommitted()
+}
+
+// terminalStateReload is the only way a terminal presentation path may use a
+// state update that reported a post-rename or unlock failure. Its State is a
+// fresh read of the durable file, never the update callback's speculative
+// value.
+type terminalStateReload struct {
+	State            state
+	MayHaveCommitted bool
+}
+
+// reloadExactTerminalState classifies an update result once for ordinary ETL
+// and reverse finalization. A definite no-commit has no terminal result to
+// present. A may-have-committed result must be reloaded before any caller can
+// return it to the CLI or another durable boundary.
+func (a *App) reloadExactTerminalState(persistErr error) (terminalStateReload, error) {
+	if persistErr == nil || !stateStoreCommitMayHaveSucceeded(persistErr) {
+		return terminalStateReload{}, nil
+	}
+	if a == nil || strings.TrimSpace(a.store.Path) == "" {
+		return terminalStateReload{}, errors.New("durable terminal state reload is unavailable")
+	}
+	loaded, err := a.store.LoadReadOnly()
+	if err != nil {
+		return terminalStateReload{}, fmt.Errorf("reload durable terminal state: %w", err)
+	}
+	if err := a.normalizeLoadedState(loaded, false); err != nil {
+		return terminalStateReload{}, fmt.Errorf("normalize reloaded terminal state: %w", err)
+	}
+	a.rememberDeferredState(loaded.Revision)
+	return terminalStateReload{State: a.state, MayHaveCommitted: true}, nil
+}
+
+func terminalETLRunFromState(loaded state, runID string) (Run, error) {
+	for _, run := range loaded.Runs {
+		if run.ID != runID {
+			continue
+		}
+		if !IsTerminalETLRunStatus(run.Status) || run.CompletedAt.IsZero() {
+			return Run{}, fmt.Errorf("durable ETL run %q is not terminal", runID)
+		}
+		return run, nil
+	}
+	return Run{}, fmt.Errorf("durable ETL run %q was not found", runID)
+}
+
+// IsTerminalETLRunStatus reports statuses that are durably presentable to
+// callers. A reconciliation-required run is terminal delivery evidence, not a
+// runnable work item: it can only be repaired from its stored receipt.
+func IsTerminalETLRunStatus(status string) bool {
+	return status == "completed" || status == "failed" || status == ETLRunStatusDeliveredReconciliationRequired
+}
+
+func terminalReverseRunFromState(loaded state, planID, runID string) (ReverseRun, error) {
+	plan, err := reversePlanFromState(loaded, planID)
+	if err != nil {
+		return ReverseRun{}, fmt.Errorf("reload durable reverse plan: %w", err)
+	}
+	if plan.Status != "executed" && plan.Status != "failed" {
+		return ReverseRun{}, fmt.Errorf("durable reverse plan %q is not terminal", planID)
+	}
+	for _, run := range loaded.ReverseRuns {
+		if run.ID != runID {
+			continue
+		}
+		if run.PlanID != planID || (run.Status != "completed" && run.Status != "failed") || run.CompletedAt.IsZero() {
+			return ReverseRun{}, fmt.Errorf("durable reverse run %q is not terminal", runID)
+		}
+		return run, nil
+	}
+	return ReverseRun{}, fmt.Errorf("durable reverse run %q was not found", runID)
 }
 
 func newStateStore(path string) statestore.JSONStore[state] {
@@ -733,6 +808,9 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	}
 	if err := connectors.ValidateConfiguration(connector, req.Config); err != nil {
 		return CredentialMeta{}, fmt.Errorf("credential configuration: %w", err)
+	}
+	if err := credential.RequirePersistentValues(req.Secrets); err != nil {
+		return CredentialMeta{}, err
 	}
 	if err := a.vault.Put(ctx, id, req.Secrets); err != nil {
 		return CredentialMeta{}, err
@@ -1340,6 +1418,10 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if !ok {
 		return Run{}, fmt.Errorf("stream %q not configured on connection %q", req.Stream, req.Connection)
 	}
+	if delivered, pending := a.deliveredReconciliationFor(req.Connection, req.Stream); pending {
+		return a.reconcileDeliveredTransportRun(ctx, delivered)
+	}
+	transportAdmissionFence := a.state.StreamStates[streamStateKey(req.Connection, req.Stream)].ActiveWorkFence
 	if a.connectionMaterializesLocalWarehouse(conn) {
 		if err := a.validateConfiguredLocalWarehouseDestinationTables(); err != nil {
 			return Run{}, err
@@ -1422,6 +1504,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		destination:                 destination,
 		destinationRuntime:          destRuntime,
 		sourceExpectation:           sourceExpectation,
+		transportAdmissionFence:     transportAdmissionFence,
 		streamName:                  req.Stream,
 		stream:                      stream,
 		mode:                        mode,
@@ -1599,16 +1682,64 @@ func (a *App) completeAcknowledgedTransportRun(runID string, result etlExecution
 	if !present {
 		return a.completeRun(runID, result)
 	}
-	return a.completeRunWithAcknowledgedTransportState(runID, result, &acknowledgedTransportCompletion{
+	// A concurrent state update may perform the receipt-association migration
+	// before this finalization rebases. Compare the same normalized historical
+	// representation so that migration metadata alone cannot discard a durable
+	// empty-publication replay fence; every execution-relevant field remains in
+	// the stale-state comparison below.
+	migrateLegacyTransportReceiptAssociation(&acknowledged)
+	completion := &acknowledgedTransportCompletion{
 		key:   result.PendingStreamState.Key,
 		state: cloneStreamState(acknowledged),
-	})
+	}
+	if result.DeliveryReconciliation != nil && (result.DeliveryReconciliation.EmptyPublication != nil || result.DeliveryReconciliation.EmptyPublicationReadBackPending != nil) {
+		return a.completeEmptyPublicationAcknowledgedTransportRun(runID, result, completion)
+	}
+	return a.completeRunWithAcknowledgedTransportState(runID, result, completion)
+}
+
+func (a *App) completeEmptyPublicationAcknowledgedTransportRun(runID string, result etlExecutionResult, completion *acknowledgedTransportCompletion) (Run, error) {
+	if result.persistedDeliveryReconciliation != nil {
+		fenced := *result.persistedDeliveryReconciliation
+		completed, finalizeErr := a.reconcileDeliveredTransportRun(context.Background(), fenced)
+		if finalizeErr != nil {
+			if completed.ID != "" && completed.Status == "completed" {
+				return completed, finalizeErr
+			}
+			return fenced, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("finalize empty full-overwrite replay fence: %w", finalizeErr))
+		}
+		completed.DestinationResults = cloneDestinationResults(result.DestinationResults)
+		return completed, nil
+	}
+	fenced, persistErr := a.persistDeliveredReconciliationRun(runID, result, nil, completion)
+	if persistErr != nil {
+		if fenced.ID != "" || stateStoreCommitMayHaveSucceeded(persistErr) || errors.Is(persistErr, errStateRevisionConflict) {
+			return fenced, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite replay fence: %w", persistErr))
+		}
+		retried, retryErr := a.persistDeliveredReconciliationRun(runID, result, nil, completion)
+		if retried.ID != "" {
+			return retried, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite replay fence: %w", errors.Join(persistErr, retryErr)))
+		}
+		return Run{}, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite replay fence: %w", errors.Join(persistErr, retryErr)))
+	}
+	completed, finalizeErr := a.reconcileDeliveredTransportRun(context.Background(), fenced)
+	if finalizeErr != nil {
+		if completed.ID != "" && completed.Status == "completed" {
+			return completed, finalizeErr
+		}
+		return fenced, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("finalize empty full-overwrite replay fence: %w", finalizeErr))
+	}
+	completed.DestinationResults = cloneDestinationResults(result.DestinationResults)
+	return completed, nil
 }
 
 // failAcknowledgedTransportRun uses a completed checkpoint only as an
 // eligibility witness for terminal failure. It does not refresh state, retry a
 // checkpoint, or replay destination work.
 func (a *App) failAcknowledgedTransportRun(runID string, result etlExecutionResult, runErr error) (Run, error) {
+	if result.persistedDeliveryReconciliation != nil {
+		return *result.persistedDeliveryReconciliation, runErr
+	}
 	if errors.Is(runErr, errTransportStreamStateConflict) {
 		return a.failRunWithResult(runID, result, runErr)
 	}
@@ -1618,6 +1749,12 @@ func (a *App) failAcknowledgedTransportRun(runID string, result etlExecutionResu
 	acknowledged, present := a.state.StreamStates[result.PendingStreamState.Key]
 	if !present {
 		return a.failRunWithResult(runID, result, runErr)
+	}
+	if result.DeliveryReconciliation != nil {
+		return a.persistDeliveredReconciliationRun(runID, result, runErr, &acknowledgedTransportCompletion{
+			key:   result.PendingStreamState.Key,
+			state: cloneStreamState(acknowledged),
+		})
 	}
 	return a.failRunWithAcknowledgedTransportState(runID, result, runErr, &acknowledgedTransportCompletion{
 		key:   result.PendingStreamState.Key,
@@ -1687,11 +1824,15 @@ func (a *App) completeRunWithAcknowledgedTransportState(runID string, result etl
 	})
 	if persistErr != nil {
 		if acknowledged != nil && transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
-			for _, run := range updated.Runs {
-				if run.ID == runID {
+			reloaded, reloadErr := a.reloadExactTerminalState(persistErr)
+			if reloadErr == nil {
+				run, runErr := terminalETLRunFromState(reloaded.State, runID)
+				if runErr == nil {
 					return run, persistErr
 				}
+				return Run{}, errors.Join(persistErr, runErr)
 			}
+			return Run{}, errors.Join(persistErr, reloadErr)
 		}
 		return Run{}, persistErr
 	}
@@ -1740,11 +1881,15 @@ func (a *App) failRunWithAcknowledgedTransportState(runID string, result etlExec
 	})
 	if persistErr != nil {
 		if transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
-			for _, run := range updated.Runs {
-				if run.ID == runID {
-					return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+			reloaded, reloadErr := a.reloadExactTerminalState(persistErr)
+			if reloadErr == nil {
+				durableRun, terminalErr := terminalETLRunFromState(reloaded.State, runID)
+				if terminalErr == nil {
+					return durableRun, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 				}
+				return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", terminalErr))
 			}
+			return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", errors.Join(persistErr, reloadErr)))
 		}
 		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 	}
@@ -2019,11 +2164,13 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 				return ReversePlan{}, nil, fmt.Errorf("connector %q does not support direct-write previews", connector.Name())
 			}
 			preview, err := directWriter.PreviewOperationDirectWrite(ctx, connectors.OperationDirectWriteRequest{
-				Operation:  writeCommand.Operation,
-				Config:     runtime,
-				PathParams: writeCommand.PathParams,
-				Query:      writeCommand.Query,
-				Body:       map[string]any(writeCommand.Record),
+				Operation:    writeCommand.Operation,
+				Config:       runtime,
+				PathParams:   writeCommand.PathParams,
+				Query:        writeCommand.Query,
+				Headers:      writeCommand.Headers,
+				HeaderValues: writeCommand.HeaderValues,
+				Body:         map[string]any(writeCommand.Record),
 			})
 			if err != nil {
 				return ReversePlan{}, nil, err
@@ -2043,17 +2190,20 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	}
 	planHash, err := connectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Write, writeCommand.Record, payloadIdentity)
 	if writeCommand.Operation != "" {
-		planHash, err = operationConnectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Operation, writeCommand.PathParams, writeCommand.Query, writeCommand.Record, payloadIdentity)
+		planHash, err = operationConnectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Operation, writeCommand.PathParams, writeCommand.Query, writeCommand.Headers, writeCommand.HeaderValues, writeCommand.Record, payloadIdentity)
 	}
 	if err != nil {
 		return ReversePlan{}, nil, err
 	}
 	confirmation := confirmationFromChallenge(writeCommand.ConfirmationChallenge)
-	redactFields, err := connectorCommandRedactFields(connector, writeCommand.Operation, writeCommand.Write)
+	redactFields, structuredBody, err := connectorCommandRedactFields(connector, writeCommand.Operation, writeCommand.Write)
 	if err != nil {
 		return ReversePlan{}, nil, err
 	}
-	withheldRecord, withheldFields := withholdRecordFields(writeCommand.Record, redactFields)
+	withheldRecord, withheldFields, sample, err := connectorCommandPlanRecords(connector, writeCommand.Operation, structuredBody, writeCommand.Record, writeCommand.RedactedRecord, redactFields)
+	if err != nil {
+		return ReversePlan{}, nil, err
+	}
 	created := time.Now().UTC()
 	expires := created.Add(24 * time.Hour)
 	var planSeal *connectors.WritePlanSeal
@@ -2073,32 +2223,34 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		expires = seal.ExpiresAt
 	}
 	plan := ReversePlan{
-		ID:                         id,
-		Name:                       name,
-		Status:                     "planned",
-		Mode:                       reversePlanModeConnectorCommand,
-		DestinationConnector:       req.Connector,
-		DestinationCredential:      req.Credential,
-		DestinationConfig:          cloneStringMap(req.Config),
-		Action:                     writeCommand.Write,
-		Mappings:                   map[string]string{},
-		ConnectorCommand:           writeCommand.Command,
-		ConnectorCommandPath:       append([]string(nil), req.Path...),
-		ConnectorCommandOperation:  writeCommand.Operation,
-		ConnectorCommandPathParams: cloneStringMap(writeCommand.PathParams),
-		ConnectorCommandQuery:      cloneStringMap(writeCommand.Query),
-		ConnectorCommandRecord:     withheldRecord,
-		PayloadIdentity:            payloadIdentity,
-		ConfirmationChallenge:      writeCommand.ConfirmationChallenge,
-		ConfirmationPolicy:         confirmationFromChallenge(writeCommand.ConfirmationChallenge),
-		RecordCount:                1,
-		RedactFields:               redactFields,
-		WithheldFields:             withheldFields,
-		Sample:                     RedactReversePlanRecords([]connectors.Record{cloneRecord(writeCommand.RedactedRecord)}, redactFields),
-		PlanHash:                   planHash,
-		PlanSeal:                   planSeal,
-		CreatedAt:                  created,
-		ExpiresAt:                  expires,
+		ID:                           id,
+		Name:                         name,
+		Status:                       "planned",
+		Mode:                         reversePlanModeConnectorCommand,
+		DestinationConnector:         req.Connector,
+		DestinationCredential:        req.Credential,
+		DestinationConfig:            cloneStringMap(req.Config),
+		Action:                       writeCommand.Write,
+		Mappings:                     map[string]string{},
+		ConnectorCommand:             writeCommand.Command,
+		ConnectorCommandPath:         append([]string(nil), req.Path...),
+		ConnectorCommandOperation:    writeCommand.Operation,
+		ConnectorCommandPathParams:   cloneStringMap(writeCommand.PathParams),
+		ConnectorCommandQuery:        cloneStringMap(writeCommand.Query),
+		ConnectorCommandHeaders:      cloneStringMap(writeCommand.Headers),
+		ConnectorCommandHeaderValues: cloneStringSliceMap(writeCommand.HeaderValues),
+		ConnectorCommandRecord:       withheldRecord,
+		PayloadIdentity:              payloadIdentity,
+		ConfirmationChallenge:        writeCommand.ConfirmationChallenge,
+		ConfirmationPolicy:           confirmationFromChallenge(writeCommand.ConfirmationChallenge),
+		RecordCount:                  1,
+		RedactFields:                 redactFields,
+		WithheldFields:               withheldFields,
+		Sample:                       sample,
+		PlanHash:                     planHash,
+		PlanSeal:                     planSeal,
+		CreatedAt:                    created,
+		ExpiresAt:                    expires,
 	}
 	if strings.TrimSpace(writeCommand.ConfirmationChallenge) == "" && writeCommand.Operation == "" {
 		token, err := randomToken(18)
@@ -2138,9 +2290,39 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 // owed back, and demanding it would strand the plan behind a precondition its
 // own hash cannot satisfy.
 func (a *App) reconstituteConnectorCommandRecord(plan ReversePlan, writer connectors.Connector, withheldFlags map[string][]string) (connectors.Record, error) {
+	structuredBody := false
+	var resolver connectors.OperationDirectWriteBodyValueResolver
+	var transformer connectors.OperationDirectWriteBodyPlanTransformer
+	if strings.TrimSpace(plan.ConnectorCommandOperation) != "" {
+		metadata, err := connectorCommandDirectWriteMetadata(writer, plan.ConnectorCommandOperation)
+		if err != nil {
+			return nil, err
+		}
+		structuredBody = metadata.StructuredBody
+		if structuredBody {
+			var ok bool
+			resolver, ok = writer.(connectors.OperationDirectWriteBodyValueResolver)
+			if !ok {
+				return nil, fmt.Errorf("connector %q does not expose direct-write body resolution", writer.Name())
+			}
+			transformer, ok = writer.(connectors.OperationDirectWriteBodyPlanTransformer)
+			if !ok {
+				return nil, fmt.Errorf("connector %q does not expose direct-write body plan transformation", writer.Name())
+			}
+		}
+	}
 	pending := make([]string, 0, len(plan.WithheldFields))
 	for _, field := range plan.WithheldFields {
-		if !recordHasField(plan.ConnectorCommandRecord, field) {
+		field = strings.TrimSpace(field)
+		present := recordHasField(plan.ConnectorCommandRecord, field)
+		if structuredBody {
+			_, resolved, err := resolver.ResolveOperationDirectWriteBodyValue(plan.ConnectorCommandOperation, map[string]any(plan.ConnectorCommandRecord), field)
+			if err != nil {
+				return nil, err
+			}
+			present = resolved
+		}
+		if !present {
 			pending = append(pending, strings.TrimSpace(field))
 		}
 	}
@@ -2156,6 +2338,13 @@ func (a *App) reconstituteConnectorCommandRecord(plan ReversePlan, writer connec
 			"reverse plan %q withheld %s from disk; re-supply %s on this command to preview or approve it",
 			plan.ID, strings.Join(pending, ", "), strings.Join(missing, " "),
 		)
+	}
+	if structuredBody {
+		merged, err := transformer.MergeOperationDirectWriteBodyFragments(plan.ConnectorCommandOperation, map[string]any(plan.ConnectorCommandRecord), map[string]any(supplied))
+		if err != nil {
+			return nil, err
+		}
+		return connectors.Record(merged), nil
 	}
 	return mergeRecordFields(plan.ConnectorCommandRecord, supplied), nil
 }
@@ -2207,11 +2396,13 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string, withhe
 			return ReversePlan{}, connectors.WritePreview{}, fmt.Errorf("connector %q no longer supports direct-write previews", writer.Name())
 		}
 		preview, err := directWriter.PreviewOperationDirectWrite(ctx, connectors.OperationDirectWriteRequest{
-			Operation:  plan.ConnectorCommandOperation,
-			Config:     runtime,
-			PathParams: plan.ConnectorCommandPathParams,
-			Query:      plan.ConnectorCommandQuery,
-			Body:       map[string]any(record),
+			Operation:    plan.ConnectorCommandOperation,
+			Config:       runtime,
+			PathParams:   plan.ConnectorCommandPathParams,
+			Query:        plan.ConnectorCommandQuery,
+			Headers:      plan.ConnectorCommandHeaders,
+			HeaderValues: plan.ConnectorCommandHeaderValues,
+			Body:         map[string]any(record),
 		})
 		if err != nil {
 			return ReversePlan{}, connectors.WritePreview{}, err
@@ -2256,6 +2447,8 @@ func connectorCommandHashForPlan(plan ReversePlan, record connectors.Record, pay
 			plan.ConnectorCommandOperation,
 			plan.ConnectorCommandPathParams,
 			plan.ConnectorCommandQuery,
+			plan.ConnectorCommandHeaders,
+			plan.ConnectorCommandHeaderValues,
 			record,
 			payloadIdentity,
 		)
@@ -2868,14 +3061,8 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	}
 	writeRequest.Approval = evidence
 	result, err := writer.Write(ctx, writeRequest, records)
-	if err == nil && (result.RecordsWritten != len(records) || result.RecordsFailed != 0 || result.RecordsUnchanged != 0) {
-		err = fmt.Errorf(
-			"connector command acknowledgement is incomplete: wrote %d, unchanged %d, failed %d of %d records",
-			result.RecordsWritten,
-			result.RecordsUnchanged,
-			result.RecordsFailed,
-			len(records),
-		)
+	if err == nil {
+		err = validateCompleteReverseWriteAcknowledgement(len(records), result, a.reverseWriteAllowsUnchanged(plan.ID))
 	}
 	return a.finishReverseWrite(plan.ID, run, result, runtime, len(records), err)
 }
@@ -2886,11 +3073,13 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 		return ReverseRun{}, fmt.Errorf("connector %q no longer supports direct writes", writer.Name())
 	}
 	operationRequest := connectors.OperationDirectWriteRequest{
-		Operation:  plan.ConnectorCommandOperation,
-		Config:     runtime,
-		PathParams: plan.ConnectorCommandPathParams,
-		Query:      plan.ConnectorCommandQuery,
-		Body:       map[string]any(record),
+		Operation:    plan.ConnectorCommandOperation,
+		Config:       runtime,
+		PathParams:   plan.ConnectorCommandPathParams,
+		Query:        plan.ConnectorCommandQuery,
+		Headers:      plan.ConnectorCommandHeaders,
+		HeaderValues: plan.ConnectorCommandHeaderValues,
+		Body:         map[string]any(record),
 	}
 	preview, err := validateOperationDirectWritePreview(ctx, directWriter, plan, operationRequest)
 	if err != nil {
@@ -2909,7 +3098,7 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 	operationRequest.PreviewDigest = preview.Digest
 	operationResult, writeErr := directWriter.OperationDirectWrite(ctx, operationRequest)
 	writeResult := connectors.WriteResult{RecordsWritten: 1}
-	if operationResult.ResponseReceived {
+	if operationResult.Operation != "" {
 		safeOperationResult := connectors.SanitizeOperationDirectWriteResultForOutput(operationResult, runtime.Secrets)
 		run.OperationDirectWrite = &safeOperationResult
 	}
@@ -3133,6 +3322,9 @@ func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result c
 }
 
 func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, result connectors.WriteResult, runtime connectors.RuntimeConfig, staged int, writeErr error, errorText func(error) string) (ReverseRun, error) {
+	if writeErr == nil {
+		writeErr = validateCompleteReverseWriteAcknowledgement(staged, result, a.reverseWriteAllowsUnchanged(planID))
+	}
 	output, outputErr := json.Marshal(connectors.SanitizeWriteResultForOutput(result, runtime.Secrets))
 	if outputErr != nil && writeErr == nil {
 		writeErr = fmt.Errorf("encode complete reverse destination result: %w", outputErr)
@@ -3140,21 +3332,21 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	if outputErr == nil {
 		run.DestinationResult = append(json.RawMessage(nil), output...)
 	}
-	run.RecordsSucceeded = result.RecordsWritten
-	run.RecordsFailed = result.RecordsFailed
+	run.RecordsSucceeded = min(max(result.RecordsWritten, 0), max(staged, 0))
+	run.RecordsFailed = min(max(result.RecordsFailed, 0), max(staged, 0))
 	run.CompletedAt = time.Now().UTC()
 	planStatus := "executed"
 	if writeErr != nil {
 		run.Status = "failed"
 		planStatus = "failed"
 		if run.RecordsFailed == 0 {
-			run.RecordsFailed = staged - result.RecordsWritten
+			run.RecordsFailed = max(0, staged-run.RecordsSucceeded)
 		}
 		run.Error = errorText(writeErr)
 	} else {
 		run.Status = "completed"
 	}
-	updated, persistErr := a.updateState(func(current state) (state, error) {
+	_, persistErr := a.updateState(func(current state) (state, error) {
 		current.ReverseRuns = append(current.ReverseRuns, run)
 		for i := range current.ReversePlans {
 			if current.ReversePlans[i].ID == planID && (current.ReversePlans[i].Status == "executing" || current.ReversePlans[i].Status == reversePlanStatusApprovalConsumptionUncertain) {
@@ -3165,16 +3357,21 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 		}
 		return current, nil
 	})
-	if persistErr == nil {
-		a.state = updated
-	}
-	if writeErr != nil {
-		return run, writeErr
-	}
 	if persistErr != nil {
-		return ReverseRun{}, persistErr
+		if !stateStoreCommitMayHaveSucceeded(persistErr) {
+			return ReverseRun{}, errors.Join(writeErr, persistErr)
+		}
+		reloaded, reloadErr := a.reloadExactTerminalState(persistErr)
+		if reloadErr != nil {
+			return ReverseRun{}, errors.Join(writeErr, persistErr, reloadErr)
+		}
+		restored, restoreErr := terminalReverseRunFromState(reloaded.State, planID, run.ID)
+		if restoreErr != nil {
+			return ReverseRun{}, errors.Join(writeErr, persistErr, restoreErr)
+		}
+		return restored, errors.Join(writeErr, persistErr)
 	}
-	return run, nil
+	return run, writeErr
 }
 
 type runtimeSecretSanitizedError struct {
@@ -3472,18 +3669,20 @@ func (a *App) failRun(runID string, runErr error) (Run, error) {
 func (a *App) failRunWithResult(runID string, result etlExecutionResult, runErr error) (Run, error) {
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
-	transportStateConflict := errors.Is(runErr, errTransportStreamStateConflict)
+	transportRunFinalizationRebase := errors.Is(runErr, errTransportStreamStateConflict) ||
+		errors.Is(runErr, errTransportStreamReconciliationPending) ||
+		errors.Is(runErr, errTransportStreamAdmissionStale)
 	transitionedInCallback := false
 	targetAlreadyTerminal := false
 	updated, persistErr := a.updateState(func(current state) (state, error) {
-		if !transportStateConflict && current.Revision != expectedRevision {
+		if !transportRunFinalizationRebase && current.Revision != expectedRevision {
 			return current, errStateRevisionConflict
 		}
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
 			}
-			if transportStateConflict && current.Runs[i].Status != "running" {
+			if transportRunFinalizationRebase && current.Runs[i].Status != "running" {
 				targetAlreadyTerminal = true
 				return current, fmt.Errorf("transport conflict run %q has status %q, want running before finalization", runID, current.Runs[i].Status)
 			}
@@ -3504,12 +3703,23 @@ func (a *App) failRunWithResult(runID string, result etlExecutionResult, runErr 
 		return current, fmt.Errorf("run %q not found", runID)
 	})
 	if persistErr != nil {
-		if transportStateConflict && (targetAlreadyTerminal || (transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr))) {
-			for _, run := range updated.Runs {
-				if run.ID == runID {
-					return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
-				}
+		if transportRunFinalizationRebase && targetAlreadyTerminal {
+			if run, storedErr := terminalETLRunFromState(updated, runID); storedErr == nil {
+				return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+			} else {
+				return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", errors.Join(persistErr, storedErr)))
 			}
+		}
+		if transitionedInCallback && stateStoreCommitMayHaveSucceeded(persistErr) {
+			reloaded, reloadErr := a.reloadExactTerminalState(persistErr)
+			if reloadErr != nil {
+				return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", errors.Join(persistErr, reloadErr)))
+			}
+			run, storedErr := terminalETLRunFromState(reloaded.State, runID)
+			if storedErr != nil {
+				return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", errors.Join(persistErr, storedErr)))
+			}
+			return run, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 		}
 		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 	}

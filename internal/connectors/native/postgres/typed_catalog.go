@@ -210,10 +210,14 @@ func (resources typedCatalogResources) operationContext(ctx context.Context) (co
 }
 
 func discoverTypedCatalog(ctx context.Context, pool *pgxpool.Pool, databaseName, schema string, definition database.Definition, resources typedCatalogResources) (database.Catalog, error) {
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return database.Catalog{}, err
+	}
 	tx, err := pool.BeginTx(ctx, typedCatalogTransactionOptions())
 	if err != nil {
 		return database.Catalog{}, fmt.Errorf("catalog postgres: begin typed catalog snapshot: %w", err)
 	}
+	tx = admitPostgresTx(tx)
 	catalog, discoverErr := discoverTypedCatalogSnapshot(ctx, tx, databaseName, schema, definition)
 	rollbackErr := rollbackTypedCatalogSnapshot(ctx, tx, resources)
 	if rollbackErr != nil {

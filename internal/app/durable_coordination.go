@@ -126,6 +126,22 @@ func (a *App) parkRateLimitedRun(ctx context.Context, request etlModeDispatchReq
 			current.Runs[index].DestinationResults = cloneDestinationResults(result.DestinationResults)
 			current.Runs[index].Error = runError
 			current.Runs[index].CompletedAt = completedAt
+			streamState, present := current.StreamStates[stateKey]
+			if !present {
+				return current, fmt.Errorf("rate-limited run %q no longer owns its transport stream work", request.runID)
+			}
+			if streamState.ActiveWorkID != "" && (streamState.ActiveWorkID != request.runID || streamState.ActiveWorkLeaseUntil == nil) {
+				return current, fmt.Errorf("rate-limited run %q no longer owns its transport stream work", request.runID)
+			}
+			// Parking is a durable terminal handoff, not a live owner. Retain the
+			// acknowledged checkpoint and monotonic fence. A direct persistence
+			// caller has no live lease to release; an exact live owner is released
+			// so the separately identified resume attempt can claim it.
+			if streamState.ActiveWorkID == request.runID {
+				streamState.ActiveWorkID = ""
+				streamState.ActiveWorkLeaseUntil = nil
+			}
+			current.StreamStates[stateKey] = cloneStreamState(streamState)
 			return current, nil
 		}
 		return current, fmt.Errorf("rate-limited run %q not found", request.runID)
@@ -230,9 +246,27 @@ func (a *App) startParkedRateLimitRunRearm(ctx context.Context, original Run, ch
 	request.rateParkingRearmAttemptRunID = attemptRunID
 	resumeCtx := context.WithValue(ctx, rateParkingResumeContextKey{}, original.ID)
 	if _, err := a.RunETL(resumeCtx, request); err != nil {
-		return "", err
+		return "", classifyRateParkingResumeError(err)
 	}
 	return attemptRunID, nil
+}
+
+// classifyRateParkingResumeError keeps the coordinator connector-neutral while
+// making a known-invalid, approval-bound authorization terminal for this exact
+// parked scope. All other provider failures retain their retryable semantics.
+func classifyRateParkingResumeError(err error) error {
+	if err == nil {
+		return nil
+	}
+	var expired *AuthorizationExpiredError
+	if errors.As(err, &expired) {
+		return coordination.NeedsReauthorization(err)
+	}
+	var revoked *AuthorizationRevokedError
+	if errors.As(err, &revoked) {
+		return coordination.NeedsReauthorization(err)
+	}
+	return err
 }
 
 func (a *App) persistRateParkingRearmAttemptLink(runID, attemptRunID string) error {

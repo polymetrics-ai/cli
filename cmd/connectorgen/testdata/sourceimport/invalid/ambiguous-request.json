@@ -1,0 +1,1 @@
+{"openapi":"3.0.3","info":{"title":"invalid","version":"1"},"paths":{"/items":{"post":{"operationId":"ambiguous","requestBody":{"content":{"application/json":{"schema":{"oneOf":[{"type":"string","maxLength":4},{"type":"string","maxLength":5}]}}}},"responses":{"200":{"description":"x"}}}}}}

@@ -838,6 +838,7 @@ func buildFlowMatrixForConnectors(repoRoot string, capabilities capabilityMatrix
 	if err != nil {
 		return flowMatrix{}, err
 	}
+	evidence = currentCertificationEvidence(repoRoot, evidence)
 
 	roles, rolesByConnector, err := buildConnectorFlowRoles(sources, capabilities)
 	if err != nil {

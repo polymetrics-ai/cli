@@ -254,12 +254,13 @@ This fact explained a defect nobody could see; do not rediscover it the hard way
 
 ## Command Parameters Are Derived, Never Hand-Authored
 
-A `direct_read` command's flags come from the connector's own provider
-specification, not from authoring. `connectorgen params-import` writes the
-accepted parameter set into `operations.json` as `rest.parameters`;
-`surface-sync` adds missing command flags and synchronizes their operation-owned
-mapping plus requiredness for a flag mapped to a required REST path parameter.
-It preserves author-owned summaries, types, and optional query/body behavior.
+Fixed REST or binary operation command flags come from the connector's own
+provider specification, not from authoring. `connectorgen params-import` writes
+the accepted parameter set into the operation's registered block; `surface-sync`
+adds missing command flags and synchronizes their operation-owned mapping,
+path/header requiredness, and header repeatability. It preserves author-owned
+summaries, types, and optional query/body behavior. The exact import and header
+contract lives in [the connector authoring conventions](docs/migration/conventions.md).
 The split keeps CI hermetic — `surface-sync --check` needs no artifact and no
 network.
 

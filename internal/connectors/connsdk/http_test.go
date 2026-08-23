@@ -26,6 +26,76 @@ import (
 
 func noSleep(_ context.Context, _ time.Duration) error { return nil }
 
+func TestRequesterRechecksRequestAdmissionBeforeRetry(t *testing.T) {
+	errFenced := errors.New("authentication cohort fenced")
+	sends := 0
+	fenced := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		sends++
+		fenced = true
+		http.Error(w, "retryable provider failure", http.StatusServiceUnavailable)
+	}))
+	defer server.Close()
+	checks := 0
+	ctx := WithRequestAdmission(context.Background(), func(context.Context) error {
+		checks++
+		if fenced {
+			return errFenced
+		}
+		return nil
+	})
+
+	response, err := (&Requester{BaseURL: server.URL, MaxRetries: 1, Sleep: noSleep}).Do(ctx, http.MethodGet, "/records", nil, nil)
+	if !errors.Is(err, errFenced) {
+		t.Fatalf("Do() error = %T %v, want request admission fence", err, err)
+	}
+	if sends != 1 || checks != 2 {
+		t.Fatalf("sends/admission checks = %d/%d, want first send and pre-retry fence", sends, checks)
+	}
+	if response == nil || response.Status != http.StatusServiceUnavailable {
+		t.Fatalf("terminal response = %#v, want retained first provider receipt", response)
+	}
+}
+
+func TestRequesterRechecksRequestAdmissionBeforeRedirect(t *testing.T) {
+	errFenced := errors.New("authentication cohort fenced")
+	firstSends, redirectedSends := 0, 0
+	fenced := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/first":
+			firstSends++
+			fenced = true
+			http.Redirect(w, r, "/second", http.StatusFound)
+		case "/second":
+			redirectedSends++
+			w.WriteHeader(http.StatusNoContent)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+	checks := 0
+	ctx := WithRequestAdmission(context.Background(), func(context.Context) error {
+		checks++
+		if fenced {
+			return errFenced
+		}
+		return nil
+	})
+
+	response, err := (&Requester{BaseURL: server.URL, Sleep: noSleep}).Do(ctx, http.MethodGet, "/first", nil, nil)
+	if !errors.Is(err, errFenced) {
+		t.Fatalf("Do() error = %T %v, want request admission fence", err, err)
+	}
+	if firstSends != 1 || redirectedSends != 0 || checks != 2 {
+		t.Fatalf("first/redirected sends and admission checks = %d/%d/%d, want 1/0/2", firstSends, redirectedSends, checks)
+	}
+	if response == nil || response.Status != http.StatusFound {
+		t.Fatalf("terminal response = %#v, want retained redirect provider receipt", response)
+	}
+}
+
 type roundTripperFunc func(*http.Request) (*http.Response, error)
 
 func (f roundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
@@ -1049,6 +1119,117 @@ func TestRequesterDisableRetriesRejectsMutationRedirect(t *testing.T) {
 	}
 }
 
+func TestRequesterIdempotentMutationStillRefusesRedirectAndRetainsTerminalResponse(t *testing.T) {
+	for _, status := range []int{
+		http.StatusMovedPermanently,
+		http.StatusFound,
+		http.StatusSeeOther,
+		http.StatusTemporaryRedirect,
+		http.StatusPermanentRedirect,
+	} {
+		t.Run(http.StatusText(status), func(t *testing.T) {
+			var redirected int32
+			target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				atomic.AddInt32(&redirected, 1)
+				w.WriteHeader(http.StatusNoContent)
+			}))
+			defer target.Close()
+			source := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+				w.Header().Set("Location", target.URL+"/outside-approved-target")
+				w.Header().Set("X-Request-ID", "redirect-receipt")
+				w.WriteHeader(status)
+			}))
+			defer source.Close()
+
+			r := &Requester{
+				BaseURL: source.URL,
+				DefaultHeaders: map[string]string{
+					"Idempotency-Key": "preview-bound-key",
+				},
+				MaxRetries: 1,
+				Sleep:      func(context.Context, time.Duration) error { return nil },
+			}
+			resp, err := r.Do(context.Background(), http.MethodPost, "/mutate", nil, map[string]string{"name": "widget"})
+			if !errors.Is(err, transportpolicy.ErrRedirectRefused) {
+				t.Fatalf("Do error = %v, want redirect refusal", err)
+			}
+			if resp == nil || resp.Status != status || resp.Header.Get("X-Request-ID") != "redirect-receipt" {
+				t.Fatalf("terminal response = %#v, want status %d and complete receipt", resp, status)
+			}
+			if got := atomic.LoadInt32(&redirected); got != 0 {
+				t.Fatalf("redirect target hits = %d, want 0", got)
+			}
+		})
+	}
+}
+
+func TestRequesterMutationRetryCancellationRetainsLastResponse(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("X-Request-ID", "terminal-retry-receipt")
+		http.Error(w, "retry later", http.StatusServiceUnavailable)
+	}))
+	defer srv.Close()
+
+	cancelled := errors.New("retry parking cancelled")
+	r := &Requester{
+		BaseURL:    srv.URL,
+		MaxRetries: 1,
+		Sleep: func(context.Context, time.Duration) error {
+			return cancelled
+		},
+	}
+	resp, err := r.Do(context.Background(), http.MethodPost, "/mutate", nil, map[string]string{"name": "widget"})
+	if !errors.Is(err, cancelled) {
+		t.Fatalf("Do error = %v, want cancellation", err)
+	}
+	if resp == nil || resp.Status != http.StatusServiceUnavailable || resp.Header.Get("X-Request-ID") != "terminal-retry-receipt" || string(resp.Body) != "retry later\n" {
+		t.Fatalf("terminal response = %#v, want complete last provider response", resp)
+	}
+	var provider *HTTPError
+	if !errors.As(err, &provider) || provider.Status != http.StatusServiceUnavailable || provider.Header.Get("X-Request-ID") != "terminal-retry-receipt" {
+		t.Fatalf("Do error provider evidence = %#v, want retained 503 HTTPError", provider)
+	}
+}
+
+// TestRequesterRetryTransportFailureRetainsEarlierProviderResponse proves a
+// later no-response transport failure cannot overwrite the bounded provider
+// receipt that caused the retry. Downstream command surfaces need both facts:
+// the provider's 503 metadata and the terminal transport cause.
+func TestRequesterRetryTransportFailureRetainsEarlierProviderResponse(t *testing.T) {
+	transportFailure := errors.New("connection reset after provider retry")
+	calls := 0
+	r := &Requester{
+		BaseURL:    "https://provider.example.invalid",
+		MaxRetries: 1,
+		Sleep: func(context.Context, time.Duration) error {
+			return nil
+		},
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			calls++
+			if calls == 1 {
+				return &http.Response{
+					StatusCode: http.StatusServiceUnavailable,
+					Header:     http.Header{"X-Request-Id": []string{"first-provider-receipt"}},
+					Body:       io.NopCloser(strings.NewReader("retry later")),
+					Request:    req,
+				}, nil
+			}
+			return nil, transportFailure
+		})},
+	}
+	resp, err := r.Do(context.Background(), http.MethodGet, "/widgets", nil, nil)
+	if !errors.Is(err, transportFailure) {
+		t.Fatalf("Do error = %v, want terminal transport failure", err)
+	}
+	var provider *HTTPError
+	if !errors.As(err, &provider) || provider.Status != http.StatusServiceUnavailable || provider.Header.Get("X-Request-ID") != "first-provider-receipt" {
+		t.Fatalf("Do error provider evidence = %#v, want retained first 503 HTTPError", provider)
+	}
+	if resp == nil || resp.Status != http.StatusServiceUnavailable || resp.Header.Get("X-Request-ID") != "first-provider-receipt" || string(resp.Body) != "retry later" {
+		t.Fatalf("terminal response = %#v, want retained first provider response", resp)
+	}
+}
+
 func TestRequesterAdmitsReplayableReadOncePerLogicalAttempt(t *testing.T) {
 	var readHits int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
@@ -1122,6 +1303,58 @@ func TestRequesterDoLimitedCapsCapturedBody(t *testing.T) {
 	}
 	if got, want := len(resp.Body), 9; got != want {
 		t.Fatalf("captured body bytes = %d, want %d", got, want)
+	}
+}
+
+func TestRequesterAcceptedStatusMismatchReturnsReceiptAndTypedError(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Add("X-Provider-Receipt", "first")
+		w.Header().Add("X-Provider-Receipt", "second")
+		w.WriteHeader(http.StatusAccepted)
+		_, _ = w.Write([]byte(`{"id":"occurrence-9007199254740993"}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	requester := &Requester{
+		BaseURL:          srv.URL,
+		Sleep:            noSleep,
+		AcceptedStatuses: []StatusRange{{Min: http.StatusOK, Max: http.StatusCreated}},
+	}
+	response, err := requester.DoLimited(context.Background(), http.MethodPost, "/widgets", nil, map[string]any{"name": "widget"}, 1024)
+	var statusErr *UnexpectedStatusError
+	if !errors.As(err, &statusErr) || statusErr.Status != http.StatusAccepted {
+		t.Fatalf("DoLimited() error = %v, want typed status 202", err)
+	}
+	if response == nil || response.Status != http.StatusAccepted || string(response.Body) != `{"id":"occurrence-9007199254740993"}` {
+		t.Fatalf("DoLimited() response = %#v, want complete terminal receipt", response)
+	}
+	if got := response.Header.Values("X-Provider-Receipt"); !slices.Equal(got, []string{"first", "second"}) {
+		t.Fatalf("receipt headers = %#v", got)
+	}
+}
+
+func TestRequesterDoStatusCheckPreservesFinalNon2xxResponse(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if r.Method != http.MethodHead {
+			t.Fatalf("method = %s, want HEAD", r.Method)
+		}
+		w.Header().Set("X-Status-Probe", "unavailable")
+		w.WriteHeader(http.StatusServiceUnavailable)
+	}))
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, MaxRetries: 2, Sleep: noSleep}
+	resp, err := r.DoStatusCheck(context.Background(), "/health", nil, 8)
+	if err != nil {
+		t.Fatalf("DoStatusCheck error = %v", err)
+	}
+	if resp.Status != http.StatusServiceUnavailable || resp.Header.Get("X-Status-Probe") != "unavailable" || len(resp.Body) != 0 {
+		t.Fatalf("status response = %#v, want final 503 metadata", resp)
+	}
+	if requests != 3 {
+		t.Fatalf("requests = %d, want 3", requests)
 	}
 }
 
@@ -1561,6 +1794,62 @@ func TestRequesterDoFormNoBodySendsNoContentType(t *testing.T) {
 	}
 	if sawContentType != "" {
 		t.Fatalf("Content-Type = %q, want empty for bodyless form post", sawContentType)
+	}
+}
+
+func TestRequesterDoStripsOverwrittenAuthHeaderCrossOrigin(t *testing.T) {
+	var sawAccept atomic.Value
+	sawAccept.Store("")
+	cdn := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sawAccept.Store(r.Header.Get("Accept"))
+		_, _ = w.Write([]byte("ok"))
+	}))
+	t.Cleanup(cdn.Close)
+	origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, cdn.URL+"/final", http.StatusFound)
+	}))
+	t.Cleanup(origin.Close)
+	r := &Requester{
+		BaseURL: origin.URL,
+		Auth:    customHeaderAuth("Accept", "credential"),
+		RedirectPolicy: &RedirectPolicy{
+			MaxHops:      1,
+			AllowedHosts: []string{strings.TrimPrefix(cdn.URL, "http://")},
+		},
+	}
+	if _, err := r.Do(context.Background(), http.MethodGet, "/start", nil, nil); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if got := sawAccept.Load().(string); got != "" {
+		t.Fatalf("cross-origin redirect received overwritten auth header %q", got)
+	}
+}
+
+func TestBufferedRequesterDefaultRedirectPolicyProtectsCustomCredentials(t *testing.T) {
+	var targetHits int32
+	var targetCredential atomic.Value
+	targetCredential.Store("")
+	target := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		atomic.AddInt32(&targetHits, 1)
+		targetCredential.Store(r.Header.Get("X-API-Key"))
+		w.WriteHeader(http.StatusOK)
+	}))
+	t.Cleanup(target.Close)
+	origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, target.URL+"/final", http.StatusFound)
+	}))
+	t.Cleanup(origin.Close)
+
+	r := &Requester{BaseURL: origin.URL, DefaultHeaders: map[string]string{"X-API-Key": "configured-secret"}}
+	_, err := r.Do(context.Background(), http.MethodGet, "/start", nil, nil)
+	if err == nil || !strings.Contains(err.Error(), "cross-host redirect") {
+		t.Fatalf("Do error = %v, want safe-default cross-host refusal", err)
+	}
+	if got := atomic.LoadInt32(&targetHits); got != 0 {
+		t.Fatalf("redirect target hits = %d, want 0", got)
+	}
+	if got := targetCredential.Load().(string); got != "" {
+		t.Fatalf("redirect target received custom credential %q", got)
 	}
 }
 

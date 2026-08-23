@@ -202,11 +202,8 @@ func TestFreeBusyOperationDirectReadFixtureOnly(t *testing.T) {
 	if _, ok := calendars["primary"]; !ok {
 		t.Fatalf("calendars = %#v, want caller-supplied primary key", calendars)
 	}
-	if _, ok := body["accessToken"]; ok {
-		t.Fatalf("body retained sensitive accessToken: %#v", body)
-	}
-	if redacted, ok := body["accessToken_redacted"].(bool); !ok || !redacted {
-		t.Fatalf("accessToken_redacted = %#v, want true", body["accessToken_redacted"])
+	if body["accessToken"] != "provider-sensitive-fixture" {
+		t.Fatalf("ordinary unclassified accessToken was changed: %#v", body)
 	}
 }
 

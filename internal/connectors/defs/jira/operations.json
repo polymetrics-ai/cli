@@ -911,6 +911,14 @@
         "method": "GET",
         "path": "/rest/api/3/universal_avatar/view/type/{type}",
         "max_bytes": 10485760,
+        "content_types": [
+          "image/*"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -927,6 +935,14 @@
         "method": "GET",
         "path": "/rest/api/3/universal_avatar/view/type/{type}/avatar/{id}",
         "max_bytes": 10485760,
+        "content_types": [
+          "image/*"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -943,6 +959,14 @@
         "method": "GET",
         "path": "/rest/api/3/universal_avatar/view/type/{type}/owner/{entityId}",
         "max_bytes": 10485760,
+        "content_types": [
+          "image/*"
+        ],
+        "response": {
+          "success_statuses": [
+            "200"
+          ]
+        },
         "allow_overwrite": false,
         "extract_archives": false
       }

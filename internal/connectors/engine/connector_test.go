@@ -146,9 +146,11 @@ func mustJSONLiteral(t *testing.T, value string) string {
 // compile-time proof that Base + those four methods together satisfy
 // connectors.Connector.
 var (
-	_ connectors.DefinitionProvider              = Base{}
-	_ connectors.OperationDirectReadPreflighter  = Base{}
-	_ connectors.OperationDirectWritePreflighter = Base{}
+	_ connectors.DefinitionProvider                     = Base{}
+	_ connectors.OperationDirectReadPreflighter         = Base{}
+	_ connectors.OperationDirectWritePreflighter        = Base{}
+	_ connectors.OperationDirectWriteBindingPreflighter = Base{}
+	_ connectors.OperationStructuredJSONBodyPreflighter = Base{}
 )
 
 // --- test fixtures ---
@@ -333,6 +335,34 @@ func TestCommandSurfaceAddsSharedApprovalStdinMarkerForWrites(t *testing.T) {
 				t.Fatalf("approval stdin marker count = %d, want %d", count, tc.wantCount)
 			}
 		})
+	}
+}
+
+func TestCommandSurfaceProjectsOperationParameterByteCaps(t *testing.T) {
+	bundle := Bundle{
+		Operations: []OperationSpec{{
+			ID: "acme.widgets.get", Kind: "rest_read",
+			REST: &RESTOperationSpec{Parameters: []OperationParameter{
+				{Name: "id", In: "path", MaxBytes: 128},
+				{Name: "filter", In: "query"},
+			}},
+		}},
+		CLISurface: &CLISurface{Commands: []CLICommand{{
+			Path: "widgets get", Intent: "direct_read", Operation: "acme.widgets.get",
+			Flags: []CLIFlag{
+				{Name: "id", Type: "string", MapsTo: "path.id"},
+				{Name: "filter", Type: "string", MapsTo: "query.filter"},
+				{Name: "body", Type: "string", MapsTo: "body.name"},
+			},
+		}}},
+	}
+	surface := synthesizeCommandSurface(bundle)
+	if surface == nil || len(surface.Commands) != 1 || len(surface.Commands[0].Flags) != 3 {
+		t.Fatalf("command surface = %#v", surface)
+	}
+	flags := surface.Commands[0].Flags
+	if flags[0].MaxBytes != 128 || flags[1].MaxBytes != defaultOperationParameterMaxBytes || flags[2].MaxBytes != 0 {
+		t.Fatalf("projected max bytes = [%d %d %d]", flags[0].MaxBytes, flags[1].MaxBytes, flags[2].MaxBytes)
 	}
 }
 

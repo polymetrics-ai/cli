@@ -21,6 +21,7 @@ type etlModeDispatchRequest struct {
 	destination                 connectors.Connector
 	destinationRuntime          connectors.RuntimeConfig
 	sourceExpectation           synccontract.ResumeExpectation
+	transportAdmissionFence     int64
 	streamName                  string
 	stream                      StreamConfig
 	mode                        SyncMode
@@ -48,7 +49,10 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 		}
 		return a.completeAcknowledgedTransportRun(request.runID, result)
 	}
-	transportRoute := a.shouldRunTransport(request.connection, request.streamName, request.mode, request.source, request.destination)
+	transportRoute, _, routeErr := a.selectTransportRoute(request.connection, request.streamName, request.mode, request.source, request.destination)
+	if routeErr != nil {
+		return a.failAcknowledgedTransportRun(request.runID, etlExecutionResult{TransportPhaseMeasurement: &TransportPhaseMeasurement{}}, fmt.Errorf("select closed transport route: %w", routeErr))
+	}
 	if request.maxInFlightBatches > 0 && (!transportRoute || !isOrderedArrowFullOverwriteCandidate(request)) {
 		return a.failRun(request.runID, &synctransport.OrderedPipelineUnsupportedError{Source: request.source.Name(), Destination: request.destination.Name()})
 	}
@@ -60,7 +64,7 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 		if maxInFlightBatches == 0 && isOrderedArrowFullOverwriteCandidate(request) {
 			maxInFlightBatches = 2
 		}
-		result, err := a.runTransportETL(ctx, request.runID, request.connection, request.source, request.sourceRuntime, request.destination, request.destinationRuntime, request.sourceExpectation, request.streamName, request.stream, request.mode, request.batchSize, maxInFlightBatches, request.destinationApproval, request.rateParkingResumeCheckpoint)
+		result, err := a.runTransportETL(ctx, request.runID, request.connection, request.source, request.sourceRuntime, request.destination, request.destinationRuntime, request.sourceExpectation, request.transportAdmissionFence, request.streamName, request.stream, request.mode, request.batchSize, maxInFlightBatches, request.destinationApproval, request.rateParkingResumeCheckpoint)
 		if err != nil {
 			if origin, tagged := synctransport.TransportExecutionOriginOf(err); tagged && origin == synctransport.TransportExecutionOriginSource {
 				if parked, handled, parkErr := a.parkRateLimitedRun(ctx, request, result, err); handled {

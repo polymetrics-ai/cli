@@ -136,9 +136,13 @@ type ArrowBulkPhaseMeasurement struct {
 }
 
 type ArrowBulkApplyRequest struct {
-	ConnectionID  string
-	Plan          DestinationPlan
-	Segment       FastSegmentReceipt
+	ConnectionID string
+	Plan         DestinationPlan
+	Segment      FastSegmentReceipt
+	// Record is borrowed for the synchronous ApplyArrowSegment call only. The
+	// controller releases the transformed record immediately after the call
+	// returns, so a destination that needs to retain it must Retain and Release
+	// its own reference within its private run lifecycle.
 	Record        arrow.Record
 	Runtime       connectors.RuntimeConfig
 	Source        connectors.Connector
@@ -147,6 +151,22 @@ type ArrowBulkApplyRequest struct {
 	Stream        string
 	BatchSize     int
 	Approval      DestinationApproval `json:"-"`
+}
+
+func cloneArrowFullOverwriteRunRequest(request ArrowFullOverwriteRunRequest) ArrowFullOverwriteRunRequest {
+	clone := request
+	clone.Runtime = cloneRuntimeConfig(request.Runtime)
+	clone.SourceRuntime = cloneRuntimeConfig(request.SourceRuntime)
+	clone.Binding.PrimaryKey = append([]string(nil), request.Binding.PrimaryKey...)
+	return clone
+}
+
+func cloneArrowBulkApplyRequest(request ArrowBulkApplyRequest) ArrowBulkApplyRequest {
+	clone := request
+	clone.Runtime = cloneRuntimeConfig(request.Runtime)
+	clone.SourceRuntime = cloneRuntimeConfig(request.SourceRuntime)
+	clone.Binding.PrimaryKey = append([]string(nil), request.Binding.PrimaryKey...)
+	return clone
 }
 
 // ArrowFullOverwritePublicationRequest contains aggregate, record-free proof

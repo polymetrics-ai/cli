@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strings"
 	"testing"
@@ -29,17 +30,32 @@ type fakeConnector struct {
 	operationDirectReadReq     connectors.OperationDirectReadRequest
 	operationReadPreflight     operationDirectReadPreflightCall
 	operationReadPreflightErr  error
+	operationReadBindings      operationDirectReadBindingPreflightCall
+	operationReadBindingsErr   error
 	operationJSONVariable      operationStructuredJSONVariablePreflightCall
 	operationJSONVariableErr   error
+	operationJSONBodyField     operationStructuredJSONVariablePreflightCall
+	operationJSONBodyFieldErr  error
 	operationDirectWriteReq    connectors.OperationDirectWriteRequest
 	operationWritePreflight    operationDirectWritePreflightCall
 	operationWritePreflightErr error
+	operationWriteBindings     operationDirectWriteBindingPreflightCall
+	operationWriteBindingsErr  error
+	operationWriteMaterialize  func(string, map[string]any) (map[string]any, error)
 	directWriteMetadata        connectors.OperationDirectWriteMetadata
 	binaryDownloadReq          connectors.OperationBinaryDownloadRequest
+	statusCheckReq             connectors.OperationStatusCheckRequest
+	statusCheckPreflight       operationStatusCheckPreflightCall
+	statusCheckPreflightErr    error
+	statusCheckResult          connectors.OperationStatusCheckResult
+	statusCheckErr             error
 	directReadErr              error
+	directReadResult           *connectors.DirectReadResult
 	ignoresPageNavigation      bool
 	operationDirectReadErr     error
+	operationDirectReadResult  *connectors.DirectReadResult
 	binaryDownloadErr          error
+	binaryDownloadResult       *connectors.OperationBinaryDownloadResult
 	validateReq                connectors.WriteRequest
 	dryRunReq                  connectors.WriteRequest
 	writeReq                   connectors.WriteRequest
@@ -61,6 +77,14 @@ type operationDirectReadPreflightCall struct {
 	outputPolicy string
 }
 
+type operationDirectReadBindingPreflightCall struct {
+	operation   string
+	pathFields  []string
+	queryFields []string
+	bodyFields  []string
+	rawBody     bool
+}
+
 type operationStructuredJSONVariablePreflightCall struct {
 	operation string
 	variable  string
@@ -71,6 +95,78 @@ type operationDirectWritePreflightCall struct {
 	method       string
 	path         string
 	outputPolicy string
+}
+
+type operationStatusCheckPreflightCall struct {
+	operation    string
+	method       string
+	path         string
+	outputPolicy string
+}
+
+type operationDirectWriteBindingPreflightCall struct {
+	operation  string
+	pathFields []string
+	bodyFields []string
+}
+
+func TestCommandRunnerRejectsDuplicateSingletonTargetsBeforeIO(t *testing.T) {
+	tests := []struct {
+		name string
+		run  func() error
+	}{
+		{
+			name: "ETL duplicate occurrence",
+			run: func() error {
+				cmd := connectors.CommandSurfaceCommand{Path: "records list", Intent: "etl", Flags: []connectors.CommandSurfaceFlag{{Name: "state", Type: "string", MapsTo: "query.state"}}}
+				_, _, err := streamOverrides(cmd, connectors.RuntimeConfig{}, map[string][]string{"state": {"open", "closed"}})
+				return err
+			},
+		},
+		{
+			name: "direct read aliases",
+			run: func() error {
+				cmd := connectors.CommandSurfaceCommand{Path: "records get", Intent: "direct_read", Flags: []connectors.CommandSurfaceFlag{
+					{Name: "id", Type: "string", MapsTo: "query.id"},
+					{Name: "identifier", Type: "string", MapsTo: "query.id"},
+				}}
+				_, _, err := directReadOverrides(cmd, map[string][]string{"id": {"one"}, "identifier": {"two"}})
+				return err
+			},
+		},
+		{
+			name: "direct write canonical header aliases",
+			run: func() error {
+				cmd := connectors.CommandSurfaceCommand{Path: "records update", Intent: "direct_write", Flags: []connectors.CommandSurfaceFlag{
+					{Name: "request-id", Type: "string", MapsTo: "header.X-Request-ID"},
+					{Name: "request-id-alias", Type: "string", MapsTo: "header.x-request-id"},
+				}}
+				_, _, _, _, _, _, err := operationDirectOverrides(cmd, map[string][]string{"request-id": {"one"}, "request-id-alias": {"two"}}, nil)
+				return err
+			},
+		},
+		{
+			name: "reverse ETL duplicate occurrence",
+			run: func() error {
+				cmd := connectors.CommandSurfaceCommand{Path: "records create", Intent: "reverse_etl", Flags: []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "record.name"}}}
+				_, err := recordOverrides(cmd, map[string][]string{"name": {"one", "two"}})
+				return err
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if err := test.run(); err == nil || !strings.Contains(err.Error(), "supplied more than once") {
+				t.Fatalf("duplicate singleton error = %v", err)
+			}
+		})
+	}
+
+	arrayCommand := connectors.CommandSurfaceCommand{Path: "records tag", Intent: "reverse_etl", Flags: []connectors.CommandSurfaceFlag{{Name: "tag", Type: "string_array", MapsTo: "record.tags"}}}
+	record, err := recordOverrides(arrayCommand, map[string][]string{"tag": {"one", "two"}})
+	if err != nil || !reflect.DeepEqual(record["tags"], []string{"one", "two"}) {
+		t.Fatalf("repeatable array = %#v, err %v", record, err)
+	}
 }
 
 type preflightFakeConnector struct {
@@ -108,6 +204,9 @@ func (f *fakeConnector) Read(_ context.Context, req connectors.ReadRequest, emit
 func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
 	f.directReadReq = req
 	if f.directReadErr != nil {
+		if f.directReadResult != nil {
+			return *f.directReadResult, f.directReadErr
+		}
 		return connectors.DirectReadResult{}, f.directReadErr
 	}
 	return connectors.DirectReadResult{
@@ -136,6 +235,9 @@ func (f *fakeConnector) directReadPage() connectors.DirectReadPage {
 func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	f.operationDirectReadReq = req
 	if f.operationDirectReadErr != nil {
+		if f.operationDirectReadResult != nil {
+			return *f.operationDirectReadResult, f.operationDirectReadErr
+		}
 		return connectors.DirectReadResult{}, f.operationDirectReadErr
 	}
 	return connectors.DirectReadResult{
@@ -157,11 +259,21 @@ func (f *fakeConnector) PreflightOperationDirectRead(operation, method, path str
 	}
 	return f.operationReadPreflightErr
 }
+func (f *fakeConnector) PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error {
+	f.operationReadBindings = operationDirectReadBindingPreflightCall{
+		operation: operation, pathFields: pathFields, queryFields: queryFields, bodyFields: bodyFields, rawBody: rawBody,
+	}
+	return f.operationReadBindingsErr
+}
 func (f *fakeConnector) PreflightOperationStructuredJSONVariable(operation, variable string) error {
 	f.operationJSONVariable = operationStructuredJSONVariablePreflightCall{operation: operation, variable: variable}
 	return f.operationJSONVariableErr
 }
-func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error {
+func (f *fakeConnector) PreflightOperationStructuredJSONBodyField(operation, field string) error {
+	f.operationJSONBodyField = operationStructuredJSONVariablePreflightCall{operation: operation, variable: field}
+	return f.operationJSONBodyFieldErr
+}
+func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, outputPolicy string, _ ...string) error {
 	f.operationWritePreflight = operationDirectWritePreflightCall{
 		operation:    operation,
 		method:       method,
@@ -169,6 +281,37 @@ func (f *fakeConnector) PreflightOperationDirectWrite(operation, method, path, o
 		outputPolicy: outputPolicy,
 	}
 	return f.operationWritePreflightErr
+}
+func (f *fakeConnector) PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error {
+	f.operationWriteBindings = operationDirectWriteBindingPreflightCall{
+		operation:  operation,
+		pathFields: append([]string(nil), pathFields...),
+		bodyFields: append([]string(nil), bodyFields...),
+	}
+	return f.operationWriteBindingsErr
+}
+func (f *fakeConnector) MaterializeOperationDirectWriteBody(operation string, mappings map[string]any) (map[string]any, error) {
+	if f.operationWriteMaterialize != nil {
+		return f.operationWriteMaterialize(operation, mappings)
+	}
+	body := make(map[string]any, len(mappings))
+	paths := make([]string, 0, len(mappings))
+	for path := range mappings {
+		paths = append(paths, path)
+	}
+	sort.SliceStable(paths, func(left, right int) bool {
+		return bodyMappingPathLess(paths[left], paths[right])
+	})
+	for _, path := range paths {
+		if err := setOperationBodyValue(body, path, mappings[path], false); err != nil {
+			return nil, err
+		}
+	}
+	return body, nil
+}
+func (f *fakeConnector) ResolveOperationDirectWriteBodyValue(_ string, body map[string]any, path string) (any, bool, error) {
+	value, present := nestedBodyValue(body, path)
+	return value, present, nil
 }
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
@@ -191,6 +334,9 @@ func (f *fakeConnector) OperationDirectWriteMetadata(operation string) (connecto
 func (f *fakeConnector) OperationBinaryDownload(_ context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
 	f.binaryDownloadReq = req
 	if f.binaryDownloadErr != nil {
+		if f.binaryDownloadResult != nil {
+			return *f.binaryDownloadResult, f.binaryDownloadErr
+		}
 		return connectors.OperationBinaryDownloadResult{}, f.binaryDownloadErr
 	}
 	return connectors.OperationBinaryDownloadResult{
@@ -198,6 +344,22 @@ func (f *fakeConnector) OperationBinaryDownload(_ context.Context, req connector
 		Operation: req.Operation,
 		Record:    connectors.Record{"file_path": "out/artifact", "file_size_bytes": 12},
 	}, nil
+}
+func (f *fakeConnector) OperationStatusCheck(_ context.Context, req connectors.OperationStatusCheckRequest) (connectors.OperationStatusCheckResult, error) {
+	f.statusCheckReq = req
+	if f.statusCheckErr != nil {
+		return f.statusCheckResult, f.statusCheckErr
+	}
+	return f.statusCheckResult, nil
+}
+func (f *fakeConnector) PreflightOperationStatusCheck(operation, method, path, outputPolicy string) error {
+	f.statusCheckPreflight = operationStatusCheckPreflightCall{
+		operation:    operation,
+		method:       method,
+		path:         path,
+		outputPolicy: outputPolicy,
+	}
+	return f.statusCheckPreflightErr
 }
 func (f *fakeConnector) Write(_ context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
 	f.writeReq = req
@@ -889,11 +1051,11 @@ func TestBuildWriteCommandPlansReopenAndPRSharedCommands(t *testing.T) {
 		resource string
 		record   connectors.Record
 	}{
-		{[]string{"issue", "reopen"}, map[string][]string{"issue-number": {"7"}}, "reopen_issue", "issue", connectors.Record{"issue_number": 7}},
-		{[]string{"pr", "reopen"}, map[string][]string{"pull-number": {"9"}}, "reopen_pull_request", "pr", connectors.Record{"pull_number": 9}},
-		{[]string{"pr", "comment"}, map[string][]string{"pull-number": {"9"}, "body": {"ship it"}}, "comment_issue", "pr", connectors.Record{"issue_number": 9, "body": "ship it"}},
-		{[]string{"pr", "lock"}, map[string][]string{"pull-number": {"9"}}, "lock_issue", "pr", connectors.Record{"issue_number": 9}},
-		{[]string{"pr", "unlock"}, map[string][]string{"pull-number": {"9"}}, "unlock_issue", "pr", connectors.Record{"issue_number": 9}},
+		{[]string{"issue", "reopen"}, map[string][]string{"issue-number": {"7"}}, "reopen_issue", "issue", connectors.Record{"issue_number": json.Number("7")}},
+		{[]string{"pr", "reopen"}, map[string][]string{"pull-number": {"9"}}, "reopen_pull_request", "pr", connectors.Record{"pull_number": json.Number("9")}},
+		{[]string{"pr", "comment"}, map[string][]string{"pull-number": {"9"}, "body": {"ship it"}}, "comment_issue", "pr", connectors.Record{"issue_number": json.Number("9"), "body": "ship it"}},
+		{[]string{"pr", "lock"}, map[string][]string{"pull-number": {"9"}}, "lock_issue", "pr", connectors.Record{"issue_number": json.Number("9")}},
+		{[]string{"pr", "unlock"}, map[string][]string{"pull-number": {"9"}}, "unlock_issue", "pr", connectors.Record{"issue_number": json.Number("9")}},
 	}
 
 	for _, tt := range tests {
@@ -1374,8 +1536,39 @@ func TestRecordOverridesBuildsExplicitNestedScalarFields(t *testing.T) {
 	if !ok {
 		t.Fatalf("record diagnosis = %#v, want nested object", record["diagnosis"])
 	}
-	if diagnosis["nonCoded"] != "Synthetic condition" || record["rank"] != 1 {
-		t.Fatalf("record = %+v, want explicit nested scalar diagnosis and integer rank", record)
+	if diagnosis["nonCoded"] != "Synthetic condition" || record["rank"] != json.Number("1") {
+		t.Fatalf("record = %+v, want explicit nested scalar diagnosis and exact integer lexeme", record)
+	}
+}
+
+func TestRecordOverridesRejectsDeclaredStringByteCapBeforeWriteValidation(t *testing.T) {
+	command := connectors.CommandSurfaceCommand{
+		Path: "records create", Intent: "reverse_etl", Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{{Name: "summary", Type: "string", MapsTo: "record.summary", MaxBytes: 4}},
+	}
+	_, err := recordOverrides(command, map[string][]string{"summary": {"12345"}})
+	if err == nil || !strings.Contains(err.Error(), "byte cap 4") {
+		t.Fatalf("recordOverrides error = %v, want declared record string byte-cap refusal", err)
+	}
+}
+
+func TestRecordOverridesBareStringUnionRemainsBoundedAndRejectsMalformedContainers(t *testing.T) {
+	command := connectors.CommandSurfaceCommand{
+		Path: "records create", Intent: "reverse_etl", Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{{Name: "title", Type: "json", MapsTo: "record.title", AllowBareString: true, MaxBytes: 8}},
+	}
+	record, err := recordOverrides(command, map[string][]string{"title": {"Shipped"}})
+	if err != nil {
+		t.Fatalf("bare declared string arm: %v", err)
+	}
+	if got := record["title"]; got != "Shipped" {
+		t.Fatalf("bare title = %#v, want ordinary string", got)
+	}
+	if _, err := recordOverrides(command, map[string][]string{"title": {"{"}}); err == nil || !strings.Contains(err.Error(), "invalid JSON for --title") {
+		t.Fatalf("malformed JSON container error = %v, want syntax refusal", err)
+	}
+	if _, err := recordOverrides(command, map[string][]string{"title": {"123456789"}}); err == nil || !strings.Contains(err.Error(), "exceeds 8 bytes") {
+		t.Fatalf("oversized bare title error = %v, want byte-bound refusal", err)
 	}
 }
 
@@ -1813,6 +2006,7 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 				RedactFields: []string{"email"},
 				Flags: []connectors.CommandSurfaceFlag{
 					{Name: "email", Type: "string_array", MapsTo: "body.emails"},
+					{Name: "header-x-request-mode", Type: "enum", Values: []string{"safe", "full"}, MapsTo: "header.X-Request-Mode"},
 				},
 			},
 		},
@@ -1820,7 +2014,7 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 
 	result, err := Run(context.Background(), connector, Request{
 		Path:  []string{"meetings", "integration-status"},
-		Flags: map[string][]string{"email": {"ada@example.com", "grace@example.com"}},
+		Flags: map[string][]string{"email": {"ada@example.com", "grace@example.com"}, "header-x-request-mode": {"safe"}},
 	}, func(connectors.Record) error {
 		t.Fatal("emit called for operation direct-read command")
 		return nil
@@ -1844,9 +2038,49 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	if len(connector.operationDirectReadReq.RedactFields) != 0 {
 		t.Fatalf("operation direct read RedactFields = %#v, want empty", connector.operationDirectReadReq.RedactFields)
 	}
+	if got := connector.operationDirectReadReq.Headers["X-Request-Mode"]; got != "safe" {
+		t.Fatalf("operation request header = %q, want exact declared value", got)
+	}
 }
 
-func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredGraphQLVariable(t *testing.T) {
+func TestRunOperationDirectReadRejectsRepeatedHeaderFlagsBeforeDispatch(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets list", Intent: "direct_read", Availability: "implemented", Operation: "acme.widgets.list", OutputPolicy: "json_redacted",
+		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/widgets"}},
+		Flags:      []connectors.CommandSurfaceFlag{{Name: "header-x-mode", Type: "enum", Values: []string{"safe", "full"}, MapsTo: "header.X-Mode"}},
+	}}}}
+	_, err := Run(context.Background(), connector, Request{Path: []string{"widgets", "list"}, Flags: map[string][]string{"header-x-mode": {"invalid", "safe"}}}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "accept exactly one value") {
+		t.Fatalf("Run error = %v, want repeated header refusal", err)
+	}
+	if connector.operationDirectReadReq.Operation != "" {
+		t.Fatalf("duplicate header reached operation dispatch: %#v", connector.operationDirectReadReq)
+	}
+}
+
+func TestRunOperationDirectReadPreservesDeclaredRepeatableHeaderValues(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets list", Intent: "direct_read", Availability: "implemented", Operation: "acme.widgets.list", OutputPolicy: "json_redacted",
+		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/widgets"}},
+		Flags:      []connectors.CommandSurfaceFlag{{Name: "header-x-mode", Type: "enum", Values: []string{"safe", "full"}, Repeatable: true, MapsTo: "header.X-Mode"}},
+	}}}}
+	_, err := Run(context.Background(), connector, Request{Path: []string{"widgets", "list"}, Flags: map[string][]string{"header-x-mode": {"invalid", "safe"}}}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "want one of") {
+		t.Fatalf("Run error = %v, want every repeated value validated", err)
+	}
+	if connector.operationDirectReadReq.Operation != "" {
+		t.Fatalf("invalid repeated header reached operation dispatch: %#v", connector.operationDirectReadReq)
+	}
+	_, err = Run(context.Background(), connector, Request{Path: []string{"widgets", "list"}, Flags: map[string][]string{"header-x-mode": {"safe", "full"}}}, func(connectors.Record) error { return nil })
+	if err != nil {
+		t.Fatalf("Run repeatable header: %v", err)
+	}
+	if got := connector.operationDirectReadReq.HeaderValues["X-Mode"]; len(got) != 2 || got[0] != "safe" || got[1] != "full" {
+		t.Fatalf("repeatable header values = %#v, want ordered values", connector.operationDirectReadReq.HeaderValues)
+	}
+}
+
+func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredBodyField(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
 		Path:         "graphql query widgets",
 		Intent:       "direct_read",
@@ -1869,7 +2103,7 @@ func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredGraphQLVariable(t 
 	if err != nil {
 		t.Fatalf("Run: %v", err)
 	}
-	if got, want := connector.operationJSONVariable, (operationStructuredJSONVariablePreflightCall{operation: "github.graphql.query.widgets", variable: "input"}); got != want {
+	if got, want := connector.operationJSONBodyField, (operationStructuredJSONVariablePreflightCall{operation: "github.graphql.query.widgets", variable: "input"}); got != want {
 		t.Fatalf("structured JSON preflight = %#v, want %#v", got, want)
 	}
 	input, ok := connector.operationDirectReadReq.Body["input"].(map[string]any)
@@ -1881,13 +2115,58 @@ func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredGraphQLVariable(t 
 		t.Fatalf("typed GraphQL ids = %#v, want one declared item", input["ids"])
 	}
 
-	connector.operationJSONVariableErr = errors.New("variable is not a closed object or array")
+	connector.operationJSONBodyFieldErr = errors.New("variable is not a closed object or array")
 	_, err = Run(context.Background(), connector, Request{
 		Path:  []string{"graphql", "query", "widgets"},
 		Flags: map[string][]string{"input": {`{"ids":["widget-2"]}`}},
 	}, func(connectors.Record) error { return nil })
 	if err == nil || !strings.Contains(err.Error(), "closed object or array") {
-		t.Fatalf("Run rejected GraphQL variable = %v, want declaration-owned preflight rejection", err)
+		t.Fatalf("Run rejected GraphQL body field = %v, want declaration-owned preflight rejection", err)
+	}
+}
+
+func TestRunOperationDirectReadAdmitsOnlyPreflightedStructuredRESTBodyField(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "customers generate-keyword-ideas",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "google_ads.customers.generate.keyword.ideas",
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/v22/customers/{customer_id}:generateKeywordIdeas"}},
+		OutputPolicy: "json_redacted",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "keyword-seed", Type: "json", Required: true, MapsTo: "body.keywordSeed"},
+		},
+	}}}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"customers", "generate-keyword-ideas"},
+		Flags: map[string][]string{"keyword-seed": {`{"keywords":["trail running shoes"]}`}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if got, want := connector.operationJSONBodyField, (operationStructuredJSONVariablePreflightCall{operation: "google_ads.customers.generate.keyword.ideas", variable: "keywordSeed"}); got != want {
+		t.Fatalf("structured REST body preflight = %#v, want %#v", got, want)
+	}
+	seed, ok := connector.operationDirectReadReq.Body["keywordSeed"].(map[string]any)
+	if !ok {
+		t.Fatalf("typed REST seed = %#v, want object", connector.operationDirectReadReq.Body["keywordSeed"])
+	}
+	keywords, ok := seed["keywords"].([]any)
+	if !ok || len(keywords) != 1 || keywords[0] != "trail running shoes" {
+		t.Fatalf("typed REST keywords = %#v, want one declared item", seed["keywords"])
+	}
+
+	connector.operationJSONBodyFieldErr = errors.New("keywordSeed is not a closed bounded object")
+	_, err = Run(context.Background(), connector, Request{
+		Path:  []string{"customers", "generate-keyword-ideas"},
+		Flags: map[string][]string{"keyword-seed": {`{"keywords":["trail running shoes"]}`}},
+	}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "closed bounded object") {
+		t.Fatalf("Run rejected REST body field = %v, want declaration-owned preflight rejection", err)
 	}
 }
 
@@ -1926,6 +2205,62 @@ func TestRunOperationDirectReadPassesDeclaredPlainTextBody(t *testing.T) {
 	}
 	if len(connector.operationDirectReadReq.Body) != 0 {
 		t.Fatalf("Body = %#v, want no JSON fields for raw input", connector.operationDirectReadReq.Body)
+	}
+}
+
+func TestRunOperationDirectReadEnforcesEncodedPathAndQueryCapsBeforeDispatch(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets get", Intent: "direct_read", Availability: "implemented", Operation: "acme.widgets.get", OutputPolicy: "json_redacted",
+		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/widgets/{id}"}},
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "id", Type: "string", MapsTo: "path.id", Required: true, MaxBytes: 6},
+			{Name: "filter", Type: "string", MapsTo: "query.filter", MaxBytes: 6},
+		},
+	}}}}
+
+	for _, testCase := range []struct {
+		name  string
+		flags map[string][]string
+	}{
+		{name: "path", flags: map[string][]string{"id": {"éé"}}},
+		{name: "query", flags: map[string][]string{"id": {"ok"}, "filter": {"éé"}}},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			_, err := Run(context.Background(), connector, Request{Path: []string{"widgets", "get"}, Flags: testCase.flags}, func(connectors.Record) error { return nil })
+			if err == nil || !strings.Contains(err.Error(), "byte cap") {
+				t.Fatalf("Run error = %v, want encoded byte-cap rejection", err)
+			}
+		})
+	}
+	if connector.operationDirectReadReq.Operation != "" {
+		t.Fatalf("OperationDirectRead dispatched rejected input: %+v", connector.operationDirectReadReq)
+	}
+}
+
+func TestOperationDirectReadCommandPreflightsExactBindings(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets search", Intent: "direct_read", Availability: "implemented", Operation: "acme.widgets.search", OutputPolicy: "json_redacted",
+		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/widgets/{tenant}"}},
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "tenant", Type: "string", MapsTo: "path.tenant"},
+			{Name: "cursor", Type: "string", MapsTo: "query.cursor"},
+			{Name: "name", Type: "string", MapsTo: "body.name"},
+			{Name: "trace", Type: "string", MapsTo: "header.X-Trace"},
+		},
+	}}}}
+	if err := Preflight(connector, []string{"widgets", "search"}); err != nil {
+		t.Fatalf("Preflight: %v", err)
+	}
+	want := operationDirectReadBindingPreflightCall{
+		operation: "acme.widgets.search", pathFields: []string{"tenant"}, queryFields: []string{"cursor"}, bodyFields: []string{"name"},
+	}
+	if !reflect.DeepEqual(connector.operationReadBindings, want) {
+		t.Fatalf("binding preflight = %#v, want %#v", connector.operationReadBindings, want)
+	}
+
+	connector.operationReadBindingsErr = errors.New("undeclared query binding")
+	if err := Preflight(connector, []string{"widgets", "search"}); err == nil || !strings.Contains(err.Error(), "bindings are not executable") {
+		t.Fatalf("Preflight error = %v, want closed-binding rejection", err)
 	}
 }
 
@@ -2076,8 +2411,8 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	if command.Batchable {
 		t.Fatal("direct write command made batchable:false operation batchable")
 	}
-	if got := command.Record["dir"]; got != 1 {
-		t.Fatalf("typed body dir = %#v (%T), want integer 1", got, got)
+	if got := command.Record["dir"]; got != json.Number("1") {
+		t.Fatalf("typed body dir = %#v (%T), want exact integer lexeme 1", got, got)
 	}
 	if got := command.RedactedRecord["id"]; got != "t3_abc" {
 		t.Fatalf("direct-write preview record id = %#v, want complete input", got)
@@ -2092,6 +2427,611 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	})
 	if err == nil || !strings.Contains(err.Error(), "plan, preview, approval, execute") {
 		t.Fatalf("Run(direct_write) error = %v, want plan lifecycle block", err)
+	}
+}
+
+func TestBuildOperationDirectWriteCommandRejectsDuplicateQueryOccurrencesBeforePreview(t *testing.T) {
+	for _, tc := range []struct {
+		name  string
+		flags []connectors.CommandSurfaceFlag
+		input map[string][]string
+	}{
+		{
+			name: "repeated flag",
+			flags: []connectors.CommandSurfaceFlag{
+				{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"},
+			},
+			input: map[string][]string{"dry-run": {"true", "false"}},
+		},
+		{
+			name: "aliases target the same query parameter",
+			flags: []connectors.CommandSurfaceFlag{
+				{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"},
+				{Name: "dry-run-alias", Type: "boolean", MapsTo: "query.dry_run"},
+			},
+			input: map[string][]string{"dry-run": {"true"}, "dry-run-alias": {"false"}},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			connector := &fakeConnector{
+				directWriteMetadata: connectors.OperationDirectWriteMetadata{
+					Operation:    "acme.vote",
+					OutputPolicy: "json_redacted",
+				},
+				surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+					Path:         "vote",
+					Intent:       "direct_write",
+					Availability: "implemented",
+					Operation:    "acme.vote",
+					APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/api/vote"}},
+					OutputPolicy: "json_redacted",
+					Flags:        tc.flags,
+				}}},
+			}
+
+			_, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path:    []string{"vote"},
+				Flags:   tc.input,
+				Preview: true,
+			})
+			if err == nil || !strings.Contains(err.Error(), "supplied more than once") || !strings.Contains(err.Error(), "dry_run") {
+				t.Fatalf("BuildWriteCommand error = %v, want duplicate query rejection", err)
+			}
+			if connector.operationDirectWriteReq.Operation != "" {
+				t.Fatalf("duplicate query reached operation preview: %+v", connector.operationDirectWriteReq)
+			}
+		})
+	}
+}
+
+func TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody(t *testing.T) {
+	batchable := false
+	bundle := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		Operations: []engine.OperationSpec{{
+			ID:            "acme.workspaces.create_widget",
+			Kind:          "rest_write",
+			Summary:       "Create one declared widget",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "create",
+			Batchable:     &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/workspaces/{workspace_id}/widgets",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				Parameters: []engine.OperationParameter{{
+					Name: "dry_run",
+					In:   "query",
+					Type: "boolean",
+				}},
+				BodySchema: json.RawMessage(`{
+					"type": "object",
+					"additionalProperties": false,
+					"required": ["label", "attributes", "targets"],
+					"properties": {
+						"label": {"type": "string"},
+						"attributes": {
+							"type": "object",
+							"additionalProperties": false,
+							"required": ["owner", "active"],
+							"properties": {
+								"owner": {"type": "string"},
+								"active": {"type": "boolean"}
+							}
+						},
+						"targets": {
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 2,
+							"items": {
+								"type": "object",
+								"additionalProperties": false,
+								"required": ["id"],
+								"properties": {"id": {"type": "string"}}
+							}
+						}
+					}
+				}`),
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: http.MethodPost,
+			Path:   "/workspaces/{workspace_id}/widgets",
+			Operation: &engine.SurfaceOperation{
+				Model:            "destructive_action",
+				Status:           "blocked",
+				Risk:             "high",
+				BlockedByDefault: true,
+				Reason:           "declared typed write",
+			},
+		}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "widgets create",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.workspaces.create_widget",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: "/workspaces/{workspace_id}/widgets"}},
+			OutputPolicy: "json",
+			Flags: []engine.CLIFlag{
+				{Name: "workspace-id", Type: "string", MapsTo: "path.workspace_id", Required: true},
+				{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"},
+				{Name: "label", Type: "string", MapsTo: "body.label", Required: true},
+				{Name: "attributes", Type: "json", MapsTo: "body.attributes", Required: true},
+				{Name: "targets", Type: "json", MapsTo: "body.targets", Required: true},
+			},
+		}}},
+	}
+
+	command, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+		Path: []string{"widgets", "create"},
+		Flags: map[string][]string{
+			"workspace-id": {"workspace-1"},
+			"dry-run":      {"true"},
+			"label":        {"fixture widget"},
+			"attributes":   {`{"owner":"owner-1","active":true}`},
+			"targets":      {`[{"id":"target-1"}]`},
+		},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	if got, want := command.PathParams, map[string]string{"workspace_id": "workspace-1"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("path params = %#v, want %#v", got, want)
+	}
+	if got, want := command.Query, map[string]string{"dry_run": "true"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("query = %#v, want %#v", got, want)
+	}
+	attributes, ok := command.Record["attributes"].(map[string]any)
+	if !ok || attributes["owner"] != "owner-1" || attributes["active"] != true {
+		t.Fatalf("attributes = %#v, want declared nested object", command.Record["attributes"])
+	}
+	targets, ok := command.Record["targets"].([]any)
+	if !ok || len(targets) != 1 {
+		t.Fatalf("targets = %#v, want one declared array entry", command.Record["targets"])
+	}
+
+	baseFlags := map[string][]string{
+		"workspace-id": {"workspace-1"},
+		"dry-run":      {"true"},
+		"label":        {"fixture widget"},
+		"attributes":   {`{"owner":"owner-1","active":true}`},
+		"targets":      {`[{"id":"target-1"}]`},
+	}
+	for _, tc := range []struct {
+		name    string
+		mutate  func(map[string][]string)
+		wantErr string
+	}{
+		{
+			name: "path cannot be supplied by body",
+			mutate: func(flags map[string][]string) {
+				delete(flags, "workspace-id")
+				flags["attributes"] = []string{`{"owner":"owner-1","active":true,"workspace_id":"wrong-namespace"}`}
+			},
+			wantErr: "missing required flag --workspace-id",
+		},
+		{
+			name: "malformed structured body",
+			mutate: func(flags map[string][]string) {
+				flags["attributes"] = []string{`{"owner":`}
+			},
+			wantErr: "invalid JSON for --attributes",
+		},
+		{
+			name: "structured body over flag limit",
+			mutate: func(flags map[string][]string) {
+				flags["attributes"] = []string{`{"owner":"` + strings.Repeat("x", maxStructuredJSONFlagBytes) + `","active":true}`}
+			},
+			wantErr: "structured JSON exceeds",
+		},
+		{
+			name: "raw body is not an escape hatch",
+			mutate: func(flags map[string][]string) {
+				flags["body"] = []string{`{"arbitrary":true}`}
+			},
+			wantErr: "unknown flag --body",
+		},
+		{
+			name: "request metadata is not caller controlled",
+			mutate: func(flags map[string][]string) {
+				flags["method"] = []string{http.MethodDelete}
+			},
+			wantErr: "unknown flag --method",
+		},
+		{
+			name: "other action fields cannot bind",
+			mutate: func(flags map[string][]string) {
+				flags["archive"] = []string{`{"reason":"wrong-action"}`}
+			},
+			wantErr: "unknown flag --archive",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			flags := make(map[string][]string, len(baseFlags))
+			for name, values := range baseFlags {
+				flags[name] = append([]string(nil), values...)
+			}
+			tc.mutate(flags)
+			_, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+				Path:  []string{"widgets", "create"},
+				Flags: flags,
+			})
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("BuildWriteCommand error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
+}
+
+func TestBuildWriteCommandPreservesDeclaredScalarUnionJSONFlag(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "acme",
+		Writes: []engine.WriteAction{{
+			Name: "update_item", Method: http.MethodPatch, Path: "/items",
+			RecordSchema: json.RawMessage(`{
+				"type":"object","additionalProperties":false,"required":["choice"],
+				"properties":{"choice":{"type":["string","integer","null"]}}
+			}`),
+			Risk: "standard",
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "items update", Intent: "reverse_etl", Availability: "implemented", Write: "update_item",
+			Flags: []engine.CLIFlag{{Name: "choice", Type: "json", MapsTo: "record.choice", Required: true, MaxBytes: 8}},
+		}}},
+	}
+	connector := engine.New(bundle, nil)
+	for _, testCase := range []struct {
+		name, value string
+		want        any
+		wantErr     string
+	}{
+		{name: "integer arm", value: `17`, want: json.Number("17")},
+		{name: "string arm", value: `"yes"`, want: "yes"},
+		{name: "per-flag byte cap", value: `"too-long"`, wantErr: "structured JSON exceeds 8 bytes"},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			command, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path: []string{"items", "update"}, Flags: map[string][]string{"choice": {testCase.value}},
+			})
+			if testCase.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), testCase.wantErr) {
+					t.Fatalf("BuildWriteCommand error = %v, want %q", err, testCase.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("BuildWriteCommand: %v", err)
+			}
+			if got := command.Record["choice"]; !reflect.DeepEqual(got, testCase.want) {
+				t.Fatalf("choice = %#v (%T), want %#v (%T)", got, got, testCase.want, testCase.want)
+			}
+		})
+	}
+}
+
+func TestBuildOperationDirectWriteCommandSupportsDottedStructuredBodyField(t *testing.T) {
+	batchable := false
+	bundle := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		Operations: []engine.OperationSpec{{
+			ID:            "acme.widgets.configure",
+			Kind:          "rest_write",
+			Summary:       "Configure one widget",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "update",
+			Batchable:     &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPatch,
+				Path:        "/widgets/{widget_id}",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema: json.RawMessage(`{
+					"type":"object",
+					"additionalProperties":false,
+					"required":["settings.v1"],
+					"properties":{"settings.v1":{"type":"object","additionalProperties":false,"required":["enabled"],"properties":{"enabled":{"type":"boolean"}}}}
+				}`),
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: http.MethodPatch,
+			Path:   "/widgets/{widget_id}",
+			Operation: &engine.SurfaceOperation{
+				Model: "write",
+			},
+		}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "widgets configure",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.widgets.configure",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPatch, Path: "/widgets/{widget_id}"}},
+			OutputPolicy: "json",
+			Flags: []engine.CLIFlag{
+				{Name: "widget-id", Type: "string", MapsTo: "path.widget_id", Required: true},
+				{Name: "settings", Type: "json", MapsTo: "body.settings.v1", Required: true},
+			},
+		}}},
+	}
+
+	command, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+		Path: []string{"widgets", "configure"},
+		Flags: map[string][]string{
+			"widget-id": {"widget-1"},
+			"settings":  {`{"enabled":true}`},
+		},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	settings, ok := command.Record["settings.v1"].(map[string]any)
+	if !ok || settings["enabled"] != true {
+		t.Fatalf("dotted structured body = %#v, want declared provider field", command.Record)
+	}
+}
+
+func TestBuildOperationDirectWriteCommandValidatesDottedStructuredBodyConstraints(t *testing.T) {
+	batchable := false
+	bundle := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		Operations: []engine.OperationSpec{{
+			ID:            "acme.windows.schedule",
+			Kind:          "rest_write",
+			Summary:       "Schedule one window",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "update",
+			Batchable:     &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPatch,
+				Path:        "/windows/{window_id}",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema: json.RawMessage(`{
+					"type":"object",
+					"additionalProperties":false,
+					"required":["start.time","end.time"],
+					"properties":{"start.time":{"type":"string"},"end.time":{"type":"string"}}
+				}`),
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{Method: http.MethodPatch, Path: "/windows/{window_id}", Operation: &engine.SurfaceOperation{Model: "write"}}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "windows schedule",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.windows.schedule",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPatch, Path: "/windows/{window_id}"}},
+			OutputPolicy: "json",
+			Flags: []engine.CLIFlag{
+				{Name: "window-id", Type: "string", MapsTo: "path.window_id", Required: true},
+				{Name: "start", Type: "string", MapsTo: "body.start.time", Required: true},
+				{Name: "end", Type: "string", MapsTo: "body.end.time", Required: true},
+			},
+			Constraints: []engine.CLIConstraint{{
+				Kind: "order", Left: "body.start.time", Right: "body.end.time", Op: "lt", ValueType: "date-time", Message: "start must precede end",
+			}},
+		}}},
+	}
+	_, err := BuildWriteCommand(context.Background(), engine.New(bundle, nil), Request{
+		Path: []string{"windows", "schedule"},
+		Flags: map[string][]string{
+			"window-id": {"window-1"},
+			"start":     {"2026-08-22T00:00:00Z"},
+			"end":       {"2026-08-21T00:00:00Z"},
+		},
+	})
+	if err == nil || !strings.Contains(err.Error(), "start must precede end") {
+		t.Fatalf("BuildWriteCommand error = %v, want declared dotted-body constraint rejection", err)
+	}
+}
+
+func TestOperationDirectWriteOverridesDelegatesIndexedMappings(t *testing.T) {
+	cmd := connectors.CommandSurfaceCommand{Intent: "direct_write", Availability: "implemented", Path: "widgets create"}
+	flags := make(map[string][]string, 130)
+	for index := 0; index < 130; index++ {
+		name := fmt.Sprintf("target-%d", index)
+		cmd.Flags = append(cmd.Flags, connectors.CommandSurfaceFlag{Name: name, Type: "string", MapsTo: fmt.Sprintf("body.targets.%d.id", index)})
+		flags[name] = []string{fmt.Sprintf("id-%d", index)}
+	}
+
+	var received map[string]any
+	_, _, _, _, body, raw, err := operationDirectWriteOverrides(cmd, flags, func(_ string, mappings map[string]any) (map[string]any, error) {
+		received = make(map[string]any, len(mappings))
+		for path, value := range mappings {
+			received[path] = value
+		}
+		targets := make([]any, 130)
+		for index := range targets {
+			targets[index] = map[string]any{"id": fmt.Sprintf("id-%d", index)}
+		}
+		return map[string]any{"targets": targets}, nil
+	})
+	if err != nil {
+		t.Fatalf("operationDirectWriteOverrides: %v", err)
+	}
+	if raw != nil {
+		t.Fatal("array mappings produced an unexpected raw body")
+	}
+	targets, ok := body["targets"].([]any)
+	if !ok || len(targets) != 130 {
+		t.Fatalf("targets = %#v, want 130 ordered entries", body["targets"])
+	}
+	for _, index := range []int{0, 1, 10, 129} {
+		entry, ok := targets[index].(map[string]any)
+		if !ok || entry["id"] != fmt.Sprintf("id-%d", index) {
+			t.Fatalf("targets[%d] = %#v, want declared index value", index, targets[index])
+		}
+	}
+	if got, want := len(received), 130; got != want {
+		t.Fatalf("materializer mappings = %d, want %d declared indexed inputs", got, want)
+	}
+}
+
+func TestValidateCommandInputsTraversesDirectWriteArrayFields(t *testing.T) {
+	cmd := connectors.CommandSurfaceCommand{Constraints: []connectors.CommandSurfaceConstraint{{
+		Kind:      "order",
+		Left:      "body.targets.0.start",
+		Right:     "body.targets.0.end",
+		Op:        "lt",
+		ValueType: "date-time",
+		Message:   "target start must be before end",
+	}}}
+	err := validateCommandInputs(cmd, connectors.RuntimeConfig{}, mappedCommandInputs{Body: map[string]any{
+		"targets": []any{map[string]any{
+			"start": "2026-08-21T00:00:00Z",
+			"end":   "2026-08-20T00:00:00Z",
+		}},
+	}})
+	if err == nil || !strings.Contains(err.Error(), "target start must be before end") {
+		t.Fatalf("validateCommandInputs error = %v, want nested-array constraint rejection", err)
+	}
+}
+
+func TestCLICommandExactlyOneConstraint(t *testing.T) {
+	cmd := connectors.CommandSurfaceCommand{Constraints: []connectors.CommandSurfaceConstraint{{
+		Kind:    "exactly_one",
+		Fields:  []string{"body.keywordAndUrlSeed", "body.urlSeed", "body.keywordSeed", "body.siteSeed"},
+		Message: "exactly one keyword seed must be provided",
+	}}}
+
+	tests := []struct {
+		name    string
+		body    map[string]any
+		wantErr bool
+	}{
+		{name: "none", body: map[string]any{}, wantErr: true},
+		{name: "one", body: map[string]any{"keywordSeed": map[string]any{"keywords": []any{"shoes"}}}},
+		{name: "alternate", body: map[string]any{"urlSeed": map[string]any{"url": "https://example.com"}}},
+		{name: "two", body: map[string]any{"keywordSeed": map[string]any{"keywords": []any{"shoes"}}, "urlSeed": map[string]any{"url": "https://example.com"}}, wantErr: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateCommandInputs(cmd, connectors.RuntimeConfig{}, mappedCommandInputs{Body: tt.body})
+			if tt.wantErr && (err == nil || !strings.Contains(err.Error(), "exactly one keyword seed")) {
+				t.Fatalf("validateCommandInputs error = %v, want exactly-one rejection", err)
+			}
+			if !tt.wantErr && err != nil {
+				t.Fatalf("validateCommandInputs: %v", err)
+			}
+		})
+	}
+}
+
+func TestBuildOperationDirectWriteCommandRejectsUndeclaredQueryBindings(t *testing.T) {
+	batchable := false
+	bundle := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "https://example.invalid"},
+		Operations: []engine.OperationSpec{{
+			ID:            "acme.widgets.create",
+			Kind:          "rest_write",
+			Summary:       "Create one widget",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "create",
+			Batchable:     &batchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/widgets",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				Parameters: []engine.OperationParameter{{
+					Name: "dry_run",
+					In:   "query",
+					Type: "boolean",
+				}},
+			},
+		}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/widgets",
+			Operation: &engine.SurfaceOperation{Model: "write"},
+		}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "widgets create",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.widgets.create",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: "/widgets"}},
+			OutputPolicy: "json",
+			Flags:        []engine.CLIFlag{{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"}},
+		}}},
+	}
+
+	for _, test := range []struct {
+		name   string
+		mutate func(*engine.Bundle)
+		want   string
+	}{
+		{
+			name: "exact source query binding",
+		},
+		{
+			name: "unknown query binding",
+			mutate: func(bundle *engine.Bundle) {
+				bundle.CLISurface.Commands[0].Flags[0].MapsTo = "query.unknown"
+			},
+			want: "not source-declared",
+		},
+		{
+			name: "duplicate query binding",
+			mutate: func(bundle *engine.Bundle) {
+				bundle.CLISurface.Commands[0].Flags = append(bundle.CLISurface.Commands[0].Flags, engine.CLIFlag{Name: "again", Type: "boolean", MapsTo: "query.dry_run"})
+			},
+			want: "maps more than one command flag",
+		},
+		{
+			name: "fixed query binding",
+			mutate: func(bundle *engine.Bundle) {
+				rest := bundle.Operations[0].REST
+				rest.Query = map[string]string{"dry_run": "true"}
+			},
+			want: "fixed by rest.query",
+		},
+		{
+			name: "required query has no binding",
+			mutate: func(bundle *engine.Bundle) {
+				rest := bundle.Operations[0].REST
+				rest.Parameters = append(rest.Parameters, engine.OperationParameter{Name: "scope", In: "query", Type: "string", Required: true})
+			},
+			want: "requires query parameter",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			testBundle := bundle
+			testBundle.Operations = append([]engine.OperationSpec(nil), bundle.Operations...)
+			testREST := *bundle.Operations[0].REST
+			testREST.Parameters = append([]engine.OperationParameter(nil), testREST.Parameters...)
+			testBundle.Operations[0].REST = &testREST
+			testSurface := *bundle.CLISurface
+			testSurface.Commands = append([]engine.CLICommand(nil), bundle.CLISurface.Commands...)
+			testSurface.Commands[0].Flags = append([]engine.CLIFlag(nil), bundle.CLISurface.Commands[0].Flags...)
+			testBundle.CLISurface = &testSurface
+			if test.mutate != nil {
+				test.mutate(&testBundle)
+			}
+			_, err := BuildWriteCommand(context.Background(), engine.New(testBundle, nil), Request{Path: []string{"widgets", "create"}})
+			if test.want == "" {
+				if err != nil {
+					t.Fatalf("BuildWriteCommand: %v", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("BuildWriteCommand error = %v, want %q", err, test.want)
+			}
+		})
 	}
 }
 
@@ -2205,6 +3145,40 @@ func TestPreflightOperationDirectWriteRequiresRuntimeBinding(t *testing.T) {
 		outputPolicy: "json_redacted",
 	}); got != want {
 		t.Fatalf("operation write preflight = %#v, want %#v", got, want)
+	}
+}
+
+func TestPreflightOperationDirectWriteRequiresDeclaredPathAndBodyBindings(t *testing.T) {
+	connector := &fakeConnector{
+		operationWriteBindingsErr: errors.New("body field \"undeclared\" is not declared"),
+		directWriteMetadata: connectors.OperationDirectWriteMetadata{
+			Operation:    "acme.vote",
+			OutputPolicy: "json_redacted",
+		},
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "vote",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.vote",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/api/vote/{id}"}},
+			OutputPolicy: "json_redacted",
+			Flags: []connectors.CommandSurfaceFlag{
+				{Name: "id", Type: "string", MapsTo: "path.id"},
+				{Name: "payload", Type: "string", MapsTo: "body.payload"},
+			},
+		}}},
+	}
+
+	err := Preflight(connector, []string{"vote"})
+	if err == nil || !strings.Contains(err.Error(), "operation direct write bindings are not executable") {
+		t.Fatalf("Preflight(direct_write) error = %v, want binding rejection", err)
+	}
+	if got, want := connector.operationWriteBindings, (operationDirectWriteBindingPreflightCall{
+		operation:  "acme.vote",
+		pathFields: []string{"id"},
+		bodyFields: []string{"payload"},
+	}); !reflect.DeepEqual(got, want) {
+		t.Fatalf("operation write bindings = %#v, want %#v", got, want)
 	}
 }
 
@@ -2565,7 +3539,7 @@ func TestValidateFlagMinimumIsOptIn(t *testing.T) {
 		t.Fatalf("validateFlagValue without minimum = %v, want unchanged acceptance", err)
 	}
 
-	minimum := 1.0
+	minimum := connectors.ExactNumber("1")
 	flag := connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", Minimum: &minimum}
 	if err := validateFlagValue(flag, "1"); err != nil {
 		t.Fatalf("validateFlagValue at minimum = %v, want accepted", err)
@@ -2575,13 +3549,80 @@ func TestValidateFlagMinimumIsOptIn(t *testing.T) {
 	if !errors.As(err, &minimumErr) {
 		t.Fatalf("validateFlagValue below minimum error = %T %v, want MinimumFlagError", err, err)
 	}
-	if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+	if minimumErr.Parameter != "page-number" || minimumErr.Minimum.String() != "1" {
 		t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
 	}
 }
 
+func TestValidateFlagMaximumIsOptIn(t *testing.T) {
+	if err := validateFlagValue(connectors.CommandSurfaceFlag{Name: "page-size", Type: "integer"}, "2147483648"); err != nil {
+		t.Fatalf("validateFlagValue without maximum = %v, want unchanged acceptance", err)
+	}
+
+	maximum := connectors.ExactNumber("2147483647")
+	flag := connectors.CommandSurfaceFlag{Name: "page-size", Type: "integer", Maximum: &maximum}
+	if err := validateFlagValue(flag, "2147483647"); err != nil {
+		t.Fatalf("validateFlagValue at maximum = %v, want accepted", err)
+	}
+	err := validateFlagValue(flag, "2147483648")
+	var maximumErr *MaximumFlagError
+	if !errors.As(err, &maximumErr) {
+		t.Fatalf("validateFlagValue above maximum error = %T %v, want MaximumFlagError", err, err)
+	}
+	if maximumErr.Parameter != "page-size" || maximumErr.Maximum.String() != "2147483647" {
+		t.Fatalf("MaximumFlagError = %+v, want page-size maximum 2147483647", maximumErr)
+	}
+}
+
+// TestCoerceFlagValuePreservesExactNumericLexemes prevents command binding
+// from changing a provider ID or decimal before the schema, preview digest,
+// and request encoder see it. json.Number is intentional: it carries the
+// caller's validated JSON lexeme without a float64 round trip.
+func TestCoerceFlagValuePreservesExactNumericLexemes(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		flag  connectors.CommandSurfaceFlag
+		value string
+	}{
+		{name: "integer above float precision", flag: connectors.CommandSurfaceFlag{Name: "provider-id", Type: "integer"}, value: "9007199254740993"},
+		{name: "precise decimal", flag: connectors.CommandSurfaceFlag{Name: "ratio", Type: "number"}, value: "0.10000000000000001"},
+		{name: "negative exponent", flag: connectors.CommandSurfaceFlag{Name: "offset", Type: "number"}, value: "-1.25e-3"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := coerceFlagValue(tt.flag, []string{tt.value})
+			if err != nil {
+				t.Fatalf("coerceFlagValue: %v", err)
+			}
+			number, ok := got.(json.Number)
+			if !ok || number.String() != tt.value {
+				t.Fatalf("coerceFlagValue = %#v (%T), want json.Number(%q)", got, got, tt.value)
+			}
+		})
+	}
+}
+
+func TestValidateFlagNumericBoundsUseExactDeclarationLexemes(t *testing.T) {
+	integerMinimum := connectors.ExactNumber("9007199254740993")
+	integer := connectors.CommandSurfaceFlag{Name: "provider-id", Type: "integer", Minimum: &integerMinimum}
+	if err := validateFlagValue(integer, "9007199254740993"); err != nil {
+		t.Fatalf("exact integer minimum: %v", err)
+	}
+	if err := validateFlagValue(integer, "9007199254740992"); err == nil {
+		t.Fatal("adjacent integer below exact minimum was accepted")
+	}
+
+	decimalMinimum := connectors.ExactNumber("0.10000000000000001")
+	decimal := connectors.CommandSurfaceFlag{Name: "ratio", Type: "number", Minimum: &decimalMinimum}
+	if err := validateFlagValue(decimal, "0.10000000000000001"); err != nil {
+		t.Fatalf("exact decimal minimum: %v", err)
+	}
+	if err := validateFlagValue(decimal, "0.1"); err == nil {
+		t.Fatal("decimal below exact minimum was accepted after float rounding")
+	}
+}
+
 func TestStreamOverridesConfigMinimumIsOptIn(t *testing.T) {
-	minimum := 1.0
+	minimum := connectors.ExactNumber("1")
 	tests := []struct {
 		name        string
 		flag        connectors.CommandSurfaceFlag
@@ -2621,7 +3662,7 @@ func TestStreamOverridesConfigMinimumIsOptIn(t *testing.T) {
 				if !errors.As(err, &minimumErr) {
 					t.Fatalf("streamOverrides error = %T %v, want MinimumFlagError", err, err)
 				}
-				if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+				if minimumErr.Parameter != "page-number" || minimumErr.Minimum.String() != "1" {
 					t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
 				}
 				return
@@ -2939,6 +3980,137 @@ func TestEveryImplementedCommandPassesRuntimePreflight(t *testing.T) {
 	}
 	b.WriteString("\nEither make the command executable or stop claiming it is implemented.")
 	t.Fatal(b.String())
+}
+
+func TestRunStatusCheckPreservesFinalNon2xxMetadata(t *testing.T) {
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "repository status",
+			Intent:       "status_check",
+			Availability: "implemented",
+			Operation:    "github.repository.status",
+			APISurface: []connectors.CommandSurfaceEndpointRef{
+				{Method: http.MethodHead, Path: "/repos/{owner}/{repo}"},
+			},
+			OutputPolicy: "status",
+		}}},
+		statusCheckResult: connectors.OperationStatusCheckResult{
+			Connector: "github",
+			Operation: "github.repository.status",
+			Method:    http.MethodHead,
+			Path:      "/repos/octo/hello",
+			Status:    http.StatusServiceUnavailable,
+			BodyBytes: 0,
+		},
+	}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path: []string{"repository", "status"},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for status check")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.StatusCheck == nil {
+		t.Fatal("Run result carries no status check")
+	}
+	if result.StatusCheck.Status != http.StatusServiceUnavailable || result.StatusCheck.BodyBytes != 0 {
+		t.Fatalf("status result = %#v, want final 503 metadata", result.StatusCheck)
+	}
+	if result.DirectRead != nil || result.BinaryDownload != nil || result.Count != 0 {
+		t.Fatalf("status check fell through to another result shape: %#v", result)
+	}
+	if got := connector.statusCheckReq.Operation; got != "github.repository.status" {
+		t.Fatalf("status operation = %q, want github.repository.status", got)
+	}
+	if got, want := connector.statusCheckPreflight, (operationStatusCheckPreflightCall{
+		operation:    "github.repository.status",
+		method:       http.MethodHead,
+		path:         "/repos/{owner}/{repo}",
+		outputPolicy: "status",
+	}); got != want {
+		t.Fatalf("status preflight = %#v, want %#v", got, want)
+	}
+}
+
+func TestRunStatusCheckPreservesPostProviderReceiptWithError(t *testing.T) {
+	providerErr := errors.New("provider redirect refused after response")
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path: "repository status", Intent: "status_check", Availability: "implemented", Operation: "github.repository.status",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodHead, Path: "/repos/{owner}/{repo}"}},
+			OutputPolicy: "status",
+		}}},
+		statusCheckResult: connectors.OperationStatusCheckResult{
+			Connector: "github", Operation: "github.repository.status", Method: http.MethodHead, Path: "/repos/octo/hello", Status: http.StatusTemporaryRedirect,
+			Receipt: &connectors.ProviderResponseReceipt{ResponseReceived: true, Status: http.StatusTemporaryRedirect, Headers: map[string]connectors.OperationResponseHeader{
+				"X-Provider-Trace": {Values: []string{"first", "second"}},
+			}},
+		},
+		statusCheckErr: providerErr,
+	}
+
+	result, err := Run(context.Background(), connector, Request{Path: []string{"repository", "status"}}, func(connectors.Record) error {
+		t.Fatal("emit called for status check")
+		return nil
+	})
+	if err != providerErr {
+		t.Fatalf("Run error = %v, want original provider error %v", err, providerErr)
+	}
+	if result.StatusCheck == nil || result.StatusCheck.Receipt == nil || !result.StatusCheck.Receipt.ResponseReceived || result.StatusCheck.Status != http.StatusTemporaryRedirect {
+		t.Fatalf("Run status result = %#v, want retained terminal provider receipt", result)
+	}
+}
+
+func TestRunOmitsResultEnvelopeBeforeProviderResponse(t *testing.T) {
+	providerErr := errors.New("transport failed before provider response")
+	tests := []struct {
+		name string
+		run  func() (Result, error)
+	}{
+		{
+			name: "legacy direct read",
+			run: func() (Result, error) {
+				connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+					Path: "records lookup", Intent: "direct_read", Availability: "implemented", OutputPolicy: "json_redacted",
+					APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/records/{id}"}},
+					Flags:      []connectors.CommandSurfaceFlag{{Name: "id", Type: "string", MapsTo: "query.id", Required: true}},
+				}}}, directReadErr: providerErr}
+				return Run(context.Background(), connector, Request{Path: []string{"records", "lookup"}, Flags: map[string][]string{"id": {"fixture"}}}, func(connectors.Record) error { return nil })
+			},
+		},
+		{
+			name: "status check",
+			run: func() (Result, error) {
+				connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+					Path: "repository status", Intent: "status_check", Availability: "implemented", Operation: "github.repository.status",
+					APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodHead, Path: "/repos/{owner}/{repo}"}}, OutputPolicy: "status",
+				}}}, statusCheckErr: providerErr}
+				return Run(context.Background(), connector, Request{Path: []string{"repository", "status"}}, func(connectors.Record) error { return nil })
+			},
+		},
+		{
+			name: "binary download",
+			run: func() (Result, error) {
+				connector := binaryDownloadTestConnector()
+				connector.binaryDownloadErr = providerErr
+				return Run(context.Background(), connector, Request{Path: []string{"artifact", "download"}, Flags: map[string][]string{"artifact-id": {"42"}, "archive-format": {"zip"}}, DestRoot: "out"}, func(connectors.Record) error { return nil })
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result, err := test.run()
+			if err != providerErr {
+				t.Fatalf("Run error = %v, want original pre-provider error %v", err, providerErr)
+			}
+			if result.DirectRead != nil || result.BinaryDownload != nil || result.StatusCheck != nil {
+				t.Fatalf("pre-provider error returned a result envelope: %#v", result)
+			}
+		})
+	}
 }
 
 func binaryDownloadTestConnector() *fakeConnector {

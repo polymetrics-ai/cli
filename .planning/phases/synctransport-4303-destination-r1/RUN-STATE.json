@@ -12,6 +12,7 @@
     "application_dispatch": "passed",
     "complete_result_output": "passed",
     "revalidation_2026_08_20": "passed_locally",
-    "website_generated_data": "repaired_and_verified_locally"
+    "follow_up_action_binding_foundation_r1": "passed_locally",
+    "merge_origin_main_2026_08_23": "focused_packages_and_website_generation_passed_full_verify_pending"
   }
 }

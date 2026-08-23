@@ -23,9 +23,6 @@ func HTTPClient(ctx context.Context, client *http.Client) *http.Client {
 	return httpClient(ctx, client, ErrRedirectRefused)
 }
 
-// HTTPClientRetainingRedirectResponse, in a destructive context, keeps a
-// terminal redirect response available for caller-side refusal without
-// following the redirected target.
 func HTTPClientRetainingRedirectResponse(ctx context.Context, client *http.Client) *http.Client {
 	return httpClient(ctx, client, http.ErrUseLastResponse)
 }

@@ -530,6 +530,9 @@ func (r *postgresPollingSourceRunner) FetchPollingSourcePage(ctx context.Context
 	if err != nil {
 		return engine.PollingSourcePage{}, err
 	}
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return engine.PollingSourcePage{}, err
+	}
 	rows, err := r.pool.Query(ctx, r.plan.query(after, request.PageSize+1), r.plan.queryArguments(after, request.PageSize+1)...)
 	if err != nil {
 		return engine.PollingSourcePage{}, fmt.Errorf("postgres polling query bounded page: %w", err)

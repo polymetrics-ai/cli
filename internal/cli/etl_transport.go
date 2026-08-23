@@ -69,6 +69,14 @@ DESCRIPTION
   already-absent cleanup result, not a completed provider write; replaying a
   consumed cleanup approval is rejected before another provider request.
 
+  A declarative typed destination plan and preview list and digest-bind every
+  declaration-owned physical action, including any independently destructive
+  tombstone delete. The runtime may clamp --batch-size to the selected action's
+  acknowledgement, read-back, and bounded private-receipt capacity; it never
+  creates a larger provider mutation unit. Each separately approved tombstone delete
+  uses a distinct mapping, idempotency key, and independent absence read-back
+  before checkpoint.
+
 SECURITY
   Raw approval tokens are accepted only through --approval-token-stdin. They
   are never accepted in argv, environment variables, files, JSON output, or
@@ -148,10 +156,27 @@ DESCRIPTION
 
   Planning and preview bind one connection, stream, destination_action,
   source mapping, credential revision, configuration digest, and strategy.
+  They also display and digest-bind every declaration-owned physical action,
+  including an independently destructive tombstone delete. The runtime may
+  clamp --batch-size to the selected action's acknowledgement, read-back, and
+  bounded private-receipt capacity; it never creates a larger provider
+  mutation unit. A tombstone is a separately approved tombstone delete with
+  its own mapping, idempotency key, and independent absence read-back.
   The initial approval token becomes a revocable, bounded authorization for
   that exact shape. Each reopened workset obtains fresh typed write evidence;
   the generic orchestrator advances its checkpoint only after the declared
   durable acknowledgement and read-back.
+
+  If a closed transport has already applied, read back, and checkpointed a
+  destination effect but cannot complete local receipt retirement or its
+  declaration-owned approval marker, the persisted run has status
+  delivered_reconciliation_required. Its delivery_reconciliation field names
+  only the bounded local repair; destination_results and the acknowledged
+  checkpoint remain intact. The command exits nonzero with an exact terminal ETLRun.
+  Repeating the same saved connection and stream repairs from durable
+  state before endpoint resolution and never replays source or destination I/O.
+  Missing, malformed, or stale reconciliation evidence is refused rather than
+  falling back to an ordinary route.
 
 SECURITY
   Approval tokens are accepted only through --approval-token-stdin. Callers
@@ -167,19 +192,20 @@ EXIT STATUS
 `
 
 type etlTransportPlanOutput struct {
-	ID                      string                       `json:"id"`
-	Status                  string                       `json:"status"`
-	Mode                    string                       `json:"mode"`
-	ConnectionID            string                       `json:"connection_id"`
-	Action                  string                       `json:"action"`
-	RecordCount             int                          `json:"record_count"`
-	Confirmation            connectors.WriteConfirmation `json:"confirmation"`
-	CreatedAt               time.Time                    `json:"created_at"`
-	ExpiresAt               time.Time                    `json:"expires_at"`
-	AuthorizationLifetime   time.Duration                `json:"authorization_lifetime_ns,omitempty"`
-	ForwardPlanID           string                       `json:"forward_plan_id,omitempty"`
-	TargetCopyWorkers       int                          `json:"target_copy_workers,omitempty"`
-	TargetCopyWorkerMaximum int                          `json:"target_copy_worker_maximum,omitempty"`
+	ID                       string                                    `json:"id"`
+	Status                   string                                    `json:"status"`
+	Mode                     string                                    `json:"mode"`
+	ConnectionID             string                                    `json:"connection_id"`
+	Action                   string                                    `json:"action"`
+	RecordCount              int                                       `json:"record_count"`
+	Confirmation             connectors.WriteConfirmation              `json:"confirmation"`
+	CreatedAt                time.Time                                 `json:"created_at"`
+	ExpiresAt                time.Time                                 `json:"expires_at"`
+	AuthorizationLifetime    time.Duration                             `json:"authorization_lifetime_ns,omitempty"`
+	ForwardPlanID            string                                    `json:"forward_plan_id,omitempty"`
+	TargetCopyWorkers        int                                       `json:"target_copy_workers,omitempty"`
+	TargetCopyWorkerMaximum  int                                       `json:"target_copy_worker_maximum,omitempty"`
+	TransportPhysicalActions []synctransport.DestinationPhysicalAction `json:"transport_physical_actions,omitempty"`
 }
 
 type etlTransportWritePreviewOutput struct {
@@ -499,11 +525,21 @@ func runApprovedTransportETL(ctx context.Context, a *app.App, flags strictTransp
 		MaxInFlightBatches:  maxInFlightBatches,
 		DestinationApproval: approval,
 	})
-	if err != nil {
+	if err != nil && run.ID == "" {
 		return err
 	}
 	if jsonOut {
-		return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": false})
+		if outputErr := writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": false}); outputErr != nil {
+			return outputErr
+		}
+		if err != nil {
+			return alreadyReportedExecutionError(err)
+		}
+		return nil
+	}
+	if err != nil {
+		_, _ = fmt.Fprintf(stdout, "ETL run %s ended with status %s; inspect it with pm etl status %s\n", run.ID, run.Status, run.ID)
+		return alreadyReportedExecutionError(err)
 	}
 	_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
 	return nil
@@ -687,19 +723,34 @@ func validateTransportPlanID(planID string) error {
 
 func safeETLTransportPlan(plan app.ReversePlan) etlTransportPlanOutput {
 	return etlTransportPlanOutput{
-		ID:                      plan.ID,
-		Status:                  plan.Status,
-		Mode:                    plan.Mode,
-		ConnectionID:            plan.TransportConnectionID,
-		Action:                  plan.Action,
-		RecordCount:             plan.RecordCount,
-		Confirmation:            plan.ConfirmationPolicy,
-		CreatedAt:               plan.CreatedAt,
-		ExpiresAt:               plan.ExpiresAt,
-		AuthorizationLifetime:   plan.AuthorizationLifetime,
-		ForwardPlanID:           plan.TransportForwardPlanID,
-		TargetCopyWorkers:       plan.TargetCopyWorkers,
-		TargetCopyWorkerMaximum: plan.TargetCopyWorkerMaximum,
+		ID:                       plan.ID,
+		Status:                   plan.Status,
+		Mode:                     plan.Mode,
+		ConnectionID:             plan.TransportConnectionID,
+		Action:                   plan.Action,
+		RecordCount:              plan.RecordCount,
+		Confirmation:             plan.ConfirmationPolicy,
+		CreatedAt:                plan.CreatedAt,
+		ExpiresAt:                plan.ExpiresAt,
+		AuthorizationLifetime:    plan.AuthorizationLifetime,
+		ForwardPlanID:            plan.TransportForwardPlanID,
+		TargetCopyWorkers:        plan.TargetCopyWorkers,
+		TargetCopyWorkerMaximum:  plan.TargetCopyWorkerMaximum,
+		TransportPhysicalActions: append([]synctransport.DestinationPhysicalAction(nil), plan.TransportPhysicalActions...),
+	}
+}
+
+func writeETLTransportPhysicalActions(stdout io.Writer, actions []synctransport.DestinationPhysicalAction) {
+	if len(actions) == 0 {
+		return
+	}
+	_, _ = fmt.Fprintln(stdout, "Physical actions:")
+	for _, action := range actions {
+		disposition := "non-destructive"
+		if action.Destructive {
+			disposition = "destructive"
+		}
+		_, _ = fmt.Fprintf(stdout, "  - %s: kind=%s action_digest=%s idempotency_header=%s %s\n", action.Action, action.Kind, action.ActionDefinitionSHA256, action.IdempotencyKeyHeader, disposition)
 	}
 }
 
@@ -756,6 +807,7 @@ func writeDeclarativeTypedDestinationTransportPlan(stdout io.Writer, jsonOut boo
 	}
 	_, _ = fmt.Fprintf(stdout, "Declarative typed destination transport plan %s\n", safe.ID)
 	_, _ = fmt.Fprintf(stdout, "Mode: %s\nAction: %s\nRecords: %d\n", safe.Mode, safe.Action, safe.RecordCount)
+	writeETLTransportPhysicalActions(stdout, safe.TransportPhysicalActions)
 	_, _ = fmt.Fprintln(stdout, "Preview required before an approval token is issued.")
 	_, err := fmt.Fprintln(stdout, "Confirmation required: --confirm destructive")
 	return err
@@ -775,6 +827,7 @@ func writeDeclarativeTypedDestinationTransportPreview(stdout io.Writer, jsonOut 
 	}
 	_, _ = fmt.Fprintf(stdout, "Declarative typed destination transport preview %s\n", safePlan.ID)
 	_, _ = fmt.Fprintf(stdout, "Mode: %s\nAction: %s\nRecords staged: %d\n", safePlan.Mode, safePlan.Action, safePreview.RecordsStaged)
+	writeETLTransportPhysicalActions(stdout, safePlan.TransportPhysicalActions)
 	if plan.ApprovalToken == "" {
 		return fmt.Errorf("declarative typed destination transport preview did not issue an approval token")
 	}

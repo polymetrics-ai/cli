@@ -183,10 +183,68 @@ type StreamHook interface {
 }
 
 // WriteHook overrides execution of one write action (compound/multi-request
-// actions such as github's create_pull_request + reviewer follow-up).
-// handled=false tells the engine to fall back to the declarative write path.
+// actions such as github's create_pull_request + reviewer follow-up). Every
+// physical provider response, including the terminal failed one, is returned
+// to the engine for bounded receipt projection. handled=false tells the engine
+// to fall back to the declarative write path and must return no responses.
 type WriteHook interface {
-	ExecuteWrite(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (handled bool, err error)
+	ExecuteWrite(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (handled bool, responses []*connsdk.Response, err error)
+}
+
+// PreparedWriteHook is the only compound-write extension admitted by the
+// approval path. A hook may select ordered, declaration-owned action names and
+// sealed typed records; it cannot supply a method, URL, headers, or body. The
+// engine validates and prepares every selected physical request before a
+// preview is produced, then executes that same private plan after approval.
+//
+// WriteHook is retained for direct unit compatibility, but a legacy hook that
+// claims an action is refused by prepareDeclarativeWrite rather than being
+// allowed to choose an unpreviewed request at execution time.
+type PreparedWriteHook interface {
+	PrepareWrite(action WriteAction, records []connectors.Record) (PreparedWriteHookPlan, bool, error)
+}
+
+// PreparedWriteHookPlan groups each source record's physical provider
+// requests. Records may have no steps only when the named compound action
+// resolves to a declaration-owned no-op; every non-empty step becomes exactly
+// one PreparedRequest in the preview's ordered digest projection.
+type PreparedWriteHookPlan struct {
+	Records []PreparedWriteHookRecord
+}
+
+type PreparedWriteHookRecord struct {
+	Steps []PreparedWriteHookStep
+}
+
+// PreparedWriteHookStep names an existing declaration-owned write action.
+// Record is validated against that declaration and sealed by the engine. A
+// response binding is intentionally limited to a previous step's one named
+// JSON field becoming one declared path field of this step; it is not a raw
+// response/body projection language. ResolvedDeclarative allows the root hook
+// to explicitly attest that a selected hook-backed action is already a fully
+// resolved declarative request, so the engine will not recurse into that hook.
+type PreparedWriteHookStep struct {
+	Action              string
+	Record              connectors.Record
+	ResponseBinding     *PreparedWriteResponseBinding
+	ResolvedDeclarative bool
+}
+
+// PreparedWriteResponseBinding supplies one follow-up path field from one
+// earlier physical response in the same source record. SourceStep is a
+// zero-based index into that record's ordered hook plan.
+type PreparedWriteResponseBinding struct {
+	SourceStep  int    `json:"source_step"`
+	Field       string `json:"field"`
+	TargetField string `json:"target_field"`
+}
+
+// PreparedWriteResponseValidator lets a native hook retain an established
+// typed provider-envelope rule while the engine owns transport, planning, and
+// receipt persistence. It receives only the named action, sealed record, and
+// bounded response already captured by the engine.
+type PreparedWriteResponseValidator interface {
+	ValidatePreparedWriteResponse(action WriteAction, rec connectors.Record, response *connsdk.Response) error
 }
 
 type WriteHookClassifier interface {

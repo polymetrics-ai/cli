@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strconv"
 	"strings"
 	"testing"
@@ -23,7 +24,7 @@ import (
 // operation executor rather than a generic GraphQL transport.
 func graphQLOperationBundle(baseURL, kind string) Bundle {
 	operationName := "GetWidget"
-	document := "query GetWidget($id: ID!, $first: Int!, $after: String, $filter: WidgetFilterInput) { widget(id: $id, filter: $filter) { id items(first: $first, after: $after) { nodes { id name secret } pageInfo { hasNextPage endCursor } } } rateLimit { limit cost remaining resetAt } }"
+	document := "query GetWidget($id: ID!, $first: Int!, $after: String, $last: Int, $before: String, $filter: WidgetFilterInput) { widget(id: $id, filter: $filter) { id items(first: $first, after: $after, last: $last, before: $before) { nodes { id name secret } pageInfo { hasNextPage hasPreviousPage startCursor endCursor } } } rateLimit { limit cost remaining resetAt } }"
 	mutationClass := ""
 	approval := "none"
 	risk := "low"
@@ -54,6 +55,8 @@ func graphQLOperationBundle(baseURL, kind string) Bundle {
 				"id":{"type":"string"},
 				"first":{"type":"integer"},
 				"after":{"type":["string","null"]},
+				"last":{"type":"integer"},
+				"before":{"type":["string","null"]},
 				"filter":{
 					"type":"object",
 					"additionalProperties":false,
@@ -65,10 +68,12 @@ func graphQLOperationBundle(baseURL, kind string) Bundle {
 			}
 		}`)
 		pagination = &GraphQLOperationPaginationSpec{
-			ConnectionPath:   "widget.items",
-			CursorVariable:   "after",
-			PageSizeVariable: "first",
-			MaxPageSize:      50,
+			ConnectionPath:           "widget.items",
+			CursorVariable:           "after",
+			PageSizeVariable:         "first",
+			BackwardCursorVariable:   "before",
+			BackwardPageSizeVariable: "last",
+			MaxPageSize:              50,
 		}
 	}
 
@@ -132,6 +137,22 @@ func graphQLMutationWithSensitiveInput(baseURL string) Bundle {
 	op.SecretSensitive = true
 	op.MutationClass = "secret"
 	return bundle
+}
+
+func TestGraphQLErrorMetadataDoesNotKeywordRedactOrdinaryProviderWords(t *testing.T) {
+	_, metadata, err := graphQLOperationResponse([]byte(`{
+		"data":{"viewer":{"login":"octocat"}},
+		"errors":[{"message":"Unknown token type"}]
+	}`), 1024)
+	if err != nil {
+		t.Fatalf("graphQLOperationResponse: %v", err)
+	}
+	if metadata == nil || len(metadata.Errors) != 1 {
+		t.Fatalf("metadata = %#v, want one provider error", metadata)
+	}
+	if got := metadata.Errors[0].Message; got != "Unknown token type" {
+		t.Fatalf("GraphQL error message = %q, want ordinary provider message unchanged", got)
+	}
 }
 
 type rejectingGraphQLRateLimitClock struct {
@@ -376,6 +397,176 @@ func TestValidateGraphQLOperationStructuredJSONVariableRequiresClosedTopLevelCon
 	}
 }
 
+func TestGraphQLOperationVariablesRejectsMixedPaginationDirections(t *testing.T) {
+	op := graphQLOperationBundle("http://127.0.0.1", "graphql_query").Operations[0]
+
+	for name, variables := range map[string]map[string]any{
+		"page sizes": {"id": "widget-1", "first": 10, "last": 10},
+		"cursors":    {"id": "widget-1", "after": "next", "before": "previous"},
+		"crossed":    {"id": "widget-1", "first": 10, "before": "previous"},
+	} {
+		t.Run(name, func(t *testing.T) {
+			_, err := graphQLOperationVariables(op, variables, 0, "")
+			if err == nil || !strings.Contains(err.Error(), "mixes forward and backward pagination") {
+				t.Fatalf("graphQLOperationVariables() error = %v, want mixed-direction rejection", err)
+			}
+		})
+	}
+
+	if _, err := graphQLOperationVariables(op, map[string]any{"id": "widget-1", "last": 10}, 0, ""); err != nil {
+		t.Fatalf("backward-only pagination: %v", err)
+	}
+}
+
+func TestGraphQLOperationVariablesRequiresExactlyOnePaginationDirection(t *testing.T) {
+	op := graphQLOperationBundle("https://example.test", "graphql_query").Operations[0]
+
+	tests := []struct {
+		name       string
+		variables  map[string]any
+		pageCursor string
+		wantErr    bool
+	}{
+		{name: "neither direction", variables: map[string]any{"id": "widget-1"}, wantErr: true},
+		{name: "both directions", variables: map[string]any{"id": "widget-1", "first": 10, "last": 10}, wantErr: true},
+		{name: "cursor without direction", variables: map[string]any{"id": "widget-1"}, pageCursor: "opaque-next", wantErr: true},
+		{name: "forward", variables: map[string]any{"id": "widget-1", "first": 10}},
+		{name: "backward", variables: map[string]any{"id": "widget-1", "last": 10}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := graphQLOperationVariables(op, tt.variables, 0, tt.pageCursor)
+			if tt.wantErr {
+				if err == nil || !strings.Contains(err.Error(), "exactly one pagination direction") {
+					t.Fatalf("graphQLOperationVariables() error = %v, want exact-direction preflight refusal", err)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("graphQLOperationVariables() error = %v", err)
+			}
+		})
+	}
+}
+
+func TestOperationDirectReadBackwardGraphQLPaginationUsesPreviousPageInfo(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodPost || r.URL.Path != "/graphql" {
+			t.Fatalf("request = %s %s, want POST /graphql", r.Method, r.URL.Path)
+		}
+		var payload struct {
+			Variables map[string]any `json:"variables"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+			t.Fatalf("decode payload: %v", err)
+		}
+		last := int(payload.Variables["last"].(float64))
+		pageInfo := `{"hasPreviousPage":true,"startCursor":"previous-cursor","hasNextPage":false,"endCursor":"unrelated-forward-cursor"}`
+		switch last {
+		case 3:
+			pageInfo = `{"hasPreviousPage":false,"hasNextPage":true,"endCursor":"unrelated-forward-cursor"}`
+		case 4:
+			pageInfo = `{"hasPreviousPage":true,"hasNextPage":false,"endCursor":"unrelated-forward-cursor"}`
+		case 5:
+			pageInfo = `{"hasPreviousPage":"true","hasNextPage":false,"endCursor":"unrelated-forward-cursor"}`
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"data":{"widget":{"items":{"nodes":[{"id":"item-1"}],"pageInfo":` + pageInfo + `}}}}`))
+	}))
+	defer server.Close()
+
+	bundle := graphQLOperationBundle(server.URL, "graphql_query")
+	for _, tt := range []struct {
+		name       string
+		last       int
+		wantError  string
+		wantMore   bool
+		wantCursor string
+	}{
+		{name: "previous page", last: 2, wantMore: true, wantCursor: "previous-cursor"},
+		{name: "terminal page", last: 3},
+		{name: "missing previous cursor", last: 4, wantError: "startCursor"},
+		{name: "malformed previous state", last: 5, wantError: "hasPreviousPage"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+				Operation: "acme.widgets.query",
+				Body:      map[string]any{"id": "widget-1", "last": tt.last},
+				MaxBytes:  4096,
+			}, nil)
+			if tt.wantError != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantError) {
+					t.Fatalf("OperationDirectRead() error = %v, want %q", err, tt.wantError)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("OperationDirectRead: %v", err)
+			}
+			if result.Page.HasMore != tt.wantMore || result.Page.NextCursor != tt.wantCursor || result.Page.Complete != !tt.wantMore {
+				t.Fatalf("backward page = %+v, want has_more=%t cursor=%q", result.Page, tt.wantMore, tt.wantCursor)
+			}
+		})
+	}
+	if calls != 4 {
+		t.Fatalf("query calls = %d, want 4", calls)
+	}
+}
+
+func TestGraphQLIntUsesSigned32BitDomain(t *testing.T) {
+	op := graphQLOperationBundle("https://example.test", "graphql_query").Operations[0]
+	op.GraphQL.Pagination = nil
+	op.GraphQL.Document = "query IntFixture($count: Int!, $input: Input!, $counts: [Int!]!) { widget(count: $count, input: $input, counts: $counts) { id } }"
+	op.GraphQL.VariablesSchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["count","input","counts"],
+		"properties":{
+			"count":{"type":"integer","minimum":-2147483648,"maximum":2147483647},
+			"input":{"type":"object","additionalProperties":false,"required":["count"],"properties":{"count":{"type":"integer","minimum":-2147483648,"maximum":2147483647}}},
+			"counts":{"type":"array","maxItems":3,"items":{"type":"integer","minimum":-2147483648,"maximum":2147483647}}
+		}
+	}`)
+
+	for name, variables := range map[string]map[string]any{
+		"signed bounds": {
+			"count":  -2147483648,
+			"input":  map[string]any{"count": 2147483647},
+			"counts": []any{-2147483648, 2147483647},
+		},
+		"root above maximum": {
+			"count":  2147483648,
+			"input":  map[string]any{"count": 0},
+			"counts": []any{0},
+		},
+		"nested below minimum": {
+			"count":  0,
+			"input":  map[string]any{"count": -2147483649},
+			"counts": []any{0},
+		},
+		"list above maximum": {
+			"count":  0,
+			"input":  map[string]any{"count": 0},
+			"counts": []any{2147483648},
+		},
+	} {
+		t.Run(name, func(t *testing.T) {
+			_, err := graphQLOperationVariables(op, variables, 0, "")
+			if name == "signed bounds" {
+				if err != nil {
+					t.Fatalf("graphQLOperationVariables() error = %v, want signed bounds accepted", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), "maximum") && !strings.Contains(err.Error(), "minimum") {
+				t.Fatalf("graphQLOperationVariables() error = %v, want signed-32-bit preflight refusal", err)
+			}
+		})
+	}
+}
+
 func TestOperationDirectReadExecutesFixedGraphQLQueryAndPreservesPartialData(t *testing.T) {
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -411,7 +602,7 @@ func TestOperationDirectReadExecutesFixedGraphQLQueryAndPreservesPartialData(t *
 				"widget": {"id":"widget-1","items":{"nodes":[{"id":"item-1","name":"visible","secret":"response-secret"}],"pageInfo":{"hasNextPage":true,"endCursor":"next-cursor"}}},
 				"rateLimit": {"limit":5000,"cost":1,"remaining":4999,"resetAt":"2026-08-09T00:00:00Z"}
 			},
-			"errors": [{"message":"field warning"}]
+			"errors": [{"message":"field warning","path":["widget","items",0],"locations":[{"line":3,"column":7}],"extensions":{"code":"PARTIAL","occurrence_id":"graphql-occurrence-9007199254740993"}}]
 		}`))
 	}))
 	defer server.Close()
@@ -437,6 +628,9 @@ func TestOperationDirectReadExecutesFixedGraphQLQueryAndPreservesPartialData(t *
 	if got, want := result.GraphQL.Errors[0].Message, "field warning"; got != want {
 		t.Fatalf("GraphQL error message = %q, want %q", got, want)
 	}
+	if result.Operation != "acme.widgets.query" || result.Receipt == nil || !strings.Contains(result.Receipt.BodyRaw, "graphql-occurrence-9007199254740993") {
+		t.Fatalf("GraphQL complete receipt = %#v, want full bounded envelope", result.Receipt)
+	}
 	if result.GraphQL.RateLimit == nil || result.GraphQL.RateLimit.Remaining != 4999 || result.GraphQL.RateLimit.Cost != 1 {
 		t.Fatalf("GraphQL rate limit = %+v, want reported bounded data", result.GraphQL.RateLimit)
 	}
@@ -454,8 +648,84 @@ func TestOperationDirectReadExecutesFixedGraphQLQueryAndPreservesPartialData(t *
 		t.Fatalf("nodes = %#v, want one fixed-selection item", nodes)
 	}
 	node, _ := nodes[0].(map[string]any)
-	if node["secret_redacted"] != true {
-		t.Fatalf("node = %#v, want response redaction", node)
+	if node["secret"] != "response-secret" {
+		t.Fatalf("node = %#v, want ordinary unclassified provider field preserved", node)
+	}
+}
+
+func TestOperationDirectReadMasksConfiguredGraphQLDiagnosticsAndReceipts(t *testing.T) {
+	const credential = "opaque-provider-value-77"
+	encoded := base64.RawURLEncoding.EncodeToString([]byte(credential))
+	diagnostic := "provider diagnostic " + credential + " encoded " + encoded + " occurrence_id=graphql-occurrence-9007199254740993"
+	response, err := json.Marshal(map[string]any{
+		"data": map[string]any{
+			"widget": map[string]any{
+				"id": "ghs_unconfigured_provider_value",
+				"items": map[string]any{
+					"nodes":    []any{},
+					"pageInfo": map[string]any{"hasNextPage": false},
+				},
+			},
+			"rateLimit": map[string]any{"limit": 5000, "cost": 1, "remaining": 4999, "resetAt": "2026-08-09T00:00:00Z"},
+		},
+		"errors": []map[string]string{{"message": diagnostic}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodPost || r.URL.Path != "/graphql" {
+			t.Fatalf("request = %s %s, want POST /graphql", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Add("X-GraphQL-Metadata", credential)
+		w.Header().Add("X-GraphQL-Metadata", "graphql-occurrence-9007199254740993")
+		w.Header().Add("X-GraphQL-Metadata", encoded)
+		w.Header().Add("X-GraphQL-Metadata", "ghp_unconfigured_provider_token")
+		w.Header().Add("X-GraphQL-Metadata", credential)
+		_, _ = w.Write(response)
+	}))
+	defer server.Close()
+
+	result, err := OperationDirectRead(context.Background(), graphQLOperationBundle(server.URL, "graphql_query"), connectors.OperationDirectReadRequest{
+		Operation: "acme.widgets.query",
+		// The operation declares forward pagination, so its size direction is
+		// part of the closed request contract even though this test concerns
+		// only the public-output boundary.
+		Body:   map[string]any{"id": "widget-1", "first": 1},
+		Config: connectors.RuntimeConfig{Secrets: map[string]string{"credential": credential}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("requests = %d, want 1", calls)
+	}
+	public, err := json.Marshal(result)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, value := range []string{credential, encoded} {
+		if strings.Contains(string(public), value) {
+			t.Fatal("public GraphQL result exposed configured material")
+		}
+	}
+	if result.GraphQL == nil || len(result.GraphQL.Errors) != 1 || !strings.Contains(result.GraphQL.Errors[0].Message, "occurrence_id=graphql-occurrence-9007199254740993") || !strings.Contains(result.GraphQL.Errors[0].Message, "[masked]") {
+		t.Fatal("GraphQL metadata did not preserve ordinary context and redact configured material")
+	}
+	wantHeaders := []string{"[masked]", "graphql-occurrence-9007199254740993", "[masked]", "ghp_unconfigured_provider_token", "[masked]"}
+	if result.Receipt == nil || !reflect.DeepEqual(result.Receipt.Headers[http.CanonicalHeaderKey("X-GraphQL-Metadata")].Values, wantHeaders) {
+		t.Fatalf("GraphQL receipt headers = %#v, want %#v", result.Receipt, wantHeaders)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("result body type = %T, want map", result.Body)
+	}
+	widget, ok := body["widget"].(map[string]any)
+	if !ok || widget["id"] != "ghs_unconfigured_provider_value" {
+		t.Fatalf("result body = %#v", body)
 	}
 }
 
@@ -531,7 +801,7 @@ func TestOperationDirectReadRedactsGraphQLHTTPErrorBody(t *testing.T) {
 	bundle := graphQLOperationBundle(server.URL, "graphql_query")
 	_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
 		Operation: "acme.widgets.query",
-		Body:      map[string]any{"id": "widget-1"},
+		Body:      map[string]any{"id": "widget-1", "first": 1},
 		MaxBytes:  4096,
 	}, nil)
 	if err == nil {
@@ -540,8 +810,8 @@ func TestOperationDirectReadRedactsGraphQLHTTPErrorBody(t *testing.T) {
 	if strings.Contains(err.Error(), "fake-test-value") {
 		t.Fatalf("GraphQL HTTP error leaked provider body value: %v", err)
 	}
-	if !strings.Contains(err.Error(), "[redacted]") {
-		t.Fatalf("GraphQL HTTP error = %v, want redaction marker", err)
+	if !strings.Contains(err.Error(), "http 400") {
+		t.Fatalf("GraphQL HTTP error = %v, want body-free status diagnostic", err)
 	}
 }
 
@@ -662,6 +932,42 @@ func TestOperationDirectWriteUsesSharedApprovalForFixedGraphQLMutation(t *testin
 	}
 }
 
+// TestPrepareOperationDirectWriteSealsNestedVariablesAndRuntimeMaps proves
+// preparation owns the values its preview binds. A caller may retain and
+// mutate its request/config maps while an approval is pending, but that cannot
+// change the already-prepared GraphQL payload or its auth/config inputs.
+func TestPrepareOperationDirectWriteSealsNestedVariablesAndRuntimeMaps(t *testing.T) {
+	bundle := graphQLOperationBundle("https://example.invalid", "graphql_mutation")
+	op := &bundle.Operations[0]
+	op.GraphQL.Document = "mutation DeleteWidget($input: DeleteWidgetInput!) { deleteWidget(input: $input) { deletedId } }"
+	op.GraphQL.VariablesSchema = json.RawMessage(`{
+		"type":"object","additionalProperties":false,"required":["input"],
+		"properties":{"input":{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string"}}}}
+	}`)
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"tenant": "approved-tenant"},
+			Secrets: map[string]string{"api_key": "approved-secret"},
+		},
+		Body: map[string]any{"input": map[string]any{"name": "approved-name"}},
+	}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite: %v", err)
+	}
+	req.Body["input"].(map[string]any)["name"] = "mutated-name"
+	req.Config.Config["tenant"] = "mutated-tenant"
+	req.Config.Secrets["api_key"] = "mutated-secret"
+	variables, ok := prepared.body["variables"].(map[string]any)
+	if !ok || variables["input"].(map[string]any)["name"] != "approved-name" {
+		t.Fatalf("prepared variables = %#v, want sealed approved nested input", prepared.body)
+	}
+	if prepared.cfg.Config["tenant"] != "approved-tenant" || prepared.cfg.Secrets["api_key"] != "approved-secret" {
+		t.Fatalf("prepared runtime config = %#v/%#v, want sealed maps", prepared.cfg.Config, prepared.cfg.Secrets)
+	}
+}
+
 func TestOperationDirectWritePreservesExplicitNonJSONGraphQLMutationResponse(t *testing.T) {
 	for _, testCase := range []struct {
 		name        string
@@ -765,6 +1071,102 @@ func TestOperationDirectWriteFailsClosedOnGraphQLErrors(t *testing.T) {
 	}
 	if calls != 1 {
 		t.Fatalf("GraphQL error test calls = %d, want exactly one approved request", calls)
+	}
+}
+
+func TestOperationDirectWriteRetainsGraphQLApplicationErrorResponse(t *testing.T) {
+	const secret = "graphql-provider-canary"
+	const responseBody = `{"data":{"deleteWidget":null},"errors":[{"message":"` + secret + `"}]}`
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("X-Provider-Trace", "trace-123")
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(responseBody))
+	}))
+	defer server.Close()
+
+	bundle := graphQLOperationBundle(server.URL, "graphql_mutation")
+	bundle.Operations[0].SecretSensitive = true
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite error = nil, want GraphQL application error")
+	}
+	if strings.Contains(err.Error(), secret) {
+		t.Fatalf("GraphQL application error leaked provider secret: %v", err)
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) {
+		t.Fatalf("GraphQL application error cause = %T, want provider response error", err)
+	}
+	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "trace-123" || providerErr.Body != responseBody {
+		t.Fatal("GraphQL application provider response did not retain exact status, headers, and body")
+	}
+	if calls != 1 {
+		t.Fatalf("GraphQL application error calls = %d, want exactly one approved request", calls)
+	}
+}
+
+func TestOperationDirectWriteBindsGraphQLQueryAuth(t *testing.T) {
+	const token = "graphql-query-key"
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if got := r.URL.Query().Get("api_key"); got != token {
+			t.Error("api_key did not match the preview-bound value")
+		}
+		_, _ = w.Write([]byte(`{"data":{"deleteWidget":{"deletedId":"widget-1"}}}`))
+	}))
+	defer server.Close()
+
+	bundle := graphQLOperationBundle(server.URL, "graphql_mutation")
+	bundle.HTTP.Auth = []AuthSpec{{Mode: "api_key_query", Param: "api_key", Value: "{{ secrets.api_key }}"}}
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+			Secrets:             map[string]string{"api_key": token},
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite: %v", err)
+	}
+	if got := prepared.query.Get("api_key"); got != token {
+		t.Fatal("prepared api_key did not retain the exact bound value")
+	}
+	if got := prepared.prepared.Requests[0].Query; got != "api_key="+token {
+		t.Fatal("prepared query did not retain the exact bound value")
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err != nil {
+		t.Fatalf("OperationDirectWrite: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("GraphQL query-auth calls = %d, want exactly one approved request", calls)
 	}
 }
 
@@ -928,6 +1330,38 @@ func TestPreflightOperationDirectWriteRequiresExactFixedGraphQLBinding(t *testin
 	unsafePath.Operations[0].GraphQL.Path = "/graphql/../raw"
 	if err := PreflightOperationDirectWrite(unsafePath, "acme.widgets.mutation", http.MethodPost, "/graphql/../raw", "json_redacted"); err == nil || !strings.Contains(err.Error(), "traversal") {
 		t.Fatalf("PreflightOperationDirectWrite unsafe GraphQL path = %v, want declaration-path rejection", err)
+	}
+}
+
+func TestValidateOperationDirectWriteMappingsAcceptsDeclaredGraphQLVariables(t *testing.T) {
+	bundle := graphQLOperationBundle("https://example.invalid", "graphql_mutation")
+	op, err := findOperation(bundle, "acme.widgets.mutation")
+	if err != nil {
+		t.Fatalf("findOperation: %v", err)
+	}
+	for _, tc := range []struct {
+		name       string
+		pathFields []string
+		bodyFields []string
+		wantErr    string
+	}{
+		{name: "declared variable", bodyFields: []string{"id"}},
+		{name: "undeclared variable", bodyFields: []string{"override"}, wantErr: "is not declared"},
+		{name: "nested variable path", bodyFields: []string{"id.owner"}, wantErr: "top-level GraphQL variable"},
+		{name: "path override", pathFields: []string{"owner"}, wantErr: "does not accept path fields"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			err := ValidateOperationDirectWriteMappings(op, tc.pathFields, tc.bodyFields)
+			if tc.wantErr == "" {
+				if err != nil {
+					t.Fatalf("ValidateOperationDirectWriteMappings: %v", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("ValidateOperationDirectWriteMappings error = %v, want %q", err, tc.wantErr)
+			}
+		})
 	}
 }
 

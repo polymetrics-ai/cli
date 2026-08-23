@@ -6,8 +6,13 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
+	"strconv"
 	"strings"
+
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // params-import carries a connector's accepted parameters from its own provider
@@ -41,8 +46,9 @@ import (
 // hermetic so CI can verify drift without fetching anything.
 const paramsImportUsage = `connectorgen params-import <connector> --artifact <path> [--defs <dir>] [--check]
 
-Imports the accepted parameter set for a connector's rest_read operations from
-its provider specification (OpenAPI 3 or Swagger 2) into operations.json.
+Imports the accepted parameter set for a connector's executable REST and
+binary operations from its provider specification (OpenAPI 3 or Swagger 2)
+into operations.json.
 
   --artifact <path>  provider specification file (.json)
   --defs <dir>       connector defs root (default internal/connectors/defs)
@@ -126,19 +132,31 @@ type openAPIDoc struct {
 }
 
 type openAPIParameter struct {
-	Ref         string `json:"$ref"`
-	Name        string `json:"name"`
-	In          string `json:"in"`
-	Required    bool   `json:"required"`
-	Description string `json:"description"`
-	Schema      struct {
-		Type string   `json:"type"`
-		Enum []string `json:"enum"`
-	} `json:"schema"`
+	Ref         string                 `json:"$ref"`
+	Name        string                 `json:"name"`
+	In          string                 `json:"in"`
+	Required    bool                   `json:"required"`
+	Description string                 `json:"description"`
+	Schema      openAPIParameterSchema `json:"schema"`
 	// Swagger 2 puts type/enum directly on the parameter rather than under a
 	// schema object.
 	Type string   `json:"type"`
 	Enum []string `json:"enum"`
+}
+
+// openAPIParameterSchema is the deliberately small parameter subset the
+// importer needs. A path/query parameter whose source is an unconditional
+// string-or-scalar union still has one closed textual wire representation, so
+// the importer can expose it as a bounded string flag without inventing a
+// body or a raw request path.
+type openAPIParameterSchema struct {
+	Type      string                   `json:"type"`
+	Enum      []string                 `json:"enum"`
+	Pattern   string                   `json:"pattern"`
+	MinLength int                      `json:"minLength"`
+	MaxLength int                      `json:"maxLength"`
+	OneOf     []openAPIParameterSchema `json:"oneOf"`
+	AnyOf     []openAPIParameterSchema `json:"anyOf"`
 }
 
 type openAPIOperation struct {
@@ -166,7 +184,11 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 		return 0, 0, fmt.Errorf("parse operations.json: %w", err)
 	}
 
-	declaredPaging, configProps, err := paramsImportSkipSets(bundleDir)
+	declaredPaging, configProps, runtimeHeaders, err := paramsImportSkipSets(bundleDir)
+	if err != nil {
+		return 0, 0, err
+	}
+	declaredCLIPathBindings, err := paramsImportDeclaredCLIPathBindings(bundleDir)
 	if err != nil {
 		return 0, 0, err
 	}
@@ -176,31 +198,54 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 		if !ok {
 			continue
 		}
-		if stringField(op, "kind") != "rest_read" {
+		kind := stringField(op, "kind")
+		blockName, executable := engine.OperationRequestParameterBlock(kind)
+		if !executable {
+			if _, hasREST := op.get("rest"); hasREST {
+				return 0, 0, fmt.Errorf("operation %q kind %q has REST metadata but no registered parameter import contract", stringField(op, "id"), kind)
+			}
+			if _, hasBinary := op.get("binary"); hasBinary {
+				return 0, 0, fmt.Errorf("operation %q kind %q has binary metadata but no registered parameter import contract", stringField(op, "id"), kind)
+			}
 			continue
 		}
-		restRaw, ok := op.get("rest")
+		blockRaw, ok := op.get(blockName)
 		if !ok {
-			continue
+			return 0, 0, fmt.Errorf("operation %q kind %q requires %s metadata for parameter import", stringField(op, "id"), kind, blockName)
 		}
-		rest, ok := restRaw.(*orderedObject)
+		block, ok := blockRaw.(*orderedObject)
 		if !ok {
-			continue
+			return 0, 0, fmt.Errorf("operation %q %s metadata is not an object", stringField(op, "id"), blockName)
 		}
 		total++
-		method := strings.ToLower(strings.TrimSpace(stringField(rest, "method")))
-		path := stringField(rest, "path")
+		method := strings.ToLower(strings.TrimSpace(stringField(block, "method")))
+		path := stringField(block, "path")
 		item, ok := doc.Paths[path]
 		if !ok {
-			continue
+			return 0, total, fmt.Errorf("operation %q provider route %s %s is absent from the artifact", stringField(op, "id"), strings.ToUpper(method), path)
 		}
 		rawOp, ok := item[method]
 		if !ok {
-			continue
+			return 0, total, fmt.Errorf("operation %q provider route %s %s is absent from the artifact", stringField(op, "id"), strings.ToUpper(method), path)
 		}
 		var parsed openAPIOperation
 		if err := json.Unmarshal(rawOp, &parsed); err != nil {
 			return 0, 0, fmt.Errorf("parse operation %s %s: %w", method, path, err)
+		}
+		var pathParameters []openAPIParameter
+		if rawParameters, present := item["parameters"]; present {
+			if err := json.Unmarshal(rawParameters, &pathParameters); err != nil {
+				return 0, 0, fmt.Errorf("parse path parameters %s: %w", path, err)
+			}
+		}
+		parameters := mergedOpenAPIParameters(doc, pathParameters, parsed.Parameters)
+		for _, parameter := range parameters {
+			if parameter.Ref == "" {
+				continue
+			}
+			if _, ok := resolveOpenAPIParameter(doc, parameter); !ok {
+				return 0, total, fmt.Errorf("operation %q has unresolved parameter reference %q", stringField(op, "id"), parameter.Ref)
+			}
 		}
 		skip := map[string]bool{}
 		for name := range declaredPaging {
@@ -211,21 +256,27 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 		// some other code path reads, and skipping it drops a parameter the
 		// caller has no other way to set.
 		for _, name := range pathTemplateVariables(path) {
-			if configProps[name] {
+			if configProps[name] && !declaredCLIPathBindings[stringField(op, "id")][name] {
 				skip[name] = true
 			}
 		}
-		want := importedParameters(doc, parsed.Parameters, skip)
-		if !sameImportedParameters(rest, want) {
-			changed++
-			setImportedParameters(rest, want)
+		want := importedParameters(doc, parameters, skip)
+		preserveDeclaredHeaderRepeatability(block, want)
+		if err := validateImportedOperationHeaders(want, runtimeHeaders); err != nil {
+			return 0, 0, fmt.Errorf("operation %q: %w", stringField(op, "id"), err)
 		}
-		if paginationRaw, ok := rest.get("pagination"); ok {
-			if pagination, ok := paginationRaw.(*orderedObject); ok {
-				wantPaging := importedOperationPaginationParameters(doc, parsed.Parameters, operationPaginationParameterNames(pagination))
-				if !sameImportedField(rest, "pagination_parameters", wantPaging) {
-					changed++
-					setImportedField(rest, "pagination_parameters", wantPaging)
+		if !sameImportedParameters(block, want) {
+			changed++
+			setImportedParameters(block, want)
+		}
+		if kind == "rest_read" {
+			if paginationRaw, present := block.get("pagination"); present {
+				if pagination, ok := paginationRaw.(*orderedObject); ok {
+					wantPaging := importedOperationPaginationParameters(doc, parameters, operationPaginationParameterNames(pagination))
+					if !sameImportedField(block, "pagination_parameters", wantPaging) {
+						changed++
+						setImportedField(block, "pagination_parameters", wantPaging)
+					}
 				}
 			}
 		}
@@ -240,6 +291,107 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 	return changed, total, nil
 }
 
+// paramsImportDeclaredCLIPathBindings preserves an already-declared caller
+// path binding. Config interpolation normally owns a matching path variable,
+// but a command that explicitly maps a flag to that same operation/path is an
+// intentional declaration-owned override. Retaining it lets params-import
+// synchronize its source type/requiredness instead of silently deleting the
+// only caller route to that provider field.
+func paramsImportDeclaredCLIPathBindings(bundleDir string) (map[string]map[string]bool, error) {
+	bindings := map[string]map[string]bool{}
+	raw, err := os.ReadFile(filepath.Join(bundleDir, "cli_surface.json"))
+	if err != nil {
+		if os.IsNotExist(err) {
+			return bindings, nil
+		}
+		return nil, fmt.Errorf("read cli_surface.json: %w", err)
+	}
+	var document orderedJSON
+	if err := json.Unmarshal(raw, &document); err != nil {
+		return nil, fmt.Errorf("parse cli_surface.json: %w", err)
+	}
+	for _, rawCommand := range arrayField(document.root, "commands") {
+		command, ok := rawCommand.(*orderedObject)
+		if !ok {
+			continue
+		}
+		operation := stringField(command, "operation")
+		if operation == "" {
+			continue
+		}
+		for _, rawFlag := range arrayField(command, "flags") {
+			flag, ok := rawFlag.(*orderedObject)
+			if !ok {
+				continue
+			}
+			name, mapped := strings.CutPrefix(stringField(flag, "maps_to"), "path.")
+			if !mapped || name == "" {
+				continue
+			}
+			if bindings[operation] == nil {
+				bindings[operation] = map[string]bool{}
+			}
+			bindings[operation][name] = true
+		}
+	}
+	return bindings, nil
+}
+
+func mergedOpenAPIParameters(doc openAPIDoc, pathParameters, operationParameters []openAPIParameter) []openAPIParameter {
+	merged := make([]openAPIParameter, 0, len(pathParameters)+len(operationParameters))
+	indices := map[string]int{}
+	add := func(raw openAPIParameter) {
+		parameter, ok := resolveOpenAPIParameter(doc, raw)
+		if !ok || strings.TrimSpace(parameter.Name) == "" || strings.TrimSpace(parameter.In) == "" {
+			merged = append(merged, raw)
+			return
+		}
+		name := strings.TrimSpace(parameter.Name)
+		if parameter.In == "header" {
+			canonical, err := connectors.CanonicalOperationHeaderName(name)
+			if err != nil {
+				merged = append(merged, raw)
+				return
+			}
+			name = canonical
+		}
+		key := parameter.In + "\x00" + name
+		if index, exists := indices[key]; exists {
+			merged[index] = raw
+			return
+		}
+		indices[key] = len(merged)
+		merged = append(merged, raw)
+	}
+	for _, parameter := range pathParameters {
+		add(parameter)
+	}
+	for _, parameter := range operationParameters {
+		add(parameter)
+	}
+	return merged
+}
+
+func validateImportedOperationHeaders(parameters []map[string]any, runtimeHeaders map[string]bool) error {
+	for _, parameter := range parameters {
+		if parameter["in"] != "header" {
+			continue
+		}
+		name, _ := parameter["name"].(string)
+		canonical, err := connectors.CanonicalOperationHeaderName(name)
+		if err != nil {
+			return fmt.Errorf("imported header %q is malformed", name)
+		}
+		if connectors.IsProtectedOperationHeaderName(canonical) {
+			return fmt.Errorf("imported header %q is protected and runtime-owned", name)
+		}
+		if runtimeHeaders[canonical] {
+			return fmt.Errorf("imported header %q is protected and runtime-owned", name)
+		}
+	}
+	return nil
+}
+
 // paramsImportSkipSets reads the two bundle-declared name sets the import
 // consults: the paging parameters this connector's own pagination spec names,
 // and its config schema's property names.
@@ -247,27 +399,49 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 // They are returned apart because they are applied differently. A declared
 // paging parameter is excluded everywhere; a config property is excluded only
 // where the operation's own path template actually interpolates it.
-func paramsImportSkipSets(bundleDir string) (paging, configProps map[string]bool, err error) {
+func paramsImportSkipSets(bundleDir string) (paging, configProps, runtimeHeaders map[string]bool, err error) {
 	paging = map[string]bool{}
 	configProps = map[string]bool{}
+	runtimeHeaders = map[string]bool{}
 
 	streamsRaw, err := os.ReadFile(filepath.Join(bundleDir, "streams.json"))
 	if err == nil {
 		var streams struct {
 			Base struct {
-				Pagination map[string]any `json:"pagination"`
+				Pagination map[string]any    `json:"pagination"`
+				Headers    map[string]string `json:"headers"`
+				Auth       []struct {
+					Header string `json:"header"`
+				} `json:"auth"`
 			} `json:"base"`
 		}
 		if err := json.Unmarshal(streamsRaw, &streams); err != nil {
-			return nil, nil, fmt.Errorf("parse streams.json: %w", err)
+			return nil, nil, nil, fmt.Errorf("parse streams.json: %w", err)
 		}
 		for _, key := range []string{"page_param", "size_param", "cursor_param", "limit_param", "offset_param", "count_param", "start_index_param"} {
 			if value, ok := streams.Base.Pagination[key].(string); ok && strings.TrimSpace(value) != "" {
 				paging[value] = true
 			}
 		}
+		for name := range streams.Base.Headers {
+			canonical, err := connectors.CanonicalOperationHeaderName(name)
+			if err != nil {
+				return nil, nil, nil, fmt.Errorf("streams.json runtime header %q: %w", name, err)
+			}
+			runtimeHeaders[canonical] = true
+		}
+		for _, auth := range streams.Base.Auth {
+			if strings.TrimSpace(auth.Header) == "" {
+				continue
+			}
+			canonical, err := connectors.CanonicalOperationHeaderName(auth.Header)
+			if err != nil {
+				return nil, nil, nil, fmt.Errorf("streams.json runtime auth header %q: %w", auth.Header, err)
+			}
+			runtimeHeaders[canonical] = true
+		}
 	} else if !os.IsNotExist(err) {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
 	specRaw, err := os.ReadFile(filepath.Join(bundleDir, "spec.json"))
@@ -276,15 +450,15 @@ func paramsImportSkipSets(bundleDir string) (paging, configProps map[string]bool
 			Properties map[string]json.RawMessage `json:"properties"`
 		}
 		if err := json.Unmarshal(specRaw, &spec); err != nil {
-			return nil, nil, fmt.Errorf("parse spec.json: %w", err)
+			return nil, nil, nil, fmt.Errorf("parse spec.json: %w", err)
 		}
 		for name := range spec.Properties {
 			configProps[name] = true
 		}
 	} else if !os.IsNotExist(err) {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
-	return paging, configProps, nil
+	return paging, configProps, runtimeHeaders, nil
 }
 
 // pathTemplateVariables lists the {name} placeholders an operation's REST path
@@ -380,18 +554,24 @@ func importedParameters(doc openAPIDoc, params []openAPIParameter, skip map[stri
 			continue
 		}
 		name := strings.TrimSpace(p.Name)
-		if name == "" || seen[name] || skip[name] {
+		parameterKey := p.In + "\x00" + name
+		if p.In == "header" {
+			if canonical, err := connectors.CanonicalOperationHeaderName(name); err == nil {
+				parameterKey = p.In + "\x00" + canonical
+			}
+		}
+		if name == "" || seen[parameterKey] || skip[name] {
 			continue
 		}
-		if p.In != "query" && p.In != "path" {
+		if p.In != "query" && p.In != "path" && p.In != "header" {
 			continue
 		}
 		if isProviderPagingParameter(p) {
 			continue
 		}
-		seen[name] = true
+		seen[parameterKey] = true
 		entry := map[string]any{"name": name, "in": p.In}
-		if typ := firstNonEmpty(p.Schema.Type, p.Type); typ != "" {
+		if typ := importedParameterWireType(p); typ != "" {
 			entry["type"] = typ
 		}
 		if p.Required {
@@ -403,12 +583,98 @@ func importedParameters(doc openAPIDoc, params []openAPIParameter, skip map[stri
 		if summary := strings.TrimSpace(firstLine(p.Description)); summary != "" {
 			entry["summary"] = summary
 		}
+		if p.In == "header" {
+			schema, maxBytes, ok := importedHeaderSchema(p)
+			if !ok {
+				// A header with no bounded string contract is not a safe CLI
+				// input. Leave it unavailable rather than inventing a generic
+				// header path; a source contract can be improved and re-imported.
+				continue
+			}
+			entry["type"] = "string"
+			entry["schema"] = schema
+			entry["max_bytes"] = maxBytes
+		}
 		out = append(out, entry)
 	}
 	sort.SliceStable(out, func(i, j int) bool {
 		return out[i]["name"].(string) < out[j]["name"].(string)
 	})
 	return out
+}
+
+func importedParameterWireType(p openAPIParameter) string {
+	if typ := firstNonEmpty(p.Schema.Type, p.Type); typ != "" {
+		return typ
+	}
+	if (p.In == "path" || p.In == "query") && openAPIStringScalarWireUnion(p.Schema) {
+		return "string"
+	}
+	return ""
+}
+
+func openAPIStringScalarWireUnion(schema openAPIParameterSchema) bool {
+	arms := schema.OneOf
+	if len(arms) == 0 {
+		arms = schema.AnyOf
+	}
+	if len(arms) < 2 {
+		return false
+	}
+	hasOpenString := false
+	for _, arm := range arms {
+		if len(arm.OneOf) != 0 || len(arm.AnyOf) != 0 || len(arm.Enum) != 0 || arm.Pattern != "" || arm.MinLength != 0 || arm.MaxLength != 0 {
+			return false
+		}
+		switch arm.Type {
+		case "string":
+			hasOpenString = true
+		case "integer", "number", "boolean":
+		default:
+			return false
+		}
+	}
+	return hasOpenString
+}
+
+// importedHeaderSchema turns the bounded string subset of an OpenAPI header
+// parameter into the engine's schema dialect. The byte cap is conservative for
+// a provider's character maxLength (UTF-8 can use four bytes per code point),
+// or exact for a closed enum. Unbounded or non-string headers are intentionally
+// not imported: generated commands must never create a generic header escape
+// hatch.
+func importedHeaderSchema(p openAPIParameter) (map[string]any, int, bool) {
+	typ := firstNonEmpty(p.Schema.Type, p.Type)
+	if typ != "string" {
+		return nil, 0, false
+	}
+	values := firstNonEmptySlice(p.Schema.Enum, p.Enum)
+	schema := map[string]any{"type": "string"}
+	if len(values) > 0 {
+		schema["enum"] = values
+	}
+	if p.Schema.Pattern != "" {
+		schema["pattern"] = p.Schema.Pattern
+	}
+	if p.Schema.MinLength > 0 {
+		schema["minLength"] = p.Schema.MinLength
+	}
+	if p.Schema.MaxLength > 0 {
+		schema["maxLength"] = p.Schema.MaxLength
+	}
+	maxBytes := 0
+	if p.Schema.MaxLength > 0 && p.Schema.MaxLength <= 4096 {
+		maxBytes = p.Schema.MaxLength * 4
+	}
+	for _, value := range values {
+		if len(value) > maxBytes {
+			maxBytes = len(value)
+		}
+	}
+	if maxBytes <= 0 || maxBytes > 16<<10 {
+		return nil, 0, false
+	}
+	return schema, maxBytes, true
 }
 
 // importedOperationPaginationParameters records the exact source parameters a
@@ -536,6 +802,12 @@ func sameImportedParameter(got *orderedObject, want map[string]any) bool {
 	if required != wantRequired {
 		return false
 	}
+	gotRepeatable, _ := got.get("repeatable")
+	repeatable, _ := gotRepeatable.(bool)
+	wantRepeatable, _ := want["repeatable"].(bool)
+	if repeatable != wantRepeatable {
+		return false
+	}
 	wantValues, _ := want["values"].([]string)
 	gotValues := arrayField(got, "values")
 	if len(gotValues) != len(wantValues) {
@@ -547,7 +819,40 @@ func sameImportedParameter(got *orderedObject, want map[string]any) bool {
 			return false
 		}
 	}
+	wantSchema, schemaDeclared := want["schema"]
+	gotSchema, gotSchemaDeclared := got.get("schema")
+	if schemaDeclared != gotSchemaDeclared || (schemaDeclared && !sameImportedJSONValue(gotSchema, wantSchema)) {
+		return false
+	}
+	wantMaxBytes, maxBytesDeclared := want["max_bytes"].(int)
+	gotMaxBytes, gotMaxBytesDeclared := got.get("max_bytes")
+	if maxBytesDeclared != gotMaxBytesDeclared {
+		return false
+	}
+	if maxBytesDeclared {
+		gotNumber, ok := gotMaxBytes.(json.Number)
+		if !ok || gotNumber.String() != strconv.Itoa(wantMaxBytes) {
+			return false
+		}
+	}
 	return true
+}
+
+// sameImportedJSONValue compares the ordered document representation with the
+// map/slice values constructed from the OpenAPI artifact. Re-marshalling keeps
+// the comparison semantic rather than treating orderedObject and map as two
+// different schemas.
+func sameImportedJSONValue(got, want any) bool {
+	gotRaw, gotErr := json.Marshal(got)
+	wantRaw, wantErr := json.Marshal(want)
+	if gotErr != nil || wantErr != nil {
+		return false
+	}
+	var gotNormalized, wantNormalized any
+	if json.Unmarshal(gotRaw, &gotNormalized) != nil || json.Unmarshal(wantRaw, &wantNormalized) != nil {
+		return false
+	}
+	return reflect.DeepEqual(gotNormalized, wantNormalized)
 }
 
 // setImportedParameters replaces the operation's parameter list wholesale: the
@@ -573,6 +878,9 @@ func setImportedField(rest *orderedObject, field string, want []map[string]any) 
 		if required, ok := param["required"].(bool); ok && required {
 			entry.set("required", true)
 		}
+		if repeatable, ok := param["repeatable"].(bool); ok && repeatable {
+			entry.set("repeatable", true)
+		}
 		if values, ok := param["values"].([]string); ok && len(values) > 0 {
 			list := make([]any, 0, len(values))
 			for _, value := range values {
@@ -583,7 +891,44 @@ func setImportedField(rest *orderedObject, field string, want []map[string]any) 
 		if summary, ok := param["summary"].(string); ok && summary != "" {
 			entry.set("summary", summary)
 		}
+		if schema, ok := param["schema"].(map[string]any); ok {
+			entry.set("schema", schema)
+		}
+		if maxBytes, ok := param["max_bytes"].(int); ok && maxBytes > 0 {
+			entry.set("max_bytes", json.Number(strconv.Itoa(maxBytes)))
+		}
 		entries = append(entries, entry)
 	}
 	rest.set(field, entries)
+}
+
+func preserveDeclaredHeaderRepeatability(rest *orderedObject, want []map[string]any) {
+	repeatable := make(map[string]struct{})
+	for _, raw := range arrayField(rest, "parameters") {
+		parameter, ok := raw.(*orderedObject)
+		if !ok || stringField(parameter, "in") != "header" {
+			continue
+		}
+		value, _ := parameter.get("repeatable")
+		if enabled, _ := value.(bool); !enabled {
+			continue
+		}
+		name, err := connectors.CanonicalOperationHeaderName(stringField(parameter, "name"))
+		if err == nil {
+			repeatable[name] = struct{}{}
+		}
+	}
+	for _, parameter := range want {
+		if parameter["in"] != "header" {
+			continue
+		}
+		name, _ := parameter["name"].(string)
+		canonical, err := connectors.CanonicalOperationHeaderName(name)
+		if err != nil {
+			continue
+		}
+		if _, ok := repeatable[canonical]; ok {
+			parameter["repeatable"] = true
+		}
+	}
 }

@@ -31,7 +31,7 @@ const INTENT_RULES = [
   ['direct_read', 'Constrained read commands that do not naturally fit streams.'],
   [
     'binary_download',
-    'Bounded GET downloads that write a file to a caller-supplied `--dest-root`; no response body is rendered.',
+    'Bounded GET downloads that require declared response status, media, and redirect policy before writing a file beneath a caller-supplied `--dest-root`; no response body is rendered.',
   ],
   [
     'direct_write',

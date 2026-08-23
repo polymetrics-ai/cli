@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -11,7 +12,88 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
+
+func TestOperationDirectWriteNoResponseRetainsAttemptIdentity(t *testing.T) {
+	bundle := graphQLOperationBundle("http://127.0.0.1:1", "graphql_mutation")
+	request := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	request.PreviewDigest = preview.Digest
+	request.Approval = approvedEvidenceForPreview(t, preview)
+
+	result, err := OperationDirectWrite(context.Background(), bundle, request, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite() error = nil, want transport failure")
+	}
+	if result.Connector != "acme" || result.Operation != request.Operation || result.Method != http.MethodPost || result.Path != "/graphql" || result.ResponseReceived {
+		t.Fatalf("attempt receipt = %#v, want sealed identity without a response", result)
+	}
+
+	invalid := request
+	invalid.Body = map[string]any{}
+	if preflight, preflightErr := OperationDirectWrite(context.Background(), bundle, invalid, nil); preflightErr == nil || preflight.Operation != "" {
+		t.Fatalf("preflight result = %#v error = %v, want no attempt receipt", preflight, preflightErr)
+	}
+}
+
+func TestSensitiveTransformUnimplementedFailsBeforePreview(t *testing.T) {
+	bundle := graphQLOperationBundle("http://127.0.0.1:1", "graphql_mutation")
+	bundle.Operations[0].SensitivePolicy = &SensitivePolicySpec{
+		InputMode:    "env",
+		Transform:    "github_secret_encryption",
+		ApprovalMode: "typed_confirmation",
+	}
+	request := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	if _, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil); err == nil || !strings.Contains(err.Error(), "not registered") {
+		t.Fatalf("PreviewOperationDirectWrite error = %v, want pre-preview transform refusal", err)
+	}
+}
+
+func TestSensitiveTransformRegisteredExecutionBindsDigest(t *testing.T) {
+	bundle := graphQLOperationBundle("http://127.0.0.1:1", "graphql_mutation")
+	bundle.Operations[0].SensitivePolicy = &SensitivePolicySpec{InputMode: "env", Transform: "none", ApprovalMode: "typed_confirmation"}
+	request := connectors.OperationDirectWriteRequest{
+		Operation: "acme.widgets.mutation",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "fixture-credential-revision",
+			ConfigurationDigest: "fixture-configuration-digest",
+			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+		},
+		Body: map[string]any{"id": "widget-1"},
+	}
+	prepared, err := prepareOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err != nil {
+		t.Fatalf("prepareOperationDirectWrite: %v", err)
+	}
+	definition, ok := prepared.prepared.Definition.(map[string]any)
+	if !ok {
+		t.Fatalf("prepared definition = %#v", prepared.prepared.Definition)
+	}
+	transform, ok := definition["sensitive_transform"].(map[string]any)
+	if !ok || transform["name"] != "none" || transform["version"] != "v1" {
+		t.Fatalf("prepared transform definition = %#v", definition["sensitive_transform"])
+	}
+}
 
 func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *testing.T) {
 	calls := 0
@@ -32,7 +114,12 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 		if got := r.Form.Get("dir"); got != "1" {
 			t.Fatalf("form dir = %q, want 1", got)
 		}
+		if got := r.Header.Get("X-Change-Reason"); got != "correctness" {
+			t.Fatalf("X-Change-Reason = %q, want declaration-owned value", got)
+		}
 		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("X-Write-Receipt", "receipt-42")
+		w.Header().Add("Set-Cookie", "transport-secret")
 		_, _ = w.Write([]byte(`{"ok":true,"token":"server-token","nested":{"token":"nested-server-token"}}`))
 	}))
 	defer srv.Close()
@@ -59,6 +146,10 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 				Path:        "/api/vote",
 				ContentType: "application/x-www-form-urlencoded",
 				MaxBytes:    1024,
+				Parameters: []OperationParameter{{
+					Name: "X-Change-Reason", In: "header", Type: "string", Required: true,
+					Schema: json.RawMessage(`{"type":"string","enum":["correctness","moderation"]}`), MaxBytes: 32,
+				}},
 				BodySchema: json.RawMessage(`{
 					"type": "object",
 					"required": ["id", "dir"],
@@ -67,6 +158,10 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 						"dir": {"type": "integer"}
 					}
 				}`),
+				Response: &OperationResponseSpec{Headers: []OperationResponseHeaderSpec{
+					{Name: "X-Write-Receipt", MaxBytes: 64},
+					{Name: "Set-Cookie", MaxBytes: 64},
+				}},
 			},
 		}},
 		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
@@ -89,6 +184,7 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
 		},
 		Body:         map[string]any{"id": "t3_abc", "dir": 1},
+		Headers:      map[string]string{"X-Change-Reason": "correctness"},
 		RedactFields: []string{"token"},
 	}
 
@@ -101,6 +197,23 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	}
 	if preview.ApprovalTarget.Batchable {
 		t.Fatal("preview made a batchable:false operation batchable")
+	}
+	changedHeader := req
+	changedHeader.Headers = map[string]string{"X-Change-Reason": "moderation"}
+	changedPreview, err := PreviewOperationDirectWrite(context.Background(), bundle, changedHeader, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite changed header: %v", err)
+	}
+	if changedPreview.Digest == preview.Digest {
+		t.Fatalf("header change preserved preview digest %q", preview.Digest)
+	}
+	changedHeader.PreviewDigest = preview.Digest
+	changedHeader.Approval = approvedEvidenceForPreview(t, preview)
+	if _, err := OperationDirectWrite(context.Background(), bundle, changedHeader, nil); err == nil || !strings.Contains(err.Error(), "no longer matches") {
+		t.Fatalf("OperationDirectWrite with changed header = %v, want preview mismatch", err)
+	}
+	if calls != 0 {
+		t.Fatalf("changed header reached network; calls = %d, want 0", calls)
 	}
 
 	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil {
@@ -121,6 +234,12 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	}
 	if result.Status != http.StatusOK {
 		t.Fatalf("status = %d, want %d", result.Status, http.StatusOK)
+	}
+	if got := result.Headers["X-Write-Receipt"].Values; len(got) != 1 || got[0] != "receipt-42" {
+		t.Fatalf("write receipt = %#v, want declared provider metadata", got)
+	}
+	if cookie, ok := result.Headers["Set-Cookie"]; !ok || len(cookie.Values) != 1 || cookie.Values[0] != "transport-secret" {
+		t.Fatalf("Set-Cookie = %#v, want exact internal provider metadata", cookie)
 	}
 	body, ok := result.Body.(map[string]any)
 	if !ok {
@@ -214,6 +333,48 @@ func TestOperationDirectWriteStoresReturnedSecretAndRetainsRuntimeResponse(t *te
 	}
 }
 
+// TestOperationDirectWriteRetainsProviderReceiptWhenSecretStoreFails protects
+// the terminal-failure contract: the printable error remains secret-safe, but
+// the engine result and wrapped cause retain the exact provider receipt for
+// the App's bounded persistence projection.
+func TestOperationDirectWriteRetainsProviderReceiptWhenSecretStoreFails(t *testing.T) {
+	const providerCredential = "returned-credential-store-failure-canary"
+	store := newRecordingSecretStore()
+	store.err = errors.New("fixture secret store failure")
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("X-Provider-Trace", "secret-store-failure")
+		_, _ = w.Write([]byte(`{"credential":"` + providerCredential + `"}`))
+	}))
+	t.Cleanup(server.Close)
+	bundle := Bundle{Name: "acme", HTTP: HTTPBase{URL: server.URL}, Operations: []OperationSpec{{
+		ID: "acme.credentials.create", Kind: "rest_write", Summary: "Create credential", Risk: "high", Approval: "typed", OutputPolicy: directWritePolicySecretStored,
+		MutationClass: "secret", SecretSensitive: true,
+		SensitivePolicy: &SensitivePolicySpec{InputMode: "env", ApprovalMode: "typed_confirmation", ResponseSecretField: "credential", ResponseSecretStoreKey: "generated_credential"},
+		REST:            &RESTOperationSpec{Method: http.MethodPost, Path: "/v2/credentials", MaxBytes: 1024},
+	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/v2/credentials", Operation: &SurfaceOperation{Model: "write"}}}}}
+	req := connectors.OperationDirectWriteRequest{Operation: "acme.credentials.create", Config: connectors.RuntimeConfig{SecretStore: store, CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest", WriteApprovalScope: connectors.WriteApprovalScopeFixture}}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite accepted secret-store failure")
+	}
+	if strings.Contains(err.Error(), providerCredential) {
+		t.Fatalf("secret-store error leaked provider credential: %v", err)
+	}
+	if result.Status != http.StatusOK || result.Headers["X-Provider-Trace"].Values[0] != "secret-store-failure" {
+		t.Fatalf("result = %#v, want complete provider receipt", result)
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) || providerErr.Body != `{"credential":"`+providerCredential+`"}` {
+		t.Fatalf("error = %T %v, want exact retained provider receipt", err, err)
+	}
+}
+
 func TestOperationDirectWriteRejectsSecretResponseWithoutEncryptedStoreBeforeIO(t *testing.T) {
 	requests := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))
@@ -277,7 +438,7 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 		{name: "json returns complete decoded body", policy: directWritePolicyJSON, wantBody: true},
 		{name: "none retains complete response body", policy: directWritePolicyNone, wantBody: true},
 		{name: "none accepts bodyless response", policy: directWritePolicyNone, bodyless: true},
-		{name: "none rejects empty declared JSON", policy: directWritePolicyNone, emptyJSON: true, wantErr: "not JSON"},
+		{name: "none accepts empty declared JSON as absent body", policy: directWritePolicyNone, emptyJSON: true},
 		{name: "none preserves literal JSON null", policy: directWritePolicyNone, response: `null`, wantNull: true},
 		{name: "json rejects trailing response content", policy: directWritePolicyJSON, response: `{"created":true} trailing`, wantErr: "not JSON"},
 	} {
@@ -357,11 +518,11 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
 					t.Fatalf("OperationDirectWrite error = %v, want %q", err, tt.wantErr)
 				}
-				if !result.ResponseReceived || !result.BodyPresent || result.BodyRaw != tt.response {
+				if !result.ResponseReceived || result.BodyPresent != (len(tt.response) > 0) || result.BodyRaw != tt.response {
 					t.Fatalf("trailing response result = %#v, want complete received raw response", result)
 				}
 				if tt.emptyJSON {
-					if result.Status != http.StatusOK || result.BodyBytes != 0 || result.BodyRawEncoding != "text" {
+					if result.Status != http.StatusOK || result.BodyBytes != 0 || result.BodyRawEncoding != "" {
 						t.Fatalf("empty declared JSON result = %#v, want complete zero-value provider response", result)
 					}
 					if receipt := result.Headers["X-Provider-Receipt"].Values; len(receipt) != 1 || receipt[0] != "receipt-empty-json" {
@@ -391,6 +552,12 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 				}
 				return
 			}
+			if tt.emptyJSON {
+				if result.Status != http.StatusOK || result.BodyPresent || result.BodyBytes != 0 || result.BodyRaw != "" || result.Body != nil {
+					t.Fatalf("empty declared JSON result = %#v, want an absent transport body", result)
+				}
+				return
+			}
 			if tt.wantNull {
 				if !result.BodyPresent || result.BodyRaw != "null" || result.BodyBytes != len("null") || result.Body != nil {
 					t.Fatalf("literal JSON null result = %#v, want a present null body", result)
@@ -417,6 +584,69 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 			}
 			t.Logf("direct-write policy=%q status=%d response=%s", tt.policy, result.Status, encoded)
 		})
+	}
+}
+
+func TestOperationDirectWriteRetainsRESTDecodeFailureResponse(t *testing.T) {
+	const rawResponse = `{"result":"provider-response-canary"`
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("X-Provider-Trace", "trace-123")
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(rawResponse))
+	}))
+	t.Cleanup(srv.Close)
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:            "acme.widgets.create",
+			Kind:          "rest_write",
+			Summary:       "Create one widget",
+			Risk:          "medium",
+			Approval:      "none",
+			OutputPolicy:  directWritePolicyJSON,
+			MutationClass: "create",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/widgets",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}}}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/widgets", Operation: &SurfaceOperation{Model: "write"}}}},
+	}
+	req := connectors.OperationDirectWriteRequest{Operation: "acme.widgets.create", Body: map[string]any{"name": "widget"}}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	_, err = OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite error = nil, want decode failure")
+	}
+	if strings.Contains(err.Error(), "provider-response-canary") {
+		t.Fatalf("OperationDirectWrite printable error exposed provider response: %v", err)
+	}
+	var providerResponse *connsdk.HTTPError
+	if !errors.As(err, &providerResponse) {
+		t.Fatalf("OperationDirectWrite error = %v, want retained provider response cause", err)
+	}
+	if providerResponse.Status != http.StatusOK {
+		t.Fatalf("provider response status = %d, want %d", providerResponse.Status, http.StatusOK)
+	}
+	if providerResponse.Header.Get("X-Provider-Trace") != "trace-123" {
+		t.Fatalf("provider response headers = %#v, want provider trace", providerResponse.Header)
+	}
+	if providerResponse.Body != rawResponse {
+		t.Fatalf("provider response body = %q, want %q", providerResponse.Body, rawResponse)
+	}
+	if calls != 1 {
+		t.Fatalf("provider calls = %d, want 1", calls)
 	}
 }
 
@@ -615,5 +845,74 @@ func TestOperationDirectWriteRefusesRedirectReplay(t *testing.T) {
 	}
 	if calls != 1 || redirectedCalls != 0 {
 		t.Fatalf("redirect calls = total %d / followed %d, want exactly 1 / 0", calls, redirectedCalls)
+	}
+}
+
+func TestOperationDirectWriteRejectsUndeclaredRequestBindingsBeforeIO(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		bundle  func(string) Bundle
+		request func() connectors.OperationDirectWriteRequest
+		wantErr string
+	}{
+		{
+			name:   "undeclared path parameter",
+			bundle: structuredRESTBodyBundle,
+			request: func() connectors.OperationDirectWriteRequest {
+				req := structuredRESTBodyRequest()
+				req.PathParams["undeclared"] = "override"
+				return req
+			},
+			wantErr: "not declared by rest.path",
+		},
+		{
+			name: "open scalar nesting",
+			bundle: func(baseURL string) Bundle {
+				bundle := structuredRESTBodyBundle(baseURL)
+				rest := *bundle.Operations[0].REST
+				rest.BodySchema = json.RawMessage(`{"type":"object","properties":{"payload":{}}}`)
+				bundle.Operations[0].REST = &rest
+				return bundle
+			},
+			request: func() connectors.OperationDirectWriteRequest {
+				req := structuredRESTBodyRequest()
+				req.Body = map[string]any{"payload": map[string]any{"undeclared": "value"}}
+				return req
+			},
+			wantErr: "does not permit a nested object",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+				calls++
+			}))
+			t.Cleanup(server.Close)
+
+			_, err := OperationDirectWrite(context.Background(), tc.bundle(server.URL), tc.request(), nil)
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("OperationDirectWrite error = %v, want %q", err, tc.wantErr)
+			}
+			if calls != 0 {
+				t.Fatalf("rejected binding reached provider; calls = %d", calls)
+			}
+		})
+	}
+}
+
+func TestPreviewOperationDirectWriteDoesNotExposeSecretFilterValues(t *testing.T) {
+	const secret = "secret-canary-preview"
+	bundle := structuredRESTBodyBundle("https://example.invalid/{{ secrets.token | unix_seconds }}")
+	request := structuredRESTBodyRequest()
+	request.Config.Secrets = map[string]string{"token": secret}
+	_, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+	if err == nil {
+		t.Fatal("PreviewOperationDirectWrite error = nil, want secret filter rejection")
+	}
+	if strings.Contains(err.Error(), secret) {
+		t.Fatalf("PreviewOperationDirectWrite error exposed secret value: %v", err)
+	}
+	if !strings.Contains(err.Error(), "secrets.token") {
+		t.Fatalf("PreviewOperationDirectWrite error = %v, want secret reference", err)
 	}
 }

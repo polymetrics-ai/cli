@@ -2893,6 +2893,36 @@
     },
     {
       "method": "POST",
+      "path": "/v22/customers/{customer_id}:generateAudienceCompositionInsights",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/v22/customers/{customer_id}:generateAudienceOverlapInsights",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/v22/customers/{customer_id}:generateCreatorInsights",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/v22/customers/{customer_id}:generateInsightsFinderReport",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/v22/customers/{customer_id}:generateKeywordForecastMetrics",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
       "path": "/v22/customers/{customer_id}:generateKeywordHistoricalMetrics",
       "kind": "rest_read",
       "max_bytes": 1048576
@@ -2905,7 +2935,31 @@
     },
     {
       "method": "POST",
+      "path": "/v22/customers/{customer_id}:generateReachForecast",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/v22/customers/{customer_id}:generateShareablePreviews",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
       "path": "/v22/customers/{customer_id}:generateSuggestedTargetingInsights",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/v22/customers/{customer_id}:generateTargetingSuggestionMetrics",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/v22/customers/{customer_id}:generateTrendingInsights",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -2918,6 +2972,24 @@
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}:suggestBrands",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/v22/customers/{customer_id}:suggestKeywordThemes",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/v22/customers/{customer_id}:suggestSmartCampaignAd",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions",
       "kind": "rest_read",
       "max_bytes": 1048576
     },
@@ -3263,7 +3335,38 @@
   "harvest": [],
   "height": [],
   "hellobaton": [],
-  "help-scout": [],
+  "help-scout": [
+    {
+      "method": "GET",
+      "path": "/v3/conversations/{conversationId}",
+      "kind": "rest_read",
+      "max_bytes": 4194304
+    },
+    {
+      "method": "GET",
+      "path": "/v3/conversations/{conversationId}/threads",
+      "kind": "rest_read",
+      "max_bytes": 4194304
+    },
+    {
+      "method": "GET",
+      "path": "/v3/customers",
+      "kind": "rest_read",
+      "max_bytes": 4194304
+    },
+    {
+      "method": "GET",
+      "path": "/v3/system-users",
+      "kind": "rest_read",
+      "max_bytes": 4194304
+    },
+    {
+      "method": "GET",
+      "path": "/v3/system-users/{systemUserId}",
+      "kind": "rest_read",
+      "max_bytes": 4194304
+    }
+  ],
   "hibob": [],
   "high-level": [],
   "hoorayhr": [],

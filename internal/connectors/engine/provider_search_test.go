@@ -23,6 +23,47 @@ func TestCompileSchemaAcceptsMaxItems(t *testing.T) {
 	}
 }
 
+// TestCompileSchemaEnforcesOneOf keeps closed declaration unions structural:
+// a source binding has exactly one mapping shape, so neither an unbound
+// record nor a record carrying both ordinary and tombstone mappings can pass
+// schema admission and drift to later runtime validation.
+func TestCompileSchemaEnforcesOneOf(t *testing.T) {
+	schema, err := CompileSchema([]byte(`{
+  "type":"object",
+  "properties": {
+    "record_mapping": {"type":"object"},
+    "tombstone_mapping": {"type":"object"}
+  },
+  "oneOf": [
+    {"required":["record_mapping"]},
+    {"required":["tombstone_mapping"]}
+  ]
+}`))
+	if err != nil {
+		t.Fatalf("compile oneOf schema: %v", err)
+	}
+	for name, value := range map[string]map[string]any{
+		"ordinary":  {"record_mapping": map[string]any{}},
+		"tombstone": {"tombstone_mapping": map[string]any{}},
+	} {
+		t.Run(name, func(t *testing.T) {
+			if err := schema.Validate(value); err != nil {
+				t.Fatalf("valid %s mapping rejected: %v", name, err)
+			}
+		})
+	}
+	for name, value := range map[string]map[string]any{
+		"neither": {},
+		"both":    {"record_mapping": map[string]any{}, "tombstone_mapping": map[string]any{}},
+	} {
+		t.Run(name, func(t *testing.T) {
+			if err := schema.Validate(value); err == nil {
+				t.Fatalf("invalid %s mapping passed oneOf", name)
+			}
+		})
+	}
+}
+
 func TestSchemaEnforcesMaxItems(t *testing.T) {
 	sch, err := CompileSchema([]byte(`{"type":"object","properties":{"ids":{"type":"array","items":{"type":"string"},"maxItems":2}}}`))
 	if err != nil {

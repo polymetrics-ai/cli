@@ -11,6 +11,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -260,6 +261,216 @@ func TestRateParkingCoordinator_DefersImmediateRearmUntilResumerReturns(t *testi
 	}
 	if records, err := coordinator.store.List(); err != nil || len(records) != 0 {
 		t.Fatalf("records after immediate rearm = %#v, %v; want none", records, err)
+	}
+}
+
+func TestRateParkingCoordinator_PersistsNeedsReauthorizationWithoutRetryUntilSafeCancel(t *testing.T) {
+	now := time.Date(2026, time.August, 21, 14, 0, 0, 0, time.UTC)
+	scheduler := newRateParkingTestScheduler()
+	store := NewMemoryRateParkingStore()
+	resumes := 0
+	coordinator := NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+		Store:     store,
+		Scheduler: scheduler,
+		Now:       func() time.Time { return now },
+		Resume: func(context.Context, ParkedRateLimitRun) error {
+			resumes++
+			return NeedsReauthorization(errors.New("authorization expired"))
+		},
+	})
+	if err := coordinator.Start(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	request := RateParkingRequest{
+		RunID:      "run-needs-reauthorization",
+		Scope:      connectors.RateLimitScopeKey("scope-needs-reauthorization"),
+		Checkpoint: testParkedCheckpoint(now),
+		ResetAt:    now,
+		Reason:     connsdk.RateLimitObservationSourceRetryAfter,
+	}
+	if _, err := coordinator.Park(context.Background(), request); err != nil {
+		t.Fatal(err)
+	}
+	scheduler.RunThrough(now)
+	if resumes != 1 {
+		t.Fatalf("resume attempts = %d, want exactly one terminal attempt", resumes)
+	}
+	if got := scheduler.Scheduled(); got != 0 {
+		t.Fatalf("scheduled retries after terminal authorization failure = %d, want 0", got)
+	}
+	runs, err := store.List()
+	if err != nil || len(runs) != 1 || runs[0].Outcome != RateParkingOutcomeNeedsReauthorization {
+		t.Fatalf("durable terminal run = %#v, %v; want one needs_reauthorization record", runs, err)
+	}
+	if _, claimed, _, err := store.Claim(request.RunID, "second-coordinator", now, now.Add(time.Minute)); claimed || !errors.Is(err, ErrRateLimitNeedsReauthorization) {
+		t.Fatalf("second coordinator terminal claim = claimed %t err %v, want no claim and ErrRateLimitNeedsReauthorization", claimed, err)
+	}
+	if err := coordinator.Admit(request.Scope); !errors.Is(err, ErrRateLimitNeedsReauthorization) {
+		t.Fatalf("Admit(terminal scope) = %v, want ErrRateLimitNeedsReauthorization", err)
+	}
+	if err := coordinator.Cancel(request.RunID); err != nil {
+		t.Fatalf("Cancel(terminal run) = %v", err)
+	}
+	if err := coordinator.Admit(request.Scope); err != nil {
+		t.Fatalf("Admit(scope) after explicit safe cancel = %v", err)
+	}
+}
+
+func TestFileRateParkingStore_PersistsNeedsReauthorizationAcrossReopen(t *testing.T) {
+	now := time.Date(2026, time.August, 21, 14, 30, 0, 0, time.UTC)
+	path := filepath.Join(t.TempDir(), "rate-parking.json")
+	store, err := OpenFileRateParkingStore(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	run := ParkedRateLimitRun{
+		RunID: "run-terminal-file", Outcome: RateParkingOutcomeParkedRateLimit,
+		Scope: "scope-terminal-file", Checkpoint: testParkedCheckpoint(now), ResetAt: now,
+		Reason: connsdk.RateLimitObservationSourceHeaders,
+	}
+	if _, _, err := store.Create(run); err != nil {
+		t.Fatal(err)
+	}
+	if _, claimed, _, err := store.Claim(run.RunID, "terminal-owner", now, now.Add(time.Minute)); err != nil || !claimed {
+		t.Fatalf("Claim() = claimed %t, %v", claimed, err)
+	}
+	if _, err := store.BeginResume(run.RunID, "terminal-owner"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := store.MarkNeedsReauthorization(run.RunID, "terminal-owner"); err != nil {
+		t.Fatal(err)
+	}
+	reopened, err := OpenFileRateParkingStore(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	runs, err := reopened.List()
+	if err != nil || len(runs) != 1 || runs[0].Outcome != RateParkingOutcomeNeedsReauthorization || !runs[0].ResumeStarted || runs[0].ResumeCompleted {
+		t.Fatalf("reopened terminal record = %#v, %v; want durable uncompleted terminal outcome", runs, err)
+	}
+	if _, claimed, _, err := reopened.Claim(run.RunID, "later-owner", now, now.Add(time.Minute)); claimed || !errors.Is(err, ErrRateLimitNeedsReauthorization) {
+		t.Fatalf("reopened terminal Claim() = claimed %t, %v; want terminal refusal", claimed, err)
+	}
+}
+
+func TestRateParkingCoordinator_ReconcilesPostCommitCreateBeforeReturningUncertainty(t *testing.T) {
+	now := time.Date(2026, time.August, 21, 15, 0, 0, 0, time.UTC)
+	scheduler := newRateParkingTestScheduler()
+	store := &rateParkingPostCommitStore{RateParkingStore: NewMemoryRateParkingStore(), create: true, fault: "create"}
+	coordinator := NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+		Store:     store,
+		Scheduler: scheduler,
+		Now:       func() time.Time { return now },
+		Resume:    func(context.Context, ParkedRateLimitRun) error { return nil },
+	})
+	if err := coordinator.Start(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	request := RateParkingRequest{
+		RunID:      "run-post-commit-create",
+		Scope:      connectors.RateLimitScopeKey("scope-post-commit-create"),
+		Checkpoint: testParkedCheckpoint(now),
+		ResetAt:    now.Add(time.Minute),
+		Reason:     connsdk.RateLimitObservationSourceRetryAfter,
+	}
+	if _, err := coordinator.Park(context.Background(), request); statestore.CommitOutcomeForError(err) != statestore.CommitOutcomeIndeterminate {
+		t.Fatalf("Park() outcome = %s for %v, want indeterminate post-commit error", statestore.CommitOutcomeForError(err), err)
+	}
+	if err := coordinator.Admit(request.Scope); !errors.Is(err, ErrRateLimitParked) {
+		t.Fatalf("Admit(post-commit scope) = %v, want durable parked refusal", err)
+	}
+	if got := scheduler.Scheduled(); got != 1 {
+		t.Fatalf("reconciled timer count = %d, want exactly one", got)
+	}
+	runs, err := store.List()
+	if err != nil || len(runs) != 1 || !parkedRateLimitRunEqual(runs[0], ParkedRateLimitRun{RunID: request.RunID, Outcome: RateParkingOutcomeParkedRateLimit, Scope: request.Scope, Checkpoint: request.Checkpoint, ResetAt: request.ResetAt, Reason: request.Reason}) {
+		t.Fatalf("reconciled durable runs = %#v, %v; want exact created record", runs, err)
+	}
+}
+
+func TestRateParkingCoordinator_ReconcilesEachPostCommitResumeMutation(t *testing.T) {
+	for _, mutation := range []string{"claim", "begin", "mark_completed", "complete"} {
+		t.Run(mutation, func(t *testing.T) {
+			now := time.Date(2026, time.August, 21, 15, 30, 0, 0, time.UTC)
+			scheduler := newRateParkingTestScheduler()
+			store := &rateParkingPostCommitStore{RateParkingStore: NewMemoryRateParkingStore(), fault: mutation}
+			resumes := 0
+			coordinator := NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+				Store:     store,
+				Scheduler: scheduler,
+				Now:       func() time.Time { return now },
+				Resume: func(context.Context, ParkedRateLimitRun) error {
+					resumes++
+					return nil
+				},
+			})
+			if err := coordinator.Start(context.Background()); err != nil {
+				t.Fatal(err)
+			}
+			request := RateParkingRequest{RunID: "run-post-commit-" + mutation, Scope: connectors.RateLimitScopeKey("scope-post-commit-" + mutation), Checkpoint: testParkedCheckpoint(now), ResetAt: now, Reason: connsdk.RateLimitObservationSourceHeaders}
+			if _, err := coordinator.Park(context.Background(), request); err != nil {
+				t.Fatal(err)
+			}
+			scheduler.RunThrough(now)
+			if mutation == "complete" {
+				if runs, err := store.List(); err != nil || len(runs) != 0 {
+					t.Fatalf("completed indeterminate mutation left durable records %#v, %v", runs, err)
+				}
+				if got := scheduler.Scheduled(); got != 0 {
+					t.Fatalf("completed indeterminate mutation scheduled %d retries, want 0", got)
+				}
+				return
+			}
+			if got := scheduler.Scheduled(); got != 1 {
+				t.Fatalf("%s indeterminate mutation scheduled %d callbacks, want one reconciled retry", mutation, got)
+			}
+			now = now.Add(time.Second)
+			scheduler.RunThrough(now)
+			if runs, err := store.List(); err != nil || len(runs) != 0 {
+				t.Fatalf("%s recovery durable records = %#v, %v; want completed removal", mutation, runs, err)
+			}
+			if resumes == 0 {
+				t.Fatalf("%s recovery did not resume/reconcile the exact durable record", mutation)
+			}
+		})
+	}
+}
+
+func TestRateParkingCoordinator_ReconcilesPostCommitRearmAndDelete(t *testing.T) {
+	now := time.Date(2026, time.August, 21, 16, 0, 0, 0, time.UTC)
+	for _, mutation := range []string{"rearm", "delete"} {
+		t.Run(mutation, func(t *testing.T) {
+			scheduler := newRateParkingTestScheduler()
+			store := &rateParkingPostCommitStore{RateParkingStore: NewMemoryRateParkingStore(), fault: mutation}
+			coordinator := NewRateParkingCoordinator(RateParkingCoordinatorOptions{Store: store, Scheduler: scheduler, Now: func() time.Time { return now }, Resume: func(context.Context, ParkedRateLimitRun) error { return nil }})
+			if err := coordinator.Start(context.Background()); err != nil {
+				t.Fatal(err)
+			}
+			request := RateParkingRequest{RunID: "run-post-commit-" + mutation, Scope: connectors.RateLimitScopeKey("scope-post-commit-" + mutation), Checkpoint: testParkedCheckpoint(now), ResetAt: now, Reason: connsdk.RateLimitObservationSourceHeaders}
+			if _, err := coordinator.Park(context.Background(), request); err != nil {
+				t.Fatal(err)
+			}
+			if mutation == "delete" {
+				if err := coordinator.Cancel(request.RunID); statestore.CommitOutcomeForError(err) != statestore.CommitOutcomeIndeterminate {
+					t.Fatalf("Cancel() outcome = %s for %v, want indeterminate", statestore.CommitOutcomeForError(err), err)
+				}
+				if runs, err := store.List(); err != nil || len(runs) != 0 || scheduler.Scheduled() != 0 {
+					t.Fatalf("delete reconciliation = runs %#v err %v timers %d, want empty/zero", runs, err, scheduler.Scheduled())
+				}
+				return
+			}
+			if _, claimed, _, err := store.RateParkingStore.Claim(request.RunID, coordinator.owner, now, now.Add(time.Minute)); err != nil || !claimed {
+				t.Fatalf("pre-rearm claim = %t, %v", claimed, err)
+			}
+			request.ResetAt = now.Add(2 * time.Minute)
+			if _, err := coordinator.Rearm(context.Background(), request); statestore.CommitOutcomeForError(err) != statestore.CommitOutcomeIndeterminate {
+				t.Fatalf("Rearm() outcome = %s for %v, want indeterminate", statestore.CommitOutcomeForError(err), err)
+			}
+			runs, err := store.List()
+			if err != nil || len(runs) != 1 || !runs[0].ResetAt.Equal(request.ResetAt) || scheduler.Scheduled() != 1 {
+				t.Fatalf("rearm reconciliation = %#v, %v timers %d; want exact one rearmed record/timer", runs, err, scheduler.Scheduled())
+			}
+		})
 	}
 }
 
@@ -705,6 +916,225 @@ func TestRateParkingCoordinator_ConcurrentSameScopeAdmissionHasZeroSends(t *test
 	if sends != 0 {
 		t.Fatalf("same-scope sends during parked state = %d, want 0", sends)
 	}
+}
+
+func TestRateParking_TransientFailuresRemainScheduledOrReconcile(t *testing.T) {
+	now := time.Date(2026, time.August, 21, 9, 0, 0, 0, time.UTC)
+	base := NewMemoryRateParkingStore()
+	faults := &rateParkingFaultStore{RateParkingStore: base, claimFailures: 1, completeFailures: 1}
+	scheduler := newRateParkingTestScheduler()
+	providerResumes := 0
+	coordinator := NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+		Store: faults, Scheduler: scheduler, Now: func() time.Time { return now },
+		RetryBackoff: time.Second, RetryBackoffMaximum: 4 * time.Second,
+		Resume: func(context.Context, ParkedRateLimitRun) error { providerResumes++; return nil },
+		Reconcile: func(context.Context, ParkedRateLimitRun) error {
+			t.Fatal("completed resume replayed through reconciliation")
+			return nil
+		},
+	})
+	if err := coordinator.Start(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := coordinator.Park(context.Background(), RateParkingRequest{RunID: "transient", Scope: "scope-transient", Checkpoint: testParkedCheckpoint(now), ResetAt: now, Reason: connsdk.RateLimitObservationSourceHTTP429}); err != nil {
+		t.Fatal(err)
+	}
+	scheduler.RunThrough(now)
+	if providerResumes != 0 || scheduler.Scheduled() != 1 {
+		t.Fatalf("claim failure resumes/scheduled = %d/%d, want 0/1", providerResumes, scheduler.Scheduled())
+	}
+	now = now.Add(time.Second)
+	scheduler.RunThrough(now)
+	if providerResumes != 1 || scheduler.Scheduled() != 1 {
+		t.Fatalf("completion failure resumes/scheduled = %d/%d, want 1/1", providerResumes, scheduler.Scheduled())
+	}
+	now = now.Add(4 * time.Second)
+	scheduler.RunThrough(now)
+	if providerResumes != 1 {
+		t.Fatalf("provider resumes after persisted completion = %d, want 1", providerResumes)
+	}
+	if runs, err := base.List(); err != nil || len(runs) != 0 {
+		t.Fatalf("reconciled completion retained runs %#v, %v", runs, err)
+	}
+
+	base = NewMemoryRateParkingStore()
+	faults = &rateParkingFaultStore{RateParkingStore: base, releaseFailures: 1}
+	scheduler = newRateParkingTestScheduler()
+	providerResumes, reconciles := 0, 0
+	coordinator = NewRateParkingCoordinator(RateParkingCoordinatorOptions{
+		Store: faults, Scheduler: scheduler, Now: func() time.Time { return now }, ClaimTTL: 2 * time.Second,
+		RetryBackoff: time.Second, RetryBackoffMaximum: 4 * time.Second,
+		Resume: func(context.Context, ParkedRateLimitRun) error {
+			providerResumes++
+			return errors.New("transient pre-provider failure")
+		},
+		Reconcile: func(context.Context, ParkedRateLimitRun) error { reconciles++; return nil },
+	})
+	if err := coordinator.Start(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := coordinator.Park(context.Background(), RateParkingRequest{RunID: "release", Scope: "scope-release", Checkpoint: testParkedCheckpoint(now), ResetAt: now, Reason: connsdk.RateLimitObservationSourceHeaders}); err != nil {
+		t.Fatal(err)
+	}
+	scheduler.RunThrough(now)
+	if providerResumes != 1 || scheduler.Scheduled() != 1 {
+		t.Fatalf("release failure resumes/scheduled = %d/%d, want 1/1", providerResumes, scheduler.Scheduled())
+	}
+	now = now.Add(3 * time.Second)
+	scheduler.RunThrough(now)
+	if providerResumes != 1 || reconciles != 1 {
+		t.Fatalf("provider/reconcile calls = %d/%d, want 1/1 without provider replay", providerResumes, reconciles)
+	}
+}
+
+func TestRateParking_SerializesSameScopeAcrossCoordinators(t *testing.T) {
+	for _, testCase := range []struct {
+		name   string
+		stores func(*testing.T) (RateParkingStore, RateParkingStore)
+	}{
+		{name: "memory", stores: func(*testing.T) (RateParkingStore, RateParkingStore) {
+			store := NewMemoryRateParkingStore()
+			return store, store
+		}},
+		{name: "file", stores: func(t *testing.T) (RateParkingStore, RateParkingStore) {
+			path := filepath.Join(t.TempDir(), "scope-queue.json")
+			first, err := OpenFileRateParkingStore(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			second, err := OpenFileRateParkingStore(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			return first, second
+		}},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			now := time.Date(2026, time.August, 21, 10, 0, 0, 0, time.UTC)
+			first, second := testCase.stores(t)
+			for _, id := range []string{"run-a", "run-b"} {
+				if _, _, err := first.Create(ParkedRateLimitRun{RunID: id, Outcome: RateParkingOutcomeParkedRateLimit, Scope: "shared-scope", Checkpoint: testParkedCheckpoint(now), ResetAt: now, Reason: connsdk.RateLimitObservationSourceRetryAfter}); err != nil {
+					t.Fatal(err)
+				}
+			}
+			if _, claimed, _, err := second.Claim("run-b", "coordinator-b", now, now.Add(time.Minute)); err != nil || claimed {
+				t.Fatalf("non-leader claim = %t, %v; want queued", claimed, err)
+			}
+			if _, claimed, _, err := first.Claim("run-a", "coordinator-a", now, now.Add(time.Minute)); err != nil || !claimed {
+				t.Fatalf("leader claim = %t, %v; want claimed", claimed, err)
+			}
+			if _, err := first.BeginResume("run-a", "coordinator-a"); err != nil {
+				t.Fatal(err)
+			}
+			if _, err := first.MarkResumeCompleted("run-a", "coordinator-a"); err != nil {
+				t.Fatal(err)
+			}
+			if err := first.Complete("run-a", "coordinator-a"); err != nil {
+				t.Fatal(err)
+			}
+			if _, claimed, _, err := second.Claim("run-b", "coordinator-b", now, now.Add(time.Minute)); err != nil || !claimed {
+				t.Fatalf("next leader claim = %t, %v; want claimed after predecessor completion", claimed, err)
+			}
+		})
+	}
+}
+
+type rateParkingFaultStore struct {
+	RateParkingStore
+	claimFailures    int
+	completeFailures int
+	releaseFailures  int
+}
+
+type rateParkingPostCommitStore struct {
+	RateParkingStore
+	create bool
+	fault  string
+}
+
+func (s *rateParkingPostCommitStore) postCommit(method string) error {
+	if s.fault != method {
+		return nil
+	}
+	s.fault = ""
+	return &statestore.CommitOutcomeError{Outcome: statestore.CommitOutcomeIndeterminate, Err: errors.New("directory sync failed after rename")}
+}
+
+func (s *rateParkingPostCommitStore) Create(run ParkedRateLimitRun) (ParkedRateLimitRun, bool, error) {
+	persisted, created, err := s.RateParkingStore.Create(run)
+	if err != nil || !s.create {
+		return persisted, created, err
+	}
+	s.create = false
+	return persisted, created, s.postCommit("create")
+}
+
+func (s *rateParkingPostCommitStore) Rearm(run ParkedRateLimitRun, owner string, until time.Time) (ParkedRateLimitRun, error) {
+	persisted, err := s.RateParkingStore.Rearm(run, owner, until)
+	if err != nil {
+		return persisted, err
+	}
+	return persisted, s.postCommit("rearm")
+}
+
+func (s *rateParkingPostCommitStore) Claim(runID, owner string, now, until time.Time) (ParkedRateLimitRun, bool, time.Time, error) {
+	run, claimed, retryAt, err := s.RateParkingStore.Claim(runID, owner, now, until)
+	if err != nil {
+		return run, claimed, retryAt, err
+	}
+	return run, claimed, retryAt, s.postCommit("claim")
+}
+
+func (s *rateParkingPostCommitStore) BeginResume(runID, owner string) (ParkedRateLimitRun, error) {
+	run, err := s.RateParkingStore.BeginResume(runID, owner)
+	if err != nil {
+		return run, err
+	}
+	return run, s.postCommit("begin")
+}
+
+func (s *rateParkingPostCommitStore) MarkResumeCompleted(runID, owner string) (ParkedRateLimitRun, error) {
+	run, err := s.RateParkingStore.MarkResumeCompleted(runID, owner)
+	if err != nil {
+		return run, err
+	}
+	return run, s.postCommit("mark_completed")
+}
+
+func (s *rateParkingPostCommitStore) Complete(runID, owner string) error {
+	if err := s.RateParkingStore.Complete(runID, owner); err != nil {
+		return err
+	}
+	return s.postCommit("complete")
+}
+
+func (s *rateParkingPostCommitStore) Delete(runID string, now time.Time) error {
+	if err := s.RateParkingStore.Delete(runID, now); err != nil {
+		return err
+	}
+	return s.postCommit("delete")
+}
+
+func (s *rateParkingFaultStore) Claim(runID, owner string, now, until time.Time) (ParkedRateLimitRun, bool, time.Time, error) {
+	if s.claimFailures > 0 {
+		s.claimFailures--
+		return ParkedRateLimitRun{}, false, time.Time{}, errors.New("transient claim failure")
+	}
+	return s.RateParkingStore.Claim(runID, owner, now, until)
+}
+func (s *rateParkingFaultStore) Complete(runID, owner string) error {
+	if s.completeFailures > 0 {
+		s.completeFailures--
+		return errors.New("transient completion failure")
+	}
+	return s.RateParkingStore.Complete(runID, owner)
+}
+func (s *rateParkingFaultStore) ReleaseClaim(runID, owner string) error {
+	if s.releaseFailures > 0 {
+		s.releaseFailures--
+		return errors.New("transient release failure")
+	}
+	return s.RateParkingStore.ReleaseClaim(runID, owner)
 }
 
 func testParkedCheckpoint(observedAt time.Time) synccontract.CheckpointEnvelope {

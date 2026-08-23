@@ -12,6 +12,7 @@ import (
 	"net/url"
 	stdpath "path"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -39,23 +40,21 @@ const (
 	directReadPolicyText = "text"
 )
 
-var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
+var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_-]*)\}`)
 
-// completeEngineErrorText preserves the bounded diagnostic content captured by
-// connsdk for direct-read callers. HTTPError.Error deliberately applies its
-// own presentation policy, so the engine reads the typed fields here to retain
-// the request URL and provider body that the operator needs to diagnose a
-// declared connector action.
+// completeEngineErrorText renders only safe transport facts. The typed cause
+// remains available through errors.As for classification and rate parking, but
+// provider URLs, queries, headers, and bodies never cross the printable error
+// boundary.
 func completeEngineErrorText(err error) string {
 	var httpErr *connsdk.HTTPError
 	if !errors.As(err, &httpErr) {
-		return err.Error()
+		return safety.RedactErrorText(err.Error())
 	}
-	message := strings.TrimSpace(httpErr.Body)
-	if message == "" {
-		message = http.StatusText(httpErr.Status)
+	if statusText := http.StatusText(httpErr.Status); statusText != "" {
+		return fmt.Sprintf("http %d (%s)", httpErr.Status, statusText)
 	}
-	return fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
+	return fmt.Sprintf("http %d", httpErr.Status)
 }
 
 func OperationDirectRead(ctx context.Context, b Bundle, req connectors.OperationDirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
@@ -66,21 +65,35 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	commandQueryFields := map[string]struct{}(nil)
+	if req.CommandBindings != nil {
+		if !operationDirectReadBindingsDeclaredByCommand(b, op.ID, req.CommandBindings.Path, req.CommandBindings.Query, req.CommandBindings.Body, req.CommandBindings.RawBody) {
+			return connectors.DirectReadResult{}, fmt.Errorf("operation %q command bindings do not match a declared implemented command", op.ID)
+		}
+		if err := validateOperationDirectReadRequestBindings(req); err != nil {
+			return connectors.DirectReadResult{}, fmt.Errorf("operation %q command bindings: %w", op.ID, err)
+		}
+		commandQueryFields = bindingFieldSet(req.CommandBindings.Query)
+	}
 	if op.Kind == "graphql_query" {
+		if len(req.Headers) != 0 || len(req.HeaderValues) != 0 {
+			return connectors.DirectReadResult{}, fmt.Errorf("operation %q fixed GraphQL query does not accept request header overrides", op.ID)
+		}
 		return operationGraphQLDirectRead(ctx, b, op, req, h)
 	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 	cfg := materializeConfigDefaults(b, req.Config)
-	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
+	effectivePathParams, err := materializeOperationDirectReadPathParams(op, cfg, req.PathParams)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	queryMap := map[string]string{}
-	for key, value := range op.REST.Query {
-		queryMap[key] = value
+	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, effectivePathParams)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
 	}
-	for key, value := range req.Query {
-		queryMap[key] = value
+	queryMap, err := operationDirectReadQuery(op, req.Query, commandQueryFields)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
 	}
 	if err := requireOperationQueryGroups(op, queryMap); err != nil {
 		return connectors.DirectReadResult{}, err
@@ -93,7 +106,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if policy == "" {
 		policy = op.OutputPolicy
 	}
-	if err := validateDirectReadOutputPolicy(policy, op.REST.Path, req.PathParams, cfg); err != nil {
+	if err := validateDirectReadOutputPolicy(policy, op.REST.Path, effectivePathParams, cfg); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 	maxBytes := clampOperationDirectReadMaxBytes(req.MaxBytes, op.REST.MaxBytes)
@@ -101,14 +114,22 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-
-	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
-	defer cancel()
-	rt, err := newRuntime(ctx, b, cfg, h)
+	headers, err := operationRequestHeaders(b, op, req.Headers, req.HeaderValues)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+
+	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
+	defer cancel()
+	baseURL, err := resolveOperationRoute(b, cfg, op.Route, op.ID, op.REST.Path, op.SourceURL)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	rt, err := newRuntimeForOperationRoute(ctx, b, cfg, h, op.Route, op.ID, op.REST.Path, op.SourceURL)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL)
 	decoded, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
 		method:          method,
 		declaredPat:     op.REST.Path,
@@ -116,22 +137,32 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		query:           query,
 		body:            body,
 		bodyContentType: operationDirectReadContentType(op),
+		headers:         headers,
+		operation:       &op,
 		outputPolicy:    policy,
 		maxBytes:        maxBytes,
 		page:            req.Page,
 		pageCursor:      req.PageCursor,
 		pagination:      op.REST.Pagination,
 	})
+	readResult := connectors.DirectReadResult{Connector: b.Name, Operation: op.ID, Method: method, Path: resolvedPath, Page: connectors.SanitizeDirectReadPageForOutput(pageInfo, cfg.Secrets), OutputSecretFields: operationDirectReadOutputSecretFields(op)}
+	readResult.Receipt = providerResponseReceiptFromResponse(b, resp, cfg.Secrets)
+	if readResult.Receipt == nil && err != nil {
+		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
+	}
+	if readResult.Receipt != nil {
+		readResult.Status = readResult.Receipt.Status
+	}
 	if err != nil {
 		var tooLarge errDirectReadTooLarge
 		if errors.As(err, &tooLarge) {
-			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read %s", tooLarge.Error())
+			return readResult, fmt.Errorf("operation direct read %s", tooLarge.Error())
 		}
 		// A pagination failure arrives with the response already fetched and
 		// decoded, so it must not fall through to the not-JSON branch below.
 		var pageErr errDirectReadPagination
 		if errors.As(err, &pageErr) {
-			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read pagination: %w", pageErr.err)
+			return readResult, fmt.Errorf("operation direct read pagination: %w", pageErr.err)
 		}
 		var providerHTTPError *connsdk.HTTPError
 		if resp == nil || errors.As(err, &providerHTTPError) {
@@ -143,13 +174,13 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 			if class != "" {
 				msg = class + ": " + msg
 			}
-			return connectors.DirectReadResult{}, formatResponseError(fmt.Sprintf("operation direct read %s %s: %s", method, op.REST.Path, msg), err)
+			return readResult, formatResponseError(fmt.Sprintf("operation direct read %s %s: %s", method, op.REST.Path, msg), err)
 		}
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read response is not JSON: %w", err)
+		return readResult, fmt.Errorf("operation direct read response is not JSON: %w", err)
 	}
 	decoded, err = applyDirectReadOutputPolicy(policy, decoded)
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return readResult, err
 	}
 	redactFields := append([]string(nil), req.RedactFields...)
 	if op.SensitivePolicy != nil {
@@ -158,7 +189,16 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if len(redactFields) > 0 {
 		decoded = redactNamedJSONFields(decoded, redactFields)
 	}
-	return connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Status: resp.Status, Body: decoded, Page: pageInfo}, nil
+	// Convenience response output is public-facing and may hide configured
+	// credentials, but Receipt remains the immutable pre-projection response.
+	decoded = connectors.SanitizeProviderOutputForOutput(decoded, req.Config.Secrets)
+	responseHeaders, err := operationResponseHeaders(b, op, resp.Header, cfg.Secrets)
+	if err != nil {
+		return readResult, err
+	}
+	readResult.Body = decoded
+	readResult.Headers = responseHeaders
+	return readResult, nil
 }
 
 // PreflightOperationDirectRead proves a command's named operation can reach
@@ -202,6 +242,158 @@ func PreflightOperationDirectRead(b Bundle, operation, method, endpointPath stri
 	return validateDirectReadOutputPolicy(outputPolicy, op.REST.Path, nil, connectors.RuntimeConfig{})
 }
 
+// PreflightOperationDirectReadBindings proves that every command-controlled
+// REST input is owned by the selected operation declaration. It is kept
+// separate from endpoint preflight so older native adapters can delegate both
+// checks through Base without learning engine internals.
+func PreflightOperationDirectReadBindings(b Bundle, operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error {
+	op, err := operationDirectReadSpec(b, operation)
+	if err != nil {
+		return err
+	}
+	if op.Kind == "graphql_query" {
+		if len(pathFields) != 0 || len(queryFields) != 0 || rawBody {
+			return fmt.Errorf("operation %q fixed GraphQL query accepts only declared variables", op.ID)
+		}
+		_, schema, err := graphQLOperationVariablesSchema(op)
+		if err != nil {
+			return err
+		}
+		properties, _ := schema["properties"].(map[string]any)
+		seen := make(map[string]struct{}, len(bodyFields))
+		for _, field := range bodyFields {
+			if !graphQLNamePattern.MatchString(field) {
+				return fmt.Errorf("operation %q GraphQL variable %q is not a top-level declared variable", op.ID, field)
+			}
+			if _, duplicate := seen[field]; duplicate {
+				return fmt.Errorf("operation %q maps more than one command flag to GraphQL variable %q", op.ID, field)
+			}
+			seen[field] = struct{}{}
+			if _, declared := properties[field]; !declared {
+				return fmt.Errorf("operation %q GraphQL variable %q is not declared", op.ID, field)
+			}
+		}
+		return nil
+	}
+	if err := validateOperationDirectReadPathFields(op, pathFields); err != nil {
+		return err
+	}
+	var commandQueryFields map[string]struct{}
+	if operationDirectReadBindingsDeclaredByCommand(b, op.ID, pathFields, queryFields, bodyFields, rawBody) {
+		commandQueryFields = bindingFieldSet(queryFields)
+	}
+	if err := validateOperationDirectReadQueryFields(op, queryFields, commandQueryFields); err != nil {
+		return err
+	}
+	contentType := operationDirectReadContentType(op)
+	if rawBody {
+		if contentType != "text/plain" || len(bodyFields) != 0 {
+			return fmt.Errorf("operation %q raw body requires the exact declared text/plain root string", op.ID)
+		}
+		return validateOperationDirectReadTextPlainContract(op)
+	}
+	if contentType == "text/plain" {
+		if len(bodyFields) != 0 {
+			return fmt.Errorf("operation %q text/plain request does not accept JSON body fields", op.ID)
+		}
+		return nil
+	}
+	return validateOperationDirectReadBodyFields(op, bodyFields)
+}
+
+func operationDirectReadBindingsDeclaredByCommand(b Bundle, operation string, pathFields, queryFields, bodyFields []string, rawBody bool) bool {
+	if b.CLISurface == nil {
+		return false
+	}
+	for _, command := range b.CLISurface.Commands {
+		if command.Operation != operation || command.Intent != "direct_read" || command.Availability != "implemented" {
+			continue
+		}
+		var declaredPath, declaredQuery, declaredBody []string
+		declaredRawBody := false
+		valid := true
+		for _, flag := range command.Flags {
+			mapsTo := strings.TrimSpace(flag.MapsTo)
+			switch {
+			case strings.HasPrefix(mapsTo, "path."):
+				declaredPath = append(declaredPath, strings.TrimPrefix(mapsTo, "path."))
+			case strings.HasPrefix(mapsTo, "query."):
+				declaredQuery = append(declaredQuery, strings.TrimPrefix(mapsTo, "query."))
+			case strings.HasPrefix(mapsTo, "body."):
+				declaredBody = append(declaredBody, strings.TrimPrefix(mapsTo, "body."))
+			case strings.HasPrefix(mapsTo, "header."):
+			case mapsTo == "body" && !declaredRawBody:
+				declaredRawBody = true
+			default:
+				valid = false
+			}
+		}
+		if valid && declaredRawBody == rawBody && sameBindingFields(declaredPath, pathFields) && sameBindingFields(declaredQuery, queryFields) && sameBindingFields(declaredBody, bodyFields) {
+			return true
+		}
+	}
+	return false
+}
+
+func sameBindingFields(left, right []string) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	counts := make(map[string]int, len(left))
+	for _, field := range left {
+		counts[field]++
+	}
+	for _, field := range right {
+		if counts[field] == 0 {
+			return false
+		}
+		counts[field]--
+	}
+	return true
+}
+
+func bindingFieldSet(fields []string) map[string]struct{} {
+	set := make(map[string]struct{}, len(fields))
+	for _, field := range fields {
+		set[field] = struct{}{}
+	}
+	return set
+}
+
+func validateOperationDirectReadRequestBindings(req connectors.OperationDirectReadRequest) error {
+	if req.CommandBindings == nil {
+		return nil
+	}
+	for field := range req.PathParams {
+		if _, declared := bindingFieldSet(req.CommandBindings.Path)[field]; !declared {
+			return fmt.Errorf("path field %q is not bound by the selected command", field)
+		}
+	}
+	for field := range req.Query {
+		if _, declared := bindingFieldSet(req.CommandBindings.Query)[field]; !declared {
+			return fmt.Errorf("query field %q is not bound by the selected command", field)
+		}
+	}
+	for field := range req.Body {
+		if !bindingOwnsTopLevelField(req.CommandBindings.Body, field) {
+			return fmt.Errorf("body field %q is not bound by the selected command", field)
+		}
+	}
+	if req.RawBody != nil && !req.CommandBindings.RawBody {
+		return fmt.Errorf("raw body is not bound by the selected command")
+	}
+	return nil
+}
+
+func bindingOwnsTopLevelField(bindings []string, field string) bool {
+	for _, binding := range bindings {
+		if binding == field || strings.HasPrefix(binding, field+".") {
+			return true
+		}
+	}
+	return false
+}
+
 // operationDirectReadSpec is the static, no-network part of the bounded
 // direct-read executor. Both execution and command preflight call it so their
 // eligibility rules cannot drift apart.
@@ -211,6 +403,9 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 		return OperationSpec{}, err
 	}
 	if op.Kind == "graphql_query" {
+		if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.GraphQL.Path, op.SourceURL); err != nil {
+			return OperationSpec{}, err
+		}
 		if err := validateGraphQLOperationDirectContract(op, "query"); err != nil {
 			return OperationSpec{}, err
 		}
@@ -227,6 +422,9 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 	// bounded read. What differs is its stricter bundle-load contract.
 	if (op.Kind != "rest_read" && op.Kind != "provider_search") || op.REST == nil {
 		return OperationSpec{}, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
+	}
+	if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.REST.Path, op.SourceURL); err != nil {
+		return OperationSpec{}, err
 	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 	if method != http.MethodGet && method != http.MethodPost {
@@ -302,16 +500,24 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		page:         req.Page,
 		pageCursor:   req.PageCursor,
 	})
+	readResult := connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Page: connectors.SanitizeDirectReadPageForOutput(pageInfo, cfg.Secrets), OutputSecretFields: append([]string(nil), req.RedactFields...)}
+	readResult.Receipt = providerResponseReceiptFromResponse(b, resp, cfg.Secrets)
+	if readResult.Receipt == nil && err != nil {
+		readResult.Receipt = providerResponseReceiptFromHTTPError(b, err, cfg.Secrets)
+	}
+	if readResult.Receipt != nil {
+		readResult.Status = readResult.Receipt.Status
+	}
 	if err != nil {
 		var tooLarge errDirectReadTooLarge
 		if errors.As(err, &tooLarge) {
-			return connectors.DirectReadResult{}, fmt.Errorf("direct read %s", tooLarge.Error())
+			return readResult, fmt.Errorf("direct read %s", tooLarge.Error())
 		}
 		// A pagination failure arrives with the response already fetched and
 		// decoded, so it must not fall through to the not-JSON branch below.
 		var pageErr errDirectReadPagination
 		if errors.As(err, &pageErr) {
-			return connectors.DirectReadResult{}, fmt.Errorf("direct read pagination: %w", pageErr.err)
+			return readResult, fmt.Errorf("direct read pagination: %w", pageErr.err)
 		}
 		var providerHTTPError *connsdk.HTTPError
 		if resp == nil || errors.As(err, &providerHTTPError) {
@@ -323,25 +529,27 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 			if class != "" {
 				msg = class + ": " + msg
 			}
-			return connectors.DirectReadResult{}, formatResponseError(fmt.Sprintf("direct read %s %s: %s", method, req.Path, msg), err)
+			return readResult, formatResponseError(fmt.Sprintf("direct read %s %s: %s", method, req.Path, msg), err)
 		}
-		return connectors.DirectReadResult{}, fmt.Errorf("direct read response is not JSON: %w", err)
+		return readResult, fmt.Errorf("direct read response is not JSON: %w", err)
 	}
 	body, err = applyDirectReadOutputPolicy(req.OutputPolicy, body)
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return readResult, err
 	}
 	if len(req.RedactFields) > 0 {
 		body = redactNamedJSONFields(body, req.RedactFields)
 	}
-	return connectors.DirectReadResult{
-		Connector: b.Name,
-		Method:    method,
-		Path:      resolvedPath,
-		Status:    resp.Status,
-		Body:      body,
-		Page:      pageInfo,
-	}, nil
+	body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets)
+	readResult.Body = body
+	return readResult, nil
+}
+
+func operationDirectReadOutputSecretFields(op OperationSpec) []string {
+	if op.SensitivePolicy == nil {
+		return nil
+	}
+	return append([]string(nil), op.SensitivePolicy.RedactFields...)
 }
 
 func findOperation(b Bundle, id string) (OperationSpec, error) {
@@ -415,6 +623,138 @@ func queryGroupSatisfied(group RequiredQueryGroup, query map[string]string) bool
 	return false
 }
 
+func validateOperationDirectReadPathFields(op OperationSpec, pathFields []string) error {
+	declared, err := operationDirectWritePathParameterNames(op)
+	if err != nil {
+		return err
+	}
+	seen := make(map[string]struct{}, len(pathFields))
+	for _, field := range pathFields {
+		if err := safety.ValidateIdentifier(field, "operation path field"); err != nil {
+			return fmt.Errorf("operation %q path field: %w", op.ID, err)
+		}
+		if _, duplicate := seen[field]; duplicate {
+			return fmt.Errorf("operation %q maps more than one command flag to path parameter %q", op.ID, field)
+		}
+		seen[field] = struct{}{}
+		if _, ok := declared[field]; !ok {
+			return fmt.Errorf("operation %q path parameter %q is not declared by rest.path", op.ID, field)
+		}
+	}
+	return nil
+}
+
+func materializeOperationDirectReadPathParams(op OperationSpec, cfg connectors.RuntimeConfig, pathParams map[string]string) (map[string]string, error) {
+	declared, err := operationDirectWritePathParameterNames(op)
+	if err != nil {
+		return nil, err
+	}
+	return materializeOperationPathParams(op, declared, cfg, pathParams)
+}
+
+func operationDirectReadQueryParameters(op OperationSpec) (map[string]OperationParameter, error) {
+	return operationParametersForLocation(op, "query")
+}
+
+func validateOperationDirectReadQueryFields(op OperationSpec, queryFields []string, commandFields map[string]struct{}) error {
+	parameters, err := operationDirectReadQueryParameters(op)
+	if err != nil {
+		return err
+	}
+	seen := make(map[string]struct{}, len(queryFields))
+	for _, field := range queryFields {
+		if err := safety.ValidateIdentifier(field, "operation query parameter"); err != nil {
+			return fmt.Errorf("operation %q query field: %w", op.ID, err)
+		}
+		if _, duplicate := seen[field]; duplicate {
+			return fmt.Errorf("operation %q maps more than one command flag to query parameter %q", op.ID, field)
+		}
+		seen[field] = struct{}{}
+		if _, fixed := op.REST.Query[field]; fixed {
+			return fmt.Errorf("operation %q query parameter %q is fixed by rest.query and cannot be caller-bound", op.ID, field)
+		}
+		if _, declared := parameters[field]; !declared {
+			if _, commandDeclared := commandFields[field]; commandDeclared {
+				continue
+			}
+			return fmt.Errorf("operation %q query parameter %q is not source-declared in rest.parameters", op.ID, field)
+		}
+	}
+	for name, parameter := range parameters {
+		if !parameter.Required {
+			continue
+		}
+		if _, fixed := op.REST.Query[name]; fixed {
+			continue
+		}
+		if _, bound := seen[name]; !bound {
+			return fmt.Errorf("operation %q requires query parameter %q", op.ID, name)
+		}
+	}
+	return nil
+}
+
+func operationDirectReadQuery(op OperationSpec, requested map[string]string, commandFields map[string]struct{}) (map[string]string, error) {
+	parameters, err := operationDirectReadQueryParameters(op)
+	if err != nil {
+		return nil, err
+	}
+	requestedNames := make([]string, 0, len(requested))
+	for name := range requested {
+		requestedNames = append(requestedNames, name)
+	}
+	sort.Strings(requestedNames)
+	if err := validateOperationDirectReadQueryFields(op, requestedNames, commandFields); err != nil {
+		return nil, err
+	}
+	query := make(map[string]string, len(op.REST.Query)+len(requested))
+	for name, value := range op.REST.Query {
+		parameter, declared := parameters[name]
+		if !declared {
+			parameter = OperationParameter{Name: name, In: "query", Type: "string"}
+		}
+		if err := validateOperationParameterWireValue(op, parameter, "query", value); err != nil {
+			return nil, fmt.Errorf("fixed rest.query: %w", err)
+		}
+		query[name] = value
+	}
+	for _, name := range requestedNames {
+		parameter, declared := parameters[name]
+		if !declared {
+			parameter = OperationParameter{Name: name, In: "query", Type: "string", MaxBytes: defaultOperationParameterMaxBytes}
+		}
+		if err := validateOperationParameterWireValue(op, parameter, "query", requested[name]); err != nil {
+			return nil, err
+		}
+		query[name] = requested[name]
+	}
+	return query, nil
+}
+
+func validateOperationDirectReadBodyFields(op OperationSpec, bodyFields []string) error {
+	if op.REST == nil || strings.ToUpper(strings.TrimSpace(op.REST.Method)) != http.MethodPost {
+		if len(bodyFields) == 0 {
+			return nil
+		}
+		return fmt.Errorf("operation %q does not accept request body fields", op.ID)
+	}
+	if operationDirectReadContentType(op) != "application/json" {
+		if len(bodyFields) == 0 {
+			return nil
+		}
+		return fmt.Errorf("operation %q does not accept JSON body fields", op.ID)
+	}
+	if len(bodyFields) == 0 {
+		_, err := CompileSchema(op.REST.BodySchema)
+		return err
+	}
+	normalized, _, err := compileOperationDirectReadBodySchema(op)
+	if err != nil {
+		return err
+	}
+	return validateOperationDirectWriteBodyFields(normalized, bodyFields)
+}
+
 func operationReadBody(op OperationSpec, overrides map[string]any, rawBody *string, maxBytes int) (any, error) {
 	if op.REST == nil || strings.ToUpper(strings.TrimSpace(op.REST.Method)) != http.MethodPost {
 		if rawBody != nil {
@@ -445,16 +785,34 @@ func operationReadBody(op OperationSpec, overrides map[string]any, rawBody *stri
 	if rawBody != nil {
 		return nil, fmt.Errorf("operation %q raw body requires declared text/plain content_type", op.ID)
 	}
+	bodyFields := make([]string, 0, len(overrides))
+	for field := range overrides {
+		bodyFields = append(bodyFields, field)
+	}
+	sort.Strings(bodyFields)
+	if err := validateOperationDirectReadBodyFields(op, bodyFields); err != nil {
+		return nil, err
+	}
 	body := cloneAnyMap(op.REST.Body)
 	for key, value := range overrides {
 		body[key] = value
 	}
 	if len(op.REST.BodySchema) > 0 {
-		sch, err := CompileSchema(op.REST.BodySchema)
+		var schema *Schema
+		var err error
+		if len(overrides) == 0 {
+			schema, err = CompileSchema(op.REST.BodySchema)
+		} else {
+			_, compiled, compileErr := compileOperationDirectReadBodySchema(op)
+			err = compileErr
+			if compiled != nil {
+				schema = compiled.schema
+			}
+		}
 		if err != nil {
 			return nil, fmt.Errorf("operation %q: compile body_schema: %w", op.ID, err)
 		}
-		if err := sch.Validate(body); err != nil {
+		if err := schema.Validate(body); err != nil {
 			return nil, fmt.Errorf("operation %q: body_schema: %w", op.ID, err)
 		}
 	}
@@ -487,6 +845,87 @@ func validateOperationDirectReadPOSTContract(op OperationSpec) error {
 	default:
 		return fmt.Errorf("operation direct read POST requires application/json or text/plain content_type")
 	}
+}
+
+// compileOperationDirectReadBodySchema applies the engine's conservative
+// closure defaults before compiling a REST read body. Imported provider
+// schemas frequently omit JSON Schema's permissive-by-default keywords; an
+// executable command must not turn that omission into caller authority. An
+// explicit open object remains invalid, while omitted object/array bounds are
+// filled with the same finite engine ceilings used by structured writes.
+func compileOperationDirectReadBodySchema(op OperationSpec) (OperationSpec, *structuredRESTBodySchemaCompilation, error) {
+	if op.REST == nil || len(op.REST.BodySchema) == 0 {
+		return OperationSpec{}, nil, fmt.Errorf("operation %q structured JSON body requires body_schema", op.ID)
+	}
+	var root map[string]any
+	if err := json.Unmarshal(op.REST.BodySchema, &root); err != nil {
+		return OperationSpec{}, nil, fmt.Errorf("operation %q body_schema is not an object: %w", op.ID, err)
+	}
+	if err := closeOperationDirectReadSchemaNode(op.ID, root, "body_schema", 1); err != nil {
+		return OperationSpec{}, nil, err
+	}
+	normalizedRaw, err := json.Marshal(root)
+	if err != nil {
+		return OperationSpec{}, nil, fmt.Errorf("operation %q normalize body_schema: %w", op.ID, err)
+	}
+	normalized := op
+	rest := *op.REST
+	rest.BodySchema = normalizedRaw
+	normalized.REST = &rest
+	compiled, err := compileStructuredRESTBodySchema(normalized)
+	if err != nil {
+		return OperationSpec{}, nil, err
+	}
+	return normalized, compiled, nil
+}
+
+func closeOperationDirectReadSchemaNode(operation string, node map[string]any, path string, depth int) error {
+	if depth > maxStructuredRESTBodyDepth {
+		return fmt.Errorf("operation %q %s exceeds structured body depth limit %d", operation, path, maxStructuredRESTBodyDepth)
+	}
+	object, array := operationDirectWriteBodyNodeKinds(node)
+	if object {
+		if open, declared := node["additionalProperties"].(bool); declared && open {
+			return fmt.Errorf("operation %q %s explicitly permits additionalProperties", operation, path)
+		}
+		node["additionalProperties"] = false
+		properties, ok := node["properties"].(map[string]any)
+		if !ok {
+			properties = map[string]any{}
+			node["properties"] = properties
+		}
+		for _, name := range sortedMapKeys(properties) {
+			child, ok := properties[name].(map[string]any)
+			if !ok {
+				return fmt.Errorf("operation %q %s/%s must be a schema object", operation, path, name)
+			}
+			if err := closeOperationDirectReadSchemaNode(operation, child, path+"/"+name, depth+1); err != nil {
+				return err
+			}
+		}
+	}
+	if array {
+		if _, declared := node["maxItems"]; !declared {
+			node["maxItems"] = float64(maxStructuredRESTBodyItems)
+		}
+		if items, ok := node["items"].(map[string]any); ok {
+			if err := closeOperationDirectReadSchemaNode(operation, items, path+"/items", depth+1); err != nil {
+				return err
+			}
+		}
+		if prefix, ok := node["prefixItems"].([]any); ok {
+			for index, raw := range prefix {
+				child, ok := raw.(map[string]any)
+				if !ok {
+					return fmt.Errorf("operation %q %s/prefixItems/%d must be a schema object", operation, path, index)
+				}
+				if err := closeOperationDirectReadSchemaNode(operation, child, fmt.Sprintf("%s/prefixItems/%d", path, index), depth+1); err != nil {
+					return err
+				}
+			}
+		}
+	}
+	return nil
 }
 
 // validateOperationDirectReadTextPlainContract is the loader-safe half of
@@ -539,7 +978,7 @@ func bodySchemaHasRootString(raw json.RawMessage) bool {
 func cloneAnyMap(in map[string]any) map[string]any {
 	out := make(map[string]any, len(in))
 	for key, value := range in {
-		out[key] = value
+		out[key] = copyRecordValue(value)
 	}
 	return out
 }
@@ -681,7 +1120,7 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 		}
 		return out, nil
 	case directReadPolicyJSONRedacted, directReadPolicyClinicalJSONRedacted:
-		return redactJSONValue(body), nil
+		return cloneJSONValue(body), nil
 	case directReadPolicyNone:
 		if body != nil {
 			return nil, fmt.Errorf("direct read output policy %q received a response body", policy)
@@ -728,22 +1167,18 @@ func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL string) string {
 	return resolvedPath
 }
 
-func redactJSONValue(value any) any {
+func cloneJSONValue(value any) any {
 	switch v := value.(type) {
 	case map[string]any:
 		out := make(map[string]any, len(v))
 		for key, item := range v {
-			if item != nil && shouldRedactJSONField(key) {
-				out[key+"_redacted"] = true
-				continue
-			}
-			out[key] = redactJSONValue(item)
+			out[key] = cloneJSONValue(item)
 		}
 		return out
 	case []any:
 		out := make([]any, len(v))
 		for i, item := range v {
-			out[i] = redactJSONValue(item)
+			out[i] = cloneJSONValue(item)
 		}
 		return out
 	default:
@@ -787,26 +1222,6 @@ func redactJSONFieldsByPredicate(value any, shouldRedact func(string) bool) any 
 	default:
 		return value
 	}
-}
-
-func shouldRedactJSONField(name string) bool {
-	normalized := normalizeJSONFieldName(name)
-	switch normalized {
-	case "content", "body", "payload", "raw", "download_url", "download_media_url", "clone_url", "api_key", "apikey", "access_key", "private_key", "authorization", "credential", "credentials":
-		return true
-	}
-	if strings.Contains(normalized, "download") && strings.Contains(normalized, "url") {
-		return true
-	}
-	if strings.Contains(normalized, "clone") && strings.Contains(normalized, "url") {
-		return true
-	}
-	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "apikey", "access_key", "authorization", "credential"} {
-		if strings.Contains(normalized, marker) {
-			return true
-		}
-	}
-	return false
 }
 
 func normalizeJSONFieldName(name string) string {
@@ -919,6 +1334,10 @@ func resolveSurfaceEndpointPath(template string, cfg connectors.RuntimeConfig, p
 			firstErr = err
 			return ""
 		}
+		if len(encoded) > maxOperationParameterMaxBytes {
+			firstErr = fmt.Errorf("path variable %q encoded value exceeds byte cap %d", name, maxOperationParameterMaxBytes)
+			return ""
+		}
 		return encoded
 	})
 	if firstErr != nil {
@@ -959,7 +1378,10 @@ func encodeSurfacePathValue(name, value string) (string, error) {
 		}
 		return strings.Join(parts, "/"), nil
 	}
-	if err := safety.ValidateIdentifier(value, "path variable "+name); err != nil {
+	if strings.TrimSpace(value) == "" {
+		return "", fmt.Errorf("path variable %q is required", name)
+	}
+	if err := safety.RejectDangerousChars(value, "path variable "+name); err != nil {
 		return "", err
 	}
 	return url.PathEscape(value), nil
@@ -973,6 +1395,9 @@ func directReadQuery(query map[string]string) (url.Values, error) {
 		}
 		if err := safety.RejectDangerousChars(value, "query parameter "+name); err != nil {
 			return nil, err
+		}
+		if encoded := url.QueryEscape(value); len(encoded) > maxOperationParameterMaxBytes {
+			return nil, fmt.Errorf("query parameter %q encoded value exceeds byte cap %d", name, maxOperationParameterMaxBytes)
 		}
 		values.Set(name, value)
 	}

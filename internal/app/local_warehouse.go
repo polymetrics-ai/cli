@@ -22,15 +22,17 @@ import (
 )
 
 type etlExecutionResult struct {
-	RecordsRead               int
-	RecordsTransformed        int
-	RecordsLoaded             int
-	RecordsFailed             int
-	BatchCount                int
-	Checkpoint                map[string]string
-	TransportPhaseMeasurement *TransportPhaseMeasurement
-	DestinationResults        []json.RawMessage
-	PendingStreamState        *pendingStreamState
+	RecordsRead                     int
+	RecordsTransformed              int
+	RecordsLoaded                   int
+	RecordsFailed                   int
+	BatchCount                      int
+	Checkpoint                      map[string]string
+	TransportPhaseMeasurement       *TransportPhaseMeasurement
+	DestinationResults              []json.RawMessage
+	DeliveryReconciliation          *DeliveryReconciliation
+	PendingStreamState              *pendingStreamState
+	persistedDeliveryReconciliation *Run
 }
 
 func cloneDestinationResults(results []json.RawMessage) []json.RawMessage {
@@ -49,6 +51,22 @@ func cloneTransportPhaseMeasurement(measurement *TransportPhaseMeasurement) *Tra
 		return nil
 	}
 	clone := *measurement
+	return &clone
+}
+
+func cloneDeliveryReconciliation(reconciliation *DeliveryReconciliation) *DeliveryReconciliation {
+	if reconciliation == nil {
+		return nil
+	}
+	clone := *reconciliation
+	if reconciliation.EmptyPublication != nil {
+		witness := *reconciliation.EmptyPublication
+		clone.EmptyPublication = &witness
+	}
+	if reconciliation.EmptyPublicationReadBackPending != nil {
+		receipt := reconciliation.EmptyPublicationReadBackPending.Clone()
+		clone.EmptyPublicationReadBackPending = &receipt
+	}
 	return &clone
 }
 

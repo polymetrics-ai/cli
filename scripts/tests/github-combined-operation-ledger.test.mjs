@@ -269,7 +269,7 @@ test("records source-wide fixed node projections and GraphQL mutation safety fro
   assert.equal(node?.policy, "fixed declared documents only; no caller-supplied GraphQL selection");
   assert.equal(nodes?.policy, "fixed declared documents only; no caller-supplied GraphQL selection");
   assert.equal(node?.state, "fixed_projection_only");
-  assert.equal(nodes?.state, "fixed_typename_projection");
+  assert.equal(nodes?.state, "fixed_projection_only");
   const deleteIssue = ledger.rows.find((row) => row.id === "github.graphql.mutation.deleteIssue");
   assert.equal(deleteIssue?.implementation.state, "implemented");
   assert.equal(deleteIssue?.blocker, undefined);
