@@ -1104,6 +1104,155 @@ function applyCurrentDeclarationState(map) {
   return map;
 }
 
+function commandIntentForParity(parity) {
+  if (parity === 'binary_read') return 'binary_download';
+  if (parity === 'binary_write') return 'binary_upload';
+  return parity;
+}
+
+function commandToken(value) {
+  const token = String(value || '')
+    .replaceAll(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9]+/g, '-')
+    .replaceAll(/^-+|-+$/g, '');
+  return token || 'operation';
+}
+
+function generatedCommandPath(row) {
+  return `operations ${commandToken(`${row.method}-${row.path}`)}`;
+}
+
+function partialCommandNote(row) {
+  const sourceID = row.source?.source_id || `${row.method} ${row.path}`;
+  if (row.parity_class === 'direct_read') {
+    return `Blocked: locked source operation ${sourceID} has no declaration-owned executable stream, direct-read, binary, or status route.`;
+  }
+  return `Blocked: locked source operation ${sourceID} has no declaration-owned executable ${commandIntentForParity(row.parity_class)} route.`;
+}
+
+function partialCommandSourceID(command) {
+  const match = String(command.notes || '').match(/^Blocked: locked source operation (.+) has no declaration-owned executable /);
+  return match ? match[1] : null;
+}
+
+function partialCommandForRow(row, path) {
+  const command = {
+    path,
+    summary: `Declared ${row.parity_class.replaceAll('_', ' ')}: ${row.method} ${row.path}.`,
+    intent: commandIntentForParity(row.parity_class),
+    availability: 'partial',
+    source_url: row.source?.source_url || null,
+    notes: partialCommandNote(row),
+  };
+  // The established source-bound partial-read form retains its exact fixed
+  // endpoint for help/provenance while the runner blocks before provider I/O.
+  // Mutation and binary placeholders intentionally omit body/path bindings:
+  // their source lock has method/path only and cannot truthfully invent a
+  // request schema, pagination, response, or destructive write contract.
+  if (row.parity_class === 'direct_read') command.api_surface = [{ method: row.method, path: row.path }];
+  if (row.parity_class === 'direct_write') {
+    command.risk = row.api_surface?.operation?.reason || `Declared provider mutation: ${row.method} ${row.path}.`;
+    command.approval = row.method === 'DELETE'
+      ? 'direct_write commands require plan, preview, approval, execute with destructive confirmation'
+      : 'direct_write commands require plan, preview, approval, execute';
+  }
+  return command;
+}
+
+function commandMatchesDisposition(command, row, operationEndpoints = new Map()) {
+  if (partialCommandSourceID(command) === row.source?.source_id) return true;
+  if (row.source?.operation_id) {
+    const operationSuffix = String(row.source.operation_id).replaceAll(/[^A-Za-z0-9-]+/g, '_');
+    if (String(command.operation || '').endsWith(`.${operationSuffix}`)) return true;
+  }
+  const operationEndpoint = operationEndpoints.get(command.operation);
+  if (operationEndpoint?.method === row.method && operationEndpoint.path === row.path) return true;
+  return (command.api_surface || []).some((endpoint) => endpoint.method === row.method && endpoint.path === row.path);
+}
+
+async function reconcileCommandSurface(connector) {
+  const dir = join(root, 'internal/connectors/defs', connector);
+  const mapPath = join(dir, 'sources', `${connector}-declaration-disposition.json`);
+  const map = await readJSON(mapPath);
+  assert(map, `${connector}: disposition map is required before command-surface reconciliation`);
+  const cliPath = join(dir, 'cli_surface.json');
+  const cli = await readJSON(cliPath) || {
+    tagline: `Declared ${connector} API commands.`,
+    usage: `pm ${connector} <command> [flags]`,
+    commands: [],
+  };
+  const operations = await readJSON(join(dir, 'operations.json')) || { operations: [] };
+  const operationEndpoints = new Map((operations.operations || [])
+    .map((operation) => [operation.id, operation.rest ? { method: operation.rest.method, path: operation.rest.path } : null])
+    .filter(([, endpoint]) => endpoint));
+  const commands = (cli.commands || []).map(clone);
+  const byPath = new Map(commands.map((command) => [command.path, command]));
+  const selectedPaths = new Set();
+
+  for (const command of commands) {
+    const row = map.ledger_dispositions.find((candidate) => commandMatchesDisposition(command, candidate, operationEndpoints));
+    const promotableLegacyCommand = ['planned', 'unsafe_or_disallowed'].includes(command.availability);
+    const stalePartialOperationCommand = command.availability === 'partial' && Boolean(command.operation) && Boolean(row);
+    if (!promotableLegacyCommand && !stalePartialOperationCommand) continue;
+    command.availability = 'partial';
+    if (row) {
+      command.notes = partialCommandNote(row);
+      if (row.parity_class === 'direct_read') {
+        command.intent = 'direct_read';
+        delete command.stream;
+        delete command.operation;
+        delete command.risk;
+        delete command.approval;
+        command.api_surface = [{ method: row.method, path: row.path }];
+      }
+      if (!command.stream && !command.write) command.intent = commandIntentForParity(row.parity_class);
+    } else if (!command.notes) {
+      command.notes = 'Blocked: this connector command has no declaration-owned executable route.';
+    }
+  }
+
+  for (const row of map.ledger_dispositions) {
+    let command = commands.find((candidate) => commandMatchesDisposition(candidate, row, operationEndpoints));
+    if (!command) {
+      let path = generatedCommandPath(row);
+      let suffix = 2;
+      while (byPath.has(path)) path = `${generatedCommandPath(row)}-${suffix++}`;
+      command = partialCommandForRow(row, path);
+      commands.push(command);
+      byPath.set(path, command);
+    }
+    if (command.availability === 'partial' && row.parity_class === 'direct_write') {
+      command.risk ||= row.api_surface?.operation?.reason || `Declared provider mutation: ${row.method} ${row.path}.`;
+      command.approval ||= row.method === 'DELETE'
+        ? 'direct_write commands require plan, preview, approval, execute with destructive confirmation'
+        : 'direct_write commands require plan, preview, approval, execute';
+    }
+    if (command.availability === 'partial' && row.parity_class === 'direct_read') {
+      command.intent = 'direct_read';
+      delete command.stream;
+      delete command.operation;
+      delete command.risk;
+      delete command.approval;
+      command.api_surface = [{ method: row.method, path: row.path }];
+      command.notes = partialCommandNote(row);
+    }
+    selectedPaths.add(command.path);
+    row.declaration = row.declaration || {};
+    row.declaration.command = { path: command.path, intent: command.intent, availability: command.availability };
+    if (row.state === 'declaration-pending') {
+      row.declaration.status = `declaration-pending; partial connector command "${command.path}" records the normalized source endpoint, but no declaration-owned executable contract exists`;
+    }
+  }
+  cli.commands = commands.filter((command) => !partialCommandSourceID(command) || selectedPaths.has(command.path));
+  applyCurrentDeclarationState(map);
+  map.summary.terminal_commands = map.ledger_dispositions.filter(({ declaration }) => declaration.command?.availability === 'implemented').length;
+  map.summary.partial_commands = map.ledger_dispositions.filter(({ declaration }) => declaration.command?.availability === 'partial').length;
+  await writeFile(cliPath, json(cli));
+  await writeFile(mapPath, json(map));
+  await writeFile(join(dir, 'sources', `${connector}-parity-map-summary.md`), summaryMarkdown(connector, map));
+}
+
 function tableCell(value) {
   return String(value ?? 'unknown').replaceAll('|', '\\|').replaceAll('\n', ' ');
 }
@@ -1295,7 +1444,7 @@ async function writeHardPreMergeGate(checkOnly = false) {
           declaration_state: disposition.state,
           reason: 'Requires an enabled runtime preflight against the generated command surface; no provider call is authorized in this mapping lane.',
         },
-        generated_cli_command: command ? { status: command.availability === 'implemented' ? 'declared-unproven' : 'pending', command } : { status: 'pending', command: null },
+        generated_cli_command: command ? { status: command.availability === 'implemented' ? 'declared-unproven' : command.availability === 'partial' ? 'declared-blocked' : 'pending', command } : { status: 'pending', command: null },
         generated_website_row: { status: 'pending', reason: 'No generated connector website row has been proved for this operation.' },
         fixture_or_conformance: { status: 'pending', reason: 'No operation-specific executable fixture or conformance evidence has been recorded.' },
         surface_reconciliation: surfaceReconciliation(disposition),
@@ -1334,6 +1483,7 @@ async function writeHardPreMergeGate(checkOnly = false) {
     connectors_without_enumerated_provider_operations: connectors.filter(({ provider_inventory }) => provider_inventory.enumerated_provider_operations === 0).map(({ connector }) => connector),
     runtime_reachability_proven: 0,
     generated_cli_proven: 0,
+    generated_cli_declared_blocked: rows.filter(({ generated_cli_command }) => generated_cli_command.status === 'declared-blocked').length,
     generated_website_rows_proven: 0,
     fixtures_or_conformance_proven: 0,
     provider_capability_absent: rows.filter(({ runtime_reachability }) => runtime_reachability.status === 'provider-capability-absent').length,
@@ -1359,6 +1509,7 @@ async function writeHardPreMergeGate(checkOnly = false) {
     `- Connectors with dynamic or unavailable provider inventories: ${summary.connectors_without_enumerated_provider_operations.join(', ') || 'none'}`,
     `- Runtime reachability proven: ${summary.runtime_reachability_proven}`,
     `- Generated CLI commands proven: ${summary.generated_cli_proven}`,
+    `- Generated CLI commands declared-blocked: ${summary.generated_cli_declared_blocked}`,
     `- Generated website rows proven: ${summary.generated_website_rows_proven}`,
     `- Executable fixture/conformance proofs: ${summary.fixtures_or_conformance_proven}`,
     `- Provider-deprecated/absent operations with direct source evidence: ${summary.provider_capability_absent}`,
@@ -1368,7 +1519,7 @@ async function writeHardPreMergeGate(checkOnly = false) {
     '',
     '`not-asserted`, `pending`, `declared-unproven`, and a source version that was not materialized are all pending evidence—not N/A. The only provider-capability absence status is backed by the source record’s deprecation/absence metadata. Scope, tier, destructive, risk, and confirmation requirements remain typed runtime controls and never turn an otherwise supported operation into an exclusion.',
     '',
-    'Final push remains paused until the shared foundation publishes its App/CLI generic-destination dispatch integration, is merged locally, is proven as an ancestor, and passes the real installed App/CLI-path exercise. This gate also remains blocked until each operation has the missing reachability, generated website, and executable conformance evidence.',
+    'The merged #4304 foundation head supplies generic App/CLI destination dispatch and is an ancestor of this branch. This gate remains blocked until each operation has the missing executable reachability, generated website, and fixture/conformance evidence.',
     '',
     '| Connector | Provider inventory state | Enumerable operations | Local bindings outside provider inventory |',
     '| --- | --- | ---: | ---: |',
@@ -1762,6 +1913,9 @@ async function check(connector) {
     }
     if (row.state === 'declaration-pending') assert(row.rejection?.reason === 'declaration-pending', `${connector}: pending row has wrong reason`);
     if (row.api_surface?.excluded?.category === 'requires_elevated_scope') assert(row.state === 'enabled' && !row.rejection, `${connector}: elevated scope must stay enabled`);
+    const command = row.declaration?.command;
+    assert(command?.path && ['implemented', 'partial'].includes(command.availability), `${connector}: every mapped operation must retain an implemented or declared-blocked CLI command`);
+    assert(command.intent, `${connector}: mapped command must name its declared intent`);
   }
   for (const action of writes?.actions || []) {
     const rows = map.ledger_dispositions.filter(({ api_surface }) => api_surface?.covered_by?.write === action.name);
@@ -1821,6 +1975,15 @@ async function main() {
       await writeFile(path, json(updated));
       await writeFile(join(root, 'internal/connectors/defs', connector, 'sources', `${connector}-parity-map-summary.md`), summaryMarkdown(connector, updated));
       console.log(`reconcile-dispatch: ${connector}`);
+    }
+    return;
+  }
+  if (mode === 'reconcile-command-surface') {
+    const connectors = target ? (batches[target] || (sourceProfiles[target] ? [target] : null)) : [...batches.batch4, ...batches.batch5];
+    if (!connectors) throw new Error('usage: materialize-parity-maps.mjs reconcile-command-surface [batch4|batch5|connector]');
+    for (const connector of connectors) {
+      await reconcileCommandSurface(connector);
+      console.log(`reconcile-command-surface: ${connector}`);
     }
     return;
   }
