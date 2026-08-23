@@ -186,7 +186,7 @@ func TestSourceImportRetainsRecursiveSchemaReferencesAsSourceBoundGaps(t *testin
 				t.Fatalf("operations = %d, want retained operation", len(result.Operations))
 			}
 			operation := result.Operations[0]
-			if operation.Source.Location != `paths["/folders"].get` {
+			if operation.SourceID != "folders/get" || operation.ProviderOperationID != "folders/get" || operation.Source.Location != `paths["/folders"].get` || operation.Source.URL != "https://fixtures.polymetrics.invalid/inline-openapi.json" {
 				t.Fatalf("operation source trace = %#v", operation.Source)
 			}
 
@@ -437,7 +437,6 @@ func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 	}{
 		{name: "external reference", artifact: "external-ref.json", want: "external reference", limits: baseLimits},
 		{name: "unresolved reference", artifact: "unresolved-ref.json", want: "unresolved reference", limits: baseLimits},
-		{name: "cyclic reference", artifact: "cyclic-ref.json", want: "reference cycle", limits: baseLimits},
 		{name: "ambiguous request", artifact: "ambiguous-request.json", want: "ambiguous request schema", limits: baseLimits},
 		{name: "duplicate identity", artifact: "duplicate-id.json", want: "duplicate source identity", limits: baseLimits},
 		{name: "unbounded request", artifact: "unbounded-request.json", want: "unbounded request schema", limits: baseLimits},
@@ -1362,11 +1361,6 @@ func TestSourceImportPreflightsUnusedGrammarObjects(t *testing.T) {
 			want: "external reference",
 		},
 		{
-			name: "unused schema cycle",
-			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$ref":"#/components/schemas/Unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
-			want: "reference cycle",
-		},
-		{
 			name: "unused dynamic schema",
 			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$dynamicRef":"#unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
 			want: "cli-openapi-dynamic-ref-foundation-r1",
@@ -1386,6 +1380,27 @@ func TestSourceImportPreflightsUnusedGrammarObjects(t *testing.T) {
 				t.Fatalf("unused grammar error = %v, want %q", err, tc.want)
 			}
 		})
+	}
+
+	unusedCycle := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$ref":"#/components/schemas/Unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/unused-grammar-cycle.json", unusedCycle)
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return unusedCycle, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("unused recursive schema import: %v", err)
+	}
+	if len(result.Gaps) != 1 {
+		t.Fatalf("unused recursive schema gaps = %#v", result.Gaps)
+	}
+	gap := result.Gaps[0]
+	if gap.Foundation != sourceRecursiveSchemaFoundation || !strings.Contains(gap.Location, "#/components/schemas/Unused") || !strings.Contains(gap.Reason, "#/components/schemas/Unused") {
+		t.Fatalf("unused recursive schema gap = %#v", gap)
+	}
+	encoded, err := marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal unused recursive schema descriptor: %v", err)
+	}
+	if !strings.Contains(string(encoded), `"merge_blocked": true`) || !strings.Contains(string(encoded), `"foundation": "cli-recursive-schema-foundation-r1"`) {
+		t.Fatalf("unused recursive schema evidence disappeared from descriptor: %s", encoded)
 	}
 }
 
@@ -1839,9 +1854,23 @@ func TestSourceImportNormalizesDirectReferenceFragments(t *testing.T) {
 	}
 	literalPercentCycle := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Root":{"type":"object","additionalProperties":false,"properties":{"percent%2F":{"$ref":"#/components/schemas/Root/properties/percent%252F"}}}}},"paths":{"/items":{"get":{"parameters":[{"name":"filter","in":"query","schema":{"$ref":"#/components/schemas/Root"}}],"responses":{"200":{"description":"ok"}}}}}}`)
 	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/literal-percent-reference-cycle.json", literalPercentCycle)
-	_, err = importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return literalPercentCycle, nil }), defaultSourceImportLimits())
-	if err == nil || !strings.Contains(err.Error(), "reference cycle") {
-		t.Fatalf("literal percent reference cycle error = %v", err)
+	cycleResult, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return literalPercentCycle, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("literal percent recursive schema import: %v", err)
+	}
+	if len(cycleResult.Operations) != 1 || !cycleResult.Operations[0].Runtime.MergeBlocked {
+		t.Fatalf("literal percent recursive schema operation = %#v", cycleResult.Operations)
+	}
+	var cycleGap *sourceContractGap
+	for index := range cycleResult.Operations[0].Runtime.Gaps {
+		gap := &cycleResult.Operations[0].Runtime.Gaps[index]
+		if gap.Foundation == sourceRecursiveSchemaFoundation {
+			cycleGap = gap
+			break
+		}
+	}
+	if cycleGap == nil || !strings.Contains(cycleGap.Reason, "#/components/schemas/Root/properties/percent%2F") {
+		t.Fatalf("literal percent recursive schema gap = %#v", cycleResult.Operations[0].Runtime.Gaps)
 	}
 }
 
