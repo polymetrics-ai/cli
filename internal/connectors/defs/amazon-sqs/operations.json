@@ -21,6 +21,7 @@
           "properties": {
             "attribute_names": {
               "type": "array",
+              "maxItems": 64,
               "items": {
                 "type": "string"
               }
@@ -171,7 +172,8 @@
         "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
-          "additionalProperties": false
+          "additionalProperties": false,
+          "properties": {}
         }
       }
     }

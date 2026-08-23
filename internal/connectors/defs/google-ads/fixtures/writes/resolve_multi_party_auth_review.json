@@ -1,0 +1,26 @@
+{
+  "record": {
+    "operations": [
+      {
+        "multiPartyAuthReview": "customers/synthetic-conformance-value/multiPartyAuthReviews/1",
+        "newStatus": "APPROVED"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/multiPartyAuthReview:resolve",
+    "body": {
+      "operations": [
+        {
+          "multiPartyAuthReview": "customers/synthetic-conformance-value/multiPartyAuthReviews/1",
+          "newStatus": "APPROVED"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

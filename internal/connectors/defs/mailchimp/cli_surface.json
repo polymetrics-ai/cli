@@ -140,15 +140,7 @@
           "path": "/account-exports/{export_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "export-id",
-          "type": "string",
-          "summary": "Mailchimp export_id path identifier.",
-          "maps_to": "path.export_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp account-exports get --json"
@@ -198,15 +190,7 @@
           "path": "/audiences/{audience_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "audience-id",
-          "type": "string",
-          "summary": "Mailchimp audience_id path identifier.",
-          "maps_to": "path.audience_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp audiences get --json"
@@ -267,22 +251,7 @@
           "path": "/audiences/{audience_id}/contacts/{contact_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "audience-id",
-          "type": "string",
-          "summary": "Mailchimp audience_id path identifier.",
-          "maps_to": "path.audience_id",
-          "allow_empty": false
-        },
-        {
-          "name": "contact-id",
-          "type": "string",
-          "summary": "Mailchimp contact_id path identifier.",
-          "maps_to": "path.contact_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp audiences contacts get --json"
@@ -418,15 +387,7 @@
           "path": "/authorized-apps/{app_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "app-id",
-          "type": "string",
-          "summary": "Mailchimp app_id path identifier.",
-          "maps_to": "path.app_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp authorized-apps get --json"
@@ -479,15 +440,7 @@
           "path": "/automations/{workflow_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "workflow-id",
-          "type": "string",
-          "summary": "Mailchimp workflow_id path identifier.",
-          "maps_to": "path.workflow_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp automations get --json"
@@ -636,22 +589,7 @@
           "path": "/automations/{workflow_id}/emails/{workflow_email_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "workflow-id",
-          "type": "string",
-          "summary": "Mailchimp workflow_id path identifier.",
-          "maps_to": "path.workflow_id",
-          "allow_empty": false
-        },
-        {
-          "name": "workflow-email-id",
-          "type": "string",
-          "summary": "Mailchimp workflow_email_id path identifier.",
-          "maps_to": "path.workflow_email_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp automations emails get --json"
@@ -821,29 +759,7 @@
           "path": "/automations/{workflow_id}/emails/{workflow_email_id}/queue/{subscriber_hash}"
         }
       ],
-      "flags": [
-        {
-          "name": "workflow-id",
-          "type": "string",
-          "summary": "Mailchimp workflow_id path identifier.",
-          "maps_to": "path.workflow_id",
-          "allow_empty": false
-        },
-        {
-          "name": "workflow-email-id",
-          "type": "string",
-          "summary": "Mailchimp workflow_email_id path identifier.",
-          "maps_to": "path.workflow_email_id",
-          "allow_empty": false
-        },
-        {
-          "name": "subscriber-hash",
-          "type": "string",
-          "summary": "Mailchimp subscriber_hash path identifier.",
-          "maps_to": "path.subscriber_hash",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp automations emails queue get --json"
@@ -904,22 +820,7 @@
           "path": "/automations/{workflow_id}/removed-subscribers/{subscriber_hash}"
         }
       ],
-      "flags": [
-        {
-          "name": "workflow-id",
-          "type": "string",
-          "summary": "Mailchimp workflow_id path identifier.",
-          "maps_to": "path.workflow_id",
-          "allow_empty": false
-        },
-        {
-          "name": "subscriber-hash",
-          "type": "string",
-          "summary": "Mailchimp subscriber_hash path identifier.",
-          "maps_to": "path.subscriber_hash",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp automations removed-subscribers get --json"
@@ -999,15 +900,7 @@
           "path": "/batch-webhooks/{batch_webhook_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "batch-webhook-id",
-          "type": "string",
-          "summary": "Mailchimp batch_webhook_id path identifier.",
-          "maps_to": "path.batch_webhook_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp batch-webhooks get --json"
@@ -1095,15 +988,7 @@
           "path": "/batches/{batch_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "batch-id",
-          "type": "string",
-          "summary": "Mailchimp batch_id path identifier.",
-          "maps_to": "path.batch_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp batches get --json"
@@ -1183,15 +1068,7 @@
           "path": "/campaign-folders/{folder_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "folder-id",
-          "type": "string",
-          "summary": "Mailchimp folder_id path identifier.",
-          "maps_to": "path.folder_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp campaign-folders get --json"
@@ -1298,15 +1175,7 @@
           "path": "/campaigns/{campaign_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "campaign-id",
-          "type": "string",
-          "summary": "Mailchimp campaign_id path identifier.",
-          "maps_to": "path.campaign_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp campaigns get --json"
@@ -1594,15 +1463,7 @@
           "path": "/campaigns/{campaign_id}/content"
         }
       ],
-      "flags": [
-        {
-          "name": "campaign-id",
-          "type": "string",
-          "summary": "Mailchimp campaign_id path identifier.",
-          "maps_to": "path.campaign_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp campaigns content get --json"
@@ -1724,22 +1585,7 @@
           "path": "/campaigns/{campaign_id}/feedback/{feedback_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "campaign-id",
-          "type": "string",
-          "summary": "Mailchimp campaign_id path identifier.",
-          "maps_to": "path.campaign_id",
-          "allow_empty": false
-        },
-        {
-          "name": "feedback-id",
-          "type": "string",
-          "summary": "Mailchimp feedback_id path identifier.",
-          "maps_to": "path.feedback_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp campaigns feedback get --json"
@@ -1791,15 +1637,7 @@
           "path": "/campaigns/{campaign_id}/send-checklist"
         }
       ],
-      "flags": [
-        {
-          "name": "campaign-id",
-          "type": "string",
-          "summary": "Mailchimp campaign_id path identifier.",
-          "maps_to": "path.campaign_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp campaigns send-checklist get --json"
@@ -1879,15 +1717,7 @@
           "path": "/connected-sites/{connected_site_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "connected-site-id",
-          "type": "string",
-          "summary": "Mailchimp connected_site_id path identifier.",
-          "maps_to": "path.connected_site_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp connected-sites get --json"
@@ -2002,15 +1832,7 @@
           "path": "/conversations/{conversation_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "conversation-id",
-          "type": "string",
-          "summary": "Mailchimp conversation_id path identifier.",
-          "maps_to": "path.conversation_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp conversations get --json"
@@ -2044,22 +1866,7 @@
           "path": "/conversations/{conversation_id}/messages/{message_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "conversation-id",
-          "type": "string",
-          "summary": "Mailchimp conversation_id path identifier.",
-          "maps_to": "path.conversation_id",
-          "allow_empty": false
-        },
-        {
-          "name": "message-id",
-          "type": "string",
-          "summary": "Mailchimp message_id path identifier.",
-          "maps_to": "path.message_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp conversations messages get --json"
@@ -2189,15 +1996,7 @@
           "path": "/ecommerce/stores/{store_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "store-id",
-          "type": "string",
-          "summary": "Mailchimp store_id path identifier.",
-          "maps_to": "path.store_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp ecommerce stores get --json"
@@ -2319,22 +2118,7 @@
           "path": "/ecommerce/stores/{store_id}/carts/{cart_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "store-id",
-          "type": "string",
-          "summary": "Mailchimp store_id path identifier.",
-          "maps_to": "path.store_id",
-          "allow_empty": false
-        },
-        {
-          "name": "cart-id",
-          "type": "string",
-          "summary": "Mailchimp cart_id path identifier.",
-          "maps_to": "path.cart_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp ecommerce stores carts get --json"
@@ -2477,29 +2261,7 @@
           "path": "/ecommerce/stores/{store_id}/carts/{cart_id}/lines/{line_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "store-id",
-          "type": "string",
-          "summary": "Mailchimp store_id path identifier.",
-          "maps_to": "path.store_id",
-          "allow_empty": false
-        },
-        {
-          "name": "cart-id",
-          "type": "string",
-          "summary": "Mailchimp cart_id path identifier.",
-          "maps_to": "path.cart_id",
-          "allow_empty": false
-        },
-        {
-          "name": "line-id",
-          "type": "string",
-          "summary": "Mailchimp line_id path identifier.",
-          "maps_to": "path.line_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp ecommerce stores carts lines get --json"
@@ -2635,22 +2397,7 @@
           "path": "/ecommerce/stores/{store_id}/customers/{customer_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "store-id",
-          "type": "string",
-          "summary": "Mailchimp store_id path identifier.",
-          "maps_to": "path.store_id",
-          "allow_empty": false
-        },
-        {
-          "name": "customer-id",
-          "type": "string",
-          "summary": "Mailchimp customer_id path identifier.",
-          "maps_to": "path.customer_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp ecommerce stores customers get --json"
@@ -2813,22 +2560,7 @@
           "path": "/ecommerce/stores/{store_id}/orders/{order_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "store-id",
-          "type": "string",
-          "summary": "Mailchimp store_id path identifier.",
-          "maps_to": "path.store_id",
-          "allow_empty": false
-        },
-        {
-          "name": "order-id",
-          "type": "string",
-          "summary": "Mailchimp order_id path identifier.",
-          "maps_to": "path.order_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp ecommerce stores orders get --json"
@@ -3005,29 +2737,7 @@
           "path": "/ecommerce/stores/{store_id}/orders/{order_id}/lines/{line_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "store-id",
-          "type": "string",
-          "summary": "Mailchimp store_id path identifier.",
-          "maps_to": "path.store_id",
-          "allow_empty": false
-        },
-        {
-          "name": "order-id",
-          "type": "string",
-          "summary": "Mailchimp order_id path identifier.",
-          "maps_to": "path.order_id",
-          "allow_empty": false
-        },
-        {
-          "name": "line-id",
-          "type": "string",
-          "summary": "Mailchimp line_id path identifier.",
-          "maps_to": "path.line_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp ecommerce stores orders lines get --json"
@@ -3163,22 +2873,7 @@
           "path": "/ecommerce/stores/{store_id}/products/{product_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "store-id",
-          "type": "string",
-          "summary": "Mailchimp store_id path identifier.",
-          "maps_to": "path.store_id",
-          "allow_empty": false
-        },
-        {
-          "name": "product-id",
-          "type": "string",
-          "summary": "Mailchimp product_id path identifier.",
-          "maps_to": "path.product_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp ecommerce stores products get --json"
@@ -3355,29 +3050,7 @@
           "path": "/ecommerce/stores/{store_id}/products/{product_id}/images/{image_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "store-id",
-          "type": "string",
-          "summary": "Mailchimp store_id path identifier.",
-          "maps_to": "path.store_id",
-          "allow_empty": false
-        },
-        {
-          "name": "product-id",
-          "type": "string",
-          "summary": "Mailchimp product_id path identifier.",
-          "maps_to": "path.product_id",
-          "allow_empty": false
-        },
-        {
-          "name": "image-id",
-          "type": "string",
-          "summary": "Mailchimp image_id path identifier.",
-          "maps_to": "path.image_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp ecommerce stores products images get --json"
@@ -3527,29 +3200,7 @@
           "path": "/ecommerce/stores/{store_id}/products/{product_id}/variants/{variant_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "store-id",
-          "type": "string",
-          "summary": "Mailchimp store_id path identifier.",
-          "maps_to": "path.store_id",
-          "allow_empty": false
-        },
-        {
-          "name": "product-id",
-          "type": "string",
-          "summary": "Mailchimp product_id path identifier.",
-          "maps_to": "path.product_id",
-          "allow_empty": false
-        },
-        {
-          "name": "variant-id",
-          "type": "string",
-          "summary": "Mailchimp variant_id path identifier.",
-          "maps_to": "path.variant_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp ecommerce stores products variants get --json"
@@ -3726,22 +3377,7 @@
           "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "store-id",
-          "type": "string",
-          "summary": "Mailchimp store_id path identifier.",
-          "maps_to": "path.store_id",
-          "allow_empty": false
-        },
-        {
-          "name": "promo-rule-id",
-          "type": "string",
-          "summary": "Mailchimp promo_rule_id path identifier.",
-          "maps_to": "path.promo_rule_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp ecommerce stores promo-rules get --json"
@@ -3884,29 +3520,7 @@
           "path": "/ecommerce/stores/{store_id}/promo-rules/{promo_rule_id}/promo-codes/{promo_code_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "store-id",
-          "type": "string",
-          "summary": "Mailchimp store_id path identifier.",
-          "maps_to": "path.store_id",
-          "allow_empty": false
-        },
-        {
-          "name": "promo-rule-id",
-          "type": "string",
-          "summary": "Mailchimp promo_rule_id path identifier.",
-          "maps_to": "path.promo_rule_id",
-          "allow_empty": false
-        },
-        {
-          "name": "promo-code-id",
-          "type": "string",
-          "summary": "Mailchimp promo_code_id path identifier.",
-          "maps_to": "path.promo_code_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp ecommerce stores promo-rules promo-codes get --json"
@@ -3981,15 +3595,7 @@
           "path": "/facebook-ads/{outreach_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "outreach-id",
-          "type": "string",
-          "summary": "Mailchimp outreach_id path identifier.",
-          "maps_to": "path.outreach_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp facebook-ads get --json"
@@ -4069,15 +3675,7 @@
           "path": "/file-manager/files/{file_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "file-id",
-          "type": "string",
-          "summary": "Mailchimp file_id path identifier.",
-          "maps_to": "path.file_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp file-manager files get --json"
@@ -4184,15 +3782,7 @@
           "path": "/file-manager/folders/{folder_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "folder-id",
-          "type": "string",
-          "summary": "Mailchimp folder_id path identifier.",
-          "maps_to": "path.folder_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp file-manager folders get --json"
@@ -4315,15 +3905,7 @@
           "path": "/landing-pages/{page_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "page-id",
-          "type": "string",
-          "summary": "Mailchimp page_id path identifier.",
-          "maps_to": "path.page_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp landing-pages get --json"
@@ -4422,15 +4004,7 @@
           "path": "/landing-pages/{page_id}/content"
         }
       ],
-      "flags": [
-        {
-          "name": "page-id",
-          "type": "string",
-          "summary": "Mailchimp page_id path identifier.",
-          "maps_to": "path.page_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp landing-pages content get --json"
@@ -4510,15 +4084,7 @@
           "path": "/lists/{list_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists get --json"
@@ -4606,22 +4172,7 @@
           "path": "/lists/{list_id}/abuse-reports/{report_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        },
-        {
-          "name": "report-id",
-          "type": "string",
-          "summary": "Mailchimp report_id path identifier.",
-          "maps_to": "path.report_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists abuse-reports get --json"
@@ -4687,22 +4238,7 @@
           "path": "/lists/{list_id}/growth-history/{month}"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        },
-        {
-          "name": "month",
-          "type": "string",
-          "summary": "Mailchimp month path identifier.",
-          "maps_to": "path.month",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists growth-history get --json"
@@ -4797,22 +4333,7 @@
           "path": "/lists/{list_id}/interest-categories/{interest_category_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        },
-        {
-          "name": "interest-category-id",
-          "type": "string",
-          "summary": "Mailchimp interest_category_id path identifier.",
-          "maps_to": "path.interest_category_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists interest-categories get --json"
@@ -4955,29 +4476,7 @@
           "path": "/lists/{list_id}/interest-categories/{interest_category_id}/interests/{interest_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        },
-        {
-          "name": "interest-category-id",
-          "type": "string",
-          "summary": "Mailchimp interest_category_id path identifier.",
-          "maps_to": "path.interest_category_id",
-          "allow_empty": false
-        },
-        {
-          "name": "interest-id",
-          "type": "string",
-          "summary": "Mailchimp interest_id path identifier.",
-          "maps_to": "path.interest_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists interest-categories interests get --json"
@@ -5129,22 +4628,7 @@
           "path": "/lists/{list_id}/members/{subscriber_hash}"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        },
-        {
-          "name": "subscriber-hash",
-          "type": "string",
-          "summary": "Mailchimp subscriber_hash path identifier.",
-          "maps_to": "path.subscriber_hash",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists members get --json"
@@ -5280,22 +4764,7 @@
           "path": "/lists/{list_id}/members/{subscriber_hash}/activity-feed"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        },
-        {
-          "name": "subscriber-hash",
-          "type": "string",
-          "summary": "Mailchimp subscriber_hash path identifier.",
-          "maps_to": "path.subscriber_hash",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists members activity-feed get --json"
@@ -5470,29 +4939,7 @@
           "path": "/lists/{list_id}/members/{subscriber_hash}/notes/{note_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        },
-        {
-          "name": "subscriber-hash",
-          "type": "string",
-          "summary": "Mailchimp subscriber_hash path identifier.",
-          "maps_to": "path.subscriber_hash",
-          "allow_empty": false
-        },
-        {
-          "name": "note-id",
-          "type": "string",
-          "summary": "Mailchimp note_id path identifier.",
-          "maps_to": "path.note_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists members notes get --json"
@@ -5678,22 +5125,7 @@
           "path": "/lists/{list_id}/merge-fields/{merge_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        },
-        {
-          "name": "merge-id",
-          "type": "string",
-          "summary": "Mailchimp merge_id path identifier.",
-          "maps_to": "path.merge_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists merge-fields get --json"
@@ -5822,22 +5254,7 @@
           "path": "/lists/{list_id}/segments/{segment_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        },
-        {
-          "name": "segment-id",
-          "type": "string",
-          "summary": "Mailchimp segment_id path identifier.",
-          "maps_to": "path.segment_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists segments get --json"
@@ -6134,22 +5551,7 @@
           "path": "/lists/{list_id}/surveys/{survey_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        },
-        {
-          "name": "survey-id",
-          "type": "string",
-          "summary": "Mailchimp survey_id path identifier.",
-          "maps_to": "path.survey_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists surveys get --json"
@@ -6337,22 +5739,7 @@
           "path": "/lists/{list_id}/tag-search"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        },
-        {
-          "name": "query",
-          "type": "string",
-          "summary": "Search query text.",
-          "maps_to": "query.query",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists tag-search get --json"
@@ -6447,22 +5834,7 @@
           "path": "/lists/{list_id}/webhooks/{webhook_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "list-id",
-          "type": "string",
-          "summary": "Mailchimp list_id path identifier.",
-          "maps_to": "path.list_id",
-          "allow_empty": false
-        },
-        {
-          "name": "webhook-id",
-          "type": "string",
-          "summary": "Mailchimp webhook_id path identifier.",
-          "maps_to": "path.webhook_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp lists webhooks get --json"
@@ -6530,15 +5902,7 @@
           "path": "/reporting/facebook-ads/{outreach_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "outreach-id",
-          "type": "string",
-          "summary": "Mailchimp outreach_id path identifier.",
-          "maps_to": "path.outreach_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reporting facebook-ads get --json"
@@ -6588,15 +5952,7 @@
           "path": "/reporting/landing-pages/{outreach_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "outreach-id",
-          "type": "string",
-          "summary": "Mailchimp outreach_id path identifier.",
-          "maps_to": "path.outreach_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reporting landing-pages get --json"
@@ -6630,15 +5986,7 @@
           "path": "/reporting/surveys/{survey_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "survey-id",
-          "type": "string",
-          "summary": "Mailchimp survey_id path identifier.",
-          "maps_to": "path.survey_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reporting surveys get --json"
@@ -6672,22 +6020,7 @@
           "path": "/reporting/surveys/{survey_id}/questions/{question_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "survey-id",
-          "type": "string",
-          "summary": "Mailchimp survey_id path identifier.",
-          "maps_to": "path.survey_id",
-          "allow_empty": false
-        },
-        {
-          "name": "question-id",
-          "type": "string",
-          "summary": "Mailchimp question_id path identifier.",
-          "maps_to": "path.question_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reporting surveys questions get --json"
@@ -6737,22 +6070,7 @@
           "path": "/reporting/surveys/{survey_id}/responses/{response_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "survey-id",
-          "type": "string",
-          "summary": "Mailchimp survey_id path identifier.",
-          "maps_to": "path.survey_id",
-          "allow_empty": false
-        },
-        {
-          "name": "response-id",
-          "type": "string",
-          "summary": "Mailchimp response_id path identifier.",
-          "maps_to": "path.response_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reporting surveys responses get --json"
@@ -6786,15 +6104,7 @@
           "path": "/reports/{campaign_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "campaign-id",
-          "type": "string",
-          "summary": "Mailchimp campaign_id path identifier.",
-          "maps_to": "path.campaign_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reports get --json"
@@ -6828,22 +6138,7 @@
           "path": "/reports/{campaign_id}/abuse-reports/{report_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "campaign-id",
-          "type": "string",
-          "summary": "Mailchimp campaign_id path identifier.",
-          "maps_to": "path.campaign_id",
-          "allow_empty": false
-        },
-        {
-          "name": "report-id",
-          "type": "string",
-          "summary": "Mailchimp report_id path identifier.",
-          "maps_to": "path.report_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reports abuse-reports get --json"
@@ -6893,22 +6188,7 @@
           "path": "/reports/{campaign_id}/click-details/{link_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "campaign-id",
-          "type": "string",
-          "summary": "Mailchimp campaign_id path identifier.",
-          "maps_to": "path.campaign_id",
-          "allow_empty": false
-        },
-        {
-          "name": "link-id",
-          "type": "string",
-          "summary": "Mailchimp link_id path identifier.",
-          "maps_to": "path.link_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reports click-details get --json"
@@ -6942,29 +6222,7 @@
           "path": "/reports/{campaign_id}/click-details/{link_id}/members/{subscriber_hash}"
         }
       ],
-      "flags": [
-        {
-          "name": "campaign-id",
-          "type": "string",
-          "summary": "Mailchimp campaign_id path identifier.",
-          "maps_to": "path.campaign_id",
-          "allow_empty": false
-        },
-        {
-          "name": "link-id",
-          "type": "string",
-          "summary": "Mailchimp link_id path identifier.",
-          "maps_to": "path.link_id",
-          "allow_empty": false
-        },
-        {
-          "name": "subscriber-hash",
-          "type": "string",
-          "summary": "Mailchimp subscriber_hash path identifier.",
-          "maps_to": "path.subscriber_hash",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reports click-details members get --json"
@@ -7046,22 +6304,7 @@
           "path": "/reports/{campaign_id}/email-activity/{subscriber_hash}"
         }
       ],
-      "flags": [
-        {
-          "name": "campaign-id",
-          "type": "string",
-          "summary": "Mailchimp campaign_id path identifier.",
-          "maps_to": "path.campaign_id",
-          "allow_empty": false
-        },
-        {
-          "name": "subscriber-hash",
-          "type": "string",
-          "summary": "Mailchimp subscriber_hash path identifier.",
-          "maps_to": "path.subscriber_hash",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reports email-activity get --json"
@@ -7111,22 +6354,7 @@
           "path": "/reports/{campaign_id}/open-details/{subscriber_hash}"
         }
       ],
-      "flags": [
-        {
-          "name": "campaign-id",
-          "type": "string",
-          "summary": "Mailchimp campaign_id path identifier.",
-          "maps_to": "path.campaign_id",
-          "allow_empty": false
-        },
-        {
-          "name": "subscriber-hash",
-          "type": "string",
-          "summary": "Mailchimp subscriber_hash path identifier.",
-          "maps_to": "path.subscriber_hash",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reports open-details get --json"
@@ -7160,22 +6388,7 @@
           "path": "/reports/{campaign_id}/sent-to/{subscriber_hash}"
         }
       ],
-      "flags": [
-        {
-          "name": "campaign-id",
-          "type": "string",
-          "summary": "Mailchimp campaign_id path identifier.",
-          "maps_to": "path.campaign_id",
-          "allow_empty": false
-        },
-        {
-          "name": "subscriber-hash",
-          "type": "string",
-          "summary": "Mailchimp subscriber_hash path identifier.",
-          "maps_to": "path.subscriber_hash",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reports sent-to get --json"
@@ -7225,22 +6438,7 @@
           "path": "/reports/{campaign_id}/unsubscribed/{subscriber_hash}"
         }
       ],
-      "flags": [
-        {
-          "name": "campaign-id",
-          "type": "string",
-          "summary": "Mailchimp campaign_id path identifier.",
-          "maps_to": "path.campaign_id",
-          "allow_empty": false
-        },
-        {
-          "name": "subscriber-hash",
-          "type": "string",
-          "summary": "Mailchimp subscriber_hash path identifier.",
-          "maps_to": "path.subscriber_hash",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp reports unsubscribed get --json"
@@ -7258,15 +6456,7 @@
           "path": "/search-campaigns"
         }
       ],
-      "flags": [
-        {
-          "name": "query",
-          "type": "string",
-          "summary": "Search query text.",
-          "maps_to": "query.query",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp search-campaigns get --json"
@@ -7284,15 +6474,7 @@
           "path": "/search-members"
         }
       ],
-      "flags": [
-        {
-          "name": "query",
-          "type": "string",
-          "summary": "Search query text.",
-          "maps_to": "query.query",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp search-members get --json"
@@ -7372,15 +6554,7 @@
           "path": "/sms-campaigns/{sms_campaign_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "sms-campaign-id",
-          "type": "string",
-          "summary": "Mailchimp sms_campaign_id path identifier.",
-          "maps_to": "path.sms_campaign_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp sms-campaigns get --json"
@@ -7506,15 +6680,7 @@
           "path": "/sms-campaigns/{sms_campaign_id}/content"
         }
       ],
-      "flags": [
-        {
-          "name": "sms-campaign-id",
-          "type": "string",
-          "summary": "Mailchimp sms_campaign_id path identifier.",
-          "maps_to": "path.sms_campaign_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp sms-campaigns content get --json"
@@ -7621,15 +6787,7 @@
           "path": "/template-folders/{folder_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "folder-id",
-          "type": "string",
-          "summary": "Mailchimp folder_id path identifier.",
-          "maps_to": "path.folder_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp template-folders get --json"
@@ -7736,15 +6894,7 @@
           "path": "/templates/{template_id}"
         }
       ],
-      "flags": [
-        {
-          "name": "template-id",
-          "type": "string",
-          "summary": "Mailchimp template_id path identifier.",
-          "maps_to": "path.template_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp templates get --json"
@@ -7789,15 +6939,7 @@
           "path": "/templates/{template_id}/default-content"
         }
       ],
-      "flags": [
-        {
-          "name": "template-id",
-          "type": "string",
-          "summary": "Mailchimp template_id path identifier.",
-          "maps_to": "path.template_id",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp templates default-content get --json"
@@ -7877,15 +7019,7 @@
           "path": "/verified-domains/{domain_name}"
         }
       ],
-      "flags": [
-        {
-          "name": "domain-name",
-          "type": "string",
-          "summary": "Mailchimp domain_name path identifier.",
-          "maps_to": "path.domain_name",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "output_policy": "json_redacted",
       "examples": [
         "pm mailchimp verified-domains get --json"

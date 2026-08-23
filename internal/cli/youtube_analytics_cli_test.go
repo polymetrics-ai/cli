@@ -161,6 +161,22 @@ func TestYouTubeAnalyticsReportsDownloadRunsThroughBoundedBinaryExecutor(t *test
 	if tokenRequests.Load() != 2 || downloadRequests.Load() != 2 {
 		t.Fatalf("provider requests after bounded rejection: token=%d download=%d, want 2 each", tokenRequests.Load(), downloadRequests.Load())
 	}
+	var oversizedPathOut, oversizedPathErr bytes.Buffer
+	code = cli.Run([]string{
+		"youtube-analytics", "reports", "download",
+		"--credential", "youtube-fixture",
+		"--resource-name", strings.Repeat("a", 4097),
+		"--dest-root", destination,
+		"--file-name", "oversized-path.csv",
+		"--root", root,
+		"--json",
+	}, &oversizedPathOut, &oversizedPathErr)
+	if code == 0 || !strings.Contains(oversizedPathOut.String()+oversizedPathErr.String(), "exceeds") {
+		t.Fatalf("oversized path code=%d stdout=%s stderr=%s", code, oversizedPathOut.String(), oversizedPathErr.String())
+	}
+	if got := downloadRequests.Load(); got != 2 {
+		t.Fatalf("oversized path reached provider %d times, want exactly two earlier download requests", got)
+	}
 	for _, secret := range []string{"fixture-client-id", "fixture-refresh-token", "fixture-access-token"} {
 		if strings.Contains(stdout+stderr+boundedOut.String()+boundedErr.String(), secret) {
 			t.Fatalf("CLI output leaked synthetic secret %q", secret)

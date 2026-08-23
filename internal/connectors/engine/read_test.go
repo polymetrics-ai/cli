@@ -174,6 +174,29 @@ func TestReadRequestQueryTemplateMissingFailsBeforeRequest(t *testing.T) {
 	}
 }
 
+// TestReadRequestOptionalQueryTemplateMissingOmitsBeforeRequest keeps an
+// optional, declaration-owned selector optional for ordinary source reads.
+// Read-back supplies the same declared selector explicitly; callers cannot add
+// an undeclared parameter through this exception.
+func TestReadRequestOptionalQueryTemplateMissingOmitsBeforeRequest(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Query: map[string]QueryParam{
+		"receipt": {Template: "{{ query.receipt }}", OmitWhenAbsent: true},
+	}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if _, found := gotQuery["receipt"]; found {
+		t.Fatalf("optional receipt query = %q, want omitted", gotQuery.Get("receipt"))
+	}
+}
+
 // --- GraphQL request body support ---
 
 func TestReadGraphQLBodySendsFixedDocumentAndVariables(t *testing.T) {

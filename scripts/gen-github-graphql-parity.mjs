@@ -27,8 +27,17 @@ const MAX_GRAPHQL_BYTES = 1024 * 1024;
 const OBSOLETE_GRAPHQL_OPERATION_IDS = new Set(["github.issue.delete"]);
 const MAX_GRAPHQL_ARRAY_ITEMS = 100;
 const MAX_INPUT_DEPTH = 8;
+const MAX_MUTATION_OUTPUT_DEPTH = 3;
+const MAX_MUTATION_OUTPUT_FIELDS = 64;
 const BUILTIN_SCALARS = new Set(["Boolean", "Float", "ID", "Int", "String"]);
 const SENSITIVE_NAME = /(?:secret|token|password|private(?:_|-)?key|encrypted(?:_|-)?value|credential|access(?:_|-)?key)/iu;
+const NON_SECRET_SENSITIVE_NAME = /(?:token|secret)count$/iu;
+const IDENTITY_OUTPUT_FIELD_ORDER = ["id", "databaseId", "fullDatabaseId", "number", "url", "resourcePath", "clientMutationId"];
+
+function isSourceSecretName(name) {
+  const value = String(name || "");
+  return SENSITIVE_NAME.test(value) && !NON_SECRET_SENSITIVE_NAME.test(value);
+}
 
 // These reviewed verb families receive the ordinary plan/preview/approval
 // write lifecycle without a destructive typed acknowledgement. Every other
@@ -90,6 +99,10 @@ function sorted(values) {
 
 function unique(values) {
   return [...new Set(values)];
+}
+
+function uniqueSorted(values) {
+  return sorted(unique(values));
 }
 
 function kebabCase(value) {
@@ -158,7 +171,10 @@ function scalarSchema(name) {
     case "Boolean":
       return { type: "boolean" };
     case "Int":
-      return { type: "integer" };
+      // GraphQL Int is a signed 32-bit integer, even on a 64-bit Go host.
+      // The same exact range is projected into the command flag and checked
+      // again by the closed engine schema before any operation reaches I/O.
+      return { type: "integer", minimum: -2147483648, maximum: 2147483647 };
     case "Float":
       return { type: "number" };
     default:
@@ -207,41 +223,144 @@ function rootVariablesSchema(field, indexes, { paginated = false } = {}) {
   const argumentsByName = new Map(sourceArguments.map((argument) => [argument.name, argument]));
   for (const argument of sourceArguments) {
     const name = requireString(argument?.name, "GraphQL root argument name");
-    // Cursor navigation is exposed only through --page-cursor. A backwards
-    // cursor/last window would be a second opaque pagination channel.
-    if (paginated && (name === "before" || name === "last")) continue;
     properties[name] = inputSchema(argument.type, indexes);
-    if (argument.type?.non_null === true || (paginated && name === "first")) required.push(name);
+    if (argument.type?.non_null === true) required.push(name);
   }
   if (paginated) {
     const after = argumentsByName.get("after");
     const first = argumentsByName.get("first");
-    if (!after || !first) throw new Error("GraphQL connection root " + field.name + " must declare after and first");
+    const before = argumentsByName.get("before");
+    const last = argumentsByName.get("last");
+    if (!after || !first || !before || !last) throw new Error("GraphQL connection root " + field.name + " must declare forward and backward pagination arguments");
     if (!properties.after) properties.after = inputSchema(after.type, indexes);
     if (!properties.first) properties.first = inputSchema(first.type, indexes);
-    if (!required.includes("first")) required.push("first");
+    if (!properties.before) properties.before = inputSchema(before.type, indexes);
+    if (!properties.last) properties.last = inputSchema(last.type, indexes);
   }
   const schema = { type: "object", additionalProperties: false, properties };
   if (required.length > 0) schema.required = sorted(required);
   return schema;
 }
 
+function scalarLeafSelection(typeName, indexes) {
+  const object = indexes.objects.get(typeName);
+  if (!object) return [];
+  return requireArray(object.fields || [], "GraphQL object " + typeName + " fields")
+    .filter((field) => requireArray(field.arguments || [], "GraphQL field arguments").length === 0)
+	.filter((field) => !isSourceSecretName(field.name))
+    .filter((field) => {
+      const name = namedType(field.type);
+      return BUILTIN_SCALARS.has(name) || indexes.scalars.has(name) || indexes.enums.has(name);
+    })
+    .map((field) => requireString(field.name, "GraphQL output field name"));
+}
+
+function concreteTypeSelection(typeName, indexes) {
+  const leaves = scalarLeafSelection(typeName, indexes);
+  return leaves.length > 0 ? uniqueSorted(["__typename", ...leaves]).join(" ") : "__typename";
+}
+
+function abstractTypeSelection(typeName, indexes) {
+  const abstract = indexes.interfaces.get(typeName) || indexes.unions.get(typeName);
+  if (!abstract) return "";
+  const fragments = sorted(requireArray(abstract.possible_types || [], "GraphQL abstract possible_types"))
+    .map((concrete) => "... on " + concrete + " { " + concreteTypeSelection(concrete, indexes) + " }");
+  return ["__typename", ...fragments].join(" ");
+}
+
+function outputFieldOrder(left, right) {
+	const leftIndex = IDENTITY_OUTPUT_FIELD_ORDER.indexOf(left);
+	const rightIndex = IDENTITY_OUTPUT_FIELD_ORDER.indexOf(right);
+	if (leftIndex >= 0 || rightIndex >= 0) {
+		if (leftIndex < 0) return 1;
+		if (rightIndex < 0) return -1;
+		return leftIndex - rightIndex;
+	}
+	return String(left).localeCompare(String(right));
+}
+
+function isScalarOutputField(field, indexes) {
+	const name = namedType(field.type);
+	return BUILTIN_SCALARS.has(name) || indexes.scalars.has(name) || indexes.enums.has(name);
+}
+
+// Mutation payloads are source-derived acknowledgements, not caller-selected
+// documents. Select bounded nested identity/status information so callers can
+// persist a provider result, while keeping selection depth and total field
+// count finite and excluding source-classified secret outputs.
+function boundedMutationObjectSelection(typeName, indexes, budget, ancestry = [], depth = 0) {
+	const object = indexes.objects.get(typeName);
+	if (!object) return "";
+	if (depth > MAX_MUTATION_OUTPUT_DEPTH || ancestry.includes(typeName) || budget.remaining <= 0) return "__typename";
+	const fields = requireArray(object.fields || [], "GraphQL object " + typeName + " fields")
+		.filter((field) => requireArray(field.arguments || [], "GraphQL field arguments").length === 0)
+		.filter((field) => !isSourceSecretName(field.name));
+	const scalar = fields
+		.filter((field) => isScalarOutputField(field, indexes))
+		.map((field) => requireString(field.name, "GraphQL output field name"))
+		.sort(outputFieldOrder);
+	const selected = ["__typename"];
+	for (const name of scalar) {
+		if (budget.remaining <= 0) break;
+		selected.push(name);
+		budget.remaining--;
+	}
+	if (depth === MAX_MUTATION_OUTPUT_DEPTH || budget.remaining <= 0) return selected.join(" ");
+	const nested = fields
+		.filter((field) => !isScalarOutputField(field, indexes))
+		.sort((left, right) => outputFieldOrder(String(left.name), String(right.name)));
+	for (const field of nested) {
+		if (budget.remaining <= 0) break;
+		// The parent field is part of the declared selection too; reserve its
+		// one slot before recursing so descendants cannot exceed the ceiling.
+		budget.remaining--;
+		const nestedName = namedType(field.type);
+		let child = boundedMutationObjectSelection(nestedName, indexes, budget, [...ancestry, typeName], depth + 1);
+		if (child === "") {
+			child = boundedMutationAbstractSelection(nestedName, indexes, budget, [...ancestry, typeName], depth + 1);
+		}
+		if (child === "") {
+			budget.remaining++;
+			continue;
+		}
+		selected.push(requireString(field.name, "GraphQL output field name") + " { " + child + " }");
+	}
+	return selected.join(" ");
+}
+
+function boundedMutationAbstractSelection(typeName, indexes, budget, ancestry, depth) {
+	const abstract = indexes.interfaces.get(typeName) || indexes.unions.get(typeName);
+	if (!abstract || depth > MAX_MUTATION_OUTPUT_DEPTH || budget.remaining <= 0) return "";
+	const fragments = [];
+	for (const concrete of sorted(requireArray(abstract.possible_types || [], "GraphQL abstract possible_types"))) {
+		if (budget.remaining <= 0) break;
+		const child = boundedMutationObjectSelection(concrete, indexes, budget, ancestry, depth);
+		if (child !== "") fragments.push("... on " + concrete + " { " + child + " }");
+	}
+	return fragments.length > 0 ? ["__typename", ...fragments].join(" ") : "";
+}
+
+function boundedMutationSelection(typeName, indexes) {
+	const budget = { remaining: MAX_MUTATION_OUTPUT_FIELDS };
+	return boundedMutationObjectSelection(typeName, indexes, budget) || boundedMutationAbstractSelection(typeName, indexes, budget, [], 0);
+}
+
 function outputSelection(field, indexes, { paginated = false } = {}) {
   if (field.root === "Query" && field.name === "rateLimit") return "limit cost remaining resetAt";
-  if (field.root === "Query" && field.name === "node") {
-    const node = requireObject(indexes.interfaces.get("Node"), "GraphQL Node interface");
-    const projections = sorted(requireArray(node.possible_types, "GraphQL Node possible types"))
-      .map((type) => {
-        if (type === "Issue") return "... on Issue { id number title isPinned }";
-        if (type === "PullRequest") return "... on PullRequest { id number title isDraft }";
-        if (type === "Repository") return "... on Repository { id databaseId nameWithOwner }";
-        return "... on " + type + " { __typename }";
-      });
-    return "__typename " + projections.join(" ");
-  }
-  if (paginated) return "__typename nodes { __typename } pageInfo { hasNextPage endCursor }";
   const name = namedType(field.return_type);
-  if (indexes.objects.has(name) || indexes.interfaces.has(name) || indexes.unions.has(name)) return "__typename";
+  if (field.root === "Mutation") return boundedMutationSelection(name, indexes);
+  const abstractSelection = abstractTypeSelection(name, indexes);
+  if (abstractSelection !== "") return abstractSelection;
+  if (paginated) {
+    const connection = requireObject(indexes.objects.get(name), "GraphQL connection " + name);
+    const fields = new Map(requireArray(connection.fields || [], "GraphQL connection fields").map((entry) => [entry.name, entry]));
+    const nodes = requireObject(fields.get("nodes"), "GraphQL connection nodes field");
+    const nodeType = namedType(nodes.type);
+    const nodeSelection = abstractTypeSelection(nodeType, indexes) || concreteTypeSelection(nodeType, indexes);
+    const connectionScalars = scalarLeafSelection(name, indexes).filter((fieldName) => fieldName !== "pageInfo");
+    return uniqueSorted(["__typename", ...connectionScalars]).join(" ") + " nodes { " + nodeSelection + " } pageInfo { hasNextPage hasPreviousPage startCursor endCursor }";
+  }
+  if (indexes.objects.has(name)) return concreteTypeSelection(name, indexes);
   return "";
 }
 
@@ -256,8 +375,7 @@ function isConnectionRoot(field, indexes) {
 }
 
 function documentFor(field, indexes, { paginated }) {
-  const rootArguments = requireArray(field.arguments, "GraphQL root " + field.name + " arguments")
-    .filter((argument) => !paginated || (argument.name !== "before" && argument.name !== "last"));
+  const rootArguments = requireArray(field.arguments, "GraphQL root " + field.name + " arguments");
   const declarations = rootArguments.map((argument) => "$" + argument.name + ": " + variableType(argument.type));
   const invocation = rootArguments.length === 0
     ? field.name
@@ -287,15 +405,18 @@ function containsSensitiveInput(ref, indexes, seen = new Set()) {
 	// names instead, so generated tokens retain their ordinary destructive
 	// write contract while access-token-bearing inputs get the env-only path.
 	if (!input || seen.has(name)) return false;
-	seen.add(name);
 	return requireArray(input.fields || [], "GraphQL input object fields").some((field) =>
-		SENSITIVE_NAME.test(String(field.name || "")) || containsSensitiveInput(field.type, indexes, seen),
+		isSourceSecretName(field.name) || containsSensitiveInput(field.type, indexes, new Set([...seen, name])),
 	);
 }
 
+function sourceSensitiveArguments(field, indexes) {
+	return requireArray(field.arguments, "GraphQL root arguments")
+		.filter((argument) => isSourceSecretName(argument.name) || containsSensitiveInput(argument.type, indexes));
+}
+
 function mutationPolicy(field, indexes) {
-	const sensitiveArguments = requireArray(field.arguments, "GraphQL mutation arguments")
-		.filter((argument) => containsSensitiveInput(argument.type, indexes));
+	const sensitiveArguments = sourceSensitiveArguments(field, indexes);
 	if (sensitiveArguments.length > 0) {
 		return {
 			availability: "implemented",
@@ -336,12 +457,12 @@ function mutationPolicy(field, indexes) {
 
 function commandFlagForArgument(argument, indexes, { paginated = false } = {}) {
   const name = requireString(argument?.name, "GraphQL root argument name");
-  if (paginated && (name === "after" || name === "before" || name === "last")) return undefined;
+  if (paginated && (name === "after" || name === "before")) return undefined;
   const base = { name: kebabCase(name), maps_to: "body." + name };
   const type = requireObject(argument.type, "GraphQL root argument type");
   const named = namedType(type);
   if (type.kind === "list" || indexes.inputObjects.has(named)) {
-    return { ...base, type: "json", ...(type.non_null === true || (paginated && name === "first") ? { required: true } : {}) };
+    return { ...base, type: "json", ...(type.non_null === true ? { required: true } : {}) };
   }
   const enumEntry = indexes.enums.get(named);
   if (enumEntry) {
@@ -349,14 +470,14 @@ function commandFlagForArgument(argument, indexes, { paginated = false } = {}) {
       ...base,
       type: "enum",
       values: sorted(requireArray(enumEntry.values, "GraphQL enum values")),
-      ...(type.non_null === true || (paginated && name === "first") ? { required: true } : {}),
+      ...(type.non_null === true ? { required: true } : {}),
     };
   }
-  let flagType = "string";
-  if (named === "Boolean") flagType = "boolean";
-  if (named === "Int") flagType = "integer";
-  if (named === "Float") flagType = "number";
-  return { ...base, type: flagType, ...(type.non_null === true || (paginated && name === "first") ? { required: true } : {}) };
+	let flagType = "string";
+	if (named === "Boolean") flagType = "boolean";
+	if (named === "Int") return { ...base, type: "integer", minimum: -2147483648, maximum: 2147483647, ...(type.non_null === true ? { required: true } : {}) };
+	if (named === "Float") flagType = "number";
+  return { ...base, type: flagType, ...(type.non_null === true ? { required: true } : {}) };
 }
 
 function generatedOperation(field, indexes) {
@@ -379,11 +500,13 @@ function generatedOperation(field, indexes) {
       variables_schema: rootVariablesSchema(field, indexes, { paginated }),
     },
   };
-  if (paginated) {
+	if (paginated) {
     operation.graphql.pagination = {
       connection_path: field.name,
       cursor_variable: "after",
       page_size_variable: "first",
+      backward_cursor_variable: "before",
+      backward_page_size_variable: "last",
       max_page_size: MAX_GRAPHQL_ARRAY_ITEMS,
     };
   }
@@ -401,13 +524,28 @@ function generatedOperation(field, indexes) {
 		}
 		if (policy.destructive) operation.destructive = true;
 	}
+	if (isQuery) {
+		const sensitiveArguments = sourceSensitiveArguments(field, indexes);
+		if (sensitiveArguments.length > 0) {
+			operation.sensitive_policy = {
+				input_mode: "env",
+				redact_fields: sensitiveArguments.map((argument) => "body." + argument.name),
+				transform: "none",
+			};
+		}
+	}
   return operation;
 }
 
 function generatedCommand(field, indexes, operation) {
   const isQuery = field.root === "Query";
   const paginated = isConnectionRoot(field, indexes);
-  const policy = isQuery ? { availability: "implemented" } : mutationPolicy(field, indexes);
+	const querySensitiveArguments = isQuery
+		? sourceSensitiveArguments(field, indexes).map((argument) => requireString(argument.name, "GraphQL sensitive argument name"))
+		: [];
+	const policy = isQuery
+		? { availability: "implemented", sensitiveArguments: querySensitiveArguments, secretSensitive: querySensitiveArguments.length > 0 }
+		: mutationPolicy(field, indexes);
 	const flags = requireArray(field.arguments, "GraphQL root arguments")
 		.map((argument) => {
 			const flag = commandFlagForArgument(argument, indexes, { paginated });
@@ -425,7 +563,14 @@ function generatedCommand(field, indexes, operation) {
     flags,
     api_surface: [{ ...GRAPHQL_TRANSPORT }],
     output_policy: "json_redacted",
-  };
+	};
+	if (paginated) {
+		command.constraints = [{
+			kind: "exactly_one",
+			fields: ["body.first", "body.last"],
+			message: "exactly one GraphQL pagination direction must be provided",
+		}];
+	}
   if (!isQuery) {
     command.risk = mutationPolicy(field, indexes).risk;
     command.approval = mutationPolicy(field, indexes).approval;
@@ -630,9 +775,13 @@ export function mergeGitHubGraphQLParityArtifacts(bundle, generated) {
   const transport = {
     ...generated.transport,
     covered_by: {
-      operations: [...new Set([...supplementalTransportOperations, ...generated.transport.covered_by.operations])],
+      operations: uniqueSorted([...supplementalTransportOperations, ...generated.transport.covered_by.operations]),
     },
   };
+  const by = (key) => (left, right) => String(key(left)).localeCompare(String(key(right)));
+  const operationOrder = by((operation) => operation?.id || "");
+  const commandOrder = by((command) => `${command?.path || ""}\u0000${command?.operation || command?.write || ""}`);
+  const endpointOrder = by((endpoint) => `${String(endpoint?.method || "").toUpperCase()}\u0000${endpoint?.path || ""}\u0000${JSON.stringify(endpoint?.covered_by || {})}`);
   return {
     operations: {
       ...operations,
@@ -641,10 +790,16 @@ export function mergeGitHubGraphQLParityArtifacts(bundle, generated) {
           (operation) => !generatedOperation(operation) && !OBSOLETE_GRAPHQL_OPERATION_IDS.has(operation?.id),
         ),
         ...generated.operations,
-      ],
+      ].sort(operationOrder),
     },
-    cli: { ...cli, commands: [...requireArray(cli.commands, "GitHub CLI commands").filter((command) => !generatedCommand(command)), ...generated.commands] },
-    surface: { ...surface, endpoints: [...requireArray(surface.endpoints, "GitHub API endpoints").filter((endpoint) => !generatedTransport(endpoint)), transport] },
+    cli: {
+      ...cli,
+      commands: [...requireArray(cli.commands, "GitHub CLI commands").filter((command) => !generatedCommand(command)), ...generated.commands].sort(commandOrder),
+    },
+    surface: {
+      ...surface,
+      endpoints: [...requireArray(surface.endpoints, "GitHub API endpoints").filter((endpoint) => !generatedTransport(endpoint)), transport].sort(endpointOrder),
+    },
   };
 }
 

@@ -1,0 +1,17 @@
+openapi: 3.0.3
+info:
+  title: first document
+  version: "1"
+paths:
+  /items:
+    get:
+      operationId: first
+      responses:
+        "200":
+          description: first
+---
+openapi: 3.0.3
+info:
+  title: second document
+  version: "1"
+paths: {}

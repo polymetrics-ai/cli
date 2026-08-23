@@ -361,8 +361,8 @@ not a full override by default.
   `internal/connectors/direct_read_page_flags.json` and answered from the connector's own declared
   pagination spec, so no bundle declares them (see AGENTS.md, "Direct Reads Return One Page, And
   Say So"). The command fields that are derivable from `operations.json` — `api_surface`, flag
-  `maps_to`, requiredness for a mapped required REST path parameter, `output_policy`, and
-  `rest.max_bytes` — are not hand-authored:
+  `maps_to`, requiredness for mapped required path or header parameters, repeatability for
+  mapped repeatable headers, `output_policy`, and `rest.max_bytes` — are not hand-authored:
   `go run ./cmd/connectorgen surface-sync` fills them and `--check` fails on drift (see AGENTS.md,
   "Command Surface Must Stay Executable"). The same command generates the embedded
   `operation_endpoint_ledger.json` runtime projection from `api_surface.json` and
@@ -370,6 +370,60 @@ not a full override by default.
   so preflight fails closed if a shipped bundle has no matching projection entry. The shared-code boundary guard
   (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside connector
   defs/hooks/native escape hatches.
+- **Structured REST JSON direct writes are a closed operation adoption**: this foundation does not
+  make an endpoint executable by itself. A connector lane may bind a provider-sourced
+  `kind:"rest_write"` operation only when its `rest` declaration fixes the method,
+  connector-relative path, JSON (or SCIM JSON) content type, positive `max_bytes`, and a
+  `body_schema`. The root and every nested object must declare
+  `"additionalProperties": false`; every array must declare `maxItems` and an item schema. A
+  structural node may omit `type` only when its shape is unambiguous: `properties` or
+  `additionalProperties` normalizes it to `object`, while `items` or `prefixItems` normalizes it to
+  `array`. An untyped node with both object and array structure, or a structural declaration that
+  conflicts with its explicit type, is a foundation gap and is rejected before I/O. `prefixItems`
+  must cover every allowed position or pair with `items` to constrain the remaining positions. The
+  engine additionally refuses a schema deeper than 16 levels, with more than 256 object fields, or
+  more than 1024 allowed collection items, and enforces aggregate node and byte limits before it
+  copies or serializes caller values. Each `type:"json"` flag may target one declared object or
+  array node at `maps_to:"body.<schema-path>"`, including a nested node. The schema-path is resolved
+  against the operation schema rather than split as an open dotted key: object segments match
+  declared provider property names, array segments are declared numeric item positions, and the
+  schema determines whether a numeric-looking segment is an object property or array index. Keep
+  scalar fields as their normal typed flags; raw `body`, method, path, content-type, action,
+  connector, or header inputs are not legal command targets. Mark a structured field required when
+  it supplies a required schema branch. `connectorgen validate`, runtime preflight, and the shared engine
+  materializer verify the same declaration before I/O, and preview/approval binds the resulting
+  canonical payload and declaration-owned headers. Header values are represented by a canonical
+  hash rather than rendered in previews or errors, then dispatched without re-resolution after
+  approval. This is also the canonical materializer used by typed-action/reverse-ETL
+  execution; do not add a second request builder. A `path.<name>` mapping must match an exact
+  `{name}` route placeholder, while every scalar or nested `body.<path>` mapping must resolve
+  through declared object properties or array item schemas (including any declared bounds); a caller cannot introduce an
+  open scalar/object branch or replace route metadata. Each adoption must still run `surface-sync`, add
+  provider-source evidence, update its generated help/manual/website surfaces, and prove its own
+  exact request and rejected-input cases. A direct-write `query.<name>` binding must match one
+  exact source-imported `rest.parameters` query row; a provider-fixed `rest.query` value cannot be
+  caller-bound or overridden, and each source-required query parameter must be fixed or mapped to
+  a required command flag.
+- **Write-query optionality is source-locked too**: a legacy `writes.json` action may use the
+  existing object-form `query` entry with `"template":"{{ record.field }}"` and
+  `"omit_when_absent": true` to omit that one parameter when the record does not contain the
+  field. This is the only write-side record-absence exception. A plain-string entry, a missing
+  required record field, an undeclared query key, a wrong source (for example `query.*` in place of
+  `record.*`), malformed interpolation, and an explicit invalid value still fail before I/O.
+  Config, secret, and incremental references retain their established object-form omission/default
+  behavior; they do not satisfy a missing `record.*` reference. Every template expression is
+  validated before the record-absence decision, so an absent record value cannot hide a later invalid
+  or wrong-source reference. Write-query templates use a deterministic delimiter parser: nested,
+  stray, or unbalanced delimiters, empty expressions, and empty filter stages are rejected before
+  resolution. `record.*` may use a dotted record path; every other permitted namespace uses its exact
+  declaration-owned reference shape, and `query.*`, `cursor`, and `fanout.*` are not valid write
+  sources. The validated token stream is also the rendered value, so no accepted delimiter or
+  multiline form can be sent literally; identifiers and resolved/default values reject controls,
+  bidi characters, and other unsafe transport bytes. Filter errors from a `secrets.*` reference
+  identify the reference and filter but never its resolved value. The caller cannot provide free-form
+  query values: an explicit record value is sent only through its exact declared query entry. Do not
+  use this rule for operation direct writes or as a generic query escape hatch. A direct-write
+  `query.<name>` flag may occur once; aliases count as the same source-declared query input.
 - **`api_surface` operation rows are reconciled, never hand-edited**: use
   `go run ./cmd/connectorgen surface-reconcile --check` to derive the current
   result for direct-read operation rows. The tool loads the disk bundle and
@@ -402,12 +456,20 @@ not a full override by default.
   `internal/connectors/binary_download_flags.json` by runtime help, the generated `MANUAL.md`/
   `SKILL.md`, and the website generator, so one declaration keeps all three documenting the same
   flag surface. `--max-bytes` may only lower the operation's declared `binary.max_bytes`, never
-  raise it.
+  raise it. An executable binary operation must declare non-empty `binary.content_types` (exact
+  media types or bounded media ranges) and `binary.response.success_statuses` (exact 2xx statuses
+  or inclusive 2xx ranges). A redirect is disabled unless `binary.redirect` declares its hop bound
+  plus same-origin permission and/or exact cross-origin hosts.
 - **Operation-only capability contracts stay typed and bounded**: use `rest_status` with
   `intent:"status_check"`, a single HEAD endpoint, and `output_policy:"status"` for a
-  response-less status probe; it cannot be declared as `direct_read`. Use `text_export` only
-  for a declared `binary.accept:"text/csv"` GET with positive `binary.max_bytes`; it writes the
-  same explicit destination manifest as a binary download and never streams text to stdout. A
+  response-less status probe; it cannot be declared as `direct_read`, its `rest.max_bytes` must
+  be between 1 and 1024, and its `rest.response` must declare accepted successful statuses. Use
+  `text_export` only for a declared
+  `binary.accept:"text/csv"` GET with positive `binary.max_bytes`, a non-empty CSV-compatible
+  `binary.content_types` declaration, exact `binary.charset`, declared success statuses, and
+  operation `output_policy:"file_manifest"`; its command leaves `output_policy` unset because it
+  writes the same explicit destination manifest as a binary download and never streams text to
+  stdout. A
   `rest_read.rest.pagination` may override connector-level pagination for one endpoint; its
   `pagination_parameters` are source-imported evidence only, not command flags, and every
   declared query mechanic must match them. For a secret-returning `rest_write`, declare the
@@ -434,8 +496,10 @@ not a full override by default.
 
 ## 2.9 Command parameters and paging are DERIVED — never hand-author them
 
-Two parts of a `direct_read` command's surface are generated from declarations
-you already own. Hand-writing either one is a bug, not a shortcut.
+Paging and operation parameters are generated from declarations you already
+own. Paging applies only to `direct_read`; the parameter-import contract applies
+to registered REST and binary operation kinds. Hand-writing derived surface is a
+bug, not a shortcut.
 
 ### Paging
 
@@ -466,13 +530,60 @@ go run ./cmd/connectorgen params-import <connector> --artifact <spec.json>
 go run ./cmd/connectorgen surface-sync internal/connectors/defs
 ```
 
-`params-import` writes the accepted parameter set into `operations.json` under
-`rest.parameters` (name, location, type, requiredness, enum values, summary). When an operation
-declares `rest.pagination`, it additionally writes the pager's source-only query set under
-`rest.pagination_parameters`; these values remain excluded from generated flags.
+`params-import` writes the accepted parameter set into `operations.json` under the registered
+operation block's `parameters` field (`rest.parameters` or `binary.parameters`; name, location,
+type, requiredness, enum values, summary). When an operation declares `rest.pagination`, it
+additionally writes the pager's source-only query set under `rest.pagination_parameters`; these
+values remain excluded from generated flags.
 `surface-sync` then derives the command flags from it. The split exists so CI
 stays hermetic: `surface-sync --check` verifies drift with no artifact and no
 network.
+
+### Declaration-owned request headers and response metadata
+
+A fixed REST or binary operation may declare a non-auth request parameter with
+`"in":"header"`. It must use its provider's exact field name, a bounded
+string `schema`, and a positive `max_bytes` no greater than the shared 16 KiB
+ceiling. The declaration, not the command, owns the header name. `params-import`
+accepts only OpenAPI string headers it can bound; `surface-sync` derives a
+string/enum flag with a `header-` prefix (lowercasing the declared name and
+changing `_` to `-` for the CLI spelling) while retaining the exact declared
+name in `maps_to:"header.<provider-name>"`. Generated command help therefore
+lists only the operation's declared header flags; authors must not add a header
+map, a generic `--header`, or a hand-authored mapping.
+
+Request headers are a separate namespace from path, query, and body fields. They are single-value
+by default; an exact `repeatable:true` header declaration validates and sends every supplied value
+in order.
+The engine validates requiredness, enum/pattern/length and byte bounds before
+credential setup or I/O. It refuses unknown names, duplicate case variants,
+CR/LF/control characters, cross-operation mappings, and every runtime-owned
+field, including authorization, proxy authorization, cookies (including
+`Set-Cookie`), host/routing, content metadata, connection/proxy, forwarding,
+transport metadata, and credential/API-key/token aliases, as well as every case
+or underscore normalization variant. An operation may never declare a
+runtime-owned field to make it caller-selectable.
+
+An operation may also declare only the response headers it needs to expose:
+
+```json
+"response": {
+  "success_statuses": ["200", "202-204"],
+  "headers": [
+    { "name": "X-Request-ID", "max_bytes": 128 },
+    { "name": "ETag", "max_bytes": 256 }
+  ]
+}
+```
+
+The result retains every ordinary provider body field, status, and declared
+response-header value within the operation's existing body/media/schema bounds;
+it does not filter a value for scope, rarity, pricing tier, destructive effect,
+or unfamiliarity. Undeclared headers are not an output channel. Established
+credential/transport-secret header masking remains mandatory: a present masked
+header is returned as `{"redacted":true}` rather than silently disappearing.
+If a declared response header exceeds its cap, execution fails rather than
+truncating or leaking an unbounded value.
 
 The import deliberately drops two classes of parameter:
 
@@ -495,9 +606,10 @@ The import deliberately drops two classes of parameter:
 
 A flag the derivation cannot know about, and a better summary or narrower type
 than the specification carries. `surface-sync` adds missing derived flags and
-synchronizes only the operation-owned fields it can prove: `maps_to` and
-requiredness for a flag mapped to a required REST path parameter. A declared
-summary, type, and supported optional query/body behavior remain author-owned.
+synchronizes only the operation-owned fields it can prove: `maps_to`, requiredness
+for a flag mapped to a required path or header parameter, and repeatability
+for a mapped header. A declared summary, type, and supported optional query/body
+behavior remain author-owned.
 
 ### Verifying
 
@@ -507,8 +619,8 @@ go run ./cmd/connectorgen surface-sync --check internal/connectors/defs
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
-`validate` rejects a malformed `rest.parameters` entry at build time — an `in`
-outside `query|path` fails with the exact JSON pointer — so a declaration that
+`validate` rejects a malformed operation `parameters` entry at build time — an `in`
+outside `query|path|header` fails with the exact JSON pointer — so a declaration that
 could not produce a valid command never reaches the runtime.
 
 ## 3. The engine dialect reference
@@ -1319,6 +1431,17 @@ per-record request error, or ctx cancellation), the loop stops immediately;
   {"status": 201, "body": {"number": 42}}` because `hooks/github/hooks.go`'s `createPullRequest`
   decodes the POST response's `number` field before issuing its follow-up requests; a fixture with
   no `response` block is unaffected, still gets `200 {}`).
+- **Multipart write fixtures carry declared payload assets, never inline bytes.** For every
+  `multipart.parts[].type: "file"` field present in a write fixture record, add the sanitized,
+  bounded test payload at `fixtures/writes/<action>.payloads/<declared-record-field>`. The fixture
+  record keeps the ordinary project-relative source path (for example `"media_file_path":
+  "fixture-media.bin"`); conformance stages the asset into that path in a private temporary
+  project, computes its SHA-256 through the action's declared file and aggregate byte caps, and
+  sends only that digest through the real preview → fixture-approval → execute path. The asset
+  bytes and source content never enter plans, grants, reports, or provider-facing fixture output.
+  A missing, oversized, unsafe, changed-after-preview, or stale-digest asset is a hard conformance
+  failure before the replay server receives a request. This contract is provider-neutral: do not
+  add connector-specific fixture approval helpers or inline/base64 raw-byte escape hatches.
 - **No secret-looking values, ever.** `connectorgen validate`'s `secret_literal` rule and
   `conformance`'s `secret_redaction` check both regex-scan every fixture file (and `docs.md`) for
   Bearer-header shapes, `api_key`/`access_token`/`secret`/`password`-adjacent long tokens, and
@@ -1504,3 +1627,87 @@ wave-close after the path-guard (`git status --porcelain` limited to assigned di
    never inherit fixture conveniences. Fixture request values for templated config are the literal
    `"synthetic-conformance-value"`; page-1 fixtures are FULL pages when page_number/offset
    pagination is declared (token/cursor types stop on token absence instead).
+
+## §9 Source-lock declaration import
+
+Connector batches begin with the connector-owned
+`sources/<connector>-operation-source-lock.json`; never give the generator an
+alternate provider URL or a downloaded production artifact. Run:
+
+```sh
+go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-path>
+go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-path> --check
+```
+
+Version 1 and 2 locks pin one fixed public artifact URL. Version 3 locks retain
+that wire contract for existing locks but use `rest.retrieval`, a sorted aggregate
+`rest.openapi` array, and sorted `rest.source_documents`. Each v3 document owns a
+queryless immutable `artifact`, its exact operation inventory, and a
+`published_source` record identifying the provider document from which it was
+captured. The importer retrieves only each document's fixed artifact URL without
+credentials and verifies its exact locked byte count and SHA-256 before parsing.
+A mismatch is a **source-lock refresh** decision: do not infer a replacement
+schema or accept source drift. The generated descriptor preserves each
+operation's document ID, stable artifact, published URL, capture identity, and
+provider operation ID; a document-qualified locked `id` is the descriptor source
+identity even when the provider repeats an `operationId` in another document.
+
+A v3 `published_source.source_url` is a historical citation, not a retrieval
+endpoint. It may carry only a bounded, non-secret provider query (for example a
+fixed `slug`); it must not contain userinfo, fragments, controls, repeated keys,
+oversized values, or credential-like parameter names. Its `capture_url` and the
+imported `artifact.source_url` remain absolute public HTTPS URLs with no query,
+and only the artifact is fetched by `source-import`. This preserves provenance
+when a provider's rendered documentation URLs expire or rotate.
+
+The generated descriptor is an intermediate provider contract for later fixed
+declaration materializers, never an execution command or a generic HTTP escape
+hatch.
+
+A cold source fetch has a three-minute upper bound. After a successful fetch,
+the generator stores the public artifact in a content-addressed cache keyed by
+the locked SHA-256. `--cache-dir <existing-directory>` selects an explicit,
+non-symlink cache root for isolated qualification; it changes only where an
+already lock-verified public artifact is stored and cannot change the source
+URL, digest, byte count, or request authority. Every cache hit is still bounded
+and re-verifies its exact byte count and digest before parsing; missing, stale,
+corrupt, oversized, or digest-mismatched cache content is never used. It may be replaced only by a
+fresh response that passes the same immutable lock, so cache recovery cannot
+become an unverified fallback.
+
+The lock must pin an OpenAPI 3.0/3.1 or Swagger 2.0 source document; JSON and
+YAML are accepted only in those forms. Each operation descriptor retains the
+provider `operation_id`, including an empty value, alongside its deterministic
+`source_id`. The source ID falls back to the connector, lower-case method, and
+connector-relative path only when the provider ID is empty. Resolve only
+bounded, unambiguous in-artifact references: external, cyclic, unresolved, or
+ambiguous references, oversized schemas, and unbounded or dynamic request
+contracts fail before descriptor output.
+
+Descriptors preserve fixed method/path and separated typed input schemas, plus
+the complete provider-declared response status shapes and ordinary output
+fields. Output classification is additive; it does not erase fields because
+they are unusual, privileged, paid-tier, destructive, or sensitive-looking.
+Any later runtime masking must leave field presence explicit. Batches may then
+materialize only contracts their closed runtime supports, preserving existing
+credential and write-plan/preview/approval policies.
+
+Source import retains provider `servers` layers, parameter wire serialization,
+and `x-` path metadata as canonical `merge_blocked` evidence when later
+declaration generators cannot yet execute them. Dynamic reference vocabularies
+remain rejected, while every response status and media pair stays present so a
+binary success and a JSON error can be materialized without collapsing either
+contract.
+
+A callback-only or webhook-only route is not a promotable operation: fail
+closed before descriptor generation with an actionable diagnostic that names its
+source location and the
+`cli-webhook-event-surface-foundation-r1` foundation gap. Never silently drop
+such a route or represent it as merge-ready. Bounded callback metadata and
+subgraphs attached to an otherwise accepted ordinary operation may be retained
+canonically as non-executable `merge_blocked` evidence; that retention does not
+make the callback executable. `cli-webhook-event-surface-foundation-r1` owns the
+later executable callback/webhook surface, and an affected connector remains
+merge-blocked until that foundation closes the gap. This preserves the captain's
+final-release invariant: no declared provider operation is omitted or left
+unreachable.

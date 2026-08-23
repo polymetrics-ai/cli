@@ -53,7 +53,7 @@ func (h *Hooks) Authenticator(_ context.Context, cfg connectors.RuntimeConfig, _
 	if strings.TrimSpace(username) == "" && strings.TrimSpace(password) == "" {
 		return nil, fmt.Errorf("mixpanel: requires config username or secret username_secret, and secret password or api_secret")
 	}
-	return connsdk.Basic(username, password), nil
+	return connsdk.BasicWithRequirements(username, password, false, false), nil
 }
 
 // credentials mirrors legacy's mixpanelCredentials (mixpanel/mixpanel.go)

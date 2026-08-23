@@ -25,12 +25,17 @@ type AuthorizationStreamTable struct {
 // reference; credential/configuration values are represented only by their
 // derived revisions and digests.
 type AuthorizationScope struct {
-	SourceConnection               string                       `json:"source_connection"`
-	DestinationConnection          string                       `json:"destination_connection"`
-	DestinationCredentialRevision  string                       `json:"destination_credential_revision"`
-	StreamTables                   []AuthorizationStreamTable   `json:"stream_tables"`
-	FieldMappings                  map[string]string            `json:"field_mappings"`
-	WriteAction                    string                       `json:"write_action"`
+	SourceConnection              string                     `json:"source_connection"`
+	DestinationConnection         string                     `json:"destination_connection"`
+	DestinationCredentialRevision string                     `json:"destination_credential_revision"`
+	StreamTables                  []AuthorizationStreamTable `json:"stream_tables"`
+	FieldMappings                 map[string]string          `json:"field_mappings"`
+	WriteAction                   string                     `json:"write_action"`
+	// AllowedWriteActions is the closed action set admitted by one durable
+	// authorization. WriteAction remains the primary plan action for existing
+	// scopes; a tombstone-capable typed destination adds exactly its
+	// declaration-selected delete action here, never a caller-selected action.
+	AllowedWriteActions            []string                     `json:"allowed_write_actions,omitempty"`
 	DestinationConfigurationDigest string                       `json:"destination_configuration_digest"`
 	EnabledOperations              []string                     `json:"enabled_operations,omitempty"`
 	ConfirmationPolicy             connectors.WriteConfirmation `json:"confirmation_policy"`
@@ -70,6 +75,7 @@ func canonicalAuthorizationScope(scope AuthorizationScope) AuthorizationScope {
 		return left.DestinationTable < right.DestinationTable
 	})
 	sort.Strings(canonical.EnabledOperations)
+	sort.Strings(canonical.AllowedWriteActions)
 	return canonical
 }
 
@@ -78,6 +84,7 @@ func cloneAuthorizationScope(scope AuthorizationScope) AuthorizationScope {
 	clone.StreamTables = append([]AuthorizationStreamTable(nil), scope.StreamTables...)
 	clone.FieldMappings = cloneStringMap(scope.FieldMappings)
 	clone.EnabledOperations = append([]string(nil), scope.EnabledOperations...)
+	clone.AllowedWriteActions = append([]string(nil), scope.AllowedWriteActions...)
 	return clone
 }
 
@@ -125,6 +132,16 @@ func (a *App) AuthorizationScopeForReversePlan(ctx context.Context, planID strin
 			return AuthorizationScope{}, err
 		}
 		return a.issueLabelTransportAuthorizationScope(conn, mode, action, plan, prepared), nil
+	}
+	if plan.Mode == reversePlanModeDeclarativeTypedDestinationTransport {
+		prepared, err := a.prepareDeclarativeTypedDestinationTransport(ctx, plan.SourceConnection, plan.TransportStream)
+		if err != nil {
+			return AuthorizationScope{}, err
+		}
+		if err := a.validateDeclarativeTypedDestinationPlan(plan, prepared); err != nil {
+			return AuthorizationScope{}, err
+		}
+		return a.declarativeTypedDestinationAuthorizationScope(prepared, plan), nil
 	}
 	if plan.Mode == reversePlanModeConnectorCommand {
 		return AuthorizationScope{}, errors.New("connector command plans do not have a source-table authorization scope")
@@ -288,6 +305,8 @@ func authorizationScopeDifference(expected, actual AuthorizationScope) string {
 		return "field_mappings"
 	case expected.WriteAction != actual.WriteAction:
 		return "write_action"
+	case !sameStringSlice(expected.AllowedWriteActions, actual.AllowedWriteActions):
+		return "allowed_write_actions"
 	case !constantTimeStringEqual(expected.DestinationConfigurationDigest, actual.DestinationConfigurationDigest):
 		return "destination_configuration"
 	case !sameStringSlice(expected.EnabledOperations, actual.EnabledOperations):

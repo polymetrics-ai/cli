@@ -96,8 +96,14 @@
     {
       "method": "GET",
       "path": "/users/{userId}/messages/{messageId}/attachments/{id}",
-      "covered_by": {
-        "direct_read": "messages attachments download"
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Gmail returns a base64url JSON envelope rather than direct attachment bytes, so the raw binary executor does not expose this operation until a closed envelope decoder is declared.",
+        "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+        "notes": "Named dependency: an explicit, bounded Gmail attachment-envelope decoder."
       }
     },
     {

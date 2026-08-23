@@ -61,6 +61,11 @@ type WriteActionSpec struct {
 	// why this is a pointer rather than a bool.
 	Batchable *bool  `json:"batchable,omitempty"`
 	Confirm   string `json:"confirm,omitempty"`
+	// AllowsUnchanged is true only when the connector declaration admits a
+	// successful no-change terminal outcome for this exact action. It is
+	// intentionally distinct from the HTTP method: an arbitrary DELETE must
+	// not manufacture a complete reverse-ETL acknowledgement.
+	AllowsUnchanged bool `json:"allows_unchanged,omitempty"`
 }
 
 // ConfirmationForWriteAction normalizes manifest metadata into the closed

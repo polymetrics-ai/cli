@@ -2,12 +2,14 @@ package amazonsqs
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/xml"
 	"fmt"
 	"net/url"
 	"sort"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors"
 )
@@ -31,21 +33,53 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 	if err := applySQSDirectReadPageRequest(req, form); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	result := connectors.DirectReadResult{Connector: c.Name(), Operation: req.Operation, Method: "POST", Path: "SQS." + directReadAction(req.Operation), OutputSecretFields: append([]string(nil), req.RedactFields...)}
 	resp, err := c.doService(ctx, req.Config, form, maxBytes)
+	result.Receipt = sqsDirectReadReceipt(resp)
+	if result.Receipt != nil {
+		result.Status = result.Receipt.Status
+	}
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return result, err
 	}
 	body, err := decodeDirectReadOperation(req.Operation, resp.body)
 	if err != nil {
-		return connectors.DirectReadResult{}, err
+		return result, err
 	}
+	result.Receipt.Body = body
 	page := sqsDirectReadPage(req.Operation, body)
 	redacted := redactDirectBody(body, req.RedactFields)
 	body, ok := redacted.(map[string]any)
 	if !ok {
-		return connectors.DirectReadResult{}, fmt.Errorf("redact sqs direct read %s: unexpected root type %T", req.Operation, redacted)
+		return result, fmt.Errorf("redact sqs direct read %s: unexpected root type %T", req.Operation, redacted)
 	}
-	return connectors.DirectReadResult{Connector: c.Name(), Method: "POST", Path: "SQS." + directReadAction(req.Operation), Status: resp.status, Body: body, Page: page}, nil
+	result.Body = connectors.SanitizeProviderOutputForOutput(body, req.Config.Secrets).(map[string]any)
+	result.Page = connectors.SanitizeDirectReadPageForOutput(page, req.Config.Secrets)
+	return result, nil
+}
+
+func sqsDirectReadReceipt(response sqsHTTPResponse) *connectors.ProviderResponseReceipt {
+	if response.status == 0 {
+		return nil
+	}
+	receipt := &connectors.ProviderResponseReceipt{
+		ResponseReceived: true,
+		Status:           response.status,
+		Headers:          make(map[string]connectors.OperationResponseHeader, len(response.headers)),
+		BodyPresent:      len(response.body) != 0,
+		BodyBytes:        int64(len(response.body)),
+	}
+	for name, values := range response.headers {
+		receipt.Headers[name] = connectors.OperationResponseHeader{Values: append([]string(nil), values...)}
+	}
+	if len(response.body) != 0 {
+		if utf8.Valid(response.body) {
+			receipt.BodyRaw, receipt.BodyRawEncoding = string(response.body), "text"
+		} else {
+			receipt.BodyRaw, receipt.BodyRawEncoding = base64.StdEncoding.EncodeToString(response.body), "base64"
+		}
+	}
+	return receipt
 }
 
 // sqsDirectReadPaging declares how each SQS read operation pages, so the page
@@ -89,6 +123,9 @@ func applySQSDirectReadPageRequest(req connectors.OperationDirectReadRequest, fo
 		return fmt.Errorf("amazon-sqs direct read %s returns a single page and cannot address a page by cursor", req.Operation)
 	case req.PageCursor == "":
 		return nil
+	}
+	if err := connectors.ValidateDirectReadPageCursor(req.PageCursor); err != nil {
+		return err
 	}
 	// The operation also declares its own next_token flag. Two navigation
 	// inputs select two different pages, so the pairing is refused rather than
@@ -484,10 +521,9 @@ func redactDirectBody(value any, fields []string) any {
 	explicit := map[string]bool{}
 	for _, field := range fields {
 		field = strings.TrimSpace(field)
-		if field == "" {
-			continue
+		if field != "" {
+			explicit[normalizeField(field)] = true
 		}
-		explicit[normalizeField(field)] = true
 	}
 	return redactDirectValue("", value, explicit, 0)
 }
@@ -500,18 +536,18 @@ func redactDirectValue(key string, value any, explicit map[string]bool, depth in
 	case map[string]any:
 		out := make(map[string]any, len(typed))
 		keys := make([]string, 0, len(typed))
-		for k := range typed {
-			keys = append(keys, k)
+		for key := range typed {
+			keys = append(keys, key)
 		}
 		sort.Strings(keys)
-		for _, k := range keys {
-			out[k] = redactDirectValue(k, typed[k], explicit, depth+1)
+		for _, key := range keys {
+			out[key] = redactDirectValue(key, typed[key], explicit, depth+1)
 		}
 		return out
 	case []any:
 		out := make([]any, len(typed))
-		for i, item := range typed {
-			out[i] = redactDirectValue("", item, explicit, depth+1)
+		for index, item := range typed {
+			out[index] = redactDirectValue("", item, explicit, depth+1)
 		}
 		return out
 	default:
@@ -520,19 +556,11 @@ func redactDirectValue(key string, value any, explicit map[string]bool, depth in
 }
 
 func shouldRedactDirectField(key string, explicit map[string]bool, topLevel bool) bool {
-	normalized := normalizeField(key)
-	if explicit[normalized] {
-		return true
-	}
-	if normalized == "next_token" && topLevel {
-		return false
-	}
-	for _, marker := range []string{"receipt_handle", "task_handle", "policy", "secret", "token", "password", "api_key", "apikey", "access_key", "accesskey", "credential"} {
-		if strings.Contains(normalized, marker) {
-			return true
-		}
-	}
-	return false
+	_ = topLevel
+	// Names are provider-owned data, not sensitivity evidence. Only the
+	// action's declared redaction fields can suppress a response value; this
+	// keeps Policy, TaskHandle, and ordinary token-shaped identifiers intact.
+	return explicit[normalizeField(key)]
 }
 
 func normalizeField(key string) string {

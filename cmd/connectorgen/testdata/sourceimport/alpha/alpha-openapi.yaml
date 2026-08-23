@@ -1,0 +1,103 @@
+openapi: 3.0.3
+info:
+  title: Alpha fixture
+  version: "1"
+components:
+  securitySchemes:
+    token:
+      type: http
+      scheme: bearer
+  schemas:
+    Widget:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          maxLength: 36
+        rare_paid_result:
+          type: object
+          additionalProperties: false
+          properties:
+            value:
+              type: string
+              maxLength: 80
+        access_token:
+          type: string
+          maxLength: 160
+paths:
+  /widgets/{widget_id}:
+    parameters:
+      - name: widget_id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 36
+    get:
+      operationId: getWidget
+      security:
+        - token: [widgets.read]
+      parameters:
+        - name: include_archived
+          in: query
+          schema:
+            type: boolean
+        - name: x-request-id
+          in: header
+          required: false
+          schema:
+            type: string
+            maxLength: 64
+      x-pagination:
+        strategy: page_number
+        page_param: page
+      x-max-response-bytes: 4096
+      responses:
+        "200":
+          description: Widget record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Widget'
+        "403":
+          description: Plan tier denial
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  code:
+                    type: string
+                    maxLength: 32
+  /widgets:
+    post:
+      security:
+        - token: [widgets.write]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              maxProperties: 2
+              required: [name]
+              properties:
+                name:
+                  type: string
+                  maxLength: 80
+                labels:
+                  type: array
+                  maxItems: 5
+                  items:
+                    type: string
+                    maxLength: 20
+      responses:
+        "201":
+          description: Created widget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Widget'

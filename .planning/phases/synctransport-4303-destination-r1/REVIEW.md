@@ -1,7 +1,7 @@
 ---
 status: clean
 depth: standard
-files_reviewed: 3
+files_reviewed: 16
 findings:
   critical: 0
   warning: 0
@@ -19,11 +19,33 @@ standard depth for:
 
 - `internal/app/issue_label_warehouse_transport.go`
 - `internal/app/transport_composition_test.go`
+- `internal/app/app.go`
+- `internal/app/transport_dispatch.go`
+- `internal/app/types.go`
+- `internal/connectors/connectors.go`
+- `internal/connectors/engine/write.go`
+- `internal/connectors/engine/direct_write.go`
+- `internal/connectors/sync_transport.go`
+- `internal/synctransport/orchestrator.go`
 - `docs/sync-transport-definition.md`
 
 ## Disposition
 
-No findings.
+The prior review findings were legitimate and have been remediated in the
+shared declaration and selected-action preflight boundaries:
+
+- raw input mappings now defer property admission to the exact selected record
+  schema without identifier normalization;
+- required top-level action properties must all be mapped before source or
+  stage work;
+- the generic destination rejects `full_overwrite` until it has a run-scoped
+  protocol;
+- duplicate `writes.json` action names fail at definition load; and
+- successful bodyless `output_policy: none` results retain status and headers.
+
+Focused remediation verification passed:
+
+`go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/app -run '^(TestBundleLoadRejectsDuplicateWriteActionNames|TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies|TestValidateRecordSchemaFieldMappingRequiresExactCompleteFields|TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields|TestDeclarativeTypedDestinationPreflightRejectsIncompleteMappingAndFullOverwriteBeforeIO|TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies)$'`
 
 The review confirmed that the generic destination takes only declaration-owned
 action metadata and source field mappings; validates action schemas before
@@ -32,5 +54,42 @@ tombstones; requires keyed replay; and cannot select a specialized
 `transport_binding` action. The common factory loop collects each exact
 declaration's conformance evidence without connector-name selection. GitHub
 retains the dedicated typed issue-label executor solely for its provider-state
-read-back. Focused, affected-package, real-provider, and full repository
-verification are recorded in `VERIFICATION.md`.
+read-back.
+
+The reconciliation review additionally confirmed that `destination_action` is
+an exact persisted stream identity, never an invocation argument; multiple
+connector-owned actions cannot cross-select. Schema field admission is checked
+against the exact selected action, including schema-valid camelCase spelling.
+The result path captures terminal and successful responses from already-named
+typed actions, persists acknowledgements before later read-back, and carries
+every provider-returned response field, key, and value verbatim through App and
+CLI output, including credential-equal bytes. System-generated plans, logs,
+request diagnostics, and synthetic errors remain secret-taint-safe. Focused,
+affected-package, real-provider, and full repository verification are recorded
+in `VERIFICATION.md`.
+
+## 2026-08-20 revalidation review
+
+After the published-head reconciliation pass, an additional inline review
+covered the persisted selection and approval boundary, the generic adapter,
+the exact action-schema mapping, result projection, and the new CLI help and
+documentation paths. No actionable finding remained. Fresh focused tests,
+standalone connector-boundary, `git diff --check`, and full local `make verify`
+are recorded in `VERIFICATION.md`.
+
+## Follow-up foundation r1 review
+
+Inline standard-depth review covered the action-owned source binding and
+selection boundary, sealed approval fields, batch receipt boundary, tombstone
+mapping/read-back path, authorization action allowlist, schema, synthetic
+fixtures, generated catalog, and documentation. No Twenty-, GitHub-, route-,
+method-, payload-, or credential-specific branch was introduced in shared Go;
+no production connector definition changed.
+
+The full App package review run found one actionable ordering regression: a
+blank request action for a valid single-action destination was passed into
+action-owned source admission before the descriptor defaulted it. The fix
+resolves the descriptor strategy first and passes its exact action to the
+binding lookup. The original defaulted paths, explicitly selected multi-action
+paths, cross-action refusals, and all new tombstone paths then passed focused
+and full-package verification. No remaining findings were observed.

@@ -557,7 +557,7 @@ func TestEndpointRequireSharedErrorSurvivesOperationFormatting(t *testing.T) {
 			path:   "/graphql",
 			bundle: func(baseURL string) Bundle { return graphQLOperationBundle(baseURL, "graphql_query") },
 			run: func(bundle Bundle, cfg connectors.RuntimeConfig) error {
-				_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.widgets.query", Config: cfg, Body: map[string]any{"id": "widget-1"}}, nil)
+				_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.widgets.query", Config: cfg, Body: map[string]any{"id": "widget-1", "first": 1}}, nil)
 				return err
 			},
 		},
@@ -566,7 +566,7 @@ func TestEndpointRequireSharedErrorSurvivesOperationFormatting(t *testing.T) {
 			method: http.MethodGet,
 			path:   "/file",
 			bundle: func(baseURL string) Bundle {
-				return Bundle{Name: "acme", HTTP: HTTPBase{URL: baseURL}, Operations: []OperationSpec{{ID: "acme.file", Kind: "binary_download", Summary: "file", Risk: "low", Approval: "none", Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/file", MaxBytes: 1024}}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/file", Operation: &SurfaceOperation{}}}}}
+				return Bundle{Name: "acme", HTTP: HTTPBase{URL: baseURL}, Operations: []OperationSpec{{ID: "acme.file", Kind: "binary_download", Summary: "file", Risk: "low", Approval: "none", Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/file", MaxBytes: 1024, ContentTypes: []string{"application/octet-stream"}, Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}}}}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/file", Operation: &SurfaceOperation{}}}}}
 			},
 			run: func(bundle Bundle, cfg connectors.RuntimeConfig) error {
 				_, err := OperationBinaryDownload(context.Background(), bundle, BinaryDownloadRequest{Operation: "acme.file", Config: cfg, DestRoot: t.TempDir()}, nil)

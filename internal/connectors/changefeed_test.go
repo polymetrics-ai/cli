@@ -2,8 +2,59 @@ package connectors
 
 import (
 	"context"
+	"strings"
 	"testing"
+	"time"
 )
+
+func TestCDCArtifactManifestRestorationIsStrictAndBounded(t *testing.T) {
+	manifest, err := NewCDCArtifactManifest(
+		"connection",
+		"public.users",
+		1,
+		"transaction-key",
+		2,
+		strings.Repeat("a", 64),
+		strings.Repeat("b", 64),
+		strings.Repeat("c", 64),
+	)
+	if err != nil {
+		t.Fatalf("NewCDCArtifactManifest() error = %v", err)
+	}
+	receipt, err := NewCDCTransactionReceiptWithArtifactManifest("receipt", "warehouse:connection", time.Now().UTC(), manifest)
+	if err != nil {
+		t.Fatalf("NewCDCTransactionReceiptWithArtifactManifest() error = %v", err)
+	}
+	payload, err := receipt.ArtifactManifestJSON()
+	if err != nil {
+		t.Fatalf("ArtifactManifestJSON() error = %v", err)
+	}
+
+	restored, err := NewCDCTransactionReceiptWithArtifactManifestJSON("receipt", "warehouse:connection", time.Now().UTC(), payload)
+	if err != nil {
+		t.Fatalf("NewCDCTransactionReceiptWithArtifactManifestJSON(valid) error = %v", err)
+	}
+	got, err := restored.ArtifactManifest()
+	if err != nil {
+		t.Fatalf("ArtifactManifest() error = %v", err)
+	}
+	if got != manifest {
+		t.Fatalf("ArtifactManifest() = %#v, want %#v", got, manifest)
+	}
+
+	for name, invalidPayload := range map[string]string{
+		"missing":   "",
+		"unknown":   strings.TrimSuffix(payload, "}") + `,"unrecognized":true}`,
+		"trailing":  payload + "{}",
+		"oversized": strings.Repeat(" ", (8<<10)+1),
+	} {
+		t.Run(name, func(t *testing.T) {
+			if _, err := NewCDCTransactionReceiptWithArtifactManifestJSON("receipt", "warehouse:connection", time.Now().UTC(), invalidPayload); err == nil {
+				t.Fatalf("NewCDCTransactionReceiptWithArtifactManifestJSON(%s) error = nil, want strict private manifest refusal", name)
+			}
+		})
+	}
+}
 
 type changefeedTestReader struct{}
 

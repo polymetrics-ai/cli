@@ -23,6 +23,7 @@ const (
 
 func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	lock := loadGitHubSourceLock(t)
+	_, descriptor := loadInstalledGitHubSourceProjection(t)
 	raw, err := os.ReadFile("../../internal/connectors/defs/github/api_surface.json")
 	if err != nil {
 		t.Fatalf("read github api_surface.json: %v", err)
@@ -46,6 +47,14 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		t.Fatalf("operation_ledger_version = %d, want 1", surface.OperationLedgerVersion)
 	}
 
+	blockedSourceReads := map[string]string{}
+	for _, operation := range descriptor.Operations {
+		if operation.Protocol == "graphql" || sourceProjectionMutationMethod(operation.Method) || !sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
+			continue
+		}
+		blockedSourceReads[sourceProjectionEndpointKey(operation.Method, operation.Path)] = operation.SourceID
+	}
+
 	totalByMethod := map[string]int{}
 	coveredByMethod := map[string]int{}
 	operationByMethod := map[string]int{}
@@ -54,6 +63,9 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	statuses := map[string]int{}
 	covered, excluded, operations, restEndpoints, graphQLBindings, generatedGraphQLTransports := 0, 0, 0, 0, 0, 0
 	sawRetiredUserDraftRESTRoute := false
+	wantOperations := 0
+	wantOperationByMethod := map[string]int{}
+	wantModels := map[string]int{}
 
 	for i, ep := range surface.Endpoints {
 		generatedTransport := githubGeneratedGraphQLTransport(ep.Method, ep.Path, ep.CoveredBy)
@@ -75,7 +87,29 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		if len(ep.Excluded) > 0 {
 			excluded++
 		}
+		key := sourceProjectionEndpointKey(ep.Method, ep.Path)
+		sourceID, sourceBlocked := blockedSourceReads[key]
+		hasCoverage := len(ep.CoveredBy) > 0
+		if sourceBlocked {
+			if _, directRead := ep.CoveredBy["direct_read"]; directRead {
+				t.Fatalf("endpoint %d %s retains direct_read coverage despite source gap", i, key)
+			}
+			if _, directReads := ep.CoveredBy["direct_reads"]; directReads {
+				t.Fatalf("endpoint %d %s retains direct_reads coverage despite source gap", i, key)
+			}
+			if !hasCoverage {
+				wantOperations++
+				wantOperationByMethod[ep.Method]++
+				wantModels["direct_read"]++
+			}
+		}
 		if ep.Operation != nil {
+			if sourceID == "" && key != sourceProjectionEndpointKey("POST", githubRetiredUserDraftRESTPath) {
+				t.Fatalf("endpoint %d %s has an undeclared blocked operation: %+v", i, key, ep.Operation)
+			}
+			if hasCoverage {
+				t.Fatalf("endpoint %d %s has both independent coverage and a blocked operation", i, key)
+			}
 			operations++
 			operationByMethod[ep.Method]++
 			models[ep.Operation.Model]++
@@ -93,9 +127,19 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 			if ep.Operation.Model == "duplicate" && ep.Operation.DuplicateOf == "" {
 				t.Fatalf("endpoint %d duplicate operation is missing duplicate_of", i)
 			}
+			if sourceID != "" {
+				if ep.Operation.Model != "direct_read" || ep.Operation.Status != "blocked" || ep.Operation.Risk != "low" || !ep.Operation.BlockedByDefault || !strings.Contains(ep.Operation.Notes, "Named dependency: source_operation="+sourceID) {
+					t.Fatalf("endpoint %d %s source-bound operation = %+v, want blocked declaration-owned source dependency %q", i, key, ep.Operation, sourceID)
+				}
+			}
+		} else if sourceBlocked && !hasCoverage {
+			t.Fatalf("endpoint %d %s has a source gap but neither coverage nor a blocked source operation", i, key)
 		}
 		if ep.Method == "POST" && ep.Path == githubRetiredUserDraftRESTPath {
 			sawRetiredUserDraftRESTRoute = true
+			wantOperations++
+			wantOperationByMethod[ep.Method]++
+			wantModels["duplicate"]++
 			if len(ep.CoveredBy) != 0 || ep.Operation == nil || ep.Operation.Model != "duplicate" ||
 				ep.Operation.Status != "blocked" || ep.Operation.Risk != "low" ||
 				!ep.Operation.BlockedByDefault || ep.Operation.DuplicateOf != githubUserDraftGraphQLTarget {
@@ -116,15 +160,15 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if generatedGraphQLTransports != 1 {
 		t.Fatalf("generated GraphQL transports = %d, want one shared POST /graphql binding", generatedGraphQLTransports)
 	}
-	wantCovered := restEndpoints + graphQLBindings - generatedGraphQLTransports - 1
+	wantCovered := restEndpoints + graphQLBindings - generatedGraphQLTransports - wantOperations
 	if covered != wantCovered {
-		t.Fatalf("covered endpoints = %d, want %d executable bindings plus one blocked duplicate", covered, wantCovered)
+		t.Fatalf("covered endpoints = %d, want %d executable bindings after source-blocked projections", covered, wantCovered)
 	}
 	if !sawRetiredUserDraftRESTRoute {
 		t.Fatalf("source inventory omits POST %s", githubRetiredUserDraftRESTPath)
 	}
-	if operations != 1 {
-		t.Fatalf("operation endpoints = %d, want the retired user-project draft REST duplicate only", operations)
+	if operations != wantOperations {
+		t.Fatalf("operation endpoints = %d, want %d source-projected blocked operations", operations, wantOperations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -133,12 +177,14 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	assertStringIntMap(t, "totalByMethod", totalByMethod, githubRESTMethodSplit(lock))
 	delete(coveredByMethod, "GRAPHQL")
 	wantCoveredByMethod := githubRESTMethodSplit(lock)
-	wantCoveredByMethod["POST"]--
+	for method, count := range wantOperationByMethod {
+		wantCoveredByMethod[method] -= count
+	}
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, wantCoveredByMethod)
-	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{"POST": 1})
-	assertStringIntMap(t, "models", models, map[string]int{"duplicate": 1})
-	assertStringIntMap(t, "risks", risks, map[string]int{"low": 1})
-	assertStringIntMap(t, "statuses", statuses, map[string]int{"blocked": 1})
+	assertStringIntMap(t, "operationByMethod", operationByMethod, wantOperationByMethod)
+	assertStringIntMap(t, "models", models, wantModels)
+	assertStringIntMap(t, "risks", risks, map[string]int{"low": wantOperations})
+	assertStringIntMap(t, "statuses", statuses, map[string]int{"blocked": wantOperations})
 }
 
 // TestGitHubStatusAndTextOperationContracts pins the classified endpoints

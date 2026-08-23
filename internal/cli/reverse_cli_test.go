@@ -591,6 +591,7 @@ func TestReverseETLToGitHubCreatesPullRequestAfterApproval(t *testing.T) {
 			t.Fatalf("decode GitHub request body: %v", err)
 		}
 		seen = append(seen, seenRequest{Method: r.Method, Path: r.URL.Path, Body: body})
+		w.Header().Set("Content-Type", "application/json")
 		switch r.URL.Path {
 		case "/repos/acme/widgets/pulls":
 			w.WriteHeader(http.StatusCreated)

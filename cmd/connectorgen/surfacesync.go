@@ -38,7 +38,8 @@ import (
 //     parsed endpoint must already appear in api_surface.json, so this is a
 //     join across consistent files, never an invented endpoint. An
 //     operation-backed endpoint remains an authoritative, more specific source
-//     for direct_read, direct_write, and binary_download.
+//     for direct_read, direct_write, binary_download, text_export, and
+//     status_check.
 //   - flags[].maps_to <- "path.<var>" when the flag's name matches a {var} in
 //     that endpoint's path.
 //   - flags[].required <- true when the mapped REST path parameter is declared
@@ -54,8 +55,8 @@ import (
 //   - direct_write output_policy <- operations[].output_policy exactly. The
 //     response contract is bound into its preview digest, so this is derived,
 //     not a display preference.
-//   - a binary_download carries no output policy at all: the response becomes
-//     a file, not a JSON body.
+//   - binary_download and text_export carry no output policy at all: the
+//     response becomes a file, not a JSON body.
 //   - rest.max_bytes <- defaultOperationRESTMaxBytes when unset or
 //     non-positive, matching the direct operation executors' default. A
 //     positive value is the operation's own declaration and is left alone.
@@ -159,7 +160,21 @@ func runSurfaceSync(args []string, stdout, stderr io.Writer) int {
 
 	total := surfaceSyncStats{}
 	changed := 0
+	sourceProjectionDrift := 0
 	for _, name := range names {
+		projection, err := syncCheckedInSourceProjection(filepath.Join(dir, name), name, check)
+		if err != nil {
+			logf(stderr, "connectorgen surface-sync: %s source projection: %v\n", name, err)
+			return 1
+		}
+		if projection.Changed() {
+			sourceProjectionDrift++
+			verb := "updated"
+			if check {
+				verb = "would update"
+			}
+			logf(stdout, "%s: source projection %s writes=%d cli=%d\n", name, verb, projection.Writes, projection.CLI)
+		}
 		stats, err := syncBundle(filepath.Join(dir, name), check)
 		if err != nil {
 			logf(stderr, "connectorgen surface-sync: %s: %v\n", name, err)
@@ -190,14 +205,45 @@ func runSurfaceSync(args []string, stdout, stderr io.Writer) int {
 		logf(stdout, "runtime operation endpoint ledger: %s %d endpoint(s)\n", verb, ledgerStats.Entries)
 	}
 
-	if check && (total.total() > 0 || ledgerStats.Changed) {
-		logf(stderr, "connectorgen surface-sync: %d connector(s) out of sync, %d field(s) missing, %d field(s) divergent, runtime endpoint ledger drift=%t; run `connectorgen surface-sync`\n",
-			changed, total.Filled.total(), total.Corrected.total(), ledgerStats.Changed)
+	if check && (total.total() > 0 || ledgerStats.Changed || sourceProjectionDrift > 0) {
+		logf(stderr, "connectorgen surface-sync: %d connector(s) out of sync, %d field(s) missing, %d field(s) divergent, %d source projection(s) drifted, runtime endpoint ledger drift=%t; run `connectorgen surface-sync`\n",
+			changed, total.Filled.total(), total.Corrected.total(), sourceProjectionDrift, ledgerStats.Changed)
 		return 1
 	}
 	logf(stdout, "connectorgen surface-sync: %d connector(s) scanned, %d field(s) filled and %d field(s) corrected across %d connector(s)\n",
 		len(names), total.Filled.total(), total.Corrected.total(), changed)
 	return 0
+}
+
+func syncCheckedInSourceProjection(bundleDir, connector string, check bool) (sourceProjectionStats, error) {
+	lockPath := filepath.Join(bundleDir, "sources", connector+"-operation-source-lock.json")
+	if _, err := os.Stat(lockPath); err != nil {
+		if os.IsNotExist(err) {
+			return sourceProjectionStats{}, nil
+		}
+		return sourceProjectionStats{}, err
+	}
+	descriptorPath := filepath.Join(bundleDir, "sources", connector+"-operation-descriptor.json")
+	raw, err := os.ReadFile(descriptorPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return sourceProjectionStats{}, fmt.Errorf("canonical source descriptor is missing")
+		}
+		return sourceProjectionStats{}, err
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(raw, &descriptor); err != nil {
+		return sourceProjectionStats{}, fmt.Errorf("parse canonical source descriptor: %w", err)
+	}
+	if descriptor.SchemaVersion != 2 && descriptor.SchemaVersion != 3 {
+		return sourceProjectionStats{}, fmt.Errorf("source descriptor schema_version = %d, want 2 or 3", descriptor.SchemaVersion)
+	}
+	return projectSourceDescriptorToBundle(bundleDir, sourceImportResult{
+		Operations:     descriptor.Operations,
+		InboundEvents:  descriptor.InboundEvents,
+		Extensions:     descriptor.Extensions,
+		GraphQLSchemas: descriptor.GraphQLSchemas,
+	}, check)
 }
 
 type runtimeOperationEndpointLedgerStats struct {
@@ -351,8 +397,8 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		}
 		// The endpoint block is whichever one the operation's kind declares.
 		// A direct operation never borrows a binary operation's endpoint and
-		// a binary download never borrows a REST one, so a mismatched pair is
-		// left untouched for the validator to report.
+		// a file download or export never borrows a REST one, so a mismatched
+		// pair is left untouched for the validator to report.
 		kind := stringField(op, "kind")
 		blockName := "rest"
 		if intent == "binary_download" || intent == "text_export" {
@@ -382,7 +428,7 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 
 		// A direct write's response policy is part of the operation's own
 		// preview-bound contract, so it must exactly match. Direct reads use a
-		// supported default and binary downloads carry no body policy.
+		// supported default and file downloads or exports carry no body policy.
 		switch policy := strings.TrimSpace(stringField(cmd, "output_policy")); {
 		case intent == "binary_download" || intent == "text_export":
 			if cmd.remove("output_policy") {
@@ -441,13 +487,12 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			}
 		}
 
-		// DERIVED: a direct_read command's flags come from the operation's
-		// imported parameter set, never from hand-authoring. An operation that
-		// declares no parameters leaves the command's flags untouched, so a
-		// connector whose parameters have not been imported yet is unaffected.
-		if intent == "direct_read" {
-			stats.Filled.FlagDerived += deriveCommandParameterFlags(cmd, block)
-		}
+		// DERIVED: fixed-operation command flags come from the operation's
+		// imported parameter set, never from hand-authoring. This includes the
+		// closed header.<declared-name> channel for REST, status, binary, and
+		// text-export operations; a connector with no imported parameters is
+		// unaffected.
+		stats.Filled.FlagDerived += deriveCommandParameterFlags(cmd, block)
 
 		// DERIVED: a REST path parameter marked required is an executable
 		// command input, not a display preference. Its mapped CLI flag must
@@ -458,10 +503,16 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		filled, corrected := deriveRequiredPathFlagRequiredness(cmd, block)
 		stats.Filled.FlagRequired += filled
 		stats.Corrected.FlagRequired += corrected
+		filled, corrected = deriveRequiredHeaderFlagRequiredness(cmd, block)
+		stats.Filled.FlagRequired += filled
+		stats.Corrected.FlagRequired += corrected
+		filled, corrected = deriveHeaderFlagRepeatability(cmd, block)
+		stats.Filled.FlagDerived += filled
+		stats.Corrected.FlagDerived += corrected
 
-		// DEFAULTED for REST direct operations: a binary_download operation
-		// must declare its own positive max_bytes at bundle load, and a
-		// positive rest.max_bytes is the operation's own declaration rather
+		// DEFAULTED for REST direct operations: a binary_download or text_export
+		// operation must declare its own positive max_bytes at bundle load, and
+		// a positive rest.max_bytes is the operation's own declaration rather
 		// than anything this tool derives.
 		if intent == "direct_read" || intent == "direct_write" {
 			maxBytes, present := block.get("max_bytes")
@@ -678,46 +729,54 @@ func positiveNumber(v any) bool {
 	return err == nil && f > 0
 }
 
-// deriveCommandParameterFlags adds a flag for every parameter the operation
-// declares that the command does not already expose, and returns how many it
-// added.
-//
-// It only ever ADDS. A flag the bundle already declares is left exactly as
-// authored, because an author may have given it a better summary or a narrower
-// type than the provider specification carries; the derivation exists to close
-// the gap where a parameter has no flag at all, not to overwrite judgement.
+// deriveCommandParameterFlags synchronizes provider-owned flag semantics from
+// the operation declaration. Human-authored prose and flags without a
+// path/query/header mapping remain authored; source-owned type, bounds,
+// requiredness, repeatability, values, location, and deletion do not drift.
 //
 // Paging parameters never arrive here: params-import excludes them, because
 // paging is answered by the connector's declared pagination spec through
 // --page/--page-cursor.
 func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
-	params := arrayField(rest, "parameters")
-	if len(params) == 0 {
+	// An absent block means this operation has not been through the immutable
+	// provider-parameter importer, so this synchronizer has no source-owned
+	// authority over its existing command flags. An explicitly present empty
+	// block is different: params-import verified the provider exposes no caller
+	// parameters and stale path/query/header flags must be removed.
+	if _, declared := rest.get("parameters"); !declared {
 		return 0
 	}
-	declared := map[string]bool{}
-	for _, raw := range arrayField(cmd, "flags") {
-		if flag, ok := raw.(*orderedObject); ok {
-			declared[strings.ReplaceAll(stringField(flag, "name"), "-", "_")] = true
-		}
-	}
-	flags := append([]any(nil), arrayField(cmd, "flags")...)
-	added := 0
+	params := arrayField(rest, "parameters")
+	wanted := map[string]*orderedObject{}
+	order := make([]string, 0, len(params))
 	for _, raw := range params {
 		param, ok := raw.(*orderedObject)
 		if !ok {
 			continue
 		}
 		name := stringField(param, "name")
-		if name == "" || declared[name] {
+		location := stringField(param, "in")
+		if location != "query" && location != "path" && location != "header" {
 			continue
 		}
-		location := stringField(param, "in")
-		if location != "query" && location != "path" {
+		flagName := strings.ReplaceAll(name, "_", "-")
+		if location == "path" && stringField(param, "cli_name") != "" {
+			// A declaration can name a safe runtime path placeholder differently
+			// from the provider's resource identity. The alias remains closed:
+			// maps_to still names the exact provider path parameter below.
+			flagName = stringField(param, "cli_name")
+		}
+		if location == "header" {
+			// Header names are case-insensitive and may overlap a path/query
+			// parameter. The generated CLI flag carries its location explicitly,
+			// while maps_to remains the exact provider header name.
+			flagName = "header-" + strings.ToLower(strings.ReplaceAll(name, "_", "-"))
+		}
+		if name == "" {
 			continue
 		}
 		flag := newOrderedObject()
-		flag.set("name", strings.ReplaceAll(name, "_", "-"))
+		flag.set("name", flagName)
 		flag.set("type", derivedFlagType(param))
 		if summary := stringField(param, "summary"); summary != "" {
 			flag.set("summary", summary)
@@ -725,18 +784,179 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 		if values := arrayField(param, "values"); len(values) > 0 {
 			flag.set("values", append([]any(nil), values...))
 		}
-		if required, _ := param.get("required"); required == true {
+		// Path requiredness is deliberately synchronized by
+		// deriveRequiredPathFlagRequiredness below. Keeping that one owner lets
+		// surface-sync distinguish an absent required marker from a corrected
+		// false one, and prevents parameter-semantic reconciliation from
+		// silently swallowing that accounting boundary.
+		if required, _ := param.get("required"); required == true && location != "path" {
 			flag.set("required", true)
 		}
+		if repeatable, _ := param.get("repeatable"); location == "header" && repeatable == true {
+			flag.set("repeatable", true)
+		}
+		if maxBytes, present := param.get("max_bytes"); present {
+			flag.set("max_bytes", maxBytes)
+		}
 		flag.set("maps_to", location+"."+name)
-		flags = append(flags, flag)
-		declared[name] = true
-		added++
+		key := normalizedDerivedFlagName(flagName)
+		wanted[key] = flag
+		order = append(order, key)
 	}
-	if added > 0 {
+
+	changes := 0
+	flags := make([]any, 0, len(arrayField(cmd, "flags"))+len(wanted))
+	seen := map[string]bool{}
+	for _, raw := range arrayField(cmd, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok {
+			flags = append(flags, raw)
+			continue
+		}
+		key := normalizedDerivedFlagName(stringField(flag, "name"))
+		derived, exists := wanted[key]
+		mapping := stringField(flag, "maps_to")
+		providerOwned := strings.HasPrefix(mapping, "query.") || strings.HasPrefix(mapping, "path.") || strings.HasPrefix(mapping, "header.")
+		if !exists {
+			if providerOwned {
+				changes++
+				continue
+			}
+			flags = append(flags, flag)
+			continue
+		}
+		seen[key] = true
+		if summary := stringField(flag, "summary"); summary != "" {
+			derived.set("summary", summary)
+		}
+		// Existing requiredness is an accounting boundary: a new source-owned
+		// flag receives the provider's required marker, while an existing flag
+		// leaves an absent/false marker for the location-specific synchronizer
+		// to classify as a fill or correction. This preserves the established
+		// direct-read query contract and gives path/header repair one owner.
+		if sourceRequired, _ := derived.get("required"); sourceRequired == true {
+			if required, present := flag.get("required"); !present {
+				derived.remove("required")
+			} else if required == false {
+				derived.set("required", false)
+			}
+		}
+		// Preserve path requiredness exactly until the dedicated path
+		// synchronizer accounts for it. That includes an already-correct true:
+		// dropping it here and immediately adding it back below leaves files
+		// unchanged but reports phantom generator drift on every --check.
+		// False and absent markers still flow to the same synchronizer, which
+		// records their correction/fill once and makes the next pass a no-op.
+		if strings.HasPrefix(mapping, "path.") {
+			if required, present := flag.get("required"); present && required == false {
+				derived.set("required", false)
+			} else if present && required == true {
+				derived.set("required", true)
+			}
+		}
+		if !orderedSemanticEqual(flag, derived) {
+			changes++
+		}
+		flags = append(flags, derived)
+	}
+	for _, key := range order {
+		if seen[key] {
+			continue
+		}
+		flags = append(flags, wanted[key])
+		changes++
+	}
+	if changes > 0 {
 		cmd.set("flags", flags)
 	}
-	return added
+	return changes
+}
+
+func normalizedDerivedFlagName(name string) string {
+	return strings.ToLower(strings.ReplaceAll(strings.TrimSpace(name), "-", "_"))
+}
+
+// deriveRequiredHeaderFlagRequiredness mirrors the path rule for the other
+// caller-owned, fixed-operation input location. The engine independently
+// rejects an absent required header before I/O; synchronizing it here makes
+// generated help and the command parser explain the requirement earlier.
+func deriveRequiredHeaderFlagRequiredness(cmd, block *orderedObject) (filled, corrected int) {
+	required := map[string]bool{}
+	for _, raw := range arrayField(block, "parameters") {
+		parameter, ok := raw.(*orderedObject)
+		if !ok || stringField(parameter, "in") != "header" {
+			continue
+		}
+		if isRequired, _ := parameter.get("required"); isRequired == true {
+			required[strings.ToLower(stringField(parameter, "name"))] = true
+		}
+	}
+	if len(required) == 0 {
+		return 0, 0
+	}
+	for _, raw := range arrayField(cmd, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		target, mapped := strings.CutPrefix(strings.TrimSpace(stringField(flag, "maps_to")), "header.")
+		if !mapped || !required[strings.ToLower(target)] {
+			continue
+		}
+		isRequired, present := flag.get("required")
+		if isRequired == true {
+			continue
+		}
+		flag.set("required", true)
+		if present {
+			corrected++
+		} else {
+			filled++
+		}
+	}
+	return filled, corrected
+}
+
+func deriveHeaderFlagRepeatability(cmd, block *orderedObject) (filled, corrected int) {
+	repeatable := map[string]bool{}
+	for _, raw := range arrayField(block, "parameters") {
+		parameter, ok := raw.(*orderedObject)
+		if !ok || stringField(parameter, "in") != "header" {
+			continue
+		}
+		if declared, _ := parameter.get("repeatable"); declared == true {
+			repeatable[strings.ToLower(strings.ReplaceAll(stringField(parameter, "name"), "_", "-"))] = true
+		}
+	}
+	for _, raw := range arrayField(cmd, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		target, mapped := strings.CutPrefix(strings.TrimSpace(stringField(flag, "maps_to")), "header.")
+		if !mapped {
+			continue
+		}
+		want := repeatable[strings.ToLower(strings.ReplaceAll(target, "_", "-"))]
+		got, present := flag.get("repeatable")
+		if want {
+			if got == true {
+				continue
+			}
+			flag.set("repeatable", true)
+			if present {
+				corrected++
+			} else {
+				filled++
+			}
+			continue
+		}
+		if present {
+			flag.remove("repeatable")
+			corrected++
+		}
+	}
+	return filled, corrected
 }
 
 // deriveRequiredPathFlagRequiredness synchronizes requiredness for flags that
