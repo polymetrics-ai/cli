@@ -1,0 +1,18 @@
+{
+  "issue": 4336,
+  "phase": "request-contract-bounding-r1",
+  "status": "planned",
+  "delivery": "direct-pr",
+  "base": "main@8127de418",
+  "branch": "fm/cli-request-contract-bounding-design-r1",
+  "gsd_execution": "inline-manual-fallback",
+  "concurrency": "GOFLAGS=-p=3; one heavy suite at a time",
+  "red_green_refactor": {
+    "red": "pending Gong-shaped importer and envelope failure",
+    "green": "pending typed disposition, explicit envelope, exact runtime enforcement",
+    "refactor": "pending removal of error-string classification and numeric narrowing"
+  },
+  "dependencies": {
+    "pr_4339": "malformed-path/media-quota quarantine and unrelated provider dialect prerequisites; not stacked or duplicated"
+  }
+}
