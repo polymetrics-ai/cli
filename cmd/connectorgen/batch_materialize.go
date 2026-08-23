@@ -572,6 +572,10 @@ type batchArtifactLookupIPAddr func(context.Context, string) ([]net.IPAddr, erro
 
 type batchArtifactDialContext func(context.Context, string, string) (net.Conn, error)
 
+type batchArtifactURLPolicy struct {
+	allowIdentityQuery bool
+}
+
 var batchArtifactNonPublicPrefixes = []netip.Prefix{
 	netip.MustParsePrefix("0.0.0.0/8"),
 	netip.MustParsePrefix("100.64.0.0/10"),
@@ -592,6 +596,10 @@ var batchArtifactNonPublicPrefixes = []netip.Prefix{
 }
 
 func parseBatchArtifactURL(raw string) (*url.URL, error) {
+	return parseBatchArtifactURLWithPolicy(raw, batchArtifactURLPolicy{})
+}
+
+func parseBatchArtifactURLWithPolicy(raw string, policy batchArtifactURLPolicy) (*url.URL, error) {
 	if raw == "" || raw != strings.TrimSpace(raw) {
 		return nil, errors.New("artifact URL must be a non-empty absolute HTTPS URL")
 	}
@@ -602,7 +610,7 @@ func parseBatchArtifactURL(raw string) (*url.URL, error) {
 	if parsed.User != nil {
 		return nil, errors.New("artifact URL must not include userinfo")
 	}
-	if parsed.RawQuery != "" || parsed.ForceQuery {
+	if !policy.allowIdentityQuery && (parsed.RawQuery != "" || parsed.ForceQuery) {
 		return nil, errors.New("artifact URL must not include a query")
 	}
 	if parsed.Fragment != "" || strings.Contains(raw, "#") {
@@ -619,21 +627,25 @@ func parseBatchArtifactURL(raw string) (*url.URL, error) {
 }
 
 func validateBatchArtifactRequestURL(ctx context.Context, parsed *url.URL, lookup batchArtifactLookupIPAddr) error {
-	if err := validateBatchArtifactURLObject(parsed); err != nil {
+	return validateBatchArtifactRequestURLWithPolicy(ctx, parsed, lookup, batchArtifactURLPolicy{})
+}
+
+func validateBatchArtifactRequestURLWithPolicy(ctx context.Context, parsed *url.URL, lookup batchArtifactLookupIPAddr, policy batchArtifactURLPolicy) error {
+	if err := validateBatchArtifactURLObject(parsed, policy); err != nil {
 		return err
 	}
 	_, err := batchArtifactPublicAddresses(ctx, parsed.Hostname(), lookup)
 	return err
 }
 
-func validateBatchArtifactURLObject(parsed *url.URL) error {
+func validateBatchArtifactURLObject(parsed *url.URL, policy batchArtifactURLPolicy) error {
 	if parsed == nil || !parsed.IsAbs() || parsed.Scheme != "https" || parsed.Host == "" {
 		return errors.New("artifact request URL must be an absolute HTTPS URL")
 	}
 	if parsed.User != nil {
 		return errors.New("artifact request URL must not include userinfo")
 	}
-	if parsed.RawQuery != "" || parsed.ForceQuery || parsed.Fragment != "" {
+	if (!policy.allowIdentityQuery && (parsed.RawQuery != "" || parsed.ForceQuery)) || parsed.Fragment != "" {
 		return errors.New("artifact request URL must not include query or fragment components")
 	}
 	host := strings.TrimSuffix(strings.ToLower(parsed.Hostname()), ".")
