@@ -314,6 +314,22 @@ two open) with one provenance-rich row per affected operation, explicit per-batc
 fan-out, owner/lane/status, and exact closure verification. Its portfolio rollup is currently
 `merge_ready: false`; `update_customer` and all five Help Scout v3 direct-read rows with open
 foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
+
+## Main-foundation reconciliation and citation-contract pause — 2026-08-23
+
+- **Main reconciliation:** merged `origin/main` at `cf493b834` into this branch and retargeted PR
+  #4296 to `main`; GitHub API read-back returned `main`.
+- **Independent GREEN:** `go test -count=1 -timeout 20m ./internal/connectors/engine -run
+  '^(TestHelpScoutV3DirectReadsUseTheirDeclaredRoute|TestOperationRoutes)'` passed. `go run
+  ./cmd/pm connectors inspect help-scout --json` was asserted to expose both eligible actions,
+  `conversations.id → conversationId`, and `customers.id → customerId`. This is a definition-only,
+  credential-free proof; no provider request or certification was run.
+- **Citation RED / pause:** `go run ./cmd/connectorgen validate` reports 20 source-projection failures:
+  schema-v2 operations reject the preserved `source_url` citation field, while v3 requires a
+  captured OpenAPI artifact and published source per document. The rendered references have no such
+  artifact and must not receive invented form pins or digests. `cli-rendered-reference-citation-contract-r1`
+  owns the discriminated rendered-reference document form. The 20 source-lock changes are deliberately
+  left uncommitted and the branch is not pushed until that contract lands.
 # Stale typed-destination gap reconciliation — increment 1 (2026-08-20)
 
 - **RED:** The operation-evidence ledger exposed 1,111 direct-write rows that still named

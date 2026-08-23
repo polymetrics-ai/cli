@@ -3,12 +3,12 @@
 ## Task Delivery Header
 
 - Issue: Refs #4291 — chore(connectors): map parity batches 6 and 7
-- Base branch: fm/cli-reverse-etl-destination-r1
-- Merges into: fm/cli-reverse-etl-destination-r1 → main
-- Delivery: PR #4296 remains open against `fm/cli-reverse-etl-destination-r1`; the batch is still reconciling its twenty connector definitions, generated CLI/manual/website data, and required local gates. It is not merge-ready while any open foundation-gap row remains.
+- Base branch: main
+- Merges into: main
+- Delivery: PR #4296 remains open against `main` (API verified). The batch remains paused until `cli-rendered-reference-citation-contract-r1` can faithfully represent its pinned rendered-reference citations; no red-gate branch push is authorized.
 - Working branch: fm/cli-map-batch67-r1
 - Task: Reconcile the credential-free, public-source-locked inventory for `close-com`, `outreach`, `salesloft`, `copper`, `zoho-bigin`, `klaviyo`, `braze`, `customer-io`, `intercom`, `freshdesk`, `segment`, `activecampaign`, `iterable`, `help-scout`, `gorgias`, `service-now`, `chatwoot`, `chargebee`, `square`, and `braintree` against all seven delivery surfaces. Every documented operation must be faithfully modeled and user-reachable through the installed CLI when the existing closed contract supports it. Destructive, privileged, uncommon, binary, and non-certified operations remain reachable with their established safety/approval metadata; only a named technical contract gap can make an operation unsupported.
-- Verification: Run the readiness-baseline invariant, `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`, generated docs/website data checks, focused connector and CLI tests, `connector-boundary` through a bounded poll, and the non-suite `make verify` gates individually.
+- Verification: Run the readiness-baseline invariant, `go run ./cmd/connectorgen validate`, `go run ./cmd/connectorgen surface-sync --check`, generated docs/website data checks, focused connector and CLI tests, `connector-boundary` through a bounded poll, and the non-suite `make verify` gates individually after the citation contract lands. The independent Help Scout route/action proof is recorded in `VERIFICATION.md`.
 
 ## Evidence Table
 
@@ -21,14 +21,15 @@
 | Every documented provider operation remains user-reachable unless a precise technical contract is absent | live | The seven-surface readiness ledger compares every source-locked direct-read/write/binary row against an exact command or typed action and rejects safety or certification as an unreachability reason. |
 | Reverse-ETL declarations use the merged typed-destination contract | live | Bundle validation and runtime preflight load each connector-owned `sync_transport.json`, select only a named `writes.json` action, and reject an absent source binding, acknowledgement, or per-mode strategy before I/O. |
 | Captain pre-merge zero-omission gate | required before merge | For every provider-defined operation, the final ledger must preserve source URL/version/hash, canonical surface mapping, enabled runtime reachability, generated CLI command, generated website row, and executable fixture/conformance evidence. It separately records ETL, reverse ETL, direct read/write, binary download/upload; `N/A` requires provider evidence that the capability is absent. Typed scope/tier/destructive/safety metadata and confirmation must never substitute for reachability. |
-| Closed operation-route foundation | live, externally blocked | The five Help Scout v3 reads remain source-locked and `foundation-gap` blocked until `cli-operation-route-override-foundation-r1` supplies definition-owned per-operation base/version/route selection across every executor. The capability must refuse arbitrary caller URLs, undeclared routes, and silent fallback before I/O. |
+| Help Scout route/action foundation reconciliation | live | `TestHelpScoutV3DirectReadsUseTheirDeclaredRoute`, the operation-route fail-closed suite, and installed-binary inspection prove closed v3 route selection plus distinct `update_conversation` and `update_customer` source mappings. |
+| Rendered-reference citation provenance | externally blocked | Legacy locks contain per-operation citations but schema v2 rejects that field and schema v3 requires an OpenAPI artifact per document. `cli-rendered-reference-citation-contract-r1` owns the discriminated rendered-reference document form; no fake digest or connector-local shim is permitted. |
 
 ## Lifecycle record
 
 - Required GSD commands resolved with `scripts/gsd sources` and prompts generated for `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review`.
 - Inline/manual fallback: `gsd-sdk query init.phase-op connector-parity-batches-6-7-r1` reports `phase_found: false` because `.planning/ROADMAP.md` intentionally delegates connector work to the issue-first canon. The canonical delivery contract also forbids spawning GSD roles. This issue-local phase record executes the same discuss → TDD plan → execute → verify → review sequence inline.
 - Discuss decisions locked by issue #4291 and the repaired brief: no credentials or provider API calls; source material is public documentation only; an authoritative provider specification or complete rendered reference is the denominator; no legacy `api_surface.json` entry bounds a recovery remap; un-authored operations are `declaration-pending`; deletes are not unsafe solely because they delete; ETL is source-declaration-pending when absent; typed write actions are enabled `direct_write`; foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` replaced the retired generic destination gap, so a direct write without a connector-owned typed action remains a declaration-pending reverse-ETL candidate.
-- Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, and `golang-testing`.
+- Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-cli`, and `golang-documentation`.
 
 ## TDD slices
 

@@ -2,11 +2,14 @@ Refs #4291
 
 ## Status
 
-Reconciliation is in progress; do not merge. This PR now depends on
-`fm/cli-reverse-etl-destination-r1` / PR #4304, merged into this branch as
-`3c50ae3cda9bb04944a660f9c8793fac6ae3ef16`, including foundation
-`609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57`. The base has been verified through
-the GitHub API as `fm/cli-reverse-etl-destination-r1`.
+Reconciliation is paused; do not merge. PR #4296 now targets `main`, confirmed by
+the GitHub API after this branch merged `origin/main` at `cf493b834`. The current
+tree contains the route and action-specific source-binding foundations, and the
+independent Help Scout proof is committed separately. The remaining blocker is
+`cli-rendered-reference-citation-contract-r1`: the twenty legacy locks have
+faithful per-operation rendered-reference citations, but neither strict schema v2
+nor the OpenAPI-artifact-only v3 form can represent them. The migration remains
+uncommitted and the branch must not be pushed while `connectorgen validate` is red.
 
 ## Twenty-connector seven-surface baseline
 

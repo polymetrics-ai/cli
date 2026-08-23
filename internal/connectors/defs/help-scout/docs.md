@@ -111,24 +111,18 @@ mailbox, team, tag, webhook, workflow, and user data.
 
 - Batch defaults: read_page_size=50.
 - `sync_transport.json` declares the 24 current fixture streams and
-  `conversations(id) → update_conversation(conversationId)` as a typed-destination proof. It has
+  `conversations(id) → update_conversation(conversationId)` plus
+  `customers(id) → update_customer(customerId)` as typed-destination proofs. They have
   keyed delivery, durable acknowledgement, all closed modes, and fixture/preflight evidence against
   the persisted App/CLI typed-destination foundation at
   `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57`. Provider-live certification remains pending.
 - The source inventory remains unproven. Every declared typed action has an explicit eligibility
-  disposition. `update_customer` is not reverse-ETL enabled while the shared
-  `declarative-typed-destination-action-specific-source-bindings` foundation gap remains open: the
-  closed contract currently allows only one source binding for the declarative source executor, so
-  its required `customers(id) → customerId` mapping cannot be added beside the conversation mapping
-  without a connector-specific workaround. Other typed actions are declaration-pending their exact
-  source mapping and conformance evidence. Direct-read gaps and source-inventory recovery remain
-  connector work, not a safety or certification exclusion.
-- The five source-locked Mailbox API v3 reads remain explicitly foundation-blocked by
-  `declarative-operation-route-override`, owned by
-  `cli-operation-route-override-foundation-r1`. The configured v2 base cannot faithfully execute a
-  v3 route: the current requester would form `/v2/v3/...`. The required closure is a closed,
-  definition-owned per-operation base/version/route contract shared by all execution surfaces; callers
-  must never supply a URL and there is no fallback. These operations are not declaration-pending,
-  enabled, or provider-live certified while that foundation remains open.
+  disposition. The other typed actions are declaration-pending their exact source mapping and
+  conformance evidence. Direct-read gaps and source-inventory recovery remain connector work, not a
+  safety or certification exclusion.
+- The five source-locked Mailbox API v3 reads are user-reachable through their generated direct-read
+  commands. Their `mailbox_v3` route is selected by the closed declaration-owned route contract;
+  callers cannot provide a URL and no fallback is available. Fixture proof is recorded, while
+  provider-live certification remains pending.
 - Fixture-only evidence: no live Help Scout credentials, provider calls, provider writes, or
   certification run were used.

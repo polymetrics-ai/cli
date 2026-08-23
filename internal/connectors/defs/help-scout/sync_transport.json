@@ -52,7 +52,8 @@
       "id": "declarative_typed_destination"
     },
     "eligible_actions": [
-      "update_conversation"
+      "update_conversation",
+      "update_customer"
     ],
     "modes": [
       "full_overwrite",
@@ -76,18 +77,34 @@
         "action": "update_conversation"
       },
       {
+        "mode": "full_overwrite",
+        "strategy": "replace",
+        "action": "update_customer"
+      },
+      {
         "mode": "full_append",
         "strategy": "append",
         "action": "update_conversation"
       },
       {
+        "mode": "full_append",
+        "strategy": "append",
+        "action": "update_customer"
+      },
+      {
         "mode": "incremental_upsert",
         "strategy": "merge",
         "action": "update_conversation"
+      },
+      {
+        "mode": "incremental_upsert",
+        "strategy": "merge",
+        "action": "update_customer"
       }
     ],
     "source_bindings": [
       {
+        "action": "update_conversation",
         "executor": {
           "family": "declarative_api",
           "id": "declarative_stream_source"
@@ -100,6 +117,25 @@
           "inputs": [
             {
               "input": "conversationId",
+              "field": "id"
+            }
+          ]
+        }
+      },
+      {
+        "action": "update_customer",
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "customers"
+        ],
+        "record_mapping": {
+          "kind": "input_fields",
+          "inputs": [
+            {
+              "input": "customerId",
               "field": "id"
             }
           ]
