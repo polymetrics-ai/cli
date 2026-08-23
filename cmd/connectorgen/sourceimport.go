@@ -133,11 +133,12 @@ func defaultSourceImportLimits() sourceImportLimits {
 }
 
 type sourceImportArtifact struct {
-	SourceURL string `json:"source_url"`
-	SHA256    string `json:"sha256"`
-	Bytes     int64  `json:"bytes"`
-	OpenAPI   string `json:"openapi,omitempty"`
-	Swagger   string `json:"swagger,omitempty"`
+	SourceURL     string `json:"source_url"`
+	SHA256        string `json:"sha256"`
+	Bytes         int64  `json:"bytes"`
+	OpenAPI       string `json:"openapi,omitempty"`
+	Swagger       string `json:"swagger,omitempty"`
+	IdentityQuery bool   `json:"identity_query,omitempty"`
 }
 
 type sourceImportRESTOperation struct {
@@ -161,9 +162,9 @@ type sourceImportREST struct {
 }
 
 // sourceImportPublishedSource records the provider document cited by an
-// immutable, queryless artifact. Its source URL is provenance only: source
-// import never fetches it, so a provider's short-lived capture query cannot
-// widen the importer request surface.
+// immutable artifact. Its source URL is provenance only: source import never
+// fetches it, so a provider's short-lived capture query cannot widen the
+// importer request surface.
 type sourceImportPublishedSource struct {
 	SourceURL  string `json:"source_url"`
 	CaptureURL string `json:"capture_url"`
@@ -577,6 +578,9 @@ func parseSourceImportLock(raw []byte, expectedConnector string) (sourceImportLo
 		return sourceImportLock{}, err
 	}
 	if lock.SchemaVersion < 3 {
+		if lock.Rest.IdentityQuery || lock.GraphQL.IdentityQuery {
+			return sourceImportLock{}, fmt.Errorf("source lock identity query declaration requires a v3 REST source document")
+		}
 		if err := validateSourceImportArtifact(lock.Rest.sourceImportArtifact); err != nil {
 			return sourceImportLock{}, err
 		}
@@ -745,6 +749,9 @@ func sourceImportDocumentID(value string) bool {
 }
 
 func validateSourceImportGraphQLInventory(lock sourceImportLock) error {
+	if lock.GraphQL.IdentityQuery {
+		return fmt.Errorf("source lock identity query declaration requires a v3 REST source document")
+	}
 	graphqlCount := len(lock.GraphQL.QueryFields) + len(lock.GraphQL.MutationFields)
 	if graphqlCount == 0 {
 		if lock.Counts.GraphQLQuery != 0 || lock.Counts.GraphQLMutation != 0 {
@@ -791,8 +798,15 @@ func validateSourceImportConnector(connector string) error {
 }
 
 func validateSourceImportArtifact(artifact sourceImportArtifact) error {
-	if _, err := parseBatchArtifactURL(artifact.SourceURL); err != nil {
+	policy := batchArtifactURLPolicy{allowIdentityQuery: artifact.IdentityQuery}
+	parsed, err := parseBatchArtifactURLWithPolicy(artifact.SourceURL, policy)
+	if err != nil {
 		return fmt.Errorf("source lock has invalid public artifact URL: %w", err)
+	}
+	if artifact.IdentityQuery {
+		if err := validateSourceImportIdentityArtifactQuery(parsed); err != nil {
+			return fmt.Errorf("source lock has invalid identity artifact query: %w", err)
+		}
 	}
 	if artifact.Bytes <= 0 {
 		return fmt.Errorf("source lock has invalid artifact byte count")
@@ -870,20 +884,31 @@ func validateSourceImportPublishedURL(raw string) error {
 	if _, err := parseBatchArtifactURL(artifactURL.String()); err != nil {
 		return fmt.Errorf("published source URL: %w", err)
 	}
+	return validateSourceImportBoundedQuery(parsed, "published source URL", false)
+}
+
+func validateSourceImportIdentityArtifactQuery(parsed *url.URL) error {
+	return validateSourceImportBoundedQuery(parsed, "identity artifact query", true)
+}
+
+func validateSourceImportBoundedQuery(parsed *url.URL, subject string, requireQuery bool) error {
 	if parsed.RawQuery == "" && !parsed.ForceQuery {
+		if requireQuery {
+			return fmt.Errorf("%s is missing", subject)
+		}
 		return nil
 	}
 	if parsed.ForceQuery || len(parsed.RawQuery) > maxSourceImportPublishedQueryBytes {
-		return fmt.Errorf("published source URL query exceeds the citation policy")
+		return fmt.Errorf("%s exceeds the citation policy", subject)
 	}
 	query, err := url.ParseQuery(parsed.RawQuery)
 	if err != nil || len(query) == 0 || len(query) > maxSourceImportPublishedQueryKeys {
-		return fmt.Errorf("published source URL query violates the citation policy")
+		return fmt.Errorf("%s violates the citation policy", subject)
 	}
 	for key, values := range query {
 		lowerKey := strings.ToLower(key)
 		if key == "" || len(key) > maxSourceImportPublishedQueryKey || len(values) != 1 || len(values[0]) > maxSourceImportPublishedQueryValue || strings.ContainsAny(key, "\r\n") || strings.ContainsAny(values[0], "\r\n") || sourceImportCredentialLikeQueryKey(lowerKey) {
-			return fmt.Errorf("published source URL query violates the citation policy")
+			return fmt.Errorf("%s violates the citation policy", subject)
 		}
 	}
 	return nil
@@ -7929,6 +7954,7 @@ func sourceImportPathWithin(root, path string) bool {
 type httpSourceImportFetcher struct {
 	limits sourceImportLimits
 	lookup batchArtifactLookupIPAddr
+	client *http.Client
 }
 
 func newHTTPSourceImportFetcher(limits sourceImportLimits) sourceImportFetcher {
@@ -7993,7 +8019,7 @@ func (fetcher sourceImportArtifactCacheFetcher) FetchArtifact(ctx context.Contex
 		}
 	}
 
-	raw, err := fetcher.source.Fetch(ctx, artifact.SourceURL)
+	raw, err := fetchSourceImportArtifact(ctx, fetcher.source, artifact)
 	if err != nil {
 		return nil, err
 	}
@@ -8127,24 +8153,38 @@ func validateSourceImportArtifactBytes(raw []byte, artifact sourceImportArtifact
 }
 
 func (fetcher httpSourceImportFetcher) Fetch(ctx context.Context, sourceURL string) ([]byte, error) {
+	return fetcher.fetch(ctx, sourceURL, batchArtifactURLPolicy{})
+}
+
+func (fetcher httpSourceImportFetcher) FetchArtifact(ctx context.Context, artifact sourceImportArtifact) ([]byte, error) {
+	if err := validateSourceImportArtifact(artifact); err != nil {
+		return nil, err
+	}
+	return fetcher.fetch(ctx, artifact.SourceURL, batchArtifactURLPolicy{allowIdentityQuery: artifact.IdentityQuery})
+}
+
+func (fetcher httpSourceImportFetcher) fetch(ctx context.Context, sourceURL string, policy batchArtifactURLPolicy) ([]byte, error) {
 	if err := validateSourceImportLimits(fetcher.limits); err != nil {
 		return nil, err
 	}
 	if fetcher.lookup == nil {
 		return nil, fmt.Errorf("source importer has no public address resolver")
 	}
-	parsed, err := parseBatchArtifactURL(sourceURL)
+	parsed, err := parseBatchArtifactURLWithPolicy(sourceURL, policy)
 	if err != nil {
 		return nil, fmt.Errorf("validate locked source artifact URL: %w", err)
 	}
-	if err := validateBatchArtifactRequestURL(ctx, parsed, fetcher.lookup); err != nil {
+	if err := validateBatchArtifactRequestURLWithPolicy(ctx, parsed, fetcher.lookup, policy); err != nil {
 		return nil, fmt.Errorf("validate locked source artifact destination: %w", err)
 	}
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, parsed.String(), nil)
 	if err != nil {
 		return nil, err
 	}
-	client := newSourceImportHTTPClient(fetcher.lookup)
+	client := fetcher.client
+	if client == nil {
+		client = newSourceImportHTTPClient(fetcher.lookup)
+	}
 	response, err := client.Do(request)
 	if err != nil {
 		return nil, err
