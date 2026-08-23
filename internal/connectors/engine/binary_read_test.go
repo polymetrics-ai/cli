@@ -1,19 +1,72 @@
 package engine
 
 import (
+	"bufio"
 	"context"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
+	"errors"
+	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
 )
+
+const binaryDownloadCrashHelperEnv = "PM_BINARY_DOWNLOAD_CRASH_HELPER"
+
+// publicationGateReader lets the test create a competing final name after
+// owned temporary bytes exist but before EOF allows the publication step.
+// That is the precise race a no-overwrite download must tolerate.
+type publicationGateReader struct {
+	payload []byte
+	started chan<- struct{}
+	release <-chan struct{}
+	wrote   bool
+}
+
+func (r *publicationGateReader) Read(p []byte) (int, error) {
+	if !r.wrote {
+		r.wrote = true
+		copy(p, r.payload)
+		close(r.started)
+		return len(r.payload), nil
+	}
+	<-r.release
+	return 0, io.EOF
+}
+
+type crashPublicationReader struct {
+	wrote     bool
+	announced bool
+}
+
+func (r *crashPublicationReader) Read(p []byte) (int, error) {
+	if !r.wrote {
+		r.wrote = true
+		copy(p, []byte("bytes staged before crash"))
+		return len("bytes staged before crash"), nil
+	}
+	if !r.announced {
+		r.announced = true
+		// io.Copy asks for this second read only after it has written the
+		// first payload into the owned temp, so readiness proves the crash is
+		// at the staged-but-unpublished state rather than before temp I/O.
+		if _, err := fmt.Fprintln(os.Stdout, "binary-download-staged"); err != nil {
+			return 0, fmt.Errorf("announce staged binary download: %w", err)
+		}
+	}
+	select {}
+}
 
 func binaryBundle(srv *httptest.Server, spec *BinaryOperationSpec) Bundle {
 	if spec.Method == "" {
@@ -24,6 +77,14 @@ func binaryBundle(srv *httptest.Server, spec *BinaryOperationSpec) Bundle {
 	}
 	if spec.MaxBytes == 0 {
 		spec.MaxBytes = 1 << 20
+	}
+	if len(spec.ContentTypes) == 0 {
+		spec.ContentTypes = []string{"application/*"}
+	}
+	if spec.Response == nil {
+		spec.Response = &OperationResponseSpec{SuccessStatuses: []string{"200-299"}}
+	} else if len(spec.Response.SuccessStatuses) == 0 {
+		spec.Response.SuccessStatuses = []string{"200-299"}
 	}
 	return Bundle{
 		Name: "acme",
@@ -48,6 +109,9 @@ func binaryBundle(srv *httptest.Server, spec *BinaryOperationSpec) Bundle {
 func binaryServer(t *testing.T, body []byte, headers map[string]string) *httptest.Server {
 	t.Helper()
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if headers == nil || headers["Content-Type"] == "" {
+			w.Header().Set("Content-Type", "application/octet-stream")
+		}
 		for k, v := range headers {
 			w.Header().Set(k, v)
 		}
@@ -104,6 +168,45 @@ func TestBinaryDownloadWritesBoundedFile(t *testing.T) {
 	}
 }
 
+func TestOperationBinaryDownloadMasksConfiguredResponseHeaderValues(t *testing.T) {
+	const credential = "configured-header-material"
+	const occurrenceID = "occurrence-9007199254740993"
+	const unconfiguredToken = "ghp_unconfigured_provider_token"
+	encoded := base64.StdEncoding.EncodeToString([]byte(credential))
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Header().Add("X-Provider-Metadata", credential)
+		w.Header().Add("X-Provider-Metadata", occurrenceID)
+		w.Header().Add("X-Provider-Metadata", encoded)
+		w.Header().Add("X-Provider-Metadata", unconfiguredToken)
+		w.Header().Add("X-Provider-Metadata", credential)
+		w.Header().Set(credential, occurrenceID)
+		_, _ = w.Write([]byte("fixture"))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := binaryBundle(srv, &BinaryOperationSpec{
+		Response: &OperationResponseSpec{Headers: []OperationResponseHeaderSpec{
+			{Name: "X-Provider-Metadata", MaxBytes: 512},
+			{Name: credential, MaxBytes: 64},
+		}},
+	})
+	req := downloadReq(t.TempDir())
+	req.Config.Secrets = map[string]string{"credential": credential}
+	result, err := OperationBinaryDownload(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("OperationBinaryDownload: %v", err)
+	}
+	want := []string{"[masked]", occurrenceID, "[masked]", unconfiguredToken, "[masked]"}
+	for _, headers := range []map[string]connectors.OperationResponseHeader{result.Headers, result.Receipt.Headers} {
+		if !reflect.DeepEqual(headers["X-Provider-Metadata"].Values, want) {
+			t.Fatalf("header values = %#v, want %#v", headers["X-Provider-Metadata"].Values, want)
+		}
+	}
+	if result.Headers[credential].Values[0] != occurrenceID {
+		t.Fatalf("configured header name was changed: %#v", result.Headers)
+	}
+}
+
 // TestBinaryDownloadRejectsOverflow: a body one byte past the limit must be
 // REJECTED, not silently truncated. A truncated PDF looks like a valid write.
 func TestBinaryDownloadRejectsOverflow(t *testing.T) {
@@ -112,16 +215,84 @@ func TestBinaryDownloadRejectsOverflow(t *testing.T) {
 	dest := t.TempDir()
 	b := binaryBundle(srv, &BinaryOperationSpec{MaxBytes: 100})
 
-	_, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
+	result, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
 	if err == nil {
 		t.Fatal("want overflow rejection")
 	}
 	if !strings.Contains(err.Error(), "too large") {
 		t.Fatalf("error should name the size limit, got: %v", err)
 	}
+	if result.Receipt == nil || !result.Receipt.ResponseReceived || result.Receipt.Status != http.StatusOK || !result.Receipt.BodyPresent || result.Receipt.BodyBytes != 101 {
+		t.Fatalf("overflow receipt = %#v", result.Receipt)
+	}
 	entries, _ := os.ReadDir(dest)
 	if len(entries) != 0 {
 		t.Fatalf("rejected download must leave no file behind, found %d", len(entries))
+	}
+}
+
+func TestBinaryDownloadRequiresDeclaredMediaAndSuccessfulStatusBeforeIO(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))
+	t.Cleanup(srv.Close)
+	b := binaryBundle(srv, &BinaryOperationSpec{})
+	b.Operations[0].Binary.ContentTypes = nil
+	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil); err == nil || !strings.Contains(err.Error(), "content_types") {
+		t.Fatalf("missing media contract error = %v", err)
+	}
+	if requests != 0 {
+		t.Fatalf("missing media contract reached provider %d times", requests)
+	}
+	b = binaryBundle(srv, &BinaryOperationSpec{})
+	b.Operations[0].Binary.Response.SuccessStatuses = nil
+	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil); err == nil || !strings.Contains(err.Error(), "success_statuses") {
+		t.Fatalf("missing status contract error = %v", err)
+	}
+	if requests != 0 {
+		t.Fatalf("missing status contract reached provider %d times", requests)
+	}
+}
+
+func TestBinaryDownloadRejectsUndeclaredSuccessfulStatusBeforeArtifact(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.WriteHeader(http.StatusPartialContent)
+		_, _ = w.Write([]byte("partial"))
+	}))
+	t.Cleanup(srv.Close)
+	b := binaryBundle(srv, &BinaryOperationSpec{ContentTypes: []string{"application/octet-stream"}, Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}}})
+	dest := t.TempDir()
+	result, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
+	if err == nil || !strings.Contains(err.Error(), "not declared") {
+		t.Fatalf("undeclared status error = %v", err)
+	}
+	if result.Receipt == nil || result.Receipt.Status != http.StatusPartialContent || !result.Receipt.BodyPresent || result.Receipt.BodyBytes != int64(len("partial")) {
+		t.Fatalf("undeclared status receipt = %#v", result.Receipt)
+	}
+	entries, err := os.ReadDir(dest)
+	if err != nil || len(entries) != 0 {
+		t.Fatalf("undeclared status left artifacts: %v / %v", entries, err)
+	}
+}
+
+func TestBinaryDownloadRejectsUndeclaredContentTypeParametersBeforeArtifact(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/pdf; profile=unapproved")
+		_, _ = w.Write([]byte("%PDF-1.4"))
+	}))
+	t.Cleanup(srv.Close)
+	b := binaryBundle(srv, &BinaryOperationSpec{ContentTypes: []string{"application/pdf; profile=approved"}})
+	dest := t.TempDir()
+	result, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
+	if err == nil || !strings.Contains(err.Error(), "parameters") {
+		t.Fatalf("undeclared content-type parameter error = %v", err)
+	}
+	if result.Receipt == nil || !result.Receipt.ResponseReceived || result.Receipt.Status != http.StatusOK || !result.Receipt.BodyPresent || result.Receipt.BodyBytes != int64(len("%PDF-1.4")) || result.Receipt.Headers["Content-Type"].Values[0] != "application/pdf; profile=unapproved" {
+		t.Fatalf("media mismatch receipt = %#v", result.Receipt)
+	}
+	entries, err := os.ReadDir(dest)
+	if err != nil || len(entries) != 0 {
+		t.Fatalf("undeclared content-type parameters left artifacts: %v / %v", entries, err)
 	}
 }
 
@@ -135,6 +306,118 @@ func TestBinaryDownloadExactLimitSucceeds(t *testing.T) {
 
 	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil); err != nil {
 		t.Fatalf("exactly-at-limit must succeed: %v", err)
+	}
+}
+
+// TestBinaryDownloadNoOverwritePublicationIsCrashAndRaceSafe proves both
+// edges of the no-overwrite contract without relying on a timing accident: no
+// final name exists while a download is still staging (so process death cannot
+// leave a visible zero-byte claim), and a foreign final inserted before
+// publication remains byte/inode-identical after the owned temp is cleaned.
+func TestBinaryDownloadNoOverwritePublicationIsCrashAndRaceSafe(t *testing.T) {
+	if os.Getenv(binaryDownloadCrashHelperEnv) == "1" {
+		dest := os.Getenv("PM_BINARY_DOWNLOAD_CRASH_DEST")
+		if dest == "" {
+			t.Fatal("crash helper destination is empty")
+		}
+		_, _, _, err := streamBinaryDownloadToRoot(&crashPublicationReader{}, dest, "locked-export.csv", 1024, false, 0, nil)
+		t.Fatalf("crash helper returned before being killed: %v", err)
+	}
+
+	// A process killed while the owned temp is staged must leave no visible
+	// final name. This is a helper-process assertion rather than a simulated
+	// cleanup path, so defers cannot accidentally make the claim pass.
+	crashDest := t.TempDir()
+	crash := exec.Command(os.Args[0], "-test.run=^TestBinaryDownloadNoOverwritePublicationIsCrashAndRaceSafe$")
+	crash.Env = append(os.Environ(), binaryDownloadCrashHelperEnv+"=1", "PM_BINARY_DOWNLOAD_CRASH_DEST="+crashDest)
+	stdout, err := crash.StdoutPipe()
+	if err != nil {
+		t.Fatalf("crash helper stdout: %v", err)
+	}
+	if err := crash.Start(); err != nil {
+		t.Fatalf("start crash helper: %v", err)
+	}
+	ready := make(chan string, 1)
+	go func() {
+		line, _ := bufio.NewReader(stdout).ReadString('\n')
+		ready <- line
+	}()
+	select {
+	case line := <-ready:
+		if line != "binary-download-staged\n" {
+			_ = crash.Process.Kill()
+			_ = crash.Wait()
+			t.Fatalf("crash helper readiness = %q", line)
+		}
+	case <-time.After(5 * time.Second):
+		_ = crash.Process.Kill()
+		_ = crash.Wait()
+		t.Fatal("crash helper did not stage owned bytes")
+	}
+	if err := crash.Process.Kill(); err != nil {
+		t.Fatalf("kill crash helper: %v", err)
+	}
+	if err := crash.Wait(); err == nil {
+		t.Fatal("crash helper exited cleanly after kill")
+	}
+	if _, err := os.Stat(filepath.Join(crashDest, "locked-export.csv")); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("crash left visible final name: %v", err)
+	}
+
+	dest := t.TempDir()
+	const finalName = "locked-export.csv"
+	started := make(chan struct{})
+	release := make(chan struct{})
+	done := make(chan error, 1)
+	go func() {
+		_, _, _, err := streamBinaryDownloadToRoot(&publicationGateReader{
+			payload: []byte("owned export bytes"),
+			started: started,
+			release: release,
+		}, dest, finalName, 1024, false, 0, nil)
+		done <- err
+	}()
+
+	<-started
+	finalPath := filepath.Join(dest, finalName)
+	if _, err := os.Stat(finalPath); !errors.Is(err, os.ErrNotExist) {
+		close(release)
+		<-done
+		t.Fatalf("final name exists before publication: %v", err)
+	}
+
+	if err := os.WriteFile(finalPath, []byte("foreign sentinel"), 0o600); err != nil {
+		close(release)
+		<-done
+		t.Fatalf("create foreign sentinel: %v", err)
+	}
+	before, err := os.Stat(finalPath)
+	if err != nil {
+		close(release)
+		<-done
+		t.Fatalf("stat foreign sentinel: %v", err)
+	}
+	close(release)
+	if err := <-done; err == nil {
+		t.Fatal("no-overwrite publication succeeded over a foreign final file")
+	}
+	after, err := os.Stat(finalPath)
+	if err != nil {
+		t.Fatalf("foreign sentinel disappeared after failed publication: %v", err)
+	}
+	if !os.SameFile(before, after) {
+		t.Fatal("foreign sentinel inode changed during failed publication")
+	}
+	contents, err := os.ReadFile(finalPath)
+	if err != nil || string(contents) != "foreign sentinel" {
+		t.Fatalf("foreign sentinel contents = %q / %v, want unchanged", contents, err)
+	}
+	entries, err := os.ReadDir(dest)
+	if err != nil {
+		t.Fatalf("read destination: %v", err)
+	}
+	if len(entries) != 1 || entries[0].Name() != finalName {
+		t.Fatalf("destination entries = %#v, want only foreign final", entries)
 	}
 }
 
@@ -426,9 +709,7 @@ func TestBinaryDownloadSniffsContentType(t *testing.T) {
 
 // TestBinaryDownloadRecordIsFlatAndSurvivesRedaction: records are flat
 // map[string]any and pass through schema projection, so a nested object would
-// not survive. And shouldRedactJSONField silently redacts anything containing
-// both "download" and "url" — a field named download_url would become
-// download_url_redacted:true, so the reference field must be source_ref.
+// not survive. Provider metadata names are not sensitivity classifications.
 func TestBinaryDownloadRecordIsFlatAndSurvivesRedaction(t *testing.T) {
 	srv := binaryServer(t, []byte("data"), nil)
 	dest := t.TempDir()
@@ -441,9 +722,6 @@ func TestBinaryDownloadRecordIsFlatAndSurvivesRedaction(t *testing.T) {
 		switch v.(type) {
 		case map[string]any, []any, connectors.Record:
 			t.Fatalf("record field %q is not a flat scalar: %T", k, v)
-		}
-		if shouldRedactJSONField(k) {
-			t.Fatalf("record field %q would be silently redacted by shouldRedactJSONField", k)
 		}
 	}
 	for _, want := range []string{
@@ -470,8 +748,7 @@ func TestBinaryDownloadRequiresDestRoot(t *testing.T) {
 	}
 }
 
-// TestBinaryDownloadPreservesHTTPErrorTextAndLeavesNoFile.
-func TestBinaryDownloadPreservesHTTPErrorTextAndLeavesNoFile(t *testing.T) {
+func TestBinaryDownloadHTTPErrorKeepsProviderQueryAndBodyPrivateAndLeavesNoFile(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if got, want := r.URL.Query().Get("trace"), "binary-download-fixture"; got != want {
 			t.Fatalf("trace = %q, want %q", got, want)
@@ -481,21 +758,103 @@ func TestBinaryDownloadPreservesHTTPErrorTextAndLeavesNoFile(t *testing.T) {
 	}))
 	t.Cleanup(srv.Close)
 	dest := t.TempDir()
-	b := binaryBundle(srv, &BinaryOperationSpec{})
+	b := binaryBundle(srv, &BinaryOperationSpec{Parameters: []OperationParameter{{Name: "trace", In: "query", Type: "string", MaxBytes: 64}}})
 	req := downloadReq(dest)
 	req.Query = map[string]string{"trace": "binary-download-fixture"}
 	_, err := OperationBinaryDownload(context.Background(), b, req, nil)
 	if err == nil {
 		t.Fatal("want error for 403")
 	}
-	for _, want := range []string{"trace=binary-download-fixture", `{"diagnostic":"binary-download-fixture-body"}`} {
-		if !strings.Contains(err.Error(), want) {
-			t.Fatalf("OperationBinaryDownload error = %q, want complete diagnostic %q", err.Error(), want)
+	for _, secret := range []string{"trace=binary-download-fixture", "binary-download-fixture-body"} {
+		if strings.Contains(err.Error(), secret) {
+			t.Fatalf("OperationBinaryDownload error leaked %q: %q", secret, err.Error())
 		}
+	}
+	if !strings.Contains(err.Error(), "http 403") || !strings.Contains(err.Error(), "/files/{id}") {
+		t.Fatalf("OperationBinaryDownload error = %q, want safe status and declaration identity", err.Error())
 	}
 	entries, _ := os.ReadDir(dest)
 	if len(entries) != 0 {
 		t.Fatalf("failed download must leave no file, found %d", len(entries))
+	}
+}
+
+func TestBinaryDownloadRejectsUndeclaredOrUnsafeParametersBeforeProviderIO(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if got := r.URL.Query().Get("view"); got != "full" {
+			t.Errorf("view = %q, want full", got)
+		}
+		w.Header().Set("Content-Type", "application/octet-stream")
+		_, _ = w.Write([]byte("ok"))
+	}))
+	t.Cleanup(srv.Close)
+	b := binaryBundle(srv, &BinaryOperationSpec{Parameters: []OperationParameter{
+		{Name: "id", In: "path", Type: "string", Required: true, MaxBytes: 8},
+		{Name: "view", In: "query", Type: "string", Required: true, MaxBytes: 8},
+	}})
+	for _, tc := range []struct {
+		name string
+		req  BinaryDownloadRequest
+		ok   bool
+	}{
+		{name: "declared parameters", ok: true, req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "declared path parameter from config", ok: true, req: BinaryDownloadRequest{Operation: "acme.download_file", Config: connectors.RuntimeConfig{Config: map[string]string{"id": "report"}}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "undeclared path parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report", "admin": "true"}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "undeclared query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "full", "admin": "true"}, DestRoot: t.TempDir()}},
+		{name: "over cap path parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "too-long-id"}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "over cap configured path parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", Config: connectors.RuntimeConfig{Config: map[string]string{"id": "too-long-id"}}, Query: map[string]string{"view": "full"}, DestRoot: t.TempDir()}},
+		{name: "missing required query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, DestRoot: t.TempDir()}},
+		{name: "empty required query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": ""}, DestRoot: t.TempDir()}},
+		{name: "whitespace required query parameter", req: BinaryDownloadRequest{Operation: "acme.download_file", PathParams: map[string]string{"id": "report"}, Query: map[string]string{"view": "   "}, DestRoot: t.TempDir()}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			before := requests
+			_, err := OperationBinaryDownload(context.Background(), b, tc.req, nil)
+			if tc.ok {
+				if err != nil {
+					t.Fatalf("OperationBinaryDownload: %v", err)
+				}
+				if requests != before+1 {
+					t.Fatalf("requests = %d, want %d", requests, before+1)
+				}
+				return
+			}
+			if err == nil {
+				t.Fatal("unsafe binding was accepted")
+			}
+			if requests != before {
+				t.Fatalf("unsafe binding reached provider %d times", requests-before)
+			}
+		})
+	}
+}
+
+func TestBinaryDownloadProviderErrorReturnsCompleteMetadataAndNoArtifact(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Add("X-Provider-Receipt", "first")
+		w.Header().Add("X-Provider-Receipt", "second")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		_, _ = w.Write([]byte(`{"id":"download-occurrence-9007199254740993"}`))
+	}))
+	t.Cleanup(srv.Close)
+	dest := t.TempDir()
+	b := binaryBundle(srv, &BinaryOperationSpec{})
+	result, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
+	if err == nil {
+		t.Fatal("download error = nil")
+	}
+	if result.Operation == "" || result.Receipt == nil || result.Receipt.Status != http.StatusNotFound || !strings.Contains(result.Receipt.BodyRaw, "download-occurrence-9007199254740993") {
+		t.Fatalf("binary error receipt = %#v", result)
+	}
+	if got := result.Receipt.Headers["X-Provider-Receipt"].Values; !reflect.DeepEqual(got, []string{"first", "second"}) {
+		t.Fatalf("duplicate receipt headers = %#v", got)
+	}
+	entries, readErr := os.ReadDir(dest)
+	if readErr != nil || len(entries) != 0 {
+		t.Fatalf("failed binary download left artifacts: entries=%v err=%v", entries, readErr)
 	}
 }
 
@@ -545,6 +904,7 @@ func redirectingBinaryServers(t *testing.T) (origin *httptest.Server, cdnHost *s
 	host := ""
 	cdn := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		sawAuth = r.Header.Get("X-API-Key")
+		w.Header().Set("Content-Type", "application/octet-stream")
 		_, _ = w.Write([]byte("cdn-bytes"))
 	}))
 	t.Cleanup(cdn.Close)
@@ -581,9 +941,9 @@ func TestBinaryDownloadRefusesCrossHostRedirectByDefault(t *testing.T) {
 // TestBinaryDownloadAllowCrossHostIsEnforced: declaring allow_cross_host
 // actually changes behaviour, and the credential still does not travel.
 func TestBinaryDownloadAllowCrossHostIsEnforced(t *testing.T) {
-	origin, _, cdnSawAuth := redirectingBinaryServers(t)
+	origin, cdnHost, cdnSawAuth := redirectingBinaryServers(t)
 	dest := t.TempDir()
-	b := binaryBundleWithAuth(origin, &BinaryOperationSpec{AllowCrossHost: true})
+	b := binaryBundleWithAuth(origin, &BinaryOperationSpec{Redirect: &OperationRedirectSpec{MaxHops: 1, AllowedHosts: []string{*cdnHost}}})
 	res, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
 	if err != nil {
 		t.Fatalf("declared allow_cross_host must permit the hop: %v", err)
@@ -602,7 +962,7 @@ func TestBinaryDownloadAllowCrossHostIsEnforced(t *testing.T) {
 func TestBinaryDownloadAllowedHostsIsEnforced(t *testing.T) {
 	origin, cdnHost, cdnSawAuth := redirectingBinaryServers(t)
 
-	b := binaryBundleWithAuth(origin, &BinaryOperationSpec{AllowedHosts: []string{*cdnHost}})
+	b := binaryBundleWithAuth(origin, &BinaryOperationSpec{Redirect: &OperationRedirectSpec{MaxHops: 1, AllowedHosts: []string{*cdnHost}}})
 	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil); err != nil {
 		t.Fatalf("allowlisted host must be permitted: %v", err)
 	}
@@ -610,7 +970,7 @@ func TestBinaryDownloadAllowedHostsIsEnforced(t *testing.T) {
 		t.Fatalf("credential leaked to an allowlisted host: %q", *cdnSawAuth)
 	}
 
-	other := binaryBundleWithAuth(origin, &BinaryOperationSpec{AllowedHosts: []string{"somewhere.invalid:443"}})
+	other := binaryBundleWithAuth(origin, &BinaryOperationSpec{Redirect: &OperationRedirectSpec{MaxHops: 1, AllowedHosts: []string{"somewhere.invalid:443"}}})
 	if _, err := OperationBinaryDownload(context.Background(), other, downloadReq(t.TempDir()), nil); err == nil {
 		t.Fatal("a host outside allowed_hosts must stay refused")
 	}

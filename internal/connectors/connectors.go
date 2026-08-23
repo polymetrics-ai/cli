@@ -2,8 +2,10 @@ package connectors
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/csv"
 	"encoding/json"
 	"errors"
@@ -12,10 +14,13 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf16"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/synccontract"
@@ -390,6 +395,40 @@ type OpaqueCursorState struct {
 	Present bool
 }
 
+// ReadContinuation is engine-owned pagination state for a bounded source
+// scan. Its bytes are opaque outside the connector engine: callers may retain
+// and return an exact value through a durable checkpoint, but cannot select a
+// provider cursor, URL, query, or pagination strategy with it.
+type ReadContinuation struct {
+	Kind  string
+	Token []byte
+}
+
+// Clone preserves the exact opaque continuation bytes across request and
+// result boundaries.
+func (c *ReadContinuation) Clone() *ReadContinuation {
+	if c == nil {
+		return nil
+	}
+	clone := *c
+	clone.Token = append([]byte(nil), c.Token...)
+	return &clone
+}
+
+// ReadBudgetStoppedError reports that an engine scan reached its declared
+// page budget while a further provider page was known to exist. It is not EOF
+// and cannot be treated as a completed collection.
+type ReadBudgetStoppedError struct {
+	Continuation ReadContinuation
+}
+
+func (e *ReadBudgetStoppedError) Error() string {
+	if e == nil {
+		return "source pagination stopped at its page budget"
+	}
+	return "source pagination stopped at its page budget before exhaustion"
+}
+
 type SourceOrderedCursorReader interface {
 	CursorStateFromRecord(Record, string) (OpaqueCursorState, error)
 	ValidateCursorField(RuntimeConfig, string) error
@@ -407,6 +446,9 @@ type ReadRequest struct {
 	// tighten a declared stream limit; zero leaves it unchanged and a negative
 	// value is rejected.
 	MaxPages int
+	// Continuation is accepted only by an engine-owned bounded-source resume.
+	// It is deliberately not mapped from command input or connector config.
+	Continuation *ReadContinuation
 	// PageDeadline bounds one retryable provider page request. It is used by
 	// closed transports and never represents a deadline for an entire stream.
 	PageDeadline time.Duration
@@ -436,7 +478,17 @@ type OperationDirectReadRequest struct {
 	Config     RuntimeConfig
 	PathParams map[string]string
 	Query      map[string]string
-	Body       map[string]any
+	// CommandBindings seals the exact caller-controlled fields declared by the
+	// generated command descriptor. The engine revalidates this set against the
+	// loaded bundle before using it, so legacy descriptors can remain executable
+	// while undeclared direct callers stay closed.
+	CommandBindings *OperationDirectReadBindings
+	// Headers contains only values for exact, provider-declared non-auth
+	// header parameters. The operation engine validates the declaration and
+	// values before constructing a runtime or issuing I/O.
+	Headers      map[string]string
+	HeaderValues map[string][]string
+	Body         map[string]any
 	// RawBody is available only to an operation that explicitly declares a
 	// text/plain POST with a root string body schema. It is a pointer so an
 	// absent body is distinct from an intentionally empty one; the operation
@@ -450,22 +502,71 @@ type OperationDirectReadRequest struct {
 	PageCursor string
 }
 
+// OperationDirectReadBindings is the closed command-to-operation projection
+// for one direct read. It contains field names only; values remain in the
+// request maps and are independently type/size validated before dispatch.
+type OperationDirectReadBindings struct {
+	Path    []string
+	Query   []string
+	Body    []string
+	RawBody bool
+}
+
 type DirectReadResult struct {
 	Connector string `json:"connector"`
+	Operation string `json:"operation,omitempty"`
 	Method    string `json:"method"`
 	Path      string `json:"path"`
 	Status    int    `json:"status"`
 	Body      any    `json:"body"`
+	// Receipt is the complete bounded provider response. Body remains the
+	// declaration's convenience projection; Receipt retains the raw transport
+	// representation and every ordinary response header for audit/retry work.
+	Receipt *ProviderResponseReceipt `json:"receipt,omitempty"`
+	// Headers contains only response headers explicitly admitted by the exact
+	// operation response contract. A redacted header remains present with its
+	// explicit marker; arbitrary provider metadata is never an output channel.
+	Headers map[string]OperationResponseHeader `json:"headers,omitempty"`
 	// GraphQL is present only for a declared fixed-document GraphQL operation.
 	// It deliberately exposes a small, redacted response summary rather than
 	// a provider error envelope, so a provider cannot turn errors/extensions
 	// into a secret-bearing output side channel.
 	GraphQL *GraphQLResponseMetadata `json:"graphql,omitempty"`
+	// OutputSecretFields is declaration-owned response sensitivity metadata.
+	// It never leaves the internal connector/runner boundary; the public
+	// projection replaces only the matching scalar values while retaining keys.
+	OutputSecretFields []string `json:"-"`
 	// Page answers "is this all of it?" — the question a direct-read caller
 	// previously had no way to ask. A single Status+Body cannot represent
 	// page 2..N, so before this field a truncated collection and a complete
 	// one were indistinguishable at status 200.
 	Page DirectReadPage `json:"page"`
+}
+
+// ProviderResponseReceipt is shared by direct reads and binary downloads.
+// Binary success never inlines file bytes: Body is confined-file metadata and
+// BodyRaw remains empty while BodyBytes reports the streamed byte count.
+type ProviderResponseReceipt struct {
+	ResponseReceived bool                               `json:"response_received"`
+	Status           int                                `json:"status"`
+	Headers          map[string]OperationResponseHeader `json:"headers,omitempty"`
+	BodyPresent      bool                               `json:"body_present"`
+	BodyBytes        int64                              `json:"body_bytes"`
+	BodyRaw          string                             `json:"body_raw,omitempty"`
+	BodyRawEncoding  string                             `json:"body_raw_encoding,omitempty"`
+	Body             any                                `json:"body,omitempty"`
+}
+
+// OperationResponseHeader is one declared provider response header. Values are
+// complete when ordinary; Redacted preserves presence for credential or
+// transport-secret headers without exposing their values.
+type OperationResponseHeader struct {
+	Values   []string `json:"values,omitempty"`
+	Redacted bool     `json:"redacted,omitempty"`
+	// Masked is the persisted reverse-ETL projection spelling for the same
+	// declared secret boundary. Keep both markers so direct operation results
+	// and full provider write receipts retain their established JSON contracts.
+	Masked bool `json:"masked,omitempty"`
 }
 
 // GraphQLResponseMetadata is the bounded protocol metadata retained for a
@@ -478,9 +579,7 @@ type GraphQLResponseMetadata struct {
 	RateLimit   *GraphQLRateLimit    `json:"rate_limit,omitempty"`
 }
 
-// GraphQLResultError intentionally carries only a sanitized, bounded message.
-// Provider extensions and paths may echo caller inputs or internal identifiers,
-// so neither is a CLI response contract.
+// GraphQLResultError reports one provider GraphQL error.
 type GraphQLResultError struct {
 	Message string `json:"message"`
 }
@@ -586,6 +685,14 @@ type OperationDirectReadPreflighter interface {
 	PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error
 }
 
+// OperationDirectReadBindingPreflighter proves the exact command-owned
+// path/query/body mappings before commandrunner accepts an operation-backed
+// direct read. Endpoint preflight alone cannot prevent an otherwise valid
+// operation from receiving undeclared caller fields.
+type OperationDirectReadBindingPreflighter interface {
+	PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error
+}
+
 // OperationStructuredJSONVariablePreflighter exposes the deliberately narrow
 // admission check for a structured CLI value in a fixed GraphQL operation.
 // The operation declaration remains the only authority for which one
@@ -602,10 +709,14 @@ type OperationStructuredJSONVariablePreflighter interface {
 // issued for that exact preview; the engine consumes it at its shared write
 // gate immediately before dispatch.
 type OperationDirectWriteRequest struct {
-	Operation    string
-	Config       RuntimeConfig
-	PathParams   map[string]string
-	Query        map[string]string
+	Operation  string
+	Config     RuntimeConfig
+	PathParams map[string]string
+	Query      map[string]string
+	// Headers contains only exact declaration-owned non-auth header values.
+	// They are included in the preview digest that authorizes execution.
+	Headers      map[string]string
+	HeaderValues map[string][]string
 	Body         map[string]any
 	OutputPolicy string
 	// RedactFields remains part of the request contract for compatibility, but
@@ -616,19 +727,30 @@ type OperationDirectWriteRequest struct {
 }
 
 // OperationDirectWriteResult is the typed result of one declared REST or
-// fixed-document GraphQL mutation. Successful output retains the complete
-// decoded provider response; a declared output_policy shapes parsing only and
-// does not silently suppress ordinary result fields.
+// fixed-document GraphQL mutation. Provider-returned output is retained
+// verbatim; output_policy shapes parsing only. System-generated diagnostics,
+// plans, and logs remain separate secret-safe surfaces.
 type OperationDirectWriteResult struct {
-	Connector          string                         `json:"connector"`
-	Operation          string                         `json:"operation"`
-	Method             string                         `json:"method"`
-	Path               string                         `json:"path"`
-	Status             int                            `json:"status"`
-	Headers            map[string]WriteProviderHeader `json:"headers,omitempty"`
-	Body               any                            `json:"body,omitempty"`
-	GraphQL            *GraphQLResponseMetadata       `json:"graphql,omitempty"`
-	OutputSecretFields []string                       `json:"-"`
+	Connector          string                             `json:"connector"`
+	Operation          string                             `json:"operation"`
+	Method             string                             `json:"method"`
+	Path               string                             `json:"path"`
+	ResponseReceived   bool                               `json:"response_received"`
+	Status             int                                `json:"status"`
+	Headers            map[string]OperationResponseHeader `json:"headers,omitempty"`
+	BodyPresent        bool                               `json:"body_present"`
+	BodyBytes          int                                `json:"body_bytes"`
+	BodyRaw            string                             `json:"body_raw,omitempty"`
+	BodyRawEncoding    string                             `json:"body_raw_encoding,omitempty"`
+	Body               any                                `json:"body"`
+	GraphQL            *GraphQLResponseMetadata           `json:"graphql,omitempty"`
+	OutputSecretFields []string                           `json:"-"`
+	// RequestSensitiveValues is populated only by the declaration-owned
+	// executor.  A provider can echo a declared sensitive request scalar in an
+	// otherwise ordinary receipt (especially an error receipt); retain the
+	// receipt but mask that exact scalar at the persistence/public boundary.
+	// It is deliberately not serializable and is never caller-controlled.
+	RequestSensitiveValues []string `json:"-"`
 }
 
 // OperationDirectWriteMetadata is the no-network operation metadata needed by
@@ -643,11 +765,13 @@ type OperationDirectWriteMetadata struct {
 	ConfirmationChallenge string
 	OutputPolicy          string
 	Batchable             bool
+	StructuredBody        bool
 	// PayloadFileFields is nil for non-multipart operations. For a declared
 	// multipart operation it is the closed set of body paths whose local-file
 	// identities must be captured before preview, even when their names do not
 	// follow a file_path convention.
-	PayloadFileFields []string
+	PayloadFileFields   []string
+	PayloadFileMaxBytes map[string]int64
 	// RedactFields is the operation's declared sensitive_policy.redact_fields.
 	// It is the ONLY redaction source for an operation-backed reverse plan:
 	// operation IDs and write-action names are separate namespaces that
@@ -667,10 +791,42 @@ type OperationDirectWriter interface {
 // OperationDirectWritePreflighter exposes the no-network admission check for
 // a command's exact direct-write binding. A command cannot be executable merely
 // because an operation has compatible metadata: its method, provider-relative
-// path, and output policy must match the fixed declaration that the runtime
-// will dispatch.
+// path, output policy, and query-field bindings must match the fixed
+// declaration that the runtime will dispatch.
 type OperationDirectWritePreflighter interface {
-	PreflightOperationDirectWrite(operation, method, path, outputPolicy string) error
+	PreflightOperationDirectWrite(operation, method, path, outputPolicy string, queryFields ...string) error
+}
+
+type OperationDirectWriteBindingPreflighter interface {
+	PreflightOperationDirectWriteBindings(operation string, pathFields, bodyFields []string) error
+}
+
+type OperationDirectWriteBodyMaterializer interface {
+	MaterializeOperationDirectWriteBody(operation string, mappings map[string]any) (map[string]any, error)
+}
+
+type OperationDirectWriteBodyValueResolver interface {
+	ResolveOperationDirectWriteBodyValue(operation string, body map[string]any, path string) (any, bool, error)
+}
+
+// OperationDirectWriteBodyPlanTransformer is the closed plan/reconstitution
+// companion for a declaration-owned structured body. It has no method, URL,
+// header, or raw-body authority: every accepted path is resolved against the
+// operation's bound body schema.
+type OperationDirectWriteBodyPlanTransformer interface {
+	WithholdOperationDirectWriteBodyFields(operation string, body map[string]any, fields []string) (map[string]any, []string, error)
+	RedactOperationDirectWriteBodyFields(operation string, body map[string]any, fields []string) (map[string]any, error)
+	MergeOperationDirectWriteBodyFragments(operation string, base, overlay map[string]any) (map[string]any, error)
+	OperationDirectWriteBodyPathContains(operation, parent, child string) (bool, error)
+}
+
+// OperationStructuredJSONBodyPreflighter proves that one named top-level
+// operation body field is a closed, bounded object or array in the operation
+// declaration. It deliberately accepts neither a raw body nor a dotted path:
+// command runners use it before parsing a json flag so source declarations,
+// not callers, own the resulting request structure.
+type OperationStructuredJSONBodyPreflighter interface {
+	PreflightOperationStructuredJSONBodyField(operation, field string) error
 }
 
 // OperationDirectWriteMetadataProvider exposes the plan-safe metadata for a
@@ -681,7 +837,7 @@ type OperationDirectWriteMetadataProvider interface {
 }
 
 // OperationBinaryDownloadRequest is one bounded binary/file download driven by
-// a declared binary_download operation.
+// a declared binary_download or text_export operation.
 //
 // DestRoot is required and is the directory the download is confined beneath;
 // there is no implicit destination, because a CLI that guesses where to write
@@ -691,6 +847,9 @@ type OperationBinaryDownloadRequest struct {
 	Config     RuntimeConfig
 	PathParams map[string]string
 	Query      map[string]string
+	// Headers contains only exact declaration-owned non-auth header values.
+	Headers      map[string]string
+	HeaderValues map[string][]string
 	// MaxBytes may only lower the operation's declared cap, never raise it.
 	MaxBytes int64
 	DestRoot string
@@ -703,15 +862,24 @@ type OperationBinaryDownloadRequest struct {
 // OperationBinaryDownloadResult describes what landed on disk. Bytes are never
 // inlined: a 25 MiB attachment would become a 34 MiB JSON line.
 type OperationBinaryDownloadResult struct {
-	Connector string `json:"connector"`
-	Operation string `json:"operation"`
-	Record    Record `json:"record"`
+	Connector string                             `json:"connector"`
+	Operation string                             `json:"operation"`
+	Method    string                             `json:"method"`
+	Path      string                             `json:"path"`
+	Record    Record                             `json:"record"`
+	Status    int                                `json:"status"`
+	Headers   map[string]OperationResponseHeader `json:"headers,omitempty"`
+	Receipt   *ProviderResponseReceipt           `json:"receipt,omitempty"`
 }
 
 // OperationBinaryDownloader is implemented by connectors that can execute a
-// declared binary_download operation.
+// declared binary_download or text_export operation.
 type OperationBinaryDownloader interface {
 	OperationBinaryDownload(context.Context, OperationBinaryDownloadRequest) (OperationBinaryDownloadResult, error)
+}
+
+type OperationBinaryDownloadPreflighter interface {
+	PreflightOperationBinaryDownload(operation, method, path string) error
 }
 
 // OperationStatusCheckRequest selects one declared response-less HEAD
@@ -722,17 +890,26 @@ type OperationStatusCheckRequest struct {
 	Config     RuntimeConfig
 	PathParams map[string]string
 	Query      map[string]string
+	// Headers contains only exact declaration-owned non-auth header values.
+	Headers      map[string]string
+	HeaderValues map[string][]string
 }
 
 // OperationStatusCheckResult intentionally exposes only bounded response
-// metadata. HEAD response bodies are never decoded or surfaced.
+// metadata. A final non-2xx response remains metadata rather than an HTTP
+// error, and HEAD response bodies are never decoded or surfaced.
 type OperationStatusCheckResult struct {
-	Connector string `json:"connector"`
-	Operation string `json:"operation"`
-	Method    string `json:"method"`
-	Path      string `json:"path"`
-	Status    int    `json:"status"`
-	BodyBytes int    `json:"body_bytes"`
+	Connector string                             `json:"connector"`
+	Operation string                             `json:"operation"`
+	Method    string                             `json:"method"`
+	Path      string                             `json:"path"`
+	Status    int                                `json:"status"`
+	BodyBytes int                                `json:"body_bytes"`
+	Headers   map[string]OperationResponseHeader `json:"headers,omitempty"`
+	// Receipt is the complete bounded HEAD response. Headers remains the
+	// declaration-admitted convenience projection; Receipt preserves all
+	// provider metadata so a terminal error does not erase audit evidence.
+	Receipt *ProviderResponseReceipt `json:"receipt,omitempty"`
 }
 
 type OperationStatusChecker interface {
@@ -792,13 +969,18 @@ func legacyBareConnectorName(name string) string {
 }
 
 type WriteRequest struct {
-	Stream     string
-	Table      string
-	Action     string
-	Overwrite  bool
-	Config     RuntimeConfig
-	PrimaryKey []string
-	Approval   *WriteApprovalEvidence
+	Stream    string
+	Table     string
+	Action    string
+	Overwrite bool
+	// DeliveryOccurrence is an internal, durable-workset identity supplied by
+	// checkpointed destinations. It is never a provider parameter or a
+	// caller-selected idempotency key; the engine hashes it with the sealed
+	// preview/action/index so retries stay stable without aliasing worksets.
+	DeliveryOccurrence string
+	Config             RuntimeConfig
+	PrimaryKey         []string
+	Approval           *WriteApprovalEvidence
 }
 
 // ConfirmationKind is the closed runtime vocabulary for an explicit write
@@ -833,171 +1015,1093 @@ type WriteResult struct {
 	ProviderResponses []WriteProviderResponse `json:"provider_responses,omitempty"`
 }
 
-// WriteProviderResponse is the provider result captured for one named typed
-// write action. It contains the complete successful response observable by the
-// closed connector action; only credential-bearing headers and exact known
-// credential values are represented by a Masked marker at the output boundary.
-// It never carries request paths, request bodies, or caller-selected transport
-// details.
+// WriteProviderResponse is the verbatim provider result captured for one named
+// typed write action. System-generated diagnostics are carried separately.
 type WriteProviderResponse struct {
-	Status       int                            `json:"status"`
-	Headers      map[string]WriteProviderHeader `json:"headers"`
-	Body         any                            `json:"body"`
-	BodyEncoding string                         `json:"body_encoding,omitempty"`
+	RecordIndex     int                            `json:"record_index"`
+	Status          int                            `json:"status"`
+	Headers         map[string]WriteProviderHeader `json:"headers"`
+	BodyPresent     bool                           `json:"body_present"`
+	BodyBytes       int                            `json:"body_bytes"`
+	BodyRaw         string                         `json:"body_raw,omitempty"`
+	BodyRawEncoding string                         `json:"body_raw_encoding,omitempty"`
+	Body            any                            `json:"body"`
+	BodyEncoding    string                         `json:"body_encoding,omitempty"`
 }
 
-// WriteProviderHeader preserves an ordinary provider response header. A
-// credential-bearing value remains present as an explicit masked marker rather
-// than being silently removed from persisted App/CLI output.
-type WriteProviderHeader struct {
-	Values []string `json:"values,omitempty"`
-	Masked bool     `json:"masked,omitempty"`
-}
+// WriteProviderHeader and OperationResponseHeader share the same complete
+// provider-header representation. The alias prevents the declarative reverse
+// result path from narrowing a declaration-owned operation result.
+type WriteProviderHeader = OperationResponseHeader
 
-// SanitizeWriteResultForOutput retains every normal provider result field for
-// persisted App/CLI output. It applies only the transport credential boundary:
-// standard credential headers and values equal to (or containing) a configured
-// secret become an explicit masked marker. No scope, plan, action, tier, or
-// field-name heuristic is used to suppress ordinary provider output.
+// SanitizeWriteResultForOutput returns a public clone of the complete internal
+// receipt. Ordinary provider truth is retained; only concrete configured
+// credential material (including common transport encodings) is masked.
 func SanitizeWriteResultForOutput(result WriteResult, secrets map[string]string) WriteResult {
-	clone := result
-	if len(result.ProviderResponses) == 0 {
-		return clone
+	masked := configuredWriteResultSecrets(secrets)
+	out := result
+	out.ProviderResponses = make([]WriteProviderResponse, len(result.ProviderResponses))
+	for i, response := range result.ProviderResponses {
+		out.ProviderResponses[i] = sanitizeWriteProviderResponse(response, masked)
 	}
-	secretValues := make([]string, 0, len(secrets))
-	for _, value := range secrets {
-		if value = strings.TrimSpace(value); value != "" {
-			secretValues = append(secretValues, value)
-		}
-	}
-	clone.ProviderResponses = make([]WriteProviderResponse, len(result.ProviderResponses))
-	for index, response := range result.ProviderResponses {
-		copy := response
-		copy.Headers = sanitizeWriteProviderHeaders(response.Headers, secretValues)
-		copy.Body = redactWriteResultValue(response.Body, secretValues)
-		clone.ProviderResponses[index] = copy
-	}
-	return clone
+	return out
 }
 
-// SanitizeOperationDirectWriteResultForOutput applies the same explicit
-// credential boundary to an already named operation result. The operation's
-// declared response secret fields remain present as masked markers; all other
-// provider output stays intact for persisted App/CLI result consumers.
+// SanitizeOperationDirectWriteResultForOutput applies the same public-boundary
+// clone and also masks declaration-classified response secret locations.
 func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResult, secrets map[string]string) OperationDirectWriteResult {
-	clone := result
-	secretValues := make([]string, 0, len(secrets))
-	for _, value := range secrets {
-		if value = strings.TrimSpace(value); value != "" {
-			secretValues = append(secretValues, value)
-		}
+	masked := configuredWriteResultSecrets(secrets)
+	masked = appendDeclaredSecretVariants(masked, result.RequestSensitiveValues)
+	declaredValues := providerOutputSecretValues(result.Body, result.OutputSecretFields)
+	body := cloneProviderOutputValue(result.Body)
+	for _, path := range result.OutputSecretFields {
+		maskProviderOutputPath(body, path)
 	}
-	clone.Headers = sanitizeWriteProviderHeaders(result.Headers, secretValues)
-	clone.Body = redactDeclaredWriteResultFields(redactWriteResultValue(result.Body, secretValues), result.OutputSecretFields)
-	clone.OutputSecretFields = nil
-	return clone
+	out := result
+	out.Headers = sanitizeProviderHeaders(result.Headers, masked)
+	out.BodyRaw = sanitizeProviderResponseRawAtPaths(result.BodyRaw, result.BodyRawEncoding, masked, result.OutputSecretFields)
+	out.Body = sanitizeProviderResponseValue(body, masked)
+	if rawBody, ok := result.Body.(string); ok && rawBody == result.BodyRaw {
+		out.Body = out.BodyRaw
+	}
+	out.OutputSecretFields = append([]string(nil), result.OutputSecretFields...)
+	out.RequestSensitiveValues = append([]string(nil), result.RequestSensitiveValues...)
+	out.GraphQL = sanitizeGraphQLResponseMetadataForOutput(result.GraphQL, appendDeclaredSecretVariants(masked, declaredValues))
+	return out
 }
 
-func sanitizeWriteProviderHeaders(headers map[string]WriteProviderHeader, secretValues []string) map[string]WriteProviderHeader {
-	if len(headers) == 0 {
+func SanitizeGraphQLResponseMetadataForOutput(metadata *GraphQLResponseMetadata, secrets map[string]string) *GraphQLResponseMetadata {
+	return sanitizeGraphQLResponseMetadataForOutput(metadata, configuredWriteResultSecrets(secrets))
+}
+
+func sanitizeGraphQLResponseMetadataForOutput(metadata *GraphQLResponseMetadata, secrets []string) *GraphQLResponseMetadata {
+	if metadata == nil {
 		return nil
 	}
-	clone := make(map[string]WriteProviderHeader, len(headers))
-	for name, header := range headers {
-		if responseHeaderIsCredential(name) || containsConfiguredSecret(header.Values, secretValues) {
-			clone[name] = WriteProviderHeader{Masked: true}
-			continue
-		}
-		clone[name] = WriteProviderHeader{Values: append([]string(nil), header.Values...), Masked: header.Masked}
+	out := *metadata
+	out.Errors = append([]GraphQLResultError(nil), metadata.Errors...)
+	for i := range out.Errors {
+		out.Errors[i].Message = redactWriteResultString(out.Errors[i].Message, secrets)
 	}
-	return clone
+	if metadata.RateLimit != nil {
+		rateLimit := *metadata.RateLimit
+		out.RateLimit = &rateLimit
+	}
+	return &out
 }
 
-func responseHeaderIsCredential(name string) bool {
-	switch strings.ToLower(strings.TrimSpace(name)) {
-	case "authorization", "proxy-authorization", "cookie", "set-cookie", "x-api-key", "x-auth-token":
+func sanitizeWriteProviderResponse(response WriteProviderResponse, secrets []string) WriteProviderResponse {
+	out := response
+	out.Headers = sanitizeProviderHeaders(response.Headers, secrets)
+	out.BodyRaw, out.Body = sanitizeProviderResponseBody(response.BodyRaw, response.BodyRawEncoding, response.Body, secrets)
+	return out
+}
+
+func sanitizeProviderHeaders(headers map[string]OperationResponseHeader, secrets []string) map[string]OperationResponseHeader {
+	if headers == nil {
+		return nil
+	}
+	out := make(map[string]OperationResponseHeader, len(headers))
+	for name, header := range headers {
+		clone := header
+		if header.Values != nil {
+			clone.Values = make([]string, len(header.Values))
+			for i, value := range header.Values {
+				clone.Values[i] = redactProviderResponseText(value, secrets)
+			}
+		}
+		// Header names are provider facts, never values. Rewriting them can
+		// corrupt duplicate/header identity and cannot remove secret material.
+		out[name] = clone
+	}
+	return out
+}
+
+func cloneProviderOutputValue(value any) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, item := range typed {
+			out[key] = cloneProviderOutputValue(item)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for i, item := range typed {
+			out[i] = cloneProviderOutputValue(item)
+		}
+		return out
+	case []string:
+		return append([]string(nil), typed...)
+	case []byte:
+		return append([]byte(nil), typed...)
+	default:
+		return value
+	}
+}
+
+func sanitizeProviderOutputValue(value any, secrets []string) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, item := range typed {
+			// Field names are structural provider output. Only concrete values can
+			// be configured credentials, so retain the provider's schema exactly.
+			out[key] = sanitizeProviderOutputValue(item, secrets)
+		}
+		return out
+	case map[string]string:
+		out := make(map[string]string, len(typed))
+		for key, item := range typed {
+			out[key] = sanitizeProviderOutputScalar(item, secrets)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for i, item := range typed {
+			out[i] = sanitizeProviderOutputValue(item, secrets)
+		}
+		return out
+	case string:
+		return sanitizeProviderOutputScalar(typed, secrets)
+	case json.Number:
+		if masked, ok := configuredSecretMask(typed.String(), secrets); ok {
+			return masked
+		}
+		return typed
+	case []string:
+		out := make([]string, len(typed))
+		for i, item := range typed {
+			out[i] = sanitizeProviderOutputScalar(item, secrets)
+		}
+		return out
+	default:
+		return cloneProviderOutputValue(value)
+	}
+}
+
+func sanitizeProviderResponseValue(value any, secrets []string) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, item := range typed {
+			out[key] = sanitizeProviderResponseValue(item, secrets)
+		}
+		return out
+	case map[string]string:
+		out := make(map[string]string, len(typed))
+		for key, item := range typed {
+			out[key] = redactProviderResponseText(item, secrets)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for i, item := range typed {
+			out[i] = sanitizeProviderResponseValue(item, secrets)
+		}
+		return out
+	case []string:
+		out := make([]string, len(typed))
+		for i, item := range typed {
+			out[i] = redactProviderResponseText(item, secrets)
+		}
+		return out
+	case string:
+		return redactProviderResponseText(typed, secrets)
+	case json.Number:
+		if masked := redactWriteResultString(typed.String(), secrets); masked != typed.String() {
+			return masked
+		}
+		return typed
+	default:
+		return cloneProviderOutputValue(value)
+	}
+}
+
+func sanitizeProviderOutputScalar(value string, secrets []string) string {
+	if masked, ok := configuredSecretMask(value, secrets); ok {
+		return masked
+	}
+	return value
+}
+
+func configuredSecretMask(value string, secrets []string) (string, bool) {
+	for _, secret := range secrets {
+		if value == secret {
+			return "[masked]", true
+		}
+	}
+	return value, false
+}
+
+// SanitizeProviderOutputForOutput deep-clones an arbitrary decoded provider
+// value and masks only configured credential material. It intentionally does
+// not infer sensitivity from field names: identifiers such as token and
+// trained_tokens are ordinary provider truth unless a declaration says
+// otherwise.
+func SanitizeProviderOutputForOutput(value any, secrets map[string]string) any {
+	return sanitizeProviderOutputValue(value, configuredWriteResultSecrets(secrets))
+}
+
+func SanitizeProviderResponseHeadersForOutput(headers map[string]OperationResponseHeader, secrets map[string]string) map[string]OperationResponseHeader {
+	return sanitizeProviderHeaders(headers, configuredWriteResultSecrets(secrets))
+}
+
+// SanitizeDirectReadPageForOutput returns page navigation that is safe to
+// publish with a direct-read result. A next cursor is an opaque provider value
+// and stays intact unless it is exactly one configured credential or one of
+// that credential's concrete wire encodings.
+func SanitizeDirectReadPageForOutput(page DirectReadPage, secrets map[string]string) DirectReadPage {
+	page.NextCursor = sanitizeProviderOutputScalar(page.NextCursor, configuredWriteResultSecrets(secrets))
+	return page
+}
+
+// SanitizeProviderResponseReceiptForOutput clones a complete response receipt
+// and removes only concrete configured credential values. Header locations
+// classified as credential material by the engine are already represented by
+// explicit Redacted/Masked markers before this value reaches the boundary.
+func SanitizeProviderResponseReceiptForOutput(receipt ProviderResponseReceipt, secrets map[string]string) ProviderResponseReceipt {
+	return SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput(receipt, secrets, nil)
+}
+
+// SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput is the sole
+// public projection of an immutable provider receipt. Declared field paths
+// identify values (never keys) to mask; configured credential material is
+// compared as whole scalar values, not by substring.
+func SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput(receipt ProviderResponseReceipt, secrets map[string]string, declaredFields []string) ProviderResponseReceipt {
+	masked := configuredWriteResultSecrets(secrets)
+	out := receipt
+	out.Headers = sanitizeProviderHeaders(receipt.Headers, masked)
+	body := cloneProviderOutputValue(receipt.Body)
+	maskProviderOutputPaths(body, declaredFields)
+	out.BodyRaw = sanitizeProviderResponseRawAtPaths(receipt.BodyRaw, receipt.BodyRawEncoding, masked, declaredFields)
+	out.Body = sanitizeProviderResponseValue(body, masked)
+	if rawBody, ok := receipt.Body.(string); ok && rawBody == receipt.BodyRaw {
+		out.Body = out.BodyRaw
+	}
+	return out
+}
+
+// SanitizeDirectReadResultForOutput projects an engine-owned result at the
+// command boundary. The engine result remains immutable provider evidence;
+// this clone is the only representation suitable for stdout or persistence.
+func SanitizeDirectReadResultForOutput(result DirectReadResult, secrets map[string]string) DirectReadResult {
+	masked := configuredWriteResultSecrets(secrets)
+	var declaredValues []string
+	if result.Receipt != nil {
+		declaredValues = providerOutputSecretValues(result.Receipt.Body, result.OutputSecretFields)
+	}
+	out := result
+	out.Headers = sanitizeProviderHeaders(result.Headers, masked)
+	out.Body = sanitizeProviderOutputValue(result.Body, masked)
+	out.OutputSecretFields = append([]string(nil), result.OutputSecretFields...)
+	if result.Receipt != nil {
+		receipt := SanitizeProviderResponseReceiptWithDeclaredSecretsForOutput(*result.Receipt, secrets, result.OutputSecretFields)
+		out.Receipt = &receipt
+	}
+	if result.GraphQL != nil {
+		graphql := *result.GraphQL
+		graphql.Errors = append([]GraphQLResultError(nil), result.GraphQL.Errors...)
+		graphqlSecrets := appendDeclaredSecretVariants(masked, declaredValues)
+		for i := range graphql.Errors {
+			graphql.Errors[i].Message = redactWriteResultString(graphql.Errors[i].Message, graphqlSecrets)
+		}
+		if result.GraphQL.RateLimit != nil {
+			rateLimit := *result.GraphQL.RateLimit
+			graphql.RateLimit = &rateLimit
+		}
+		out.GraphQL = &graphql
+	}
+	return out
+}
+
+// SanitizeOperationStatusCheckResultForOutput mirrors direct-read receipt
+// safety without adding a response-body surface to a HEAD operation.
+func SanitizeOperationStatusCheckResultForOutput(result OperationStatusCheckResult, secrets map[string]string) OperationStatusCheckResult {
+	out := result
+	out.Headers = sanitizeProviderHeaders(result.Headers, configuredWriteResultSecrets(secrets))
+	if result.Receipt != nil {
+		receipt := SanitizeProviderResponseReceiptForOutput(*result.Receipt, secrets)
+		out.Receipt = &receipt
+	}
+	return out
+}
+
+// SanitizeOperationBinaryDownloadResultForOutput keeps binary transfer bytes
+// out of the record while projecting its bounded provider receipt safely.
+func SanitizeOperationBinaryDownloadResultForOutput(result OperationBinaryDownloadResult, secrets map[string]string) OperationBinaryDownloadResult {
+	out := result
+	out.Headers = sanitizeProviderHeaders(result.Headers, configuredWriteResultSecrets(secrets))
+	if result.Receipt != nil {
+		receipt := SanitizeProviderResponseReceiptForOutput(*result.Receipt, secrets)
+		out.Receipt = &receipt
+	}
+	return out
+}
+
+func sanitizeProviderResponseRawAtPaths(value, encoding string, secrets, declaredFields []string) string {
+	if len(declaredFields) == 0 {
+		return sanitizeProviderResponseRaw(value, encoding, secrets)
+	}
+	raw := []byte(value)
+	base64Encoded := encoding == "base64"
+	if base64Encoded {
+		decoded, err := base64.StdEncoding.DecodeString(value)
+		if err != nil {
+			return sanitizeProviderResponseRaw(value, encoding, secrets)
+		}
+		raw = decoded
+	}
+	if publicJSON, ok := sanitizeProviderJSON(raw, secrets, declaredFields); ok {
+		raw = publicJSON
+	} else {
+		return sanitizeProviderResponseRaw(value, encoding, secrets)
+	}
+	if base64Encoded {
+		return base64.StdEncoding.EncodeToString(raw)
+	}
+	return string(raw)
+}
+
+func sanitizeProviderJSON(raw []byte, secrets, declaredFields []string) ([]byte, bool) {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.UseNumber()
+	var decoded any
+	if err := decoder.Decode(&decoded); err != nil {
+		return nil, false
+	}
+	var trailing any
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		return nil, false
+	}
+	original := cloneProviderOutputValue(decoded)
+	maskProviderOutputPaths(decoded, declaredFields)
+	public := sanitizeProviderOutputValue(decoded, secrets)
+	// Provider bytes are evidence, not a formatting suggestion. A parse is
+	// necessary to find a concrete scalar to withhold, but when no declared or
+	// configured value matched it must not change whitespace, key order,
+	// numeric spelling, escapes, or non-ASCII byte representation.
+	if reflect.DeepEqual(original, public) {
+		return append([]byte(nil), raw...), true
+	}
+	encoded, err := json.Marshal(public)
+	if err != nil {
+		return nil, false
+	}
+	return encoded, true
+}
+
+func sanitizeProviderResponseBody(raw, rawEncoding string, body any, secrets []string) (string, any) {
+	sanitizedRaw := sanitizeProviderResponseRaw(raw, rawEncoding, secrets)
+	sanitizedBody := sanitizeProviderResponseValue(body, secrets)
+	if rawBody, ok := body.(string); ok && rawBody == raw {
+		sanitizedBody = sanitizedRaw
+	}
+	return sanitizedRaw, sanitizedBody
+}
+
+func sanitizeProviderResponseRaw(value, encoding string, secrets []string) string {
+	if encoding == "base64" {
+		raw, err := base64.StdEncoding.DecodeString(value)
+		if err != nil {
+			return redactProviderResponseText(value, secrets)
+		}
+		return base64.StdEncoding.EncodeToString([]byte(redactProviderResponseText(string(raw), secrets)))
+	}
+	return redactProviderResponseText(value, secrets)
+}
+
+type providerResponseJSONStringSpan struct {
+	start int
+	end   int
+	key   bool
+}
+
+type providerResponseJSONContainerState uint8
+
+const (
+	providerResponseJSONObjectKeyOrEnd providerResponseJSONContainerState = iota
+	providerResponseJSONObjectColon
+	providerResponseJSONObjectValue
+	providerResponseJSONObjectCommaOrEnd
+	providerResponseJSONArrayValueOrEnd
+	providerResponseJSONArrayCommaOrEnd
+	providerResponseJSONContainerInvalid
+)
+
+type providerResponseJSONContainer struct {
+	kind  byte
+	state providerResponseJSONContainerState
+}
+
+type providerResponseJSONScanner struct {
+	containers []providerResponseJSONContainer
+}
+
+func redactProviderResponseText(value string, secrets []string) string {
+	if len(secrets) == 0 {
+		return value
+	}
+	stringSpans, isJSON := providerResponseJSONStrings(value)
+	if !isJSON || len(stringSpans) == 0 {
+		return redactProviderResponseTextSegment(value, secrets)
+	}
+	var out strings.Builder
+	out.Grow(len(value))
+	offset := 0
+	for _, span := range stringSpans {
+		out.WriteString(redactProviderResponseTextSegment(value[offset:span.start], secrets))
+		if span.key {
+			out.WriteString(value[span.start:span.end])
+		} else {
+			out.WriteString(redactProviderResponseJSONString(value[span.start:span.end], secrets))
+		}
+		offset = span.end
+	}
+	out.WriteString(redactProviderResponseTextSegment(value[offset:], secrets))
+	return out.String()
+}
+
+func redactProviderResponseTextSegment(value string, secrets []string) string {
+	for _, secret := range secrets {
+		value = redactConcreteSecretTextWithBoundary(value, secret, providerResponseTokenBoundary)
+	}
+	return value
+}
+
+func providerResponseJSONStrings(value string) ([]providerResponseJSONStringSpan, bool) {
+	spans := make([]providerResponseJSONStringSpan, 0)
+	scanner := providerResponseJSONScanner{}
+	for offset := 0; offset < len(value); {
+		if isProviderResponseJSONWhitespace(value[offset]) {
+			offset++
+			continue
+		}
+		if value[offset] != '"' {
+			scanner.consume(value, &offset)
+			continue
+		}
+		start := offset
+		offset++
+		terminated := false
+		for offset < len(value) {
+			switch value[offset] {
+			case '\\':
+				offset += 2
+			case '"':
+				offset++
+				terminated = true
+			default:
+				offset++
+			}
+			if terminated {
+				break
+			}
+		}
+		if !terminated {
+			break
+		}
+		spans = append(spans, providerResponseJSONStringSpan{start: start, end: offset, key: scanner.consumeString(value, offset)})
+	}
+	return spans, len(spans) != 0
+}
+
+func (scanner *providerResponseJSONScanner) consume(value string, offset *int) {
+	switch value[*offset] {
+	case '{', '[':
+		scanner.open(value[*offset])
+		*offset = *offset + 1
+	case '}', ']':
+		scanner.close(value[*offset])
+		*offset = *offset + 1
+	case ':':
+		scanner.colon()
+		*offset = *offset + 1
+	case ',':
+		scanner.comma()
+		*offset = *offset + 1
+	default:
+		start := *offset
+		for *offset < len(value) && !isProviderResponseJSONWhitespace(value[*offset]) && !isProviderResponseJSONStructuralByte(value[*offset]) {
+			*offset = *offset + 1
+		}
+		scanner.literal(value[start:*offset])
+	}
+}
+
+func (scanner *providerResponseJSONScanner) consumeString(value string, end int) bool {
+	container := scanner.top()
+	if container == nil {
+		return false
+	}
+	next := end
+	for next < len(value) && isProviderResponseJSONWhitespace(value[next]) {
+		next++
+	}
+	if container.kind == '{' && container.state == providerResponseJSONObjectKeyOrEnd && next < len(value) && value[next] == ':' {
+		container.state = providerResponseJSONObjectColon
+		return true
+	}
+	switch container.state {
+	case providerResponseJSONObjectValue:
+		container.state = providerResponseJSONObjectCommaOrEnd
+	case providerResponseJSONArrayValueOrEnd:
+		container.state = providerResponseJSONArrayCommaOrEnd
+	default:
+		container.state = providerResponseJSONContainerInvalid
+	}
+	return false
+}
+
+func (scanner *providerResponseJSONScanner) open(kind byte) {
+	if container := scanner.top(); container != nil {
+		switch container.state {
+		case providerResponseJSONObjectValue:
+			container.state = providerResponseJSONObjectCommaOrEnd
+		case providerResponseJSONArrayValueOrEnd:
+			container.state = providerResponseJSONArrayCommaOrEnd
+		default:
+			container.state = providerResponseJSONContainerInvalid
+			return
+		}
+	}
+	state := providerResponseJSONObjectKeyOrEnd
+	if kind == '[' {
+		state = providerResponseJSONArrayValueOrEnd
+	}
+	scanner.containers = append(scanner.containers, providerResponseJSONContainer{kind: kind, state: state})
+}
+
+func (scanner *providerResponseJSONScanner) close(kind byte) {
+	container := scanner.top()
+	if container == nil {
+		return
+	}
+	if (kind != '}' || container.kind != '{') && (kind != ']' || container.kind != '[') {
+		container.state = providerResponseJSONContainerInvalid
+		return
+	}
+	complete := providerResponseJSONContainerComplete(*container)
+	scanner.containers = scanner.containers[:len(scanner.containers)-1]
+	if !complete {
+		if parent := scanner.top(); parent != nil {
+			parent.state = providerResponseJSONContainerInvalid
+		}
+	}
+}
+
+func (scanner *providerResponseJSONScanner) colon() {
+	container := scanner.top()
+	if container == nil {
+		return
+	}
+	if container.kind == '{' && container.state == providerResponseJSONObjectColon {
+		container.state = providerResponseJSONObjectValue
+		return
+	}
+	container.state = providerResponseJSONContainerInvalid
+}
+
+func (scanner *providerResponseJSONScanner) comma() {
+	container := scanner.top()
+	if container == nil {
+		return
+	}
+	switch container.kind {
+	case '{':
+		if container.state == providerResponseJSONObjectCommaOrEnd {
+			container.state = providerResponseJSONObjectKeyOrEnd
+			return
+		}
+		container.state = providerResponseJSONContainerInvalid
+	case '[':
+		if container.state == providerResponseJSONArrayCommaOrEnd {
+			container.state = providerResponseJSONArrayValueOrEnd
+			return
+		}
+		container.state = providerResponseJSONContainerInvalid
+	}
+}
+
+func (scanner *providerResponseJSONScanner) literal(value string) {
+	container := scanner.top()
+	if container == nil {
+		return
+	}
+	if !json.Valid([]byte(value)) {
+		container.state = providerResponseJSONContainerInvalid
+		return
+	}
+	switch container.state {
+	case providerResponseJSONObjectValue:
+		container.state = providerResponseJSONObjectCommaOrEnd
+	case providerResponseJSONArrayValueOrEnd:
+		container.state = providerResponseJSONArrayCommaOrEnd
+	default:
+		container.state = providerResponseJSONContainerInvalid
+	}
+}
+
+func (scanner *providerResponseJSONScanner) top() *providerResponseJSONContainer {
+	if len(scanner.containers) == 0 {
+		return nil
+	}
+	return &scanner.containers[len(scanner.containers)-1]
+}
+
+func providerResponseJSONContainerComplete(container providerResponseJSONContainer) bool {
+	switch container.kind {
+	case '{':
+		return container.state == providerResponseJSONObjectKeyOrEnd || container.state == providerResponseJSONObjectCommaOrEnd
+	case '[':
+		return container.state == providerResponseJSONArrayValueOrEnd || container.state == providerResponseJSONArrayCommaOrEnd
+	default:
+		return false
+	}
+}
+
+func isProviderResponseJSONStructuralByte(value byte) bool {
+	switch value {
+	case '{', '}', '[', ']', ':', ',', '"':
 		return true
 	default:
 		return false
 	}
 }
 
-func containsConfiguredSecret(values, secrets []string) bool {
-	for _, value := range values {
-		for _, secret := range secrets {
-			if strings.Contains(value, secret) {
-				return true
+func isProviderResponseJSONWhitespace(value byte) bool {
+	return value == ' ' || value == '\t' || value == '\n' || value == '\r'
+}
+
+type providerResponseDecodedByteSpan struct {
+	start int
+	end   int
+}
+
+type providerResponseTextSpan struct {
+	start int
+	end   int
+}
+
+func redactProviderResponseJSONString(value string, secrets []string) string {
+	decoded, decodedSpans, ok := decodeProviderResponseJSONString(value)
+	if !ok {
+		return redactProviderResponseTextSegment(value, secrets)
+	}
+	matches := providerResponseSecretTextSpans(decoded, secrets)
+	if len(matches) == 0 {
+		return value
+	}
+	var out strings.Builder
+	out.Grow(len(value))
+	offset := 0
+	for _, match := range matches {
+		start := decodedSpans[match.start].start
+		end := decodedSpans[match.end-1].end
+		out.WriteString(value[offset:start])
+		out.WriteString("[masked]")
+		offset = end
+	}
+	out.WriteString(value[offset:])
+	return out.String()
+}
+
+func decodeProviderResponseJSONString(value string) (string, []providerResponseDecodedByteSpan, bool) {
+	if len(value) < 2 || value[0] != '"' || value[len(value)-1] != '"' {
+		return "", nil, false
+	}
+	decoded := make([]byte, 0, len(value)-2)
+	spans := make([]providerResponseDecodedByteSpan, 0, len(value)-2)
+	appendBytes := func(start, end int, bytes []byte) {
+		decoded = append(decoded, bytes...)
+		for range bytes {
+			spans = append(spans, providerResponseDecodedByteSpan{start: start, end: end})
+		}
+	}
+	for offset := 1; offset < len(value)-1; {
+		if value[offset] != '\\' {
+			appendBytes(offset, offset+1, []byte{value[offset]})
+			offset++
+			continue
+		}
+		if offset+1 >= len(value)-1 {
+			return "", nil, false
+		}
+		start := offset
+		switch value[offset+1] {
+		case '"', '\\', '/':
+			appendBytes(start, offset+2, []byte{value[offset+1]})
+			offset += 2
+		case 'b':
+			appendBytes(start, offset+2, []byte{'\b'})
+			offset += 2
+		case 'f':
+			appendBytes(start, offset+2, []byte{'\f'})
+			offset += 2
+		case 'n':
+			appendBytes(start, offset+2, []byte{'\n'})
+			offset += 2
+		case 'r':
+			appendBytes(start, offset+2, []byte{'\r'})
+			offset += 2
+		case 't':
+			appendBytes(start, offset+2, []byte{'\t'})
+			offset += 2
+		case 'u':
+			if offset+6 > len(value)-1 {
+				return "", nil, false
 			}
+			r, ok := providerResponseJSONHexRune(value[offset+2 : offset+6])
+			if !ok {
+				return "", nil, false
+			}
+			offset += 6
+			end := offset
+			if r >= 0xD800 && r <= 0xDBFF && offset+6 <= len(value)-1 && value[offset] == '\\' && value[offset+1] == 'u' {
+				low, validLow := providerResponseJSONHexRune(value[offset+2 : offset+6])
+				if validLow && low >= 0xDC00 && low <= 0xDFFF {
+					r = utf16.DecodeRune(r, low)
+					offset += 6
+					end = offset
+				} else {
+					r = utf8.RuneError
+				}
+			} else if r >= 0xD800 && r <= 0xDFFF {
+				r = utf8.RuneError
+			}
+			appendBytes(start, end, []byte(string(r)))
+		default:
+			return "", nil, false
+		}
+	}
+	return string(decoded), spans, true
+}
+
+func providerResponseJSONHexRune(value string) (rune, bool) {
+	if len(value) != 4 {
+		return 0, false
+	}
+	var result rune
+	for _, digit := range value {
+		result <<= 4
+		switch {
+		case digit >= '0' && digit <= '9':
+			result += digit - '0'
+		case digit >= 'a' && digit <= 'f':
+			result += digit - 'a' + 10
+		case digit >= 'A' && digit <= 'F':
+			result += digit - 'A' + 10
+		default:
+			return 0, false
+		}
+	}
+	return result, true
+}
+
+func providerResponseSecretTextSpans(value string, secrets []string) []providerResponseTextSpan {
+	spans := make([]providerResponseTextSpan, 0)
+	for _, secret := range secrets {
+		if secret == "" {
+			continue
+		}
+		for offset := 0; offset < len(value); {
+			index := strings.Index(value[offset:], secret)
+			if index < 0 {
+				break
+			}
+			start := offset + index
+			end := start + len(secret)
+			if providerOutputTokenBoundary(value, start, end) && !providerResponseTextSpanOverlaps(spans, start, end) {
+				spans = append(spans, providerResponseTextSpan{start: start, end: end})
+			}
+			offset = end
+		}
+	}
+	sort.Slice(spans, func(i, j int) bool {
+		if spans[i].start == spans[j].start {
+			return spans[i].end < spans[j].end
+		}
+		return spans[i].start < spans[j].start
+	})
+	return spans
+}
+
+func providerResponseTextSpanOverlaps(spans []providerResponseTextSpan, start, end int) bool {
+	for _, span := range spans {
+		if start < span.end && span.start < end {
+			return true
 		}
 	}
 	return false
 }
 
-func redactWriteResultValue(value any, secrets []string) any {
-	switch typed := value.(type) {
-	case string:
-		if containsConfiguredSecret([]string{typed}, secrets) {
-			return map[string]bool{"masked": true}
+func providerOutputValueAtPath(value any, path string) (any, bool) {
+	current := value
+	for _, segment := range strings.Split(strings.TrimPrefix(path, "body."), ".") {
+		object, ok := current.(map[string]any)
+		if !ok {
+			return nil, false
 		}
-		return typed
+		current, ok = object[segment]
+		if !ok {
+			return nil, false
+		}
+	}
+	return current, true
+}
+
+func maskProviderOutputPath(value any, path string) {
+	segments := strings.Split(strings.TrimPrefix(path, "body."), ".")
+	maskProviderOutputSegments(value, segments)
+}
+
+func maskProviderOutputPaths(value any, paths []string) {
+	for _, path := range paths {
+		path = strings.TrimSpace(path)
+		if path == "" {
+			continue
+		}
+		maskProviderOutputPath(value, path)
+	}
+}
+
+func maskProviderOutputSegments(value any, segments []string) {
+	if len(segments) == 0 {
+		return
+	}
+	switch current := value.(type) {
 	case map[string]any:
-		clone := make(map[string]any, len(typed))
-		for key, child := range typed {
-			clone[key] = redactWriteResultValue(child, secrets)
+		next, present := current[segments[0]]
+		if !present {
+			return
 		}
-		return clone
+		if len(segments) == 1 {
+			current[segments[0]] = "[masked]"
+			return
+		}
+		maskProviderOutputSegments(next, segments[1:])
 	case []any:
-		clone := make([]any, len(typed))
-		for index, child := range typed {
-			clone[index] = redactWriteResultValue(child, secrets)
+		for _, item := range current {
+			maskProviderOutputSegments(item, segments)
 		}
-		return clone
-	case []string:
-		clone := make([]string, len(typed))
-		copy(clone, typed)
-		if containsConfiguredSecret(clone, secrets) {
-			return map[string]bool{"masked": true}
-		}
-		return clone
-	default:
-		return value
 	}
 }
 
-func redactDeclaredWriteResultFields(value any, fields []string) any {
-	if len(fields) == 0 {
-		return value
-	}
-	declared := make(map[string]struct{}, len(fields))
-	for _, field := range fields {
-		if field = strings.TrimSpace(field); field != "" {
-			declared[field] = struct{}{}
+func providerOutputSecretValues(value any, paths []string) []string {
+	values := make([]string, 0, len(paths))
+	for _, path := range paths {
+		segments := strings.Split(strings.TrimPrefix(strings.TrimSpace(path), "body."), ".")
+		if len(segments) == 0 || segments[0] == "" {
+			continue
 		}
+		collectProviderOutputSecretValues(value, segments, &values)
 	}
-	return redactDeclaredWriteResultFieldsValue(value, declared)
+	return values
 }
 
-func redactDeclaredWriteResultFieldsValue(value any, fields map[string]struct{}) any {
-	switch typed := value.(type) {
+func collectProviderOutputSecretValues(value any, segments []string, values *[]string) {
+	if len(segments) == 0 {
+		if scalar, ok := providerOutputSecretScalar(value); ok {
+			*values = append(*values, scalar)
+		}
+		return
+	}
+	switch current := value.(type) {
 	case map[string]any:
-		clone := make(map[string]any, len(typed))
-		for key, child := range typed {
-			if _, declared := fields[key]; declared {
-				clone[key] = map[string]bool{"masked": true}
+		next, present := current[segments[0]]
+		if present {
+			collectProviderOutputSecretValues(next, segments[1:], values)
+		}
+	case []any:
+		for _, item := range current {
+			collectProviderOutputSecretValues(item, segments, values)
+		}
+	}
+}
+
+func appendDeclaredSecretVariants(secrets, declared []string) []string {
+	out := append([]string(nil), secrets...)
+	seen := make(map[string]struct{}, len(out))
+	for _, value := range out {
+		seen[value] = struct{}{}
+	}
+	for _, value := range declared {
+		for _, variant := range configuredSecretVariants(value) {
+			if _, present := seen[variant]; present {
 				continue
 			}
-			clone[key] = redactDeclaredWriteResultFieldsValue(child, fields)
+			seen[variant] = struct{}{}
+			out = append(out, variant)
 		}
-		return clone
-	case []any:
-		clone := make([]any, len(typed))
-		for index, child := range typed {
-			clone[index] = redactDeclaredWriteResultFieldsValue(child, fields)
-		}
-		return clone
+	}
+	return out
+}
+
+func providerOutputSecretScalar(value any) (string, bool) {
+	switch typed := value.(type) {
+	case string:
+		return typed, typed != ""
+	case json.Number:
+		return typed.String(), typed.String() != ""
 	default:
+		return "", false
+	}
+}
+
+func SanitizeWriteErrorForOutput(err error, secrets map[string]string) string {
+	if err == nil {
+		return ""
+	}
+	return redactProviderDiagnosticText(err.Error(), configuredWriteResultSecrets(secrets))
+}
+
+// Diagnostics are not provider scalar values: an upstream error may quote a
+// credential inside surrounding prose. Redact concrete known material here,
+// while provider receipts continue to use exact scalar matching above.
+func redactProviderDiagnosticText(value string, secrets []string) string {
+	for _, secret := range secrets {
+		if secret != "" {
+			value = strings.ReplaceAll(value, secret, "[masked]")
+		}
+	}
+	return value
+}
+
+func configuredWriteResultSecrets(secrets map[string]string) []string {
+	values := make([]string, 0, len(secrets)*7)
+	seen := make(map[string]struct{}, len(secrets)*7)
+	for _, value := range secrets {
+		for _, variant := range configuredSecretVariants(value) {
+			if _, found := seen[variant]; found {
+				continue
+			}
+			seen[variant] = struct{}{}
+			values = append(values, variant)
+		}
+	}
+	sort.Slice(values, func(i, j int) bool {
+		if len(values[i]) == len(values[j]) {
+			return values[i] < values[j]
+		}
+		return len(values[i]) > len(values[j])
+	})
+	return values
+}
+
+func configuredSecretVariants(value string) []string {
+	if value == "" {
+		return nil
+	}
+	bytes := []byte(value)
+	variants := []string{
+		value,
+		url.QueryEscape(value),
+		url.PathEscape(value),
+		base64.StdEncoding.EncodeToString(bytes),
+		base64.RawStdEncoding.EncodeToString(bytes),
+		base64.URLEncoding.EncodeToString(bytes),
+		base64.RawURLEncoding.EncodeToString(bytes),
+	}
+	if escaped, err := json.Marshal(value); err == nil && len(escaped) >= 2 {
+		variants = append(variants, string(escaped[1:len(escaped)-1]))
+	}
+	return variants
+}
+
+func redactWriteResultString(value string, secrets []string) string {
+	for _, secret := range secrets {
+		value = redactConcreteSecretText(value, secret)
+	}
+	return value
+}
+
+func redactConcreteSecretText(value, secret string) string {
+	return redactConcreteSecretTextWithBoundary(value, secret, providerOutputTokenBoundary)
+}
+
+func redactConcreteSecretTextWithBoundary(value, secret string, boundary func(string, int, int) bool) string {
+	if secret == "" {
 		return value
 	}
+	var out strings.Builder
+	for offset := 0; ; {
+		index := strings.Index(value[offset:], secret)
+		if index < 0 {
+			out.WriteString(value[offset:])
+			return out.String()
+		}
+		start := offset + index
+		end := start + len(secret)
+		out.WriteString(value[offset:start])
+		if boundary(value, start, end) {
+			out.WriteString("[masked]")
+		} else {
+			out.WriteString(secret)
+		}
+		offset = end
+	}
+}
+
+func providerOutputTokenBoundary(value string, start, end int) bool {
+	return (start == 0 || !isProviderOutputTokenByte(value[start-1])) &&
+		(end == len(value) || !isProviderOutputTokenByte(value[end]))
+}
+
+func providerResponseTokenBoundary(value string, start, end int) bool {
+	return providerResponseTokenBoundaryBefore(value, start) && providerResponseTokenBoundaryAfter(value, end)
+}
+
+func providerResponseTokenBoundaryBefore(value string, start int) bool {
+	if start == 0 {
+		return true
+	}
+	if decoded, ok := providerResponseEscapedRuneBefore(value, start); ok {
+		return !isProviderResponseTokenRune(decoded)
+	}
+	return !isProviderOutputTokenByte(value[start-1])
+}
+
+func providerResponseTokenBoundaryAfter(value string, end int) bool {
+	if end == len(value) {
+		return true
+	}
+	if decoded, ok := providerResponseEscapedRuneAfter(value, end); ok {
+		return !isProviderResponseTokenRune(decoded)
+	}
+	return !isProviderOutputTokenByte(value[end])
+}
+
+func providerResponseEscapedRuneBefore(value string, end int) (rune, bool) {
+	start := end - 6
+	if start < 0 || value[start] != '\\' || value[start+1] != 'u' || providerResponseEscapedBackslash(value, start) {
+		return 0, false
+	}
+	return providerResponseJSONHexRune(value[start+2 : end])
+}
+
+func providerResponseEscapedRuneAfter(value string, start int) (rune, bool) {
+	end := start + 6
+	if end > len(value) || value[start] != '\\' || value[start+1] != 'u' || providerResponseEscapedBackslash(value, start) {
+		return 0, false
+	}
+	return providerResponseJSONHexRune(value[start+2 : end])
+}
+
+func providerResponseEscapedBackslash(value string, slash int) bool {
+	count := 0
+	for offset := slash; offset >= 0 && value[offset] == '\\'; offset-- {
+		count++
+	}
+	return count%2 == 0
+}
+
+func isProviderResponseTokenRune(value rune) bool {
+	return value < utf8.RuneSelf && isProviderOutputTokenByte(byte(value))
+}
+
+func isProviderOutputTokenByte(value byte) bool {
+	return value >= 'a' && value <= 'z' || value >= 'A' && value <= 'Z' || value >= '0' && value <= '9' ||
+		value == '_' || value == '-' || value == '.' || value == '~' || value == '%'
 }
 
 type QueryRequest struct {
@@ -1048,14 +2152,28 @@ type CDCEvent struct {
 // consumed once with bounded memory. Its identity is opaque-safe and contains
 // no provider transaction value.
 type CDCTransaction struct {
-	id      string
-	records int64
-	stream  func(context.Context, func(CDCEvent) error) error
+	id            string
+	records       int64
+	contentDigest string
+	stream        func(context.Context, func(CDCEvent) error) error
 }
 
 // NewCDCTransaction constructs a committed transaction around a one-shot
 // event stream. Native changefeeds use it only after their own commit boundary.
 func NewCDCTransaction(id string, records int64, stream func(context.Context, func(CDCEvent) error) error) (CDCTransaction, error) {
+	return newCDCTransaction(id, records, "", stream)
+}
+
+// NewCDCTransactionWithContentDigest constructs a committed transaction whose
+// source-stage content digest is required by an artifact-bound durable receipt.
+func NewCDCTransactionWithContentDigest(id string, records int64, contentDigest string, stream func(context.Context, func(CDCEvent) error) error) (CDCTransaction, error) {
+	if !validCDCArtifactDigest(contentDigest) {
+		return CDCTransaction{}, errors.New("CDC transaction content digest is invalid")
+	}
+	return newCDCTransaction(id, records, contentDigest, stream)
+}
+
+func newCDCTransaction(id string, records int64, contentDigest string, stream func(context.Context, func(CDCEvent) error) error) (CDCTransaction, error) {
 	if strings.TrimSpace(id) == "" || len(id) > 1024 {
 		return CDCTransaction{}, errors.New("CDC transaction identity is invalid")
 	}
@@ -1065,7 +2183,7 @@ func NewCDCTransaction(id string, records int64, stream func(context.Context, fu
 	if stream == nil {
 		return CDCTransaction{}, errors.New("CDC transaction event stream is required")
 	}
-	return CDCTransaction{id: id, records: records, stream: stream}, nil
+	return CDCTransaction{id: id, records: records, contentDigest: contentDigest, stream: stream}, nil
 }
 
 // ID returns the opaque-safe committed transaction identity.
@@ -1073,6 +2191,10 @@ func (t CDCTransaction) ID() string { return t.id }
 
 // Records returns the source-declared event count.
 func (t CDCTransaction) Records() int64 { return t.records }
+
+// ContentDigest is the exact source-stage content identity when the native
+// changefeed has one. An empty value cannot bind a warehouse recovery receipt.
+func (t CDCTransaction) ContentDigest() string { return t.contentDigest }
 
 // StreamEvents visits the transaction in source order exactly once.
 func (t CDCTransaction) StreamEvents(ctx context.Context, emit func(CDCEvent) error) error {
@@ -1092,14 +2214,95 @@ func (t CDCTransaction) StreamEvents(ctx context.Context, emit func(CDCEvent) er
 // transaction. Its acknowledgement is constructible only through the sync
 // contract's durable acknowledgement constructor.
 type CDCTransactionReceipt struct {
-	id              string
-	acknowledgement synccontract.DownstreamAcknowledgement
-	durable         bool
+	id               string
+	acknowledgement  synccontract.DownstreamAcknowledgement
+	artifactManifest string
+	durable          bool
+}
+
+const cdcArtifactManifestVersion = 1
+
+// CDCArtifactManifest is the private, versioned evidence binding a durable
+// CDC receipt to the exact connection-owned warehouse generation and files.
+// It is never included in public run or provider output.
+type CDCArtifactManifest struct {
+	Version          int    `json:"version"`
+	ConnectionID     string `json:"connection_id"`
+	Stream           string `json:"stream"`
+	GenerationID     int64  `json:"generation_id"`
+	TransactionKey   string `json:"transaction_key"`
+	Records          int64  `json:"records"`
+	ContentSHA256    string `json:"content_sha256"`
+	RawWALSHA256     string `json:"raw_wal_sha256"`
+	FinalTableSHA256 string `json:"final_table_sha256"`
+}
+
+// NewCDCArtifactManifest makes the exact source/staged transaction identity
+// available only to the durable recovery-receipt path.
+func NewCDCArtifactManifest(connectionID, stream string, generationID int64, transactionKey string, records int64, contentSHA256, rawWALSHA256, finalTableSHA256 string) (CDCArtifactManifest, error) {
+	manifest := CDCArtifactManifest{
+		Version:          cdcArtifactManifestVersion,
+		ConnectionID:     connectionID,
+		Stream:           stream,
+		GenerationID:     generationID,
+		TransactionKey:   transactionKey,
+		Records:          records,
+		ContentSHA256:    contentSHA256,
+		RawWALSHA256:     rawWALSHA256,
+		FinalTableSHA256: finalTableSHA256,
+	}
+	if err := manifest.Validate(); err != nil {
+		return CDCArtifactManifest{}, err
+	}
+	return manifest, nil
+}
+
+// Validate refuses incomplete, unbounded, or non-digest artifact evidence
+// before it can bind a recovered source checkpoint.
+func (m CDCArtifactManifest) Validate() error {
+	if m.Version != cdcArtifactManifestVersion || strings.TrimSpace(m.ConnectionID) == "" || len(m.ConnectionID) > 1024 ||
+		strings.TrimSpace(m.Stream) == "" || len(m.Stream) > 1024 || m.GenerationID <= 0 ||
+		strings.TrimSpace(m.TransactionKey) == "" || len(m.TransactionKey) > 1024 || m.Records < 0 ||
+		!validCDCArtifactDigest(m.ContentSHA256) || !validCDCArtifactDigest(m.RawWALSHA256) || !validCDCArtifactDigest(m.FinalTableSHA256) {
+		return errors.New("CDC artifact manifest is invalid")
+	}
+	return nil
 }
 
 // NewCDCTransactionReceipt constructs a receipt after the named sink has made
 // the complete transaction durable.
 func NewCDCTransactionReceipt(id, sink string, durableAt time.Time) (CDCTransactionReceipt, error) {
+	return newCDCTransactionReceipt(id, sink, durableAt, "")
+}
+
+// NewCDCTransactionReceiptWithArtifactManifest creates a private
+// artifact-bound receipt after all manifest artifacts are durable.
+func NewCDCTransactionReceiptWithArtifactManifest(id, sink string, durableAt time.Time, manifest CDCArtifactManifest) (CDCTransactionReceipt, error) {
+	if err := manifest.Validate(); err != nil {
+		return CDCTransactionReceipt{}, err
+	}
+	payload, err := json.Marshal(manifest)
+	if err != nil {
+		return CDCTransactionReceipt{}, fmt.Errorf("encode CDC artifact manifest: %w", err)
+	}
+	return newCDCTransactionReceipt(id, sink, durableAt, string(payload))
+}
+
+// NewCDCTransactionReceiptWithArtifactManifestJSON restores the bounded
+// private manifest persisted by a native transaction stage; it accepts no
+// public provider body or caller-selected path.
+func NewCDCTransactionReceiptWithArtifactManifestJSON(id, sink string, durableAt time.Time, payload string) (CDCTransactionReceipt, error) {
+	manifest, canonical, err := parseCDCArtifactManifest(payload)
+	if err != nil {
+		return CDCTransactionReceipt{}, err
+	}
+	if _, err := NewCDCTransactionReceiptWithArtifactManifest(id, sink, durableAt, manifest); err != nil {
+		return CDCTransactionReceipt{}, err
+	}
+	return newCDCTransactionReceipt(id, sink, durableAt, canonical)
+}
+
+func newCDCTransactionReceipt(id, sink string, durableAt time.Time, artifactManifest string) (CDCTransactionReceipt, error) {
 	if strings.TrimSpace(id) == "" || len(id) > 1024 {
 		return CDCTransactionReceipt{}, errors.New("CDC transaction receipt identity is invalid")
 	}
@@ -1107,11 +2310,17 @@ func NewCDCTransactionReceipt(id, sink string, durableAt time.Time) (CDCTransact
 	if err != nil {
 		return CDCTransactionReceipt{}, err
 	}
-	return CDCTransactionReceipt{id: id, acknowledgement: acknowledgement, durable: true}, nil
+	return CDCTransactionReceipt{id: id, acknowledgement: acknowledgement, artifactManifest: artifactManifest, durable: true}, nil
 }
 
 // ID returns the receiver-owned durable receipt identity.
 func (r CDCTransactionReceipt) ID() string { return r.id }
+
+// HasArtifactManifest reports whether this private durable receipt carries
+// exact warehouse artifact evidence.
+func (r CDCTransactionReceipt) HasArtifactManifest() bool {
+	return r.durable && r.artifactManifest != ""
+}
 
 // Acknowledgement returns the checkpoint admission produced by this receipt.
 func (r CDCTransactionReceipt) Acknowledgement() (synccontract.DownstreamAcknowledgement, error) {
@@ -1119,6 +2328,64 @@ func (r CDCTransactionReceipt) Acknowledgement() (synccontract.DownstreamAcknowl
 		return synccontract.DownstreamAcknowledgement{}, errors.New("durable CDC transaction receipt is unavailable")
 	}
 	return r.acknowledgement, nil
+}
+
+// ArtifactManifest returns private exact artifact evidence. It is deliberately
+// unavailable for ordinary unbound CDC receipts and never becomes result data.
+func (r CDCTransactionReceipt) ArtifactManifest() (CDCArtifactManifest, error) {
+	if !r.durable || strings.TrimSpace(r.id) == "" {
+		return CDCArtifactManifest{}, errors.New("durable CDC transaction receipt is unavailable")
+	}
+	manifest, _, err := parseCDCArtifactManifest(r.artifactManifest)
+	return manifest, err
+}
+
+// ArtifactManifestJSON returns a validated canonical private payload for the
+// transaction-stage receipt store. It is not a public output projection.
+func (r CDCTransactionReceipt) ArtifactManifestJSON() (string, error) {
+	if !r.durable || strings.TrimSpace(r.id) == "" {
+		return "", errors.New("durable CDC transaction receipt is unavailable")
+	}
+	_, canonical, err := parseCDCArtifactManifest(r.artifactManifest)
+	return canonical, err
+}
+
+func parseCDCArtifactManifest(payload string) (CDCArtifactManifest, string, error) {
+	if len(payload) == 0 || len(payload) > 8<<10 {
+		return CDCArtifactManifest{}, "", errors.New("CDC artifact manifest is unavailable")
+	}
+	decoder := json.NewDecoder(strings.NewReader(payload))
+	decoder.DisallowUnknownFields()
+	var manifest CDCArtifactManifest
+	if err := decoder.Decode(&manifest); err != nil {
+		return CDCArtifactManifest{}, "", fmt.Errorf("decode CDC artifact manifest: %w", err)
+	}
+	if err := decoder.Decode(&struct{}{}); !errors.Is(err, io.EOF) {
+		if err == nil {
+			return CDCArtifactManifest{}, "", errors.New("CDC artifact manifest has trailing values")
+		}
+		return CDCArtifactManifest{}, "", fmt.Errorf("decode CDC artifact manifest trailing value: %w", err)
+	}
+	if err := manifest.Validate(); err != nil {
+		return CDCArtifactManifest{}, "", err
+	}
+	canonical, err := json.Marshal(manifest)
+	if err != nil {
+		return CDCArtifactManifest{}, "", fmt.Errorf("encode CDC artifact manifest: %w", err)
+	}
+	return manifest, string(canonical), nil
+}
+
+func validCDCArtifactDigest(value string) bool {
+	if len(value) != sha256.Size*2 {
+		return false
+	}
+	for _, character := range value {
+		if (character < '0' || character > '9') && (character < 'a' || character > 'f') {
+			return false
+		}
+	}
+	return true
 }
 
 // CDCTransactionReceiver makes one complete source transaction durable and
@@ -1137,6 +2404,115 @@ type CDCTransactionReceiptRestorer interface {
 
 type WriteValidator interface {
 	ValidateWrite(ctx context.Context, req WriteRequest, records []Record) error
+}
+
+type DeclarativeTypedDestination interface {
+	Connector
+	DefinitionProvider
+	WriteValidator
+	PreflightWriteRecordFieldMapping(actionName string, fields []string) error
+	DeclarativeTypedDestinationActionDigest(actionName string) (string, error)
+	// DeclarativeTypedDestinationIdempotencyHeader returns the provider-owned
+	// header from the compiled action. A transport delivery claim alone is not
+	// evidence that an action can safely replay an ambiguous write.
+	DeclarativeTypedDestinationIdempotencyHeader(actionName string) (string, error)
+}
+
+// DeclarativeTypedDestinationReadBackRequest is a declaration-owned bounded
+// provider-state read. Operation remains opaque to shared orchestration.
+type DeclarativeTypedDestinationReadBackRequest struct {
+	Operation              string
+	Runtime                RuntimeConfig
+	MaxRecords             int
+	Receipt                json.RawMessage
+	ReceiptLocator         DestinationReceiptLocator
+	ActionDefinitionSHA256 string
+}
+
+// DeclarativeTypedDestinationReadBackReceipt is private, bounded evidence
+// extracted from provider write responses. It is only decoded by the exact
+// connector-owned read-back method and never becomes printable result output.
+type DeclarativeTypedDestinationReadBackReceipt struct {
+	Version                int      `json:"version"`
+	ActionDefinitionSHA256 string   `json:"action_definition_sha256"`
+	Locators               []string `json:"locators"`
+}
+
+// NewDeclarativeTypedDestinationReadBackReceipt creates the private, bounded
+// bridge from a successful typed write to its declared read-back. Callers pass
+// only scalars already extracted under the declaration's response locator.
+func NewDeclarativeTypedDestinationReadBackReceipt(actionDefinitionSHA256 string, locator DestinationReceiptLocator, locators []string, maxRecords int) (json.RawMessage, error) {
+	if err := locator.Validate(); err != nil {
+		return nil, fmt.Errorf("declarative destination receipt locator: %w", err)
+	}
+	if len(strings.TrimSpace(actionDefinitionSHA256)) != sha256.Size*2 {
+		return nil, fmt.Errorf("declarative destination receipt requires an action definition digest")
+	}
+	if maxRecords < 1 || len(locators) == 0 || len(locators) > maxRecords {
+		return nil, fmt.Errorf("declarative destination receipt locator count is outside its read-back bound")
+	}
+	copyLocators := make([]string, len(locators))
+	for index, value := range locators {
+		if value == "" || len(value) > locator.MaxValueBytes {
+			return nil, fmt.Errorf("declarative destination receipt locator value is outside its byte bound")
+		}
+		copyLocators[index] = value
+	}
+	receipt, err := json.Marshal(DeclarativeTypedDestinationReadBackReceipt{
+		Version:                1,
+		ActionDefinitionSHA256: actionDefinitionSHA256,
+		Locators:               copyLocators,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("encode declarative destination read-back receipt: %w", err)
+	}
+	if len(receipt) > synccontract.MaxPrivateReceiptBytes {
+		return nil, fmt.Errorf("declarative destination receipt exceeds its byte bound")
+	}
+	return receipt, nil
+}
+
+// ParseDeclarativeTypedDestinationReadBackReceipt validates the exact private
+// receipt before it can drive a declared query parameter. It never accepts a
+// fallback output body, route, or user-provided selector.
+func ParseDeclarativeTypedDestinationReadBackReceipt(raw json.RawMessage, actionDefinitionSHA256 string, locator DestinationReceiptLocator, maxRecords int) ([]string, error) {
+	if len(raw) == 0 || len(raw) > synccontract.MaxPrivateReceiptBytes {
+		return nil, fmt.Errorf("declarative destination read-back requires a bounded private receipt")
+	}
+	if err := locator.Validate(); err != nil {
+		return nil, fmt.Errorf("declarative destination receipt locator: %w", err)
+	}
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.DisallowUnknownFields()
+	var receipt DeclarativeTypedDestinationReadBackReceipt
+	if err := decoder.Decode(&receipt); err != nil {
+		return nil, fmt.Errorf("decode declarative destination read-back receipt: %w", err)
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return nil, fmt.Errorf("declarative destination read-back receipt contains multiple JSON values")
+		}
+		return nil, fmt.Errorf("decode declarative destination read-back receipt: %w", err)
+	}
+	if receipt.Version != 1 || !strings.EqualFold(receipt.ActionDefinitionSHA256, actionDefinitionSHA256) || maxRecords < 1 || len(receipt.Locators) == 0 || len(receipt.Locators) > maxRecords {
+		return nil, fmt.Errorf("declarative destination read-back receipt does not match the declared action")
+	}
+	locators := make([]string, len(receipt.Locators))
+	for index, value := range receipt.Locators {
+		if value == "" || len(value) > locator.MaxValueBytes {
+			return nil, fmt.Errorf("declarative destination read-back receipt locator is outside its byte bound")
+		}
+		locators[index] = value
+	}
+	return locators, nil
+}
+
+// DeclarativeTypedDestinationReadBack is required by the generic typed
+// destination adapter. Connectors without a real provider read cannot claim
+// provider-state read-back from local receipt checks.
+type DeclarativeTypedDestinationReadBack interface {
+	ReadBackDeclarativeDestination(context.Context, DeclarativeTypedDestinationReadBackRequest) ([]Record, error)
 }
 
 type DryRunWriter interface {

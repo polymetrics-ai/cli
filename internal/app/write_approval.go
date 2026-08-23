@@ -238,7 +238,7 @@ func (e *projectWriteApprovalEvidence) ValidateProjectWrite(target connectors.Wr
 	if e.authorization != nil {
 		scope := e.authorization
 		if target.Scope != connectors.WriteApprovalScopeProject ||
-			target.Operation != scope.WriteAction ||
+			!authorizationScopeAllowsWriteAction(*scope, target.Operation) ||
 			!projectApprovalStringEqual(target.CredentialRevision, scope.DestinationCredentialRevision) ||
 			!projectApprovalStringEqual(target.ConfigurationDigest, scope.DestinationConfigurationDigest) ||
 			target.Confirmation.Kind != scope.ConfirmationPolicy.Kind {
@@ -262,6 +262,18 @@ func (e *projectWriteApprovalEvidence) ValidateProjectWrite(target connectors.Wr
 		return errors.New("write approval evidence has expired")
 	}
 	return nil
+}
+
+func authorizationScopeAllowsWriteAction(scope AuthorizationScope, action string) bool {
+	if action == scope.WriteAction {
+		return true
+	}
+	for _, allowed := range scope.AllowedWriteActions {
+		if action == allowed {
+			return true
+		}
+	}
+	return false
 }
 
 func (e *projectWriteApprovalEvidence) AuthorizeProjectWrite(target connectors.WriteApprovalTarget, previewDigest string, now time.Time) error {

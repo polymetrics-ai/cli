@@ -9,6 +9,7 @@ import (
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/safety"
 	"polymetrics.ai/internal/schedule"
@@ -96,6 +97,17 @@ func certifyExitErrorf(code int, format string, args ...any) error {
 	}
 }
 
+// alreadyReportedExecutionError preserves the original categorized exit while
+// preventing writeError from replacing a terminal run envelope with a second
+// Error envelope. Callers use it only after stdout has accepted the persisted
+// non-success run.
+func alreadyReportedExecutionError(err error) error {
+	classified := classifyError(err)
+	clone := *classified
+	clone.alreadyReported = true
+	return &clone
+}
+
 func classifyError(err error) *cliError {
 	if err == nil {
 		return nil
@@ -107,6 +119,14 @@ func classifyError(err error) *cliError {
 	var missingRequiredFlag *commandrunner.MissingRequiredFlagError
 	if errors.As(err, &missingRequiredFlag) {
 		return &cliError{category: categoryUsage, code: "usage_error", message: missingRequiredFlag.Error(), err: err}
+	}
+	var emptySecret *credential.EmptySecretError
+	if errors.As(err, &emptySecret) {
+		return &cliError{category: categoryValidation, code: "validation_error", message: emptySecret.Error(), err: err}
+	}
+	var invalidSecret *credential.InvalidSecretValueError
+	if errors.As(err, &invalidSecret) {
+		return &cliError{category: categoryValidation, code: "validation_error", message: invalidSecret.Error(), err: err}
 	}
 	var replay *app.AuthorizationTokenReplayError
 	if errors.As(err, &replay) {
@@ -182,18 +202,27 @@ func writeError(stdout, stderr io.Writer, err error, jsonOut bool) int {
 	if ce.alreadyReported {
 		return exitCodeFor(ce)
 	}
-	message := safety.SanitizeTerminal(safety.RedactErrorText(ce.Error()))
+	public := publicErrorEnvelope(ce)
+	message, _ := public["message"].(string)
 	if jsonOut {
 		_ = writeJSON(stdout, envelope{
 			"api_version": apiVersion,
 			"kind":        "Error",
-			"error": envelope{
-				"category": string(ce.category),
-				"code":     ce.code,
-				"message":  message,
-			},
+			"error":       public,
 		})
 	}
 	_, _ = fmt.Fprintf(stderr, "error: %s\n", message)
 	return exitCodeFor(ce)
+}
+
+func publicErrorEnvelope(err error) envelope {
+	ce := classifyError(err)
+	if ce == nil {
+		return nil
+	}
+	return envelope{
+		"category": string(ce.category),
+		"code":     ce.code,
+		"message":  safety.SanitizeTerminal(safety.RedactErrorText(ce.Error())),
+	}
 }

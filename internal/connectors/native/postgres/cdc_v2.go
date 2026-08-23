@@ -277,7 +277,7 @@ func (m *pgoutputV2TransactionMachine) commit(ctx context.Context, xid uint32, c
 		// time as the recovered observation preserves acknowledgement ordering
 		// without inventing a later observation on process restart.
 		candidate.ObservedAt = stagedReceipt.DurableAt()
-		receipt, err := connectors.NewCDCTransactionReceipt(stagedReceipt.DownstreamReceiptID(), stagedReceipt.Sink(), stagedReceipt.DurableAt())
+		receipt, err := connectors.NewCDCTransactionReceiptWithArtifactManifestJSON(stagedReceipt.DownstreamReceiptID(), stagedReceipt.Sink(), stagedReceipt.DurableAt(), stagedReceipt.ArtifactManifest())
 		if err != nil {
 			return fmt.Errorf("postgres CDC: recover downstream transaction receipt: %w", err)
 		}
@@ -425,7 +425,7 @@ type postgresCDCTransactionReceiver struct {
 
 func (r postgresCDCTransactionReceiver) ReceiveCommittedTransaction(ctx context.Context, transaction database.CommittedTransaction) (database.DownstreamTransactionReceipt, error) {
 	if r.durable != nil {
-		committed, err := connectors.NewCDCTransaction(transaction.TransactionKey, transaction.Records, func(streamCtx context.Context, emit func(connectors.CDCEvent) error) error {
+		committed, err := connectors.NewCDCTransactionWithContentDigest(transaction.TransactionKey, transaction.Records, transaction.ContentDigest, func(streamCtx context.Context, emit func(connectors.CDCEvent) error) error {
 			return streamPostgresCDCTransactionEvents(streamCtx, transaction, emit)
 		})
 		if err != nil {
@@ -439,10 +439,18 @@ func (r postgresCDCTransactionReceiver) ReceiveCommittedTransaction(ctx context.
 		if err != nil {
 			return database.DownstreamTransactionReceipt{}, err
 		}
+		artifactManifest := ""
+		if receipt.HasArtifactManifest() {
+			artifactManifest, err = receipt.ArtifactManifestJSON()
+			if err != nil {
+				return database.DownstreamTransactionReceipt{}, fmt.Errorf("read durable CDC artifact manifest: %w", err)
+			}
+		}
 		return database.DownstreamTransactionReceipt{
-			ReceiptID: receipt.ID(),
-			Sink:      acknowledgement.Sink,
-			DurableAt: acknowledgement.AcknowledgedAt,
+			ReceiptID:        receipt.ID(),
+			Sink:             acknowledgement.Sink,
+			DurableAt:        acknowledgement.AcknowledgedAt,
+			ArtifactManifest: artifactManifest,
 		}, nil
 	}
 	if r.emit == nil {

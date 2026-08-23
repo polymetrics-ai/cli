@@ -1,17 +1,89 @@
 package coordination
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"testing"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 )
+
+func TestRateParkingStores_RejectInvalidMutationWithoutStateChange(t *testing.T) {
+	now := time.Date(2026, 8, 21, 8, 0, 0, 0, time.UTC)
+	valid := ParkedRateLimitRun{RunID: "stable", Outcome: RateParkingOutcomeParkedRateLimit, Scope: "stable-scope", Checkpoint: testParkedCheckpoint(now), ResetAt: now, Reason: connsdk.RateLimitObservationSourceHeaders}
+
+	t.Run("memory", func(t *testing.T) {
+		store := NewMemoryRateParkingStore()
+		if _, _, err := store.Create(valid); err != nil {
+			t.Fatal(err)
+		}
+		before := make(map[string]rateParkingFileRecord, len(store.runs))
+		for key, record := range store.runs {
+			before[key] = rateParkingFileRecord{Run: record.Run.Clone(), ClaimOwner: record.ClaimOwner, ClaimUntil: record.ClaimUntil}
+		}
+		invalid := valid.Clone()
+		invalid.RunID = ""
+		if _, _, err := store.Create(invalid); err == nil {
+			t.Fatal("memory store accepted invalid create")
+		}
+		if _, _, _, err := store.Claim(valid.RunID, "", now, now.Add(time.Minute)); err == nil {
+			t.Fatal("memory store accepted blank claim owner")
+		}
+		if _, _, _, err := store.Claim(valid.RunID, "owner", now, now); err == nil {
+			t.Fatal("memory store accepted non-forward claim deadline")
+		}
+		if !reflect.DeepEqual(store.runs, before) {
+			t.Fatalf("rejected memory mutations changed state: before=%#v after=%#v", before, store.runs)
+		}
+	})
+
+	t.Run("file", func(t *testing.T) {
+		path := filepath.Join(t.TempDir(), "stable.json")
+		store, err := OpenFileRateParkingStore(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, _, err := store.Create(valid); err != nil {
+			t.Fatal(err)
+		}
+		before, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		invalid := valid.Clone()
+		invalid.RunID = ""
+		if _, _, err := store.Create(invalid); err == nil {
+			t.Fatal("file store accepted invalid create")
+		}
+		if _, _, _, err := store.Claim(valid.RunID, "", now, now.Add(time.Minute)); err == nil {
+			t.Fatal("file store accepted blank claim owner")
+		}
+		if _, _, _, err := store.Claim(valid.RunID, "owner", now, now); err == nil {
+			t.Fatal("file store accepted non-forward claim deadline")
+		}
+		after, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.Equal(before, after) {
+			t.Fatal("rejected file mutations changed durable bytes")
+		}
+		reopened, err := OpenFileRateParkingStore(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if runs, err := reopened.List(); err != nil || len(runs) != 1 || !parkedRateLimitRunEqual(runs[0], valid) {
+			t.Fatalf("reopened state = %#v, %v; want original run", runs, err)
+		}
+	})
+}
 
 func TestFileRateParkingStoreEmptySingleLargeDuplicateAndOutOfOrder(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "parking.json")
@@ -117,6 +189,12 @@ func TestFileRateParkingStoreClaimExpiryPreventsDuplicateResumeAndRecoversDeadOw
 	}
 	if runs, _ := store.List(); len(runs) != 1 {
 		t.Fatalf("stale owner deleted durable work: %#v", runs)
+	}
+	if _, err := store.BeginResume(run.RunID, "owner-two"); err != nil {
+		t.Fatalf("begin current owner resume: %v", err)
+	}
+	if _, err := store.MarkResumeCompleted(run.RunID, "owner-two"); err != nil {
+		t.Fatalf("persist current owner resume completion: %v", err)
 	}
 	if err := store.Complete(run.RunID, "owner-two"); err != nil {
 		t.Fatalf("current owner completion: %v", err)
@@ -283,5 +361,34 @@ func TestFileAuthCohortStoreRejectsOutOfOrderEpochWithoutOverwrite(t *testing.T)
 	got, found, err := store.Load(cohort)
 	if err != nil || !found || got != current {
 		t.Fatalf("health after stale CAS = %+v, found=%t err=%v", got, found, err)
+	}
+}
+
+func TestAuthCohortFenceIndeterminateCommitCancelsOldLocalEpoch(t *testing.T) {
+	store, err := OpenFileAuthCohortHealthStore(filepath.Join(t.TempDir(), "auth.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	cohort := testAuthCohortKey(t, "indeterminate-fence-cancellation")
+	coordinator := NewAuthCohortCoordinator(store)
+	admission, err := coordinator.Admit(context.Background(), cohort)
+	if err != nil {
+		t.Fatalf("Admit() error = %v", err)
+	}
+	defer admission.Release()
+	store.store.SyncDirectory = func(string) error { return errors.New("directory sync failed") }
+
+	err = coordinator.Fence(cohort, AuthenticationOutcomeVerifiedInvalid)
+	if err == nil {
+		t.Fatal("Fence() succeeded despite post-rename directory-sync failure")
+	}
+	select {
+	case <-admission.Context().Done():
+	case <-time.After(time.Second):
+		t.Fatal("indeterminate durable fence left the old local epoch runnable")
+	}
+	health, found, loadErr := store.Load(cohort)
+	if loadErr != nil || !found || !health.Fenced {
+		t.Fatalf("reloaded health = %+v found=%t err=%v, want persisted fenced epoch", health, found, loadErr)
 	}
 }

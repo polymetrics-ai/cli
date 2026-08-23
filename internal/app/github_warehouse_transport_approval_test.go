@@ -428,6 +428,11 @@ func TestDeclarativeTransportSourceEmitsWholeProviderPageInBoundedBatches(t *tes
 	fixture := newIssueLabelTransportApprovalFixture(t)
 	fixture.sourceRuntime.Config = cloneStringMap(fixture.sourceRuntime.Config)
 	delete(fixture.sourceRuntime.Config, issueLabelTransportSourceIssueConfig)
+	// This direct source test intentionally proves the entire provider page can
+	// be split into bounded transport batches. B27 defaults executable runs to
+	// one page and reports a typed continuation, so select the existing closed
+	// unlimited spelling rather than mistaking a deliberate budget stop for EOF.
+	fixture.sourceRuntime.Config[declarativeTransportMaxPagesConfig] = "unlimited"
 	resume := streamResumeExpectation(fixture.sourceConnector, fixture.sourceCredential, fixture.sourceRuntime, "issues")
 	var pages []synctransport.SourcePage
 	err := fixture.sourceExecutor.ReadTransport(context.Background(), synctransport.SourceRequest{
@@ -444,7 +449,10 @@ func TestDeclarativeTransportSourceEmitsWholeProviderPageInBoundedBatches(t *tes
 	if err != nil {
 		t.Fatalf("ReadTransport() = %v", err)
 	}
-	fixture.assertProviderReads(t, 1)
+	// An unlimited page-number traversal reads the short/empty follow-up page
+	// to prove exhaustion; the first response still carries the whole 100-row
+	// provider page that this test splits into bounded transport batches.
+	fixture.assertProviderReads(t, 2)
 	if got, want := len(pages), 34; got != want {
 		t.Fatalf("collection source pages = %d, want %d bounded pages", got, want)
 	}

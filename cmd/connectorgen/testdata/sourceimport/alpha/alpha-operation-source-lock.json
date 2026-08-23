@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "connector": "alpha",
+  "rest": {
+    "source_url": "https://fixtures.polymetrics.invalid/alpha-openapi.yaml",
+    "sha256": "c4e02cbb72d377f29cb4e4a839224a515e33f3f921d8c647f3a3a95c20093bd7",
+    "bytes": 2472,
+    "openapi": "3.0.3"
+  }
+}

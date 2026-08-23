@@ -2,6 +2,7 @@ package certify
 
 import (
 	"errors"
+	"os"
 	"testing"
 )
 
@@ -37,6 +38,29 @@ func TestGraphQLCertificationInventoryRejectsIncorrectProducedValueAfterSchemaCo
 	}}, candidate.OutputAssertions)
 	if !passed {
 		t.Fatalf("produced-value assertion failed after schema conformance: %s", reason)
+	}
+}
+
+func TestGithubFullGraphQLInventoryUsesEmbeddedSourceLockOutsideCheckout(t *testing.T) {
+	checkout, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("Getwd(): %v", err)
+	}
+	t.Cleanup(func() {
+		if err := os.Chdir(checkout); err != nil {
+			t.Errorf("restore checkout working directory: %v", err)
+		}
+	})
+	if err := os.Chdir(t.TempDir()); err != nil {
+		t.Fatalf("Chdir(temporary installed location): %v", err)
+	}
+
+	inventory, err := graphQLCertificationInventoryFor("github")
+	if err != nil {
+		t.Fatalf("graphQLCertificationInventoryFor outside checkout: %v", err)
+	}
+	if inventory.SchemaConformant != 29 || inventory.LiveRequired != 2 || inventory.FixtureBound != 274 {
+		t.Fatalf("GraphQL classification outside checkout = schema=%d live=%d fixture=%d, want 29/2/274", inventory.SchemaConformant, inventory.LiveRequired, inventory.FixtureBound)
 	}
 }
 

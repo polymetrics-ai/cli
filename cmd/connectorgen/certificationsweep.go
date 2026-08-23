@@ -494,7 +494,7 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 		DeclaredCommands: len(commands),
 		Commands:         make([]certificationSweepCommand, 0, len(commands)+5),
 		ProductDefects:   []certificationSweepProductDefect{},
-		ProviderRefusals: providerRefusals,
+		ProviderRefusals: []certificationSweepProviderRefusal{},
 	}
 	seen := make(map[string]bool, len(commands))
 	for _, command := range commands {
@@ -546,12 +546,33 @@ func buildCertificationSweep(repoRoot, connector string) (certificationSweep, er
 			return certificationSweep{}, fmt.Errorf("provider-refusal observation command %q is absent from cli_surface.json", path)
 		}
 	}
+	sweep.ProviderRefusals = certificationSweepActiveProviderRefusals(sweep.Commands, providerRefusals)
 	sweep.DeclaredRows = len(sweep.Commands)
 	sweep.StatusTotal = len(sweep.Commands)
 	if err := validateCertificationSweep(sweep); err != nil {
 		return certificationSweep{}, err
 	}
 	return sweep, nil
+}
+
+// certificationSweepActiveProviderRefusals publishes only observations that
+// remain the declaration-owned classification. Source projection may downgrade
+// a previously probed command to partial, in which case preserving its old
+// provider refusal would make the generated receipt contradict the command.
+func certificationSweepActiveProviderRefusals(commands []certificationSweepCommand, observations []certificationSweepProviderRefusal) []certificationSweepProviderRefusal {
+	active := make(map[string]bool, len(commands))
+	for _, command := range commands {
+		if command.Status == certificationSweepProviderRefused {
+			active[command.Path] = true
+		}
+	}
+	refusals := make([]certificationSweepProviderRefusal, 0, len(observations))
+	for _, observation := range observations {
+		if active[observation.Command] {
+			refusals = append(refusals, observation)
+		}
+	}
+	return refusals
 }
 
 type certificationSweepDeclaration struct {

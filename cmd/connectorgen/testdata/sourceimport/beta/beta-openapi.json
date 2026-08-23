@@ -1,0 +1,9 @@
+{
+  "swagger": "2.0",
+  "info": {"title": "Beta fixture", "version": "1"},
+  "paths": {
+    "/health": {"head": {"operationId": "healthStatus", "responses": {"204": {"description": "healthy"}}}},
+    "/plain": {"get": {"operationId": "exportPlain", "produces": ["text/plain"], "responses": {"200": {"description": "plain export", "schema": {"type": "string", "maxLength": 2048}}}}},
+    "/download": {"get": {"operationId": "downloadArchive", "produces": ["application/octet-stream"], "x-max-response-bytes": 1024, "responses": {"200": {"description": "archive", "schema": {"type": "string", "format": "binary", "maxLength": 1024}}}}}
+  }
+}

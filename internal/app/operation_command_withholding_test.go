@@ -14,6 +14,7 @@ import (
 )
 
 const widgetNameSentinel = "WIDGET-SENTINEL-VALUE"
+const nestedBodyTokenSentinel = "NESTED-BODY-SENSITIVE-CANARY"
 
 // operationWithholdingApp mirrors setupRestWriteDemoAppWithBundle but also
 // returns the project root, so a test can assert against the persisted bytes
@@ -130,6 +131,129 @@ func TestOperationBackedPlanWithholdsDeclaredFields(t *testing.T) {
 	}
 	if raw := stateBytes(t, root); strings.Contains(raw, widgetNameSentinel) {
 		t.Fatalf("executing persisted the withheld field to state.json")
+	}
+}
+
+func TestOperationBackedPlanWithholdsNestedStructuredBodyFields(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatal("decode request body")
+		}
+		targets, ok := body["targets"].([]any)
+		if !ok || len(targets) != 1 {
+			t.Error("provider did not receive the declared nested target")
+		} else if target, ok := targets[0].(map[string]any); !ok || target["fixed"] != "provider" || target["id"] != "target-1" || target["token"] != nestedBodyTokenSentinel {
+			t.Error("provider did not receive the reconstituted nested target")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_ = json.NewEncoder(w).Encode(map[string]string{"error": nestedBodyTokenSentinel})
+	}))
+	defer server.Close()
+
+	a, root := operationWithholdingApp(t, ctx, server.URL, func(bundle *engine.Bundle) {
+		for index := range bundle.Operations {
+			if bundle.Operations[index].ID != "restwrite-demo.widget-update" {
+				continue
+			}
+			rest := *bundle.Operations[index].REST
+			rest.BodySchema = json.RawMessage(`{
+				"type":"object",
+				"additionalProperties":false,
+				"required":["targets"],
+				"properties":{"targets":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"object","additionalProperties":false,"required":["fixed","id","token"],"properties":{"fixed":{"type":"string"},"id":{"type":"string"},"token":{"type":"string"}}}}}
+			}`)
+			rest.Body = map[string]any{"targets": []any{map[string]any{"fixed": "provider"}}}
+			bundle.Operations[index].REST = &rest
+			bundle.Operations[index].SensitivePolicy = &engine.SensitivePolicySpec{RedactFields: []string{"body.targets.0.token"}}
+		}
+		for index := range bundle.CLISurface.Commands {
+			if bundle.CLISurface.Commands[index].Path != "widget update" {
+				continue
+			}
+			bundle.CLISurface.Commands[index].Flags = []engine.CLIFlag{
+				{Name: "id", Type: "string", Summary: "Target id.", MapsTo: "path.id", Required: true},
+				{Name: "targets", Type: "json", Summary: "Nested targets.", MapsTo: "body.targets", Required: true},
+			}
+		}
+	})
+	targetsJSON := `[{"id":"target-1","token":"` + nestedBodyTokenSentinel + `"}]`
+	flags := map[string][]string{"id": {"w_1"}, "targets": {targetsJSON}}
+	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  restWriteDemoConnector,
+		Credential: "restwrite-local",
+		Path:       []string{"widget", "update"},
+		Flags:      flags,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	if got := plan.RedactFields; len(got) != 1 || got[0] != "targets.0.token" {
+		t.Fatalf("plan.RedactFields = %#v, want the nested operation field", got)
+	}
+	if raw := stateBytes(t, root); strings.Contains(raw, nestedBodyTokenSentinel) {
+		t.Fatal("state.json contains the nested withheld value")
+	}
+	targets, ok := plan.ConnectorCommandRecord["targets"].([]any)
+	if !ok || len(targets) != 1 {
+		t.Fatal("plan record did not retain the non-sensitive nested target")
+	}
+	target, ok := targets[0].(map[string]any)
+	if !ok || target["id"] != "target-1" {
+		t.Fatal("plan record did not retain the non-sensitive nested target id")
+	}
+	if _, present := target["token"]; present {
+		t.Fatal("plan record retained the nested sensitive token")
+	}
+	if len(plan.Sample) != 1 {
+		t.Fatal("plan sample did not contain the redacted nested target")
+	}
+	sampleTargets, ok := plan.Sample[0]["targets"].([]any)
+	if !ok || len(sampleTargets) != 1 {
+		t.Fatal("plan sample did not retain the nested target shape")
+	}
+	sampleTarget, ok := sampleTargets[0].(map[string]any)
+	if !ok || sampleTarget["token"] != "redacted" {
+		t.Fatal("plan sample did not redact the nested sensitive token")
+	}
+
+	previewed, preview, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, map[string][]string{"targets": {targetsJSON}})
+	if err != nil {
+		t.Fatalf("PreviewConnectorCommandPlan: %v", err)
+	}
+	if preview.Digest == "" || previewed.ApprovalToken == "" {
+		t.Fatal("preview did not bind the reconstituted nested record")
+	}
+	if calls != 0 {
+		t.Fatalf("preview reached the provider; calls = %d", calls)
+	}
+	if raw := stateBytes(t, root); strings.Contains(raw, nestedBodyTokenSentinel) {
+		t.Fatal("preview persisted the nested withheld value")
+	}
+
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        previewed.ID,
+		ApprovalToken: previewed.ApprovalToken,
+		WithheldFlags: map[string][]string{"targets": {targetsJSON}},
+	})
+	if err == nil {
+		t.Fatal("RunReverseETL error = nil, want provider error")
+	}
+	if strings.Contains(err.Error(), nestedBodyTokenSentinel) {
+		t.Fatal("system-generated run error leaked the nested sensitive value")
+	}
+	if run.Status != "failed" || strings.Contains(run.Error, nestedBodyTokenSentinel) {
+		t.Fatal("persisted run output did not protect the nested sensitive value")
+	}
+	if calls != 1 {
+		t.Fatalf("calls = %d, want one provider request", calls)
+	}
+	if raw := stateBytes(t, root); strings.Contains(raw, nestedBodyTokenSentinel) {
+		t.Fatal("failed run persisted the nested sensitive value")
 	}
 }
 

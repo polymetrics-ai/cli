@@ -44,6 +44,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/credential"
 )
 
 // defaultTokenURL matches the bundle's spec.json default for token_url;
@@ -99,17 +100,17 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 	if tokenURL == "" {
 		tokenURL = defaultTokenURL
 	}
-	clientID := strings.TrimSpace(cfg.Secrets["client_id"])
-	if clientID == "" {
-		return nil, errors.New("amazon-ads: secret client_id is required")
+	clientID := cfg.Secrets["client_id"]
+	if err := credential.RequireAuthenticationValue("amazon ads client ID", clientID); err != nil {
+		return nil, fmt.Errorf("amazon-ads: %w", err)
 	}
-	clientSecret := strings.TrimSpace(cfg.Secrets["client_secret"])
-	if clientSecret == "" {
-		return nil, errors.New("amazon-ads: secret client_secret is required")
+	clientSecret := cfg.Secrets["client_secret"]
+	if err := credential.RequireAuthenticationValue("amazon ads client secret", clientSecret); err != nil {
+		return nil, fmt.Errorf("amazon-ads: %w", err)
 	}
-	refreshToken := strings.TrimSpace(cfg.Secrets["refresh_token"])
-	if refreshToken == "" {
-		return nil, errors.New("amazon-ads: secret refresh_token is required")
+	refreshToken := cfg.Secrets["refresh_token"]
+	if err := credential.RequireAuthenticationValue("amazon ads refresh token", refreshToken); err != nil {
+		return nil, fmt.Errorf("amazon-ads: %w", err)
 	}
 
 	form := url.Values{}
@@ -144,13 +145,13 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
 		return nil, fmt.Errorf("amazon-ads: decode LWA token response: %w", err)
 	}
-	if strings.TrimSpace(out.AccessToken) == "" {
-		return nil, errors.New("amazon-ads: LWA token response did not include access_token")
+	if err := credential.RequireAuthenticationValue("amazon ads access token", out.AccessToken); err != nil {
+		return nil, fmt.Errorf("amazon-ads: %w", err)
 	}
 
 	return &scopedBearer{
-		accessToken: out.AccessToken,
-		profileID:   strings.TrimSpace(cfg.Config["profile_id"]),
+		bearer:    connsdk.Bearer(out.AccessToken),
+		profileID: strings.TrimSpace(cfg.Config["profile_id"]),
 	}, nil
 }
 
@@ -159,12 +160,14 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 // unscoped profiles endpoint (matches legacy streams.go's per-endpoint
 // scoped flag). It satisfies connsdk.Authenticator.
 type scopedBearer struct {
-	accessToken string
-	profileID   string
+	bearer    connsdk.Authenticator
+	profileID string
 }
 
-func (a *scopedBearer) Apply(_ context.Context, req *http.Request) error {
-	req.Header.Set("Authorization", "Bearer "+a.accessToken)
+func (a *scopedBearer) Apply(ctx context.Context, req *http.Request) error {
+	if err := a.bearer.Apply(ctx, req); err != nil {
+		return err
+	}
 	if strings.HasSuffix(strings.TrimRight(req.URL.Path, "/"), unscopedPath) {
 		return nil
 	}

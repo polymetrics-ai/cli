@@ -12,6 +12,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -470,7 +471,192 @@ func TestAuthenticatorGithubApp_HonorsContextCancellation(t *testing.T) {
 	}
 }
 
+func TestAuthenticatorGithubAppRestrictionParsingFailsClosedBeforeDeclaredRouteIO(t *testing.T) {
+	privateKey := testPrivateKeyPEM(t)
+	newConfig := func(t *testing.T, extra map[string]string) connectors.RuntimeConfig {
+		t.Helper()
+		key := privateKey
+		if extra["valid"] != "true" {
+			key = "invalid-private-key"
+		}
+		return newRuntimeConfig("https://example.invalid", map[string]string{
+			"app_id":                      "12345",
+			"installation_id":             "67890",
+			"installation_repositories":   extra["installation_repositories"],
+			"installation_repository_ids": extra["installation_repository_ids"],
+			"installation_permissions":    extra["installation_permissions"],
+		}, map[string]string{"private_key": key})
+	}
+	repositories := func(count int) string {
+		values := make([]string, count)
+		for i := range values {
+			values[i] = "repository-" + strconv.Itoa(i+1)
+		}
+		return strings.Join(values, ",")
+	}
+	repositoryIDs := func(count int) string {
+		values := make([]string, count)
+		for i := range values {
+			values[i] = strconv.Itoa(i + 1)
+		}
+		return strings.Join(values, ",")
+	}
+	for _, tc := range []struct {
+		name  string
+		extra map[string]string
+		valid bool
+	}{
+		{name: "valid restrictions", valid: true, extra: map[string]string{"valid": "true", "installation_repositories": "alpha,beta", "installation_repository_ids": "7,9", "installation_permissions": `{"contents":"read","issues":"write"}`}},
+		{name: "valid maximum repository names", valid: true, extra: map[string]string{"valid": "true", "installation_repositories": repositories(500)}},
+		{name: "valid combined repository restrictions", valid: true, extra: map[string]string{"valid": "true", "installation_repositories": repositories(250), "installation_repository_ids": repositoryIDs(250)}},
+		{name: "valid provider permission matrix", valid: true, extra: map[string]string{"valid": "true", "installation_permissions": `{"repository_projects":"admin","workflows":"write","organization_events":"read"}`}},
+		{name: "empty repository member", extra: map[string]string{"installation_repositories": "alpha,,beta"}},
+		{name: "unsafe repository name", extra: map[string]string{"installation_repositories": "alpha/../beta"}},
+		{name: "case insensitive duplicate repository name", extra: map[string]string{"installation_repositories": "Widget,widget"}},
+		{name: "too many repository names", extra: map[string]string{"installation_repositories": repositories(501)}},
+		{name: "non-numeric repository id", extra: map[string]string{"installation_repository_ids": "7,not-a-number"}},
+		{name: "duplicate repository id", extra: map[string]string{"installation_repository_ids": "7,7"}},
+		{name: "too many repository ids", extra: map[string]string{"installation_repository_ids": repositoryIDs(501)}},
+		{name: "too many combined repository restrictions", extra: map[string]string{"installation_repositories": repositories(250), "installation_repository_ids": repositoryIDs(251)}},
+		{name: "permissions not json", extra: map[string]string{"installation_permissions": "not-json"}},
+		{name: "permissions wrong value type", extra: map[string]string{"installation_permissions": `{"contents":false}`}},
+		{name: "permissions duplicate key", extra: map[string]string{"installation_permissions": `{"contents":"read","contents":"write"}`}},
+		{name: "unsupported permission name", extra: map[string]string{"installation_permissions": `{"unsupported_permission":"read"}`}},
+		{name: "unsupported permission level", extra: map[string]string{"installation_permissions": `{"actions":"admin"}`}},
+		{name: "write-only permission read", extra: map[string]string{"installation_permissions": `{"workflows":"read"}`}},
+		{name: "read-only permission write", extra: map[string]string{"installation_permissions": `{"organization_events":"write"}`}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			route := &githubAppDeclaredRouteRecorder{responseBody: []byte(`{"token":"synthetic-installation-token"}`)}
+			_, err := githubhooks.New().AuthenticatorWithDeclaredRoute(context.Background(), newConfig(t, tc.extra), engine.AuthSpec{Mode: "custom", Hook: "github"}, route)
+			if tc.valid {
+				if err != nil {
+					t.Fatalf("AuthenticatorWithDeclaredRoute: %v", err)
+				}
+				if route.method != http.MethodPost {
+					t.Fatal("valid restrictions did not reach the declared route")
+				}
+				return
+			}
+			if err == nil {
+				t.Fatal("malformed restriction was accepted")
+			}
+			if !strings.Contains(err.Error(), "github installation_") {
+				t.Fatalf("malformed restriction did not fail before private-key processing: %v", err)
+			}
+			if route.method != "" || route.path != "" || route.hasBearerJWT {
+				t.Fatal("malformed restriction reached authenticated declared-route I/O")
+			}
+		})
+	}
+}
+
 // --- ExecuteWrite (WriteHook) ---
+
+// TestPreparedWritePlanEnumeratesEveryGitHubCompoundRequest is the
+// declaration-selection half of the compound approval contract. The engine
+// separately resolves the selected names into bounded PreparedRequests; this
+// table fixes GitHub's complete physical request vocabulary and ordering so a
+// future hook cannot silently add, omit, or alias a provider mutation.
+func TestPreparedWritePlanEnumeratesEveryGitHubCompoundRequest(t *testing.T) {
+	h := githubhooks.New()
+	for _, tt := range []struct {
+		name        string
+		action      string
+		record      connectors.Record
+		wantActions []string
+		wantBound   []int
+	}{
+		{name: "close issue comment then state", action: "close_issue", record: connectors.Record{"issue_number": 12, "comment": "done", "state_reason": "completed"}, wantActions: []string{"comment_issue", "update_issue"}},
+		{name: "close pull comment then state", action: "close_pull_request", record: connectors.Record{"pull_number": 12, "comment": "done"}, wantActions: []string{"comment_issue", "update_pull_request"}},
+		{name: "reopen issue", action: "reopen_issue", record: connectors.Record{"issue_number": 12}, wantActions: []string{"update_issue"}},
+		{name: "reopen pull", action: "reopen_pull_request", record: connectors.Record{"pull_number": 12}, wantActions: []string{"update_pull_request"}},
+		{name: "create pull response-bound metadata and reviewers", action: "create_pull_request", record: connectors.Record{"base": "main", "head": "feature", "title": "fixture", "labels": []string{"bug"}, "reviewers": []string{"octocat"}}, wantActions: []string{"create_pull_request", "update_issue", "request_reviewers"}, wantBound: []int{1, 2}},
+		{name: "update pull core metadata and reviewers", action: "update_pull_request", record: connectors.Record{"pull_number": 12, "title": "fixture", "labels": []string{"bug"}, "reviewers": []string{"octocat"}}, wantActions: []string{"update_pull_request", "update_issue", "request_reviewers"}},
+		{name: "create label normalized", action: "create_label", record: connectors.Record{"name": "bug", "color": "#ff0000"}, wantActions: []string{"create_label"}},
+		{name: "update label normalized", action: "update_label", record: connectors.Record{"name": "bug", "color": "#00ff00"}, wantActions: []string{"update_label"}},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			plan, handled, err := h.PrepareWrite(engine.WriteAction{Name: tt.action}, []connectors.Record{tt.record})
+			if err != nil || !handled {
+				t.Fatalf("PrepareWrite() = (%#v, %t, %v), want handled plan", plan, handled, err)
+			}
+			if len(plan.Records) != 1 {
+				t.Fatalf("planned records = %#v, want one source record", plan.Records)
+			}
+			steps := plan.Records[0].Steps
+			gotActions := make([]string, len(steps))
+			for index, step := range steps {
+				gotActions[index] = step.Action
+			}
+			if len(gotActions) != len(tt.wantActions) {
+				t.Fatalf("physical action count = %d, want %d: %v", len(gotActions), len(tt.wantActions), gotActions)
+			}
+			for index, want := range tt.wantActions {
+				if gotActions[index] != want {
+					t.Fatalf("physical action %d = %q, want %q (all=%v)", index, gotActions[index], want, gotActions)
+				}
+			}
+			for _, index := range tt.wantBound {
+				binding := steps[index].ResponseBinding
+				if binding == nil || binding.SourceStep != 0 || binding.Field != "number" || (binding.TargetField != "issue_number" && binding.TargetField != "pull_number") {
+					t.Fatalf("step %d binding = %#v, want bounded create receipt number path binding", index, binding)
+				}
+			}
+		})
+	}
+}
+
+// TestGitHubPreparedPlanExecutesOnlyPreviewedStepsAndRetainsTerminalReceipt
+// drives the real GitHub declarations through engine.Write. A provider number
+// from the first bounded receipt is the only authority for the metadata path;
+// a failing metadata response stops the reviewers follow-up and is retained
+// alongside the successful create receipt.
+func TestGitHubPreparedPlanExecutesOnlyPreviewedStepsAndRetainsTerminalReceipt(t *testing.T) {
+	var requests []recordedRequest
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var body map[string]any
+		_ = json.NewDecoder(r.Body).Decode(&body)
+		requests = append(requests, recordedRequest{Method: r.Method, Path: r.URL.Path, Body: body})
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/repos/octocat/hello-world/pulls":
+			w.WriteHeader(http.StatusCreated)
+			_, _ = w.Write([]byte(`{"number":301,"id":99}`))
+		case "/repos/octocat/hello-world/issues/301":
+			w.WriteHeader(http.StatusBadRequest)
+			_, _ = w.Write([]byte(`{"message":"metadata terminal failure"}`))
+		default:
+			t.Fatalf("unpreviewed physical request %s %s", r.Method, r.URL.Path)
+		}
+	}))
+	t.Cleanup(srv.Close)
+
+	bundle := githubWriteHookRateLimitBundle(t, srv.URL, false)
+	h := githubhooks.New()
+	result, err := engine.Write(context.Background(), bundle, connectors.WriteRequest{
+		Action: "create_pull_request",
+		Config: githubWriteHookRateLimitConfig(t, srv.URL),
+	}, []connectors.Record{{
+		"base": "main", "head": "fixture", "title": "planned",
+		"labels": []string{"bug"}, "reviewers": []string{"octocat"},
+	}}, h)
+	if err == nil || !strings.Contains(err.Error(), "HTTP status 400") {
+		t.Fatalf("engine.Write error = %v, want terminal metadata failure", err)
+	}
+	if len(requests) != 2 || requests[0].Path != "/repos/octocat/hello-world/pulls" || requests[1].Path != "/repos/octocat/hello-world/issues/301" {
+		t.Fatalf("physical requests = %#v, want planned create then response-bound metadata only", requests)
+	}
+	if result.RecordsWritten != 0 || result.RecordsFailed != 1 || len(result.ProviderResponses) != 2 {
+		t.Fatalf("write result = %#v, want terminal two-receipt failure", result)
+	}
+	if result.ProviderResponses[0].Status != http.StatusCreated || result.ProviderResponses[1].Status != http.StatusBadRequest {
+		t.Fatalf("provider receipts = %#v, want ordered 201 then 400", result.ProviderResponses)
+	}
+	if got := result.ProviderResponses[1].Body.(map[string]any)["message"]; got != "metadata terminal failure" {
+		t.Fatalf("terminal provider receipt = %#v, want exact provider body", result.ProviderResponses[1])
+	}
+}
 
 // captureServer records every request it receives (method, path, decoded
 // JSON body) in order, answering each with a fixed JSON response.
@@ -515,7 +701,7 @@ func TestExecuteWrite_CloseIssueWithComment(t *testing.T) {
 	action := engine.WriteAction{Name: "close_issue", Method: "PATCH", Path: "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}"}
 	rec := connectors.Record{"issue_number": 101, "comment": "Closing via fixture", "state_reason": "completed"}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite() error = %v", err)
 	}
@@ -550,7 +736,7 @@ func TestExecuteWrite_CloseIssueWithoutComment(t *testing.T) {
 	action := engine.WriteAction{Name: "close_issue"}
 	rec := connectors.Record{"issue_number": 101}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite() error = %v", err)
 	}
@@ -577,7 +763,7 @@ func TestExecuteWrite_CreatePullRequestWithFollowups(t *testing.T) {
 		"labels": []string{"bug"}, "reviewers": []string{"octocat"},
 	}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite() error = %v", err)
 	}
@@ -610,7 +796,7 @@ func TestExecuteWrite_CreatePullRequestNoFollowups(t *testing.T) {
 	action := engine.WriteAction{Name: "create_pull_request"}
 	rec := connectors.Record{"head": "feature-1", "base": "main", "title": "Fixture PR"}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite() error = %v", err)
 	}
@@ -631,7 +817,7 @@ func TestExecuteWrite_UpdatePullRequestWithFollowups(t *testing.T) {
 	action := engine.WriteAction{Name: "update_pull_request"}
 	rec := connectors.Record{"pull_number": 301, "title": "Updated", "reviewers": []string{"octocat"}}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite() error = %v", err)
 	}
@@ -658,7 +844,7 @@ func TestExecuteWrite_ReopenIssue(t *testing.T) {
 	action := engine.WriteAction{Name: "reopen_issue", Method: "PATCH", Path: "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}"}
 	rec := connectors.Record{"issue_number": 101}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite() error = %v", err)
 	}
@@ -689,7 +875,7 @@ func TestExecuteWrite_ReopenPullRequest(t *testing.T) {
 	action := engine.WriteAction{Name: "reopen_pull_request", Method: "PATCH", Path: "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}"}
 	rec := connectors.Record{"pull_number": 301}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite() error = %v", err)
 	}
@@ -713,7 +899,7 @@ func TestExecuteWrite_ClosePullRequestWithComment(t *testing.T) {
 	action := engine.WriteAction{Name: "close_pull_request"}
 	rec := connectors.Record{"pull_number": 301, "comment": "Closing PR"}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite() error = %v", err)
 	}
@@ -740,7 +926,7 @@ func TestExecuteWrite_CreateLabelStripsLeadingHash(t *testing.T) {
 	action := engine.WriteAction{Name: "create_label"}
 	rec := connectors.Record{"name": "bug", "color": "#ff0000", "description": "Fixture label"}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite() error = %v", err)
 	}
@@ -770,7 +956,7 @@ func TestGitHubWriteHookCreateLabelUsesDeclaredRouteRequester(t *testing.T) {
 		t.Fatalf("NewRuntime: %v", err)
 	}
 
-	handled, err := h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "create_label"}, connectors.Record{"name": "bug", "color": "#ff0000"}, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "create_label"}, connectors.Record{"name": "bug", "color": "#ff0000"}, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite: %v", err)
 	}
@@ -790,7 +976,7 @@ func TestGitHubWriteHookFollowupsUseDistinctDeclaredRouteRequesters(t *testing.T
 		t.Fatalf("NewRuntime: %v", err)
 	}
 
-	handled, err := h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "create_pull_request"}, connectors.Record{
+	handled, _, err := h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "create_pull_request"}, connectors.Record{
 		"base": "main", "head": "fixture", "labels": []string{"bug"}, "reviewers": []string{"octocat"}, "title": "Fixture PR",
 	}, rt)
 	if err != nil {
@@ -812,7 +998,7 @@ func TestGitHubWriteHookCommentAndFinalStateUseDistinctDeclaredRouteRequesters(t
 		t.Fatalf("NewRuntime: %v", err)
 	}
 
-	handled, err := h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "close_issue"}, connectors.Record{"issue_number": 301, "comment": "close fixture"}, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "close_issue"}, connectors.Record{"issue_number": 301, "comment": "close fixture"}, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite: %v", err)
 	}
@@ -855,7 +1041,7 @@ func TestGitHubWriteHookAllPhysicalRESTSendsUseDeclaredRouteRequester(t *testing
 				t.Fatalf("NewRuntime: %v", err)
 			}
 
-			handled, err := h.ExecuteWrite(context.Background(), engine.WriteAction{Name: tt.action}, tt.record, rt)
+			handled, _, err := h.ExecuteWrite(context.Background(), engine.WriteAction{Name: tt.action}, tt.record, rt)
 			if err != nil {
 				t.Fatalf("ExecuteWrite: %v", err)
 			}
@@ -879,7 +1065,7 @@ func TestGitHubWriteHookCreateLabelRequireSharedRefusesBeforeTransport(t *testin
 	if err != nil {
 		t.Fatalf("NewRuntime: %v", err)
 	}
-	_, err = h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "create_label"}, connectors.Record{"name": "bug", "color": "#ff0000"}, rt)
+	_, _, err = h.ExecuteWrite(context.Background(), engine.WriteAction{Name: "create_label"}, connectors.Record{"name": "bug", "color": "#ff0000"}, rt)
 	var unavailable *coordination.SharedRateLimitUnavailableError
 	var refusal *connsdk.RateBudgetRefusalError
 	if !errors.As(err, &refusal) || refusal.Code != connsdk.RateBudgetRefusalSharedCoordinatorUnavailable {
@@ -904,7 +1090,7 @@ func TestExecuteWrite_CreateLabelMissingColorErrors(t *testing.T) {
 	action := engine.WriteAction{Name: "create_label"}
 	rec := connectors.Record{"name": "bug"}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if !handled {
 		t.Fatal("handled = false, want true (create_label is always hook-handled)")
 	}
@@ -921,7 +1107,7 @@ func TestExecuteWrite_UpdateLabelStripsLeadingHashWhenColorPresent(t *testing.T)
 	action := engine.WriteAction{Name: "update_label"}
 	rec := connectors.Record{"name": "bug", "color": "#00ff00"}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite() error = %v", err)
 	}
@@ -948,7 +1134,7 @@ func TestExecuteWrite_UpdateLabelMissingNameErrors(t *testing.T) {
 	action := engine.WriteAction{Name: "update_label"}
 	rec := connectors.Record{"color": "#00ff00"}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if !handled {
 		t.Fatal("handled = false, want true (update_label is always hook-handled)")
 	}
@@ -963,7 +1149,7 @@ func TestExecuteWrite_NonCompoundActionFallsBackToDeclarative(t *testing.T) {
 	action := engine.WriteAction{Name: "create_issue"}
 	rec := connectors.Record{"title": "not compound"}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	handled, _, err := h.ExecuteWrite(context.Background(), action, rec, rt)
 	if err != nil {
 		t.Fatalf("ExecuteWrite() error = %v", err)
 	}
@@ -1003,7 +1189,7 @@ func TestMapWriteRecord_ArchiveRepoPinsArchivedTrue(t *testing.T) {
 	if pinned["archived"] != true {
 		t.Fatalf("archive record = %+v, want archived=true", pinned)
 	}
-	if handled, err := h.ExecuteWrite(context.Background(), action, connectors.Record{}, nil); handled || err != nil {
+	if handled, _, err := h.ExecuteWrite(context.Background(), action, connectors.Record{}, nil); handled || err != nil {
 		t.Fatalf("ExecuteWrite() = (%v, %v), want (false, nil): the pinned-body action must stay declarative", handled, err)
 	}
 	if h.HandlesWriteAction(action) {
@@ -1027,7 +1213,7 @@ func TestMapWriteRecord_UnarchiveRepoPinsArchivedFalse(t *testing.T) {
 	if pinned["archived"] != false {
 		t.Fatalf("unarchive record = %+v, want archived=false", pinned)
 	}
-	if handled, err := h.ExecuteWrite(context.Background(), action, connectors.Record{}, nil); handled || err != nil {
+	if handled, _, err := h.ExecuteWrite(context.Background(), action, connectors.Record{}, nil); handled || err != nil {
 		t.Fatalf("ExecuteWrite() = (%v, %v), want (false, nil): the pinned-body action must stay declarative", handled, err)
 	}
 	if h.HandlesWriteAction(action) {

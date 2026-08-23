@@ -551,6 +551,28 @@ func TestValidate_CLISurfaceReverseETLStructuredJSONRequiresDeclaredTopLevelCont
 	}
 }
 
+func TestValidate_CLISurfaceDirectReadStructuredJSONRequiresDeclaredClosedRESTBodyField(t *testing.T) {
+	newCommand := func(operation engine.OperationSpec, mapsTo string) engine.CLICommand {
+		return engine.CLICommand{
+			Path: "widgets search", Intent: "direct_read", Availability: "implemented", Operation: operation.ID,
+			Flags: []engine.CLIFlag{{Name: "filter", Type: "json", MapsTo: mapsTo}},
+		}
+	}
+	closedRead := engine.OperationSpec{
+		ID: "widgets.search", Kind: "rest_read",
+		REST: &engine.RESTOperationSpec{Method: "POST", ContentType: "application/json", MaxBytes: 1024, BodySchema: json.RawMessage(`{
+			"type":"object","additionalProperties":false,
+			"properties":{"filter":{"type":"object","additionalProperties":false,"properties":{"state":{"type":"string"}}}}
+		}`)},
+	}
+	if findings := checkCLISurfaceStructuredJSONFlags(engine.Bundle{Name: "widgets", Operations: []engine.OperationSpec{closedRead}}, 0, newCommand(closedRead, "body.filter")); len(findings) != 0 {
+		t.Fatalf("declared REST read structured JSON findings = %+v", findings)
+	}
+	if findings := checkCLISurfaceStructuredJSONFlags(engine.Bundle{Name: "widgets", Operations: []engine.OperationSpec{closedRead}}, 0, newCommand(closedRead, "body.filter.state")); len(findings) != 1 || !strings.Contains(findings[0].Message, "allowed only") {
+		t.Fatalf("nested REST read structured JSON findings = %+v, want closed placement rejection", findings)
+	}
+}
+
 func TestValidate_CLISurfaceFixedGraphQLCommandRequiresDeclaredTopLevelJSONVariable(t *testing.T) {
 	bundle := engine.Bundle{
 		Name: "cli-surface",
@@ -638,6 +660,36 @@ func TestValidate_CLISurfaceEnvOnlyFlagRequiresDeclaredSecretGraphQLContract(t *
 	if len(findings) != 1 || !strings.Contains(findings[0].Message, "secret GraphQL mutation") {
 		t.Fatalf("env_only without environment redaction contract findings = %+v, want one closed-surface rejection", findings)
 	}
+
+	query := engine.OperationSpec{
+		ID:   "cli-surface.enterprise.invitation",
+		Kind: "graphql_query",
+		GraphQL: &engine.GraphQLOperationSpec{VariablesSchema: json.RawMessage(`{
+			"type":"object","additionalProperties":false,
+			"properties":{"invitationToken":{"type":"string"}}
+		}`)},
+		SensitivePolicy: &engine.SensitivePolicySpec{
+			InputMode:    "env",
+			RedactFields: []string{"body.invitationToken"},
+			Transform:    "none",
+		},
+	}
+	queryCommand := engine.CLICommand{
+		Path:         "graphql query enterprise",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    query.ID,
+		Flags: []engine.CLIFlag{{
+			Name: "invitation-token", Type: "string", MapsTo: "body.invitationToken", EnvOnly: true,
+		}},
+	}
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, queryCommand, map[string]engine.OperationSpec{query.ID: query}); len(findings) != 0 {
+		t.Fatalf("source-declared GraphQL query env_only contract findings = %+v, want none", findings)
+	}
+	query.SensitivePolicy = nil
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, queryCommand, map[string]engine.OperationSpec{query.ID: query}); len(findings) != 1 || !strings.Contains(findings[0].Message, "source-declared scalar GraphQL query") {
+		t.Fatalf("query env_only without declared policy findings = %+v, want closed-surface rejection", findings)
+	}
 }
 
 func TestValidate_CLISurfaceImplementedRawAPIIsBlocked(t *testing.T) {
@@ -656,6 +708,298 @@ func TestValidate_CLISurfaceImplementedDirectWritePasses(t *testing.T) {
 	}
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for valid direct_write cli surface, got %+v", report.Findings)
+	}
+}
+
+func TestCheckCLISurfaceDirectWriteQueryBindings(t *testing.T) {
+	batchable := false
+	op := engine.OperationSpec{
+		ID:            "cli-surface.widgets.create",
+		Kind:          "rest_write",
+		Risk:          "high",
+		Approval:      "plan-preview-confirm-execute",
+		OutputPolicy:  "json",
+		MutationClass: "create",
+		Batchable:     &batchable,
+		REST: &engine.RESTOperationSpec{
+			Method:      "POST",
+			Path:        "/widgets",
+			ContentType: "application/json",
+			MaxBytes:    1024,
+			Parameters: []engine.OperationParameter{{
+				Name: "dry_run",
+				In:   "query",
+				Type: "boolean",
+			}},
+		},
+	}
+	baseCommand := engine.CLICommand{
+		Path:         "widget create",
+		Intent:       "direct_write",
+		Availability: "implemented",
+		Operation:    op.ID,
+		APISurface:   []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/widgets"}},
+		OutputPolicy: "json",
+		Flags:        []engine.CLIFlag{{Name: "dry-run", Type: "boolean", MapsTo: "query.dry_run"}},
+	}
+
+	for _, test := range []struct {
+		name   string
+		mutate func(*engine.OperationSpec, *engine.CLICommand)
+		want   string
+	}{
+		{name: "exact source query binding"},
+		{
+			name: "unknown query binding",
+			mutate: func(_ *engine.OperationSpec, command *engine.CLICommand) {
+				command.Flags[0].MapsTo = "query.unknown"
+			},
+			want: "not source-declared",
+		},
+		{
+			name: "duplicate query binding",
+			mutate: func(_ *engine.OperationSpec, command *engine.CLICommand) {
+				command.Flags = append(command.Flags, engine.CLIFlag{Name: "again", Type: "boolean", MapsTo: "query.dry_run"})
+			},
+			want: "maps more than one command flag",
+		},
+		{
+			name: "fixed query binding",
+			mutate: func(operation *engine.OperationSpec, _ *engine.CLICommand) {
+				operation.REST.Query = map[string]string{"dry_run": "true"}
+			},
+			want: "fixed by rest.query",
+		},
+		{
+			name: "required query is unmapped",
+			mutate: func(operation *engine.OperationSpec, _ *engine.CLICommand) {
+				operation.REST.Parameters = append(operation.REST.Parameters, engine.OperationParameter{Name: "scope", In: "query", Type: "string", Required: true})
+			},
+			want: "requires query parameter",
+		},
+		{
+			name: "required query flag is optional",
+			mutate: func(operation *engine.OperationSpec, command *engine.CLICommand) {
+				operation.REST.Parameters = []engine.OperationParameter{{Name: "scope", In: "query", Type: "string", Required: true}}
+				command.Flags = []engine.CLIFlag{{Name: "scope", Type: "string", MapsTo: "query.scope"}}
+			},
+			want: "must be required",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			testOperation := op
+			testREST := *op.REST
+			testREST.Parameters = append([]engine.OperationParameter(nil), op.REST.Parameters...)
+			testOperation.REST = &testREST
+			testCommand := baseCommand
+			testCommand.Flags = append([]engine.CLIFlag(nil), baseCommand.Flags...)
+			if test.mutate != nil {
+				test.mutate(&testOperation, &testCommand)
+			}
+			bundle := engine.Bundle{
+				Name:       "cli-surface",
+				Operations: []engine.OperationSpec{testOperation},
+				Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+					Method:    "POST",
+					Path:      "/widgets",
+					Operation: &engine.SurfaceOperation{Model: "write"},
+				}}},
+			}
+			findings := checkCLISurfaceDirectWriteOperationSafety(bundle, 0, testCommand, testOperation)
+			if test.want == "" {
+				if len(findings) != 0 {
+					t.Fatalf("findings = %+v, want none", findings)
+				}
+				return
+			}
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, test.want) {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want %q", findings, test.want)
+		})
+	}
+}
+
+func TestCheckCLISurfaceDirectWriteRequiresDeclaredPathAndBodyMappings(t *testing.T) {
+	batchable := false
+	op := engine.OperationSpec{
+		ID:            "cli-surface.widgets.configure",
+		Kind:          "rest_write",
+		Risk:          "high",
+		Approval:      "plan-preview-confirm-execute",
+		OutputPolicy:  "json",
+		MutationClass: "update",
+		Batchable:     &batchable,
+		REST: &engine.RESTOperationSpec{
+			Method:      "POST",
+			Path:        "/widgets/{id}",
+			ContentType: "application/json",
+			MaxBytes:    1024,
+			BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"payload":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}}`),
+		},
+	}
+	baseCommand := engine.CLICommand{
+		Path:         "widget configure",
+		Intent:       "direct_write",
+		Availability: "implemented",
+		Operation:    op.ID,
+		APISurface:   []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/widgets/{id}"}},
+		OutputPolicy: "json",
+		Flags: []engine.CLIFlag{
+			{Name: "id", Type: "string", MapsTo: "path.id"},
+			{Name: "name", Type: "string", MapsTo: "body.payload.name"},
+		},
+	}
+	for _, tc := range []struct {
+		name   string
+		mutate func(*engine.CLICommand)
+		want   string
+	}{
+		{name: "declared mappings pass"},
+		{
+			name: "undeclared path mapping",
+			mutate: func(command *engine.CLICommand) {
+				command.Flags[0].MapsTo = "path.undeclared"
+			},
+			want: "not declared by rest.path",
+		},
+		{
+			name: "undeclared body mapping",
+			mutate: func(command *engine.CLICommand) {
+				command.Flags[1].MapsTo = "body.payload.undeclared"
+			},
+			want: "additional property",
+		},
+		{
+			name: "open scalar descent",
+			mutate: func(command *engine.CLICommand) {
+				command.Flags[1].MapsTo = "body.payload.name.value"
+			},
+			want: "descends into scalar",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			command := baseCommand
+			command.Flags = append([]engine.CLIFlag(nil), baseCommand.Flags...)
+			if tc.mutate != nil {
+				tc.mutate(&command)
+			}
+			bundle := engine.Bundle{
+				Name:       "cli-surface",
+				Operations: []engine.OperationSpec{op},
+				Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+					Method:    "POST",
+					Path:      "/widgets/{id}",
+					Operation: &engine.SurfaceOperation{Model: "write"},
+				}}},
+			}
+			findings := checkCLISurfaceDirectWriteOperationSafety(bundle, 0, command, op)
+			if tc.want == "" {
+				if len(findings) != 0 {
+					t.Fatalf("findings = %+v, want none", findings)
+				}
+				return
+			}
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, tc.want) {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want %q", findings, tc.want)
+		})
+	}
+}
+
+func TestValidate_CLISurfaceDirectWriteStructuredRESTBodyRequiresClosedBoundedDeclaration(t *testing.T) {
+	newBundle := func(bodySchema, mapsTo string) fstest.MapFS {
+		fsys := directWriteCLISurfaceBundleFS()
+		fsys["cli-surface/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
+			"tagline": "Work with CLI Surface from the command line.",
+			"usage": "pm cli-surface <command> [flags]",
+			"commands": [{
+				"path": "widget configure",
+				"summary": "Configure a widget",
+				"intent": "direct_write",
+				"availability": "implemented",
+				"operation": "cli-surface.widgets.configure",
+				"source_cli_path": "clis widget configure",
+				"api_surface": [{"method": "POST", "path": "/widgets/{id}/configure"}],
+				"output_policy": "json",
+				"flags": [
+					{"name": "id", "type": "string", "maps_to": "path.id", "required": true},
+					{"name": "settings", "type": "json", "maps_to": "` + mapsTo + `", "required": true}
+				],
+				"risk": "updates a widget",
+				"approval": "plan-preview-confirm-execute"
+			}]
+		}`)}
+		fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+			"api": "test API v1",
+			"operation_ledger_version": 1,
+			"endpoints": [
+				{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+				{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+				{
+				"method": "POST",
+				"path": "/widgets/{id}/configure",
+				"operation": {
+					"model": "destructive_action",
+					"status": "blocked",
+					"risk": "high",
+					"blocked_by_default": true,
+					"reason": "Typed rest_write operation",
+					"notes": "Declared only through the direct-write executor."
+				}
+			}]
+		}`)}
+		fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(`{
+			"operations": [{
+				"id": "cli-surface.widgets.configure",
+				"kind": "rest_write",
+				"summary": "Configure a widget",
+				"risk": "high",
+				"approval": "plan-preview-confirm-execute",
+				"output_policy": "json",
+				"mutation_class": "update",
+				"confirmation": {"kind": "destructive"},
+				"batchable": false,
+				"rest": {
+					"method": "POST",
+					"path": "/widgets/{id}/configure",
+					"content_type": "application/json",
+					"max_bytes": 1024,
+					"body_schema": ` + bodySchema + `
+				}
+			}]
+		}`)}
+		return fsys
+	}
+
+	closedBounded := `{"type":"object","additionalProperties":false,"required":["settings"],"properties":{"settings":{"type":"object","additionalProperties":false,"required":["owner","targets"],"properties":{"owner":{"type":"string"},"targets":{"type":"array","maxItems":2,"items":{"type":"object","additionalProperties":false,"required":["id"],"properties":{"id":{"type":"string"}}}}}}}}`
+	for _, tc := range []struct {
+		name, schema, mapsTo string
+		wantFinding          bool
+	}{
+		{name: "closed bounded object is accepted", schema: closedBounded, mapsTo: "body.settings"},
+		{name: "nested flag traversal is rejected", schema: closedBounded, mapsTo: "body.settings.owner", wantFinding: true},
+		{name: "open nested object is rejected", schema: strings.Replace(closedBounded, `"additionalProperties":false,"required":["owner","targets"]`, `"required":["owner","targets"]`, 1), mapsTo: "body.settings", wantFinding: true},
+		{name: "unbounded nested array is rejected", schema: strings.Replace(closedBounded, `"maxItems":2,`, "", 1), mapsTo: "body.settings", wantFinding: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			report, err := validateDir(newBundle(tc.schema, tc.mapsTo))
+			if err != nil {
+				t.Fatalf("validateDir: %v", err)
+			}
+			if tc.wantFinding {
+				assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+				return
+			}
+			if len(report.Findings) != 0 {
+				t.Fatalf("valid structured REST body declaration has findings: %+v", report.Findings)
+			}
+		})
 	}
 }
 
@@ -859,6 +1203,33 @@ func TestValidate_CLISurfaceOperationReferencePasses(t *testing.T) {
 	}
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for valid operation-backed cli surface, got %+v", report.Findings)
+	}
+}
+
+func TestCheckCLISurfaceOperationHeaderMappingsRequiresExactDeclaredHeader(t *testing.T) {
+	bundle := engine.Bundle{Name: "acme"}
+	op := engine.OperationSpec{
+		ID: "acme.widgets.list",
+		REST: &engine.RESTOperationSpec{Parameters: []engine.OperationParameter{{
+			Name: "X-Request-Mode", In: "header", Type: "string", Required: true,
+			Values: []string{"safe", "full"}, Schema: json.RawMessage(`{"type":"string","enum":["safe","full"]}`), MaxBytes: 16,
+		}}},
+	}
+	valid := engine.CLICommand{
+		Path: "widgets list", Intent: "direct_read", Availability: "implemented",
+		Flags: []engine.CLIFlag{{Name: "header-x-request-mode", Type: "enum", Values: []string{"safe", "full"}, Required: true, MapsTo: "header.X-Request-Mode"}},
+	}
+	if findings := checkCLISurfaceOperationHeaderMappings(bundle, 0, valid, op); len(findings) != 0 {
+		t.Fatalf("valid declared header mapping findings = %+v", findings)
+	}
+	for _, invalid := range []engine.CLICommand{
+		{Path: valid.Path, Intent: valid.Intent, Availability: valid.Availability, Flags: []engine.CLIFlag{{Name: "wrong-case", Type: "enum", Values: []string{"safe", "full"}, Required: true, MapsTo: "header.x-request-mode"}}},
+		{Path: valid.Path, Intent: valid.Intent, Availability: valid.Availability, Flags: []engine.CLIFlag{{Name: "not-required", Type: "enum", Values: []string{"safe", "full"}, MapsTo: "header.X-Request-Mode"}}},
+		{Path: valid.Path, Intent: valid.Intent, Availability: valid.Availability, Flags: []engine.CLIFlag{{Name: "unknown", Type: "string", MapsTo: "header.X-Other-Operation"}}},
+	} {
+		if findings := checkCLISurfaceOperationHeaderMappings(bundle, 0, invalid, op); len(findings) == 0 {
+			t.Fatalf("invalid header mapping %+v unexpectedly passed", invalid.Flags)
+		}
 	}
 }
 

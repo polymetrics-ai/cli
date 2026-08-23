@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestGenerateRecordForGitHubLabelIncludesColor(t *testing.T) {
+func TestGenerateRecordForGitHubLabelPreservesOptionalColorOverride(t *testing.T) {
 	schema, err := writeActionRecordSchema("github", "create_label")
 	if err != nil {
 		t.Fatalf("writeActionRecordSchema: %v", err)
@@ -14,8 +14,25 @@ func TestGenerateRecordForGitHubLabelIncludesColor(t *testing.T) {
 	if err := json.Unmarshal(schema, &doc); err != nil {
 		t.Fatalf("parse schema: %v", err)
 	}
-	if !containsString(doc.Required, "color") {
-		t.Fatalf("create_label required fields = %v, want color from defs/github/writes.json", doc.Required)
+	if len(doc.Required) != 1 || doc.Required[0] != "name" {
+		t.Fatalf("create_label required fields = %v, want exactly locked-provider required field [name]", doc.Required)
+	}
+	if containsString(doc.Required, "color") {
+		t.Fatalf("create_label required fields = %v, want color optional as declared by the locked provider source", doc.Required)
+	}
+	if doc.Properties["color"].Type != "string" {
+		t.Fatalf("create_label color schema = %#v, want declared optional string", doc.Properties["color"])
+	}
+	var bounded struct {
+		Properties map[string]struct {
+			MaxLength int `json:"maxLength"`
+		} `json:"properties"`
+	}
+	if err := json.Unmarshal(schema, &bounded); err != nil {
+		t.Fatalf("parse bounded schema: %v", err)
+	}
+	if got := bounded.Properties["color"].MaxLength; got != 8192 {
+		t.Fatalf("create_label color maxLength = %d, want locked declaration bound 8192", got)
 	}
 	rec, err := GenerateRecordWithOverrides(schema, "pm-cert-github-test", "12345678", PairingsFor("github")[0].Overrides)
 	if err != nil {

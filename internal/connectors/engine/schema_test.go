@@ -223,6 +223,27 @@ func TestSchemaValidateInstances(t *testing.T) {
 	}
 }
 
+func TestSchemaEnumExactNumbersBeyondFloatPrecision(t *testing.T) {
+	schema, err := CompileSchema(json.RawMessage(`{"type":"integer","enum":[9007199254740992]}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	if err := schema.Validate(json.Number("9007199254740992.0")); err != nil {
+		t.Fatalf("equivalent exact number rejected: %v", err)
+	}
+	if err := schema.Validate(json.Number("9007199254740993")); err == nil {
+		t.Fatal("distinct integer above 2^53 matched enum through float rounding")
+	}
+
+	exponent, err := CompileSchema(json.RawMessage(`{"type":"number","enum":[1e3]}`))
+	if err != nil {
+		t.Fatalf("CompileSchema exponent: %v", err)
+	}
+	if err := exponent.Validate(json.Number("1000.0")); err != nil {
+		t.Fatalf("equivalent exponent rejected: %v", err)
+	}
+}
+
 func TestSchemaSecretKeys(t *testing.T) {
 	raw := `{
 		"type": "object",
@@ -428,6 +449,30 @@ func TestSchemaValidateMaxItems(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "maxItems") {
 		t.Fatalf("over limit: error should name maxItems, got %v", err)
+	}
+}
+
+func TestSchemaValidateMaxProperties(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{"type":"object","maxProperties":2}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	if err := sch.Validate(map[string]any{"one": true, "two": true}); err != nil {
+		t.Fatalf("at limit: unexpected error: %v", err)
+	}
+	err = sch.Validate(map[string]any{"one": true, "two": true, "three": true})
+	if err == nil {
+		t.Fatal("over limit: want error, got nil")
+	}
+	if !strings.Contains(err.Error(), "maxProperties") {
+		t.Fatalf("over limit: error should name maxProperties, got %v", err)
+	}
+}
+
+func TestCompileSchemaRejectsPrefixItemsOutsideStructuredREST(t *testing.T) {
+	_, err := CompileSchema(json.RawMessage(`{"type":"array","prefixItems":[{"type":"string"}]}`))
+	if err == nil || !strings.Contains(err.Error(), "unknown keyword") {
+		t.Fatalf("CompileSchema error = %v, want prefixItems rejection", err)
 	}
 }
 

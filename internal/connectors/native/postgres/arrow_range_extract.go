@@ -72,6 +72,9 @@ func (s *PollingTransportSource) extractArrowRanges(ctx context.Context, request
 	if err != nil {
 		return err
 	}
+	if err := checkPostgresRequestAdmission(ctx); err != nil {
+		return err
+	}
 	connection, err := pgx.ConnectConfig(ctx, pgxConfig)
 	if err != nil {
 		return fmt.Errorf("postgres Arrow range extraction: connect source: %w", err)
@@ -81,6 +84,7 @@ func (s *PollingTransportSource) extractArrowRanges(ctx context.Context, request
 	if err != nil {
 		return fmt.Errorf("postgres Arrow range extraction: begin repeatable-read snapshot: %w", err)
 	}
+	tx = admitPostgresTx(tx)
 	defer func() { _ = tx.Rollback(context.WithoutCancel(ctx)) }()
 
 	var after *synccontract.CheckpointPosition

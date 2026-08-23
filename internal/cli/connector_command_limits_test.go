@@ -68,16 +68,23 @@ func TestConnectorCommandMaxBytesRejectsNegative(t *testing.T) {
 // shared declaration exists for: runtime help must document exactly the flags
 // the generated manual, skill and website docs document.
 func TestConnectorDownloadFlagsMatchTheSharedDeclaration(t *testing.T) {
-	var help strings.Builder
-	writeConnectorDownloadFlags(&help, connectors.CommandSurfaceCommand{Intent: "binary_download"})
-	rendered := help.String()
-	for _, flag := range connectors.BinaryDownloadFlags() {
-		if !strings.Contains(rendered, "--"+flag.Name) {
-			t.Fatalf("runtime download help does not document --%s:\n%s", flag.Name, rendered)
+	for _, intent := range []string{"binary_download", "text_export"} {
+		var help strings.Builder
+		writeConnectorDownloadFlags(&help, connectors.CommandSurfaceCommand{Intent: intent})
+		rendered := help.String()
+		for _, flag := range connectors.BinaryDownloadFlags() {
+			if !strings.Contains(rendered, "--"+flag.Name) {
+				t.Fatalf("%s runtime help does not document --%s:\n%s", intent, flag.Name, rendered)
+			}
+		}
+		if !strings.Contains(rendered, "--dest-root (string) required") {
+			t.Fatalf("%s runtime help does not mark --dest-root required:\n%s", intent, rendered)
 		}
 	}
-	if !strings.Contains(rendered, "--dest-root (string) required") {
-		t.Fatalf("runtime download help does not mark --dest-root required:\n%s", rendered)
+	var repeatable strings.Builder
+	writeConnectorFlag(&repeatable, connectors.CommandSurfaceFlag{Name: "header-x-mode", Type: "string", Repeatable: true})
+	if !strings.Contains(repeatable.String(), "repeatable") {
+		t.Fatalf("runtime help did not mark repeatable flag: %s", repeatable.String())
 	}
 
 	var passive strings.Builder

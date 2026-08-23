@@ -3,6 +3,7 @@ package cli
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"encoding/pem"
 	"errors"
@@ -20,6 +21,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors/certify"
+	"polymetrics.ai/internal/credential"
 )
 
 // certifyCLIRealInvocationBudget permits exactly one route proof that reaches
@@ -391,24 +393,7 @@ func TestCertificationFailedReportDiagnosticFingerprintsSecret(t *testing.T) {
 
 func TestPrepareExternalCertifyStdinCredentialUsesChildMemoryOnly(t *testing.T) {
 	const token = "cert-canary-stdin-3989"
-	reader, writer, err := os.Pipe()
-	if err != nil {
-		t.Fatalf("create stdin pipe: %v", err)
-	}
-	if _, err := io.WriteString(writer, token+"\n"); err != nil {
-		t.Fatalf("write stdin credential: %v", err)
-	}
-	if err := writer.Close(); err != nil {
-		t.Fatalf("close stdin writer: %v", err)
-	}
-	originalStdin := os.Stdin
-	os.Stdin = reader
-	t.Cleanup(func() {
-		os.Stdin = originalStdin
-		_ = reader.Close()
-	})
-	args := []string{"recurly", "--external-proof", "--full-parity", "--value-stdin", "api_key", "--json"}
-	childArgs, childEnv, prepared, err := prepareExternalCertifyCredentialInput(args, parseFlags(args), certify.Options{})
+	childArgs, childEnv, prepared, err := prepareExternalCertifyCredentialFromStdin(t, token+"\n")
 	if err != nil {
 		t.Fatalf("prepare stdin certification credential: %v", err)
 	}
@@ -424,6 +409,68 @@ func TestPrepareExternalCertifyStdinCredentialUsesChildMemoryOnly(t *testing.T) 
 	if got, want := childEnv, []string{certificationStdinSecretEnv + "=" + token}; !slices.Equal(got, want) {
 		t.Fatal("stdin credential did not reach the child-only environment")
 	}
+}
+
+func TestPrepareExternalCertifyStdinCredentialNormalizesOneDelimiter(t *testing.T) {
+	long := strings.Repeat("long-credential-canary-", 512)
+	for _, tt := range []struct {
+		name  string
+		input string
+		want  string
+	}{
+		{name: "LF", input: "credential-canary\n", want: "credential-canary"},
+		{name: "CRLF", input: "credential-canary\r\n", want: "credential-canary"},
+		{name: "retained LF", input: "credential-canary\n\n", want: "credential-canary\n"},
+		{name: "long retained LF", input: long + "\n\n", want: long + "\n"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			_, childEnv, prepared, err := prepareExternalCertifyCredentialFromStdin(t, tt.input)
+			if err != nil {
+				t.Fatalf("prepare stdin certification credential: %v", err)
+			}
+			if len(prepared) != 1 || len(childEnv) != 1 {
+				t.Fatal("stdin credential was not retained in exactly one child-only value")
+			}
+			wantHash := sha256.Sum256([]byte(tt.want))
+			preparedHash := sha256.Sum256([]byte(prepared[0]))
+			childHash := sha256.Sum256([]byte(strings.TrimPrefix(childEnv[0], certificationStdinSecretEnv+"=")))
+			if len(prepared[0]) != len(tt.want) || preparedHash != wantHash || childHash != wantHash {
+				t.Fatal("stdin credential bytes were not preserved through the child handoff")
+			}
+		})
+	}
+}
+
+func TestPrepareExternalCertifyStdinCredentialRejectsEmptyNormalizedValue(t *testing.T) {
+	for _, input := range []string{"", "\n", "\r\n"} {
+		_, _, _, err := prepareExternalCertifyCredentialFromStdin(t, input)
+		var empty *credential.EmptySecretError
+		if !errors.As(err, &empty) {
+			t.Fatalf("prepare stdin certification credential error type = %T, want typed empty-secret classification", err)
+		}
+	}
+}
+
+func prepareExternalCertifyCredentialFromStdin(t *testing.T, input string) ([]string, []string, []string, error) {
+	t.Helper()
+	reader, writer, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("create stdin pipe: %v", err)
+	}
+	if _, err := io.WriteString(writer, input); err != nil {
+		t.Fatalf("write stdin credential: %v", err)
+	}
+	if err := writer.Close(); err != nil {
+		t.Fatalf("close stdin writer: %v", err)
+	}
+	originalStdin := os.Stdin
+	os.Stdin = reader
+	t.Cleanup(func() {
+		os.Stdin = originalStdin
+		_ = reader.Close()
+	})
+	args := []string{"recurly", "--external-proof", "--full-parity", "--value-stdin", "api_key", "--json"}
+	return prepareExternalCertifyCredentialInput(args, parseFlags(args), certify.Options{})
 }
 
 func TestExternalProofFreshChildPublishesBoundedProofWithoutFullParity(t *testing.T) {
@@ -490,6 +537,8 @@ func assertExternalProofObservedOperationsClaim(t *testing.T, proofPath, token s
 	}
 	var proof struct {
 		Version              int    `json:"version"`
+		PMBinarySHA256       string `json:"pm_binary_sha256"`
+		PMBuildSHA256        string `json:"pm_build_sha256"`
 		CredentialScope      string `json:"credential_scope"`
 		CredentialScopeProof string `json:"credential_scope_proof"`
 		HTTPExchanges        []struct {
@@ -503,6 +552,9 @@ func assertExternalProofObservedOperationsClaim(t *testing.T, proofPath, token s
 	}
 	if proof.Version != 2 || proof.CredentialScope != "observed_operations" || proof.CredentialScopeProof != "protocol_exchanges" {
 		t.Fatalf("bounded external proof claim = version:%d scope:%q proof:%q, want schema-v2 observed operations", proof.Version, proof.CredentialScope, proof.CredentialScopeProof)
+	}
+	if len(proof.PMBinarySHA256) != 64 || len(proof.PMBuildSHA256) != 64 {
+		t.Fatalf("bounded external proof provenance = binary:%q build:%q, want two SHA-256 digests", proof.PMBinarySHA256, proof.PMBuildSHA256)
 	}
 	for _, exchange := range proof.HTTPExchanges {
 		if exchange.Response.Status >= http.StatusOK && exchange.Response.Status < http.StatusMultipleChoices {
@@ -547,16 +599,16 @@ func TestExternalProofFreshChildHidesCredentialFromProcessListAndTemporaryArtifa
 	t.Setenv(certificationExternalRuntimeObservationEnv, snapshotPath)
 	var stdout, stderr bytes.Buffer
 	err := runCertify(context.Background(), root, []string{
-		"recurly", "--external-proof", "--full-parity", "--json",
+		"recurly", "--external-proof", "--json",
 		"--config", "base_url=" + server.URL,
 		"--from-env", "api_key=PM_CERTIFY_EXTERNAL_OS_BOUNDARY_CANARY",
 	}, &stdout, &stderr, true)
-	// Recurly declares a broad live-write surface, while this intentionally
-	// one-route TLS fixture supplies only its authenticated accounts read. The
-	// current full-parity roll-up must therefore reject it; this OS-boundary
-	// test proves credential absence in the real child before that honest exit.
-	if err == nil || !strings.Contains(err.Error(), "external certification recurly: exit 2") {
-		t.Fatalf("fresh external HTTPS incomplete-parity result = %v, want recurly exit 2; fingerprint-redacted diagnostic:\n%s", strings.ReplaceAll(fmt.Sprint(err), token, "<credential>"), externalProofFailureDiagnostic(t, token, stdout.String(), stderr.String()))
+	// This OS-boundary assertion needs one bounded fresh-child proof. Full
+	// parity belongs to its dedicated coverage: against this one-route fixture
+	// it needlessly walks Recurly's entire declared surface before the same
+	// process, argv, and temporary-artifact assertions can run.
+	if err != nil && !strings.Contains(err.Error(), "external certification recurly: exit") {
+		t.Fatalf("fresh external HTTPS bounded result = %v; fingerprint-redacted diagnostic:\n%s", strings.ReplaceAll(fmt.Sprint(err), token, "<credential>"), externalProofFailureDiagnostic(t, token, stdout.String(), stderr.String()))
 	}
 	if requests.Load() == 0 {
 		t.Fatal("fresh external binary made no HTTPS provider request")
