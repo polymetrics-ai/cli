@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"math"
+	"math/big"
 	"net/http"
 	"net/url"
 	"slices"
@@ -99,6 +99,13 @@ type structuredJSONRecordPreflighter interface {
 	PreflightStructuredJSONRecordField(actionName, field string) error
 }
 
+// structuredJSONRecordStringArmPreflighter is an even narrower opt-in for a
+// source-declared string arm of a named multi-kind record field. It cannot
+// authorize a raw body, open object, or a direct operation input.
+type structuredJSONRecordStringArmPreflighter interface {
+	PreflightStructuredJSONRecordStringArm(actionName, field string) error
+}
+
 // structuredJSONOperationBodyPreflighter is intentionally an operation
 // contract rather than a generic JSON parser. The engine owns the source
 // schema, body mapping, and recursive bounds for the named field.
@@ -120,11 +127,20 @@ type BlockedCommandError struct {
 
 type MinimumFlagError struct {
 	Parameter string
-	Minimum   float64
+	Minimum   connectors.ExactNumber
+}
+
+type MaximumFlagError struct {
+	Parameter string
+	Maximum   connectors.ExactNumber
+}
+
+func (e *MaximumFlagError) Error() string {
+	return fmt.Sprintf("invalid --%s: value must be at most %s", e.Parameter, e.Maximum.String())
 }
 
 func (e *MinimumFlagError) Error() string {
-	return fmt.Sprintf("invalid --%s: value must be at least %s", e.Parameter, strconv.FormatFloat(e.Minimum, 'f', -1, 64))
+	return fmt.Sprintf("invalid --%s: value must be at least %s", e.Parameter, e.Minimum.String())
 }
 
 // MissingRequiredFlagError is a caller-correctable command-input refusal.
@@ -317,6 +333,9 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 		return Result{}, err
 	}
 	if cmd.Intent == "direct_read" {
+		if err := connectors.ValidateDirectReadPageCursor(req.PageCursor); err != nil {
+			return Result{}, err
+		}
 		return runDirectRead(ctx, connector, cmd, req)
 	}
 	if cmd.Intent == "binary_download" || cmd.Intent == "text_export" {
@@ -488,14 +507,17 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 
 // preflightStructuredJSONFlags preserves the original reverse-ETL record
 // boundary and adds operation-specific exceptions. A JSON flag never means
-// "take an arbitrary request body": a direct write can name only a declared
-// body field from its fixed REST operation and a direct read can name
-// only one variable from its fixed GraphQL operation. The engine proves the
-// named value is a closed, bounded object or array in that exact declaration.
+// "take an arbitrary request body": direct writes and reads can name only a
+// declared body field from their fixed operation. The engine proves the named
+// value is a closed, bounded object or array in that exact declaration.
 func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
 	var preflighter structuredJSONRecordPreflighter
-	var graphQLPreflighter connectors.OperationStructuredJSONVariablePreflighter
+	var stringArmPreflighter structuredJSONRecordStringArmPreflighter
+	var operationPreflighter structuredJSONOperationBodyPreflighter
 	for _, flag := range cmd.Flags {
+		if flag.AllowBareString && flag.Type != "json" {
+			return fmt.Errorf("bare-string flag --%s must use the bounded json flag type", flag.Name)
+		}
 		if flag.Type != "json" {
 			continue
 		}
@@ -515,31 +537,37 @@ func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors
 			if err := preflighter.PreflightStructuredJSONRecordField(cmd.Write, field); err != nil {
 				return fmt.Errorf("structured JSON flag --%s is not declared safely: %w", flag.Name, err)
 			}
-		case cmd.Intent == "direct_write" && strings.TrimSpace(cmd.Operation) != "":
+			if flag.AllowBareString {
+				if stringArmPreflighter == nil {
+					var supported bool
+					stringArmPreflighter, supported = connector.(structuredJSONRecordStringArmPreflighter)
+					if !supported {
+						return fmt.Errorf("bare-string flag --%s requires a declarative string-arm preflight", flag.Name)
+					}
+				}
+				if err := stringArmPreflighter.PreflightStructuredJSONRecordStringArm(cmd.Write, field); err != nil {
+					return fmt.Errorf("bare-string flag --%s is not declared safely: %w", flag.Name, err)
+				}
+			}
+		case (cmd.Intent == "direct_write" || cmd.Intent == "direct_read") && strings.TrimSpace(cmd.Operation) != "":
+			if flag.AllowBareString {
+				return fmt.Errorf("bare-string flag --%s is allowed only on a declared reverse-ETL record field", flag.Name)
+			}
 			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
 			if !ok || variable == "" {
 				return fmt.Errorf("structured JSON flag --%s must map to a declared body field of its operation", flag.Name)
 			}
-			preflighter, supported := connector.(structuredJSONOperationBodyPreflighter)
-			if !supported {
-				return fmt.Errorf("structured JSON flag --%s requires declaration-backed operation body preflight", flag.Name)
+			if cmd.Intent == "direct_read" && strings.Contains(variable, ".") {
+				return fmt.Errorf("structured JSON flag --%s must map to one top-level body field of a fixed operation", flag.Name)
 			}
-			if err := preflighter.PreflightOperationStructuredJSONBodyField(cmd.Operation, variable); err != nil {
-				return fmt.Errorf("structured JSON flag --%s is not declared safely: %w", flag.Name, err)
-			}
-		case cmd.Intent == "direct_read" && strings.TrimSpace(cmd.Operation) != "":
-			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
-			if !ok || variable == "" || strings.Contains(variable, ".") {
-				return fmt.Errorf("structured JSON flag --%s must map to one top-level body.<variable> of a fixed GraphQL operation", flag.Name)
-			}
-			if graphQLPreflighter == nil {
+			if operationPreflighter == nil {
 				var supported bool
-				graphQLPreflighter, supported = connector.(connectors.OperationStructuredJSONVariablePreflighter)
+				operationPreflighter, supported = connector.(structuredJSONOperationBodyPreflighter)
 				if !supported {
-					return fmt.Errorf("structured JSON flag --%s requires fixed GraphQL variable preflight", flag.Name)
+					return fmt.Errorf("structured JSON flag --%s requires declaration-backed operation body preflight", flag.Name)
 				}
 			}
-			if err := graphQLPreflighter.PreflightOperationStructuredJSONVariable(cmd.Operation, variable); err != nil {
+			if err := operationPreflighter.PreflightOperationStructuredJSONBodyField(cmd.Operation, variable); err != nil {
 				return fmt.Errorf("structured JSON flag --%s is not declared safely: %w", flag.Name, err)
 			}
 		default:
@@ -548,6 +576,13 @@ func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors
 	}
 	return nil
 }
+
+/*
+	The structured body preflight above intentionally shares the REST and
+	GraphQL declaration boundary. Do not route json flags through a transport
+	method/path/body escape hatch: the fixed operation and its top-level mapped
+	field remain the only authority.
+*/
 
 // directReadPageFlagNames are consumed as Request.Page/Request.PageCursor
 // rather than as command flags. Only this intent can honour them, so they are
@@ -601,11 +636,18 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 		Page:         req.Page,
 		PageCursor:   req.PageCursor,
 	})
+	direct = connectors.SanitizeDirectReadResultForOutput(direct, req.Config.Secrets)
 	if err != nil {
-		return Result{}, err
+		if !directReadHasProviderEvidence(direct) {
+			return Result{}, err
+		}
+		return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, err
 	}
 	if err := assertDirectReadNavigated(connector, cmd, req, direct); err != nil {
-		return Result{}, err
+		if !directReadHasProviderEvidence(direct) {
+			return Result{}, err
+		}
+		return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, err
 	}
 	return Result{
 		Connector:  connector.Name(),
@@ -686,14 +728,18 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		Page:         req.Page,
 		PageCursor:   req.PageCursor,
 	})
+	direct = connectors.SanitizeDirectReadResultForOutput(direct, req.Config.Secrets)
 	if err != nil {
-		if direct.Receipt != nil {
-			return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, err
+		if !directReadHasProviderEvidence(direct) {
+			return Result{}, err
 		}
-		return Result{}, err
+		return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, err
 	}
 	if err := assertDirectReadNavigated(connector, cmd, req, direct); err != nil {
-		return Result{}, err
+		if !directReadHasProviderEvidence(direct) {
+			return Result{}, err
+		}
+		return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil
 }
@@ -1093,7 +1139,7 @@ func runtimeConfigWithOverrides(cfg connectors.RuntimeConfig, overrides map[stri
 
 func validateConfiguredFlagMinimums(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig) error {
 	for _, flag := range cmd.Flags {
-		if flag.Minimum == nil || !strings.HasPrefix(flag.MapsTo, "config.") {
+		if (flag.Minimum == nil && flag.Maximum == nil) || !strings.HasPrefix(flag.MapsTo, "config.") {
 			continue
 		}
 		target := strings.TrimPrefix(flag.MapsTo, "config.")
@@ -1104,7 +1150,7 @@ func validateConfiguredFlagMinimums(cmd connectors.CommandSurfaceCommand, cfg co
 		if !ok {
 			continue
 		}
-		if err := validateFlagMinimum(flag, value); err != nil {
+		if err := validateFlagNumericRange(flag, value); err != nil {
 			return err
 		}
 	}
@@ -1130,9 +1176,31 @@ func validateCommandConstraint(constraint connectors.CommandSurfaceConstraint, c
 	switch constraint.Kind {
 	case "order":
 		return validateOrderConstraint(constraint, cfg, inputs)
+	case "exactly_one":
+		return validateExactlyOneConstraint(constraint, cfg, inputs)
 	default:
 		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("unsupported command constraint kind %q", constraint.Kind)}
 	}
+}
+
+func validateExactlyOneConstraint(constraint connectors.CommandSurfaceConstraint, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) error {
+	present := 0
+	for _, target := range constraint.Fields {
+		_, targetPresent, _, err := validationTargetValue(target, cfg, inputs)
+		if err != nil {
+			return err
+		}
+		if targetPresent {
+			present++
+		}
+	}
+	if present == 1 {
+		return nil
+	}
+	if strings.TrimSpace(constraint.Message) != "" {
+		return errors.New(constraint.Message)
+	}
+	return fmt.Errorf("invalid command constraint: exactly one of %s must be provided", strings.Join(constraint.Fields, ", "))
 }
 
 func validateOrderConstraint(constraint connectors.CommandSurfaceConstraint, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) error {
@@ -1317,6 +1385,19 @@ func ReconstituteWithheldFields(connector connectors.Connector, path []string, f
 			byTarget[target] = flag
 		}
 	}
+	if strings.TrimSpace(cmd.Operation) != "" {
+		metadataProvider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+		if !ok {
+			return nil, nil, fmt.Errorf("connector %q does not expose direct-write metadata for operation %q", connector.Name(), cmd.Operation)
+		}
+		metadata, err := metadataProvider.OperationDirectWriteMetadata(cmd.Operation)
+		if err != nil {
+			return nil, nil, err
+		}
+		if metadata.StructuredBody {
+			return reconstituteStructuredDirectWriteFields(connector, cmd, byTarget, fields, flags)
+		}
+	}
 	record := connectors.Record{}
 	missing := make([]string, 0, len(fields))
 	for _, field := range fields {
@@ -1346,6 +1427,71 @@ func ReconstituteWithheldFields(connector connectors.Connector, path []string, f
 		missing = append(missing, unresolved...)
 	}
 	return record, missing, nil
+}
+
+func reconstituteStructuredDirectWriteFields(connector connectors.Connector, cmd connectors.CommandSurfaceCommand, byTarget map[string]connectors.CommandSurfaceFlag, fields []string, flags map[string][]string) (connectors.Record, []string, error) {
+	materializer, ok := connector.(connectors.OperationDirectWriteBodyMaterializer)
+	if !ok {
+		return nil, nil, fmt.Errorf("connector %q does not expose direct-write body materialization", connector.Name())
+	}
+	transformer, ok := connector.(connectors.OperationDirectWriteBodyPlanTransformer)
+	if !ok {
+		return nil, nil, fmt.Errorf("connector %q does not expose direct-write body plan transformation", connector.Name())
+	}
+	mappings := map[string]any{}
+	missing := make([]string, 0)
+	add := func(target string, flag connectors.CommandSurfaceFlag) error {
+		values := flags[flag.Name]
+		if len(values) == 0 {
+			missing = append(missing, "--"+flag.Name)
+			return nil
+		}
+		value, err := coerceRecordFlagValue(flag, values)
+		if err != nil {
+			return err
+		}
+		mappings[target] = value
+		return nil
+	}
+	for _, raw := range fields {
+		target := strings.TrimPrefix(strings.TrimSpace(raw), "body.")
+		if target == "" {
+			continue
+		}
+		if flag, found := byTarget[target]; found {
+			if err := add(target, flag); err != nil {
+				return nil, nil, err
+			}
+			continue
+		}
+		ancestor := ""
+		for candidate := range byTarget {
+			contains, err := transformer.OperationDirectWriteBodyPathContains(cmd.Operation, candidate, target)
+			if err != nil {
+				return nil, nil, err
+			}
+			if contains && (ancestor == "" || len(candidate) > len(ancestor)) {
+				ancestor = candidate
+			}
+		}
+		if ancestor != "" {
+			if err := add(ancestor, byTarget[ancestor]); err != nil {
+				return nil, nil, err
+			}
+			continue
+		}
+		missing = append(missing, target)
+	}
+	if len(mappings) == 0 {
+		sort.Strings(missing)
+		return connectors.Record{}, missing, nil
+	}
+	body, err := materializer.MaterializeOperationDirectWriteBody(cmd.Operation, mappings)
+	if err != nil {
+		return nil, nil, err
+	}
+	sort.Strings(missing)
+	return connectors.Record(body), missing, nil
 }
 
 // reconstituteWithheldSubtree rebuilds a withheld field that no single flag maps
@@ -1412,11 +1558,11 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 	}
 	switch flag.Type {
 	case "", "string", "boolean", "integer", "number", "string_array":
-		return validateFlagMinimum(flag, value)
+		return validateFlagNumericRange(flag, value)
 	case "enum":
 		for _, allowed := range flag.Values {
 			if value == allowed {
-				return validateFlagMinimum(flag, value)
+				return validateFlagNumericRange(flag, value)
 			}
 		}
 		values := append([]string(nil), flag.Values...)
@@ -1430,35 +1576,68 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 	}
 }
 
+func validateFlagNumericRange(flag connectors.CommandSurfaceFlag, value string) error {
+	if err := validateFlagMinimum(flag, value); err != nil {
+		return err
+	}
+	return validateFlagMaximum(flag, value)
+}
+
 func validateFlagMinimum(flag connectors.CommandSurfaceFlag, value string) error {
 	if flag.Minimum == nil {
 		return nil
 	}
-	minimum := *flag.Minimum
-	if math.IsNaN(minimum) || math.IsInf(minimum, 0) {
+	minimum, ok := parseExactJSONNumber(flag.Minimum.String())
+	if !ok {
 		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s has invalid minimum", flag.Name)}
 	}
-	var parsed float64
-	switch flag.Type {
-	case "integer":
-		integer, err := strconv.ParseInt(value, 10, 64)
-		if err != nil {
-			return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
-		}
-		parsed = float64(integer)
-	case "number":
-		number, err := strconv.ParseFloat(value, 64)
-		if err != nil || math.IsNaN(number) || math.IsInf(number, 0) {
-			return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
-		}
-		parsed = number
-	default:
+	if flag.Type != "integer" && flag.Type != "number" {
 		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s minimum requires integer or number type", flag.Name)}
 	}
-	if parsed < minimum {
-		return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
+	parsed, ok := parseExactFlagNumber(flag.Type, value)
+	if !ok {
+		return &MinimumFlagError{Parameter: flag.Name, Minimum: *flag.Minimum}
+	}
+	if parsed.Cmp(minimum) < 0 {
+		return &MinimumFlagError{Parameter: flag.Name, Minimum: *flag.Minimum}
 	}
 	return nil
+}
+
+func validateFlagMaximum(flag connectors.CommandSurfaceFlag, value string) error {
+	if flag.Maximum == nil {
+		return nil
+	}
+	maximum, ok := parseExactJSONNumber(flag.Maximum.String())
+	if !ok {
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s has invalid maximum", flag.Name)}
+	}
+	if flag.Type != "integer" && flag.Type != "number" {
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s maximum requires integer or number type", flag.Name)}
+	}
+	parsed, ok := parseExactFlagNumber(flag.Type, value)
+	if !ok {
+		return &MaximumFlagError{Parameter: flag.Name, Maximum: *flag.Maximum}
+	}
+	if parsed.Cmp(maximum) > 0 {
+		return &MaximumFlagError{Parameter: flag.Name, Maximum: *flag.Maximum}
+	}
+	return nil
+}
+
+func parseExactFlagNumber(flagType, value string) (*big.Rat, bool) {
+	switch flagType {
+	case "integer":
+		integer, ok := parseExactJSONInteger(value)
+		if !ok {
+			return nil, false
+		}
+		return new(big.Rat).SetInt(integer), true
+	case "number":
+		return parseExactJSONNumber(value)
+	default:
+		return nil, false
+	}
 }
 
 func validateFlagFormat(flag connectors.CommandSurfaceFlag, value string) error {
@@ -2009,11 +2188,22 @@ func coerceDeclaredStructuredJSONRecordFlagValue(flag connectors.CommandSurfaceF
 		return nil, fmt.Errorf("invalid --%s: structured JSON flags accept exactly one value", flag.Name)
 	}
 	raw := values[0]
-	if len(raw) > maxStructuredJSONFlagBytes {
-		return nil, fmt.Errorf("invalid --%s: structured JSON exceeds %d bytes", flag.Name, maxStructuredJSONFlagBytes)
+	maxBytes := maxStructuredJSONFlagBytes
+	if flag.MaxBytes > 0 && flag.MaxBytes < maxBytes {
+		maxBytes = flag.MaxBytes
+	}
+	if len(raw) > maxBytes {
+		return nil, fmt.Errorf("invalid --%s: structured JSON exceeds %d bytes", flag.Name, maxBytes)
 	}
 	if err := safety.RejectDangerousChars(raw, "flag value"); err != nil {
 		return nil, err
+	}
+	if flag.AllowBareString && !structuredJSONRecordValueStartsContainer(raw) {
+		// The declaration preflight has proved this exact named field has a
+		// string arm. Preserve normal command-line text (including text that
+		// resembles a JSON scalar) while object/array values keep their strict
+		// JSON syntax and all values still face record-schema validation.
+		return raw, nil
 	}
 
 	decoder := json.NewDecoder(strings.NewReader(raw))
@@ -2029,12 +2219,17 @@ func coerceDeclaredStructuredJSONRecordFlagValue(flag connectors.CommandSurfaceF
 		}
 		return nil, fmt.Errorf("invalid JSON for --%s: %w", flag.Name, err)
 	}
-	switch value.(type) {
-	case map[string]any, []any:
-		return value, nil
-	default:
-		return nil, fmt.Errorf("invalid --%s: structured JSON must be an object or array", flag.Name)
-	}
+	// Runtime preflight has already proved the exact named record property is
+	// structured or a provider-declared multi-kind union. Do not impose a
+	// second object/array-only rule here: it would silently remove a scalar arm
+	// from that declared union. This remains a named record value, never a raw
+	// request body, and is still bounded above before decoding.
+	return value, nil
+}
+
+func structuredJSONRecordValueStartsContainer(raw string) bool {
+	trimmed := strings.TrimSpace(raw)
+	return strings.HasPrefix(trimmed, "{") || strings.HasPrefix(trimmed, "[")
 }
 
 // coerceCommandFlagValue retains the normal command-line control-character
@@ -2111,17 +2306,15 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 		}
 		return parsed, nil
 	case "integer":
-		parsed, err := strconv.Atoi(value)
-		if err != nil {
+		if _, ok := parseExactJSONInteger(value); !ok {
 			return nil, fmt.Errorf("invalid --%s %q, want integer", flag.Name, value)
 		}
-		return parsed, nil
+		return json.Number(value), nil
 	case "number":
-		parsed, err := strconv.ParseFloat(value, 64)
-		if err != nil || math.IsNaN(parsed) || math.IsInf(parsed, 0) {
+		if _, ok := parseExactJSONNumber(value); !ok {
 			return nil, fmt.Errorf("invalid --%s %q, want finite number", flag.Name, value)
 		}
-		return parsed, nil
+		return json.Number(value), nil
 	case "string_array":
 		out := make([]string, 0)
 		for _, raw := range clean {
@@ -2161,6 +2354,26 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 	}
 }
 
+// parseExactJSONNumber accepts exactly one JSON numeric lexeme and represents
+// it as a rational for comparisons. Unlike ParseFloat it preserves provider
+// identifiers and decimal coefficients past 53 bits, including exponent
+// forms, until the sealed JSON encoder sends the same lexeme onward.
+func parseExactJSONNumber(value string) (*big.Rat, bool) {
+	if !json.Valid([]byte(value)) {
+		return nil, false
+	}
+	rational, ok := new(big.Rat).SetString(value)
+	return rational, ok
+}
+
+func parseExactJSONInteger(value string) (*big.Int, bool) {
+	if !json.Valid([]byte(value)) {
+		return nil, false
+	}
+	integer, ok := new(big.Int).SetString(value, 10)
+	return integer, ok
+}
+
 func validateCommandFlagEncodedBytes(flag connectors.CommandSurfaceFlag, value string) error {
 	if flag.MaxBytes <= 0 {
 		return nil
@@ -2171,6 +2384,8 @@ func validateCommandFlagEncodedBytes(flag connectors.CommandSurfaceFlag, value s
 	}
 	encoded := ""
 	switch location {
+	case "record":
+		encoded = value
 	case "path":
 		if name == "path" || name == "ref" {
 			parts := strings.Split(value, "/")
@@ -2362,11 +2577,12 @@ func runBinaryDownload(ctx context.Context, connector connectors.Connector, cmd 
 		DestRoot:     req.DestRoot,
 		FileName:     req.FileName,
 	})
+	download = connectors.SanitizeOperationBinaryDownloadResultForOutput(download, req.Config.Secrets)
 	if err != nil {
-		if download.Receipt != nil {
-			return Result{Connector: connector.Name(), Command: cmd.Path, BinaryDownload: &download}, err
+		if !binaryDownloadHasProviderEvidence(download) {
+			return Result{}, err
 		}
-		return Result{}, err
+		return Result{Connector: connector.Name(), Command: cmd.Path, BinaryDownload: &download}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, BinaryDownload: &download}, nil
 }
@@ -2402,8 +2618,24 @@ func runStatusCheck(ctx context.Context, connector connectors.Connector, cmd con
 		return Result{}, err
 	}
 	status, err := connector.(connectors.OperationStatusChecker).OperationStatusCheck(ctx, connectors.OperationStatusCheckRequest{Operation: cmd.Operation, Config: req.Config, PathParams: pathParams, Query: query, Headers: headers, HeaderValues: headerValues})
+	status = connectors.SanitizeOperationStatusCheckResultForOutput(status, req.Config.Secrets)
 	if err != nil {
-		return Result{}, err
+		if !statusCheckHasProviderEvidence(status) {
+			return Result{}, err
+		}
+		return Result{Connector: connector.Name(), Command: cmd.Path, StatusCheck: &status}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, StatusCheck: &status}, nil
+}
+
+func directReadHasProviderEvidence(result connectors.DirectReadResult) bool {
+	return result.Status != 0 || (result.Receipt != nil && result.Receipt.ResponseReceived)
+}
+
+func binaryDownloadHasProviderEvidence(result connectors.OperationBinaryDownloadResult) bool {
+	return result.Status != 0 || (result.Receipt != nil && result.Receipt.ResponseReceived)
+}
+
+func statusCheckHasProviderEvidence(result connectors.OperationStatusCheckResult) bool {
+	return result.Status != 0 || (result.Receipt != nil && result.Receipt.ResponseReceived)
 }

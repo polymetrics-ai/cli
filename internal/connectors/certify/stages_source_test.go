@@ -118,7 +118,7 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 
 	// --- stage 7: etl_full_refresh_overwrite_deduped (typed pre-I/O refusal) ---
 	dedupOverwrite := mustStage(t, rep, "etl_full_refresh_overwrite_deduped")
-	if !dedupOverwrite.Passed || dedupOverwrite.CLI.Kind != "Error" || dedupOverwrite.CLI.ExitCode != 1 {
+	if !dedupOverwrite.Passed || dedupOverwrite.CLI.Kind != "ETLRun" || dedupOverwrite.CLI.ExitCode != 1 {
 		t.Errorf("etl_full_refresh_overwrite_deduped stage failed: %+v", dedupOverwrite)
 	}
 	frodMode, ok := rep.Capabilities.SyncModes["full_refresh_overwrite_deduped"]
@@ -147,7 +147,7 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 
 	// --- stage 10: etl_incremental_append_deduped (typed pre-I/O refusal) ---
 	incDedup := mustStage(t, rep, "etl_incremental_append_deduped")
-	if !incDedup.Passed || incDedup.CLI.Kind != "Error" || incDedup.CLI.ExitCode != 1 {
+	if !incDedup.Passed || incDedup.CLI.Kind != "ETLRun" || incDedup.CLI.ExitCode != 1 {
 		t.Errorf("etl_incremental_append_deduped stage failed: %+v", incDedup)
 	}
 	iadMode, ok := rep.Capabilities.SyncModes["incremental_append_deduped"]

@@ -35,6 +35,30 @@ func TestRenderCommandSurfaceCommandRendersRepeatableAndTextExportFlags(t *testi
 	}
 }
 
+func TestRenderCommandSurfaceCommandRendersSafetyConstraints(t *testing.T) {
+	allowEmpty := false
+	line := renderCommandSurfaceCommand(CommandSurfaceCommand{
+		Path: "graphql mutation create-migration-source",
+		Flags: []CommandSurfaceFlag{{
+			Name:       "input",
+			Type:       "json",
+			Required:   true,
+			EnvOnly:    true,
+			AllowEmpty: &allowEmpty,
+			MaxBytes:   8192,
+			MinItems:   1,
+			MaxItems:   9,
+		}},
+	})
+	for _, want := range []string{
+		"--input (required, env-only, non-empty, 1..9 items, max 8192 bytes)",
+	} {
+		if !strings.Contains(line, want) {
+			t.Fatalf("rendered command missing %q: %s", want, line)
+		}
+	}
+}
+
 func TestConfigSectionRendersConditionalSecretRequirement(t *testing.T) {
 	section := configSection(Manifest{SecretFields: []SecretField{{
 		Name:         "password",

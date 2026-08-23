@@ -363,3 +363,32 @@ func TestFileAuthCohortStoreRejectsOutOfOrderEpochWithoutOverwrite(t *testing.T)
 		t.Fatalf("health after stale CAS = %+v, found=%t err=%v", got, found, err)
 	}
 }
+
+func TestAuthCohortFenceIndeterminateCommitCancelsOldLocalEpoch(t *testing.T) {
+	store, err := OpenFileAuthCohortHealthStore(filepath.Join(t.TempDir(), "auth.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	cohort := testAuthCohortKey(t, "indeterminate-fence-cancellation")
+	coordinator := NewAuthCohortCoordinator(store)
+	admission, err := coordinator.Admit(context.Background(), cohort)
+	if err != nil {
+		t.Fatalf("Admit() error = %v", err)
+	}
+	defer admission.Release()
+	store.store.SyncDirectory = func(string) error { return errors.New("directory sync failed") }
+
+	err = coordinator.Fence(cohort, AuthenticationOutcomeVerifiedInvalid)
+	if err == nil {
+		t.Fatal("Fence() succeeded despite post-rename directory-sync failure")
+	}
+	select {
+	case <-admission.Context().Done():
+	case <-time.After(time.Second):
+		t.Fatal("indeterminate durable fence left the old local epoch runnable")
+	}
+	health, found, loadErr := store.Load(cohort)
+	if loadErr != nil || !found || !health.Fenced {
+		t.Fatalf("reloaded health = %+v found=%t err=%v, want persisted fenced epoch", health, found, loadErr)
+	}
+}

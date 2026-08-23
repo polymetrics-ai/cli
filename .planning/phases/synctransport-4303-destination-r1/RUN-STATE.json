@@ -10,6 +10,8 @@
     "github_live_proof": "passed",
     "code_review": "clean_inline_manual_fallback",
     "application_dispatch": "passed",
-    "complete_result_output": "passed"
+    "complete_result_output": "passed",
+    "revalidation_2026_08_20": "passed_locally",
+    "follow_up_action_binding_foundation_r1": "passed_locally"
   }
 }

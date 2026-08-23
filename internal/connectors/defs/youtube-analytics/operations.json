@@ -47,6 +47,17 @@
         "method": "GET",
         "path": "/v1/media/{path}?alt=media",
         "max_bytes": 104857600,
+        "parameters": [
+          {
+            "name": "path",
+            "cli_name": "resource-name",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Provider resourceName identifying the generated report; may contain safe path segments.",
+            "max_bytes": 4096
+          }
+        ],
         "content_types": [
           "text/csv"
         ],

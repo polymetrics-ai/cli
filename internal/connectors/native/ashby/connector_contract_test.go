@@ -1084,6 +1084,40 @@ func TestAshbyResultRecordsRejectsErrorEnvelopes(t *testing.T) {
 	}
 }
 
+func TestAshbyOperationDirectReadPreservesEngineResultOnEnvelopeFailure(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/candidate.search" {
+			t.Fatalf("path = %q, want declared candidate search route", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Add("X-Provider-Trace", "first")
+		w.Header().Add("X-Provider-Trace", "second")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"success":false,"error":"logical failure","requestId":"ashby-occurrence-9007199254740993"}`))
+	}))
+	t.Cleanup(server.Close)
+
+	result, err := New().(connectors.OperationDirectReader).OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "ashby.direct.candidate.search",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": server.URL},
+			Secrets: map[string]string{"api_key": "test_key"},
+		},
+		Body:         map[string]any{"email": "candidate@example.invalid"},
+		OutputPolicy: "json_redacted",
+		MaxBytes:     1024,
+	})
+	if err == nil || !strings.Contains(err.Error(), "success=false") {
+		t.Fatalf("OperationDirectRead error = %v, want logical Ashby envelope failure", err)
+	}
+	if result.Status != http.StatusOK || result.Receipt == nil || !result.Receipt.ResponseReceived {
+		t.Fatalf("OperationDirectRead result = %#v, want retained received provider response", result)
+	}
+	if got := result.Receipt.Headers["X-Provider-Trace"].Values; len(got) != 2 || got[0] != "first" || got[1] != "second" {
+		t.Fatalf("Ashby receipt headers = %#v, want repeatable provider trace", result.Receipt.Headers)
+	}
+}
+
 func TestAshbySiblingPathsRejectCredentialSafeErrorEnvelopes(t *testing.T) {
 	const sensitive = "synthetic-sensitive-response-token"
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

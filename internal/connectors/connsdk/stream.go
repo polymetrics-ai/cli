@@ -1,7 +1,9 @@
 package connsdk
 
 import (
+	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -101,9 +103,10 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 
 	attempts := r.maxRetries() + 1
 	var lastErr error
+	var lastProviderErr error
 	for attempt := 0; attempt < attempts; attempt++ {
 		if err := ctx.Err(); err != nil {
-			return nil, err
+			return nil, errors.Join(lastProviderErr, err)
 		}
 
 		req, err := http.NewRequestWithContext(ctx, method, fullURL, nil)
@@ -136,17 +139,21 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 
 		resp, err := client.Do(req)
 		if err != nil {
+			terminal := captureTerminalStreamResponse(resp, fullURL)
 			lastErr = fmt.Errorf("send request: %w", err)
-			if isRateLimitAdmissionError(err) {
-				return nil, lastErr
+			if resp != nil {
+				lastProviderErr = responseHTTPError(resp.StatusCode, fullURL, resp.Header, streamResponseBody(terminal), RateLimitObservation{})
+			}
+			if isRateLimitAdmissionError(err) || isRequestAdmissionError(err) {
+				return terminal, errors.Join(lastProviderErr, lastErr)
 			}
 			if attempt < attempts-1 && !isRedirectPolicyError(err) {
 				if werr := r.sleep(ctx, r.backoff(attempt, RateLimitObservation{})); werr != nil {
-					return nil, werr
+					return terminal, errors.Join(lastProviderErr, lastErr, werr)
 				}
 				continue
 			}
-			return nil, lastErr
+			return terminal, errors.Join(lastProviderErr, lastErr)
 		}
 		observation := r.observeRateLimit(ctx, route, resp.StatusCode, resp.Header, costHeader)
 
@@ -156,8 +163,9 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			body, _ := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
 			_ = resp.Body.Close()
 			lastErr = responseHTTPError(resp.StatusCode, fullURL, resp.Header, body, observation)
+			lastProviderErr = lastErr
 			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
-				return nil, werr
+				return nil, errors.Join(lastProviderErr, werr)
 			}
 			continue
 		}
@@ -186,7 +194,39 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 	if lastErr == nil {
 		lastErr = fmt.Errorf("request to %s failed after %d attempts", fullURL, attempts)
 	}
-	return nil, lastErr
+	return nil, errors.Join(lastProviderErr, lastErr)
+}
+
+// captureTerminalStreamResponse turns the response returned alongside a Go
+// redirect-policy error into a bounded replayable body. http.Client closes the
+// original body before returning such an error, so callers must never retain
+// it directly; the copied metadata/body is enough for the receipt boundary
+// and still cannot be read as an unbounded download stream.
+func captureTerminalStreamResponse(resp *http.Response, fullURL string) *StreamResponse {
+	if resp == nil {
+		return nil
+	}
+	var body []byte
+	if resp.Body != nil {
+		body, _ = io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
+		_ = resp.Body.Close()
+	}
+	return &StreamResponse{
+		Status: resp.StatusCode,
+		Header: resp.Header.Clone(),
+		Body:   io.NopCloser(bytes.NewReader(body)),
+		URL:    fullURL,
+	}
+}
+
+func streamResponseBody(resp *StreamResponse) []byte {
+	if resp == nil || resp.Body == nil {
+		return nil
+	}
+	body, _ := io.ReadAll(resp.Body)
+	_ = resp.Body.Close()
+	resp.Body = io.NopCloser(bytes.NewReader(body))
+	return body
 }
 
 // streamClient returns a shallow copy of the configured client carrying the

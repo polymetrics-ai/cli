@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"math"
@@ -18,6 +19,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"gopkg.in/yaml.v3"
 )
@@ -26,7 +28,7 @@ import (
 // canonical intermediate descriptor. It intentionally owns no execution
 // controls: a connector name selects its checked-in lock, and that lock alone
 // supplies the artifact URL, byte count, and digest.
-const sourceImportUsage = `connectorgen source-import <connector> [--out <path>] [--defs <dir>] [--check]
+const sourceImportUsage = `connectorgen source-import <connector> [--out <path>] [--defs <dir>] [--cache-dir <dir>] [--check]
 
 Verifies the connector-owned source lock, retrieves only its fixed public
 artifact URL, and writes canonical provider operation descriptors for later
@@ -35,11 +37,14 @@ declaration generators.
   <connector>     connector whose sources/<connector>-operation-source-lock.json is used
   --out <path>    descriptor output path (default: connector-owned canonical descriptor)
   --defs <dir>    connector defs root (default internal/connectors/defs)
+  --cache-dir <dir> existing isolated verified-artifact cache root (default: platform cache)
   --check         compare generated descriptors with --out; do not write
 
 The source lock is authoritative. A byte or SHA-256 mismatch requires a
 source-lock refresh; this command never accepts a replacement URL, method,
-path, header, body, credential, or generic request input.`
+path, header, body, credential, or generic request input. A cold fetch is
+bounded to three minutes; later checks re-verify a content-addressed cache
+before using it.`
 
 const (
 	defaultSourceImportArtifactBytes = int64(16 << 20)
@@ -55,6 +60,10 @@ const (
 	defaultSourceImportReferences      = 50_000
 	defaultSourceImportReferenceDepth  = 32
 	defaultSourceImportSchemaNodes     = 100_000
+	// A locked provider artifact may be large enough that a cold public fetch
+	// takes longer than an ordinary interactive command. Keep the request
+	// bounded; subsequent checks use the verified content-addressed cache.
+	defaultSourceImportFetchTimeout = 3 * time.Minute
 )
 
 type sourceImportLimits struct {
@@ -180,9 +189,11 @@ type sourceGraphQLTypeSystem struct {
 
 type sourceImportGraphQL struct {
 	sourceImportArtifact
-	QueryFields    []sourceGraphQLField    `json:"query_fields"`
-	MutationFields []sourceGraphQLField    `json:"mutation_fields"`
-	TypeSystem     sourceGraphQLTypeSystem `json:"type_system"`
+	ProjectionSHA256 string                  `json:"projection_sha256,omitempty"`
+	ProjectionBytes  int64                   `json:"projection_bytes,omitempty"`
+	QueryFields      []sourceGraphQLField    `json:"query_fields"`
+	MutationFields   []sourceGraphQLField    `json:"mutation_fields"`
+	TypeSystem       sourceGraphQLTypeSystem `json:"type_system"`
 }
 
 type sourceImportCounts struct {
@@ -419,6 +430,20 @@ func (f sourceImportFetchFunc) Fetch(ctx context.Context, sourceURL string) ([]b
 	return f(ctx, sourceURL)
 }
 
+// sourceImportVerifiedArtifactFetcher can validate a cache against the
+// immutable lock before returning bytes to the importer. The legacy Fetch
+// method remains the narrow seam used by hermetic source-import tests.
+type sourceImportVerifiedArtifactFetcher interface {
+	FetchArtifact(context.Context, sourceImportArtifact) ([]byte, error)
+}
+
+func fetchSourceImportArtifact(ctx context.Context, fetcher sourceImportFetcher, artifact sourceImportArtifact) ([]byte, error) {
+	if verified, ok := fetcher.(sourceImportVerifiedArtifactFetcher); ok {
+		return verified.FetchArtifact(ctx, artifact)
+	}
+	return fetcher.Fetch(ctx, artifact.SourceURL)
+}
+
 func parseSourceImportLock(raw []byte, expectedConnector string) (sourceImportLock, error) {
 	var lock sourceImportLock
 	if err := decodeSourceStrictJSON(raw, &lock); err != nil {
@@ -461,10 +486,15 @@ func decodeSourceStrictJSON(raw []byte, target any) error {
 }
 
 func validateSourceImportLockInventory(lock sourceImportLock) error {
-	if len(lock.Rest.Operations) > 0 {
-		if lock.Counts.REST != len(lock.Rest.Operations) {
-			return fmt.Errorf("source lock REST count %d does not match %d operations", lock.Counts.REST, len(lock.Rest.Operations))
-		}
+	restCount := len(lock.Rest.Operations)
+	if lock.Counts.REST != restCount {
+		return fmt.Errorf("source lock REST count %d does not match %d operations", lock.Counts.REST, restCount)
+	}
+	graphqlCount := len(lock.GraphQL.QueryFields) + len(lock.GraphQL.MutationFields)
+	if lock.Counts.Total != lock.Counts.REST+graphqlCount {
+		return fmt.Errorf("source lock total count does not match REST and GraphQL inventories")
+	}
+	if restCount > 0 {
 		seen := map[string]bool{}
 		for _, operation := range lock.Rest.Operations {
 			if operation.ID == "" || operation.Protocol != "rest" || operation.Method == "" || operation.Path == "" || operation.SourceLocation == "" {
@@ -476,7 +506,6 @@ func validateSourceImportLockInventory(lock sourceImportLock) error {
 			seen[operation.ID] = true
 		}
 	}
-	graphqlCount := len(lock.GraphQL.QueryFields) + len(lock.GraphQL.MutationFields)
 	if graphqlCount == 0 {
 		if lock.Counts.GraphQLQuery != 0 || lock.Counts.GraphQLMutation != 0 {
 			return fmt.Errorf("source lock GraphQL counts require a GraphQL inventory")
@@ -488,9 +517,6 @@ func validateSourceImportLockInventory(lock sourceImportLock) error {
 	}
 	if lock.Counts.GraphQLQuery != len(lock.GraphQL.QueryFields) || lock.Counts.GraphQLMutation != len(lock.GraphQL.MutationFields) {
 		return fmt.Errorf("source lock GraphQL counts do not match root fields")
-	}
-	if lock.Counts.Total != lock.Counts.REST+graphqlCount {
-		return fmt.Errorf("source lock total count does not match REST and GraphQL inventories")
 	}
 	seen := map[string]bool{}
 	for _, group := range []struct {
@@ -647,16 +673,15 @@ func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock
 	if lock.Rest.Bytes > limits.MaxArtifactBytes {
 		return sourceImportResult{}, fmt.Errorf("artifact byte limit exceeded by source lock")
 	}
-	raw, err := fetcher.Fetch(ctx, lock.Rest.SourceURL)
+	raw, err := fetchSourceImportArtifact(ctx, fetcher, lock.Rest.sourceImportArtifact)
 	if err != nil {
 		return sourceImportResult{}, fmt.Errorf("fetch locked source artifact: %w", err)
 	}
 	if int64(len(raw)) > limits.MaxArtifactBytes {
 		return sourceImportResult{}, fmt.Errorf("artifact byte limit exceeded")
 	}
-	actualDigest := sha256.Sum256(raw)
-	if int64(len(raw)) != lock.Rest.Bytes || !strings.EqualFold(hex.EncodeToString(actualDigest[:]), lock.Rest.SHA256) {
-		return sourceImportResult{}, fmt.Errorf("source-lock refresh required: fetched artifact does not match locked bytes and SHA-256")
+	if err := validateSourceImportArtifactBytes(raw, lock.Rest.sourceImportArtifact); err != nil {
+		return sourceImportResult{}, err
 	}
 	doc, form, err := parseSourceImportDocument(raw)
 	if err != nil {
@@ -721,21 +746,33 @@ func appendLockedGraphQLProjection(ctx context.Context, lock sourceImportLock, f
 	if lock.GraphQL.Bytes > limits.MaxArtifactBytes {
 		return fmt.Errorf("GraphQL artifact byte limit exceeded by source lock")
 	}
+	projection, err := canonicalSourceGraphQLProjection(lock.GraphQL)
+	if err != nil {
+		return fmt.Errorf("canonicalize embedded GraphQL projection: %w", err)
+	}
+	projectionDigest := sha256.Sum256(projection)
+	if lock.SchemaVersion >= 2 {
+		if lock.GraphQL.ProjectionBytes <= 0 || len(lock.GraphQL.ProjectionSHA256) != sha256.Size*2 {
+			return fmt.Errorf("GraphQL projection digest and byte count are required for source-lock version %d", lock.SchemaVersion)
+		}
+		if int64(len(projection)) != lock.GraphQL.ProjectionBytes || !strings.EqualFold(hex.EncodeToString(projectionDigest[:]), lock.GraphQL.ProjectionSHA256) {
+			return fmt.Errorf("GraphQL projection drift: embedded type-system bytes do not match projection_bytes/projection_sha256")
+		}
+	}
 	// Version 2 embeds the complete, normalized GraphQL field and type-system
 	// projection in the strict checked-in lock. Import from those reviewed bytes
 	// instead of requiring an unversioned public URL to continue serving the
 	// historical capture. Legacy locks still verify their external artifact.
 	if lock.SchemaVersion < 2 {
-		raw, err := fetcher.Fetch(ctx, lock.GraphQL.SourceURL)
+		raw, err := fetchSourceImportArtifact(ctx, fetcher, lock.GraphQL.sourceImportArtifact)
 		if err != nil {
 			return fmt.Errorf("fetch locked GraphQL source artifact: %w", err)
 		}
 		if int64(len(raw)) > limits.MaxArtifactBytes {
 			return fmt.Errorf("GraphQL artifact byte limit exceeded")
 		}
-		digest := sha256.Sum256(raw)
-		if int64(len(raw)) != lock.GraphQL.Bytes || !strings.EqualFold(hex.EncodeToString(digest[:]), lock.GraphQL.SHA256) {
-			return fmt.Errorf("source-lock refresh required: fetched GraphQL artifact does not match locked bytes and SHA-256")
+		if err := validateSourceImportArtifactBytes(raw, lock.GraphQL.sourceImportArtifact); err != nil {
+			return fmt.Errorf("locked GraphQL source artifact: %w", err)
 		}
 	}
 	countBudget, err := budget.countBudget(limits)
@@ -749,8 +786,8 @@ func appendLockedGraphQLProjection(ctx context.Context, lock sourceImportLock, f
 		Connector: lock.Connector,
 		Source: sourceImportSource{
 			URL:      lock.GraphQL.SourceURL,
-			SHA256:   strings.ToLower(lock.GraphQL.SHA256),
-			Bytes:    lock.GraphQL.Bytes,
+			SHA256:   strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)),
+			Bytes:    firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes),
 			Location: "graphql.type_system",
 			Form:     "graphql",
 			Version:  strconv.Itoa(lock.SchemaVersion),
@@ -773,8 +810,8 @@ func appendLockedGraphQLProjection(ctx context.Context, lock sourceImportLock, f
 			SourceID:  fmt.Sprintf("%s.graphql.%s.%s", lock.Connector, kind, field.Name),
 			Source: sourceImportSource{
 				URL:      lock.GraphQL.SourceURL,
-				SHA256:   strings.ToLower(lock.GraphQL.SHA256),
-				Bytes:    lock.GraphQL.Bytes,
+				SHA256:   strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)),
+				Bytes:    firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes),
 				Location: location,
 				Form:     "graphql",
 				Version:  strconv.Itoa(lock.SchemaVersion),
@@ -799,6 +836,72 @@ func appendLockedGraphQLProjection(ctx context.Context, lock sourceImportLock, f
 		result.Operations = append(result.Operations, descriptor)
 	}
 	return nil
+}
+
+func firstPositiveInt64(values ...int64) int64 {
+	for _, value := range values {
+		if value > 0 {
+			return value
+		}
+	}
+	return 0
+}
+
+func canonicalSourceGraphQLProjection(graphql sourceImportGraphQL) ([]byte, error) {
+	raw, err := json.Marshal(struct {
+		QueryFields    []sourceGraphQLField    `json:"query_fields"`
+		MutationFields []sourceGraphQLField    `json:"mutation_fields"`
+		TypeSystem     sourceGraphQLTypeSystem `json:"type_system"`
+	}{graphql.QueryFields, graphql.MutationFields, graphql.TypeSystem})
+	if err != nil {
+		return nil, err
+	}
+	var projection struct {
+		QueryFields    []sourceGraphQLField    `json:"query_fields"`
+		MutationFields []sourceGraphQLField    `json:"mutation_fields"`
+		TypeSystem     sourceGraphQLTypeSystem `json:"type_system"`
+	}
+	if err := json.Unmarshal(raw, &projection); err != nil {
+		return nil, err
+	}
+	sortFields := func(fields []sourceGraphQLField) {
+		sort.Slice(fields, func(i, j int) bool {
+			if fields[i].Root != fields[j].Root {
+				return fields[i].Root < fields[j].Root
+			}
+			return fields[i].Name < fields[j].Name
+		})
+		for index := range fields {
+			sort.Slice(fields[index].Arguments, func(i, j int) bool { return fields[index].Arguments[i].Name < fields[index].Arguments[j].Name })
+		}
+	}
+	sortNamed := func(types []sourceGraphQLNamedType) {
+		sort.Slice(types, func(i, j int) bool { return types[i].Name < types[j].Name })
+		for index := range types {
+			sort.Slice(types[index].Fields, func(i, j int) bool { return types[index].Fields[i].Name < types[index].Fields[j].Name })
+			for fieldIndex := range types[index].Fields {
+				sort.Slice(types[index].Fields[fieldIndex].Arguments, func(i, j int) bool {
+					return types[index].Fields[fieldIndex].Arguments[i].Name < types[index].Fields[fieldIndex].Arguments[j].Name
+				})
+			}
+			sort.Strings(types[index].Interfaces)
+			sort.Strings(types[index].PossibleTypes)
+			sort.Strings(types[index].Values)
+		}
+	}
+	sortFields(projection.QueryFields)
+	sortFields(projection.MutationFields)
+	sortNamed(projection.TypeSystem.Enums)
+	sortNamed(projection.TypeSystem.InputObjects)
+	sortNamed(projection.TypeSystem.Interfaces)
+	sortNamed(projection.TypeSystem.Objects)
+	sort.Strings(projection.TypeSystem.Scalars)
+	sortNamed(projection.TypeSystem.Unions)
+	return json.Marshal(map[string]any{
+		"query_fields":    projection.QueryFields,
+		"mutation_fields": projection.MutationFields,
+		"type_system":     projection.TypeSystem,
+	})
 }
 
 func validateSourceImportResultIdentities(result sourceImportResult) error {
@@ -2574,7 +2677,8 @@ func (r *sourceReferenceResolver) preflightResolvedParameter(parameter map[strin
 			}
 		}
 	}
-	return validateBoundedRequestSchema(schema, r.form, r.limits, 0)
+	location, _ := parameter["in"].(string)
+	return validateBoundedOperationParameterSchema(schema, r.form, r.limits, location)
 }
 
 func (r *sourceReferenceResolver) preflightRequestBody(value any) error {
@@ -4979,7 +5083,7 @@ func importSourceOperation(lock sourceImportLock, doc map[string]any, form sourc
 		}
 	}
 	servers.Gaps = sourceSortedGaps(servers.Gaps)
-	runtimeGaps := append(sourceRequestGaps(request, form, limits), servers.Gaps...)
+	runtimeGaps := append(sourceRequestGaps(request, form, limits, method), servers.Gaps...)
 	runtime := sourceRuntimeReachability{MergeBlocked: len(runtimeGaps) > 0, Gaps: runtimeGaps}
 	return sourceOperationDescriptor{
 		Connector:           lock.Connector,
@@ -5100,7 +5204,7 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 			continue
 		}
 		if parameter.Content == nil {
-			if err := validateBoundedRequestSchema(parameter.Schema, form, limits, 0); err != nil {
+			if err := validateBoundedOperationParameterSchema(parameter.Schema, form, limits, parameter.In); err != nil {
 				return sourceRequestDescriptor{}, fmt.Errorf("parameter %q: %w", parameter.Name, err)
 			}
 		} else if err := validateBoundedParameterContent(parameter.Name, parameter.Content, form, limits); err != nil {
@@ -5388,7 +5492,7 @@ func sourceParameterWire(parameter map[string]any, form sourceDocumentForm, loca
 	return wire, nil
 }
 
-func sourceRequestGaps(request sourceRequestDescriptor, form sourceDocumentForm, limits sourceImportLimits) []sourceContractGap {
+func sourceRequestGaps(request sourceRequestDescriptor, form sourceDocumentForm, limits sourceImportLimits, method string) []sourceContractGap {
 	var gaps []sourceContractGap
 	if len(request.Media) > 1 {
 		gaps = append(gaps, sourceContractGapFor("cli-request-media-selection-foundation-r1", "request body media", "provider declares multiple request media types; generated command must select one exact media contract"))
@@ -5396,11 +5500,18 @@ func sourceRequestGaps(request sourceRequestDescriptor, form sourceDocumentForm,
 	if request.Body != nil && sourceRequestFormMediaType(request.MediaType) {
 		gaps = append(gaps, sourceContractGapFor("cli-request-encoding-foundation-r1", "request body encoding", "provider form request media requires runtime encoding support"))
 	}
-	for _, group := range [][]sourceParameterDescriptor{request.Path, request.Query, request.Header} {
-		for _, parameter := range group {
+	for _, group := range []struct {
+		location   string
+		parameters []sourceParameterDescriptor
+	}{
+		{location: "path", parameters: request.Path},
+		{location: "query", parameters: request.Query},
+		{location: "header", parameters: request.Header},
+	} {
+		for _, parameter := range group.parameters {
 			gaps = append(gaps, parameter.Wire.Gaps...)
 			if parameter.Schema != nil {
-				if err := sourceProjectionSchemaGap(parameter.Schema, form, limits); err != nil {
+				if err := sourceProjectionOperationParameterGap(parameter.Schema, form, limits, group.location, method); err != nil {
 					gaps = append(gaps, sourceContractGapFor("cli-request-schema-foundation-r1", "parameter "+parameter.Name, err.Error()))
 				}
 			}
@@ -5417,6 +5528,59 @@ func sourceRequestGaps(request sourceRequestDescriptor, form sourceDocumentForm,
 		}
 	}
 	return sourceSortedGaps(gaps)
+}
+
+func validateBoundedOperationParameterSchema(schema any, form sourceDocumentForm, limits sourceImportLimits, location string) error {
+	if (location == "path" || location == "query") && sourceStringScalarWireUnion(schema) {
+		return nil
+	}
+	return validateBoundedRequestSchema(schema, form, limits, 0)
+}
+
+func sourceProjectionOperationParameterGap(schema any, form sourceDocumentForm, limits sourceImportLimits, location, method string) error {
+	if !sourceProjectionMutationMethod(method) && (location == "path" || location == "query") && sourceStringScalarWireUnion(schema) {
+		return nil
+	}
+	return sourceProjectionSchemaGap(schema, form, limits)
+}
+
+// sourceStringScalarWireUnion admits only a source union with an
+// unconstrained string arm and scalar alternatives. Path and query values are
+// textual on the wire, so that string arm covers every possible encoded value;
+// retaining the exact source schema in the descriptor avoids pretending the
+// provider only accepts one arm. Object, array, constrained, header, and body
+// unions remain gaps because they require a distinct serialization contract.
+func sourceStringScalarWireUnion(schema any) bool {
+	root, ok := schema.(map[string]any)
+	if !ok {
+		return false
+	}
+	arms, ok := root["oneOf"].([]any)
+	if !ok || len(arms) == 0 {
+		arms, ok = root["anyOf"].([]any)
+	}
+	if !ok || len(arms) < 2 {
+		return false
+	}
+	hasOpenString := false
+	for _, rawArm := range arms {
+		arm, ok := rawArm.(map[string]any)
+		if !ok || len(arm) != 1 {
+			return false
+		}
+		typeName, ok := arm["type"].(string)
+		if !ok {
+			return false
+		}
+		switch typeName {
+		case "string":
+			hasOpenString = true
+		case "integer", "number", "boolean":
+		default:
+			return false
+		}
+	}
+	return hasOpenString
 }
 
 func sourceProjectionSchemaGap(schema any, form sourceDocumentForm, limits sourceImportLimits) error {
@@ -6650,6 +6814,7 @@ type sourceImportOptions struct {
 	Connector string
 	DefsDir   string
 	Output    string
+	CacheDir  string
 	Check     bool
 }
 
@@ -6670,6 +6835,14 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, sourceImportUsage)
 		return 2
 	}
+	if opts.CacheDir != "" {
+		cacheDir, cacheErr := sourceImportArtifactCacheDir(opts.CacheDir)
+		if cacheErr != nil {
+			logln(stderr, "connectorgen source-import: resolve explicit artifact cache:", cacheErr)
+			return 1
+		}
+		fetcher = newSourceImportArtifactCacheFetcher(fetcher, cacheDir, defaultSourceImportLimits())
+	}
 	lock, err := loadConnectorSourceImportLock(opts.DefsDir, opts.Connector)
 	if err != nil {
 		logln(stderr, "connectorgen source-import:", err)
@@ -6680,6 +6853,14 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import:", err)
 		return 1
 	}
+	surface, err := sourceProjectionExecutionSurface(filepath.Join(opts.DefsDir, opts.Connector), opts.Connector)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: load declaration-owned execution surface:", err)
+		return 1
+	}
+	sourceProjectionNormalizeNonBlockingReadGaps(&result)
+	sourceProjectionRestoreSourceBoundDirectReadPathFlags(&surface, result)
+	sourceProjectionAnnotateUnreachableReadGaps(surface, &result)
 	raw, err := marshalSourceImportResult(result)
 	if err != nil {
 		logln(stderr, "connectorgen source-import: encode descriptors:", err)
@@ -6718,15 +6899,18 @@ func parseSourceImportOptions(args []string) (sourceImportOptions, error) {
 		switch arg := args[i]; arg {
 		case "--check":
 			opts.Check = true
-		case "--defs", "--out":
+		case "--defs", "--out", "--cache-dir":
 			if i+1 >= len(args) {
 				return sourceImportOptions{}, fmt.Errorf("%s requires a value", arg)
 			}
 			i++
-			if arg == "--defs" {
+			switch arg {
+			case "--defs":
 				opts.DefsDir = args[i]
-			} else {
+			case "--out":
 				opts.Output = args[i]
+			case "--cache-dir":
+				opts.CacheDir = args[i]
 			}
 		default:
 			if strings.HasPrefix(arg, "-") {
@@ -6804,7 +6988,198 @@ type httpSourceImportFetcher struct {
 }
 
 func newHTTPSourceImportFetcher(limits sourceImportLimits) sourceImportFetcher {
-	return httpSourceImportFetcher{limits: limits, lookup: batchArtifactLookupIPAddr(net.DefaultResolver.LookupIPAddr)}
+	cacheDir, cacheErr := sourceImportArtifactCacheDir("")
+	return newSourceImportArtifactCacheFetcher(
+		httpSourceImportFetcher{limits: limits, lookup: batchArtifactLookupIPAddr(net.DefaultResolver.LookupIPAddr)},
+		cacheDir,
+		limits,
+		cacheErr,
+	)
+}
+
+type sourceImportArtifactCacheFetcher struct {
+	source   sourceImportFetcher
+	cacheDir string
+	limits   sourceImportLimits
+	cacheErr error
+}
+
+func newSourceImportArtifactCacheFetcher(source sourceImportFetcher, cacheDir string, limits sourceImportLimits, cacheErr ...error) sourceImportArtifactCacheFetcher {
+	fetcher := sourceImportArtifactCacheFetcher{source: source, cacheDir: cacheDir, limits: limits}
+	if len(cacheErr) > 0 {
+		fetcher.cacheErr = cacheErr[0]
+	}
+	return fetcher
+}
+
+func (fetcher sourceImportArtifactCacheFetcher) Fetch(ctx context.Context, sourceURL string) ([]byte, error) {
+	if fetcher.source == nil {
+		return nil, fmt.Errorf("source importer has no fetcher")
+	}
+	return fetcher.source.Fetch(ctx, sourceURL)
+}
+
+// FetchArtifact returns only bytes whose size and digest match the immutable
+// lock. A missing, stale, or corrupt cache is never returned; it is replaced
+// only by a fresh response that passes the same verification.
+func (fetcher sourceImportArtifactCacheFetcher) FetchArtifact(ctx context.Context, artifact sourceImportArtifact) ([]byte, error) {
+	if err := validateSourceImportLimits(fetcher.limits); err != nil {
+		return nil, err
+	}
+	if fetcher.source == nil {
+		return nil, fmt.Errorf("source importer has no fetcher")
+	}
+	if fetcher.cacheErr != nil {
+		return nil, fmt.Errorf("resolve source-import artifact cache: %w", fetcher.cacheErr)
+	}
+	cachePath, err := sourceImportArtifactCachePath(fetcher.cacheDir, artifact)
+	if err != nil {
+		return nil, err
+	}
+	if cached, present, cacheErr := readSourceImportArtifactCache(cachePath, fetcher.limits.MaxArtifactBytes); cacheErr == nil && present {
+		if err := validateSourceImportArtifactBytes(cached, artifact); err == nil {
+			return cached, nil
+		}
+		if err := removeSourceImportArtifactCache(cachePath); err != nil {
+			return nil, err
+		}
+	} else if cacheErr != nil {
+		if err := removeSourceImportArtifactCache(cachePath); err != nil {
+			return nil, err
+		}
+	}
+
+	raw, err := fetcher.source.Fetch(ctx, artifact.SourceURL)
+	if err != nil {
+		return nil, err
+	}
+	if int64(len(raw)) > fetcher.limits.MaxArtifactBytes {
+		return nil, fmt.Errorf("artifact byte limit exceeded")
+	}
+	if err := validateSourceImportArtifactBytes(raw, artifact); err != nil {
+		return nil, err
+	}
+	if err := writeSourceImportArtifactCache(cachePath, raw); err != nil {
+		return nil, err
+	}
+	return raw, nil
+}
+
+func sourceImportArtifactCacheDir(explicitRoot string) (string, error) {
+	if explicitRoot != "" {
+		absoluteRoot, err := filepath.Abs(explicitRoot)
+		if err != nil {
+			return "", fmt.Errorf("resolve explicit source-import artifact cache directory: %w", err)
+		}
+		info, err := os.Lstat(absoluteRoot)
+		if err != nil {
+			return "", fmt.Errorf("explicit source-import artifact cache directory must exist: %w", err)
+		}
+		if info.Mode()&os.ModeSymlink != 0 || !info.IsDir() {
+			return "", fmt.Errorf("explicit source-import artifact cache directory must be an existing non-symlink directory")
+		}
+		return absoluteRoot, nil
+	}
+	root, err := os.UserCacheDir()
+	if err != nil {
+		return "", err
+	}
+	if root == "" {
+		return "", fmt.Errorf("user cache directory is empty")
+	}
+	return filepath.Join(root, "polymetrics", "source-import"), nil
+}
+
+func sourceImportArtifactCachePath(cacheDir string, artifact sourceImportArtifact) (string, error) {
+	if cacheDir == "" {
+		return "", fmt.Errorf("source-import artifact cache directory is empty")
+	}
+	if err := validateSourceImportArtifact(artifact); err != nil {
+		return "", err
+	}
+	return filepath.Join(cacheDir, strings.ToLower(artifact.SHA256)+".artifact"), nil
+}
+
+func readSourceImportArtifactCache(path string, maxBytes int64) ([]byte, bool, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, false, nil
+		}
+		return nil, true, fmt.Errorf("open source-import artifact cache: %w", err)
+	}
+	raw, readErr := io.ReadAll(io.LimitReader(file, maxBytes+1))
+	closeErr := file.Close()
+	if readErr != nil {
+		return nil, true, fmt.Errorf("read source-import artifact cache: %w", readErr)
+	}
+	if closeErr != nil {
+		return nil, true, fmt.Errorf("close source-import artifact cache: %w", closeErr)
+	}
+	if int64(len(raw)) > maxBytes {
+		return nil, true, fmt.Errorf("source-import artifact cache exceeds byte limit")
+	}
+	return raw, true, nil
+}
+
+func removeSourceImportArtifactCache(path string) error {
+	if err := os.Remove(path); err != nil && !os.IsNotExist(err) {
+		return fmt.Errorf("remove invalid source-import artifact cache: %w", err)
+	}
+	return nil
+}
+
+func writeSourceImportArtifactCache(path string, raw []byte) error {
+	dir := filepath.Dir(path)
+	if err := os.MkdirAll(dir, 0o700); err != nil {
+		return fmt.Errorf("create source-import artifact cache directory: %w", err)
+	}
+	temporary, err := os.CreateTemp(dir, ".source-import-artifact-")
+	if err != nil {
+		return fmt.Errorf("create source-import artifact cache file: %w", err)
+	}
+	temporaryPath := temporary.Name()
+	if err := temporary.Chmod(0o600); err != nil {
+		return sourceImportArtifactCacheTemporaryFailure("set source-import artifact cache permissions", err, temporary, temporaryPath)
+	}
+	if _, err := temporary.Write(raw); err != nil {
+		return sourceImportArtifactCacheTemporaryFailure("write source-import artifact cache", err, temporary, temporaryPath)
+	}
+	if err := temporary.Sync(); err != nil {
+		return sourceImportArtifactCacheTemporaryFailure("sync source-import artifact cache", err, temporary, temporaryPath)
+	}
+	if err := temporary.Close(); err != nil {
+		return sourceImportArtifactCacheTemporaryFailure("close source-import artifact cache", err, temporary, temporaryPath)
+	}
+	if err := os.Rename(temporaryPath, path); err != nil {
+		if cleanupErr := removeSourceImportArtifactCache(temporaryPath); cleanupErr != nil {
+			return fmt.Errorf("publish source-import artifact cache: %w", errors.Join(err, cleanupErr))
+		}
+		return fmt.Errorf("publish source-import artifact cache: %w", err)
+	}
+	return nil
+}
+
+func sourceImportArtifactCacheTemporaryFailure(operation string, cause error, temporary *os.File, temporaryPath string) error {
+	var cleanupErrs []error
+	if err := temporary.Close(); err != nil && !errors.Is(err, os.ErrClosed) {
+		cleanupErrs = append(cleanupErrs, fmt.Errorf("close source-import artifact cache: %w", err))
+	}
+	if err := removeSourceImportArtifactCache(temporaryPath); err != nil {
+		cleanupErrs = append(cleanupErrs, err)
+	}
+	if len(cleanupErrs) > 0 {
+		return fmt.Errorf("%s: %w", operation, errors.Join(append([]error{cause}, cleanupErrs...)...))
+	}
+	return fmt.Errorf("%s: %w", operation, cause)
+}
+
+func validateSourceImportArtifactBytes(raw []byte, artifact sourceImportArtifact) error {
+	digest := sha256.Sum256(raw)
+	if int64(len(raw)) != artifact.Bytes || !strings.EqualFold(hex.EncodeToString(digest[:]), artifact.SHA256) {
+		return fmt.Errorf("source-lock refresh required: fetched artifact does not match locked bytes and SHA-256")
+	}
+	return nil
 }
 
 func (fetcher httpSourceImportFetcher) Fetch(ctx context.Context, sourceURL string) ([]byte, error) {
@@ -6849,6 +7224,7 @@ func (fetcher httpSourceImportFetcher) Fetch(ctx context.Context, sourceURL stri
 
 func newSourceImportHTTPClient(lookup batchArtifactLookupIPAddr) *http.Client {
 	client := newBatchArtifactHTTPClient(lookup)
+	client.Timeout = defaultSourceImportFetchTimeout
 	client.CheckRedirect = func(*http.Request, []*http.Request) error {
 		return fmt.Errorf("source-lock artifact redirects are not permitted")
 	}

@@ -78,16 +78,31 @@ func ValidateWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, r
 		return err
 	}
 	for i, rec := range records {
-		if sch != nil {
-			if err := sch.Validate(map[string]any(rec)); err != nil {
-				return &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: err}
-			}
-		}
-		if err := validateWriteBody(action, rec); err != nil {
+		if err := validateWriteActionRecord(action, rec, sch); err != nil {
 			return &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: err}
 		}
 	}
 	return nil
+}
+
+// validateWriteActionRecord is shared by ordinary writes and each sealed
+// physical compound step. A compound hook therefore cannot select a named
+// declaration while bypassing that declaration's closed record schema or body
+// shape validation.
+func validateWriteActionRecord(action WriteAction, rec connectors.Record, schema *Schema) error {
+	if schema == nil {
+		var err error
+		schema, err = compiledRecordSchema(action)
+		if err != nil {
+			return err
+		}
+	}
+	if schema != nil {
+		if err := schema.Validate(map[string]any(rec)); err != nil {
+			return err
+		}
+	}
+	return validateWriteBody(action, rec)
 }
 
 func validateWriteBody(action WriteAction, rec connectors.Record) error {
@@ -108,22 +123,6 @@ func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, rec
 		return connectors.WritePreview{}, err
 	}
 	return PreviewPreparedWrite(prepared)
-}
-
-// resolveWriteRequestLine interpolates the action's base URL and path against
-// the same complete runtime configuration and record that execution uses.
-func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record, cfg connectors.RuntimeConfig) (method, path string, err error) {
-	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(rec)}
-
-	baseURL, err := Interpolate(writeActionBaseURL(b, action), vars)
-	if err != nil {
-		return "", "", fmt.Errorf("engine: resolve write base url: %w", err)
-	}
-	relPath, err := InterpolatePath(action.Path, vars)
-	if err != nil {
-		return "", "", fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
-	}
-	return methodOrDefault(action.Method), joinURL(baseURL, relPath), nil
 }
 
 func copyRecordMap(src map[string]any) map[string]any {
@@ -265,7 +264,9 @@ func sortWriteRedactionLiterals(values []string) {
 
 func writeRedactionLiterals(values []string) []string {
 	seen := map[string]bool{}
-	literals := make([]string, 0, len(values)*4)
+	// Values and their encoded forms are deduplicated below. Avoid deriving an
+	// allocation size from an unchecked multiplication of input length.
+	literals := make([]string, 0)
 	for _, value := range values {
 		for _, literal := range writeRedactionLiteralForms(value) {
 			if seen[literal] {
@@ -363,9 +364,16 @@ func applyWriteRecordHook(h Hooks, action WriteAction, records []connectors.Reco
 }
 
 func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req connectors.WriteRequest, records []connectors.Record, prepared PreparedWrite, previewDigest string, h Hooks) (connectors.WriteResult, error) {
-	cfg := materializeConfigDefaults(b, req.Config)
-	if len(prepared.executionRecords) != len(records) || len(prepared.Requests) != len(records) {
+	cfg := prepared.executionConfig
+	if len(prepared.executionRecords) != len(records) || len(prepared.executionPlan) != len(records) {
 		return connectors.WriteResult{RecordsFailed: len(records)}, fmt.Errorf("engine: prepared execution plan cardinality changed")
+	}
+	requestCount := 0
+	for _, recordPlan := range prepared.executionPlan {
+		requestCount += len(recordPlan.steps)
+	}
+	if requestCount != len(prepared.Requests) {
+		return connectors.WriteResult{RecordsFailed: len(records)}, fmt.Errorf("engine: prepared physical request plan cardinality changed")
 	}
 
 	rt, err := newRuntime(ctx, b, cfg, h)
@@ -373,58 +381,154 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
 	result := connectors.WriteResult{}
-	for i, rec := range records {
+	requestIndex := 0
+	responseValidator, _ := h.(PreparedWriteResponseValidator)
+	for recordIndex := range records {
 		if err := ctx.Err(); err != nil {
 			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
 			return result, err
 		}
 
-		if wh, ok := h.(WriteHook); ok {
-			handled, err := wh.ExecuteWrite(ctx, action, rec, rt)
+		plan := prepared.executionPlan[recordIndex]
+		responses := make([]*connsdk.Response, len(plan.steps))
+		recordUnchanged := false
+		for stepIndex, step := range plan.steps {
+			if err := ctx.Err(); err != nil {
+				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+				return result, err
+			}
+			pinned := connectors.Record(copyRecordMap(map[string]any(step.record)))
+			if step.responseBinding != nil {
+				bound, err := bindPreparedWriteResponse(pinned, step.responseBinding, responses)
+				if err != nil {
+					result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+					return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Err: redactWriteActionError(err, step.action, pinned)}
+				}
+				pinned = bound
+			}
+			if err := validateWriteActionRecord(step.action, pinned, nil); err != nil {
+				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+				return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Err: redactWriteActionError(err, step.action, pinned)}
+			}
+
+			current, err := prepareDeclarativeRequest(b, step.action, pinned, recordIndex, cfg, prepared.Target.RequiresApproval())
 			if err != nil {
 				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
-				return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(err, action, rec)}
+				return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Err: redactWriteActionError(err, step.action, pinned)}
 			}
-			if handled {
-				result.RecordsWritten++
-				continue
+			if prepared.Target.RequiresApproval() && prepared.ApprovalScope == connectors.WriteApprovalScopeFixture {
+				if err := validateFixturePreparedRequests([]PreparedRequest{current}, 1); err != nil {
+					result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+					return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Err: err}
+				}
+			}
+			if !preparedRequestMatchesExecution(current, prepared.Requests[requestIndex]) {
+				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+				return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Err: errors.New("prepared request no longer matches its approved execution plan")}
+			}
+			idempotencyKey := writeIdempotencyKey(b.Name, step.action, previewDigest, req.DeliveryOccurrence, requestIndex)
+			response, err := executeWriteRecordWithResponse(ctx, b, step.action, pinned, recordIndex, cfg, rt, idempotencyKey)
+			responses[stepIndex] = response
+			requestIndex++
+			var responseErr error
+			if response != nil {
+				providerResponse, providerResponseErr := writeProviderResponse(response, recordIndex)
+				result.ProviderResponses = append(result.ProviderResponses, providerResponse)
+				responseErr = providerResponseErr
+			}
+			if responseErr != nil {
+				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+				return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Err: redactWriteActionError(responseErr, step.action, pinned)}
+			}
+			if err != nil {
+				if isMissingOkDelete(step.action, err) {
+					result.RecordsUnchanged++
+					recordUnchanged = true
+					break
+				}
+				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+				class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
+				return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Class: class, Hint: hint, Err: redactWriteActionError(err, step.action, pinned)}
+			}
+			if responseValidator != nil {
+				if err := responseValidator.ValidatePreparedWriteResponse(step.action, pinned, response); err != nil {
+					result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+					return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Err: redactWriteActionError(err, step.action, pinned)}
+				}
 			}
 		}
-
-		pinned := prepared.executionRecords[i]
-		current, err := prepareDeclarativeRequest(b, action, pinned, i, cfg, prepared.Target.RequiresApproval())
-		if err != nil {
-			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
-			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(err, action, pinned)}
+		if recordUnchanged {
+			continue
 		}
-		if !reflect.DeepEqual(current, prepared.Requests[i]) {
-			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
-			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: errors.New("prepared request no longer matches its approved execution plan")}
-		}
-		idempotencyKey := writeIdempotencyKey(b.Name, action, previewDigest, i)
-		response, err := executeWriteRecordWithResponse(ctx, b, action, pinned, i, cfg, rt, idempotencyKey)
-		var responseErr error
-		if response != nil {
-			providerResponse, providerResponseErr := writeProviderResponse(response, i)
-			result.ProviderResponses = append(result.ProviderResponses, providerResponse)
-			responseErr = providerResponseErr
-		}
-		if responseErr != nil {
-			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
-			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(responseErr, action, rec)}
-		}
-		if err != nil {
-			if isMissingOkDelete(action, err) {
-				result.RecordsUnchanged++
-				continue
-			}
-			result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
-			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Class: class, Hint: hint, Err: redactWriteActionError(err, action, rec)}
-		}
+		// A deliberate empty physical plan is an approved no-op selected by the
+		// hook. It retains legacy accounting but cannot have a hidden transport
+		// effect because preparation sealed its zero-step plan in the digest.
 		result.RecordsWritten++
 	}
 	return result, nil
+}
+
+func preparedRequestMatchesExecution(current, approved PreparedRequest) bool {
+	approved.Action = ""
+	if approved.ResponseBinding != nil {
+		// The action and response selector are already bound by the preview
+		// digest. Their concrete URL exists only after the earlier receipt; all
+		// other wire material must still equal the previewed declaration shape.
+		approved.URL = current.URL
+		approved.Target = current.Target
+		approved.ResponseBinding = nil
+	}
+	return reflect.DeepEqual(current, approved)
+}
+
+const maxPreparedWriteResponseBindingBytes = 8 << 10
+
+func bindPreparedWriteResponse(record connectors.Record, binding *PreparedWriteResponseBinding, responses []*connsdk.Response) (connectors.Record, error) {
+	if binding == nil {
+		return record, nil
+	}
+	if binding.SourceStep < 0 || binding.SourceStep >= len(responses) || responses[binding.SourceStep] == nil {
+		return nil, fmt.Errorf("prepared response binding source step %d has no provider receipt", binding.SourceStep)
+	}
+	response := responses[binding.SourceStep]
+	if len(response.Body) > maxPreparedWriteResponseBindingBytes {
+		return nil, fmt.Errorf("prepared response binding source exceeds %d bytes", maxPreparedWriteResponseBindingBytes)
+	}
+	if !writeProviderResponseDeclaresJSON(response.Header) {
+		return nil, errors.New("prepared response binding source must declare a JSON body")
+	}
+	decoder := json.NewDecoder(strings.NewReader(string(response.Body)))
+	decoder.UseNumber()
+	var body map[string]any
+	if err := decoder.Decode(&body); err != nil {
+		return nil, errors.New("prepared response binding source is not a JSON object")
+	}
+	var trailing any
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		return nil, errors.New("prepared response binding source has trailing JSON values")
+	}
+	value, ok := body[binding.Field]
+	if !ok {
+		return nil, fmt.Errorf("prepared response binding source has no field %q", binding.Field)
+	}
+	switch typed := value.(type) {
+	case string:
+		if len(typed) > maxPreparedWriteResponseBindingBytes {
+			return nil, fmt.Errorf("prepared response binding field %q exceeds %d bytes", binding.Field, maxPreparedWriteResponseBindingBytes)
+		}
+	case json.Number:
+		if len(typed.String()) > 128 {
+			return nil, fmt.Errorf("prepared response binding field %q is too large", binding.Field)
+		}
+	case bool:
+		// Scalar values are then constrained by the target action's own closed
+		// record schema during request materialization below.
+	default:
+		return nil, fmt.Errorf("prepared response binding field %q must be a bounded scalar", binding.Field)
+	}
+	bound := connectors.Record(copyRecordMap(map[string]any(record)))
+	bound[binding.TargetField] = value
+	return bound, nil
 }
 
 // executeWriteRecord performs the single HTTP request for one record: builds
@@ -679,18 +783,23 @@ func writeRequester(base *connsdk.Requester, action WriteAction, idempotencyKey 
 // name into that preview; the record index keeps one approved batch from
 // aliasing two provider mutations. Retries reuse this value because Requester
 // clones the same default headers for every attempt against the original URL.
-func writeIdempotencyKey(connector string, action WriteAction, previewDigest string, recordIndex int) string {
+func writeIdempotencyKey(connector string, action WriteAction, previewDigest, deliveryOccurrence string, recordIndex int) string {
 	if strings.TrimSpace(action.IdempotencyKeyHeader) == "" || strings.TrimSpace(previewDigest) == "" {
 		return ""
 	}
-	payload := strings.Join([]string{
+	parts := []string{
 		"polymetrics/write-idempotency/v1",
 		strings.TrimSpace(connector),
 		strings.TrimSpace(action.Name),
 		strings.ToLower(strings.TrimSpace(action.IdempotencyKeyHeader)),
 		strings.TrimSpace(previewDigest),
-		fmt.Sprintf("%d", recordIndex),
-	}, "\x00")
+	}
+	if strings.TrimSpace(deliveryOccurrence) != "" {
+		parts[0] = "polymetrics/write-idempotency/v2"
+		parts = append(parts, deliveryOccurrence)
+	}
+	parts = append(parts, fmt.Sprintf("%d", recordIndex))
+	payload := strings.Join(parts, "\x00")
 	sum := sha256.Sum256([]byte(payload))
 	return hex.EncodeToString(sum[:])
 }

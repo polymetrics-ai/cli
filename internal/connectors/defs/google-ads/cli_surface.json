@@ -26,6 +26,14 @@
       ],
       "examples": [
         "pm google-ads audience-insights list-insights-eligible-dates --json"
+      ],
+      "flags": [
+        {
+          "name": "insights-application-info",
+          "maps_to": "body.insightsApplicationInfo",
+          "summary": "Google Ads request field insightsApplicationInfo.",
+          "type": "json"
+        }
       ]
     },
     {
@@ -111,6 +119,24 @@
             "RELATED_YOUTUBE_VIDEOS",
             "LANDING_PAGE_PREVIEW"
           ]
+        },
+        {
+          "name": "final-url-generation",
+          "maps_to": "body.finalUrlGeneration",
+          "summary": "Google Ads request field finalUrlGeneration.",
+          "type": "json"
+        },
+        {
+          "name": "freeform-generation",
+          "maps_to": "body.freeformGeneration",
+          "summary": "Google Ads request field freeformGeneration.",
+          "type": "json"
+        },
+        {
+          "name": "product-recontext-generation",
+          "maps_to": "body.productRecontextGeneration",
+          "summary": "Google Ads request field productRecontextGeneration.",
+          "type": "json"
         }
       ]
     },
@@ -200,6 +226,12 @@
           "required": true
         },
         {
+          "name": "existing-generation-context",
+          "maps_to": "body.existingGenerationContext",
+          "summary": "Google Ads request field existingGenerationContext.",
+          "type": "json"
+        },
+        {
           "name": "final-url",
           "maps_to": "body.finalUrl",
           "summary": "Google Ads request field finalUrl.",
@@ -256,6 +288,314 @@
       ]
     },
     {
+      "path": "customers generate-audience-composition-insights",
+      "summary": "Read Google Ads customers.generateAudienceCompositionInsights.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google_ads.customers.generate.audience.composition.insights",
+      "output_policy": "json_redacted",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAudienceCompositionInsights",
+      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:generateAudienceCompositionInsights"
+        }
+      ],
+      "examples": [
+        "pm google-ads customers generate-audience-composition-insights --audience fixture_value --dimensions UNSPECIFIED --json"
+      ],
+      "flags": [
+        {
+          "name": "audience",
+          "maps_to": "body.audience",
+          "summary": "Google Ads request field audience.",
+          "type": "json",
+          "required": true
+        },
+        {
+          "name": "baseline-audience",
+          "maps_to": "body.baselineAudience",
+          "summary": "Google Ads request field baselineAudience.",
+          "type": "json"
+        },
+        {
+          "name": "customer-insights-group",
+          "maps_to": "body.customerInsightsGroup",
+          "summary": "Google Ads request field customerInsightsGroup.",
+          "type": "string"
+        },
+        {
+          "name": "data-month",
+          "maps_to": "body.dataMonth",
+          "summary": "Google Ads request field dataMonth.",
+          "type": "string"
+        },
+        {
+          "name": "dimensions",
+          "maps_to": "body.dimensions",
+          "summary": "Google Ads request field dimensions.",
+          "type": "string_array",
+          "values": [
+            "UNSPECIFIED",
+            "UNKNOWN",
+            "CATEGORY",
+            "KNOWLEDGE_GRAPH",
+            "GEO_TARGET_COUNTRY",
+            "SUB_COUNTRY_LOCATION",
+            "YOUTUBE_CHANNEL",
+            "AFFINITY_USER_INTEREST",
+            "IN_MARKET_USER_INTEREST",
+            "PARENTAL_STATUS",
+            "INCOME_RANGE",
+            "AGE_RANGE",
+            "GENDER",
+            "YOUTUBE_VIDEO",
+            "DEVICE",
+            "YOUTUBE_LINEUP",
+            "USER_LIST"
+          ],
+          "required": true
+        },
+        {
+          "name": "insights-application-info",
+          "maps_to": "body.insightsApplicationInfo",
+          "summary": "Google Ads request field insightsApplicationInfo.",
+          "type": "json"
+        }
+      ]
+    },
+    {
+      "path": "customers generate-audience-overlap-insights",
+      "summary": "Read Google Ads customers.generateAudienceOverlapInsights.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google_ads.customers.generate.audience.overlap.insights",
+      "output_policy": "json_redacted",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAudienceOverlapInsights",
+      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:generateAudienceOverlapInsights"
+        }
+      ],
+      "examples": [
+        "pm google-ads customers generate-audience-overlap-insights --country-location fixture_value --dimensions UNSPECIFIED --primary-attribute fixture_value --json"
+      ],
+      "flags": [
+        {
+          "name": "country-location",
+          "maps_to": "body.countryLocation",
+          "summary": "Google Ads request field countryLocation.",
+          "type": "json",
+          "required": true
+        },
+        {
+          "name": "customer-insights-group",
+          "maps_to": "body.customerInsightsGroup",
+          "summary": "Google Ads request field customerInsightsGroup.",
+          "type": "string"
+        },
+        {
+          "name": "dimensions",
+          "maps_to": "body.dimensions",
+          "summary": "Google Ads request field dimensions.",
+          "type": "string_array",
+          "values": [
+            "UNSPECIFIED",
+            "UNKNOWN",
+            "CATEGORY",
+            "KNOWLEDGE_GRAPH",
+            "GEO_TARGET_COUNTRY",
+            "SUB_COUNTRY_LOCATION",
+            "YOUTUBE_CHANNEL",
+            "AFFINITY_USER_INTEREST",
+            "IN_MARKET_USER_INTEREST",
+            "PARENTAL_STATUS",
+            "INCOME_RANGE",
+            "AGE_RANGE",
+            "GENDER",
+            "YOUTUBE_VIDEO",
+            "DEVICE",
+            "YOUTUBE_LINEUP",
+            "USER_LIST"
+          ],
+          "required": true
+        },
+        {
+          "name": "insights-application-info",
+          "maps_to": "body.insightsApplicationInfo",
+          "summary": "Google Ads request field insightsApplicationInfo.",
+          "type": "json"
+        },
+        {
+          "name": "primary-attribute",
+          "maps_to": "body.primaryAttribute",
+          "summary": "Google Ads request field primaryAttribute.",
+          "type": "json",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "customers generate-creator-insights",
+      "summary": "Read Google Ads customers.generateCreatorInsights.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google_ads.customers.generate.creator.insights",
+      "output_policy": "json_redacted",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateCreatorInsights",
+      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:generateCreatorInsights"
+        }
+      ],
+      "examples": [
+        "pm google-ads customers generate-creator-insights --country-locations fixture_value --customer-insights-group fixture_value --json"
+      ],
+      "flags": [
+        {
+          "name": "country-locations",
+          "maps_to": "body.countryLocations",
+          "summary": "Google Ads request field countryLocations.",
+          "type": "json",
+          "required": true
+        },
+        {
+          "name": "customer-insights-group",
+          "maps_to": "body.customerInsightsGroup",
+          "summary": "Google Ads request field customerInsightsGroup.",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "insights-application-info",
+          "maps_to": "body.insightsApplicationInfo",
+          "summary": "Google Ads request field insightsApplicationInfo.",
+          "type": "json"
+        },
+        {
+          "name": "search-attributes",
+          "maps_to": "body.searchAttributes",
+          "summary": "Google Ads request field searchAttributes.",
+          "type": "json"
+        },
+        {
+          "name": "search-brand",
+          "maps_to": "body.searchBrand",
+          "summary": "Google Ads request field searchBrand.",
+          "type": "json"
+        },
+        {
+          "name": "search-channels",
+          "maps_to": "body.searchChannels",
+          "summary": "Google Ads request field searchChannels.",
+          "type": "json"
+        },
+        {
+          "name": "sub-country-locations",
+          "maps_to": "body.subCountryLocations",
+          "summary": "Google Ads request field subCountryLocations.",
+          "type": "json"
+        }
+      ]
+    },
+    {
+      "path": "customers generate-insights-finder-report",
+      "summary": "Read Google Ads customers.generateInsightsFinderReport.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google_ads.customers.generate.insights.finder.report",
+      "output_policy": "json_redacted",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateInsightsFinderReport",
+      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:generateInsightsFinderReport"
+        }
+      ],
+      "examples": [
+        "pm google-ads customers generate-insights-finder-report --baseline-audience fixture_value --specific-audience fixture_value --json"
+      ],
+      "flags": [
+        {
+          "name": "baseline-audience",
+          "maps_to": "body.baselineAudience",
+          "summary": "Google Ads request field baselineAudience.",
+          "type": "json",
+          "required": true
+        },
+        {
+          "name": "customer-insights-group",
+          "maps_to": "body.customerInsightsGroup",
+          "summary": "Google Ads request field customerInsightsGroup.",
+          "type": "string"
+        },
+        {
+          "name": "insights-application-info",
+          "maps_to": "body.insightsApplicationInfo",
+          "summary": "Google Ads request field insightsApplicationInfo.",
+          "type": "json"
+        },
+        {
+          "name": "specific-audience",
+          "maps_to": "body.specificAudience",
+          "summary": "Google Ads request field specificAudience.",
+          "type": "json",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "customers generate-keyword-forecast-metrics",
+      "summary": "Read Google Ads customers.generateKeywordForecastMetrics.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google_ads.customers.generate.keyword.forecast.metrics",
+      "output_policy": "json_redacted",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateKeywordForecastMetrics",
+      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:generateKeywordForecastMetrics"
+        }
+      ],
+      "examples": [
+        "pm google-ads customers generate-keyword-forecast-metrics --campaign fixture_value --json"
+      ],
+      "flags": [
+        {
+          "name": "campaign",
+          "maps_to": "body.campaign",
+          "summary": "Google Ads request field campaign.",
+          "type": "json",
+          "required": true
+        },
+        {
+          "name": "currency-code",
+          "maps_to": "body.currencyCode",
+          "summary": "Google Ads request field currencyCode.",
+          "type": "string"
+        },
+        {
+          "name": "forecast-period",
+          "maps_to": "body.forecastPeriod",
+          "summary": "Google Ads request field forecastPeriod.",
+          "type": "json"
+        }
+      ]
+    },
+    {
       "path": "customers generate-keyword-historical-metrics",
       "summary": "Read Google Ads customers.generateKeywordHistoricalMetrics.",
       "intent": "direct_read",
@@ -276,10 +616,22 @@
       ],
       "flags": [
         {
+          "name": "aggregate-metrics",
+          "maps_to": "body.aggregateMetrics",
+          "summary": "Google Ads request field aggregateMetrics.",
+          "type": "json"
+        },
+        {
           "name": "geo-target-constants",
           "maps_to": "body.geoTargetConstants",
           "summary": "Google Ads request field geoTargetConstants.",
           "type": "string_array"
+        },
+        {
+          "name": "historical-metrics-options",
+          "maps_to": "body.historicalMetricsOptions",
+          "summary": "Google Ads request field historicalMetricsOptions.",
+          "type": "json"
         },
         {
           "name": "include-adult-keywords",
@@ -334,16 +686,34 @@
       ],
       "flags": [
         {
+          "name": "aggregate-metrics",
+          "maps_to": "body.aggregateMetrics",
+          "summary": "Google Ads request field aggregateMetrics.",
+          "type": "json"
+        },
+        {
           "name": "geo-target-constants",
           "maps_to": "body.geoTargetConstants",
           "summary": "Google Ads request field geoTargetConstants.",
           "type": "string_array"
         },
         {
+          "name": "historical-metrics-options",
+          "maps_to": "body.historicalMetricsOptions",
+          "summary": "Google Ads request field historicalMetricsOptions.",
+          "type": "json"
+        },
+        {
           "name": "include-adult-keywords",
           "maps_to": "body.includeAdultKeywords",
           "summary": "Google Ads request field includeAdultKeywords.",
           "type": "boolean"
+        },
+        {
+          "name": "keyword-and-url-seed",
+          "maps_to": "body.keywordAndUrlSeed",
+          "summary": "Google Ads request field keywordAndUrlSeed.",
+          "type": "json"
         },
         {
           "name": "keyword-annotation",
@@ -369,6 +739,12 @@
           ]
         },
         {
+          "name": "keyword-seed",
+          "maps_to": "body.keywordSeed",
+          "summary": "Google Ads request field keywordSeed.",
+          "type": "json"
+        },
+        {
           "name": "language",
           "maps_to": "body.language",
           "summary": "Google Ads request field language.",
@@ -379,6 +755,149 @@
           "maps_to": "body.pageSize",
           "summary": "Google Ads request field pageSize.",
           "type": "integer"
+        },
+        {
+          "name": "site-seed",
+          "maps_to": "body.siteSeed",
+          "summary": "Google Ads request field siteSeed.",
+          "type": "json"
+        },
+        {
+          "name": "url-seed",
+          "maps_to": "body.urlSeed",
+          "summary": "Google Ads request field urlSeed.",
+          "type": "json"
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "exactly_one",
+          "fields": [
+            "body.keywordAndUrlSeed",
+            "body.urlSeed",
+            "body.keywordSeed",
+            "body.siteSeed"
+          ],
+          "message": "exactly one Google Ads keyword seed must be provided"
+        }
+      ]
+    },
+    {
+      "path": "customers generate-reach-forecast",
+      "summary": "Read Google Ads customers.generateReachForecast.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google_ads.customers.generate.reach.forecast",
+      "output_policy": "json_redacted",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateReachForecast",
+      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:generateReachForecast"
+        }
+      ],
+      "examples": [
+        "pm google-ads customers generate-reach-forecast --campaign-duration fixture_value --planned-products fixture_value --json"
+      ],
+      "flags": [
+        {
+          "name": "campaign-duration",
+          "maps_to": "body.campaignDuration",
+          "summary": "Google Ads request field campaignDuration.",
+          "type": "json",
+          "required": true
+        },
+        {
+          "name": "cookie-frequency-cap",
+          "maps_to": "body.cookieFrequencyCap",
+          "summary": "Google Ads request field cookieFrequencyCap.",
+          "type": "integer"
+        },
+        {
+          "name": "cookie-frequency-cap-setting",
+          "maps_to": "body.cookieFrequencyCapSetting",
+          "summary": "Google Ads request field cookieFrequencyCapSetting.",
+          "type": "json"
+        },
+        {
+          "name": "currency-code",
+          "maps_to": "body.currencyCode",
+          "summary": "Google Ads request field currencyCode.",
+          "type": "string"
+        },
+        {
+          "name": "customer-reach-group",
+          "maps_to": "body.customerReachGroup",
+          "summary": "Google Ads request field customerReachGroup.",
+          "type": "string"
+        },
+        {
+          "name": "effective-frequency-limit",
+          "maps_to": "body.effectiveFrequencyLimit",
+          "summary": "Google Ads request field effectiveFrequencyLimit.",
+          "type": "json"
+        },
+        {
+          "name": "forecast-metric-options",
+          "maps_to": "body.forecastMetricOptions",
+          "summary": "Google Ads request field forecastMetricOptions.",
+          "type": "json"
+        },
+        {
+          "name": "min-effective-frequency",
+          "maps_to": "body.minEffectiveFrequency",
+          "summary": "Google Ads request field minEffectiveFrequency.",
+          "type": "integer"
+        },
+        {
+          "name": "planned-products",
+          "maps_to": "body.plannedProducts",
+          "summary": "Google Ads request field plannedProducts.",
+          "type": "json",
+          "required": true
+        },
+        {
+          "name": "reach-application-info",
+          "maps_to": "body.reachApplicationInfo",
+          "summary": "Google Ads request field reachApplicationInfo.",
+          "type": "json"
+        },
+        {
+          "name": "targeting",
+          "maps_to": "body.targeting",
+          "summary": "Google Ads request field targeting.",
+          "type": "json"
+        }
+      ]
+    },
+    {
+      "path": "customers generate-shareable-previews",
+      "summary": "Read Google Ads customers.generateShareablePreviews.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google_ads.customers.generate.shareable.previews",
+      "output_policy": "json_redacted",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateShareablePreviews",
+      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:generateShareablePreviews"
+        }
+      ],
+      "examples": [
+        "pm google-ads customers generate-shareable-previews --shareable-previews fixture_value --json"
+      ],
+      "flags": [
+        {
+          "name": "shareable-previews",
+          "maps_to": "body.shareablePreviews",
+          "summary": "Google Ads request field shareablePreviews.",
+          "type": "json",
+          "required": true
         }
       ]
     },
@@ -403,10 +922,123 @@
       ],
       "flags": [
         {
+          "name": "audience-definition",
+          "maps_to": "body.audienceDefinition",
+          "summary": "Google Ads request field audienceDefinition.",
+          "type": "json"
+        },
+        {
+          "name": "audience-description",
+          "maps_to": "body.audienceDescription",
+          "summary": "Google Ads request field audienceDescription.",
+          "type": "json"
+        },
+        {
           "name": "customer-insights-group",
           "maps_to": "body.customerInsightsGroup",
           "summary": "Google Ads request field customerInsightsGroup.",
           "type": "string"
+        },
+        {
+          "name": "insights-application-info",
+          "maps_to": "body.insightsApplicationInfo",
+          "summary": "Google Ads request field insightsApplicationInfo.",
+          "type": "json"
+        }
+      ]
+    },
+    {
+      "path": "customers generate-targeting-suggestion-metrics",
+      "summary": "Read Google Ads customers.generateTargetingSuggestionMetrics.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google_ads.customers.generate.targeting.suggestion.metrics",
+      "output_policy": "json_redacted",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateTargetingSuggestionMetrics",
+      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:generateTargetingSuggestionMetrics"
+        }
+      ],
+      "examples": [
+        "pm google-ads customers generate-targeting-suggestion-metrics --audiences fixture_value --json"
+      ],
+      "flags": [
+        {
+          "name": "audiences",
+          "maps_to": "body.audiences",
+          "summary": "Google Ads request field audiences.",
+          "type": "json",
+          "required": true
+        },
+        {
+          "name": "customer-insights-group",
+          "maps_to": "body.customerInsightsGroup",
+          "summary": "Google Ads request field customerInsightsGroup.",
+          "type": "string"
+        },
+        {
+          "name": "insights-application-info",
+          "maps_to": "body.insightsApplicationInfo",
+          "summary": "Google Ads request field insightsApplicationInfo.",
+          "type": "json"
+        }
+      ]
+    },
+    {
+      "path": "customers generate-trending-insights",
+      "summary": "Read Google Ads customers.generateTrendingInsights.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google_ads.customers.generate.trending.insights",
+      "output_policy": "json_redacted",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateTrendingInsights",
+      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:generateTrendingInsights"
+        }
+      ],
+      "examples": [
+        "pm google-ads customers generate-trending-insights --country-location fixture_value --customer-insights-group fixture_value --json"
+      ],
+      "flags": [
+        {
+          "name": "country-location",
+          "maps_to": "body.countryLocation",
+          "summary": "Google Ads request field countryLocation.",
+          "type": "json",
+          "required": true
+        },
+        {
+          "name": "customer-insights-group",
+          "maps_to": "body.customerInsightsGroup",
+          "summary": "Google Ads request field customerInsightsGroup.",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "insights-application-info",
+          "maps_to": "body.insightsApplicationInfo",
+          "summary": "Google Ads request field insightsApplicationInfo.",
+          "type": "json"
+        },
+        {
+          "name": "search-audience",
+          "maps_to": "body.searchAudience",
+          "summary": "Google Ads request field searchAudience.",
+          "type": "json"
+        },
+        {
+          "name": "search-topics",
+          "maps_to": "body.searchTopics",
+          "summary": "Google Ads request field searchTopics.",
+          "type": "json"
         }
       ]
     },
@@ -449,45 +1081,7 @@
       "examples": [
         "pm google-ads customers invoices list --billing-setup customers/synthetic-conformance-value/billingSetups/fixture --issue-month JANUARY --issue-year 2026 --json"
       ],
-      "flags": [
-        {
-          "name": "billing-setup",
-          "maps_to": "query.billingSetup",
-          "summary": "Required. The billing setup resource name of the requested invoices.",
-          "type": "string",
-          "required": true
-        },
-        {
-          "name": "issue-month",
-          "maps_to": "query.issueMonth",
-          "summary": "Required. The issue month to retrieve invoices.",
-          "type": "enum",
-          "values": [
-            "UNSPECIFIED",
-            "UNKNOWN",
-            "JANUARY",
-            "FEBRUARY",
-            "MARCH",
-            "APRIL",
-            "MAY",
-            "JUNE",
-            "JULY",
-            "AUGUST",
-            "SEPTEMBER",
-            "OCTOBER",
-            "NOVEMBER",
-            "DECEMBER"
-          ],
-          "required": true
-        },
-        {
-          "name": "issue-year",
-          "maps_to": "query.issueYear",
-          "summary": "Required. The issue year to retrieve invoices, in yyyy format.",
-          "type": "string",
-          "required": true
-        }
-      ]
+      "flags": []
     },
     {
       "path": "customers payments-accounts list",
@@ -530,6 +1124,12 @@
       ],
       "flags": [
         {
+          "name": "ad-group-info",
+          "maps_to": "body.adGroupInfo",
+          "summary": "Google Ads request field adGroupInfo.",
+          "type": "json"
+        },
+        {
           "name": "advertising-channel-type",
           "maps_to": "body.advertisingChannelType",
           "summary": "Google Ads request field advertisingChannelType.",
@@ -551,6 +1151,24 @@
             "DEMAND_GEN"
           ],
           "required": true
+        },
+        {
+          "name": "asset-group-info",
+          "maps_to": "body.assetGroupInfo",
+          "summary": "Google Ads request field assetGroupInfo.",
+          "type": "json"
+        },
+        {
+          "name": "bidding-info",
+          "maps_to": "body.biddingInfo",
+          "summary": "Google Ads request field biddingInfo.",
+          "type": "json"
+        },
+        {
+          "name": "budget-info",
+          "maps_to": "body.budgetInfo",
+          "summary": "Google Ads request field budgetInfo.",
+          "type": "json"
         },
         {
           "name": "campaign-call-asset-count",
@@ -680,6 +1298,12 @@
           "required": true
         },
         {
+          "name": "seed-info",
+          "maps_to": "body.seedInfo",
+          "summary": "Google Ads request field seedInfo.",
+          "type": "json"
+        },
+        {
           "name": "target-content-network",
           "maps_to": "body.targetContentNetwork",
           "summary": "Google Ads request field targetContentNetwork.",
@@ -746,11 +1370,29 @@
           "required": true
         },
         {
+          "name": "insights-application-info",
+          "maps_to": "body.insightsApplicationInfo",
+          "summary": "Google Ads request field insightsApplicationInfo.",
+          "type": "json"
+        },
+        {
+          "name": "location-country-filters",
+          "maps_to": "body.locationCountryFilters",
+          "summary": "Google Ads request field locationCountryFilters.",
+          "type": "json"
+        },
+        {
           "name": "query-text",
           "maps_to": "body.queryText",
           "summary": "Google Ads request field queryText.",
           "type": "string",
           "required": true
+        },
+        {
+          "name": "youtube-reach-location",
+          "maps_to": "body.youtubeReachLocation",
+          "summary": "Google Ads request field youtubeReachLocation.",
+          "type": "json"
         }
       ]
     },
@@ -786,6 +1428,100 @@
           "maps_to": "body.selectedBrands",
           "summary": "Google Ads request field selectedBrands.",
           "type": "string_array"
+        }
+      ]
+    },
+    {
+      "path": "customers suggest-keyword-themes",
+      "summary": "Read Google Ads customers.suggestKeywordThemes.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google_ads.customers.suggest.keyword.themes",
+      "output_policy": "json_redacted",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestKeywordThemes",
+      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:suggestKeywordThemes"
+        }
+      ],
+      "examples": [
+        "pm google-ads customers suggest-keyword-themes --suggestion-info fixture_value --json"
+      ],
+      "flags": [
+        {
+          "name": "suggestion-info",
+          "maps_to": "body.suggestionInfo",
+          "summary": "Google Ads request field suggestionInfo.",
+          "type": "json",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "customers suggest-smart-campaign-ad",
+      "summary": "Read Google Ads customers.suggestSmartCampaignAd.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google_ads.customers.suggest.smart.campaign.ad",
+      "output_policy": "json_redacted",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestSmartCampaignAd",
+      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:suggestSmartCampaignAd"
+        }
+      ],
+      "examples": [
+        "pm google-ads customers suggest-smart-campaign-ad --suggestion-info fixture_value --json"
+      ],
+      "flags": [
+        {
+          "name": "suggestion-info",
+          "maps_to": "body.suggestionInfo",
+          "summary": "Google Ads request field suggestionInfo.",
+          "type": "json",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "customers suggest-smart-campaign-budget-options",
+      "summary": "Read Google Ads customers.suggestSmartCampaignBudgetOptions.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google_ads.customers.suggest.smart.campaign.budget.options",
+      "output_policy": "json_redacted",
+      "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestSmartCampaignBudgetOptions",
+      "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions"
+        }
+      ],
+      "examples": [
+        "pm google-ads customers suggest-smart-campaign-budget-options --campaign fixture_value --suggestion-info fixture_value --json"
+      ],
+      "flags": [
+        {
+          "name": "campaign",
+          "maps_to": "body.campaign",
+          "summary": "Google Ads request field campaign.",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "suggestion-info",
+          "maps_to": "body.suggestionInfo",
+          "summary": "Google Ads request field suggestionInfo.",
+          "type": "json",
+          "required": true
         }
       ]
     },
@@ -851,10 +1587,22 @@
           "type": "string"
         },
         {
+          "name": "geo-targets",
+          "maps_to": "body.geoTargets",
+          "summary": "Google Ads request field geoTargets.",
+          "type": "json"
+        },
+        {
           "name": "locale",
           "maps_to": "body.locale",
           "summary": "Google Ads request field locale.",
           "type": "string"
+        },
+        {
+          "name": "location-names",
+          "maps_to": "body.locationNames",
+          "summary": "Google Ads request field locationNames.",
+          "type": "json"
         }
       ]
     },
@@ -930,6 +1678,12 @@
           "maps_to": "body.customerReachGroup",
           "summary": "Google Ads request field customerReachGroup.",
           "type": "string"
+        },
+        {
+          "name": "reach-application-info",
+          "maps_to": "body.reachApplicationInfo",
+          "summary": "Google Ads request field reachApplicationInfo.",
+          "type": "json"
         }
       ]
     },
@@ -951,6 +1705,14 @@
       ],
       "examples": [
         "pm google-ads v22 list-plannable-locations --json"
+      ],
+      "flags": [
+        {
+          "name": "reach-application-info",
+          "maps_to": "body.reachApplicationInfo",
+          "summary": "Google Ads request field reachApplicationInfo.",
+          "type": "json"
+        }
       ]
     },
     {
@@ -979,6 +1741,12 @@
           "summary": "Google Ads request field plannableLocationId.",
           "type": "string",
           "required": true
+        },
+        {
+          "name": "reach-application-info",
+          "maps_to": "body.reachApplicationInfo",
+          "summary": "Google Ads request field reachApplicationInfo.",
+          "type": "json"
         }
       ]
     },
@@ -1020,6 +1788,12 @@
           "maps_to": "body.pathQuery",
           "summary": "Google Ads request field pathQuery.",
           "type": "string"
+        },
+        {
+          "name": "reach-application-info",
+          "maps_to": "body.reachApplicationInfo",
+          "summary": "Google Ads request field reachApplicationInfo.",
+          "type": "json"
         },
         {
           "name": "user-interest-taxonomy-types",
@@ -1070,6 +1844,12 @@
           "maps_to": "body.customerReachGroup",
           "summary": "Google Ads request field customerReachGroup.",
           "type": "string"
+        },
+        {
+          "name": "reach-application-info",
+          "maps_to": "body.reachApplicationInfo",
+          "summary": "Google Ads request field reachApplicationInfo.",
+          "type": "json"
         }
       ]
     }

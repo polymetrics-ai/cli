@@ -2,6 +2,8 @@ package synctransport
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 
@@ -50,6 +52,14 @@ func sourceCheckpointForMode(mode synccontract.Mode, checkpoint, rateLimitResume
 	default:
 		return checkpoint
 	}
+}
+
+// transportUnitContext gives every physical destination effect its own bounded
+// phase while retaining parent cancellation. Apply/publication and confirmation
+// are independent provider units: confirmation must never inherit time already
+// spent making an externally visible change.
+func transportUnitContext(parent context.Context, unitDeadline time.Duration) (context.Context, context.CancelFunc) {
+	return context.WithTimeout(parent, unitDeadline)
 }
 
 func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, error) {
@@ -126,7 +136,12 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 
 	result := Result{}
 	pendingReceipts := make([]WarehouseReceipt, 0)
-	err = resolved.Source.ReadTransport(ctx, cloneSourceRequest(SourceRequest{
+	var deferredCandidate *synccontract.CheckpointEnvelope
+	var deferredAcknowledgement synccontract.DownstreamAcknowledgement
+	if err := authorizeTransportSource(ctx, request); err != nil {
+		return result, err
+	}
+	sourceRequest := cloneSourceRequest(SourceRequest{
 		Connector:    request.Source,
 		Runtime:      request.SourceRuntime,
 		Stream:       request.Stream,
@@ -140,7 +155,8 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		RecordExtraction: func(elapsed time.Duration) {
 			result.ExtractElapsed += elapsed
 		},
-	}), func(page SourcePage) (callbackErr error) {
+	})
+	callback := func(page SourcePage) (callbackErr error) {
 		defer func() {
 			callbackErr = tagTransportExecutionError(TransportExecutionOriginInternal, callbackErr)
 		}()
@@ -164,12 +180,6 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 		// Extraction has completed when the source gives us a valid bounded page,
 		// independently of whether a later warehouse or destination unit fails.
 		result.RecordsRead += len(page.Records)
-		if request.Approval.AuthorizeNextUnit != nil {
-			if err := request.Approval.AuthorizeNextUnit(ctx); err != nil {
-				return fmt.Errorf("authorize transport unit: %w", err)
-			}
-		}
-
 		// Retain the source-owned candidate for the final commit. The stage and
 		// destination receive defensive payload copies and cannot replace it.
 		candidate := page.CandidateCheckpoint.Clone()
@@ -235,12 +245,16 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			return fmt.Errorf("clone destination apply request: %w", err)
 		}
 		acknowledgement, err := func() (synccontract.DownstreamAcknowledgement, error) {
-			applyCtx, cancelApply := context.WithTimeout(ctx, request.unitDeadline())
-			defer cancelApply()
+			applyCtx, cancelApply := transportUnitContext(ctx, request.unitDeadline())
+			if err := authorizeDestinationEffect(applyCtx, request.Approval, "apply"); err != nil {
+				cancelApply()
+				return synccontract.DownstreamAcknowledgement{}, err
+			}
 
 			applyStarted := time.Now()
 			acknowledgement, err := resolved.Destination.ApplyDestination(applyCtx, destinationApplyRequest)
 			result.ApplyElapsed += time.Since(applyStarted)
+			cancelApply()
 			collectDestinationResult(&result, acknowledgement, err)
 			if err != nil {
 				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("apply destination transport: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
@@ -263,12 +277,15 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 			if err != nil {
 				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("clone destination read-back request: %w", err)
 			}
+			readBackCtx, cancelReadBack := transportUnitContext(ctx, request.unitDeadline())
 			readBackStarted := time.Now()
-			if err := resolved.Destination.ReadBackDestination(applyCtx, readBackRequest); err != nil {
-				result.ApplyElapsed += time.Since(readBackStarted)
+			if err := resolved.Destination.ReadBackDestination(readBackCtx, readBackRequest); err != nil {
+				result.ReadBackElapsed += time.Since(readBackStarted)
+				cancelReadBack()
 				return synccontract.DownstreamAcknowledgement{}, fmt.Errorf("read back destination transport receipt: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
 			}
-			result.ApplyElapsed += time.Since(readBackStarted)
+			result.ReadBackElapsed += time.Since(readBackStarted)
+			cancelReadBack()
 			return acknowledgement, nil
 		}()
 		if err != nil {
@@ -279,30 +296,81 @@ func (o *Orchestrator) Run(ctx context.Context, request RunRequest) (Result, err
 				if acknowledgement.Sink != request.Destination.Name() {
 					return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, request.Destination.Name())
 				}
-				return request.Commit(checkpoint)
+				return request.commitAcknowledgedWorksets(checkpoint, pendingReceipts)
 			}); err != nil {
 				return err
 			}
+			committed := candidate.Clone()
+			committedAt := acknowledgement.AcknowledgedAt
+			committed.CommittedAt = &committedAt
+			result.CommittedCheckpoint = &committed
+			// The page was fully delivered and checkpointed before retirement.
+			// Preserve that fact even when local cleanup needs reconciliation.
+			result.Pages++
 			if err := retireCommittedReceipts(ctx, request, pendingReceipts); err != nil {
-				return err
+				result.DeliveredReconciliationRequired = true
+				return NewDeliveredReconciliationRequiredError(err)
 			}
 			pendingReceipts = pendingReceipts[:0]
+			deferredCandidate = nil
 		}
 
-		committed := candidate.Clone()
-		committedAt := acknowledgement.AcknowledgedAt
-		committed.CommittedAt = &committedAt
-		result.Pages++
-		if !page.DeferCheckpoint {
-			result.CommittedCheckpoint = &committed
+		if page.DeferCheckpoint {
+			result.Pages++
+			deferred := candidate.Clone()
+			deferredCandidate = &deferred
+			deferredAcknowledgement = acknowledgement
 		}
 		if err := ctx.Err(); err != nil {
 			return err
 		}
 		return nil
-	})
+	}
+	var sourceOutcome SourceReadOutcome
+	outcomeSource, tracksSourceOutcome := resolved.Source.(SourceOutcomeExecutor)
+	if tracksSourceOutcome {
+		sourceOutcome, err = outcomeSource.ReadTransportWithOutcome(ctx, sourceRequest, callback)
+	} else {
+		err = resolved.Source.ReadTransport(ctx, sourceRequest, callback)
+	}
 	if err != nil {
 		return result, tagTransportExecutionError(TransportExecutionOriginSource, err)
+	}
+	if tracksSourceOutcome {
+		if err := sourceOutcome.validate(); err != nil {
+			return result, fmt.Errorf("source transport outcome: %w", err)
+		}
+		if deferredCandidate != nil {
+			candidate := deferredCandidate.Clone()
+			if sourceOutcome.Exhausted {
+				candidate.Continuation = nil
+			} else {
+				candidate.Continuation = sourceOutcome.Continuation.Clone()
+			}
+			if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, deferredAcknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
+				if deferredAcknowledgement.Sink != request.Destination.Name() {
+					return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", deferredAcknowledgement.Sink, request.Destination.Name())
+				}
+				return request.commitAcknowledgedWorksets(checkpoint, pendingReceipts)
+			}); err != nil {
+				return result, err
+			}
+			committed := candidate.Clone()
+			committedAt := deferredAcknowledgement.AcknowledgedAt
+			committed.CommittedAt = &committedAt
+			result.CommittedCheckpoint = &committed
+			if err := retireCommittedReceipts(ctx, request, pendingReceipts); err != nil {
+				result.DeliveredReconciliationRequired = true
+				return result, NewDeliveredReconciliationRequiredError(err)
+			}
+			pendingReceipts = pendingReceipts[:0]
+		}
+		if !sourceOutcome.Exhausted {
+			if result.CommittedCheckpoint == nil {
+				return result, fmt.Errorf("budget-stopped source transport completed without an acknowledged continuation checkpoint")
+			}
+			return result, &SourceBudgetStoppedError{Continuation: *sourceOutcome.Continuation.Clone()}
+		}
 	}
 	if result.CommittedCheckpoint == nil {
 		if result.Pages == 0 {
@@ -341,7 +409,13 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		TransformPlanHash: request.TransformPlanHash,
 		Approval:          request.Approval,
 	}
-	session, err := destination.BeginFullOverwrite(ctx, fullRequest)
+	beginCtx, cancelBegin := transportUnitContext(ctx, request.unitDeadline())
+	if err := authorizeDestinationEffect(beginCtx, request.Approval, "full-overwrite begin"); err != nil {
+		cancelBegin()
+		return Result{}, err
+	}
+	session, err := destination.BeginFullOverwrite(beginCtx, fullRequest)
+	cancelBegin()
 	if err != nil {
 		return Result{}, fmt.Errorf("begin destination full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, err))
 	}
@@ -362,6 +436,9 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 
 	var lastCandidate *synccontract.CheckpointEnvelope
 	receipts := make([]WarehouseReceipt, 0)
+	if err := authorizeTransportSource(ctx, request); err != nil {
+		return result, err
+	}
 	err = resolved.Source.ReadTransport(ctx, cloneSourceRequest(SourceRequest{
 		Connector:    request.Source,
 		Runtime:      request.SourceRuntime,
@@ -393,12 +470,6 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 			return fmt.Errorf("full_overwrite source transport page has tombstones")
 		}
 		result.RecordsRead += len(page.Records)
-		if request.Approval.AuthorizeNextUnit != nil {
-			if err := request.Approval.AuthorizeNextUnit(ctx); err != nil {
-				return fmt.Errorf("authorize transport unit: %w", err)
-			}
-		}
-
 		candidate := page.CandidateCheckpoint.Clone()
 		stagePage, err := cloneSourcePage(page)
 		if err != nil {
@@ -441,7 +512,11 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 		if err != nil {
 			return fmt.Errorf("clone destination apply request: %w", err)
 		}
-		applyCtx, cancelApply := context.WithTimeout(ctx, request.unitDeadline())
+		applyCtx, cancelApply := transportUnitContext(ctx, request.unitDeadline())
+		if err := authorizeDestinationEffect(applyCtx, request.Approval, "full-overwrite apply"); err != nil {
+			cancelApply()
+			return err
+		}
 		applyStarted := time.Now()
 		applyErr := session.ApplyFullOverwrite(applyCtx, applyRequest)
 		result.ApplyElapsed += time.Since(applyStarted)
@@ -463,48 +538,119 @@ func (o *Orchestrator) runFullOverwrite(ctx context.Context, request RunRequest,
 			return result, fmt.Errorf("source transport completed without a full-overwrite checkpoint candidate")
 		}
 	}
-	if request.Approval.AuthorizeNextUnit != nil {
-		if err := request.Approval.AuthorizeNextUnit(ctx); err != nil {
-			return result, fmt.Errorf("authorize full-overwrite publication: %w", err)
-		}
+	if err := authorizeDestinationEffect(ctx, request.Approval, "full-overwrite publication"); err != nil {
+		return result, err
 	}
-	publishCtx, cancelPublish := context.WithTimeout(ctx, request.unitDeadline())
+	publishCtx, cancelPublish := transportUnitContext(ctx, request.unitDeadline())
 	publishStarted := time.Now()
 	acknowledgement, publishErr := session.PublishFullOverwrite(publishCtx, FullOverwritePublicationRequest{
 		LastCheckpoint: lastCandidate, Pages: result.Pages, Records: result.RecordsApplied,
 	})
 	collectDestinationResult(&result, acknowledgement, publishErr)
 	result.ApplyElapsed += time.Since(publishStarted)
+	cancelPublish()
 	if publishErr == nil {
 		// Publication is already externally visible. Disarm pre-publication
 		// abort before read-back so an ambiguous verification failure cannot
 		// delete or roll back a successfully published destination.
 		published = true
-		publishErr = session.ReadBackFullOverwrite(publishCtx, acknowledgement)
+		if lastCandidate == nil {
+			if err := handoffEmptyPublicationReadBackPending(ctx, request, &result, acknowledgement, request.Destination.Name()); err != nil {
+				return result, err
+			}
+		}
+		readBackCtx, cancelReadBack := transportUnitContext(ctx, request.unitDeadline())
+		readBackStarted := time.Now()
+		if request.ReadBackAdmission != nil {
+			publishErr = request.ReadBackAdmission(readBackCtx)
+		}
+		if publishErr == nil {
+			publishErr = session.ReadBackFullOverwrite(readBackCtx, acknowledgement)
+		}
+		result.ReadBackElapsed += time.Since(readBackStarted)
+		cancelReadBack()
 	}
-	cancelPublish()
 	if publishErr != nil {
 		return result, fmt.Errorf("publish destination full-overwrite run: %w", tagTransportExecutionError(TransportExecutionOriginDestination, publishErr))
 	}
 	if lastCandidate == nil {
+		if err := handoffEmptyPublication(ctx, request, &result, acknowledgement, request.Destination.Name()); err != nil {
+			return result, err
+		}
 		return result, nil
 	}
 	if err := synccontract.CommitAfterDownstreamAcknowledgement(*lastCandidate, acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
 		if acknowledgement.Sink != request.Destination.Name() {
 			return fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, request.Destination.Name())
 		}
-		return request.Commit(checkpoint)
+		return request.commitAcknowledgedWorksets(checkpoint, receipts)
 	}); err != nil {
-		return result, err
-	}
-	if err := retireCommittedReceipts(ctx, request, receipts); err != nil {
 		return result, err
 	}
 	committed := lastCandidate.Clone()
 	committedAt := acknowledgement.AcknowledgedAt
 	committed.CommittedAt = &committedAt
 	result.CommittedCheckpoint = &committed
+	if err := retireCommittedReceipts(ctx, request, receipts); err != nil {
+		result.DeliveredReconciliationRequired = true
+		return result, NewDeliveredReconciliationRequiredError(err)
+	}
 	return result, nil
+}
+
+// sealEmptyPublicationWitness converts only a connector-issued durable
+// acknowledgement into the local anti-replay witness for a full-overwrite
+// publication that had no source checkpoint. Read-back has already succeeded
+// before callers reach this helper; output remains in DestinationResults.
+func sealEmptyPublicationWitness(result *Result, acknowledgement synccontract.DownstreamAcknowledgement, destination string) error {
+	if result == nil {
+		return errors.New("empty publication result is required")
+	}
+	witness, err := acknowledgement.PublicationWitness()
+	if err != nil {
+		return fmt.Errorf("seal empty full-overwrite publication: %w", err)
+	}
+	if witness.Sink != destination {
+		return fmt.Errorf("durable empty publication sink %q does not match destination %q", witness.Sink, destination)
+	}
+	result.EmptyPublication = &witness
+	return nil
+}
+
+func handoffEmptyPublication(ctx context.Context, request RunRequest, result *Result, acknowledgement synccontract.DownstreamAcknowledgement, destination string) error {
+	if err := sealEmptyPublicationWitness(result, acknowledgement, destination); err != nil {
+		return err
+	}
+	result.EmptyPublicationReadBackPending = nil
+	if request.EmptyPublicationHandoff == nil {
+		return nil
+	}
+	return request.EmptyPublicationHandoff(ctx, *result)
+}
+
+func handoffEmptyPublicationReadBackPending(ctx context.Context, request RunRequest, result *Result, acknowledgement synccontract.DownstreamAcknowledgement, destination string) error {
+	if result == nil {
+		return errors.New("empty publication result is required")
+	}
+	witness, err := acknowledgement.PublicationWitness()
+	if err != nil {
+		return fmt.Errorf("seal empty full-overwrite read-back receipt: %w", err)
+	}
+	if witness.Sink != destination {
+		return fmt.Errorf("durable empty publication sink %q does not match destination %q", witness.Sink, destination)
+	}
+	receipt := EmptyPublicationReadBackReceipt{
+		Witness: witness,
+		Output:  append(json.RawMessage(nil), acknowledgement.Output...),
+	}
+	if err := receipt.Validate(); err != nil {
+		return fmt.Errorf("seal empty full-overwrite read-back receipt: %w", err)
+	}
+	result.EmptyPublicationReadBackPending = &receipt
+	if request.EmptyPublicationReadBackPendingHandoff == nil {
+		return nil
+	}
+	return request.EmptyPublicationReadBackPendingHandoff(ctx, *result)
 }
 
 // collectDestinationResult is the single defensive-copy boundary for every
@@ -520,6 +666,16 @@ func collectDestinationResult(result *Result, acknowledgement synccontract.Downs
 	if output, ok := DestinationApplyOutput(err); ok {
 		result.DestinationResults = append(result.DestinationResults, append([]byte(nil), output...))
 	}
+}
+
+func authorizeTransportSource(ctx context.Context, request RunRequest) error {
+	if request.SourceAdmission == nil {
+		return nil
+	}
+	if err := request.SourceAdmission(ctx); err != nil {
+		return fmt.Errorf("authorize transport source effect: %w", err)
+	}
+	return nil
 }
 
 func retireCommittedReceipts(ctx context.Context, request RunRequest, receipts []WarehouseReceipt) error {

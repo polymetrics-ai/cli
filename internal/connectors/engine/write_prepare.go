@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/url"
 	"path/filepath"
@@ -45,28 +46,24 @@ func prepareDeclarativeWrite(ctx context.Context, b Bundle, req connectors.Write
 	if h != nil {
 		hookIdentity += ":" + fmt.Sprintf("%T", h) + ":" + h.ConnectorName()
 	}
-	if target.RequiresApproval() && strings.TrimSpace(action.Hook) != "" {
-		if _, ok := h.(WriteHook); ok {
-			classifier, classified := h.(WriteHookClassifier)
-			if !classified || classifier.HandlesWriteAction(action) {
-				return PreparedWrite{}, fmt.Errorf("engine: destructive write action %q uses a hook without an exact prepared-request preview", action.Name)
-			}
-		}
-	}
-
-	cfg := materializeConfigDefaults(b, req.Config)
+	cfg := materializeConfigDefaults(b, sealRuntimeConfig(req.Config))
 	mapped, err := applyWriteRecordHook(h, action, records)
 	if err != nil {
 		return PreparedWrite{}, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
 	warnings := []string{fmt.Sprintf("%s executes a live mutation only after approval; dry run performs no external call", action.Name)}
-	requests := make([]PreparedRequest, 0, len(mapped))
-	for index, record := range mapped {
-		prepared, err := prepareDeclarativeRequest(b, action, record, index, cfg, target.RequiresApproval())
-		if err != nil {
-			return PreparedWrite{}, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: index, Err: redactWriteActionError(err, action, record)}
+	requests, executionPlan, planned, err := prepareHookWritePlan(b, action, mapped, cfg, target.RequiresApproval(), h)
+	if err != nil {
+		return PreparedWrite{}, err
+	}
+	if !planned {
+		if legacyWriteHookClaimsAction(h, action) {
+			return PreparedWrite{}, fmt.Errorf("engine: write action %q uses a legacy hook without an exact prepared-request plan", action.Name)
 		}
-		requests = append(requests, prepared)
+		requests, executionPlan, err = prepareOrdinaryWritePlan(b, action, mapped, cfg, target.RequiresApproval())
+		if err != nil {
+			return PreparedWrite{}, err
+		}
 	}
 	if len(requests) > 0 {
 		redactionValues := writeActionRedactionValues(action, mapped[0])
@@ -97,6 +94,8 @@ func prepareDeclarativeWrite(ctx context.Context, b Bundle, req connectors.Write
 		HookIdentity:     hookIdentity,
 		Requests:         requests,
 		executionRecords: cloneWriteExecutionRecords(mapped),
+		executionPlan:    executionPlan,
+		executionConfig:  sealRuntimeConfig(cfg),
 	}, nil
 }
 
@@ -120,6 +119,153 @@ func cloneWriteExecutionRecords(records []connectors.Record) []connectors.Record
 		cloned[index] = connectors.Record(copyRecordMap(map[string]any(record)))
 	}
 	return cloned
+}
+
+const maxPreparedHookRequestsPerRecord = 8
+
+// legacyWriteHookClaimsAction identifies an execution-time-only hook. A hook
+// with no classifier is conservative by design: it could handle any action,
+// so the engine must refuse it until it implements PreparedWriteHook.
+func legacyWriteHookClaimsAction(h Hooks, action WriteAction) bool {
+	if h == nil {
+		return false
+	}
+	if _, ok := h.(PreparedWriteHook); ok {
+		return false
+	}
+	if _, ok := h.(WriteHook); !ok {
+		return false
+	}
+	classifier, classified := h.(WriteHookClassifier)
+	return !classified || classifier.HandlesWriteAction(action)
+}
+
+func prepareOrdinaryWritePlan(b Bundle, action WriteAction, records []connectors.Record, cfg connectors.RuntimeConfig, requirePayloadApproval bool) ([]PreparedRequest, []preparedWriteExecutionRecord, error) {
+	requests := make([]PreparedRequest, 0, len(records))
+	plan := make([]preparedWriteExecutionRecord, len(records))
+	for index, record := range records {
+		sealed := connectors.Record(copyRecordMap(map[string]any(record)))
+		prepared, err := prepareDeclarativeRequest(b, action, sealed, index, cfg, requirePayloadApproval)
+		if err != nil {
+			return nil, nil, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: index, Err: redactWriteActionError(err, action, sealed)}
+		}
+		requests = append(requests, prepared)
+		plan[index].steps = []preparedWriteExecutionStep{{action: action, record: sealed}}
+	}
+	return requests, plan, nil
+}
+
+// prepareHookWritePlan validates the hook's compact declarative selection and
+// turns it into the same PreparedRequest type ordinary writes use. There is no
+// hook-provided method, route, header, or body channel: each step resolves a
+// named, unhooked WriteAction from this bundle before the preview is minted.
+func prepareHookWritePlan(b Bundle, root WriteAction, records []connectors.Record, cfg connectors.RuntimeConfig, requirePayloadApproval bool, h Hooks) ([]PreparedRequest, []preparedWriteExecutionRecord, bool, error) {
+	planner, ok := h.(PreparedWriteHook)
+	if !ok {
+		return nil, nil, false, nil
+	}
+	planInput := cloneWriteExecutionRecords(records)
+	declared, handled, err := planner.PrepareWrite(root, planInput)
+	if err != nil {
+		return nil, nil, false, &Error{Connector: b.Name, Action: root.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+	if !handled {
+		if len(declared.Records) != 0 {
+			return nil, nil, false, fmt.Errorf("engine: write hook for %q returned a plan without handling the action", root.Name)
+		}
+		return nil, nil, false, nil
+	}
+	if len(declared.Records) != len(records) {
+		return nil, nil, false, fmt.Errorf("engine: prepared write hook plan has %d records, want %d", len(declared.Records), len(records))
+	}
+
+	requests := make([]PreparedRequest, 0, len(records))
+	execution := make([]preparedWriteExecutionRecord, len(records))
+	for recordIndex, recordPlan := range declared.Records {
+		if len(recordPlan.Steps) > maxPreparedHookRequestsPerRecord {
+			return nil, nil, false, fmt.Errorf("engine: prepared write hook record %d has %d requests, exceeds limit %d", recordIndex, len(recordPlan.Steps), maxPreparedHookRequestsPerRecord)
+		}
+		execution[recordIndex].steps = make([]preparedWriteExecutionStep, 0, len(recordPlan.Steps))
+		for stepIndex, step := range recordPlan.Steps {
+			stepAction, err := findWriteAction(b, strings.TrimSpace(step.Action))
+			if err != nil {
+				return nil, nil, false, &Error{Connector: b.Name, Action: root.Name, Page: -1, RecordIndex: recordIndex, Err: fmt.Errorf("hook step %d: %w", stepIndex, err)}
+			}
+			if strings.TrimSpace(stepAction.Hook) != "" && stepAction.Name != root.Name && !step.ResolvedDeclarative {
+				return nil, nil, false, &Error{Connector: b.Name, Action: root.Name, Page: -1, RecordIndex: recordIndex, Err: fmt.Errorf("hook step %d selects nested hook action %q", stepIndex, stepAction.Name)}
+			}
+			sealed := connectors.Record(copyRecordMap(map[string]any(step.Record)))
+			binding, err := validatePreparedWriteResponseBinding(step.ResponseBinding, stepAction, stepIndex)
+			if err != nil {
+				return nil, nil, false, &Error{Connector: b.Name, Action: root.Name, Page: -1, RecordIndex: recordIndex, Err: fmt.Errorf("hook step %d: %w", stepIndex, err)}
+			}
+			if err := validateWriteActionRecord(stepAction, sealed, nil); err != nil {
+				return nil, nil, false, &Error{Connector: b.Name, Action: stepAction.Name, Page: -1, RecordIndex: recordIndex, Err: redactWriteActionError(err, stepAction, sealed)}
+			}
+			prepared, err := prepareDeclarativeRequest(b, stepAction, sealed, recordIndex, cfg, requirePayloadApproval)
+			if err != nil {
+				return nil, nil, false, &Error{Connector: b.Name, Action: stepAction.Name, Page: -1, RecordIndex: recordIndex, Err: redactWriteActionError(err, stepAction, sealed)}
+			}
+			prepared.Action = stepAction.Name
+			prepared.ResponseBinding = binding
+			if binding != nil {
+				prepared.Target = preparedResponseBindingTarget(stepAction, binding)
+				prepared.URL = preparedResponseBindingURL(stepAction, binding)
+			}
+			requests = append(requests, prepared)
+			execution[recordIndex].steps = append(execution[recordIndex].steps, preparedWriteExecutionStep{
+				action:          stepAction,
+				record:          sealed,
+				responseBinding: binding,
+			})
+		}
+	}
+	return requests, execution, true, nil
+}
+
+func validatePreparedWriteResponseBinding(binding *PreparedWriteResponseBinding, action WriteAction, stepIndex int) (*PreparedWriteResponseBinding, error) {
+	if binding == nil {
+		return nil, nil
+	}
+	if binding.SourceStep < 0 || binding.SourceStep >= stepIndex {
+		return nil, fmt.Errorf("response binding source step %d must name an earlier request", binding.SourceStep)
+	}
+	if !isPreparedWriteBindingField(binding.Field) || !isPreparedWriteBindingField(binding.TargetField) {
+		return nil, errors.New("response binding fields must be simple declared field names")
+	}
+	for _, field := range action.PathFields {
+		if field == binding.TargetField {
+			return clonePreparedWriteResponseBinding(binding), nil
+		}
+	}
+	return nil, fmt.Errorf("response binding target %q is not a declared path field of action %q", binding.TargetField, action.Name)
+}
+
+func isPreparedWriteBindingField(field string) bool {
+	if field == "" || len(field) > 128 {
+		return false
+	}
+	for index := 0; index < len(field); index++ {
+		value := field[index]
+		if (value < 'a' || value > 'z') &&
+			(value < 'A' || value > 'Z') &&
+			(value < '0' || value > '9') &&
+			value != '_' {
+			return false
+		}
+	}
+	return true
+}
+
+func preparedResponseBindingTarget(action WriteAction, binding *PreparedWriteResponseBinding) string {
+	return fmt.Sprintf("%s: response[%d].%s -> path.%s", action.Name, binding.SourceStep, binding.Field, binding.TargetField)
+}
+
+func preparedResponseBindingURL(action WriteAction, binding *PreparedWriteResponseBinding) string {
+	// This intentionally is not a sendable provider URL. It is an explicit
+	// digest-bound representation of the one deferred path value; execution
+	// resolves it only from the previous bounded provider response.
+	return fmt.Sprintf("deferred://provider-response/%s/%d/%s/%s", action.Name, binding.SourceStep, binding.Field, binding.TargetField)
 }
 
 func prepareDeclarativeRequest(b Bundle, action WriteAction, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (PreparedRequest, error) {

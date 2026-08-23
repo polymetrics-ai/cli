@@ -3,6 +3,7 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"math"
 	"math/big"
 	"net/url"
@@ -32,6 +33,7 @@ type schemaNode struct {
 	properties           map[string]*schemaNode
 	items                *schemaNode
 	prefixItems          []*schemaNode
+	oneOf                []*schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
 	format               string
@@ -41,6 +43,8 @@ type schemaNode struct {
 	hasMaxLength         bool
 	minProperties        int
 	hasMinProperties     bool
+	maxProperties        int
+	hasMaxProperties     bool
 	additionalProperties bool // true unless explicitly set to false
 	hasAdditionalProps   bool
 
@@ -57,6 +61,11 @@ type schemaNode struct {
 	hasMinItems bool
 	maxItems    int
 	hasMaxItems bool
+
+	minimum    *big.Rat
+	hasMinimum bool
+	maximum    *big.Rat
+	hasMaximum bool
 
 	// extensions
 	secret      bool     // x-secret
@@ -91,13 +100,17 @@ var structuralKeywords = map[string]bool{
 	"required":             true,
 	"properties":           true,
 	"items":                true,
+	"oneOf":                true,
 	"enum":                 true,
 	"pattern":              true,
 	"minLength":            true,
 	"maxLength":            true,
 	"minProperties":        true,
+	"maxProperties":        true,
 	"minItems":             true,
 	"maxItems":             true,
+	"minimum":              true,
+	"maximum":              true,
 	"additionalProperties": true,
 	"x-secret":             true,
 	"x-primary-key":        true,
@@ -200,6 +213,27 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 		n.items = child
 	}
 
+	if raw, ok := m["oneOf"]; ok {
+		var subs []map[string]json.RawMessage
+		if err := json.Unmarshal(raw, &subs); err != nil || len(subs) == 0 {
+			if err != nil {
+				return nil, fmt.Errorf("compile schema: oneOf: %w", err)
+			}
+			return nil, fmt.Errorf("compile schema: oneOf must contain at least one schema object")
+		}
+		n.oneOf = make([]*schemaNode, len(subs))
+		for index, sub := range subs {
+			if sub == nil {
+				return nil, fmt.Errorf("compile schema: oneOf.%d must be a schema object", index)
+			}
+			child, err := compileNode(sub, allowPrefixItems)
+			if err != nil {
+				return nil, fmt.Errorf("compile schema: oneOf.%d: %w", index, err)
+			}
+			n.oneOf[index] = child
+		}
+	}
+
 	if raw, ok := m["prefixItems"]; ok {
 		var subs []map[string]json.RawMessage
 		if err := json.Unmarshal(raw, &subs); err != nil || subs == nil {
@@ -253,15 +287,29 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 	}
 
 	if raw, ok := m["minProperties"]; ok {
-		var mp int
-		if err := json.Unmarshal(raw, &mp); err != nil {
-			return nil, fmt.Errorf("compile schema: minProperties: %w", err)
+		mp, err := compileNonNegativeInt(raw, "minProperties")
+		if err != nil {
+			return nil, err
 		}
 		n.minProperties = mp
 		n.hasMinProperties = true
 	}
+	if raw, ok := m["maxProperties"]; ok {
+		mp, err := compileNonNegativeInt(raw, "maxProperties")
+		if err != nil {
+			return nil, err
+		}
+		n.maxProperties = mp
+		n.hasMaxProperties = true
+	}
+	if n.hasMinProperties && n.hasMaxProperties && n.maxProperties < n.minProperties {
+		return nil, fmt.Errorf("compile schema: maxProperties %d is below minProperties %d", n.maxProperties, n.minProperties)
+	}
 
 	if err := compileArrayCardinality(m, n); err != nil {
+		return nil, err
+	}
+	if err := compileNumericRange(m, n); err != nil {
 		return nil, err
 	}
 
@@ -375,6 +423,61 @@ func compileArrayCardinality(m map[string]json.RawMessage, n *schemaNode) error 
 	return nil
 }
 
+// compileNumericRange keeps numeric provider domains exact. In particular,
+// GraphQL Int is a signed 32-bit value even on a 64-bit host, so float-based
+// range storage would make the declaration's wire contract platform-dependent.
+func compileNumericRange(m map[string]json.RawMessage, n *schemaNode) error {
+	compile := func(keyword string) (*big.Rat, bool, error) {
+		raw, ok := m[keyword]
+		if !ok {
+			return nil, false, nil
+		}
+		decoder := json.NewDecoder(strings.NewReader(string(raw)))
+		decoder.UseNumber()
+		var value any
+		if err := decoder.Decode(&value); err != nil {
+			return nil, false, fmt.Errorf("compile schema: %s: %w", keyword, err)
+		}
+		if err := requireEOF(decoder, "compile schema: "+keyword); err != nil {
+			return nil, false, err
+		}
+		number, ok := value.(json.Number)
+		if !ok {
+			return nil, false, fmt.Errorf("compile schema: %s must be a number", keyword)
+		}
+		rat, ok := exactNumber(number)
+		if !ok {
+			return nil, false, fmt.Errorf("compile schema: %s must be a finite number", keyword)
+		}
+		return rat, true, nil
+	}
+	minimum, hasMinimum, err := compile("minimum")
+	if err != nil {
+		return err
+	}
+	maximum, hasMaximum, err := compile("maximum")
+	if err != nil {
+		return err
+	}
+	if hasMinimum && hasMaximum && maximum.Cmp(minimum) < 0 {
+		return fmt.Errorf("compile schema: maximum %s is below minimum %s", maximum.RatString(), minimum.RatString())
+	}
+	n.minimum, n.hasMinimum = minimum, hasMinimum
+	n.maximum, n.hasMaximum = maximum, hasMaximum
+	return nil
+}
+
+func requireEOF(decoder *json.Decoder, label string) error {
+	var trailing any
+	if err := decoder.Decode(&trailing); err == io.EOF {
+		return nil
+	} else if err == nil {
+		return fmt.Errorf("%s contains multiple JSON values", label)
+	} else {
+		return fmt.Errorf("%s: %w", label, err)
+	}
+}
+
 func compileNonNegativeInt(raw json.RawMessage, keyword string) (int, error) {
 	var v int
 	if err := json.Unmarshal(raw, &v); err != nil {
@@ -417,6 +520,17 @@ func (n *schemaNode) validate(v any, path string) error {
 	if len(n.types) > 0 && !typeMatches(v, n.types) {
 		return fmt.Errorf("%s: value does not match type %v", displayPath(path), n.types)
 	}
+	if len(n.oneOf) != 0 {
+		matches := 0
+		for _, alternative := range n.oneOf {
+			if err := alternative.validate(v, path); err == nil {
+				matches++
+			}
+		}
+		if matches != 1 {
+			return fmt.Errorf("%s: oneOf expected exactly one schema match, got %d", displayPath(path), matches)
+		}
+	}
 
 	if len(n.enum) > 0 {
 		matched := false
@@ -428,6 +542,14 @@ func (n *schemaNode) validate(v any, path string) error {
 		}
 		if !matched {
 			return fmt.Errorf("%s: value not in enum %v", displayPath(path), n.enum)
+		}
+	}
+	if number, ok := exactNumber(v); ok {
+		if n.hasMinimum && number.Cmp(n.minimum) < 0 {
+			return fmt.Errorf("%s: minimum %s not satisfied (got %s)", displayPath(path), n.minimum.RatString(), number.RatString())
+		}
+		if n.hasMaximum && number.Cmp(n.maximum) > 0 {
+			return fmt.Errorf("%s: maximum %s exceeded (got %s)", displayPath(path), n.maximum.RatString(), number.RatString())
 		}
 	}
 
@@ -500,6 +622,9 @@ func (n *schemaNode) validateArrayCardinality(count int, path string) error {
 func (n *schemaNode) validateObject(obj map[string]any, path string) error {
 	if n.hasMinProperties && len(obj) < n.minProperties {
 		return fmt.Errorf("%s: minProperties %d not satisfied (got %d)", displayPath(path), n.minProperties, len(obj))
+	}
+	if n.hasMaxProperties && len(obj) > n.maxProperties {
+		return fmt.Errorf("%s: maxProperties %d exceeded (got %d)", displayPath(path), n.maxProperties, len(obj))
 	}
 
 	for _, req := range n.required {

@@ -218,6 +218,9 @@ func (a *OAuth2ClientCredentials) accessToken(ctx context.Context) (string, erro
 	if client == nil {
 		client = &http.Client{Timeout: 30 * time.Second}
 	}
+	if err := CheckRequestAdmission(ctx); err != nil {
+		return "", fmt.Errorf("oauth2: request admission: %w", err)
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("oauth2: token request: %w", err)

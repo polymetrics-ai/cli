@@ -14,6 +14,11 @@ import (
 
 var errTransportStreamStateConflict = errors.New("transport stream state changed in another process")
 
+var errTransportStreamWorkInProgress = errors.New("transport stream work is already owned by another process")
+var errTransportStreamWorkFenceLost = errors.New("transport stream work fence was lost before I/O")
+var errTransportStreamReconciliationPending = errors.New("transport stream reconciliation is pending before I/O")
+var errTransportStreamAdmissionStale = errors.New("transport stream admission changed before I/O")
+
 func hasDeclaredSyncTransport(source, destination connectors.Connector) bool {
 	_, sourceDeclared := connectors.SyncTransportDescriptorOf(source)
 	_, destinationDeclared := connectors.SyncTransportDescriptorOf(destination)
@@ -60,18 +65,13 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 	sourceDeclarative := isDeclarativeStreamTransportConnector(source)
 	destinationDescriptor, destinationDeclared := connectors.DestinationTransportDescriptorOf(destination)
 	destinationIssueLabel := destinationDeclared && destinationDescriptor.Executor == issueLabelDestinationReference
-	if sourceDeclarative && !destinationIssueLabel {
-		descriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
-		if !declared {
-			return false, transportRouteDeclarationAbsent, nil
-		}
-		executor, registered := a.transports.RegisteredDestination(descriptor.Executor)
-		_, managedTarget := executor.(synctransport.ManagedTargetApprovalDestination)
-		_, definitionOwnedApproval := executor.(synctransport.DefinitionOwnedApprovalDestination)
-		materializer, localWarehouse := destination.(connectors.LocalWarehouseMaterializer)
-		if !registered || (!managedTarget && !definitionOwnedApproval && !(localWarehouse && materializer.MaterializesLocalWarehouse() && isWarehouseDedupeContractMode(mode.ContractMode))) {
-			return false, transportRouteDeclarationAbsent, nil
-		}
+	if sourceDeclarative && isBoundedLocalWarehouseLegacyRoute(destination, mode.ContractMode) {
+		// The local warehouse primitive owns a closed, bounded ordinary ETL
+		// representation for these executable modes. Its two dedupe modes are
+		// the only ones promoted to the registered transport executor below;
+		// routing the remainder through that executor would either replace their
+		// established semantics or reject a mode it does not declare.
+		return false, transportRouteDeclarationAbsent, nil
 	}
 	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
 		Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode, DestinationAction: action,
@@ -97,7 +97,9 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 		if localWarehouse && materializer.MaterializesLocalWarehouse() && isWarehouseDedupeContractMode(mode.ContractMode) {
 			return true, transportRouteDeclared, nil
 		}
-		return false, transportRouteDeclarationAbsent, nil
+		return false, transportRouteDeclared, &synctransport.DeclaredDestinationRouteError{
+			Destination: destination.Name(), Executor: destinationDescriptor.Executor,
+		}
 	}
 	transportConn, err := a.issueLabelTransportConnection(conn.ID)
 	if err != nil {
@@ -123,6 +125,17 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 
 func isWarehouseDedupeContractMode(mode synccontract.Mode) bool {
 	return mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory
+}
+
+// isBoundedLocalWarehouseLegacyRoute recognizes only the local warehouse's
+// declaration-owned durable materializer. It is intentionally structural: no
+// connector-name branch or generic write capability can select this fallback.
+func isBoundedLocalWarehouseLegacyRoute(destination connectors.Connector, mode synccontract.Mode) bool {
+	if isWarehouseDedupeContractMode(mode) || !isLocalWarehouseDestination(destination) {
+		return false
+	}
+	materializer, ok := destination.(connectors.LocalWarehouseMaterializer)
+	return ok && materializer.MaterializesLocalWarehouse()
 }
 
 func isIssueLabelTransportConnector(connector connectors.Connector) bool {
@@ -199,7 +212,7 @@ func validateClosedTransportBatchSize(source, destination connectors.Connector, 
 // action. Real durable warehouse/apply adapters remain separate foundations;
 // this seam therefore fails closed unless a stage and externally verified
 // transports are registered.
-func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize, maxInFlightBatches int, approval synctransport.DestinationApproval, rateParkingResumeCheckpoint *synccontract.CheckpointEnvelope) (etlExecutionResult, error) {
+func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, admissionFence int64, streamName string, stream StreamConfig, mode SyncMode, batchSize, maxInFlightBatches int, approval synctransport.DestinationApproval, rateParkingResumeCheckpoint *synccontract.CheckpointEnvelope) (etlExecutionResult, error) {
 	emptyResult := etlExecutionResult{TransportPhaseMeasurement: &TransportPhaseMeasurement{}}
 	if a.transports == nil {
 		return emptyResult, fmt.Errorf("closed transport registry is unavailable")
@@ -215,6 +228,12 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	}
 	_, requiresManagedTargetApproval := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
 	_, requiresDefinitionOwnedApproval := resolved.Destination.(synctransport.DefinitionOwnedApprovalDestination)
+	if requiresDefinitionOwnedApproval && resolved.Destination.TransportExecutorReference() == declarativeTypedDestinationReference {
+		batchSize, err = declarativeTypedDestinationEffectiveBatchSize(source, destination, streamName, mode.ContractMode, resolved.ApplyStrategy, batchSize)
+		if err != nil {
+			return emptyResult, err
+		}
+	}
 	if err := validateClosedTransportBatchSize(source, destination, batchSize); err != nil {
 		return emptyResult, err
 	}
@@ -233,7 +252,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		}
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
-	prior, priorPresent := a.state.StreamStates[stateKey]
+	prior := a.state.StreamStates[stateKey]
 	prior = cloneStreamState(prior)
 	if prior.Checkpoint != nil {
 		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
@@ -243,14 +262,126 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	if rateParkingResumeCheckpoint != nil && !transportCheckpointEqual(prior.Checkpoint, rateParkingResumeCheckpoint) {
 		return emptyResult, errors.New("rate-limit resume checkpoint changed")
 	}
+	workLease, err := a.claimTransportWorkLease(ctx, stateKey, conn.Name, streamName, runID, sourceExpectation, mode.IsOverwrite(), admissionFence)
+	if err != nil {
+		return emptyResult, err
+	}
+	prior = workLease.stateForTerminalRun()
 	generationID := prior.GenerationID
-	if generationID == 0 || mode.IsOverwrite() {
-		generationID++
+
+	// One declaration-owned approval callback now gates every source/stage/
+	// destination unit on the same durable stream fence before it consults the
+	// existing authorization. This preserves the original authorization scope
+	// while making a takeover reject stale effects without connector branches.
+	originalAuthorize := approval.AuthorizeNextUnit
+	approval.AuthorizeNextUnit = func(effectCtx context.Context) error {
+		if err := workLease.renew(effectCtx); err != nil {
+			return err
+		}
+		if originalAuthorize != nil {
+			return originalAuthorize(effectCtx)
+		}
+		return nil
 	}
 
-	expectedState := cloneStreamState(prior)
-	expectedPresent := priorPresent
 	var committed *synccontract.CheckpointEnvelope
+	var persistedEmptyPublication *Run
+	var persistedEmptyPublicationResult etlExecutionResult
+	pendingEmptyPublicationResult := func(transportResult synctransport.Result) (etlExecutionResult, error) {
+		if transportResult.EmptyPublicationReadBackPending == nil {
+			return etlExecutionResult{}, errors.New("closed transport returned no empty publication read-back receipt")
+		}
+		receipt := transportResult.EmptyPublicationReadBackPending.Clone()
+		if err := receipt.Validate(); err != nil {
+			return etlExecutionResult{}, fmt.Errorf("closed transport returned an invalid empty publication read-back receipt: %w", err)
+		}
+		if receipt.Witness.Sink != destination.Name() {
+			return etlExecutionResult{}, fmt.Errorf("closed transport empty publication read-back sink %q does not match destination %q", receipt.Witness.Sink, destination.Name())
+		}
+		updated := workLease.stateForTerminalRun()
+		updated.Connection = conn.Name
+		updated.Stream = streamName
+		updated.GenerationID = generationID
+		updated.UpdatedAt = receipt.Witness.AcknowledgedAt
+		deliveryReconciliation := &DeliveryReconciliation{
+			State:                           ETLRunStatusDeliveredReconciliationRequired,
+			EmptyPublicationReadBackPending: &receipt,
+		}
+		if requiresManagedTargetApproval {
+			deliveryReconciliation.PostgresManagedTargetPlanID = approval.PlanID
+		}
+		if requiresDefinitionOwnedApproval {
+			deliveryReconciliation.DeclarativeTypedDestinationPlanID = approval.PlanID
+		}
+		result := etlExecutionResult{
+			TransportPhaseMeasurement: transportPhaseMeasurement(transportResult),
+			DestinationResults:        cloneDestinationResults(transportResult.DestinationResults),
+			DeliveryReconciliation:    deliveryReconciliation,
+			PendingStreamState:        &pendingStreamState{Key: stateKey, State: updated},
+		}
+		result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
+		return result, nil
+	}
+	emptyPublicationResult := func(transportResult synctransport.Result) (etlExecutionResult, error) {
+		if transportResult.EmptyPublication == nil {
+			return etlExecutionResult{}, errors.New("closed transport returned no empty publication witness")
+		}
+		witness := *transportResult.EmptyPublication
+		if err := witness.Validate(); err != nil {
+			return etlExecutionResult{}, fmt.Errorf("closed transport returned an invalid empty publication witness: %w", err)
+		}
+		if witness.Sink != destination.Name() {
+			return etlExecutionResult{}, fmt.Errorf("closed transport empty publication sink %q does not match destination %q", witness.Sink, destination.Name())
+		}
+		updated := workLease.stateForTerminalRun()
+		updated.Connection = conn.Name
+		updated.Stream = streamName
+		updated.GenerationID = generationID
+		updated.LastSuccessfulRunID = runID
+		updated.RecordsLoaded = 0
+		updated.UpdatedAt = witness.AcknowledgedAt
+		deliveryReconciliation := &DeliveryReconciliation{
+			State:            ETLRunStatusDeliveredReconciliationRequired,
+			EmptyPublication: &witness,
+		}
+		if requiresManagedTargetApproval {
+			deliveryReconciliation.PostgresManagedTargetPlanID = approval.PlanID
+		}
+		if requiresDefinitionOwnedApproval {
+			deliveryReconciliation.DeclarativeTypedDestinationPlanID = approval.PlanID
+		}
+		result := etlExecutionResult{
+			TransportPhaseMeasurement: transportPhaseMeasurement(transportResult),
+			DestinationResults:        cloneDestinationResults(transportResult.DestinationResults),
+			DeliveryReconciliation:    deliveryReconciliation,
+			PendingStreamState:        &pendingStreamState{Key: stateKey, State: updated},
+		}
+		result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
+		return result, nil
+	}
+	persistAcknowledgedWorksets := func(checkpoint synccontract.CheckpointEnvelope, receipts []synctransport.WarehouseReceipt) error {
+		interim := checkpoint.Clone()
+		if interim.CommittedAt == nil {
+			return fmt.Errorf("closed transport committed checkpoint is missing its acknowledgement timestamp")
+		}
+		if err := interim.ValidateResume(sourceExpectation); err != nil {
+			return err
+		}
+		committedReceipts, err := transportReceiptCommitsForRun(conn, streamName, generationID, mode.ContractMode, receipts)
+		if err != nil {
+			return fmt.Errorf("bind acknowledged transport worksets: %w", err)
+		}
+		_, err = workLease.commitAfterAcknowledgement(ctx, interim, committedReceipts)
+		if err != nil {
+			if errors.Is(err, errTransportStreamWorkFenceLost) {
+				err = fmt.Errorf("%w: %w", errTransportStreamStateConflict, err)
+			}
+			return fmt.Errorf("persist acknowledged transport checkpoint: %w", err)
+		}
+		copy := interim.Clone()
+		committed = &copy
+		return nil
+	}
 	transportRequest := synctransport.RunRequest{
 		ConnectionID:       conn.ID,
 		Generation:         generationID,
@@ -279,54 +410,191 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		RateLimitResumeCheckpoint: rateParkingResumeCheckpoint,
 		Approval:                  approval,
 		Stage:                     a.transportStage,
-		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
-			interim := checkpoint.Clone()
-			if interim.CommittedAt == nil {
-				return fmt.Errorf("closed transport committed checkpoint is missing its acknowledgement timestamp")
-			}
-			if err := interim.ValidateResume(sourceExpectation); err != nil {
+		SourceAdmission:           workLease.renew,
+		ReadBackAdmission:         workLease.renew,
+		EmptyPublicationReadBackPendingHandoff: func(handoffCtx context.Context, transportResult synctransport.Result) error {
+			persistCtx, cancel := context.WithTimeout(context.WithoutCancel(handoffCtx), transportWorkLeaseDuration)
+			defer cancel()
+			result, err := pendingEmptyPublicationResult(transportResult)
+			if err != nil {
 				return err
 			}
-			interimState := cloneStreamState(expectedState)
-			interimState.Connection = conn.Name
-			interimState.Stream = streamName
-			interimState.Checkpoint = &interim
-			interimState.GenerationID = generationID
-			interimState.UpdatedAt = *interim.CommittedAt
-			if _, err := a.updateState(func(current state) (state, error) {
-				currentState, currentPresent := current.StreamStates[stateKey]
-				if currentPresent != expectedPresent || (currentPresent && !transportStreamStateEqual(currentState, expectedState)) {
-					return current, errTransportStreamStateConflict
-				}
-				if current.StreamStates == nil {
-					current.StreamStates = map[string]StreamState{}
-				}
-				current.StreamStates[stateKey] = cloneStreamState(interimState)
-				return current, nil
-			}); err != nil {
-				return fmt.Errorf("persist acknowledged transport checkpoint: %w", err)
+			fenced, persistErr := a.persistPendingEmptyPublicationReadBackWithWorkLease(persistCtx, workLease, runID, result)
+			if persistErr != nil && fenced.ID == "" && !stateStoreCommitMayHaveSucceeded(persistErr) && !errors.Is(persistErr, errStateRevisionConflict) {
+				fenced, persistErr = a.persistPendingEmptyPublicationReadBackWithWorkLease(persistCtx, workLease, runID, result)
 			}
-			expectedState = cloneStreamState(interimState)
-			expectedPresent = true
-			copy := interim.Clone()
-			committed = &copy
+			if fenced.ID != "" {
+				stored := fenced
+				result.persistedDeliveryReconciliation = &stored
+				persistedEmptyPublication = &stored
+				persistedEmptyPublicationResult = result
+			}
+			if persistErr != nil {
+				return synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite read-back receipt: %w", persistErr))
+			}
 			return nil
 		},
+		EmptyPublicationHandoff: func(handoffCtx context.Context, transportResult synctransport.Result) error {
+			persistCtx, cancel := context.WithTimeout(context.WithoutCancel(handoffCtx), transportWorkLeaseDuration)
+			defer cancel()
+			if err := workLease.renew(persistCtx); err != nil {
+				return fmt.Errorf("renew empty full-overwrite work lease after read-back: %w", err)
+			}
+			result, err := emptyPublicationResult(transportResult)
+			if err != nil {
+				return err
+			}
+			fenced, persistErr := a.persistDeliveredReconciliationRunWithWorkLease(persistCtx, workLease, runID, result)
+			if persistErr != nil && fenced.ID == "" && !stateStoreCommitMayHaveSucceeded(persistErr) && !errors.Is(persistErr, errStateRevisionConflict) {
+				fenced, persistErr = a.persistDeliveredReconciliationRunWithWorkLease(persistCtx, workLease, runID, result)
+			}
+			if fenced.ID != "" {
+				stored := fenced
+				result.persistedDeliveryReconciliation = &stored
+				persistedEmptyPublication = &stored
+				persistedEmptyPublicationResult = result
+			}
+			if persistErr != nil {
+				return synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite replay fence: %w", persistErr))
+			}
+			return nil
+		},
+		Commit: func(checkpoint synccontract.CheckpointEnvelope) error {
+			return persistAcknowledgedWorksets(checkpoint, nil)
+		},
+		CommitWorksets: persistAcknowledgedWorksets,
 	}
 	transportResult, err := synctransport.NewOrchestrator(a.transports).Run(ctx, transportRequest)
 	if err != nil {
 		err = sanitizeRuntimeError(err, sourceRuntime, destRuntime)
 	}
 	transportMeasurement := transportPhaseMeasurement(transportResult)
+	if persistedEmptyPublication != nil {
+		persistedEmptyPublicationResult.TransportPhaseMeasurement = transportMeasurement
+		if err != nil {
+			return persistedEmptyPublicationResult, err
+		}
+		if persistedEmptyPublication.DeliveryReconciliation != nil && persistedEmptyPublication.DeliveryReconciliation.EmptyPublicationReadBackPending != nil {
+			return persistedEmptyPublicationResult, synctransport.NewDeliveredReconciliationRequiredError(errors.New("empty full-overwrite read-back remains pending"))
+		}
+		return persistedEmptyPublicationResult, nil
+	}
+	if mode.IsOverwrite() && transportResult.EmptyPublicationReadBackPending != nil {
+		result, resultErr := pendingEmptyPublicationResult(transportResult)
+		if resultErr != nil {
+			return emptyResult, errors.Join(err, resultErr)
+		}
+		persistCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), transportWorkLeaseDuration)
+		defer cancel()
+		fenced, persistErr := a.persistPendingEmptyPublicationReadBackWithWorkLease(persistCtx, workLease, runID, result)
+		if persistErr != nil && fenced.ID == "" && !stateStoreCommitMayHaveSucceeded(persistErr) && !errors.Is(persistErr, errStateRevisionConflict) {
+			fenced, persistErr = a.persistPendingEmptyPublicationReadBackWithWorkLease(persistCtx, workLease, runID, result)
+		}
+		if fenced.ID != "" {
+			stored := fenced
+			result.persistedDeliveryReconciliation = &stored
+			if persistErr != nil {
+				return result, errors.Join(err, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite read-back receipt: %w", persistErr)))
+			}
+			return result, errors.Join(err, synctransport.NewDeliveredReconciliationRequiredError(errors.New("empty full-overwrite read-back remains pending")))
+		}
+		if persistErr != nil {
+			return result, errors.Join(err, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("persist empty full-overwrite read-back receipt: %w", persistErr)))
+		}
+		return result, errors.Join(err, synctransport.NewDeliveredReconciliationRequiredError(errors.New("empty full-overwrite read-back remains pending")))
+	}
 	if committed == nil || committed.CommittedAt == nil {
 		if err != nil {
-			return etlExecutionResult{
+			if mode.IsOverwrite() && transportResult.EmptyPublication != nil {
+				result, resultErr := emptyPublicationResult(transportResult)
+				if resultErr != nil {
+					return emptyResult, errors.Join(err, resultErr)
+				}
+				return result, err
+			}
+			result := etlExecutionResult{
 				RecordsRead: transportResult.RecordsRead, RecordsLoaded: transportResult.RecordsApplied,
 				BatchCount: transportResult.Pages, TransportPhaseMeasurement: transportMeasurement,
 				DestinationResults: cloneDestinationResults(transportResult.DestinationResults),
-			}, err
+			}
+			// A per-page run that already had a durable checkpoint can be a
+			// rate-limit handoff. Keep its exact active lease until parking
+			// atomically records the terminal run and releases that lease with the
+			// same checkpoint. Every other uncommitted path has no durable handoff
+			// evidence and must restore/delete its claim before terminal failure.
+			if (mode.IsOverwrite() || prior.Checkpoint == nil) && !stateStoreCommitMayHaveSucceeded(err) {
+				if releaseErr := workLease.abandonUncommitted(ctx); releaseErr != nil {
+					if errors.Is(releaseErr, errTransportStreamWorkFenceLost) {
+						releaseErr = fmt.Errorf("%w: %w", errTransportStreamStateConflict, releaseErr)
+					}
+					return result, errors.Join(err, releaseErr)
+				}
+			}
+			return result, err
 		}
 		if transportResult.Pages == 0 && transportResult.RecordsRead == 0 && transportResult.RecordsApplied == 0 {
+			if mode.IsOverwrite() && transportResult.EmptyPublication != nil {
+				witness := *transportResult.EmptyPublication
+				if err := witness.Validate(); err != nil {
+					return emptyResult, fmt.Errorf("closed transport returned an invalid empty publication witness: %w", err)
+				}
+				if witness.Sink != destination.Name() {
+					return emptyResult, fmt.Errorf("closed transport empty publication sink %q does not match destination %q", witness.Sink, destination.Name())
+				}
+				updated := workLease.stateForTerminalRun()
+				updated.Connection = conn.Name
+				updated.Stream = streamName
+				updated.GenerationID = generationID
+				updated.LastSuccessfulRunID = runID
+				updated.RecordsLoaded = 0
+				updated.UpdatedAt = witness.AcknowledgedAt
+				deliveryReconciliation := &DeliveryReconciliation{
+					State:            ETLRunStatusDeliveredReconciliationRequired,
+					EmptyPublication: &witness,
+				}
+				if requiresManagedTargetApproval {
+					deliveryReconciliation.PostgresManagedTargetPlanID = approval.PlanID
+				}
+				if requiresDefinitionOwnedApproval {
+					deliveryReconciliation.DeclarativeTypedDestinationPlanID = approval.PlanID
+				}
+				result := etlExecutionResult{
+					TransportPhaseMeasurement: transportMeasurement,
+					DestinationResults:        cloneDestinationResults(transportResult.DestinationResults),
+					DeliveryReconciliation:    deliveryReconciliation,
+					PendingStreamState:        &pendingStreamState{Key: stateKey, State: updated},
+				}
+				result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
+				// A marker records only that the exact declaration-owned approval
+				// was consumed. The externally visible empty replacement, read-back
+				// receipt, and terminal state were already sealed above, so a marker
+				// failure must persist reconciliation rather than abandon and replay.
+				if requiresManagedTargetApproval {
+					if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
+						return result, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("mark PostgreSQL managed target plan executed: %w", err))
+					}
+				}
+				if requiresDefinitionOwnedApproval {
+					if err := a.markDeclarativeTypedDestinationPlanExecuted(approval.PlanID); err != nil {
+						return result, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("mark declarative typed destination plan executed: %w", err))
+					}
+				}
+				return result, nil
+			}
+			if mode.IsOverwrite() {
+				// A full-overwrite that made no provider-visible publication cannot
+				// be presented as a successful empty replacement. The only allowed
+				// zero-result success is the sealed witness minted after publish and
+				// read-back above.
+				completionErr := fmt.Errorf("closed transport completed empty full-overwrite without a durable publication witness")
+				if releaseErr := workLease.abandonUncommitted(ctx); releaseErr != nil {
+					if errors.Is(releaseErr, errTransportStreamWorkFenceLost) {
+						releaseErr = fmt.Errorf("%w: %w", errTransportStreamStateConflict, releaseErr)
+					}
+					return emptyResult, errors.Join(completionErr, releaseErr)
+				}
+				return emptyResult, completionErr
+			}
 			if requiresManagedTargetApproval {
 				if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
 					return emptyResult, err
@@ -337,7 +605,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 					return emptyResult, err
 				}
 			}
-			updated := cloneStreamState(prior)
+			updated := workLease.stateForTerminalRun()
 			updated.Connection = conn.Name
 			updated.Stream = streamName
 			updated.GenerationID = generationID
@@ -351,17 +619,39 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 			result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, "", false)
 			return result, nil
 		}
-		return emptyResult, fmt.Errorf("closed transport completed without a durable committed checkpoint")
+		completionErr := fmt.Errorf("closed transport completed without a durable committed checkpoint")
+		if releaseErr := workLease.abandonUncommitted(ctx); releaseErr != nil {
+			if errors.Is(releaseErr, errTransportStreamWorkFenceLost) {
+				releaseErr = fmt.Errorf("%w: %w", errTransportStreamStateConflict, releaseErr)
+			}
+			return emptyResult, errors.Join(completionErr, releaseErr)
+		}
+		return emptyResult, completionErr
 	}
 
-	updated := StreamState{
-		Connection:          conn.Name,
-		Stream:              streamName,
-		Checkpoint:          committed,
-		GenerationID:        generationID,
-		LastSuccessfulRunID: runID,
-		RecordsLoaded:       transportResult.RecordsApplied,
-		UpdatedAt:           *committed.CommittedAt,
+	updated := workLease.stateForTerminalRun()
+	updated.Connection = conn.Name
+	updated.Stream = streamName
+	updated.Checkpoint = committed
+	updated.GenerationID = generationID
+	updated.LastSuccessfulRunID = runID
+	updated.RecordsLoaded = transportResult.RecordsApplied
+	updated.UpdatedAt = *committed.CommittedAt
+	var deliveryReconciliation *DeliveryReconciliation
+	if transportResult.DeliveredReconciliationRequired {
+		deliveryReconciliation = &DeliveryReconciliation{
+			State:           ETLRunStatusDeliveredReconciliationRequired,
+			StageRetirement: true,
+		}
+		// The provider action and checkpoint are durable, so an approval marker
+		// must be repaired with the same persisted terminal evidence rather than
+		// by re-entering the source/destination route.
+		if requiresManagedTargetApproval {
+			deliveryReconciliation.PostgresManagedTargetPlanID = approval.PlanID
+		}
+		if requiresDefinitionOwnedApproval {
+			deliveryReconciliation.DeclarativeTypedDestinationPlanID = approval.PlanID
+		}
 	}
 	result := etlExecutionResult{
 		RecordsRead:               transportResult.RecordsRead,
@@ -369,6 +659,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 		BatchCount:                transportResult.Pages,
 		TransportPhaseMeasurement: transportMeasurement,
 		DestinationResults:        cloneDestinationResults(transportResult.DestinationResults),
+		DeliveryReconciliation:    deliveryReconciliation,
 		PendingStreamState: &pendingStreamState{
 			Key:   stateKey,
 			State: updated,
@@ -380,12 +671,20 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	}
 	if requiresManagedTargetApproval {
 		if err := a.markPostgresManagedTargetPlanExecuted(approval.PlanID); err != nil {
-			return result, err
+			result.DeliveryReconciliation = &DeliveryReconciliation{
+				State:                       ETLRunStatusDeliveredReconciliationRequired,
+				PostgresManagedTargetPlanID: approval.PlanID,
+			}
+			return result, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("mark PostgreSQL managed target plan executed: %w", err))
 		}
 	}
 	if requiresDefinitionOwnedApproval {
 		if err := a.markDeclarativeTypedDestinationPlanExecuted(approval.PlanID); err != nil {
-			return result, err
+			result.DeliveryReconciliation = &DeliveryReconciliation{
+				State:                             ETLRunStatusDeliveredReconciliationRequired,
+				DeclarativeTypedDestinationPlanID: approval.PlanID,
+			}
+			return result, synctransport.NewDeliveredReconciliationRequiredError(fmt.Errorf("mark declarative typed destination plan executed: %w", err))
 		}
 	}
 	return result, nil
@@ -407,6 +706,27 @@ func (a *App) reconcileCommittedTransportStages(ctx context.Context) error {
 	return nil
 }
 
+func transportReceiptCommitsForRun(conn Connection, stream string, generation int64, mode synccontract.Mode, receipts []synctransport.WarehouseReceipt) ([]TransportReceiptCommit, error) {
+	if len(receipts) == 0 {
+		return nil, nil
+	}
+	commits := make([]TransportReceiptCommit, 0, len(receipts))
+	for _, receipt := range receipts {
+		if err := receipt.Validate(); err != nil {
+			return nil, err
+		}
+		if receipt.Owner != conn.ID || receipt.Generation != generation || receipt.Stream != stream || receipt.Mode != mode {
+			return nil, fmt.Errorf("warehouse receipt %q does not belong to the committed transport workset", receipt.ID)
+		}
+		commit, err := transportReceiptCommitFromWarehouseReceipt(receipt)
+		if err != nil {
+			return nil, err
+		}
+		commits = append(commits, commit)
+	}
+	return cloneTransportReceiptCommits(commits)
+}
+
 func transportPhaseMeasurement(result synctransport.Result) *TransportPhaseMeasurement {
 	measurement := &TransportPhaseMeasurement{
 		ExtractedRecords: result.RecordsRead, WarehouseParquetRecords: result.RecordsStaged, PostgreSQLAppliedRecords: result.RecordsApplied,
@@ -415,6 +735,7 @@ func transportPhaseMeasurement(result synctransport.Result) *TransportPhaseMeasu
 		SourceLogicalBytes: result.SourceLogicalBytes, TransformedLogicalBytes: result.TransformedBytes, ParquetBytes: result.ParquetBytes,
 		SourceReadElapsedNanos: result.ExtractElapsed.Nanoseconds(), TransformElapsedNanos: result.TransformElapsed.Nanoseconds(),
 		ParquetCloseElapsedNanos: result.ParquetElapsed.Nanoseconds(), BinaryCOPYElapsedNanos: result.ApplyElapsed.Nanoseconds(),
+		ReadBackElapsedNanos:             result.ReadBackElapsed.Nanoseconds(),
 		IndexConstraintBuildElapsedNanos: result.IndexConstraintElapsed.Nanoseconds(),
 		PublishReceiptElapsedNanos:       result.PublishElapsed.Nanoseconds(), CheckpointElapsedNanos: result.CheckpointElapsed.Nanoseconds(),
 		CriticalPathElapsedNanos: result.WallElapsed.Nanoseconds(), PeakCreditBytes: result.PeakCreditBytes,
@@ -431,13 +752,31 @@ func transportPhaseMeasurement(result synctransport.Result) *TransportPhaseMeasu
 func transportStreamStateEqual(left, right StreamState) bool {
 	if left.Connection != right.Connection ||
 		left.Stream != right.Stream ||
+		left.TransportReceiptAssociationVersion != right.TransportReceiptAssociationVersion ||
 		left.GenerationID != right.GenerationID ||
+		left.ActiveWorkID != right.ActiveWorkID ||
+		left.ActiveWorkFence != right.ActiveWorkFence ||
+		!transportOptionalTimeEqual(left.ActiveWorkLeaseUntil, right.ActiveWorkLeaseUntil) ||
 		left.LastSuccessfulRunID != right.LastSuccessfulRunID ||
 		left.RecordsLoaded != right.RecordsLoaded ||
 		!left.UpdatedAt.Equal(right.UpdatedAt) {
 		return false
 	}
-	return transportCheckpointEqual(left.Checkpoint, right.Checkpoint)
+	return transportCheckpointEqual(left.Checkpoint, right.Checkpoint) &&
+		transportCheckpointEqual(left.LegacyCommittedTransportCheckpoint, right.LegacyCommittedTransportCheckpoint) &&
+		transportReceiptCommitsEqual(left.CommittedTransportReceipts, right.CommittedTransportReceipts)
+}
+
+func transportReceiptCommitsEqual(left, right []TransportReceiptCommit) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for index := range left {
+		if left[index] != right[index] {
+			return false
+		}
+	}
+	return true
 }
 
 func transportCheckpointEqual(left, right *synccontract.CheckpointEnvelope) bool {
@@ -451,6 +790,7 @@ func transportCheckpointEqual(left, right *synccontract.CheckpointEnvelope) bool
 		left.Mechanism != right.Mechanism ||
 		!transportSnapshotBarrierEqual(left.SnapshotBarrier, right.SnapshotBarrier) ||
 		!transportCheckpointPositionEqual(left.Position, right.Position) ||
+		!synccontract.ContinuationEqual(left.Continuation, right.Continuation) ||
 		!transportOptionalBoolEqual(left.PositionObserved, right.PositionObserved) ||
 		!transportOpaqueTokenEqual(left.SourceGeneration, right.SourceGeneration) ||
 		left.SchemaVersion != right.SchemaVersion ||

@@ -304,8 +304,8 @@
           "name": "resource-name",
           "type": "string",
           "summary": "Provider resourceName identifying the generated report; may contain safe path segments.",
+          "max_bytes": 4096,
           "maps_to": "path.path",
-          "allow_empty": false,
           "required": true
         }
       ],

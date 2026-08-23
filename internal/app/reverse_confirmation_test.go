@@ -270,7 +270,7 @@ func TestGitHubConnectorCommandPreservesExactLargeIntegerPathAfterPlanReload(t *
 	}
 }
 
-func TestGitHubOrgWebhookDeleteDoesNotCountProviderNotFoundAsSuccess(t *testing.T) {
+func TestGitHubOrgWebhookDeleteCompletesDeclaredMissingAcknowledgement(t *testing.T) {
 	ctx := context.Background()
 	calls := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -306,11 +306,70 @@ func TestGitHubOrgWebhookDeleteDoesNotCountProviderNotFoundAsSuccess(t *testing.
 	if calls != 1 {
 		t.Fatalf("webhook delete calls = %d, want 1", calls)
 	}
-	if runErr == nil {
-		t.Fatalf("RunReverseETL unexpectedly accepted provider 404: %#v", run)
+	if runErr != nil {
+		t.Fatalf("RunReverseETL declared missing acknowledgement: %v", runErr)
 	}
-	if run.Status != "failed" || run.RecordsSucceeded != 0 || run.RecordsFailed != 1 {
-		t.Fatalf("webhook 404 run = %#v, want one failed write", run)
+	if run.Status != "completed" || run.RecordsSucceeded != 0 || run.RecordsFailed != 0 {
+		t.Fatalf("webhook 404 run = %#v, want a declared idempotent missing acknowledgement", run)
+	}
+}
+
+func TestGitHubIssueCommentDeleteCompletesDeclaredMissingAcknowledgement(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodDelete || r.URL.Path != "/repos/acme/widgets/issues/comments/4242" {
+			t.Errorf("request = %s %s, want DELETE exact issue-comment path", r.Method, r.URL.Path)
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+		w.WriteHeader(http.StatusNotFound)
+	}))
+	t.Cleanup(server.Close)
+
+	a, _ := setupGitHubApp(t, ctx, server.URL)
+	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Name:       "delete_missing_issue_comment",
+		Connector:  "github",
+		Credential: "github-local",
+		Path:       []string{"api", "issues", "delete-comment"},
+		Flags:      map[string][]string{"comment-id": {"4242"}},
+		Preview:    true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand(api issues delete-comment): %v", err)
+	}
+	if preview == nil || plan.ApprovalToken == "" {
+		t.Fatalf("previewed declared-idempotent plan = %#v/%#v, want preview and approval", plan, preview)
+	}
+
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("RunReverseETL declared missing acknowledgement: %v", err)
+	}
+	if calls != 1 || run.Status != "completed" || run.RecordsSucceeded != 0 || run.RecordsFailed != 0 {
+		t.Fatalf("declared missing acknowledgement run/calls = %#v/%d, want completed unchanged delete", run, calls)
+	}
+	var destinationResult struct {
+		RecordsUnchanged int `json:"records_unchanged"`
+	}
+	if err := json.Unmarshal(run.DestinationResult, &destinationResult); err != nil {
+		t.Fatalf("decode declared missing destination result: %v", err)
+	}
+	if destinationResult.RecordsUnchanged != 1 {
+		t.Fatalf("declared missing destination result = %#v, want one unchanged acknowledgement", destinationResult)
+	}
+	stored, err := a.GetReversePlan(plan.ID)
+	if err != nil {
+		t.Fatalf("GetReversePlan() error = %v", err)
+	}
+	if stored.Status != "executed" {
+		t.Fatalf("declared missing plan status = %q, want executed", stored.Status)
 	}
 }
 

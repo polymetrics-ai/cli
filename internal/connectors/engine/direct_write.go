@@ -58,6 +58,27 @@ type preparedOperationDirectWrite struct {
 	prepared         PreparedWrite
 }
 
+// sealRuntimeConfig copies every mutable request input a prepared write can
+// consult after approval. Runtime interfaces remain the caller's installed
+// services, but config/secrets and approved file digests are values bound into
+// the preview rather than live aliases.
+func sealRuntimeConfig(cfg connectors.RuntimeConfig) connectors.RuntimeConfig {
+	cloneMap := func(values map[string]string) map[string]string {
+		if len(values) == 0 {
+			return nil
+		}
+		out := make(map[string]string, len(values))
+		for key, value := range values {
+			out[key] = value
+		}
+		return out
+	}
+	cfg.Config = cloneMap(cfg.Config)
+	cfg.Secrets = cloneMap(cfg.Secrets)
+	cfg.ApprovedPayloadSHA256 = cloneMap(cfg.ApprovedPayloadSHA256)
+	return cfg
+}
+
 type operationDirectWriteError struct {
 	operation string
 	message   string
@@ -122,29 +143,38 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		requester := *resolvedRequester
 		requester.DisableRetries = true
+		if len(prepared.prepared.Requests) != 1 {
+			return fmt.Errorf("operation %q prepared request count %d, want exactly one", prepared.op.ID, len(prepared.prepared.Requests))
+		}
+		sealedRequest := prepared.prepared.Requests[0]
+		sealedQuery, queryErr := url.ParseQuery(sealedRequest.Query)
+		if queryErr != nil || sealedQuery.Encode() != sealedRequest.Query {
+			return fmt.Errorf("operation %q prepared query is not canonical", prepared.op.ID)
+		}
 
 		// Crossing this point means the sealed request is about to be submitted.
 		// Record its declaration-owned identity before transport I/O so timeout,
 		// cancellation, DNS, TLS, and connection failures retain an attempt
 		// receipt without fabricating response fields.
 		result = connectors.OperationDirectWriteResult{
-			Connector:          b.Name,
-			Operation:          prepared.op.ID,
-			Method:             prepared.method,
-			Path:               prepared.path,
-			OutputSecretFields: operationDirectWriteOutputSecretFields(prepared.op),
+			Connector:              b.Name,
+			Operation:              prepared.op.ID,
+			Method:                 prepared.method,
+			Path:                   prepared.path,
+			OutputSecretFields:     operationDirectWriteOutputSecretFields(prepared.op),
+			RequestSensitiveValues: append([]string(nil), prepared.redactionValues...),
 		}
 
 		var response *connsdk.Response
 		switch prepared.format {
 		case "form":
-			response, err = requester.DoFormLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.form, prepared.maxBytes)
+			response, err = requester.DoPreparedFormLimited(requestCtx, sealedRequest.Method, prepared.requestPath, sealedQuery, []byte(sealedRequest.Body), prepared.maxBytes)
 		case "json", "none", "graphql":
-			contentType := prepared.contentType
+			contentType := sealedRequest.ContentType
 			if contentType == "" {
 				contentType = "application/json"
 			}
-			response, err = requester.DoJSONLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.body, contentType, prepared.maxBytes)
+			response, err = requester.DoPreparedJSONLimited(requestCtx, sealedRequest.Method, prepared.requestPath, sealedQuery, []byte(sealedRequest.Body), contentType, prepared.maxBytes)
 		case "multipart":
 			root, rootErr := openMultipartRoot(prepared.cfg.ProjectDir)
 			if rootErr != nil {
@@ -182,8 +212,8 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			message := operationDirectWriteErrorText(
 				err,
 				prepared.identity,
-				prepared.op.Kind == "rest_write" && strings.Contains(b.HTTP.URL, "{{ secrets."),
-				operationDirectWriteDiagnosticValues(prepared.redactionValues, prepared.cfg.Secrets),
+				operationDirectWritePrintsProviderHTTPBody(prepared),
+				operationDirectWriteDiagnosticValues(prepared.redactionValues, prepared.cfg.Secrets, prepared.cfg.Config),
 			)
 			if hint != "" {
 				message += ": " + hint
@@ -199,7 +229,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		if responseBodyErr != nil {
 			return operationDirectWritePostResponseError(prepared.op.ID, responseBodyErr, response, prepared.identity)
 		}
-		responseHeaders, headerErr := operationResponseHeaders(b, prepared.op, response.Header)
+		responseHeaders, headerErr := operationResponseHeaders(b, prepared.op, response.Header, prepared.cfg.Secrets)
 		if headerErr != nil {
 			return headerErr
 		}
@@ -235,7 +265,12 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		if prepared.policy == directWritePolicySecretStored {
 			if err := storeOperationResponseSecret(gated, prepared.op, prepared.cfg, response.Body); err != nil {
-				return err
+				// Persistence of the declaration-owned response secret can fail
+				// after the provider has completed the fixed mutation.  Preserve
+				// that physical response as a cause (and in result above) so the
+				// durable App run can report the exact receipt without fabricating
+				// an in-memory terminal envelope.
+				return operationDirectWritePostResponseError(prepared.op.ID, err, response, prepared.identity)
 			}
 		}
 		return nil
@@ -276,17 +311,31 @@ func operationDirectWriteErrorText(err error, identity string, includeProviderBo
 }
 
 // operationDirectWriteDiagnosticValues extends declaration-owned body
-// redaction with the resolved credential values. It is used only for the
-// historical structured-URL diagnostic, whose provider detail remains useful
-// but must never echo a URL-bound secret.
-func operationDirectWriteDiagnosticValues(values []string, secrets map[string]string) []string {
+// redaction with runtime values that a provider can echo in a diagnostic.
+// The complete provider receipt stays available on the typed result/cause;
+// only this printable error surface masks exact known values.
+func operationDirectWriteDiagnosticValues(values []string, secrets, config map[string]string) []string {
 	result := append([]string(nil), values...)
 	for _, value := range secrets {
 		if strings.TrimSpace(value) != "" {
 			result = append(result, value)
 		}
 	}
+	for _, value := range config {
+		if strings.TrimSpace(value) != "" {
+			result = append(result, value)
+		}
+	}
 	return result
+}
+
+// operationDirectWritePrintsProviderHTTPBody is the intentionally narrow
+// diagnostic policy. A plain declared REST JSON result may retain an
+// actionable (with exact known values redacted) provider message. Multipart,
+// GraphQL, secret, and explicitly redacted output contracts retain their
+// complete receipt only through the typed result/cause, never synthetic text.
+func operationDirectWritePrintsProviderHTTPBody(prepared preparedOperationDirectWrite) bool {
+	return prepared.op.Kind == "rest_write" && prepared.format != "multipart" && prepared.policy == directWritePolicyJSON
 }
 
 func operationDirectWriteErrorCause(err error, identity string) error {
@@ -326,17 +375,6 @@ func operationDirectWritePostResponseError(operation string, cause error, respon
 		message:   cause.Error(),
 		cause:     errors.Join(cause, operationDirectWriteProviderResponseCause(response, identity)),
 	}
-}
-
-func cloneOperationDirectWriteHeaders(headers http.Header) map[string][]string {
-	if len(headers) == 0 {
-		return nil
-	}
-	clone := make(map[string][]string, len(headers))
-	for name, values := range headers {
-		clone[name] = append([]string(nil), values...)
-	}
-	return clone
 }
 
 // preparedOperationDirectWriteHeaders joins runtime-owned resolved headers and
@@ -421,6 +459,7 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 		ConfirmationChallenge: confirmation,
 		OutputPolicy:          op.OutputPolicy,
 		Batchable:             op.IsBatchable(),
+		StructuredBody:        OperationDirectWriteHasStructuredRESTBody(op),
 		PayloadFileFields:     operationDirectWritePayloadFileFields(op),
 		PayloadFileMaxBytes:   operationDirectWritePayloadFileMaxBytes(op),
 		RedactFields:          operationDirectWriteRedactFields(op),
@@ -438,7 +477,7 @@ func ApprovedMultipartPayloadSHA256ForOperation(ctx context.Context, b Bundle, r
 	if op.Kind != "rest_write" || op.REST == nil || op.REST.Multipart == nil {
 		return nil, nil
 	}
-	cfg := materializeConfigDefaults(b, req.Config)
+	cfg := materializeConfigDefaults(b, sealRuntimeConfig(req.Config))
 	body, err := operationWriteBody(op, req.Body)
 	if err != nil {
 		return nil, err
@@ -511,7 +550,11 @@ func PreflightOperationDirectWrite(b Bundle, operation, method, endpointPath, ou
 	if err := validateOperationDirectWriteOutputPolicy(outputPolicy); err != nil {
 		return err
 	}
-	return validateOperationDirectWriteQueryFields(op, queryFields)
+	authQueryParameters, err := OperationDirectWriteAuthOwnedQueryParameters(op, b.HTTP.Auth)
+	if err != nil {
+		return err
+	}
+	return validateOperationDirectWriteQueryFieldsWithAuth(op, queryFields, authQueryParameters)
 }
 
 func PreflightOperationDirectWriteBindings(b Bundle, operation string, pathFields, bodyFields []string) error {
@@ -1239,6 +1282,34 @@ func operationDirectWriteRedactionValues(op OperationSpec, body map[string]any) 
 	if op.SensitivePolicy == nil || len(op.SensitivePolicy.RedactFields) == 0 {
 		return nil
 	}
+	// Structured declarations may classify a scalar inside an array/object
+	// path (for example body.targets.0.token).  The legacy write-action path
+	// walker intentionally accepts only object paths, so use the same schema
+	// resolver that materializes this closed body.  Without this, an echoed
+	// declared request secret survives a failed provider receipt.
+	if OperationDirectWriteHasStructuredRESTBody(op) {
+		root, err := operationDirectWriteBodySchemaRoot(op)
+		if err != nil {
+			return nil
+		}
+		seen := make(map[string]bool)
+		for _, field := range op.SensitivePolicy.RedactFields {
+			path := strings.TrimPrefix(strings.TrimSpace(field), "body.")
+			resolved, err := resolveOperationDirectWriteBodySchemaPath(root, path)
+			if err != nil {
+				continue
+			}
+			if value, found := operationDirectWriteBodyPathValue(body, resolved.steps); found {
+				collectWriteRedactionValues(value, seen)
+			}
+		}
+		values := make([]string, 0, len(seen))
+		for value := range seen {
+			values = append(values, value)
+		}
+		sortWriteRedactionLiterals(values)
+		return values
+	}
 	fields := make([]string, 0, len(op.SensitivePolicy.RedactFields))
 	for _, field := range op.SensitivePolicy.RedactFields {
 		fields = append(fields, strings.TrimPrefix(strings.TrimSpace(field), "body."))
@@ -1463,7 +1534,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err := validateOperationDirectWritePathParams(op, req.PathParams); err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	cfg := materializeConfigDefaults(b, req.Config)
+	cfg := materializeConfigDefaults(b, sealRuntimeConfig(req.Config))
 	identity := operationDirectWriteIdentity(b, op, method)
 	headers, err := resolveDirectWriteHeaders(b.HTTP.Headers, cfg, b.Spec)
 	if err != nil {
@@ -1473,7 +1544,11 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	queryMap, err := operationDirectWriteQuery(op, req.Query)
+	authQueryParameters, err := OperationDirectWriteAuthOwnedQueryParameters(op, b.HTTP.Auth)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	queryMap, err := operationDirectWriteQuery(op, req.Query, authQueryParameters)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
@@ -1635,7 +1710,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	if len(req.Headers) != 0 || len(req.HeaderValues) != 0 {
 		return preparedOperationDirectWrite{}, fmt.Errorf("operation %q fixed GraphQL mutation does not accept request header overrides", op.ID)
 	}
-	cfg := materializeConfigDefaults(b, req.Config)
+	cfg := materializeConfigDefaults(b, sealRuntimeConfig(req.Config))
 	identity := operationDirectWriteIdentity(b, op, method)
 	headers, err := resolveDirectWriteHeaders(b.HTTP.Headers, cfg, b.Spec)
 	if err != nil {
@@ -1772,6 +1847,9 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 			return OperationSpec{}, "", err
 		}
 		if _, err := operationDirectWriteQueryParameters(op); err != nil {
+			return OperationSpec{}, "", err
+		}
+		if _, err := OperationDirectWriteAuthOwnedQueryParameters(op, b.HTTP.Auth); err != nil {
 			return OperationSpec{}, "", err
 		}
 		if _, _, err := operationDirectWriteContentType(op, map[string]any{"declared": true}); err != nil {
@@ -1922,7 +2000,7 @@ func operationDirectWriteQueryParameters(op OperationSpec) (map[string]Operation
 	return operationParametersForLocation(op, "query")
 }
 
-func validateOperationDirectWriteQueryFields(op OperationSpec, queryFields []string) error {
+func validateOperationDirectWriteQueryFieldsWithAuth(op OperationSpec, queryFields []string, authQueryParameters map[string]struct{}) error {
 	if op.Kind != "rest_write" || op.REST == nil {
 		if len(queryFields) == 0 {
 			return nil
@@ -1943,6 +2021,9 @@ func validateOperationDirectWriteQueryFields(op OperationSpec, queryFields []str
 			return fmt.Errorf("operation %q maps more than one command flag to query parameter %q", op.ID, name)
 		}
 		seen[name] = struct{}{}
+		if _, authOwned := authQueryParameters[name]; authOwned {
+			return fmt.Errorf("operation %q query parameter %q is owned by declared API key authentication and cannot be caller-bound", op.ID, name)
+		}
 		if _, fixed := op.REST.Query[name]; fixed {
 			return fmt.Errorf("operation %q query parameter %q is fixed by rest.query and cannot be caller-bound", op.ID, name)
 		}
@@ -1963,6 +2044,9 @@ func validateOperationDirectWriteQueryFields(op OperationSpec, queryFields []str
 		if _, fixed := op.REST.Query[name]; fixed {
 			continue
 		}
+		if _, authOwned := authQueryParameters[name]; authOwned {
+			continue
+		}
 		if _, bound := seen[name]; !bound {
 			return fmt.Errorf("operation %q requires query parameter %q", op.ID, name)
 		}
@@ -1970,7 +2054,63 @@ func validateOperationDirectWriteQueryFields(op OperationSpec, queryFields []str
 	return nil
 }
 
-func operationDirectWriteQuery(op OperationSpec, requested map[string]string) (map[string]string, error) {
+// OperationDirectWriteAuthOwnedQueryParameters identifies query values that
+// only the declaration-selected API-key auth may provide. A required source
+// parameter is rejected when a selectable auth branch can omit it: accepting
+// that declaration would make a safety-marked operation unreachable at
+// runtime, or tempt callers to supply an auth-owned raw query value.
+func OperationDirectWriteAuthOwnedQueryParameters(op OperationSpec, specs []AuthSpec) (map[string]struct{}, error) {
+	parameters := make(map[string]struct{})
+	selectable, noMatchPossible := operationDirectWriteSelectableAuthSpecs(specs)
+	for _, spec := range selectable {
+		if strings.EqualFold(strings.TrimSpace(spec.Mode), "api_key_query") {
+			if name := strings.TrimSpace(spec.Param); name != "" {
+				parameters[name] = struct{}{}
+			}
+		}
+	}
+	if op.Kind != "rest_write" || op.REST == nil || len(parameters) == 0 {
+		return parameters, nil
+	}
+	declared, err := operationDirectWriteQueryParameters(op)
+	if err != nil {
+		return nil, err
+	}
+	names := make([]string, 0, len(parameters))
+	for name := range parameters {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		parameter, found := declared[name]
+		if !found || !parameter.Required {
+			continue
+		}
+		if noMatchPossible {
+			return nil, fmt.Errorf("operation %q required query parameter %q is conditionally supplied by declared API key authentication; every selectable auth rule must supply it", op.ID, name)
+		}
+		for _, spec := range selectable {
+			if strings.EqualFold(strings.TrimSpace(spec.Mode), "api_key_query") && strings.TrimSpace(spec.Param) == name {
+				continue
+			}
+			return nil, fmt.Errorf("operation %q required query parameter %q is conditionally supplied by declared API key authentication; every selectable auth rule must supply it", op.ID, name)
+		}
+	}
+	return parameters, nil
+}
+
+func operationDirectWriteSelectableAuthSpecs(specs []AuthSpec) ([]AuthSpec, bool) {
+	selectable := make([]AuthSpec, 0, len(specs))
+	for _, spec := range specs {
+		selectable = append(selectable, spec)
+		if strings.TrimSpace(spec.When) == "" {
+			return selectable, false
+		}
+	}
+	return selectable, len(selectable) != 0
+}
+
+func operationDirectWriteQuery(op OperationSpec, requested map[string]string, authQueryParameters map[string]struct{}) (map[string]string, error) {
 	parameters, err := operationDirectWriteQueryParameters(op)
 	if err != nil {
 		return nil, err
@@ -1980,7 +2120,7 @@ func operationDirectWriteQuery(op OperationSpec, requested map[string]string) (m
 		requestedNames = append(requestedNames, name)
 	}
 	sort.Strings(requestedNames)
-	if err := validateOperationDirectWriteQueryFields(op, requestedNames); err != nil {
+	if err := validateOperationDirectWriteQueryFieldsWithAuth(op, requestedNames, authQueryParameters); err != nil {
 		return nil, err
 	}
 	query := make(map[string]string, len(op.REST.Query)+len(requested))
@@ -2224,19 +2364,20 @@ type operationDirectWriteResponseBodyResult struct {
 
 func operationDirectWriteResultFromResponse(connector string, prepared preparedOperationDirectWrite, response *connsdk.Response, body operationDirectWriteResponseBodyResult) connectors.OperationDirectWriteResult {
 	return connectors.OperationDirectWriteResult{
-		Connector:          connector,
-		Operation:          prepared.op.ID,
-		Method:             prepared.method,
-		Path:               prepared.path,
-		ResponseReceived:   true,
-		Status:             response.Status,
-		Headers:            writeProviderHeaders(response.Header),
-		BodyPresent:        body.present,
-		BodyBytes:          body.bytes,
-		BodyRaw:            body.raw,
-		BodyRawEncoding:    body.encoding,
-		Body:               body.body,
-		OutputSecretFields: operationDirectWriteOutputSecretFields(prepared.op),
+		Connector:              connector,
+		Operation:              prepared.op.ID,
+		Method:                 prepared.method,
+		Path:                   prepared.path,
+		ResponseReceived:       true,
+		Status:                 response.Status,
+		Headers:                writeProviderHeaders(response.Header),
+		BodyPresent:            body.present,
+		BodyBytes:              body.bytes,
+		BodyRaw:                body.raw,
+		BodyRawEncoding:        body.encoding,
+		Body:                   body.body,
+		OutputSecretFields:     operationDirectWriteOutputSecretFields(prepared.op),
+		RequestSensitiveValues: append([]string(nil), prepared.redactionValues...),
 	}
 }
 

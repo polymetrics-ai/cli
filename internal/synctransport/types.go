@@ -47,6 +47,59 @@ type SourceExecutor interface {
 	ReadTransport(context.Context, SourceRequest, func(SourcePage) error) error
 }
 
+// SourceReadOutcome distinguishes a complete source traversal from a page
+// budget stop. A continuation is opaque engine state: it is persisted only on
+// the last acknowledged source checkpoint and is never exposed as a command
+// cursor, URL, query, or connector-specific execution input.
+type SourceReadOutcome struct {
+	Exhausted    bool
+	Continuation *synccontract.SourceContinuation
+}
+
+func (o SourceReadOutcome) validate() error {
+	if o.Exhausted {
+		if o.Continuation != nil {
+			return fmt.Errorf("exhausted source read outcome must not carry a continuation")
+		}
+		return nil
+	}
+	if o.Continuation == nil {
+		return fmt.Errorf("budget-stopped source read outcome requires a continuation")
+	}
+	checkpoint := synccontract.CheckpointEnvelope{Continuation: o.Continuation.Clone()}
+	if checkpoint.Continuation == nil {
+		return fmt.Errorf("budget-stopped source read outcome requires a continuation")
+	}
+	// Continuation validation is intentionally shared with persisted
+	// checkpoints, without manufacturing a partial checkpoint envelope here.
+	if checkpoint.Continuation.Kind == "" || len(checkpoint.Continuation.Token) == 0 || len(checkpoint.Continuation.Token) > 4096 {
+		return fmt.Errorf("budget-stopped source read outcome contains an invalid continuation")
+	}
+	return nil
+}
+
+// SourceOutcomeExecutor is an optional closed extension of SourceExecutor for
+// sources that can prove whether a read reached provider exhaustion. Legacy
+// sources keep their exact executor interface and behavior.
+type SourceOutcomeExecutor interface {
+	SourceExecutor
+	ReadTransportWithOutcome(context.Context, SourceRequest, func(SourcePage) error) (SourceReadOutcome, error)
+}
+
+// SourceBudgetStoppedError is returned to callers that use the historical
+// error-only source interface. It makes a capped prefix terminally distinct
+// from an exhausted scan while retaining no provider route authority.
+type SourceBudgetStoppedError struct {
+	Continuation synccontract.SourceContinuation
+}
+
+func (e *SourceBudgetStoppedError) Error() string {
+	if e == nil {
+		return "source transport stopped at its page budget"
+	}
+	return "source transport stopped at its page budget before exhaustion"
+}
+
 // EmptyResultSource explicitly admits a successful, zero-page read without a
 // fabricated checkpoint. The orchestrator keeps rejecting silent zero-page
 // executors unless the exact registered source implements this marker.
@@ -195,6 +248,44 @@ type FullOverwriteRun interface {
 	AbortFullOverwrite(context.Context) error
 }
 
+type EmptyPublicationReadBackReceipt struct {
+	Witness synccontract.PublicationWitness `json:"witness"`
+	Output  json.RawMessage                 `json:"output,omitempty"`
+}
+
+func (r EmptyPublicationReadBackReceipt) Validate() error {
+	if err := r.Witness.Validate(); err != nil {
+		return err
+	}
+	if len(r.Output) != 0 && !json.Valid(r.Output) {
+		return fmt.Errorf("empty publication read-back receipt output must be valid JSON")
+	}
+	return nil
+}
+
+func (r EmptyPublicationReadBackReceipt) Clone() EmptyPublicationReadBackReceipt {
+	clone := r
+	clone.Output = append(json.RawMessage(nil), r.Output...)
+	return clone
+}
+
+type EmptyPublicationReadBackDestination interface {
+	ReadBackEmptyFullOverwrite(context.Context, EmptyPublicationReadBackRequest) error
+}
+
+type EmptyPublicationReadBackRequest struct {
+	Runtime           connectors.RuntimeConfig
+	Source            connectors.Connector
+	SourceRuntime     connectors.RuntimeConfig
+	Destination       connectors.Connector
+	Binding           DestinationBinding
+	Stream            string
+	DestinationAction string
+	TransformPlanJSON string
+	TransformPlanHash string
+	Receipt           EmptyPublicationReadBackReceipt
+}
+
 // FullOverwritePublicationRequest is payload-free aggregate evidence supplied
 // only after source emission completed. LastCheckpoint remains source-owned;
 // the destination cannot replace it, and the orchestrator remains responsible
@@ -221,6 +312,24 @@ type ManagedTargetApprovalDestination interface {
 type DefinitionOwnedApprovalDestination interface {
 	DestinationExecutor
 	DefinitionOwnedApprovalDestination()
+}
+
+// DeclaredDestinationRouteError means both connector declarations selected a
+// closed route and registry preflight succeeded, but the resolved destination
+// is not one of App's declared delivery representations. It is deliberately a
+// typed refusal instead of an ordinary-route fallback: a declaration-owned
+// operation must remain visible and fail before I/O when its durable delivery
+// role is incomplete.
+type DeclaredDestinationRouteError struct {
+	Destination string
+	Executor    connectors.TransportExecutorReference
+}
+
+func (e *DeclaredDestinationRouteError) Error() string {
+	if e == nil {
+		return "declared destination route is not executable"
+	}
+	return fmt.Sprintf("declared destination route for %q executor %q has no bounded durable delivery representation", e.Destination, e.Executor.ID)
 }
 
 // SourceRequest is the fixed source invocation context. It has no generic
@@ -388,9 +497,36 @@ type DestinationPlanRequest struct {
 }
 
 type DestinationPlan struct {
-	ApplyStrategy          connectors.DestinationApplyStrategy
-	TransformPlanHash      string
+	ApplyStrategy                   connectors.DestinationApplyStrategy
+	TransformPlanHash               string
+	ActionDefinitionSHA256          string
+	TombstoneActionDefinitionSHA256 string
+	// PhysicalActions is the complete, declaration-owned provider mutation set
+	// admitted by this plan. It exists beside ApplyStrategy because one logical
+	// strategy may include an independently destructive tombstone delete.
+	PhysicalActions []DestinationPhysicalAction
+}
+
+// DestinationPhysicalAction is the reviewable identity of one provider
+// mutation covered by a destination approval. It names neither a URL nor a
+// request body; those remain owned by the compiled connector declaration.
+type DestinationPhysicalAction struct {
+	Action                 string `json:"action"`
+	ActionDefinitionSHA256 string `json:"action_definition_sha256"`
+	IdempotencyKeyHeader   string `json:"idempotency_key_header"`
+	Kind                   string `json:"kind"`
+	Destructive            bool   `json:"destructive"`
+}
+
+// DestinationIdempotencyProof is carried only from a sealed, independently
+// approved transport plan to the exact destination action. It names neither a
+// URL nor a raw request: the compiled action still owns both. Its purpose is
+// to prevent a descriptor's keyed claim from being mistaken for proof that the
+// effective provider operation accepts a stable idempotency key.
+type DestinationIdempotencyProof struct {
+	Executor               connectors.TransportExecutorReference
 	ActionDefinitionSHA256 string
+	EffectiveHeader        string
 }
 
 // DestinationApproval carries only the ephemeral result of a separately
@@ -398,13 +534,20 @@ type DestinationPlan struct {
 // non-serializable: warehouse receipts, runtime configuration, destination
 // plans, and evidence artifacts never retain the operator token.
 type DestinationApproval struct {
-	PlanID                 string                            `json:"-"`
-	ApprovalToken          string                            `json:"-"`
-	Confirmation           connectors.WriteConfirmation      `json:"-"`
-	Evidence               *connectors.WriteApprovalEvidence `json:"-"`
-	Target                 connectors.WriteApprovalTarget    `json:"-"`
-	PreviewDigest          string                            `json:"-"`
-	ActionDefinitionSHA256 string                            `json:"-"`
+	PlanID                          string                            `json:"-"`
+	ApprovalToken                   string                            `json:"-"`
+	Confirmation                    connectors.WriteConfirmation      `json:"-"`
+	Evidence                        *connectors.WriteApprovalEvidence `json:"-"`
+	Target                          connectors.WriteApprovalTarget    `json:"-"`
+	PreviewDigest                   string                            `json:"-"`
+	ActionDefinitionSHA256          string                            `json:"-"`
+	TombstoneActionDefinitionSHA256 string                            `json:"-"`
+	// PhysicalActions is the complete set presented and digest-bound before a
+	// token can be consumed. Apply rechecks it so a paired delete cannot be
+	// introduced after approval.
+	PhysicalActions           []DestinationPhysicalAction `json:"-"`
+	IdempotencyProof          DestinationIdempotencyProof `json:"-"`
+	TombstoneIdempotencyProof DestinationIdempotencyProof `json:"-"`
 	// AuthorizeNextUnit rechecks a standing authorization immediately before a
 	// staged batch can cause a destination side effect. It is in-memory only:
 	// receipts and checkpoints retain no token or authorization callback.
@@ -416,6 +559,20 @@ type DestinationApproval struct {
 	// because the engine consumes evidence after each provider mutation while a
 	// durable authorization may admit several bounded worksets.
 	IssueWriteEvidence func(context.Context) (*connectors.WriteApprovalEvidence, error) `json:"-"`
+}
+
+// authorizeDestinationEffect is the final live authorization boundary before
+// an adapter can mutate or publish external destination state. Earlier checks
+// can avoid unnecessary local work, but cannot substitute for this one after
+// a blocking stage, transform, or shadow run has completed.
+func authorizeDestinationEffect(ctx context.Context, approval DestinationApproval, effect string) error {
+	if approval.AuthorizeNextUnit == nil {
+		return nil
+	}
+	if err := approval.AuthorizeNextUnit(ctx); err != nil {
+		return fmt.Errorf("authorize destination %s: %w", effect, err)
+	}
+	return nil
 }
 
 type DestinationApplyRequest struct {
@@ -509,8 +666,17 @@ type RunRequest struct {
 	// Approval is intentionally carried only in memory from App.RunETL to the
 	// destination apply boundary. It is never written into a stage artifact.
 	Approval DestinationApproval `json:"-"`
-	Stage    WarehouseStage
-	Commit   func(synccontract.CheckpointEnvelope) error
+	// SourceAdmission is an App-owned durable work-fence check. It runs
+	// immediately before a source executor begins physical I/O; it accepts no
+	// route, credential, or provider authority and is intentionally absent from
+	// receipts and generated declarations.
+	SourceAdmission                        func(context.Context) error         `json:"-"`
+	ReadBackAdmission                      func(context.Context) error         `json:"-"`
+	EmptyPublicationReadBackPendingHandoff func(context.Context, Result) error `json:"-"`
+	EmptyPublicationHandoff                func(context.Context, Result) error `json:"-"`
+	Stage                                  WarehouseStage
+	Commit                                 func(synccontract.CheckpointEnvelope) error
+	CommitWorksets                         func(synccontract.CheckpointEnvelope, []WarehouseReceipt) error
 }
 
 type Result struct {
@@ -523,6 +689,10 @@ type Result struct {
 	StageElapsed     time.Duration
 	ParquetElapsed   time.Duration
 	ApplyElapsed     time.Duration
+	// ReadBackElapsed is confirmation work performed after a destination
+	// effect. It is deliberately distinct from apply/publication: read-back has
+	// its own bounded provider phase and must not be hidden in effect latency.
+	ReadBackElapsed time.Duration
 	// IndexConstraintElapsed is destination schema/index work performed once
 	// for the private full-overwrite shadow. It is distinct from binary COPY so
 	// a high COPY rate cannot hide a slow target build.
@@ -535,13 +705,53 @@ type Result struct {
 	ParquetBytes           int64
 	PeakCreditBytes        int64
 	CreditWaitElapsed      time.Duration
-	// DestinationResults retain every provider-returned response field, key,
-	// value, receipt, status, body, occurrence ID, and credential-equal byte
-	// verbatim. They remain opaque to the transport core: mapping and provider
-	// protocol stay connector-owned. Only system-generated diagnostics, plans,
-	// logs, and errors are rendered secret-safely.
+	// DestinationResults retain each adapter-returned provider response, including
+	// field names, ordinary values, receipts, status, body, and occurrence IDs.
+	// Adapters mask concrete configured credential material before placing results
+	// here; the transport core otherwise keeps them opaque so mapping and provider
+	// protocol stay connector-owned. System-generated diagnostics, plans, logs,
+	// and errors are rendered secret-safely.
 	DestinationResults  []json.RawMessage
 	CommittedCheckpoint *synccontract.CheckpointEnvelope
+	// EmptyPublication is sealed evidence that a full-overwrite publication of
+	// an explicitly empty source was made durable and verified. It is distinct
+	// from a source checkpoint: no source position was observed or advanced.
+	// App persists it with the exact provider receipt before any local repair,
+	// so retrying the run cannot publish the empty replacement a second time.
+	EmptyPublication                *synccontract.PublicationWitness
+	EmptyPublicationReadBackPending *EmptyPublicationReadBackReceipt
+	// DeliveredReconciliationRequired says the destination effect, read-back,
+	// and checkpoint are already durable but a subsequent local bookkeeping
+	// action (for example, retiring a bounded stage receipt) needs repair.
+	// Callers must preserve the committed checkpoint and provider receipts and
+	// must not replay the destination operation.
+	DeliveredReconciliationRequired bool
+}
+
+// DeliveredReconciliationRequiredError is a typed terminal transport outcome
+// for a failure after durable delivery. The wrapped cause describes only the
+// reconciliation work that remains; it never revokes the acknowledged
+// destination effect or its committed checkpoint.
+type DeliveredReconciliationRequiredError struct {
+	cause error
+}
+
+func NewDeliveredReconciliationRequiredError(cause error) *DeliveredReconciliationRequiredError {
+	return &DeliveredReconciliationRequiredError{cause: cause}
+}
+
+func (e *DeliveredReconciliationRequiredError) Error() string {
+	if e == nil || e.cause == nil {
+		return "delivered reconciliation is required"
+	}
+	return "delivered reconciliation is required: " + e.cause.Error()
+}
+
+func (e *DeliveredReconciliationRequiredError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.cause
 }
 
 const defaultTransportUnitDeadline = time.Minute
@@ -582,10 +792,20 @@ func (r RunRequest) unitDeadline() time.Duration {
 // absent stage cannot hide a missing executor, invalid mode, or unsafe
 // acknowledgement declaration. None of these checks can cause source I/O.
 func (r RunRequest) validateDispatchDependencies() error {
-	if r.Commit == nil {
+	if r.Commit == nil && r.CommitWorksets == nil {
 		return fmt.Errorf("checkpoint committer is required for transport dispatch")
 	}
 	return nil
+}
+
+func (r RunRequest) commitAcknowledgedWorksets(checkpoint synccontract.CheckpointEnvelope, receipts []WarehouseReceipt) error {
+	if len(receipts) != 0 && r.CommitWorksets != nil {
+		return r.CommitWorksets(checkpoint, append([]WarehouseReceipt(nil), receipts...))
+	}
+	if r.Commit != nil {
+		return r.Commit(checkpoint)
+	}
+	return r.CommitWorksets(checkpoint, nil)
 }
 
 func (r RunRequest) validateLegacyDispatchDependencies() error {
@@ -670,12 +890,34 @@ func cloneRuntimeConfig(runtime connectors.RuntimeConfig) connectors.RuntimeConf
 	clone.Config = cloneStringMap(runtime.Config)
 	clone.Secrets = cloneStringMap(runtime.Secrets)
 	clone.ApprovedPayloadSHA256 = cloneStringMap(runtime.ApprovedPayloadSHA256)
-	if runtime.ResolvedCatalog != nil {
-		catalog := *runtime.ResolvedCatalog
-		catalog.Streams = append([]connectors.Stream(nil), runtime.ResolvedCatalog.Streams...)
-		clone.ResolvedCatalog = &catalog
-	}
+	clone.ResolvedCatalog = cloneCatalog(runtime.ResolvedCatalog)
 	return clone
+}
+
+// cloneCatalog copies every mutable catalog edge before an executor receives a
+// per-call runtime. Catalogs are provider metadata, but adapters may normalize
+// their local view; that normalization must never alter another executor's
+// request or the App-owned discovery result.
+func cloneCatalog(catalog *connectors.Catalog) *connectors.Catalog {
+	if catalog == nil {
+		return nil
+	}
+	clone := *catalog
+	clone.Streams = make([]connectors.Stream, len(catalog.Streams))
+	for index, stream := range catalog.Streams {
+		streamClone := stream
+		streamClone.Fields = append([]connectors.Field(nil), stream.Fields...)
+		streamClone.PrimaryKey = append([]string(nil), stream.PrimaryKey...)
+		streamClone.CursorFields = append([]string(nil), stream.CursorFields...)
+		streamClone.Schema = append(json.RawMessage(nil), stream.Schema...)
+		clone.Streams[index] = streamClone
+	}
+	if catalog.Discovery != nil {
+		discovery := *catalog.Discovery
+		discovery.Failures = append([]connectors.DiscoveryFailure(nil), catalog.Discovery.Failures...)
+		clone.Discovery = &discovery
+	}
+	return &clone
 }
 
 func cloneStringMap(values map[string]string) map[string]string {
@@ -695,7 +937,7 @@ func cloneRecords(records []connectors.Record) ([]connectors.Record, error) {
 	}
 	clone := make([]connectors.Record, len(records))
 	for index, record := range records {
-		clonedRecord, err := cloneRecord(record)
+		clonedRecord, err := CloneRecord(record)
 		if err != nil {
 			return nil, fmt.Errorf("record %d: %w", index, err)
 		}
@@ -706,11 +948,12 @@ func cloneRecords(records []connectors.Record) ([]connectors.Record, error) {
 
 var errUnsupportedTransportRecordValue = errors.New("unsupported transport record value")
 
-// cloneRecord copies the closed JSON-like record vocabulary accepted by
+// CloneRecord copies the closed JSON-like record vocabulary accepted by
 // transport. A stage or destination therefore cannot mutate a nested provider
 // field through the workset it receives, and an unrecognized mutable value
-// cannot silently cross either boundary by alias.
-func cloneRecord(record connectors.Record) (connectors.Record, error) {
+// cannot silently cross either boundary by alias. Declarative source adapters
+// use this same lossless boundary before records enter a transport workset.
+func CloneRecord(record connectors.Record) (connectors.Record, error) {
 	clone := make(connectors.Record, len(record))
 	for key, value := range record {
 		clonedValue, err := cloneRecordValue(value)
@@ -722,10 +965,16 @@ func cloneRecord(record connectors.Record) (connectors.Record, error) {
 	return clone, nil
 }
 
+// cloneRecord keeps existing package-local callers and focused tests on the
+// exported transport boundary without retaining a second implementation.
+func cloneRecord(record connectors.Record) (connectors.Record, error) {
+	return CloneRecord(record)
+}
+
 func cloneRecordValue(value any) (any, error) {
 	switch typed := value.(type) {
 	case connectors.Record:
-		return cloneRecord(typed)
+		return CloneRecord(typed)
 	case map[string]any:
 		clone := make(map[string]any, len(typed))
 		for key, nested := range typed {

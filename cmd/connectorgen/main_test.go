@@ -551,6 +551,28 @@ func TestValidate_CLISurfaceReverseETLStructuredJSONRequiresDeclaredTopLevelCont
 	}
 }
 
+func TestValidate_CLISurfaceDirectReadStructuredJSONRequiresDeclaredClosedRESTBodyField(t *testing.T) {
+	newCommand := func(operation engine.OperationSpec, mapsTo string) engine.CLICommand {
+		return engine.CLICommand{
+			Path: "widgets search", Intent: "direct_read", Availability: "implemented", Operation: operation.ID,
+			Flags: []engine.CLIFlag{{Name: "filter", Type: "json", MapsTo: mapsTo}},
+		}
+	}
+	closedRead := engine.OperationSpec{
+		ID: "widgets.search", Kind: "rest_read",
+		REST: &engine.RESTOperationSpec{Method: "POST", ContentType: "application/json", MaxBytes: 1024, BodySchema: json.RawMessage(`{
+			"type":"object","additionalProperties":false,
+			"properties":{"filter":{"type":"object","additionalProperties":false,"properties":{"state":{"type":"string"}}}}
+		}`)},
+	}
+	if findings := checkCLISurfaceStructuredJSONFlags(engine.Bundle{Name: "widgets", Operations: []engine.OperationSpec{closedRead}}, 0, newCommand(closedRead, "body.filter")); len(findings) != 0 {
+		t.Fatalf("declared REST read structured JSON findings = %+v", findings)
+	}
+	if findings := checkCLISurfaceStructuredJSONFlags(engine.Bundle{Name: "widgets", Operations: []engine.OperationSpec{closedRead}}, 0, newCommand(closedRead, "body.filter.state")); len(findings) != 1 || !strings.Contains(findings[0].Message, "allowed only") {
+		t.Fatalf("nested REST read structured JSON findings = %+v, want closed placement rejection", findings)
+	}
+}
+
 func TestValidate_CLISurfaceFixedGraphQLCommandRequiresDeclaredTopLevelJSONVariable(t *testing.T) {
 	bundle := engine.Bundle{
 		Name: "cli-surface",
@@ -637,6 +659,36 @@ func TestValidate_CLISurfaceEnvOnlyFlagRequiresDeclaredSecretGraphQLContract(t *
 	findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations)
 	if len(findings) != 1 || !strings.Contains(findings[0].Message, "secret GraphQL mutation") {
 		t.Fatalf("env_only without environment redaction contract findings = %+v, want one closed-surface rejection", findings)
+	}
+
+	query := engine.OperationSpec{
+		ID:   "cli-surface.enterprise.invitation",
+		Kind: "graphql_query",
+		GraphQL: &engine.GraphQLOperationSpec{VariablesSchema: json.RawMessage(`{
+			"type":"object","additionalProperties":false,
+			"properties":{"invitationToken":{"type":"string"}}
+		}`)},
+		SensitivePolicy: &engine.SensitivePolicySpec{
+			InputMode:    "env",
+			RedactFields: []string{"body.invitationToken"},
+			Transform:    "none",
+		},
+	}
+	queryCommand := engine.CLICommand{
+		Path:         "graphql query enterprise",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    query.ID,
+		Flags: []engine.CLIFlag{{
+			Name: "invitation-token", Type: "string", MapsTo: "body.invitationToken", EnvOnly: true,
+		}},
+	}
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, queryCommand, map[string]engine.OperationSpec{query.ID: query}); len(findings) != 0 {
+		t.Fatalf("source-declared GraphQL query env_only contract findings = %+v, want none", findings)
+	}
+	query.SensitivePolicy = nil
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, queryCommand, map[string]engine.OperationSpec{query.ID: query}); len(findings) != 1 || !strings.Contains(findings[0].Message, "source-declared scalar GraphQL query") {
+		t.Fatalf("query env_only without declared policy findings = %+v, want closed-surface rejection", findings)
 	}
 }
 

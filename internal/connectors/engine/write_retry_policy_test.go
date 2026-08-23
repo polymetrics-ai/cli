@@ -183,7 +183,7 @@ func TestDeclarativeWriteIdempotencyRetriesOriginalURLOnly(t *testing.T) {
 	if _, err := Write(context.Background(), bundle, req, records, nil); err != nil {
 		t.Fatalf("Write: %v", err)
 	}
-	wantKey := writeIdempotencyKey(bundle.Name, action, preview.Digest, 0)
+	wantKey := writeIdempotencyKey(bundle.Name, action, preview.Digest, "", 0)
 	if wantKey == "" || len(keys) != 2 || keys[0] != wantKey || keys[1] != wantKey {
 		t.Fatalf("idempotency keys = %#v, want preview-bound %q", keys, wantKey)
 	}

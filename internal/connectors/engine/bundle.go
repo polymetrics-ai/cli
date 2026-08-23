@@ -349,12 +349,13 @@ type FanOutInto struct {
 	PathVar    string `json:"path_var,omitempty"`
 }
 
-// QueryParam is one stream.Query entry (gap-loop cycle-1 item 3,
+// QueryParam is a declared query entry for streams, checks, or write actions
+// (gap-loop cycle-1 item 3,
 // REVIEW-B.md cross-cutting adjudication 2: the recurring
 // "optional/config-driven query param not expressible" gap — vitally
 // `status`, bitly `size`, calendly `count`/page_size, gmail's two filters,
-// searxng wave0 F6 — met the >=3 recurrence threshold). Declared in
-// streams.json either as a PLAIN STRING (today's exact dialect: `Template`
+// searxng wave0 F6 — met the >=3 recurrence threshold). Declared on a stream,
+// base check, or write action either as a PLAIN STRING (today's exact dialect: `Template`
 // is that string, `OmitWhenAbsent` false, `Default` empty — a template
 // referencing an absent config/secrets key is ALWAYS a hard error, zero
 // migration risk for every existing bundle) or as an OBJECT
@@ -363,6 +364,12 @@ type FanOutInto struct {
 // templating (which would silently convert a mistyped/missing REQUIRED key
 // from a fail-loud error into a silently-unfiltered request, the F4
 // fail-open class the engine deliberately rejects elsewhere).
+//
+// WriteAction.Query preserves that dialect and adds one narrow, write-only
+// case: an object-form entry with OmitWhenAbsent may omit its own unresolved
+// record.* reference. It does not widen caller query input or relax malformed,
+// wrong-source, or required-record failures; resolveWriteQueryParams owns the
+// distinction while retaining the established config/secrets/incremental rules.
 //
 // OmitWhenAbsent and Default are mutually usable but conceptually distinct:
 // OmitWhenAbsent means "leave the param off the request entirely when its
@@ -455,13 +462,12 @@ type WriteAction struct {
 	// intentionally hosted away from the connector's ordinary REST origin.
 	BaseURL    string   `json:"base_url,omitempty"`
 	PathFields []string `json:"path_fields,omitempty"`
-	// Query is the OPTIONAL write-action query-parameter map. It is the
-	// SAME construct (and the same QueryParam type, so the same
-	// bare-string-or-object dialect) that streams.json's stream.Query has
-	// always used — see QueryParam's doc comment — resolved through the
-	// same resolveQueryParams helper read.go already shares between stream
-	// reads and check reads, so all three surfaces resolve query templates
-	// identically by construction rather than by convention.
+	// Query is the OPTIONAL write-action query-parameter map. It uses the
+	// same QueryParam string-or-object dialect as stream and check queries;
+	// see QueryParam's doc comment. Write preparation resolves it through
+	// resolveWriteQueryParams, preserving that dialect and its one
+	// source-locked record.* omission rule without admitting a caller-provided
+	// free-form query channel.
 	//
 	// Absent/empty means the request carries no query string at all, which
 	// is exactly the behavior every write action had before this field
@@ -504,6 +510,11 @@ type WriteAction struct {
 	Confirmation     *ConfirmationSpec                  `json:"confirmation,omitempty"`
 	TransportBinding *connectors.TransportActionBinding `json:"transport_binding,omitempty"`
 	Hook             string                             `json:"hook,omitempty"`
+	// HookFields is a closed declaration-owned list of record fields consumed
+	// only by a compound hook's declared follow-up route. They cannot overlap
+	// the primary action's path or body fields, which keeps a hook supplement
+	// from becoming a generic raw request/body channel.
+	HookFields []string `json:"hook_fields,omitempty"`
 }
 
 // ConfirmationSpec is the closed, declarative confirmation policy shared by
@@ -801,8 +812,12 @@ func (o OperationSpec) IsBatchable() bool {
 // OperationParameter is one parameter a REST operation accepts, as its
 // provider specification declares it.
 type OperationParameter struct {
-	Name       string   `json:"name"`
-	In         string   `json:"in"`
+	Name string `json:"name"`
+	In   string `json:"in"`
+	// CLIName is an optional declaration-owned spelling for a fixed path
+	// placeholder. It exists when the runtime's safe placeholder differs from
+	// the provider's public resource name; it never changes the wire mapping.
+	CLIName    string   `json:"cli_name,omitempty"`
 	Type       string   `json:"type,omitempty"`
 	Required   bool     `json:"required,omitempty"`
 	Repeatable bool     `json:"repeatable,omitempty"`
@@ -1050,17 +1065,19 @@ type CLICommandGroup struct {
 
 // CLIFlag describes one command or global flag.
 type CLIFlag struct {
-	Name       string   `json:"name"`
-	Type       string   `json:"type"`
-	Summary    string   `json:"summary,omitempty"`
-	Values     []string `json:"values,omitempty"`
-	MapsTo     string   `json:"maps_to,omitempty"`
-	Format     string   `json:"format,omitempty"`
-	AllowEmpty *bool    `json:"allow_empty,omitempty"`
-	Minimum    *float64 `json:"minimum,omitempty"`
-	Required   bool     `json:"required,omitempty"`
-	Repeatable bool     `json:"repeatable,omitempty"`
-	EnvOnly    bool     `json:"env_only,omitempty"`
+	Name            string                  `json:"name"`
+	Type            string                  `json:"type"`
+	Summary         string                  `json:"summary,omitempty"`
+	Values          []string                `json:"values,omitempty"`
+	MapsTo          string                  `json:"maps_to,omitempty"`
+	Format          string                  `json:"format,omitempty"`
+	AllowEmpty      *bool                   `json:"allow_empty,omitempty"`
+	Minimum         *connectors.ExactNumber `json:"minimum,omitempty"`
+	Maximum         *connectors.ExactNumber `json:"maximum,omitempty"`
+	Required        bool                    `json:"required,omitempty"`
+	Repeatable      bool                    `json:"repeatable,omitempty"`
+	EnvOnly         bool                    `json:"env_only,omitempty"`
+	AllowBareString bool                    `json:"allow_bare_string,omitempty"`
 	// MaxItems/MinItems bound a string_array flag's item count so a bounded
 	// provider-search list can be enforced against the flag the user typed, not
 	// only against the assembled body.
@@ -1072,14 +1089,15 @@ type CLIFlag struct {
 // CLIConstraint describes a provider-neutral validation rule over mapped
 // command inputs.
 type CLIConstraint struct {
-	Kind          string `json:"kind"`
-	Left          string `json:"left"`
-	Right         string `json:"right"`
-	Op            string `json:"op"`
-	ValueType     string `json:"value_type,omitempty"`
-	LeftFallback  string `json:"left_fallback,omitempty"`
-	RightFallback string `json:"right_fallback,omitempty"`
-	Message       string `json:"message,omitempty"`
+	Kind          string   `json:"kind"`
+	Fields        []string `json:"fields,omitempty"`
+	Left          string   `json:"left"`
+	Right         string   `json:"right"`
+	Op            string   `json:"op"`
+	ValueType     string   `json:"value_type,omitempty"`
+	LeftFallback  string   `json:"left_fallback,omitempty"`
+	RightFallback string   `json:"right_fallback,omitempty"`
+	Message       string   `json:"message,omitempty"`
 }
 
 // CLICommand is one provider-inspired command path.
@@ -2069,6 +2087,9 @@ func validateWriteBodies(actions []WriteAction) error {
 		if err := validateDynamicFields(i, action); err != nil {
 			return err
 		}
+		if err := validateWriteHookFields(i, action); err != nil {
+			return err
+		}
 		bodyType := bodyTypeOf(action)
 		if err := validateWriteActionBaseURL(i, action); err != nil {
 			return err
@@ -2140,6 +2161,45 @@ func validateWriteBodies(actions []WriteAction) error {
 		}
 	}
 	return nil
+}
+
+func validateWriteHookFields(i int, action WriteAction) error {
+	if len(action.HookFields) == 0 {
+		return nil
+	}
+	if strings.TrimSpace(action.Hook) == "" {
+		return fmt.Errorf("action %d (%q) hook_fields requires hook", i, action.Name)
+	}
+	properties, _, err := recordSchemaTopLevelProperties(action.RecordSchema)
+	if err != nil {
+		return fmt.Errorf("action %d (%q) hook_fields record_schema: %w", i, action.Name, err)
+	}
+	seen := make(map[string]struct{}, len(action.HookFields))
+	for _, field := range action.HookFields {
+		if strings.TrimSpace(field) == "" || strings.TrimSpace(field) != field {
+			return fmt.Errorf("action %d (%q) hook_fields contains an invalid field", i, action.Name)
+		}
+		if _, duplicate := seen[field]; duplicate {
+			return fmt.Errorf("action %d (%q) hook_fields duplicates %q", i, action.Name, field)
+		}
+		seen[field] = struct{}{}
+		if _, declared := properties[field]; !declared {
+			return fmt.Errorf("action %d (%q) hook_fields field %q is absent from record_schema", i, action.Name, field)
+		}
+		if containsWriteField(action.PathFields, field) || containsWriteField(action.BodyFields, field) || action.BodyField == field {
+			return fmt.Errorf("action %d (%q) hook_fields field %q overlaps the primary request contract", i, action.Name, field)
+		}
+	}
+	return nil
+}
+
+func containsWriteField(fields []string, wanted string) bool {
+	for _, field := range fields {
+		if field == wanted {
+			return true
+		}
+	}
+	return false
 }
 
 const maxBinaryUploadBytes = int64(64 << 20)

@@ -18,31 +18,6 @@ import (
 // otherwise bounded fixed operation into an oversized-header transport path.
 const maxOperationHeaderBytes = 16 << 10
 
-// maskedOperationResponseHeaderNames mirrors the established fixed
-// credential/transport header masking used by certification capture. A value
-// is never silently omitted: a declared header remains observable as
-// {"redacted":true}. Ordinary provider headers, including unusual or
-// paid-tier metadata, are preserved without a scope-based filter.
-var maskedOperationResponseHeaderNames = map[string]struct{}{
-	"api-key":                {},
-	"api-token":              {},
-	"authorization":          {},
-	"cookie":                 {},
-	"proxy-authorization":    {},
-	"set-cookie":             {},
-	"www-authenticate":       {},
-	"x-access-token":         {},
-	"x-api-key":              {},
-	"x-api-token":            {},
-	"x-auth-token":           {},
-	"x-authentication-token": {},
-	"x-authorization":        {},
-	"x-client-secret":        {},
-	"x-secret-key":           {},
-	"x-session-token":        {},
-	"x-token":                {},
-}
-
 // validateOperationHeaderParameters admits the closed declaration shape. Only
 // REST-like operation blocks have parameters; GraphQL variables remain the
 // existing fixed-document contract and cannot gain a header escape hatch.
@@ -57,6 +32,9 @@ func validateOperationHeaderParameters(op OperationSpec) error {
 	seen := make(map[string]struct{})
 	for _, parameter := range operationParameters(op) {
 		location := strings.ToLower(strings.TrimSpace(parameter.In))
+		if err := validateOperationParameterCLIName(parameter, location); err != nil {
+			return err
+		}
 		switch location {
 		case "path", "query":
 			if err := safety.ValidateIdentifier(parameter.Name, "operation "+location+" parameter"); err != nil {
@@ -105,6 +83,23 @@ func validateOperationHeaderParameters(op OperationSpec) error {
 		if _, err := CompileSchema(parameter.Schema); err != nil {
 			return fmt.Errorf("header parameter %q schema: %w", parameter.Name, err)
 		}
+	}
+	return nil
+}
+
+func validateOperationParameterCLIName(parameter OperationParameter, location string) error {
+	cliName := strings.TrimSpace(parameter.CLIName)
+	if cliName == "" {
+		return nil
+	}
+	if cliName != parameter.CLIName || location != "path" {
+		return fmt.Errorf("parameter %q cli_name is supported only as an exact path flag name", parameter.Name)
+	}
+	if err := safety.ValidateIdentifier(cliName, "path parameter cli_name"); err != nil {
+		return err
+	}
+	if cliName != strings.ToLower(cliName) || strings.Contains(cliName, ".") || strings.HasPrefix(cliName, "-") || strings.HasSuffix(cliName, "-") || strings.Contains(cliName, "--") {
+		return fmt.Errorf("path parameter cli_name %q must be a lowercase hyphenated flag name", parameter.CLIName)
 	}
 	return nil
 }
@@ -334,7 +329,7 @@ func operationResponseSpec(op OperationSpec) *OperationResponseSpec {
 // map, so an endpoint cannot turn response metadata into an arbitrary output
 // channel. Each admitted ordinary value is preserved exactly and a known
 // credential/transport value is represented by an explicit redaction marker.
-func operationResponseHeaders(b Bundle, op OperationSpec, headers http.Header) (map[string]connectors.OperationResponseHeader, error) {
+func operationResponseHeaders(b Bundle, op OperationSpec, headers http.Header, secrets map[string]string) (map[string]connectors.OperationResponseHeader, error) {
 	if err := validateOperationResponseContract(op); err != nil {
 		return nil, fmt.Errorf("operation %q response headers: %w", op.ID, err)
 	}
@@ -343,7 +338,6 @@ func operationResponseHeaders(b Bundle, op OperationSpec, headers http.Header) (
 		return nil, nil
 	}
 	result := make(map[string]connectors.OperationResponseHeader, len(response.Headers))
-	runtimeAuthHeaders := operationRuntimeAuthHeaderNames(b.HTTP)
 	for _, declared := range response.Headers {
 		values, present := headers[http.CanonicalHeaderKey(declared.Name)]
 		if !present {
@@ -366,21 +360,12 @@ func operationResponseHeaders(b Bundle, op OperationSpec, headers http.Header) (
 		if total > declared.MaxBytes {
 			return nil, fmt.Errorf("operation %q response header %q exceeds declared byte cap %d", op.ID, declared.Name, declared.MaxBytes)
 		}
-		canonical, err := connectors.CanonicalOperationHeaderName(declared.Name)
-		if err != nil {
-			return nil, fmt.Errorf("operation %q response header %q: %w", op.ID, declared.Name, err)
-		}
-		if _, masked := maskedOperationResponseHeaderNames[canonical]; masked {
-			result[declared.Name] = connectors.OperationResponseHeader{Redacted: true}
-			continue
-		}
-		if _, masked := runtimeAuthHeaders[canonical]; masked {
-			result[declared.Name] = connectors.OperationResponseHeader{Redacted: true}
-			continue
-		}
+		// Header names are not sensitivity evidence. The public command boundary
+		// masks only values that equal configured credential material, preserving
+		// ordinary provider metadata such as WWW-Authenticate and duplicate IDs.
 		result[declared.Name] = connectors.OperationResponseHeader{Values: append([]string(nil), values...)}
 	}
-	return result, nil
+	return connectors.SanitizeProviderResponseHeadersForOutput(result, secrets), nil
 }
 
 func operationRuntimeHeaderNames(b Bundle) map[string]struct{} {

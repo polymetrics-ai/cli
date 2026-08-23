@@ -66,8 +66,8 @@ COMMAND SURFACE
   Users
     users list - Read Zoom users through the declared ETL stream. [intent=etl availability=implemented stream=users]
   Meetings and webinars
-    meetings list - Read meetings for one Zoom user through the declared ETL stream. [intent=etl availability=implemented stream=meetings]; flags: --user-id
-    webinars list - Read webinars for one Zoom user through the declared ETL stream. [intent=etl availability=implemented stream=webinars]; flags: --user-id
+    meetings list - Read meetings for one Zoom user through the declared ETL stream. [intent=etl availability=implemented stream=meetings]; flags: --user-id (non-empty)
+    webinars list - Read webinars for one Zoom user through the declared ETL stream. [intent=etl availability=implemented stream=webinars]; flags: --user-id (non-empty)
   Help topics:
     provider-inventory - The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes only these three existing stream-backed reads.
 

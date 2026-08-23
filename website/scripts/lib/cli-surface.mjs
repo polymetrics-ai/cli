@@ -43,6 +43,11 @@ const keyNames = (keyStyle) => {
     return {
       mapsTo: 'mapsTo',
       allowEmpty: 'allowEmpty',
+	  allowBareString: 'allowBareString',
+	  envOnly: 'envOnly',
+	  maxItems: 'maxItems',
+	  minItems: 'minItems',
+	  maxBytes: 'maxBytes',
       leftFallback: 'leftFallback',
       rightFallback: 'rightFallback',
       valueType: 'valueType',
@@ -57,6 +62,11 @@ const keyNames = (keyStyle) => {
   return {
     mapsTo: 'maps_to',
     allowEmpty: 'allow_empty',
+	allowBareString: 'allow_bare_string',
+	envOnly: 'env_only',
+	maxItems: 'max_items',
+	minItems: 'min_items',
+	maxBytes: 'max_bytes',
     leftFallback: 'left_fallback',
     rightFallback: 'right_fallback',
     valueType: 'value_type',
@@ -110,9 +120,15 @@ export function mapFlags(flags, options = {}) {
       };
       if (trim(flag.format)) out.format = trim(flag.format);
       if (typeof flag.allow_empty === 'boolean') out[keys.allowEmpty] = flag.allow_empty;
+	  if (typeof flag.allow_bare_string === 'boolean') out[keys.allowBareString] = flag.allow_bare_string;
       if (typeof flag.minimum === 'number' && Number.isFinite(flag.minimum)) out.minimum = flag.minimum;
+	  if (typeof flag.maximum === 'number' && Number.isFinite(flag.maximum)) out.maximum = flag.maximum;
       if (typeof flag.required === 'boolean') out.required = flag.required;
       if (typeof flag.repeatable === 'boolean') out.repeatable = flag.repeatable;
+	  if (typeof flag.env_only === 'boolean') out[keys.envOnly] = flag.env_only;
+	  if (Number.isInteger(flag.max_items) && flag.max_items >= 0) out[keys.maxItems] = flag.max_items;
+	  if (Number.isInteger(flag.min_items) && flag.min_items >= 0) out[keys.minItems] = flag.min_items;
+	  if (Number.isInteger(flag.max_bytes) && flag.max_bytes >= 0) out[keys.maxBytes] = flag.max_bytes;
       return out;
     })
     .filter((flag) => flag.name);

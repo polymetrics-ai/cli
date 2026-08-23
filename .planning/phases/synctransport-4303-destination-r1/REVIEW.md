@@ -67,3 +67,29 @@ CLI output, including credential-equal bytes. System-generated plans, logs,
 request diagnostics, and synthetic errors remain secret-taint-safe. Focused,
 affected-package, real-provider, and full repository verification are recorded
 in `VERIFICATION.md`.
+
+## 2026-08-20 revalidation review
+
+After the published-head reconciliation pass, an additional inline review
+covered the persisted selection and approval boundary, the generic adapter,
+the exact action-schema mapping, result projection, and the new CLI help and
+documentation paths. No actionable finding remained. Fresh focused tests,
+standalone connector-boundary, `git diff --check`, and full local `make verify`
+are recorded in `VERIFICATION.md`.
+
+## Follow-up foundation r1 review
+
+Inline standard-depth review covered the action-owned source binding and
+selection boundary, sealed approval fields, batch receipt boundary, tombstone
+mapping/read-back path, authorization action allowlist, schema, synthetic
+fixtures, generated catalog, and documentation. No Twenty-, GitHub-, route-,
+method-, payload-, or credential-specific branch was introduced in shared Go;
+no production connector definition changed.
+
+The full App package review run found one actionable ordering regression: a
+blank request action for a valid single-action destination was passed into
+action-owned source admission before the descriptor defaulted it. The fix
+resolves the descriptor strategy first and passes its exact action to the
+binding lookup. The original defaulted paths, explicitly selected multi-action
+paths, cross-action refusals, and all new tombstone paths then passed focused
+and full-package verification. No remaining findings were observed.

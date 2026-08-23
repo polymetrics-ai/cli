@@ -105,6 +105,40 @@ func TestValidatePromotableRecordSchemaAllowsClosedNamedFields(t *testing.T) {
 	}
 }
 
+func TestValidateStructuredJSONRecordFieldAllowsDeclaredScalarUnionOnly(t *testing.T) {
+	union := json.RawMessage(`{
+		"type":"object","additionalProperties":false,
+		"properties":{"choice":{"type":["string","integer","null"]}}
+	}`)
+	if err := ValidateStructuredJSONRecordField(union, "choice"); err != nil {
+		t.Fatalf("declared scalar union must permit its one named JSON value: %v", err)
+	}
+	scalar := json.RawMessage(`{
+		"type":"object","additionalProperties":false,
+		"properties":{"choice":{"type":"string"}}
+	}`)
+	if err := ValidateStructuredJSONRecordField(scalar, "choice"); err == nil || !strings.Contains(err.Error(), "object or array") {
+		t.Fatalf("single scalar JSON field error = %v, want generic-scalar refusal", err)
+	}
+}
+
+func TestValidateStructuredJSONRecordStringArmRequiresNamedDeclaredStringUnion(t *testing.T) {
+	withString := json.RawMessage(`{
+		"type":"object","additionalProperties":false,
+		"properties":{"title":{"type":["string","integer"]}}
+	}`)
+	if err := ValidateStructuredJSONRecordStringArm(withString, "title"); err != nil {
+		t.Fatalf("declared title string arm: %v", err)
+	}
+	withoutString := json.RawMessage(`{
+		"type":"object","additionalProperties":false,
+		"properties":{"title":{"type":["integer","number"]}}
+	}`)
+	if err := ValidateStructuredJSONRecordStringArm(withoutString, "title"); err == nil || !strings.Contains(err.Error(), "no declared string arm") {
+		t.Fatalf("non-string union error = %v, want string-arm refusal", err)
+	}
+}
+
 func TestPreflightWriteActionAllowsOnlyDeclaredNoInputEmptyRecord(t *testing.T) {
 	empty := json.RawMessage(`{"type":"object","properties":{},"additionalProperties":false}`)
 	tests := []struct {

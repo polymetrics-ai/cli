@@ -886,11 +886,13 @@ func checkCLISurface(b engine.Bundle) []Finding {
 	return findings
 }
 
-// checkCLISurfaceEnvOnlyFlags keeps --from-env a narrow secret-delivery
-// channel rather than a second, untyped source of arbitrary command values.
-// An env_only declaration is permitted only for the complete JSON input of a
-// sensitive fixed GraphQL mutation, where the operation itself declares the
-// corresponding redaction and typed-confirmation contract.
+// checkCLISurfaceEnvOnlyFlags keeps --from-env a narrow declaration-owned
+// secret-delivery channel rather than a second, untyped source of arbitrary
+// command values. Two closed forms are permitted: the complete JSON input of
+// a sensitive fixed GraphQL mutation, or a scalar source-declared variable of
+// a fixed GraphQL query whose operation itself declares env input and exact
+// redaction. The latter is needed for provider invitation tokens, but cannot
+// introduce a raw body/document or an arbitrary query parameter.
 func checkCLISurfaceEnvOnlyFlags(
 	b engine.Bundle,
 	i int,
@@ -904,7 +906,7 @@ func checkCLISurfaceEnvOnlyFlags(
 		}
 		op, found := operations[cmd.Operation]
 		variable, mapsToBody := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "body.")
-		valid := cmd.Availability == "implemented" &&
+		secretMutation := cmd.Availability == "implemented" &&
 			cmd.Intent == "direct_write" &&
 			flag.Type == "json" &&
 			flag.Required &&
@@ -915,17 +917,41 @@ func checkCLISurfaceEnvOnlyFlags(
 			strings.EqualFold(op.SensitivePolicy.InputMode, "env") &&
 			strings.EqualFold(op.SensitivePolicy.ApprovalMode, "typed_confirmation") &&
 			slices.Contains(op.SensitivePolicy.RedactFields, "body."+variable)
-		if valid {
+		sourceQuery := validEnvOnlyGraphQLQueryVariable(cmd, flag, op, variable, mapsToBody)
+		if secretMutation || sourceQuery {
 			continue
 		}
 		findings = append(findings, Finding{
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("command %d (%q) env_only flag --%s must be a required top-level JSON input for an implemented secret GraphQL mutation with env redaction and typed confirmation", i, cmd.Path, flag.Name),
+			Message:   fmt.Sprintf("command %d (%q) env_only flag --%s must be a required top-level JSON input for an implemented secret GraphQL mutation with env redaction and typed confirmation, or a source-declared scalar GraphQL query variable with exact env redaction", i, cmd.Path, flag.Name),
 		})
 	}
 	return findings
+}
+
+func validEnvOnlyGraphQLQueryVariable(cmd engine.CLICommand, flag engine.CLIFlag, op engine.OperationSpec, variable string, mapsToBody bool) bool {
+	if cmd.Availability != "implemented" || cmd.Intent != "direct_read" || flag.Type != "string" || !mapsToBody || variable == "" || strings.Contains(variable, ".") || op.Kind != "graphql_query" || op.GraphQL == nil || op.SensitivePolicy == nil {
+		return false
+	}
+	if !strings.EqualFold(op.SensitivePolicy.InputMode, "env") || !strings.EqualFold(op.SensitivePolicy.Transform, "none") || !slices.Contains(op.SensitivePolicy.RedactFields, "body."+variable) {
+		return false
+	}
+	var variables struct {
+		Properties map[string]json.RawMessage `json:"properties"`
+	}
+	if err := json.Unmarshal(op.GraphQL.VariablesSchema, &variables); err != nil {
+		return false
+	}
+	property, ok := variables.Properties[variable]
+	if !ok {
+		return false
+	}
+	var schema struct {
+		Type string `json:"type"`
+	}
+	return json.Unmarshal(property, &schema) == nil && schema.Type == "string"
 }
 
 // checkCLISurfaceStructuredJSONFlags keeps the schema vocabulary closed even
@@ -969,7 +995,7 @@ func checkCLISurfaceStructuredJSONFlags(b engine.Bundle, i int, cmd engine.CLICo
 			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
 			operation, found := operations[cmd.Operation]
 			if ok && variable != "" && !strings.Contains(variable, ".") && found {
-				if err := engine.ValidateGraphQLOperationStructuredJSONVariable(operation, variable); err == nil {
+				if err := engine.ValidateOperationStructuredJSONBodyField(operation, variable); err == nil {
 					continue
 				}
 			}
@@ -1580,22 +1606,39 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 		}
 	}
 	for j, constraint := range cmd.Constraints {
-		if constraint.Kind != "order" {
+		if constraint.Kind != "order" && constraint.Kind != "exactly_one" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported kind %q", i, cmd.Path, j, constraint.Kind)})
 		}
-		if constraint.Op != "lt" {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported op %q", i, cmd.Path, j, constraint.Op)})
-		}
-		if constraint.ValueType != "date-time" {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d must declare value_type date-time", i, cmd.Path, j)})
-		}
-		for _, ref := range []struct {
+		var targets []struct {
 			role   string
 			target string
-		}{
-			{role: "left", target: constraint.Left},
-			{role: "right", target: constraint.Right},
-		} {
+		}
+		switch constraint.Kind {
+		case "order":
+			if constraint.Op != "lt" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported op %q", i, cmd.Path, j, constraint.Op)})
+			}
+			if constraint.ValueType != "date-time" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d must declare value_type date-time", i, cmd.Path, j)})
+			}
+			targets = append(targets,
+				struct{ role, target string }{role: "left", target: constraint.Left},
+				struct{ role, target string }{role: "right", target: constraint.Right},
+			)
+		case "exactly_one":
+			if len(constraint.Fields) < 2 {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d exactly_one requires at least two fields", i, cmd.Path, j)})
+			}
+			seenTargets := map[string]bool{}
+			for k, target := range constraint.Fields {
+				if seenTargets[target] {
+					findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d repeats field target %q", i, cmd.Path, j, target)})
+				}
+				seenTargets[target] = true
+				targets = append(targets, struct{ role, target string }{role: fmt.Sprintf("fields[%d]", k), target: target})
+			}
+		}
+		for _, ref := range targets {
 			if err := validateCLIConstraintMappedTarget(ref.target); err != nil {
 				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s target %q is invalid: %v", i, cmd.Path, j, ref.role, ref.target, err)})
 				continue
@@ -2276,6 +2319,9 @@ func checkCLISurfaceEndpointCoverage(
 			})
 			continue
 		}
+		if sourceBoundPartialReadCommand(cmd) {
+			continue
+		}
 		if cmd.Operation != "" && slices.Contains(state.coveredBy.OperationTargets(), cmd.Operation) {
 			continue
 		}
@@ -2318,6 +2364,16 @@ func checkCLISurfaceEndpointCoverage(
 		}
 	}
 	return findings
+}
+
+// sourceBoundPartialReadCommand is the generated, non-executable companion
+// to a source descriptor gap. Its api_surface reference remains useful for
+// documentation and provenance even though it deliberately cannot claim an
+// executable endpoint.
+func sourceBoundPartialReadCommand(cmd engine.CLICommand) bool {
+	return cmd.Availability == "partial" && cmd.Intent == "direct_read" &&
+		strings.HasPrefix(cmd.Notes, "Blocked: locked source operation ") &&
+		strings.Contains(cmd.Notes, "declaration-owned executable")
 }
 
 func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceEndpointState {

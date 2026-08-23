@@ -41,6 +41,47 @@ func newWriteTestBundle(srv *httptest.Server, action WriteAction) Bundle {
 	}
 }
 
+func TestWriteIdempotencyKeySeparatesDurableWorksets(t *testing.T) {
+	action := WriteAction{Name: "apply_widget", IdempotencyKeyHeader: "Idempotency-Key"}
+	first := writeIdempotencyKey("acme", action, "sealed-preview", "connection-a/workset-one/checkpoint", 0)
+	retry := writeIdempotencyKey("acme", action, "sealed-preview", "connection-a/workset-one/checkpoint", 0)
+	second := writeIdempotencyKey("acme", action, "sealed-preview", "connection-a/workset-two/checkpoint", 0)
+	if first == "" {
+		t.Fatal("keyed action did not derive an idempotency key")
+	}
+	// These calls model distinct durable worksets carrying the same record at
+	// index zero. A preview/body/index-only key aliases them at the provider.
+	if first != retry {
+		t.Fatalf("same durable workset retry changed provider key: %q != %q", first, retry)
+	}
+	if first == second {
+		t.Fatalf("distinct durable worksets derived the same provider key %q", first)
+	}
+}
+
+func TestWriteIdempotencyHeaderBindsDeliveryOccurrence(t *testing.T) {
+	keys := make([]string, 0, 3)
+	srv := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		keys = append(keys, request.Header.Get("Idempotency-Key"))
+		writer.WriteHeader(http.StatusNoContent)
+	}))
+	t.Cleanup(srv.Close)
+	bundle := newWriteTestBundle(srv, WriteAction{
+		Name: "apply_widget", Kind: "update", Method: http.MethodPost,
+		Path: "/widgets/{{ record.id }}", PathFields: []string{"id"},
+		IdempotencyKeyHeader: "Idempotency-Key",
+	})
+	records := []connectors.Record{{"id": "same-provider-payload"}}
+	for _, occurrence := range []string{"connection-a/workset-one/checkpoint", "connection-a/workset-one/checkpoint", "connection-a/workset-two/checkpoint"} {
+		if _, err := Write(context.Background(), bundle, connectors.WriteRequest{Action: "apply_widget", DeliveryOccurrence: occurrence}, records, nil); err != nil {
+			t.Fatalf("Write(%q): %v", occurrence, err)
+		}
+	}
+	if len(keys) != 3 || keys[0] == "" || keys[0] != keys[1] || keys[0] == keys[2] {
+		t.Fatalf("provider idempotency headers = %#v, want stable retry key and distinct durable-workset key", keys)
+	}
+}
+
 func writeSpecWithDefaultBaseURL(t *testing.T, defaultURL string) *Schema {
 	t.Helper()
 	rawDefault, err := json.Marshal(defaultURL)
@@ -1678,17 +1719,18 @@ func TestWriteValidationFailureReportsAllRecordsFailed(t *testing.T) {
 // --- ctx cancellation mid-loop ---
 
 func TestWriteCtxCancelMidLoopAccounting(t *testing.T) {
-	// A WriteHook lets this test cancel deterministically BETWEEN records
-	// (ExecuteWrite runs once per record, before that record's declarative
-	// body/request construction) rather than racing an HTTP round trip
-	// against ctx cancellation — a real but separately-covered scenario
-	// (TestReadCtxCancelMidPage covers the read-side "cancel while a request
-	// is in flight" case). The hook always reports handled=false, so record 1
-	// completes its real declarative Do() against srv; it then cancels ctx
-	// while "handling" record 2 (before record 2's own HTTP call), so record
-	// 2's request is itself refused by ctx and record 3 is never attempted.
+	// A post-receipt validator cancels after the first provider response has
+	// been persisted and counted, so execution observes cancellation at the
+	// next sealed physical-record boundary. This replaces the old WriteHook
+	// timing seam: legacy execution hooks are refused because they could choose
+	// an unpreviewed physical request after approval.
 	ctx, cancel := context.WithCancel(context.Background())
-	srv, cap := captureServer(t, http.StatusOK, "")
+	var lastPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		lastPath = r.URL.Path
+		w.WriteHeader(http.StatusOK)
+	}))
+	t.Cleanup(srv.Close)
 	b := newWriteTestBundle(srv, WriteAction{
 		Kind:       "update",
 		Method:     http.MethodPost,
@@ -1696,14 +1738,13 @@ func TestWriteCtxCancelMidLoopAccounting(t *testing.T) {
 		PathFields: []string{"id"},
 	})
 
-	h := &writeHookFunc{fn: func(_ context.Context, _ WriteAction, rec connectors.Record, _ *Runtime) (bool, error) {
-		if rec["id"] == "2" {
+	records := []connectors.Record{{"id": "1"}, {"id": "2"}, {"id": "3"}}
+	h := &preparedWriteResponseValidatorFunc{fn: func(_ WriteAction, rec connectors.Record, _ *connsdk.Response) error {
+		if rec["id"] == "1" {
 			cancel()
 		}
-		return false, nil
+		return nil
 	}}
-
-	records := []connectors.Record{{"id": "1"}, {"id": "2"}, {"id": "3"}}
 	result, err := Write(ctx, b, connectors.WriteRequest{Action: "update_widget"}, records, h)
 	if err == nil {
 		t.Fatalf("Write: want context.Canceled surfaced")
@@ -1714,14 +1755,14 @@ func TestWriteCtxCancelMidLoopAccounting(t *testing.T) {
 	if result.RecordsFailed != len(records)-result.RecordsWritten {
 		t.Fatalf("RecordsFailed = %d, want %d", result.RecordsFailed, len(records)-result.RecordsWritten)
 	}
-	if cap.path != "/widgets/1" {
-		t.Fatalf("last observed request path = %q, want /widgets/1 (only record 1 ever reached the server)", cap.path)
+	if lastPath != "/widgets/1" {
+		t.Fatalf("last observed request path = %q, want /widgets/1 (only record 1 ever reached the server)", lastPath)
 	}
 }
 
 // --- WriteHook ---
 
-func TestWriteHookHandledBypassesDeclarative(t *testing.T) {
+func TestLegacyWriteHookClaimIsRefusedBeforeUnpreviewedTransport(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		t.Fatalf("declarative HTTP request should not happen when WriteHook handles the write")
 	}))
@@ -1734,22 +1775,115 @@ func TestWriteHookHandledBypassesDeclarative(t *testing.T) {
 	})
 
 	calls := 0
-	h := &writeHookFunc{fn: func(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, error) {
+	h := &writeHookFunc{claims: true, fn: func(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, []*connsdk.Response, error) {
 		calls++
-		return true, nil
+		return true, nil, nil
 	}}
 
 	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "merge_pull_request"}, []connectors.Record{
 		{"pull_number": 7},
 	}, h)
+	if err == nil || !strings.Contains(err.Error(), "without an exact prepared-request plan") {
+		t.Fatalf("Write error = %v, want pre-I/O legacy-hook refusal", err)
+	}
+	if calls != 0 || result.RecordsWritten != 0 || result.RecordsFailed != 1 {
+		t.Fatalf("legacy hook/result = %d / %+v, want no hook call and one refused record", calls, result)
+	}
+}
+
+// TestPreparedWriteHookSealsEveryPhysicalRequestAndRetainsTerminalReceipts
+// proves the compound-write approval boundary: the hook selects only named
+// declaration-owned actions, preparation captures both physical requests in
+// their execution order, and the response-bound follow-up receives its path
+// value only from the sealed first receipt. A caller mutation after planning
+// cannot reach either wire payload, and the failed terminal receipt remains in
+// the result beside the successful creation receipt.
+func TestPreparedWriteHookSealsEveryPhysicalRequestAndRetainsTerminalReceipts(t *testing.T) {
+	var paths []string
+	var bodies []map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode %s body: %v", r.URL.Path, err)
+		}
+		paths = append(paths, r.URL.Path)
+		bodies = append(bodies, body)
+		switch r.URL.Path {
+		case "/widgets":
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusCreated)
+			_, _ = w.Write([]byte(`{"id":73,"provider":"created"}`))
+		case "/widgets/73":
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			_, _ = w.Write([]byte(`{"message":"terminal update failure"}`))
+		default:
+			t.Fatalf("unexpected physical request %s", r.URL.Path)
+		}
+	}))
+	t.Cleanup(srv.Close)
+	b := Bundle{
+		Name: "sealed-compound", HTTP: HTTPBase{URL: srv.URL},
+		Writes: []WriteAction{
+			{Name: "compound_widget", Kind: "custom", Method: http.MethodPost, Path: "/compound", Hook: "sealed"},
+			{Name: "create_widget", Kind: "create", Method: http.MethodPost, Path: "/widgets", BodyFields: []string{"payload"}},
+			{Name: "update_widget", Kind: "update", Method: http.MethodPatch, Path: "/widgets/{{ record.id }}", PathFields: []string{"id"}, BodyFields: []string{"payload"}},
+		},
+	}
+	hook := &sealedCompoundWriteHook{}
+	records := []connectors.Record{{"payload": map[string]any{"name": "approved"}}}
+	prepared, err := prepareDeclarativeWrite(context.Background(), b, connectors.WriteRequest{Action: "compound_widget"}, records, hook)
 	if err != nil {
-		t.Fatalf("Write: %v", err)
+		t.Fatalf("prepareDeclarativeWrite: %v", err)
 	}
-	if calls != 1 {
-		t.Fatalf("WriteHook called %d times, want 1", calls)
+	if len(prepared.Requests) != 2 {
+		t.Fatalf("prepared requests = %#v, want both physical requests", prepared.Requests)
 	}
-	if result.RecordsWritten != 1 {
-		t.Fatalf("result = %+v, want 1 written via hook", result)
+	if got := []string{prepared.Requests[0].Action, prepared.Requests[1].Action}; !reflect.DeepEqual(got, []string{"create_widget", "update_widget"}) {
+		t.Fatalf("prepared action order = %v, want create_widget then update_widget", got)
+	}
+	if binding := prepared.Requests[1].ResponseBinding; binding == nil || binding.SourceStep != 0 || binding.Field != "id" || binding.TargetField != "id" {
+		t.Fatalf("prepared follow-up binding = %#v, want sealed first-response id binding", binding)
+	}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
+		t.Fatalf("PreviewPreparedWrite: %v", err)
+	}
+	if preview.Digest == "" {
+		t.Fatal("preview digest is empty; physical plan was not sealed")
+	}
+
+	action, err := findWriteAction(b, "compound_widget")
+	if err != nil {
+		t.Fatalf("findWriteAction: %v", err)
+	}
+	var result connectors.WriteResult
+	err = ExecutePreparedWrite(context.Background(), prepared, nil, preview.Digest, func(ctx context.Context) error {
+		result, err = executeApprovedWrite(ctx, b, action, connectors.WriteRequest{Action: "compound_widget"}, records, prepared, preview.Digest, hook)
+		return err
+	})
+	if err == nil || !strings.Contains(err.Error(), "HTTP status 400") {
+		t.Fatalf("ExecutePreparedWrite error = %v, want terminal compound failure", err)
+	}
+	if got := records[0]["payload"].(map[string]any)["name"]; got != "mutated-after-preview" {
+		t.Fatalf("fixture did not mutate caller record: %#v", records)
+	}
+	if !reflect.DeepEqual(paths, []string{"/widgets", "/widgets/73"}) {
+		t.Fatalf("physical request paths = %v, want sealed ordered create then response-bound update", paths)
+	}
+	for index, body := range bodies {
+		if body["payload"].(map[string]any)["name"] != "approved" {
+			t.Fatalf("physical request %d body = %#v, want sealed approved payload", index, body)
+		}
+	}
+	if result.RecordsWritten != 0 || result.RecordsFailed != 1 || len(result.ProviderResponses) != 2 {
+		t.Fatalf("Write result = %#v, want failed record with both compound receipts", result)
+	}
+	if result.ProviderResponses[0].RecordIndex != 0 || result.ProviderResponses[0].Status != http.StatusCreated || result.ProviderResponses[1].RecordIndex != 0 || result.ProviderResponses[1].Status != http.StatusBadRequest {
+		t.Fatalf("compound receipts = %#v, want ordered statuses 201 then 400 for record zero", result.ProviderResponses)
+	}
+	if got := result.ProviderResponses[1].Body.(map[string]any)["message"]; got != "terminal update failure" {
+		t.Fatalf("terminal provider receipt = %#v, want exact provider failure", result.ProviderResponses[1])
 	}
 }
 
@@ -1762,8 +1896,8 @@ func TestWriteHookNotHandledFallsBackToDeclarative(t *testing.T) {
 		PathFields: []string{"id"},
 	})
 
-	h := &writeHookFunc{fn: func(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, error) {
-		return false, nil
+	h := &writeHookFunc{claims: false, fn: func(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, []*connsdk.Response, error) {
+		return false, nil, nil
 	}}
 
 	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{
@@ -1977,12 +2111,52 @@ func TestWriteMultipartRejectsContentThatDoesNotMatchApproval(t *testing.T) {
 // --- test-only hook adapter ---
 
 type writeHookFunc struct {
-	fn func(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, error)
+	claims bool
+	fn     func(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, []*connsdk.Response, error)
 }
 
 func (w *writeHookFunc) ConnectorName() string { return "write-hook-func-test" }
-func (w *writeHookFunc) ExecuteWrite(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, error) {
+func (w *writeHookFunc) ExecuteWrite(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, []*connsdk.Response, error) {
 	return w.fn(ctx, action, rec, rt)
+}
+
+func (w *writeHookFunc) HandlesWriteAction(WriteAction) bool { return w.claims }
+
+type preparedWriteResponseValidatorFunc struct {
+	fn func(WriteAction, connectors.Record, *connsdk.Response) error
+}
+
+func (*preparedWriteResponseValidatorFunc) ConnectorName() string {
+	return "prepared-response-validator-test"
+}
+func (h *preparedWriteResponseValidatorFunc) ValidatePreparedWriteResponse(action WriteAction, rec connectors.Record, response *connsdk.Response) error {
+	return h.fn(action, rec, response)
+}
+
+type sealedCompoundWriteHook struct{}
+
+func (*sealedCompoundWriteHook) ConnectorName() string { return "sealed-compound-write-test" }
+
+func (h *sealedCompoundWriteHook) MapWriteRecord(_ WriteAction, rec connectors.Record) (connectors.Record, bool, error) {
+	pinned := connectors.Record(copyRecordMap(map[string]any(rec)))
+	rec["payload"].(map[string]any)["name"] = "mutated-after-preview"
+	return pinned, true, nil
+}
+
+func (*sealedCompoundWriteHook) PrepareWrite(action WriteAction, records []connectors.Record) (PreparedWriteHookPlan, bool, error) {
+	if action.Name != "compound_widget" {
+		return PreparedWriteHookPlan{}, false, nil
+	}
+	if len(records) != 1 {
+		return PreparedWriteHookPlan{}, true, errors.New("test hook requires one record")
+	}
+	payload := records[0]["payload"]
+	return PreparedWriteHookPlan{Records: []PreparedWriteHookRecord{{Steps: []PreparedWriteHookStep{
+		{Action: "create_widget", Record: connectors.Record{"payload": payload}},
+		// id is a schema/interpolation witness only. The engine replaces it
+		// from the sealed create receipt before it can reach the wire.
+		{Action: "update_widget", Record: connectors.Record{"id": 0, "payload": payload}, ResponseBinding: &PreparedWriteResponseBinding{SourceStep: 0, Field: "id", TargetField: "id"}},
+	}}}}, true, nil
 }
 
 // --- array cardinality reach ----------------------------------------------

@@ -62,8 +62,31 @@ func TestCertificationSweepForGitHubIsSurfaceDerivedAndExhaustive(t *testing.T) 
 	if sweep.Source != "connector declarations" {
 		t.Fatalf("source = %q, want connector declarations", sweep.Source)
 	}
-	if sweep.DeclaredCommands != 1580 || sweep.DeclaredRows != 1584 || len(sweep.Commands) != 1584 {
-		t.Fatalf("declared commands/rows/commands = %d/%d/%d, want 1580/1584/1584", sweep.DeclaredCommands, sweep.DeclaredRows, len(sweep.Commands))
+	if sweep.DeclaredCommands != 1612 || sweep.DeclaredRows != 1616 || len(sweep.Commands) != 1616 {
+		t.Fatalf("declared commands/rows/commands = %d/%d/%d, want 1612/1616/1616", sweep.DeclaredCommands, sweep.DeclaredRows, len(sweep.Commands))
+	}
+	bundle, err := engine.Load(os.DirFS(filepath.Join(root, "internal", "connectors", "defs")), "github")
+	if err != nil {
+		t.Fatalf("load github bundle: %v", err)
+	}
+	assertions, err := certificationSweepAssertions(&bundle)
+	if err != nil {
+		t.Fatalf("certificationSweepAssertions() error = %v", err)
+	}
+	wantGeneratedTrialCandidates := map[string]int{}
+	wantActiveAssertions := 0
+	commandsByPath := map[string]engine.CLICommand{}
+	for _, command := range bundle.CLISurface.Commands {
+		commandsByPath[command.Path] = command
+	}
+	for path, assertion := range assertions {
+		if commandsByPath[path].Availability != "implemented" {
+			continue
+		}
+		wantActiveAssertions++
+		if assertion.Cohort != "" {
+			wantGeneratedTrialCandidates[assertion.Cohort]++
+		}
 	}
 
 	seen := make(map[string]bool, len(sweep.Commands))
@@ -135,16 +158,11 @@ func TestCertificationSweepForGitHubIsSurfaceDerivedAndExhaustive(t *testing.T) 
 	if eligible == 0 {
 		t.Fatal("generated sweep has no eligible assertion-bearing commands")
 	}
-	if assertionOverlays != 122 {
-		t.Fatalf("assertion overlays = %d, want 25 hand-authored plus 97 generated overlays", assertionOverlays)
+	if assertionOverlays != wantActiveAssertions {
+		t.Fatalf("assertion overlays = %d, want %d active declaration-owned overlays", assertionOverlays, wantActiveAssertions)
 	}
-	if got, want := generatedTrialCandidates, map[string]int{
-		"trial_advanced_security": 31,
-		"trial_codespaces":        22,
-		"trial_copilot":           23,
-		"trial_enterprise":        21,
-	}; !reflect.DeepEqual(got, want) {
-		t.Fatalf("generated trial cohort candidates = %#v, want %#v", got, want)
+	if !reflect.DeepEqual(generatedTrialCandidates, wantGeneratedTrialCandidates) {
+		t.Fatalf("generated trial cohort candidates = %#v, want %#v active declaration-owned candidates", generatedTrialCandidates, wantGeneratedTrialCandidates)
 	}
 }
 
@@ -185,27 +203,19 @@ func TestCertificationSweepSeparatesProductDefectsAndProviderRefusals(t *testing
 	if len(sweep.ProductDefects) != 0 {
 		t.Fatalf("product defects = %#v, want none after required-path flag derivation", sweep.ProductDefects)
 	}
-	var providerRefusal *certificationSweepProviderRefusal
-	for index := range sweep.ProviderRefusals {
-		if sweep.ProviderRefusals[index].Command == "actions fork-pr-contributor-approval view" {
-			providerRefusal = &sweep.ProviderRefusals[index]
-			break
+	for _, refusal := range sweep.ProviderRefusals {
+		found := false
+		for _, command := range sweep.Commands {
+			if command.Path == refusal.Command {
+				found = true
+				if command.Status != certificationSweepProviderRefused {
+					t.Fatalf("provider refusal command %q status = %q, want %q", command.Path, command.Status, certificationSweepProviderRefused)
+				}
+			}
 		}
-	}
-	if providerRefusal == nil || providerRefusal.ProviderStatus != 422 || !strings.Contains(providerRefusal.Reason, "does not apply") {
-		t.Fatalf("provider refusals = %#v, want named HTTP 422 provider refusal", sweep.ProviderRefusals)
-	}
-	foundProviderRefusalCommand := false
-	for _, command := range sweep.Commands {
-		if command.Path == providerRefusal.Command && command.Status != certificationSweepProviderRefused {
-			t.Fatalf("provider refusal command status = %q, want %q", command.Status, certificationSweepProviderRefused)
+		if !found {
+			t.Fatalf("provider refusal command %q is missing from generated sweep", refusal.Command)
 		}
-		if command.Path == providerRefusal.Command {
-			foundProviderRefusalCommand = true
-		}
-	}
-	if !foundProviderRefusalCommand {
-		t.Fatalf("provider refusal command %q is missing from generated sweep", providerRefusal.Command)
 	}
 
 	missingFlag := requiredPathFlagDefect(engine.CLICommand{Path: "widgets view", Operation: "widgets_view"}, engine.OperationSpec{
@@ -240,6 +250,30 @@ func TestCertificationSweepSeparatesProductDefectsAndProviderRefusals(t *testing
 		}},
 	}); err == nil {
 		t.Fatal("validateCertificationSweep accepted a product-defect command without a concrete product-defect record")
+	}
+}
+
+func TestCertificationSweepRetainsProviderRefusalObservationWhenTheCommandIsImplemented(t *testing.T) {
+	sweep, err := buildCertificationSweep(repoRootForCertificationTest(t), "github")
+	if err != nil {
+		t.Fatalf("buildCertificationSweep() error = %v", err)
+	}
+	foundRefusal := false
+	for _, refusal := range sweep.ProviderRefusals {
+		if refusal.Command == "actions fork-pr-contributor-approval view" {
+			foundRefusal = true
+			if refusal.ProviderStatus != 422 {
+				t.Fatalf("provider refusal status = %d, want 422", refusal.ProviderStatus)
+			}
+		}
+	}
+	if !foundRefusal {
+		t.Fatal("implemented command lost its provider-refusal observation")
+	}
+	for _, command := range sweep.Commands {
+		if command.Path == "actions fork-pr-contributor-approval view" && command.Status != certificationSweepProviderRefused {
+			t.Fatalf("implemented command status = %q, want %q", command.Status, certificationSweepProviderRefused)
+		}
 	}
 }
 

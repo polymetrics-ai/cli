@@ -41,3 +41,17 @@
 ### Delivery note
 
 The explicit Firstmate correction defers the no-mistakes, push, and PR stages. They were not invoked in this worktree.
+
+### CI remediation — 2026-08-21
+
+- Red reproduced locally: `go test -timeout 20m ./internal/connectors/engine -run 'TestOperationDirectWriteStructuredRESTBody' -count=1` failed to compile because `interpolateDeclaredHeader` called the hardened four-argument `resolveExpr` with its obsolete three-argument form.
+- Green: restored the explicit `allowControlCharacters=false` policy at that declaration-bound header call. `go test -timeout 20m ./internal/connectors/engine`, `go test -timeout 20m ./internal/connectors/commandrunner`, `go test -timeout 20m ./internal/app`, `go test -timeout 20m ./internal/cli`, `go test -timeout 20m ./cmd/connectorgen`, `go test -timeout 20m -run '^$' ./internal/cli/ ./internal/connectors/certify/`, `go build -trimpath -ldflags='-s -w' ./cmd/pm`, `go vet ./...`, `go run ./cmd/connectorgen boundary . --json`, `go run ./cmd/connectorgen validate internal/connectors/defs`, `go run ./cmd/connectorgen surface-sync --check`, and `go run golang.org/x/vuln/cmd/govulncheck@latest ./...` passed.
+- Website CI/data green evidence: regenerated `website/lib/docs.generated.ts` with `npm run gen:website-data`; repeated generation was stable. `pnpm run typecheck` passed, and `pnpm run lint` completed with only the repository's existing 13 warnings.
+- This was an assigned CI repair only. No no-mistakes pipeline command, push, PR mutation, or CI re-run was invoked.
+
+### CI Verify follow-up — 2026-08-21
+
+- Hosted Verify run `32430447912` exposed two stale test artifacts, not a real-invocation-budget failure: the `83 (budget 92)` line was a successful final accounting report. The actual failures were the stale secret-bearing HTTP-error expectation in `internal/app` and four stale generated connector-manual transcripts in `internal/cli`.
+- `go test -timeout 20m ./internal/app -count=1` — pass (256.922s).
+- `go test -timeout 20m ./internal/cli -count=1` — pass (561.504s).
+- The targeted generator-backed transcript refresh and validation passed; `go vet ./internal/app ./internal/cli` and `git diff --check` also passed.

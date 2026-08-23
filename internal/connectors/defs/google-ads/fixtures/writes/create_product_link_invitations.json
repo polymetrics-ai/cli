@@ -1,0 +1,16 @@
+{
+  "record": {
+    "productLinkInvitation": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/productLinkInvitations:create",
+    "body": {
+      "productLinkInvitation": {}
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -196,9 +196,10 @@ func (t CommittedTransaction) StreamChunks(ctx context.Context, visit func(Trans
 // complete transaction write is durable according to the receiver's protocol.
 // The stage persists a richer immutable receipt around this downstream fact.
 type DownstreamTransactionReceipt struct {
-	ReceiptID string
-	Sink      string
-	DurableAt time.Time
+	ReceiptID        string
+	Sink             string
+	DurableAt        time.Time
+	ArtifactManifest string
 }
 
 func (r DownstreamTransactionReceipt) validate() error {
@@ -207,6 +208,9 @@ func (r DownstreamTransactionReceipt) validate() error {
 	}
 	if len(r.ReceiptID) > 1024 || len(r.Sink) > 1024 {
 		return errors.New("durable downstream transaction receipt is invalid")
+	}
+	if len(r.ArtifactManifest) > 8<<10 || (r.ArtifactManifest != "" && !json.Valid([]byte(r.ArtifactManifest))) {
+		return errors.New("durable downstream transaction artifact manifest is invalid")
 	}
 	return nil
 }
@@ -232,10 +236,11 @@ type transactionReceiptPayload struct {
 	bytes               int64
 	records             int64
 	contentDigest       string
+	artifactManifest    string
 	durable             bool
 }
 
-func newTransactionReceipt(transactionKey, downstreamReceiptID, sink string, durableAt time.Time, bytes, records int64, contentDigest string) TransactionReceipt {
+func newTransactionReceipt(transactionKey, downstreamReceiptID, sink string, durableAt time.Time, bytes, records int64, contentDigest, artifactManifest string) TransactionReceipt {
 	return TransactionReceipt{payload: transactionReceiptPayload{
 		transactionKey:      transactionKey,
 		downstreamReceiptID: downstreamReceiptID,
@@ -244,6 +249,7 @@ func newTransactionReceipt(transactionKey, downstreamReceiptID, sink string, dur
 		bytes:               bytes,
 		records:             records,
 		contentDigest:       contentDigest,
+		artifactManifest:    artifactManifest,
 		durable:             true,
 	}}
 }
@@ -268,6 +274,10 @@ func (r TransactionReceipt) Records() int64 { return r.payload.records }
 
 // ContentDigest returns the complete transaction content digest.
 func (r TransactionReceipt) ContentDigest() string { return r.payload.contentDigest }
+
+// ArtifactManifest is private downstream recovery evidence persisted with the
+// exact transaction receipt. It is never a public output field.
+func (r TransactionReceipt) ArtifactManifest() string { return r.payload.artifactManifest }
 
 // Acknowledgement adapts a persisted durable receipt to the existing sync
 // checkpoint contract. A local stage, receiver call, or manually built value
@@ -384,6 +394,7 @@ type storedTransactionReceipt struct {
 	Bytes               int64     `json:"bytes"`
 	Records             int64     `json:"records"`
 	ContentDigest       string    `json:"content_digest"`
+	ArtifactManifest    string    `json:"artifact_manifest,omitempty"`
 }
 
 type transactionStageDiscardIntent struct {
@@ -768,6 +779,7 @@ func (s *CommittedTransactionStage) CommitTransaction(ctx context.Context, trans
 		manifest.Bytes,
 		manifest.Records,
 		manifest.ContentDigest,
+		downstreamReceipt.ArtifactManifest,
 	)
 	if err := s.persistReceipt(ctx, receipt); err != nil {
 		if ctxErr := ctx.Err(); ctxErr != nil {
@@ -1484,6 +1496,7 @@ func (s *CommittedTransactionStage) persistReceipt(ctx context.Context, receipt 
 		Bytes:               receiptPayload.bytes,
 		Records:             receiptPayload.records,
 		ContentDigest:       receiptPayload.contentDigest,
+		ArtifactManifest:    receiptPayload.artifactManifest,
 	}
 	payload, err := json.Marshal(stored)
 	if err != nil {
@@ -1518,6 +1531,9 @@ func (r storedTransactionReceipt) toReceipt(expectedKey string) TransactionRecei
 		r.Bytes < 0 || r.Records < 0 || !validTransactionStageDigest(r.ContentDigest) {
 		return TransactionReceipt{}
 	}
+	if len(r.ArtifactManifest) > 8<<10 || (r.ArtifactManifest != "" && !json.Valid([]byte(r.ArtifactManifest))) {
+		return TransactionReceipt{}
+	}
 	return newTransactionReceipt(
 		r.TransactionKey,
 		r.DownstreamReceiptID,
@@ -1526,6 +1542,7 @@ func (r storedTransactionReceipt) toReceipt(expectedKey string) TransactionRecei
 		r.Bytes,
 		r.Records,
 		r.ContentDigest,
+		r.ArtifactManifest,
 	)
 }
 

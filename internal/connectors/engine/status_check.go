@@ -2,12 +2,14 @@ package engine
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 const (
@@ -38,11 +40,22 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 		return connectors.OperationStatusCheckResult{}, err
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
-	path, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
+	effectivePathParams, err := materializeOperationDirectReadPathParams(op, cfg, req.PathParams)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
-	query, err := directReadQuery(req.Query)
+	path, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, effectivePathParams)
+	if err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	queryMap, err := operationDirectReadQuery(op, req.Query, nil)
+	if err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	if err := requireOperationQueryGroups(op, queryMap); err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
+	query, err := directReadQuery(queryMap)
 	if err != nil {
 		return connectors.OperationStatusCheckResult{}, err
 	}
@@ -66,17 +79,60 @@ func OperationStatusCheck(ctx context.Context, b Bundle, req connectors.Operatio
 	}
 	cap := op.REST.MaxBytes
 	response, err := requester.DoStatusCheck(requestCtx, normalizeDirectReadPathForBaseURL(path, directReadBaseURL(b, cfg)), query, cap)
+	result := connectors.OperationStatusCheckResult{Connector: b.Name, Operation: op.ID, Method: http.MethodHead, Path: path}
+	if response != nil {
+		result.Receipt = statusCheckReceipt(b, response.Status, response.Header, response.Body)
+		result.Status = response.Status
+		result.BodyBytes = len(response.Body)
+	}
+	if result.Receipt == nil && err != nil {
+		result.Receipt = statusCheckReceiptFromHTTPError(b, err)
+		if result.Receipt != nil {
+			result.Status = result.Receipt.Status
+			result.BodyBytes = int(result.Receipt.BodyBytes)
+		}
+	}
 	if err != nil {
-		return connectors.OperationStatusCheckResult{}, fmt.Errorf("operation status %s %s: %w", http.MethodHead, op.REST.Path, err)
+		return result, fmt.Errorf("operation status %s %s: %w", http.MethodHead, op.REST.Path, err)
 	}
 	if len(response.Body) > cap {
-		return connectors.OperationStatusCheckResult{}, fmt.Errorf("operation status response exceeded metadata cap")
+		return result, fmt.Errorf("operation status response exceeded metadata cap")
 	}
-	responseHeaders, err := operationResponseHeaders(b, op, response.Header)
+	responseHeaders, err := operationResponseHeaders(b, op, response.Header, cfg.Secrets)
 	if err != nil {
-		return connectors.OperationStatusCheckResult{}, err
+		return result, err
 	}
-	return connectors.OperationStatusCheckResult{Connector: b.Name, Operation: op.ID, Method: http.MethodHead, Path: path, Status: response.Status, BodyBytes: len(response.Body), Headers: responseHeaders}, nil
+	result.Headers = responseHeaders
+	return result, nil
+}
+
+// statusCheckReceipt intentionally records raw bounded HEAD bytes without
+// decoding them. A status operation has no response-body authority even when
+// an intermediary incorrectly supplies bytes on HEAD.
+func statusCheckReceipt(b Bundle, status int, headers http.Header, raw []byte) *connectors.ProviderResponseReceipt {
+	receipt := &connectors.ProviderResponseReceipt{
+		ResponseReceived: true,
+		Status:           status,
+		Headers:          completeProviderResponseHeaders(b, headers),
+		BodyPresent:      len(raw) != 0,
+		BodyBytes:        int64(len(raw)),
+	}
+	if len(raw) != 0 {
+		receipt.BodyRaw, receipt.BodyRawEncoding = writeProviderRawBody(raw)
+	}
+	return receipt
+}
+
+func statusCheckReceiptFromHTTPError(b Bundle, err error) *connectors.ProviderResponseReceipt {
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) || httpErr == nil {
+		return nil
+	}
+	raw := append([]byte(nil), httpErr.RawBody...)
+	if raw == nil && httpErr.Body != "" {
+		raw = []byte(httpErr.Body)
+	}
+	return statusCheckReceipt(b, httpErr.Status, httpErr.Header, raw)
 }
 
 func PreflightOperationStatusCheck(b Bundle, operation, method, path, outputPolicy string) error {

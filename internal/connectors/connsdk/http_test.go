@@ -26,6 +26,76 @@ import (
 
 func noSleep(_ context.Context, _ time.Duration) error { return nil }
 
+func TestRequesterRechecksRequestAdmissionBeforeRetry(t *testing.T) {
+	errFenced := errors.New("authentication cohort fenced")
+	sends := 0
+	fenced := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		sends++
+		fenced = true
+		http.Error(w, "retryable provider failure", http.StatusServiceUnavailable)
+	}))
+	defer server.Close()
+	checks := 0
+	ctx := WithRequestAdmission(context.Background(), func(context.Context) error {
+		checks++
+		if fenced {
+			return errFenced
+		}
+		return nil
+	})
+
+	response, err := (&Requester{BaseURL: server.URL, MaxRetries: 1, Sleep: noSleep}).Do(ctx, http.MethodGet, "/records", nil, nil)
+	if !errors.Is(err, errFenced) {
+		t.Fatalf("Do() error = %T %v, want request admission fence", err, err)
+	}
+	if sends != 1 || checks != 2 {
+		t.Fatalf("sends/admission checks = %d/%d, want first send and pre-retry fence", sends, checks)
+	}
+	if response == nil || response.Status != http.StatusServiceUnavailable {
+		t.Fatalf("terminal response = %#v, want retained first provider receipt", response)
+	}
+}
+
+func TestRequesterRechecksRequestAdmissionBeforeRedirect(t *testing.T) {
+	errFenced := errors.New("authentication cohort fenced")
+	firstSends, redirectedSends := 0, 0
+	fenced := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/first":
+			firstSends++
+			fenced = true
+			http.Redirect(w, r, "/second", http.StatusFound)
+		case "/second":
+			redirectedSends++
+			w.WriteHeader(http.StatusNoContent)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+	checks := 0
+	ctx := WithRequestAdmission(context.Background(), func(context.Context) error {
+		checks++
+		if fenced {
+			return errFenced
+		}
+		return nil
+	})
+
+	response, err := (&Requester{BaseURL: server.URL, Sleep: noSleep}).Do(ctx, http.MethodGet, "/first", nil, nil)
+	if !errors.Is(err, errFenced) {
+		t.Fatalf("Do() error = %T %v, want request admission fence", err, err)
+	}
+	if firstSends != 1 || redirectedSends != 0 || checks != 2 {
+		t.Fatalf("first/redirected sends and admission checks = %d/%d/%d, want 1/0/2", firstSends, redirectedSends, checks)
+	}
+	if response == nil || response.Status != http.StatusFound {
+		t.Fatalf("terminal response = %#v, want retained redirect provider receipt", response)
+	}
+}
+
 type roundTripperFunc func(*http.Request) (*http.Response, error)
 
 func (f roundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
@@ -1114,6 +1184,49 @@ func TestRequesterMutationRetryCancellationRetainsLastResponse(t *testing.T) {
 	}
 	if resp == nil || resp.Status != http.StatusServiceUnavailable || resp.Header.Get("X-Request-ID") != "terminal-retry-receipt" || string(resp.Body) != "retry later\n" {
 		t.Fatalf("terminal response = %#v, want complete last provider response", resp)
+	}
+	var provider *HTTPError
+	if !errors.As(err, &provider) || provider.Status != http.StatusServiceUnavailable || provider.Header.Get("X-Request-ID") != "terminal-retry-receipt" {
+		t.Fatalf("Do error provider evidence = %#v, want retained 503 HTTPError", provider)
+	}
+}
+
+// TestRequesterRetryTransportFailureRetainsEarlierProviderResponse proves a
+// later no-response transport failure cannot overwrite the bounded provider
+// receipt that caused the retry. Downstream command surfaces need both facts:
+// the provider's 503 metadata and the terminal transport cause.
+func TestRequesterRetryTransportFailureRetainsEarlierProviderResponse(t *testing.T) {
+	transportFailure := errors.New("connection reset after provider retry")
+	calls := 0
+	r := &Requester{
+		BaseURL:    "https://provider.example.invalid",
+		MaxRetries: 1,
+		Sleep: func(context.Context, time.Duration) error {
+			return nil
+		},
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			calls++
+			if calls == 1 {
+				return &http.Response{
+					StatusCode: http.StatusServiceUnavailable,
+					Header:     http.Header{"X-Request-Id": []string{"first-provider-receipt"}},
+					Body:       io.NopCloser(strings.NewReader("retry later")),
+					Request:    req,
+				}, nil
+			}
+			return nil, transportFailure
+		})},
+	}
+	resp, err := r.Do(context.Background(), http.MethodGet, "/widgets", nil, nil)
+	if !errors.Is(err, transportFailure) {
+		t.Fatalf("Do error = %v, want terminal transport failure", err)
+	}
+	var provider *HTTPError
+	if !errors.As(err, &provider) || provider.Status != http.StatusServiceUnavailable || provider.Header.Get("X-Request-ID") != "first-provider-receipt" {
+		t.Fatalf("Do error provider evidence = %#v, want retained first 503 HTTPError", provider)
+	}
+	if resp == nil || resp.Status != http.StatusServiceUnavailable || resp.Header.Get("X-Request-ID") != "first-provider-receipt" || string(resp.Body) != "retry later" {
+		t.Fatalf("terminal response = %#v, want retained first provider response", resp)
 	}
 }
 

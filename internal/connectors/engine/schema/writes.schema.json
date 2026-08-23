@@ -154,7 +154,12 @@
               }
             }
           },
-          "hook": { "type": "string" }
+          "hook": { "type": "string" },
+          "hook_fields": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "pattern": ".+" }
+          }
         }
       }
     }

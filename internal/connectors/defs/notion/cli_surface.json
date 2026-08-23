@@ -257,15 +257,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_async_task",
-      "flags": [
-        {
-          "name": "task-id",
-          "type": "string",
-          "summary": "Path parameter `task_id`.",
-          "maps_to": "path.task_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/retrieve-async-task",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -285,15 +277,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_block",
-      "flags": [
-        {
-          "name": "block-id",
-          "type": "string",
-          "summary": "Path parameter `block_id`.",
-          "maps_to": "path.block_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/retrieve-a-block",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -313,21 +297,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_block_children",
-      "flags": [
-        {
-          "name": "block-id",
-          "type": "string",
-          "summary": "Path parameter `block_id`.",
-          "maps_to": "path.block_id",
-          "required": true
-        },
-        {
-          "name": "page-size",
-          "type": "number",
-          "summary": "Query parameter `page_size`.",
-          "maps_to": "query.page_size"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/get-block-children",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -347,21 +317,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.list_comments",
-      "flags": [
-        {
-          "name": "block-id",
-          "type": "string",
-          "summary": "Identifier for a Notion block or page.",
-          "maps_to": "query.block_id",
-          "required": true
-        },
-        {
-          "name": "page-size",
-          "type": "integer",
-          "summary": "The number of items from the full list desired in the response. Maximum: 100",
-          "maps_to": "query.page_size"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/list-comments",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -381,15 +337,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_comment",
-      "flags": [
-        {
-          "name": "comment-id",
-          "type": "string",
-          "summary": "Path parameter `comment_id`.",
-          "maps_to": "path.comment_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/retrieve-comment",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -409,15 +357,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_data_source",
-      "flags": [
-        {
-          "name": "data-source-id",
-          "type": "string",
-          "summary": "Path parameter `data_source_id`.",
-          "maps_to": "path.data_source_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/retrieve-a-data-source",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -437,27 +377,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.list_data_source_templates",
-      "flags": [
-        {
-          "name": "data-source-id",
-          "type": "string",
-          "summary": "Path parameter `data_source_id`.",
-          "maps_to": "path.data_source_id",
-          "required": true
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Filter templates by name (case-insensitive substring match).",
-          "maps_to": "query.name"
-        },
-        {
-          "name": "page-size",
-          "type": "integer",
-          "summary": "The number of items from the full list desired in the response. Maximum: 100",
-          "maps_to": "query.page_size"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/list-data-source-templates",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -477,15 +397,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_database",
-      "flags": [
-        {
-          "name": "database-id",
-          "type": "string",
-          "summary": "Path parameter `database_id`.",
-          "maps_to": "path.database_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/retrieve-database",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -505,15 +417,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_file_upload",
-      "flags": [
-        {
-          "name": "file-upload-id",
-          "type": "string",
-          "summary": "Path parameter `file_upload_id`.",
-          "maps_to": "path.file_upload_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/retrieve-file-upload",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -533,21 +437,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_page",
-      "flags": [
-        {
-          "name": "page-id",
-          "type": "string",
-          "summary": "Path parameter `page_id`.",
-          "maps_to": "path.page_id",
-          "required": true
-        },
-        {
-          "name": "filter-properties",
-          "type": "string",
-          "summary": "Supply a list of property IDs to filter properties in the response. Note that if a page doesn't have a property, it won't be included in the filtered response.",
-          "maps_to": "query.filter_properties"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/retrieve-a-page",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -567,21 +457,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_page_markdown",
-      "flags": [
-        {
-          "name": "page-id",
-          "type": "string",
-          "summary": "Path parameter `page_id`.",
-          "maps_to": "path.page_id",
-          "required": true
-        },
-        {
-          "name": "include-transcript",
-          "type": "boolean",
-          "summary": "Whether to include meeting note transcripts. Defaults to false. When true, full transcripts are included; when false, a placeholder with the meeting note URL is shown instead.",
-          "maps_to": "query.include_transcript"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/retrieve-page-markdown",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -601,28 +477,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_page_property",
-      "flags": [
-        {
-          "name": "page-id",
-          "type": "string",
-          "summary": "Path parameter `page_id`.",
-          "maps_to": "path.page_id",
-          "required": true
-        },
-        {
-          "name": "property-id",
-          "type": "string",
-          "summary": "Path parameter `property_id`.",
-          "maps_to": "path.property_id",
-          "required": true
-        },
-        {
-          "name": "page-size",
-          "type": "integer",
-          "summary": "Query parameter `page_size`.",
-          "maps_to": "query.page_size"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/retrieve-a-page-property",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -662,15 +517,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_user",
-      "flags": [
-        {
-          "name": "user-id",
-          "type": "string",
-          "summary": "Path parameter `user_id`.",
-          "maps_to": "path.user_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/get-user",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -690,15 +537,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_view",
-      "flags": [
-        {
-          "name": "view-id",
-          "type": "string",
-          "summary": "Path parameter `view_id`.",
-          "maps_to": "path.view_id",
-          "required": true
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/retrieve-a-view",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -718,28 +557,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "notion.retrieve_view_query_results",
-      "flags": [
-        {
-          "name": "view-id",
-          "type": "string",
-          "summary": "Path parameter `view_id`.",
-          "maps_to": "path.view_id",
-          "required": true
-        },
-        {
-          "name": "query-id",
-          "type": "string",
-          "summary": "Path parameter `query_id`.",
-          "maps_to": "path.query_id",
-          "required": true
-        },
-        {
-          "name": "page-size",
-          "type": "integer",
-          "summary": "The number of results to return per page. Maximum: 100",
-          "maps_to": "query.page_size"
-        }
-      ],
+      "flags": [],
       "source_url": "https://developers.notion.com/reference/get-view-query-results",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -760,19 +578,6 @@
       "availability": "implemented",
       "operation": "notion.query_data_source",
       "flags": [
-        {
-          "name": "data-source-id",
-          "type": "string",
-          "summary": "Path parameter `data_source_id`.",
-          "maps_to": "path.data_source_id",
-          "required": true
-        },
-        {
-          "name": "filter-properties",
-          "type": "string",
-          "summary": "Query parameter `filter_properties`.",
-          "maps_to": "query.filter_properties"
-        },
         {
           "name": "page-size",
           "type": "number",

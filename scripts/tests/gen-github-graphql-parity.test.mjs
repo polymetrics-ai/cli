@@ -88,10 +88,41 @@ test("preserves fixed supplemental GraphQL operations on the shared transport", 
     (endpoint) => endpoint.method === "POST" && endpoint.path === "/graphql",
   );
 
-  assert.deepEqual(transport.covered_by.operations, [
-    "github.repo.list",
-    ...generated.operations.map((operation) => operation.id),
-  ]);
+  assert.deepEqual(
+    transport.covered_by.operations,
+    ["github.repo.list", ...generated.operations.map((operation) => operation.id)].sort(),
+  );
+});
+
+test("TestGitHubParityGenerationOrderIsCommutative", async () => {
+  const lock = await miniLock();
+  const generated = buildGitHubGraphQLParityArtifacts({ lock, bundle: emptyBundle() });
+  const restOperations = [
+    { id: "github.rest.z", kind: "rest_read" },
+    { id: "github.rest.a", kind: "rest_read" },
+  ];
+  const restCommands = [
+    { path: "zeta read", operation: restOperations[0].id },
+    { path: "alpha read", operation: restOperations[1].id },
+  ];
+  const restEndpoints = [
+    { method: "GET", path: "/zeta", covered_by: { direct_read: "zeta read" } },
+    { method: "GET", path: "/alpha", covered_by: { direct_read: "alpha read" } },
+  ];
+  const left = emptyBundle();
+  left.operations.operations = restOperations;
+  left.cli.commands = restCommands;
+  left.surface.endpoints = restEndpoints;
+  const right = emptyBundle();
+  right.operations.operations = [...generated.operations, ...restOperations].reverse();
+  right.cli.commands = [...generated.commands, ...restCommands].reverse();
+  right.surface.endpoints = [generated.transport, ...restEndpoints].reverse();
+
+  assert.deepEqual(
+    mergeGitHubGraphQLParityArtifacts(left, generated),
+    mergeGitHubGraphQLParityArtifacts(right, generated),
+    "the canonical artifact set must be independent of generator execution order",
+  );
 });
 
 test("fails closed for a missing canary, duplicate root command, unbounded list, or unclassified deleteIssue", async () => {
@@ -158,4 +189,38 @@ test("uses the declared environment-only secret contract only for source fields 
 	const transferIssue = generated.commands.find((candidate) => candidate.path === "graphql mutation transfer-issue");
 	assert.equal(transferIssue?.availability, "implemented");
 	assert.equal(transferIssue?.approval, "plan, preview, approval, execute (typed destructive confirmation)");
+});
+
+test("TestGeneratedGraphQLContractsClassifySecretInputsAndBoundedIdentitySelections", async () => {
+	const projectRoot = path.resolve(scriptsDir, "..");
+	const lock = JSON.parse(await readFile(path.join(projectRoot, "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"), "utf8"));
+	const generated = buildGitHubGraphQLParityArtifacts({ lock, bundle: emptyBundle() });
+
+	const failures = [];
+	const require = (condition, message) => {
+		if (!condition) failures.push(message);
+	};
+	const matches = (value, expression) => expression.test(value || "");
+	const enterprise = generated.commands.find((command) => command.path === "graphql query enterprise");
+	require(enterprise?.flags.some((flag) => flag.name === "invitation-token" && flag.env_only === true), "source-declared invitation token must stay out of argv");
+	const marketplace = generated.commands.find((command) => command.path === "graphql query marketplace-listings");
+	require(marketplace?.flags.some((flag) => flag.name === "first" && flag.type === "integer" && flag.minimum === -2147483648 && flag.maximum === 2147483647), "GraphQL Int command flags must retain the signed 32-bit domain");
+	const marketplaceOperation = generated.operations.find((operation) => operation.id === "github.graphql.query.marketplace-listings");
+	require(marketplaceOperation?.graphql?.variables_schema?.properties?.first?.minimum === -2147483648 && marketplaceOperation?.graphql?.variables_schema?.properties?.first?.maximum === 2147483647, "GraphQL Int variables must retain the signed 32-bit domain");
+
+	const repository = generated.operations.find((operation) => operation.id === "github.graphql.query.repository");
+	const regenerate = generated.operations.find((operation) => operation.id === "github.graphql.mutation.regenerate-verifiable-domain-token");
+	require(!matches(repository?.graphql?.document, /\btempCloneToken\b/u), "classified query result token must be withheld from the fixed selection");
+	require(!matches(regenerate?.graphql?.document, /\bverificationToken\b/u), "classified mutation result token must be withheld from the fixed selection");
+	require(matches(regenerate?.graphql?.document, /\bclientMutationId\b/u), "ordinary mutation correlation remains selected");
+
+	const createIssue = generated.operations.find((operation) => operation.id === "github.graphql.mutation.create-issue");
+	const addComment = generated.operations.find((operation) => operation.id === "github.graphql.mutation.add-comment");
+	require(matches(createIssue?.graphql?.document, /createIssue\(input: \$input\) \{ __typename clientMutationId issue \{ __typename [^}]*\bid\b[^}]*\bnumber\b[^}]*\burl\b/u), "created issue must retain bounded provider identity");
+	require(matches(addComment?.graphql?.document, /addComment\(input: \$input\) \{ __typename clientMutationId [^}]*commentEdge \{ __typename [^}]*node \{ __typename [^}]*\bid\b[^}]*\burl\b/u), "created comment must retain bounded provider identity through its declared edge");
+
+	for (const operation of generated.operations) {
+		require(!matches(operation.graphql.document, /\b(?:tempCloneToken|verificationToken)\b/u), `${operation.id} must not select a classified result secret`);
+	}
+	assert.deepEqual(failures, []);
 });

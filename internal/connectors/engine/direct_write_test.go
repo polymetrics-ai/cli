@@ -238,8 +238,8 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	if got := result.Headers["X-Write-Receipt"].Values; len(got) != 1 || got[0] != "receipt-42" {
 		t.Fatalf("write receipt = %#v, want declared provider metadata", got)
 	}
-	if cookie, ok := result.Headers["Set-Cookie"]; !ok || !cookie.Redacted {
-		t.Fatalf("Set-Cookie = %#v, want explicit redaction marker", cookie)
+	if cookie, ok := result.Headers["Set-Cookie"]; !ok || len(cookie.Values) != 1 || cookie.Values[0] != "transport-secret" {
+		t.Fatalf("Set-Cookie = %#v, want exact internal provider metadata", cookie)
 	}
 	body, ok := result.Body.(map[string]any)
 	if !ok {
@@ -330,6 +330,48 @@ func TestOperationDirectWriteStoresReturnedSecretAndRetainsRuntimeResponse(t *te
 	}
 	if requests != 1 {
 		t.Fatalf("requests = %d, want 1", requests)
+	}
+}
+
+// TestOperationDirectWriteRetainsProviderReceiptWhenSecretStoreFails protects
+// the terminal-failure contract: the printable error remains secret-safe, but
+// the engine result and wrapped cause retain the exact provider receipt for
+// the App's bounded persistence projection.
+func TestOperationDirectWriteRetainsProviderReceiptWhenSecretStoreFails(t *testing.T) {
+	const providerCredential = "returned-credential-store-failure-canary"
+	store := newRecordingSecretStore()
+	store.err = errors.New("fixture secret store failure")
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("X-Provider-Trace", "secret-store-failure")
+		_, _ = w.Write([]byte(`{"credential":"` + providerCredential + `"}`))
+	}))
+	t.Cleanup(server.Close)
+	bundle := Bundle{Name: "acme", HTTP: HTTPBase{URL: server.URL}, Operations: []OperationSpec{{
+		ID: "acme.credentials.create", Kind: "rest_write", Summary: "Create credential", Risk: "high", Approval: "typed", OutputPolicy: directWritePolicySecretStored,
+		MutationClass: "secret", SecretSensitive: true,
+		SensitivePolicy: &SensitivePolicySpec{InputMode: "env", ApprovalMode: "typed_confirmation", ResponseSecretField: "credential", ResponseSecretStoreKey: "generated_credential"},
+		REST:            &RESTOperationSpec{Method: http.MethodPost, Path: "/v2/credentials", MaxBytes: 1024},
+	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/v2/credentials", Operation: &SurfaceOperation{Model: "write"}}}}}
+	req := connectors.OperationDirectWriteRequest{Operation: "acme.credentials.create", Config: connectors.RuntimeConfig{SecretStore: store, CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest", WriteApprovalScope: connectors.WriteApprovalScopeFixture}}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err == nil {
+		t.Fatal("OperationDirectWrite accepted secret-store failure")
+	}
+	if strings.Contains(err.Error(), providerCredential) {
+		t.Fatalf("secret-store error leaked provider credential: %v", err)
+	}
+	if result.Status != http.StatusOK || result.Headers["X-Provider-Trace"].Values[0] != "secret-store-failure" {
+		t.Fatalf("result = %#v, want complete provider receipt", result)
+	}
+	var providerErr *connsdk.HTTPError
+	if !errors.As(err, &providerErr) || providerErr.Body != `{"credential":"`+providerCredential+`"}` {
+		t.Fatalf("error = %T %v, want exact retained provider receipt", err, err)
 	}
 }
 

@@ -18,13 +18,20 @@ import (
 )
 
 type PreparedRequest struct {
-	Method      string `json:"method"`
-	URL         string `json:"url"`
-	Target      string `json:"target,omitempty"`
-	Query       string `json:"query,omitempty"`
-	ContentType string `json:"content_type,omitempty"`
-	BodyFormat  string `json:"body_format,omitempty"`
-	Body        string `json:"body,omitempty"`
+	Method string `json:"method"`
+	URL    string `json:"url"`
+	Target string `json:"target,omitempty"`
+	// Action names the declaration that owns this physical request. It is
+	// empty for the ordinary one-action-per-record path for wire compatibility.
+	Action string `json:"action,omitempty"`
+	// ResponseBinding makes a response-derived follow-up explicit in the
+	// approval digest. Its eventual path value is not guessed at preview time:
+	// execution must obtain it from the prior bounded provider receipt.
+	ResponseBinding *PreparedWriteResponseBinding `json:"response_binding,omitempty"`
+	Query           string                        `json:"query,omitempty"`
+	ContentType     string                        `json:"content_type,omitempty"`
+	BodyFormat      string                        `json:"body_format,omitempty"`
+	Body            string                        `json:"body,omitempty"`
 	// Headers and HeaderValues are preview-bound through the digest projection
 	// below, but never serialized with a prepared request. Runtime-owned auth
 	// and declaration-bound request headers may contain a credential value.
@@ -48,6 +55,25 @@ type PreparedWrite struct {
 	// requests were previewed. It is private and deep-cloned during preparation
 	// so caller mutation cannot change approved execution.
 	executionRecords []connectors.Record
+	// executionPlan is the immutable physical request plan. Requests and steps
+	// have identical flattened order; grouping by source record preserves
+	// fail-fast accounting while still allowing a compound action to emit more
+	// than one provider receipt.
+	executionPlan []preparedWriteExecutionRecord
+	// executionConfig is the sealed runtime material used to prepare request
+	// bytes. It keeps custom hooks and multipart revalidation from consulting a
+	// caller-owned config, secrets, or approved-digest map after approval.
+	executionConfig connectors.RuntimeConfig
+}
+
+type preparedWriteExecutionRecord struct {
+	steps []preparedWriteExecutionStep
+}
+
+type preparedWriteExecutionStep struct {
+	action          WriteAction
+	record          connectors.Record
+	responseBinding *PreparedWriteResponseBinding
 }
 
 func PreviewPreparedWrite(prepared PreparedWrite) (connectors.WritePreview, error) {
@@ -134,15 +160,17 @@ func PreviewPreparedWrite(prepared PreparedWrite) (connectors.WritePreview, erro
 }
 
 type preparedRequestDigestProjection struct {
-	Method        string   `json:"method"`
-	URL           string   `json:"url"`
-	Target        string   `json:"target,omitempty"`
-	Query         string   `json:"query,omitempty"`
-	ContentType   string   `json:"content_type,omitempty"`
-	BodyFormat    string   `json:"body_format,omitempty"`
-	Body          string   `json:"body,omitempty"`
-	HeaderNames   []string `json:"header_names,omitempty"`
-	HeadersSHA256 string   `json:"headers_sha256,omitempty"`
+	Method          string                        `json:"method"`
+	URL             string                        `json:"url"`
+	Target          string                        `json:"target,omitempty"`
+	Action          string                        `json:"action,omitempty"`
+	ResponseBinding *PreparedWriteResponseBinding `json:"response_binding,omitempty"`
+	Query           string                        `json:"query,omitempty"`
+	ContentType     string                        `json:"content_type,omitempty"`
+	BodyFormat      string                        `json:"body_format,omitempty"`
+	Body            string                        `json:"body,omitempty"`
+	HeaderNames     []string                      `json:"header_names,omitempty"`
+	HeadersSHA256   string                        `json:"headers_sha256,omitempty"`
 }
 
 func projectPreparedRequests(requests []PreparedRequest) ([]preparedRequestDigestProjection, error) {
@@ -153,15 +181,17 @@ func projectPreparedRequests(requests []PreparedRequest) ([]preparedRequestDiges
 			return nil, fmt.Errorf("engine: prepared request %d headers: %w", index, err)
 		}
 		projected[index] = preparedRequestDigestProjection{
-			Method:        request.Method,
-			URL:           request.URL,
-			Target:        request.Target,
-			Query:         request.Query,
-			ContentType:   request.ContentType,
-			BodyFormat:    request.BodyFormat,
-			Body:          request.Body,
-			HeaderNames:   headerNames,
-			HeadersSHA256: headersSHA256,
+			Method:          request.Method,
+			URL:             request.URL,
+			Target:          request.Target,
+			Action:          request.Action,
+			ResponseBinding: clonePreparedWriteResponseBinding(request.ResponseBinding),
+			Query:           request.Query,
+			ContentType:     request.ContentType,
+			BodyFormat:      request.BodyFormat,
+			Body:            request.Body,
+			HeaderNames:     headerNames,
+			HeadersSHA256:   headersSHA256,
 		}
 	}
 	return projected, nil
@@ -286,6 +316,13 @@ func validateFixturePreparedRequests(requests []PreparedRequest, recordsStaged i
 		return errors.New("engine: fixture write approval requires a prepared loopback request")
 	}
 	for index, request := range requests {
+		if request.ResponseBinding != nil {
+			// The deferred target is not a transport URL. Its declared action,
+			// body, headers, and response binding are still digest-bound above;
+			// its concrete loopback URL is checked only when the bound receipt
+			// materializes it immediately before I/O.
+			continue
+		}
 		parsed, err := url.Parse(request.URL)
 		if err != nil {
 			return fmt.Errorf("engine: fixture prepared request %d has an invalid URL", index)
@@ -315,14 +352,16 @@ func ExecutePreparedWrite(ctx context.Context, prepared PreparedWrite, evidence 
 
 func digestPreparedTargets(prepared PreparedWrite) (string, error) {
 	targets := make([]struct {
-		Method        string   `json:"method"`
-		URL           string   `json:"url"`
-		Target        string   `json:"target,omitempty"`
-		Query         string   `json:"query,omitempty"`
-		BodyFormat    string   `json:"body_format,omitempty"`
-		Body          string   `json:"body,omitempty"`
-		HeaderNames   []string `json:"header_names,omitempty"`
-		HeadersSHA256 string   `json:"headers_sha256,omitempty"`
+		Method          string                        `json:"method"`
+		URL             string                        `json:"url"`
+		Target          string                        `json:"target,omitempty"`
+		Action          string                        `json:"action,omitempty"`
+		ResponseBinding *PreparedWriteResponseBinding `json:"response_binding,omitempty"`
+		Query           string                        `json:"query,omitempty"`
+		BodyFormat      string                        `json:"body_format,omitempty"`
+		Body            string                        `json:"body,omitempty"`
+		HeaderNames     []string                      `json:"header_names,omitempty"`
+		HeadersSHA256   string                        `json:"headers_sha256,omitempty"`
 	}, len(prepared.Requests))
 	for i, request := range prepared.Requests {
 		headerNames, headersSHA256, err := preparedRequestHeaderDigest(request.Headers, request.HeaderValues)
@@ -332,6 +371,8 @@ func digestPreparedTargets(prepared PreparedWrite) (string, error) {
 		targets[i].Method = request.Method
 		targets[i].URL = request.URL
 		targets[i].Target = request.Target
+		targets[i].Action = request.Action
+		targets[i].ResponseBinding = clonePreparedWriteResponseBinding(request.ResponseBinding)
 		targets[i].Query = request.Query
 		targets[i].BodyFormat = request.BodyFormat
 		targets[i].Body = request.Body
@@ -340,14 +381,16 @@ func digestPreparedTargets(prepared PreparedWrite) (string, error) {
 	}
 	if len(targets) == 0 {
 		targets = append(targets, struct {
-			Method        string   `json:"method"`
-			URL           string   `json:"url"`
-			Target        string   `json:"target,omitempty"`
-			Query         string   `json:"query,omitempty"`
-			BodyFormat    string   `json:"body_format,omitempty"`
-			Body          string   `json:"body,omitempty"`
-			HeaderNames   []string `json:"header_names,omitempty"`
-			HeadersSHA256 string   `json:"headers_sha256,omitempty"`
+			Method          string                        `json:"method"`
+			URL             string                        `json:"url"`
+			Target          string                        `json:"target,omitempty"`
+			Action          string                        `json:"action,omitempty"`
+			ResponseBinding *PreparedWriteResponseBinding `json:"response_binding,omitempty"`
+			Query           string                        `json:"query,omitempty"`
+			BodyFormat      string                        `json:"body_format,omitempty"`
+			Body            string                        `json:"body,omitempty"`
+			HeaderNames     []string                      `json:"header_names,omitempty"`
+			HeadersSHA256   string                        `json:"headers_sha256,omitempty"`
 		}{Method: prepared.Target.Method, Target: prepared.Target.Connector + "/" + prepared.Target.Operation})
 	}
 	raw, err := json.Marshal(targets)
@@ -364,7 +407,10 @@ func validatePreparedRequests(prepared PreparedWrite) error {
 		if strings.TrimSpace(request.Method) == "" || strings.TrimSpace(request.URL) == "" {
 			return fmt.Errorf("engine: prepared request %d is incomplete", index)
 		}
-		if !strings.EqualFold(request.Method, targetMethod) {
+		if request.ResponseBinding != nil && strings.TrimSpace(request.Action) == "" {
+			return fmt.Errorf("engine: prepared request %d has a response binding without a declaration action", index)
+		}
+		if strings.TrimSpace(request.Action) == "" && !strings.EqualFold(request.Method, targetMethod) {
 			return fmt.Errorf("engine: prepared request %d method %q does not match target method %q", index, request.Method, targetMethod)
 		}
 		if _, err := canonicalPreparedRequestHeaderValues(request.Headers, request.HeaderValues); err != nil {
@@ -372,4 +418,12 @@ func validatePreparedRequests(prepared PreparedWrite) error {
 		}
 	}
 	return nil
+}
+
+func clonePreparedWriteResponseBinding(binding *PreparedWriteResponseBinding) *PreparedWriteResponseBinding {
+	if binding == nil {
+		return nil
+	}
+	cloned := *binding
+	return &cloned
 }

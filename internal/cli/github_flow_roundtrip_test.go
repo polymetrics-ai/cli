@@ -60,7 +60,7 @@ type githubFlowRoundTripEvidence struct {
 // control for the credential-gated live proof below. It uses the real compiled
 // GitHub definition, real durable warehouse, real reverse plan, and real flow
 // engine; only GitHub's HTTPS boundary is replaced with a faithful local API.
-func TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip(t *testing.T) {
+func runFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip(t *testing.T) {
 	const tokenEnv = "PM_CERT_GITHUB_LOCAL_FLOW_TOKEN"
 	const token = "github-flow-local-canary"
 	server, comments := newGitHubFlowRoundTripServer(t, token)

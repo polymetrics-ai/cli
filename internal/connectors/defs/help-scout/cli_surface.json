@@ -1610,22 +1610,7 @@
       "availability": "implemented",
       "operation": "help-scout.attachment_download",
       "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/",
-      "flags": [
-        {
-          "name": "conversationId",
-          "type": "string",
-          "summary": "Help Scout conversation id.",
-          "maps_to": "path.conversationId",
-          "allow_empty": false
-        },
-        {
-          "name": "attachmentId",
-          "type": "string",
-          "summary": "Help Scout attachment id.",
-          "maps_to": "path.attachmentId",
-          "allow_empty": false
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",

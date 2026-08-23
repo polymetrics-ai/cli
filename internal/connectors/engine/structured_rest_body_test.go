@@ -450,6 +450,47 @@ func TestOperationDirectWriteBindsStaticQueryAuthBeforeApproval(t *testing.T) {
 	}
 }
 
+// TestOperationDirectWriteRejectsConditionalRequiredAPIKeyOwnershipBeforeIO
+// keeps an auth-selected query parameter declaration-owned on every path: a
+// selectable none/bearer branch must not strand a required source parameter.
+func TestOperationDirectWriteRejectsConditionalRequiredAPIKeyOwnershipBeforeIO(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { calls++ }))
+	t.Cleanup(server.Close)
+	bundle := structuredRESTBodyBundle(server.URL)
+	rest := *bundle.Operations[0].REST
+	rest.Parameters = append(rest.Parameters, OperationParameter{Name: "api_key", In: "query", Type: "string", Required: true})
+	bundle.Operations[0].REST = &rest
+	bundle.HTTP.Auth = []AuthSpec{
+		{Mode: "api_key_query", Param: "api_key", Value: "placeholder", When: "{{ config.auth_type == 'api' }}"},
+		{Mode: "none"},
+	}
+	request := structuredRESTBodyRequest()
+	for _, check := range []struct {
+		name   string
+		invoke func() error
+	}{
+		{name: "metadata", invoke: func() error { _, err := OperationDirectWriteMetadata(bundle, request.Operation); return err }},
+		{name: "preflight", invoke: func() error {
+			return PreflightOperationDirectWrite(bundle, request.Operation, rest.Method, rest.Path, bundle.Operations[0].OutputPolicy)
+		}},
+		{name: "preview", invoke: func() error {
+			_, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+			return err
+		}},
+		{name: "execution", invoke: func() error { _, err := OperationDirectWrite(context.Background(), bundle, request, nil); return err }},
+	} {
+		t.Run(check.name, func(t *testing.T) {
+			if err := check.invoke(); err == nil || !strings.Contains(err.Error(), "conditionally supplied") {
+				t.Fatalf("direct-write preflight error = %v, want conditional ownership rejection", err)
+			}
+		})
+	}
+	if calls != 0 {
+		t.Fatalf("conditional ownership declaration reached provider; calls = %d", calls)
+	}
+}
+
 func TestOperationDirectWriteRejectsStaticHTTPMutationConflictsBeforeIO(t *testing.T) {
 	for _, test := range []struct {
 		name   string
@@ -599,6 +640,60 @@ func TestOperationDirectWriteErrorsDoNotExposeResolvedURLValues(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "provider failure detail") {
 		t.Fatalf("HTTP failure = %v, want provider response body", err)
+	}
+}
+
+func TestOperationDirectWriteHTTPDiagnosticsRespectSensitiveBindings(t *testing.T) {
+	const credential = "credential-bound-diagnostic-canary"
+	for _, test := range []struct {
+		name          string
+		configure     func(*Bundle, *connectors.OperationDirectWriteRequest)
+		responseBody  string
+		wantPrintable string
+		forbid        string
+	}{
+		{
+			name:          "ordinary provider diagnostic remains actionable",
+			configure:     func(*Bundle, *connectors.OperationDirectWriteRequest) {},
+			responseBody:  "provider safe diagnostic",
+			wantPrintable: "provider safe diagnostic",
+		},
+		{
+			name: "declared credential header hides echo",
+			configure: func(bundle *Bundle, request *connectors.OperationDirectWriteRequest) {
+				bundle.HTTP.Headers["X-API-Key"] = "{{ secrets.api_key }}"
+				request.Config.Secrets = map[string]string{"api_key": credential}
+			},
+			responseBody:  "provider diagnostic " + credential,
+			wantPrintable: "provider returned HTTP status 400",
+			forbid:        credential,
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.Header().Set("X-Provider-Trace", "diagnostic")
+				w.WriteHeader(http.StatusBadRequest)
+				_, _ = w.Write([]byte(test.responseBody))
+			}))
+			t.Cleanup(server.Close)
+			bundle := structuredRESTBodyBundle(server.URL)
+			request := structuredRESTBodyRequest()
+			test.configure(&bundle, &request)
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, request, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+			request.Approval = approvedEvidenceForPreview(t, preview)
+			request.PreviewDigest = preview.Digest
+			_, err = OperationDirectWrite(context.Background(), bundle, request, nil)
+			if err == nil || !strings.Contains(err.Error(), test.wantPrintable) || (test.forbid != "" && strings.Contains(err.Error(), test.forbid)) {
+				t.Fatalf("OperationDirectWrite error = %v, want printable=%q forbid=%q", err, test.wantPrintable, test.forbid)
+			}
+			var providerErr *connsdk.HTTPError
+			if !errors.As(err, &providerErr) || providerErr.Header.Get("X-Provider-Trace") != "diagnostic" || providerErr.Body != test.responseBody {
+				t.Fatalf("error = %T %v, want complete provider receipt cause", err, err)
+			}
+		})
 	}
 }
 
@@ -1402,6 +1497,28 @@ func TestValidateOperationDirectWriteCLIFlagsProjectsRequiredArraysAndDomains(t 
 	}
 }
 
+func TestValidateOperationDirectWriteCLIFlagsRejectsSparseArrayProjection(t *testing.T) {
+	op := structuredRESTBodyBundle("https://example.invalid").Operations[0]
+	rest := *op.REST
+	rest.BodySchema = json.RawMessage(`{
+		"type":"object","additionalProperties":false,
+		"properties":{"targets":{"type":"array","maxItems":3,"items":{"type":"object","additionalProperties":false,"properties":{"id":{"type":"string"}}}}}
+	}`)
+	op.REST = &rest
+	sparse := []CLIFlag{{Name: "third-target", Type: "string", MapsTo: "body.targets.2.id", Required: true}}
+	if err := ValidateOperationDirectWriteCLIFlags(op, sparse); err == nil || !strings.Contains(err.Error(), "sparse array index 2") {
+		t.Fatalf("sparse array projection error = %v, want declaration rejection", err)
+	}
+	contiguous := []CLIFlag{
+		{Name: "first-target", Type: "string", MapsTo: "body.targets.0.id", Required: true},
+		{Name: "second-target", Type: "string", MapsTo: "body.targets.1.id", Required: true},
+		{Name: "third-target", Type: "string", MapsTo: "body.targets.2.id", Required: true},
+	}
+	if err := ValidateOperationDirectWriteCLIFlags(op, contiguous); err != nil {
+		t.Fatalf("contiguous array projection: %v", err)
+	}
+}
+
 func TestValidateOperationDirectWriteCLIFlagsProjectsContainerLowerBounds(t *testing.T) {
 	base := structuredRESTBodyBundle("https://example.invalid").Operations[0]
 	tags := base
@@ -1760,6 +1877,31 @@ func TestStructuredRESTBodyRejectsUnreachableNodeMinimumAndFloatByteDrift(t *tes
 	staticLimited.REST = &staticLimitedREST
 	if err := ValidateOperationDirectWriteMappings(staticLimited, nil, nil); err == nil || !strings.Contains(err.Error(), "rest.body") {
 		t.Fatalf("fixed body byte-limit error = %v, want declaration rejection", err)
+	}
+}
+
+// TestStructuredRESTBodyMinimumWitnessHonorsMinLength keeps a valid closed
+// declaration reachable. The witness is used only to prove bounded
+// satisfiability during validation; runtime still validates the caller body.
+func TestStructuredRESTBodyMinimumWitnessHonorsMinLength(t *testing.T) {
+	op := structuredRESTBodyBundle("https://example.invalid").Operations[0]
+	rest := *op.REST
+	rest.BodySchema = json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["name"],
+		"properties":{"name":{"type":"string","minLength":3,"maxLength":8}}
+	}`)
+	op.REST = &rest
+	if err := ValidateOperationDirectWriteMappings(op, nil, nil); err != nil {
+		t.Fatalf("ValidateOperationDirectWriteMappings minLength witness: %v", err)
+	}
+	body, err := materializeStructuredRESTBody(op, nil, map[string]any{"name": "abc"})
+	if err != nil {
+		t.Fatalf("materializeStructuredRESTBody valid minLength: %v", err)
+	}
+	if body["name"] != "abc" {
+		t.Fatalf("materialized name = %#v, want exact caller value", body["name"])
 	}
 }
 

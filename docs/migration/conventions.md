@@ -1646,6 +1646,17 @@ accept source drift. The generated descriptor is an intermediate provider
 contract for later fixed declaration materializers, never an execution command
 or a generic HTTP escape hatch.
 
+A cold source fetch has a three-minute upper bound. After a successful fetch,
+the generator stores the public artifact in a content-addressed cache keyed by
+the locked SHA-256. `--cache-dir <existing-directory>` selects an explicit,
+non-symlink cache root for isolated qualification; it changes only where an
+already lock-verified public artifact is stored and cannot change the source
+URL, digest, byte count, or request authority. Every cache hit is still bounded
+and re-verifies its exact byte count and digest before parsing; missing, stale,
+corrupt, oversized, or digest-mismatched cache content is never used. It may be replaced only by a
+fresh response that passes the same immutable lock, so cache recovery cannot
+become an unverified fallback.
+
 The lock must pin an OpenAPI 3.0/3.1 or Swagger 2.0 source document; JSON and
 YAML are accepted only in those forms. Each operation descriptor retains the
 provider `operation_id`, including an empty value, alongside its deterministic

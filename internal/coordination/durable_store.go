@@ -282,6 +282,9 @@ func (s *FileRateParkingStore) Claim(runID, owner string, now, until time.Time) 
 			return state, ErrRateParkingClaimLost
 		}
 		run = record.Run.Clone()
+		if record.Run.Outcome == RateParkingOutcomeNeedsReauthorization {
+			return state, ErrRateLimitNeedsReauthorization
+		}
 		if now.Before(record.Run.ResetAt) {
 			retryAt = record.Run.ResetAt
 			return state, nil
@@ -312,6 +315,35 @@ func (s *FileRateParkingStore) BeginResume(runID, owner string) (ParkedRateLimit
 
 func (s *FileRateParkingStore) MarkResumeCompleted(runID, owner string) (ParkedRateLimitRun, error) {
 	return s.updateResumePhase(runID, owner, true)
+}
+
+func (s *FileRateParkingStore) MarkNeedsReauthorization(runID, owner string) (ParkedRateLimitRun, error) {
+	if runID == "" {
+		return ParkedRateLimitRun{}, errors.New("rate parking run identifier is required")
+	}
+	if err := validateRateParkingOwner(owner); err != nil {
+		return ParkedRateLimitRun{}, err
+	}
+	var result ParkedRateLimitRun
+	_, err := s.store.Update(func(state rateParkingFileState) (rateParkingFileState, error) {
+		if err := validateRateParkingFileState(state); err != nil {
+			return state, err
+		}
+		record, found := state.Records[runID]
+		if !found || record.ClaimOwner != owner {
+			return state, ErrRateParkingClaimLost
+		}
+		record.Run.Outcome = RateParkingOutcomeNeedsReauthorization
+		record.ClaimOwner = ""
+		record.ClaimUntil = time.Time{}
+		if err := validateParkedRateLimitRun(record.Run); err != nil {
+			return state, err
+		}
+		state.Records[runID] = record
+		result = record.Run.Clone()
+		return state, validateRateParkingFileState(state)
+	})
+	return result, err
 }
 
 func (s *FileRateParkingStore) updateResumePhase(runID, owner string, completed bool) (ParkedRateLimitRun, error) {

@@ -78,6 +78,99 @@ func TestOperationParametersEnforceEncodedPathAndQueryByteCaps(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadValidatesEffectiveConfigPathParamsBeforeIO(t *testing.T) {
+	var hits atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		hits.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	for _, test := range []struct {
+		name       string
+		parameter  OperationParameter
+		configID   string
+		pathParams map[string]string
+		ok         bool
+	}{
+		{name: "configured integer", parameter: OperationParameter{Name: "id", In: "path", Type: "integer", Required: true}, configID: "not-an-integer"},
+		{name: "configured enum", parameter: OperationParameter{Name: "id", In: "path", Type: "enum", Required: true, Values: []string{"alpha"}}, configID: "beta"},
+		{name: "configured encoded byte cap", parameter: OperationParameter{Name: "id", In: "path", Type: "string", Required: true, MaxBytes: 6}, configID: "éé"},
+		{name: "valid config fallback", parameter: OperationParameter{Name: "id", In: "path", Type: "enum", Required: true, Values: []string{"alpha"}}, configID: "alpha", ok: true},
+		{name: "caller overrides invalid config", parameter: OperationParameter{Name: "id", In: "path", Type: "integer", Required: true}, configID: "not-an-integer", pathParams: map[string]string{"id": "42"}, ok: true},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			op := OperationSpec{
+				ID: "acme.widgets.get", Kind: "rest_read", Summary: "get widget", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+				REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/widgets/{id}", MaxBytes: 1024, Parameters: []OperationParameter{test.parameter}},
+			}
+			before := hits.Load()
+			_, err := OperationDirectRead(context.Background(), operationBindingTestBundle(srv.URL, op), connectors.OperationDirectReadRequest{
+				Operation: op.ID,
+				Config: connectors.RuntimeConfig{Config: map[string]string{
+					"id": test.configID,
+				}},
+				PathParams: test.pathParams,
+			}, nil)
+			if test.ok {
+				if err != nil {
+					t.Fatalf("OperationDirectRead: %v", err)
+				}
+				if hits.Load() != before+1 {
+					t.Fatalf("provider hits = %d, want %d", hits.Load(), before+1)
+				}
+				return
+			}
+			if err == nil {
+				t.Fatal("invalid configured path parameter was accepted")
+			}
+			if hits.Load() != before {
+				t.Fatalf("invalid configured path parameter reached provider %d times", hits.Load()-before)
+			}
+		})
+	}
+}
+
+func TestOperationDirectReadRejectsBlankRequiredQueryBeforeIO(t *testing.T) {
+	var hits atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		hits.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+	op := OperationSpec{
+		ID: "acme.widgets.search", Kind: "rest_read", Summary: "search widgets", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+		REST: &RESTOperationSpec{
+			Method: http.MethodGet, Path: "/widgets", MaxBytes: 1024,
+			Parameters: []OperationParameter{{Name: "query", In: "query", Type: "string", Required: true}},
+		},
+	}
+	bundle := operationBindingTestBundle(srv.URL, op)
+	for _, test := range []struct {
+		name  string
+		value string
+	}{
+		{name: "empty", value: ""},
+		{name: "whitespace", value: "   "},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			before := hits.Load()
+			_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+				Operation: op.ID,
+				Query:     map[string]string{"query": test.value},
+			}, nil)
+			if err == nil {
+				t.Fatal("blank required query parameter was accepted")
+			}
+			if hits.Load() != before {
+				t.Fatalf("blank required query parameter reached provider %d times", hits.Load()-before)
+			}
+		})
+	}
+}
+
 func TestOperationDirectReadClosedBindingsRejectUnknownsBeforeIO(t *testing.T) {
 	var hits atomic.Int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {

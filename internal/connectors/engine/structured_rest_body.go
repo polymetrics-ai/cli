@@ -37,10 +37,12 @@ func PreflightOperationStructuredJSONBodyField(b Bundle, operation, field string
 }
 
 // ValidateOperationStructuredJSONBodyField is the common declaration gate for
-// a json command flag on a fixed write operation. GraphQL retains its existing
-// closed-variable contract; REST uses the equivalent closed body-schema path
-// contract. Commandrunner and connectorgen call this same function; typed
-// execution compiles the same schema at its shared body boundary.
+// a json command flag on a fixed operation. GraphQL retains its existing
+// closed-variable contract. REST writes and POST reads use their respective
+// closed body-schema compilation path, which lets direct reads accept a named
+// provider-declared object or array without creating a generic request body.
+// Commandrunner and connectorgen call this same function; typed execution
+// compiles the same schema at its shared body boundary.
 func ValidateOperationStructuredJSONBodyField(op OperationSpec, field string) error {
 	field = strings.TrimSpace(field)
 	if field == "" {
@@ -48,16 +50,42 @@ func ValidateOperationStructuredJSONBodyField(op OperationSpec, field string) er
 	}
 
 	switch op.Kind {
-	case "graphql_mutation":
+	case "graphql_query", "graphql_mutation":
 		if err := safety.ValidateIdentifier(field, "structured body field"); err != nil {
 			return err
 		}
 		return ValidateGraphQLOperationStructuredJSONVariable(op, field)
 	case "rest_write":
 		return validateRESTStructuredJSONBodyField(op, field)
+	case "rest_read":
+		return validateRESTDirectReadStructuredJSONBodyField(op, field)
 	default:
-		return fmt.Errorf("operation %q structured JSON body requires rest_write or graphql_mutation, got %q", op.ID, op.Kind)
+		return fmt.Errorf("operation %q structured JSON body requires rest_read, rest_write, graphql_query, or graphql_mutation, got %q", op.ID, op.Kind)
 	}
+}
+
+func validateRESTDirectReadStructuredJSONBodyField(op OperationSpec, field string) error {
+	if op.REST == nil {
+		return fmt.Errorf("operation %q rest_read has no rest declaration", op.ID)
+	}
+	if strings.ToUpper(strings.TrimSpace(op.REST.Method)) != "POST" {
+		return fmt.Errorf("operation %q structured JSON body requires a POST rest_read", op.ID)
+	}
+	if operationDirectReadContentType(op) != "application/json" {
+		return fmt.Errorf("operation %q structured JSON body requires application/json content_type", op.ID)
+	}
+	_, compiled, err := compileOperationDirectReadBodySchema(op)
+	if err != nil {
+		return err
+	}
+	resolved, err := resolveOperationDirectWriteBodySchemaPath(compiled.root, field)
+	if err != nil {
+		return fmt.Errorf("operation %q body_schema does not declare structured field %q: %w", op.ID, field, err)
+	}
+	if !isObjectType(resolved.node) && !isArrayType(resolved.node) {
+		return fmt.Errorf("operation %q body_schema field %q must be an object or array", op.ID, field)
+	}
+	return nil
 }
 
 func validateRESTStructuredJSONBodyField(op OperationSpec, field string) error {
@@ -109,7 +137,13 @@ func ValidateOperationDirectWriteCLIFlags(op OperationSpec, flags []CLIFlag) err
 		if err := validateOperationDirectWriteCLIFlagType(op, flag, path, resolved.node); err != nil {
 			return err
 		}
+		if err := validateOperationDirectWriteStaticBodyMapping(staticBody, resolved); err != nil {
+			return fmt.Errorf("operation %q CLI flag --%s body field %q: %w", op.ID, flag.Name, path, err)
+		}
 		mappings = append(mappings, structuredRESTBodyCLIFieldMapping{flag: flag, path: resolved})
+	}
+	if err := validateStructuredRESTBodyCLIArrayMappings(op.ID, staticBody, mappings); err != nil {
+		return err
 	}
 	coverage := structuredRESTBodyCLICoverageFromValue(staticBody)
 	for _, mapping := range mappings {
@@ -124,6 +158,103 @@ func ValidateOperationDirectWriteCLIFlags(op OperationSpec, flags []CLIFlag) err
 type structuredRESTBodyCLIFieldMapping struct {
 	flag CLIFlag
 	path operationDirectWriteBodyPath
+}
+
+type structuredRESTBodyCLIArrayProjection struct {
+	prefix  []operationDirectWriteBodyPathStep
+	indices map[int]structuredRESTBodyCLIArrayIndex
+}
+
+type structuredRESTBodyCLIArrayIndex struct {
+	field    string
+	required bool
+}
+
+// validateStructuredRESTBodyCLIArrayMappings rejects a declared flag that
+// would make the generated command synthesize a sparse array. Static rest.body
+// items form the only permitted prefix; every later projected item needs a
+// required, contiguous predecessor.
+func validateStructuredRESTBodyCLIArrayMappings(operation string, staticBody map[string]any, mappings []structuredRESTBodyCLIFieldMapping) error {
+	projections := make([]structuredRESTBodyCLIArrayProjection, 0)
+	for _, mapping := range mappings {
+		for position, step := range mapping.path.steps {
+			if !step.array {
+				continue
+			}
+			prefix := mapping.path.steps[:position]
+			projectionIndex := -1
+			for index := range projections {
+				if structuredRESTBodyCLIPathStepsEqual(projections[index].prefix, prefix) {
+					projectionIndex = index
+					break
+				}
+			}
+			if projectionIndex == -1 {
+				projections = append(projections, structuredRESTBodyCLIArrayProjection{
+					prefix:  append([]operationDirectWriteBodyPathStep(nil), prefix...),
+					indices: make(map[int]structuredRESTBodyCLIArrayIndex),
+				})
+				projectionIndex = len(projections) - 1
+			}
+			previous, exists := projections[projectionIndex].indices[step.index]
+			if !exists || mapping.path.raw < previous.field {
+				previous.field = mapping.path.raw
+			}
+			previous.required = previous.required || mapping.flag.Required
+			projections[projectionIndex].indices[step.index] = previous
+		}
+	}
+	sort.Slice(projections, func(left, right int) bool {
+		return operationDirectWriteBodyPathLess(
+			operationDirectWriteBodyPath{steps: projections[left].prefix},
+			operationDirectWriteBodyPath{steps: projections[right].prefix},
+		)
+	})
+	for _, projection := range projections {
+		indices := make([]int, 0, len(projection.indices))
+		for index := range projection.indices {
+			indices = append(indices, index)
+		}
+		sort.Ints(indices)
+		expected := structuredRESTBodyCLIStaticArrayPrefixLength(staticBody, projection.prefix)
+		for _, index := range indices {
+			if !projection.indices[index].required || index < expected {
+				continue
+			}
+			if index != expected {
+				return fmt.Errorf("operation %q CLI body field %q uses sparse array index %d; rest.body or required CLI mappings must provide every preceding array item", operation, projection.indices[index].field, index)
+			}
+			expected++
+		}
+	}
+	return nil
+}
+
+func structuredRESTBodyCLIPathStepsEqual(left, right []operationDirectWriteBodyPathStep) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for index := range left {
+		if left[index] != right[index] {
+			return false
+		}
+	}
+	return true
+}
+
+func structuredRESTBodyCLIStaticArrayPrefixLength(staticBody map[string]any, prefix []operationDirectWriteBodyPathStep) int {
+	value, found := operationDirectWriteBodyPathValue(staticBody, prefix)
+	if !found {
+		return 0
+	}
+	items, ok := value.([]any)
+	if !ok {
+		return 0
+	}
+	if _, ok := operationDirectWriteStaticBodyScaffold(items); !ok {
+		return 0
+	}
+	return len(items)
 }
 
 type structuredRESTBodyCLICoverage struct {
@@ -448,125 +579,6 @@ func structuredRESTBodyArrayCLIValueDomainFits(node map[string]any, values []str
 	return true
 }
 
-func structuredRESTBodyRequiredMappingPaths(node map[string]any, prefix string) []string {
-	properties, _ := node["properties"].(map[string]any)
-	required, _ := node["required"].([]any)
-	names := make([]string, 0, len(required))
-	for _, rawName := range required {
-		name, ok := rawName.(string)
-		if !ok || name == "" {
-			continue
-		}
-		names = append(names, name)
-	}
-	sort.Strings(names)
-	paths := make([]string, 0, len(names))
-	for _, name := range names {
-		child, ok := properties[name].(map[string]any)
-		if !ok {
-			continue
-		}
-		path := name
-		if prefix != "" {
-			path = prefix + "." + name
-		}
-		children := structuredRESTBodyRequiredDescendantPaths(child, path)
-		if len(children) == 0 {
-			paths = append(paths, path)
-			continue
-		}
-		paths = append(paths, children...)
-	}
-	return paths
-}
-
-func structuredRESTBodyRequiredDescendantPaths(node map[string]any, prefix string) []string {
-	if isObjectType(node) {
-		return structuredRESTBodyRequiredMappingPaths(node, prefix)
-	}
-	if !isArrayType(node) {
-		return nil
-	}
-	minItems, err := structuredRESTBodyArrayMinItems(node)
-	if err != nil || minItems == 0 {
-		return nil
-	}
-	firstItem, err := operationDirectWriteBodyArrayItemSchema(node, 0)
-	if err != nil {
-		return nil
-	}
-	if !isObjectType(firstItem) && !isArrayType(firstItem) {
-		return nil
-	}
-	paths := make([]string, 0, minItems)
-	for index := 0; index < minItems; index++ {
-		item, err := operationDirectWriteBodyArrayItemSchema(node, index)
-		if err != nil {
-			continue
-		}
-		itemPath := fmt.Sprintf("%s.%d", prefix, index)
-		children := structuredRESTBodyRequiredDescendantPaths(item, itemPath)
-		if len(children) == 0 {
-			paths = append(paths, itemPath)
-			continue
-		}
-		paths = append(paths, children...)
-	}
-	return paths
-}
-
-func structuredRESTBodyStaticValueAtPath(body map[string]any, resolved operationDirectWriteBodyPath) bool {
-	var current any = body
-	for _, step := range resolved.steps {
-		switch value := current.(type) {
-		case map[string]any:
-			var ok bool
-			if step.array {
-				return false
-			}
-			current, ok = value[step.key]
-			if !ok {
-				return false
-			}
-		case []any:
-			if !step.array || step.index >= len(value) {
-				return false
-			}
-			current = value[step.index]
-		default:
-			return false
-		}
-	}
-	raw, err := json.Marshal(resolved.node)
-	if err != nil {
-		return false
-	}
-	sch, err := compileStructuredRESTBodySchemaDocument(raw)
-	return err == nil && sch.Validate(current) == nil
-}
-
-func structuredRESTBodyRequiredFlag(path operationDirectWriteBodyPath, flags []structuredRESTBodyCLIFieldMapping) (CLIFlag, bool) {
-	var optional CLIFlag
-	foundOptional := false
-	for _, mapping := range flags {
-		covers := operationDirectWriteBodyPathsOverlap(mapping.path, path) && len(mapping.path.steps) <= len(path.steps)
-		if mapping.flag.Type == "json" && operationDirectWriteBodyPathsOverlap(mapping.path, path) {
-			covers = true
-		}
-		if !covers {
-			continue
-		}
-		if mapping.flag.Required {
-			return mapping.flag, true
-		}
-		if !foundOptional {
-			optional = mapping.flag
-			foundOptional = true
-		}
-	}
-	return optional, foundOptional
-}
-
 func operationStructuredJSONContentType(op OperationSpec) (string, string, error) {
 	if op.REST == nil {
 		return "", "", fmt.Errorf("operation %q has no rest declaration", op.ID)
@@ -636,15 +648,6 @@ func operationHasStructuredRESTBodyField(op OperationSpec) bool {
 
 func OperationDirectWriteHasStructuredRESTBody(op OperationSpec) bool {
 	return operationDirectWriteUsesJSONBody(op) && operationHasStructuredRESTBodyField(op)
-}
-
-func operationHasStructuredRESTBodyValue(body map[string]any) bool {
-	for _, value := range body {
-		if isStructuredJSONBodyValue(value) {
-			return true
-		}
-	}
-	return false
 }
 
 type structuredRESTBodySchemaCompilation struct {
@@ -1785,14 +1788,18 @@ func structuredRESTBodyMinimumJSONStringBytes(node map[string]any) (int, error) 
 func structuredRESTBodyStringWitnessCandidates(node map[string]any) ([]string, error) {
 	pattern, hasPattern := node["pattern"].(string)
 	format, _ := node["format"].(string)
+	minLength, err := structuredRESTBodyStringMinLength(node)
+	if err != nil {
+		return nil, err
+	}
 	if !hasPattern {
 		if _, exists := node["pattern"]; exists {
 			return nil, fmt.Errorf("pattern must be a string")
 		}
 		if format == "uri" {
-			return []string{"x:"}, nil
+			return []string{structuredRESTBodyPadStringWitness("x:", minLength)}, nil
 		}
-		return []string{""}, nil
+		return []string{structuredRESTBodyPadStringWitness("", minLength)}, nil
 	}
 	witness, err := structuredRESTBodyPatternMinimumString(pattern)
 	if err != nil {
@@ -1812,6 +1819,29 @@ func structuredRESTBodyStringWitnessCandidates(node map[string]any) ([]string, e
 		unique = append(unique, candidate)
 	}
 	return unique, nil
+}
+
+// structuredRESTBodyStringMinLength mirrors the shared schema compiler's
+// non-negative integral minLength rule. The structured-body normalizer holds
+// this decoded node as ordinary JSON values, so accept only the exact number
+// shapes json.Unmarshal creates and leave malformed forms to the compiler.
+func structuredRESTBodyStringMinLength(node map[string]any) (int, error) {
+	raw, exists := node["minLength"]
+	if !exists {
+		return 0, nil
+	}
+	value, ok := raw.(float64)
+	if !ok || value < 0 || math.Trunc(value) != value || value > float64(maxOperationDirectWriteBytes) {
+		return 0, fmt.Errorf("minLength must be a bounded non-negative integer")
+	}
+	return int(value), nil
+}
+
+func structuredRESTBodyPadStringWitness(prefix string, minLength int) string {
+	if padding := minLength - utf8.RuneCountInString(prefix); padding > 0 {
+		return prefix + strings.Repeat("x", padding)
+	}
+	return prefix
 }
 
 func structuredRESTBodyPatternMinimumString(pattern string) (string, error) {
@@ -1968,10 +1998,6 @@ func structuredRESTBodyJSONStringBytes(value string) int {
 	return len(encoded)
 }
 
-func structuredRESTBodyMinimumJSONObjectBytes(node map[string]any) (int, error) {
-	return structuredRESTBodyMinimumJSONObjectBytesWithStatic(node, nil)
-}
-
 func structuredRESTBodyMinimumJSONObjectBytesWithStatic(node map[string]any, staticBody map[string]any) (int, error) {
 	properties, ok := node["properties"].(map[string]any)
 	if !ok {
@@ -2040,10 +2066,6 @@ func structuredRESTBodyMinimumJSONObjectBytesWithStatic(node map[string]any, sta
 	return minimum, nil
 }
 
-func structuredRESTBodyMinimumJSONArrayBytes(node map[string]any) (int, error) {
-	return structuredRESTBodyMinimumJSONArrayBytesWithStatic(node, nil)
-}
-
 func structuredRESTBodyMinimumJSONArrayBytesWithStatic(node map[string]any, staticBody []any) (int, error) {
 	minimumItems, err := structuredRESTBodyArrayMinItems(node)
 	if err != nil {
@@ -2082,17 +2104,6 @@ func structuredRESTBodyByteCostAdd(left, right int) int {
 		return limit
 	}
 	return left + right
-}
-
-func structuredRESTBodyByteCostMultiply(value, count int) int {
-	limit := maxOperationDirectWriteBytes + 1
-	if value == 0 || count == 0 {
-		return 0
-	}
-	if value >= limit || count >= limit || value > limit/count {
-		return limit
-	}
-	return value * count
 }
 
 func structuredRESTBodyByteCost(value int) int {

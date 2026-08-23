@@ -84,6 +84,33 @@ func TestDirectReadAllowsSlashBearingRefPathVariables(t *testing.T) {
 	}
 }
 
+func TestDirectReadExecutesHyphenatedPathVariable(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/enterprises/example/teams/team-alpha/organizations" {
+			t.Fatalf("path = %s, want hyphenated path variable resolved", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"organization":"example"}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/enterprises/{enterprise}/teams/{enterprise-team}/organizations"), connectors.DirectReadRequest{
+		Method: http.MethodGet,
+		Path:   "/enterprises/{enterprise}/teams/{enterprise-team}/organizations",
+		PathParams: map[string]string{
+			"enterprise":      "example",
+			"enterprise-team": "team-alpha",
+		},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if result.Status != http.StatusOK {
+		t.Fatalf("status = %d, want 200", result.Status)
+	}
+}
+
 func TestDirectReadHTTPErrorKeepsProviderQueryAndBodyPrivate(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if got, want := r.URL.Query().Get("trace"), "direct-read-fixture"; got != want {
@@ -1022,14 +1049,73 @@ func TestOperationDirectReadPreservesDeclaredResponseFieldsAndMasksKnownSecrets(
 	if got := result.Headers["X-Provider-Tier"].Values; len(got) != 1 || got[0] != "rare-paid-feature" {
 		t.Fatalf("provider tier header = %#v, want complete declared metadata", got)
 	}
-	if cookie, ok := result.Headers["Set-Cookie"]; !ok || !cookie.Redacted || len(cookie.Values) != 0 {
-		t.Fatalf("Set-Cookie = %#v, want presence-preserving redaction marker", cookie)
+	if cookie, ok := result.Headers["Set-Cookie"]; !ok || !reflect.DeepEqual(cookie.Values, []string{"session=transport-secret"}) {
+		t.Fatalf("Set-Cookie = %#v, want exact internal provider metadata", cookie)
 	}
-	if providerKey, ok := result.Headers["X-Provider-Key"]; !ok || !providerKey.Redacted || len(providerKey.Values) != 0 {
-		t.Fatalf("X-Provider-Key = %#v, want presence-preserving redaction marker", providerKey)
+	if providerKey, ok := result.Headers["X-Provider-Key"]; !ok || !reflect.DeepEqual(providerKey.Values, []string{"echoed-credential"}) {
+		t.Fatalf("X-Provider-Key = %#v, want exact internal provider metadata", providerKey)
 	}
 	if _, present := result.Headers["X-Undeclared-Transport-Metadata"]; present {
 		t.Fatalf("headers = %#v, undeclared provider metadata became an output channel", result.Headers)
+	}
+}
+
+func TestOperationDirectReadMasksConfiguredResponseHeaderValues(t *testing.T) {
+	const credential = "configured-header-material"
+	const occurrenceID = "occurrence-9007199254740993"
+	const unconfiguredToken = "ghp_unconfigured_provider_token"
+	encodedCredential := base64.StdEncoding.EncodeToString([]byte(credential))
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("X-Request-ID", occurrenceID)
+		w.Header().Set("X-Provider-Token", unconfiguredToken)
+		w.Header().Set("X-Configured-Secret", credential)
+		w.Header().Set("X-Configured-Encoding", encodedCredential)
+		_, _ = w.Write([]byte(`{"ordinary":"retained"}`))
+	}))
+	t.Cleanup(srv.Close)
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID: "acme.result", Kind: "rest_read", Summary: "Declared result", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method: http.MethodGet, Path: "/v1/result", MaxBytes: 1024,
+				Response: &OperationResponseSpec{Headers: []OperationResponseHeaderSpec{
+					{Name: "X-Request-ID", MaxBytes: 64},
+					{Name: "X-Provider-Token", MaxBytes: 64},
+					{Name: "X-Configured-Secret", MaxBytes: 64},
+					{Name: "X-Configured-Encoding", MaxBytes: 64},
+				}},
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/v1/result", Operation: &SurfaceOperation{Model: "direct_read"}}}},
+	}
+
+	result, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation: "acme.result",
+		Config:    connectors.RuntimeConfig{Secrets: map[string]string{"credential": credential}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	for name, want := range map[string][]string{
+		"X-Request-ID":          {occurrenceID},
+		"X-Provider-Token":      {unconfiguredToken},
+		"X-Configured-Secret":   {"[masked]"},
+		"X-Configured-Encoding": {"[masked]"},
+	} {
+		header, ok := result.Headers[name]
+		if !ok || header.Redacted || !reflect.DeepEqual(header.Values, want) {
+			t.Fatalf("header %q = %#v, want values %#v without header-name redaction", name, header, want)
+		}
+	}
+	public, err := json.Marshal(result.Headers)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if bytes.Contains(public, []byte(credential)) || bytes.Contains(public, []byte(encodedCredential)) {
+		t.Fatal("public direct-read headers exposed configured material")
 	}
 }
 
@@ -1379,11 +1465,48 @@ func TestDirectReadReceiptPreservesAbsentAndInvalidBodiesAndMasksExactSecrets(t 
 		if result.Receipt == nil || result.Receipt.BodyRawEncoding != "base64" || result.Receipt.BodyBytes != int64(len(raw)) {
 			t.Fatalf("invalid UTF-8 receipt = %#v", result.Receipt)
 		}
-		decoded, decodeErr := base64.StdEncoding.DecodeString(result.Receipt.BodyRaw)
+		// The engine receipt is immutable. Public serialization applies masking
+		// and preserves the binary encoding without exposing raw secret bytes.
+		public := connectors.SanitizeProviderResponseReceiptForOutput(*result.Receipt, map[string]string{"api_token": secret})
+		decoded, decodeErr := base64.StdEncoding.DecodeString(public.BodyRaw)
 		if decodeErr != nil || bytes.Contains(decoded, []byte(secret)) || !bytes.Contains(decoded, []byte("[masked]")) {
 			t.Fatalf("masked invalid UTF-8 receipt = %q, decode err %v", decoded, decodeErr)
 		}
 	})
+}
+
+func TestOperationDirectReadMasksConfiguredCursorAtThePublicBoundary(t *testing.T) {
+	const configuredValue = "fixture-cursor-material"
+	issued := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"results":[{"occurrence_id":"occurrence-9007199254740993","token_type":"ordinary"}],"next_cursor":"fixture-cursor-material"}`))
+	}))
+	t.Cleanup(srv.Close)
+	b := paginatedOperationBundle(srv.URL, &PaginationSpec{Type: "cursor", CursorParam: "cursor", TokenPath: "next_cursor"}, "/v1/results")
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list",
+		Config:    connectors.RuntimeConfig{Secrets: map[string]string{"credential": configuredValue}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if issued != 1 {
+		t.Fatalf("requests = %d, want 1", issued)
+	}
+	public, err := json.Marshal(result)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if bytes.Contains(public, []byte(configuredValue)) {
+		t.Fatal("public direct-read result exposed configured cursor material")
+	}
+	body := result.Body.(map[string]any)
+	row := body["results"].([]any)[0].(map[string]any)
+	if row["occurrence_id"] != "occurrence-9007199254740993" || row["token_type"] != "ordinary" {
+		t.Fatal("cursor masking changed ordinary provider output")
+	}
 }
 
 // --- required_query any-of groups ------------------------------------------

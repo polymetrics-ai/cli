@@ -40,6 +40,27 @@ func TestOperationHeaderRepeatabilityExcludesPaginationParameters(t *testing.T) 
 	}
 }
 
+// TestOperationHeaderDeclarationsRejectRuntimeOwnedIdempotencyNames proves a
+// preview-bound operation cannot publish a declaration-owned idempotency
+// header that the retry transport later silently removes. These names stay
+// runtime-owned until their retry semantics are deliberately modelled.
+func TestOperationHeaderDeclarationsRejectRuntimeOwnedIdempotencyNames(t *testing.T) {
+	for _, name := range []string{"Idempotency-Key", "X-Idempotency-Key"} {
+		t.Run(name, func(t *testing.T) {
+			err := validateOperationHeaderParameters(OperationSpec{REST: &RESTOperationSpec{Parameters: []OperationParameter{{
+				Name:     name,
+				In:       "header",
+				Type:     "string",
+				MaxBytes: 128,
+				Schema:   []byte(`{"type":"string","maxLength":128}`),
+			}}}})
+			if err == nil || !strings.Contains(err.Error(), "runtime-owned") {
+				t.Fatalf("validateOperationHeaderParameters(%q) error = %v, want runtime-owned refusal", name, err)
+			}
+		})
+	}
+}
+
 func TestReadSurfaceContracts(t *testing.T) {
 	for _, intent := range []string{"direct_read", "binary_download", "text_export", "status_check"} {
 		if !IsReadSurfaceIntent(intent) {

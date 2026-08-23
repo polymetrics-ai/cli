@@ -901,6 +901,14 @@ DECLARATIVE TYPED DESTINATION TRANSPORT
   record-driven destination actions for the same sync mode; no action is
   inferred from declaration order.
 
+  Plan and preview output list and digest-bind every declaration-owned
+  physical action, including any independently destructive tombstone delete.
+  The runtime may clamp --batch-size to the selected action's acknowledgement,
+  read-back, and bounded private-receipt capacity; it never creates a larger
+  provider mutation unit. A tombstone is a separately approved tombstone
+  delete with a distinct mapping, idempotency key, and independent absence
+  read-back before checkpoint.
+
   Create and preview the connection-owned plan, then use the ordinary approved
   ETL run:
 
@@ -918,13 +926,27 @@ DECLARATIVE TYPED DESTINATION TRANSPORT
   unsupported mode fails before source or provider I/O. See
   docs/sync-transport-definition.md for the mechanical declaration contract.
 
-  JSON run and status output retains each acknowledged typed action result in
-  run.destination_results: record accounting plus every ordinary successful
-  provider response field (status, headers, and body). Fields are not removed
-  because they are rare, destructive, paid-tier-specific, or unfamiliar.
-  Provider-returned fields, keys, and values are preserved verbatim, even when
-  they equal configured credential bytes. System-generated plans, logs,
-  request diagnostics, and synthetic errors remain secret-taint-safe.
+  JSON run and status output retains each provider-successful typed action
+  result in run.destination_results: record accounting plus every ordinary
+  successful provider response field (status, headers, and body). Fields are
+  not removed because they are rare, destructive, paid-tier-specific, or
+  unfamiliar. Concrete configured credential material is masked wherever it
+  occurs; provider-owned field names and ordinary values remain available.
+  If a later local receipt, acknowledgement, composition, or output step fails
+  before checkpoint, the failed uncheckpointed run still retains ordered
+  sanitized provider evidence. System-generated plans, logs, request
+  diagnostics, and synthetic errors remain secret-taint-safe.
+
+  If a closed transport has already applied, read back, and checkpointed a
+  destination effect but cannot complete local receipt retirement or its
+  declaration-owned approval marker, the persisted run has status
+  delivered_reconciliation_required. Its delivery_reconciliation field names
+  only the bounded local repair; destination_results and the acknowledged
+  checkpoint remain intact. The command exits nonzero with an exact terminal ETLRun.
+  Repeating the same saved connection and stream repairs from durable
+  state before endpoint resolution and never replays source or destination I/O.
+  Missing, malformed, or stale reconciliation evidence is refused rather than
+  falling back to an ordinary route.
 
 DIRECT CONNECTOR COMMANDS
   check
@@ -1401,9 +1423,10 @@ SECURITY
   declared in redact_fields. Engine direct-read, operation-direct-read, and binary-
   download executors preserve bounded HTTP URL/query/body diagnostics before
   downstream rendering. Persisted reverse-ETL output retains complete provider
-  results: provider-returned fields, keys, and values remain verbatim even when
-  they equal configured credential bytes. System-generated plans, logs,
-  request diagnostics, and synthetic errors remain secret-taint-safe.
+  results: concrete configured credential material is masked, while
+  provider-owned field names and ordinary values remain available.
+  System-generated plans, logs, request diagnostics, and synthetic errors
+  remain secret-taint-safe.
   Credential storage remains encrypted at rest.
 
 LEARN MORE

@@ -3,9 +3,12 @@ package engine
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"sort"
@@ -23,6 +26,16 @@ import (
 // spec declares an explicit page_size.
 const defaultPageSize = 100
 
+const maxReadContinuationPages = 1_000_000
+
+type readContinuationPayload struct {
+	Version          int    `json:"version"`
+	Connector        string `json:"connector"`
+	Stream           string `json:"stream"`
+	DefinitionSHA256 string `json:"definition_sha256"`
+	SkippedPages     int    `json:"skipped_pages"`
+}
+
 // Read executes a declarative stream read against b per design §B.4: resolve
 // the StreamSpec, build a connsdk.Requester (base URL/headers/auth), build
 // the initial query (static query + incremental lower bound), drive the
@@ -30,18 +43,33 @@ const defaultPageSize = 100
 // (+computed_fields) -> hook dispatch -> emit. A StreamHook that returns
 // handled=true bypasses the declarative path entirely for this stream.
 func Read(ctx context.Context, b Bundle, req connectors.ReadRequest, h Hooks, emit func(connectors.Record) error) error {
-	return ReadWithSleeper(ctx, b, req, h, emit, nil)
+	return readWithSleeper(ctx, b, req, h, emit, nil, false)
+}
+
+// ReadWithOutcome is the transport-only source variant of Read. Unlike the
+// established reader, it refuses to conflate a known page-budget stop with
+// normal source exhaustion and returns only an engine-produced opaque resume
+// token for a later request.
+func ReadWithOutcome(ctx context.Context, b Bundle, req connectors.ReadRequest, h Hooks, emit func(connectors.Record) error) error {
+	return readWithSleeper(ctx, b, req, h, emit, nil, true)
 }
 
 // ReadWithSleeper is Read with an injectable rate-limit sleeper (nil uses the
 // real connsdk default, i.e. context-aware time.Sleep). Exposed so tests can
 // assert the rate-limit wait is invoked without incurring real sleeps.
 func ReadWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, h Hooks, emit func(connectors.Record) error, sleeper func(context.Context, time.Duration) error) error {
+	return readWithSleeper(ctx, b, req, h, emit, sleeper, false)
+}
+
+func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, h Hooks, emit func(connectors.Record) error, sleeper func(context.Context, time.Duration) error, trackPaginationOutcome bool) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
 	if req.MaxPages < 0 {
 		return fmt.Errorf("engine: max pages must not be negative")
+	}
+	if req.Continuation != nil && !trackPaginationOutcome {
+		return fmt.Errorf("engine: source continuation requires tracked pagination outcome")
 	}
 
 	stream, err := findStream(b, req.Stream)
@@ -65,18 +93,24 @@ func ReadWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
 		}
 		if handled {
+			if trackPaginationOutcome && req.MaxPages > 0 {
+				return fmt.Errorf("engine: tracked pagination outcome is unavailable for stream hook %q", stream.Name)
+			}
 			return nil
 		}
 	}
 
-	return readDeclarative(ctx, b, stream, req, rt, h, emit)
+	return readDeclarative(ctx, b, stream, req, rt, h, emit, trackPaginationOutcome)
 }
 
-func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error) error {
+func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error, trackPaginationOutcome bool) error {
 	if stream.FanOut != nil {
+		if trackPaginationOutcome && (req.MaxPages > 0 || req.Continuation != nil) {
+			return fmt.Errorf("engine: tracked pagination outcome does not support fan-out stream %q", stream.Name)
+		}
 		return readFanOut(ctx, b, stream, req, rt, h, emit)
 	}
-	return readOneSequence(ctx, b, stream, req, rt, h, emit, fanoutContext{})
+	return readOneSequence(ctx, b, stream, req, rt, h, emit, fanoutContext{}, trackPaginationOutcome)
 }
 
 // fanoutContext carries the current fan-out id (if any) into a single
@@ -111,7 +145,7 @@ func readFanOut(ctx context.Context, b Bundle, stream StreamSpec, req connectors
 			return err
 		}
 		fc := fanoutContext{id: id, queryParam: fo.Into.QueryParam, stampField: fo.StampField}
-		if err := readOneSequence(ctx, b, stream, req, rt, h, emit, fc); err != nil {
+		if err := readOneSequence(ctx, b, stream, req, rt, h, emit, fc, false); err != nil {
 			return err
 		}
 	}
@@ -257,7 +291,7 @@ func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req 
 // computed_fields — implemented as an ENGINE-added computed field the
 // bundle author never declares twice, applied via the exact same
 // applyComputedFields code path as any other computed_fields entry.
-func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error, fc fanoutContext) error {
+func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error, fc fanoutContext, trackPaginationOutcome bool) error {
 	schema := b.Schemas[stream.Name]
 
 	pag := stream.Pagination
@@ -305,6 +339,10 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	}
 
 	maxPages := effectiveReadMaxPages(specForPaginator.MaxPages, req.MaxPages)
+	skippedPages, err := readContinuationSkippedPages(b, stream, req.Continuation)
+	if err != nil {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
 
 	pathVars := requestVars(req.Config, nil, "")
 	pathVars.FanoutID = fc.id
@@ -321,7 +359,14 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		// zero value, i.e. absent/unset) means unbounded — pagination is
 		// bounded only by the paginator's own short/empty-page stop signal,
 		// same as before this cap existed.
-		if maxPages > 0 && pageNum >= maxPages {
+		if maxPages > 0 && pageNum-skippedPages >= maxPages {
+			if trackPaginationOutcome {
+				continuation, err := newReadContinuation(b, stream, pageNum)
+				if err != nil {
+					return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+				}
+				return &connectors.ReadBudgetStoppedError{Continuation: continuation}
+			}
 			break
 		}
 
@@ -376,6 +421,10 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		rawRecords, err := extractRecords(resp.Body, stream.Records)
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+		}
+		if pageNum < skippedPages {
+			page = paginator.Next(resp, len(rawRecords))
+			continue
 		}
 		responseFields, err := extractResponseFields(resp.Body, stream.ResponseFields)
 		if err != nil {
@@ -451,6 +500,76 @@ func effectiveReadMaxPages(declared, requested int) int {
 		return requested
 	}
 	return declared
+}
+
+func newReadContinuation(b Bundle, stream StreamSpec, skippedPages int) (connectors.ReadContinuation, error) {
+	if skippedPages < 1 || skippedPages > maxReadContinuationPages {
+		return connectors.ReadContinuation{}, fmt.Errorf("engine: source continuation page count is out of bounds")
+	}
+	payload := readContinuationPayload{
+		Version:          1,
+		Connector:        b.Name,
+		Stream:           stream.Name,
+		DefinitionSHA256: readContinuationDefinitionDigest(b, stream),
+		SkippedPages:     skippedPages,
+	}
+	encoded, err := json.Marshal(payload)
+	if err != nil {
+		return connectors.ReadContinuation{}, fmt.Errorf("engine: encode source continuation: %w", err)
+	}
+	if len(encoded) > 4096 {
+		return connectors.ReadContinuation{}, fmt.Errorf("engine: source continuation exceeds its byte bound")
+	}
+	return connectors.ReadContinuation{Kind: "engine_pagination_v1", Token: encoded}, nil
+}
+
+func readContinuationSkippedPages(b Bundle, stream StreamSpec, continuation *connectors.ReadContinuation) (int, error) {
+	if continuation == nil {
+		return 0, nil
+	}
+	if continuation.Kind != "engine_pagination_v1" || len(continuation.Token) == 0 || len(continuation.Token) > 4096 {
+		return 0, fmt.Errorf("engine: source continuation is invalid")
+	}
+	decoder := json.NewDecoder(bytes.NewReader(continuation.Token))
+	decoder.DisallowUnknownFields()
+	var payload readContinuationPayload
+	if err := decoder.Decode(&payload); err != nil {
+		return 0, fmt.Errorf("engine: decode source continuation: %w", err)
+	}
+	if err := ensureReadContinuationEOF(decoder); err != nil {
+		return 0, err
+	}
+	if payload.Version != 1 || payload.Connector != b.Name || payload.Stream != stream.Name || payload.DefinitionSHA256 != readContinuationDefinitionDigest(b, stream) || payload.SkippedPages < 1 || payload.SkippedPages > maxReadContinuationPages {
+		return 0, fmt.Errorf("engine: source continuation does not match the declared stream")
+	}
+	return payload.SkippedPages, nil
+}
+
+func ensureReadContinuationEOF(decoder *json.Decoder) error {
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return fmt.Errorf("engine: source continuation contains multiple JSON values")
+		}
+		return fmt.Errorf("engine: decode source continuation: %w", err)
+	}
+	return nil
+}
+
+func readContinuationDefinitionDigest(b Bundle, stream StreamSpec) string {
+	encoded, err := json.Marshal(struct {
+		Connector string     `json:"connector"`
+		HTTP      HTTPBase   `json:"http"`
+		Stream    StreamSpec `json:"stream"`
+	}{Connector: b.Name, HTTP: b.HTTP, Stream: stream})
+	if err != nil {
+		// Bundle compilation rejects values that cannot be encoded. Retain a
+		// deterministic fail-closed marker if an in-memory test double breaks
+		// that invariant rather than accepting a continuation across a change.
+		return "invalid"
+	}
+	sum := sha256.Sum256(encoded)
+	return hex.EncodeToString(sum[:])
 }
 
 func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, query map[string]string, page *connsdk.NextPage, pag PaginationSpec, formattedLowerBound string, fc fanoutContext) (any, error) {
@@ -867,6 +986,14 @@ func resolveQueryParamsWithRecordOmission(params map[string]QueryParam, vars Var
 		}
 		val, err := Interpolate(param.Template, vars)
 		if err != nil {
+			// A declared query selector may be optional for ordinary reads and
+			// supplied only by a closed caller such as declaration-owned
+			// read-back. This never admits an undeclared query key: the only
+			// tolerated absence is the exact query.* template on an entry that
+			// explicitly opts into omission.
+			if param.OmitWhenAbsent && isUnresolvedQueryPath(err) {
+				continue
+			}
 			if allowOmitRecord && param.OmitWhenAbsent && isUnresolvedRecordPath(err) {
 				continue
 			}
@@ -1727,6 +1854,15 @@ func bareTemplateInner(tmpl string) (string, bool) {
 func isUnresolvedRecordPath(err error) bool {
 	var unresolved *unresolvedKeyError
 	return errors.As(err, &unresolved) && unresolved.Namespace == "record"
+}
+
+// isUnresolvedQueryPath reports an absent value in the exact declared query
+// namespace. It is intentionally separate from config/secrets/incremental:
+// only an object-form query declaration that explicitly asks to omit the
+// parameter may tolerate this absence.
+func isUnresolvedQueryPath(err error) bool {
+	var unresolved *unresolvedKeyError
+	return errors.As(err, &unresolved) && unresolved.Namespace == "query"
 }
 
 // isUnresolvedConfigSecretOrIncremental reports whether err is the typed
