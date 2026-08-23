@@ -674,7 +674,7 @@ func TestDeclarativeDestination_ReadBackUsesInternalReceiptLocator(t *testing.T)
 	connector := engine.New(bundle, nil)
 	executor := &declarativeTypedDestinationExecutor{}
 	approval := syntheticTypedDestinationApproval(t, name, "apply_widget")
-	strategy := connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_widget"}
+	strategy := typedDestinationApplyStrategy(t, connector, synccontract.ModeFullAppend, "apply_widget")
 	plan, err := executor.PlanDestination(context.Background(), synctransport.DestinationPlanRequest{
 		Connector: connector, Source: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend, ApplyStrategy: strategy, Approval: approval,
 	})
@@ -695,8 +695,8 @@ func TestDeclarativeDestination_ReadBackUsesInternalReceiptLocator(t *testing.T)
 	if err != nil {
 		t.Fatalf("apply destination: %v", err)
 	}
-	if writes != 1 || bytes.Contains(acknowledgement.Output, []byte(privateLocator)) {
-		t.Fatalf("write/public acknowledgement = %d/%q, want one write and redacted public output", writes, acknowledgement.Output)
+	if writes != 1 || !bytes.Contains(acknowledgement.Output, []byte(privateLocator)) {
+		t.Fatalf("write/public acknowledgement = %d/%q, want one write and verbatim provider output", writes, acknowledgement.Output)
 	}
 	privateReceipt, found := acknowledgement.PrivateReceipt()
 	if !found || !bytes.Contains(privateReceipt, []byte(privateLocator)) {
@@ -1141,7 +1141,7 @@ func TestDeclarativeTypedDestinationMappedNullDefersToSelectedActionSchema(t *te
 	if err != nil {
 		t.Fatalf("typed destination contract: %v", err)
 	}
-	strategy := connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_widget"}
+	strategy := typedDestinationApplyStrategy(t, connector, synccontract.ModeFullAppend, "apply_widget")
 	binding, err := contract.plan(connector, "widgets", synccontract.ModeFullAppend, strategy)
 	if err != nil {
 		t.Fatalf("plan nullable typed destination: %v", err)
@@ -1416,7 +1416,7 @@ func TestDeclarativeTypedDestinationRefusesRedirectsBeforeRetargeting(t *testing
 			connector := engine.New(bundle, nil)
 			executor := &declarativeTypedDestinationExecutor{}
 			approval := syntheticTypedDestinationApproval(t, name, "apply_widget")
-			strategy := connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_widget"}
+			strategy := typedDestinationApplyStrategy(t, connector, synccontract.ModeFullAppend, "apply_widget")
 			plan, err := executor.PlanDestination(context.Background(), synctransport.DestinationPlanRequest{
 				Connector: connector, Source: connector, Stream: "widgets", Mode: synccontract.ModeFullAppend, ApplyStrategy: strategy, Approval: approval,
 			})
@@ -1769,9 +1769,7 @@ func TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFi
 			if err != nil {
 				t.Fatalf("load typed destination contract: %v", err)
 			}
-			binding, err := contract.plan(testCase.connector, "widgets", synccontract.ModeFullAppend, connectors.DestinationApplyStrategy{
-				Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: testCase.action,
-			})
+			binding, err := contract.plan(testCase.connector, "widgets", synccontract.ModeFullAppend, typedDestinationApplyStrategy(t, testCase.connector, synccontract.ModeFullAppend, testCase.action))
 			if err != nil {
 				t.Fatalf("plan selected %s action: %v", testCase.action, err)
 			}
@@ -1831,7 +1829,7 @@ func TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFi
 	if err != nil {
 		t.Fatalf("load cross-action contract: %v", err)
 	}
-	if _, err := crossActionContract.plan(crossActionContract.connector, "widgets", synccontract.ModeFullAppend, connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_camel"}); err == nil {
+	if _, err := crossActionContract.plan(crossActionContract.connector, "widgets", synccontract.ModeFullAppend, typedDestinationApplyStrategy(t, crossActionContract.connector, synccontract.ModeFullAppend, "apply_camel")); err == nil {
 		t.Fatal("camel action accepted a source binding for another action schema")
 	}
 
@@ -1865,7 +1863,7 @@ func TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFi
 			if err != nil {
 				t.Fatalf("load %s contract: %v", testCase.name, err)
 			}
-			if _, err := contract.plan(contract.connector, "widgets", synccontract.ModeFullAppend, connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_invalid"}); err == nil {
+			if _, err := contract.plan(contract.connector, "widgets", synccontract.ModeFullAppend, typedDestinationApplyStrategy(t, contract.connector, synccontract.ModeFullAppend, "apply_invalid")); err == nil {
 				t.Fatalf("plan accepted %s source binding input %q", testCase.name, testCase.input)
 			}
 		})
@@ -2519,7 +2517,7 @@ func TestDeclarativeTypedDestinationAcceptsDefinitionOwningNativeConnector(t *te
 	if err != nil {
 		t.Fatalf("native typed destination contract: %v", err)
 	}
-	strategy := connectors.DestinationApplyStrategy{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_widget"}
+	strategy := typedDestinationApplyStrategy(t, native, synccontract.ModeFullAppend, "apply_widget")
 	if _, err := contract.plan(source, "widgets", synccontract.ModeFullAppend, strategy); err != nil {
 		t.Fatalf("native typed destination plan: %v", err)
 	}
@@ -2716,6 +2714,23 @@ func declarativeTypedDestinationActionBundleFS(name, sourceRunID, destinationRun
 		files[filename] = &fstest.MapFile{Data: []byte(contents)}
 	}
 	return files
+}
+
+// typedDestinationApplyStrategy keeps direct adapter tests bound to the full
+// declaration-selected action, including its action-owned read-back policy.
+// Production preflight supplies this exact strategy; test calls that construct
+// only mode/strategy/action would otherwise model an impossible partial plan.
+func typedDestinationApplyStrategy(t *testing.T, connector connectors.Connector, mode synccontract.Mode, action string) connectors.DestinationApplyStrategy {
+	t.Helper()
+	destination, ok := connectors.DestinationTransportDescriptorOf(connector)
+	if !ok {
+		t.Fatalf("connector %q has no destination transport descriptor", connector.Name())
+	}
+	strategy, err := destination.ApplyStrategyForAction(mode, action)
+	if err != nil {
+		t.Fatalf("destination strategy %q for mode %q: %v", action, mode, err)
+	}
+	return strategy
 }
 
 func declarativeTypedDestinationMultiActionBundleFS(name, sourceRunID, destinationRunID string) fstest.MapFS {
