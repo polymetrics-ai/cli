@@ -21,7 +21,6 @@ import (
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/conformance"
 	"polymetrics.ai/internal/connectors/engine"
-	"polymetrics.ai/internal/synccontract"
 )
 
 const zoomBundleName = "zoom"
@@ -360,9 +359,10 @@ func TestMissingFoundationGapRowsAreSourceLockedAndRollUp(t *testing.T) {
 		} `json:"provider_source"`
 	}
 	type catalogGap struct {
-		ID         string `json:"id"`
-		Capability string `json:"missing_provider_neutral_capability"`
-		Status     string `json:"status"`
+		ID         string   `json:"id"`
+		Capability string   `json:"missing_provider_neutral_capability"`
+		Evidence   []string `json:"validator_or_runtime_evidence"`
+		Status     string   `json:"status"`
 		Owner      struct {
 			Issue  *string `json:"issue"`
 			Lane   string  `json:"lane"`
@@ -433,8 +433,12 @@ func TestMissingFoundationGapRowsAreSourceLockedAndRollUp(t *testing.T) {
 		}
 		catalogByID[gap.ID] = gap
 	}
-	if got := len(catalogByID); got != 12 {
-		t.Fatalf("deduplicated foundation gap catalog = %d, want 12", got)
+	if got := len(catalogByID); got != 11 {
+		t.Fatalf("deduplicated foundation gap catalog = %d, want 11", got)
+	}
+	deleteGap, found := catalogByID["declarative-typed-destination-delete-semantics"]
+	if !found || !strings.Contains(strings.Join(deleteGap.Evidence, " "), "internal/app/issue_label_warehouse_transport.go:944") {
+		t.Fatal("delete-semantics gap must cite the ordinary DELETE replay refusal")
 	}
 
 	rowsByGap := map[string]map[string]bool{}
@@ -485,8 +489,7 @@ func TestMissingFoundationGapRowsAreSourceLockedAndRollUp(t *testing.T) {
 	wantFanout := map[string]int{
 		"binary-redirect-origin-contract":                    1,
 		"capability-scoped-live-evidence-publication":        2,
-		"declarative-typed-destination-action-multiplicity":  7,
-		"declarative-typed-destination-app-dispatch":         1,
+		"declarative-typed-destination-delete-semantics":     8,
 		"definition-fixture-conformance-certification-stage": 3,
 		"file-upload-executor":                               34,
 		"operation-specific-fixture-evidence-projection":     776,
@@ -919,8 +922,8 @@ func TestEveryTypedZoomActionHasReverseETLCommandAndCandidate(t *testing.T) {
 		if candidate.command != command.Path || candidate.intent != "reverse_etl" || candidate.kind != "write_action" || candidate.executor != "reverse_plan" {
 			t.Errorf("typed action %q candidate = %+v, want command:%q reverse_etl write_action/reverse_plan", name, candidate, command.Path)
 		}
-		if candidate.code != "unassessed" || candidate.family != "declared_typed_destination_proof_pending" {
-			t.Errorf("typed action %q candidate classification = code:%q family:%q, want declared transport awaiting fixture and live proof", name, candidate.code, candidate.family)
+		if candidate.code != "unassessed" || candidate.family != "direct_cli_typed_action_proof_pending" {
+			t.Errorf("typed action %q candidate classification = code:%q family:%q, want direct CLI action awaiting fixture and live proof", name, candidate.code, candidate.family)
 		}
 	}
 }
@@ -1050,17 +1053,16 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 
 }
 
-// TestZoomTransportDeclaresTheExecutableSourceAndTypedDestination keeps the
-// definition-selected source and destination adapters honest. The destination
-// is deliberately a single named action with one source-field mapping; it is
-// not a generic provider writer.
-func TestZoomTransportDeclaresTheExecutableSourceAndTypedDestination(t *testing.T) {
+// TestZoomTransportDeclaresTheExecutableSourceOnlyUntilDeleteSemanticsExists
+// keeps the ETL source declaration executable while refusing to model a
+// provider DELETE as an ordinary reverse-ETL replay action.
+func TestZoomTransportDeclaresTheExecutableSourceOnlyUntilDeleteSemanticsExists(t *testing.T) {
 	bundle := loadZoomBundle(t)
 	if bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil {
 		t.Fatal("Zoom must declare its source sync transport")
 	}
-	if bundle.SyncTransport.Destination == nil {
-		t.Fatal("Zoom must declare its connector-neutral typed destination")
+	if bundle.SyncTransport.Destination != nil {
+		t.Fatal("Zoom must not declare a typed destination until delete semantics are transport-safe")
 	}
 	source := bundle.SyncTransport.Source
 	if got, want := source.Executor.Family, connectors.TransportExecutorFamilyDeclarativeAPI; got != want {
@@ -1088,56 +1090,6 @@ func TestZoomTransportDeclaresTheExecutableSourceAndTypedDestination(t *testing.
 		t.Errorf("source transport deletes = %q, want %q", got, want)
 	}
 
-	destination := bundle.SyncTransport.Destination
-	if got, want := destination.Executor.Family, connectors.TransportExecutorFamilyDeclarativeAPI; got != want {
-		t.Errorf("destination transport family = %q, want %q", got, want)
-	}
-	if got, want := destination.Executor.ID, "declarative_typed_destination"; got != want {
-		t.Errorf("destination transport executor = %q, want %q", got, want)
-	}
-	if got, want := destination.EligibleActions, []string{
-		"zoom_contact_center_deleteuserrecordings",
-		"zoom_contact_center_userdelete",
-		"zoom_scim2_userscim2delete",
-		"zoom_users_deluservb",
-		"zoom_users_userdelete",
-		"zoom_users_userpicturedelete",
-		"zoom_users_userschedulersdelete",
-		"zoom_users_userssotokendelete",
-	}; !reflect.DeepEqual(got, want) {
-		t.Errorf("destination eligible actions = %#v, want %#v", got, want)
-	}
-	if got, want := destination.Modes, []synccontract.Mode{synccontract.ModeFullAppend}; !reflect.DeepEqual(got, want) {
-		t.Errorf("destination modes = %#v, want %#v", got, want)
-	}
-	if got, want := destination.Delivery.Idempotency, connectors.DeliveryIdempotencyKeyed; got != want {
-		t.Errorf("destination idempotency = %q, want %q", got, want)
-	}
-	if got, want := destination.Delivery.Ordering, connectors.DeliveryOrderingSource; got != want {
-		t.Errorf("destination ordering = %q, want %q", got, want)
-	}
-	if got, want := destination.Delivery.Deletes, connectors.DeliveryDeletesUnavailable; got != want {
-		t.Errorf("destination tombstone deletes = %q, want %q", got, want)
-	}
-	if got, want := destination.Acknowledgement, connectors.TransportAcknowledgementDurableWarehouse; got != want {
-		t.Errorf("destination acknowledgement = %q, want %q", got, want)
-	}
-	if got, want := destination.Conformance.Suite, "zoom_typed_destination"; got != want {
-		t.Errorf("destination conformance suite = %q, want %q", got, want)
-	}
-	if got, want := destination.Conformance.RunID, "users_sso_token_revoke_v1"; got != want {
-		t.Errorf("destination conformance run = %q, want %q", got, want)
-	}
-	if got, want := destination.ApplyStrategies, []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "zoom_users_userssotokendelete"}}; !reflect.DeepEqual(got, want) {
-		t.Errorf("destination apply strategies = %#v, want %#v", got, want)
-	}
-	if got, want := destination.SourceBindings, []connectors.DestinationSourceBinding{{
-		Executor:        connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyDeclarativeAPI, ID: "declarative_stream_source"},
-		EligibleStreams: []string{"users"},
-		RecordMapping:   connectors.SourceRecordMapping{Kind: connectors.SourceRecordMappingKindInputFields, Inputs: []connectors.SourceRecordInputBinding{{Input: "user_id", Field: "id"}}},
-	}}; !reflect.DeepEqual(got, want) {
-		t.Errorf("destination source bindings = %#v, want %#v", got, want)
-	}
 }
 
 // TestPinnedCreationCursorsAreProjected proves the cursors used by certification
@@ -1225,25 +1177,23 @@ func TestCertificationCandidatesDescribeOneBoundedReadAndDeferWrites(t *testing.
 	if mutations == nil || mutations.Cohort.CommandCount != 206 || !reflect.DeepEqual(mutations.Cohort.Intents, []string{"reverse_etl"}) {
 		t.Fatalf("mutation candidate generation = %+v, want all 206 reverse-ETL actions", mutations)
 	}
-	if len(mutations.Families) != 1 || mutations.Families[0].ID != "declared_typed_destination_proof_pending" || mutations.Families[0].Classification.Code != "unassessed" {
-		t.Errorf("mutation candidate containment = %+v, want one declared-destination family awaiting fixture and live proof", mutations.Families)
+	if len(mutations.Families) != 1 || mutations.Families[0].ID != "direct_cli_typed_action_proof_pending" || mutations.Families[0].Classification.Code != "unassessed" || !strings.Contains(mutations.Families[0].Classification.Evidence, "internal/app/issue_label_warehouse_transport.go:944") {
+		t.Errorf("mutation candidate containment = %+v, want one direct-CLI family with an explicit delete-semantics limitation", mutations.Families)
 	}
 }
 
 // TestReverseETLEligibilityDisposesEveryTypedAction keeps destination
-// eligibility separate from direct CLI reachability. A destructive or
-// privileged action stays user-reachable; only an exact source-record mapping
-// or the one-action-per-mode closed destination contract can constrain its
-// transport selection.
+// eligibility separate from direct CLI reachability. A destructive action
+// stays user-reachable, but a source-key overlap does not make provider DELETE
+// safe to replay as an ordinary reverse-ETL destination action.
 func TestReverseETLEligibilityDisposesEveryTypedAction(t *testing.T) {
 	bundle := loadZoomBundle(t)
 	var ledger struct {
 		Summary struct {
 			TypedActions                          int `json:"typed_actions"`
 			DirectCLIReachable                    int `json:"direct_cli_reachable"`
-			ExactRecordDrivenSourceMappings       int `json:"exact_record_driven_source_mappings"`
-			SelectedByCurrentApplyStrategy        int `json:"selected_by_current_apply_strategy"`
-			PendingDestinationActionMultiplicity  int `json:"pending_destination_action_multiplicity"`
+			DeleteActionsWithSourceKeyOverlap     int `json:"delete_actions_with_source_key_overlap"`
+			DirectCLIOnlyDeleteSemantics          int `json:"direct_cli_only_delete_semantics"`
 			DirectCLIOnlyMissingExactSourceFields int `json:"direct_cli_only_missing_exact_source_fields"`
 			DirectCLIOnlyNoSourceKey              int `json:"direct_cli_only_no_source_key"`
 			Certified                             int `json:"certified"`
@@ -1274,14 +1224,11 @@ func TestReverseETLEligibilityDisposesEveryTypedAction(t *testing.T) {
 	if got := ledger.Summary.DirectCLIReachable; got != 206 {
 		t.Errorf("directly CLI-reachable actions = %d, want 206", got)
 	}
-	if got := ledger.Summary.ExactRecordDrivenSourceMappings; got != 8 {
-		t.Errorf("exact record-driven source mappings = %d, want 8", got)
+	if got := ledger.Summary.DeleteActionsWithSourceKeyOverlap; got != 8 {
+		t.Errorf("delete actions with a source-key overlap = %d, want 8", got)
 	}
-	if got := ledger.Summary.SelectedByCurrentApplyStrategy; got != 1 {
-		t.Errorf("currently selected destination actions = %d, want 1", got)
-	}
-	if got := ledger.Summary.PendingDestinationActionMultiplicity; got != 7 {
-		t.Errorf("actions pending destination multiplicity = %d, want 7", got)
+	if got := ledger.Summary.DirectCLIOnlyDeleteSemantics; got != 8 {
+		t.Errorf("direct-CLI-only delete-semantic actions = %d, want 8", got)
 	}
 	if got := ledger.Summary.DirectCLIOnlyMissingExactSourceFields; got != 197 {
 		t.Errorf("direct-CLI-only actions missing source fields = %d, want 197", got)
@@ -1294,7 +1241,7 @@ func TestReverseETLEligibilityDisposesEveryTypedAction(t *testing.T) {
 	}
 
 	seen := make(map[string]bool, len(ledger.Actions))
-	selected, multiplicityPending := 0, 0
+	deleteSemantics := 0
 	for _, action := range ledger.Actions {
 		if action.Action == "" || action.Command == "" {
 			t.Errorf("eligibility entry is missing action or command: %+v", action)
@@ -1308,15 +1255,10 @@ func TestReverseETLEligibilityDisposesEveryTypedAction(t *testing.T) {
 			t.Errorf("action %q implementation state = %q, want implemented_user_reachable", action.Action, action.ImplementationState)
 		}
 		switch action.Destination.Status {
-		case "selected_pending_application_dispatch":
-			selected++
-			if !action.Destination.DeclaredEligible || !action.Destination.SelectedByApplyStrategy {
-				t.Errorf("selected action %q lacks declared destination selection", action.Action)
-			}
-		case "eligible_pending_action_multiplicity":
-			multiplicityPending++
-			if !action.Destination.DeclaredEligible || action.Destination.SelectedByApplyStrategy {
-				t.Errorf("multiplicity-pending action %q has invalid selection state", action.Action)
+		case "direct_cli_only_delete_semantics":
+			deleteSemantics++
+			if action.Destination.DeclaredEligible || action.Destination.SelectedByApplyStrategy || !strings.Contains(action.Destination.SemanticExclusion, "internal/app/issue_label_warehouse_transport.go:944") {
+				t.Errorf("delete-semantic direct-only action %q lacks the bounded runtime exclusion", action.Action)
 			}
 		case "direct_cli_only_missing_exact_source_fields", "direct_cli_only_no_source_key":
 			if action.Destination.DeclaredEligible || action.Destination.SemanticExclusion == "" {
@@ -1329,8 +1271,8 @@ func TestReverseETLEligibilityDisposesEveryTypedAction(t *testing.T) {
 	if got, want := len(seen), len(bundle.Writes); got != want {
 		t.Errorf("eligibility action entries = %d, want %d", got, want)
 	}
-	if selected != 1 || multiplicityPending != 7 {
-		t.Errorf("destination selection states selected=%d multiplicity-pending=%d, want 1/7", selected, multiplicityPending)
+	if deleteSemantics != 8 {
+		t.Errorf("delete-semantic direct-only actions = %d, want 8", deleteSemantics)
 	}
 }
 
@@ -1400,19 +1342,19 @@ func TestLaneOwnedMeetingLifecycleActionsAreClosedAndReachable(t *testing.T) {
 func TestSevenSurfaceReadinessAccountsForEveryProviderIdentity(t *testing.T) {
 	var ledger struct {
 		Summary struct {
-			DocumentedSourceOperations          int `json:"documented_source_operations"`
-			ReconciliationRecords               int `json:"reconciliation_records"`
-			DeclaredOperationContracts          int `json:"declared_operation_contracts"`
-			CommandBound                        int `json:"command_bound"`
-			TypedActionBound                    int `json:"typed_action_bound"`
-			ETLBoundStreams                     int `json:"etl_bound_streams"`
-			ReverseETLCommandBound              int `json:"reverse_etl_command_bound"`
-			ReverseETLExactSourceMappings       int `json:"reverse_etl_exact_source_mappings"`
-			ReverseETLSelectedByCurrentStrategy int `json:"reverse_etl_selected_by_current_strategy"`
-			BinaryBoundExecutable               int `json:"binary_bound_executable"`
-			Disabled                            int `json:"disabled"`
-			Uncertified                         int `json:"uncertified"`
-			Certified                           int `json:"certified"`
+			DocumentedSourceOperations        int `json:"documented_source_operations"`
+			ReconciliationRecords             int `json:"reconciliation_records"`
+			DeclaredOperationContracts        int `json:"declared_operation_contracts"`
+			CommandBound                      int `json:"command_bound"`
+			TypedActionBound                  int `json:"typed_action_bound"`
+			ETLBoundStreams                   int `json:"etl_bound_streams"`
+			ReverseETLCommandBound            int `json:"reverse_etl_command_bound"`
+			ReverseETLDeleteSourceKeyOverlaps int `json:"reverse_etl_delete_source_key_overlaps"`
+			ReverseETLDestinationBound        int `json:"reverse_etl_destination_bound"`
+			BinaryBoundExecutable             int `json:"binary_bound_executable"`
+			Disabled                          int `json:"disabled"`
+			Uncertified                       int `json:"uncertified"`
+			Certified                         int `json:"certified"`
 		} `json:"summary"`
 		Operations []struct {
 			Identity struct {
@@ -1444,8 +1386,8 @@ func TestSevenSurfaceReadinessAccountsForEveryProviderIdentity(t *testing.T) {
 	if ledger.Summary.DeclaredOperationContracts != 1748 || ledger.Summary.CommandBound != 714 || ledger.Summary.TypedActionBound != 206 {
 		t.Errorf("readiness declaration totals = contracts:%d commands:%d actions:%d, want 1748/714/206", ledger.Summary.DeclaredOperationContracts, ledger.Summary.CommandBound, ledger.Summary.TypedActionBound)
 	}
-	if ledger.Summary.ETLBoundStreams != 3 || ledger.Summary.ReverseETLCommandBound != 206 || ledger.Summary.ReverseETLExactSourceMappings != 8 || ledger.Summary.ReverseETLSelectedByCurrentStrategy != 1 {
-		t.Errorf("readiness transport totals = ETL:%d reverse commands:%d exact mappings:%d selected:%d, want 3/206/8/1", ledger.Summary.ETLBoundStreams, ledger.Summary.ReverseETLCommandBound, ledger.Summary.ReverseETLExactSourceMappings, ledger.Summary.ReverseETLSelectedByCurrentStrategy)
+	if ledger.Summary.ETLBoundStreams != 3 || ledger.Summary.ReverseETLCommandBound != 206 || ledger.Summary.ReverseETLDeleteSourceKeyOverlaps != 8 || ledger.Summary.ReverseETLDestinationBound != 0 {
+		t.Errorf("readiness transport totals = ETL:%d reverse commands:%d delete key overlaps:%d destination-bound:%d, want 3/206/8/0", ledger.Summary.ETLBoundStreams, ledger.Summary.ReverseETLCommandBound, ledger.Summary.ReverseETLDeleteSourceKeyOverlaps, ledger.Summary.ReverseETLDestinationBound)
 	}
 	if ledger.Summary.BinaryBoundExecutable != 0 || ledger.Summary.Disabled != 1155 || ledger.Summary.Uncertified != 1939 || ledger.Summary.Certified != 0 {
 		t.Errorf("readiness availability totals = binary:%d disabled:%d uncertified:%d certified:%d, want 0/1155/1939/0", ledger.Summary.BinaryBoundExecutable, ledger.Summary.Disabled, ledger.Summary.Uncertified, ledger.Summary.Certified)

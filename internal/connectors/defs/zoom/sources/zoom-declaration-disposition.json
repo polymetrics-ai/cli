@@ -134,13 +134,11 @@
       },
       "declarative_typed_destination_transport": {
         "typed_write_actions": 206,
-        "declared_destination_transport": true,
-        "eligible_actions": 8,
-        "selected_action": "zoom_users_userssotokendelete",
-        "pending_action_multiplicity": 7,
-        "source_binding": "users.id -> user_id",
-        "mode": "full_append",
-        "application_dispatch": "pending the updated fm/cli-reverse-etl-destination-r1 head; definition-level validation is not an application-level deployability claim"
+        "declared_destination_transport": false,
+        "delete_actions_with_source_key_overlap": 8,
+        "direct_cli_only_delete_semantics": 8,
+        "gap_id": "declarative-typed-destination-delete-semantics",
+        "reason": "The users.id overlap points only to provider DELETE actions; no ordinary replay destination is declared. internal/app/issue_label_warehouse_transport.go:944 rejects such a full_append action."
       },
       "operation_specific_fixture_evidence_projection": {
         "operation_rest_read_contracts": 776,
@@ -173,7 +171,7 @@
     "An operations.json entry is a source-contract inventory declaration, not an executable terminal command or api_surface coverage claim.",
     "The 70 direct reads owned by Wave 2 remain external until their parent integration; this branch does not duplicate them.",
     "writes.json contains 206 typed actions, including 185 provider DELETE actions. They are guarded reverse-ETL commands, not invented generic HTTP writes.",
-    "sync_transport.json declares Zoom's three source streams and eight exact connector-neutral typed destination actions. One full_append strategy selects zoom_users_userssotokendelete; seven source-mappable actions are explicitly pending the one-action-per-mode selection limit. The destination remains implemented-but-uncertified and is not application-level deployable until the updated #4304 persisted-App dispatch integration is merged and exercised.",
+    "sync_transport.json declares Zoom source streams only. Eight direct CLI DELETE actions share a users.id -> user_id field overlap, but no destination transport is declared: replaying them would issue provider deletion, and internal/app/issue_label_warehouse_transport.go:944 rejects DELETE as ordinary full_append. They remain individually implemented, approval-gated direct CLI commands and are explicitly source-traced under declarative-typed-destination-delete-semantics.",
     "Runnable-command correction: 505 scalar-parameter reads, 202 no-body writes, and two narrow Meeting JSON-body lifecycle writes are implemented pending certification; elevated OAuth scope is runtime metadata, not a disable reason."
   ],
   "ledger_dispositions": [

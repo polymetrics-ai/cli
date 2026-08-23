@@ -153,6 +153,36 @@ cross-checks the 1,937 source and 1,913 ledger inventory records, committed comm
 transport eligibility, and certification limitations. Run generated artifacts and all repository
 gates before push.
 
+## Delete-only destination reconciliation (2026-08-23)
+
+Red: after the source-key audit identified eight `users.id -> user_id` candidates, the focused
+transport and eligibility tests were changed to refuse an ordinary destination replay. They failed
+because `sync_transport.json` still declared `declarative_typed_destination`, the eligibility ledger
+still selected one DELETE and deferred seven as multiplicity, and the missing-foundation catalog
+still treated the problem as dispatch/multiplicity rather than destructive replay semantics.
+
+Green: `go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run
+'^(TestMissingFoundationGapRowsAreSourceLockedAndRollUp|TestZoomTransportDeclaresTheExecutableSourceOnlyUntilDeleteSemanticsExists|TestReverseETLEligibilityDisposesEveryTypedAction|TestSevenSurfaceReadinessAccountsForEveryProviderIdentity|TestLaneOwnedMeetingLifecycleActionsAreClosedAndReachable)$'`
+passes after removing the destination declaration. The source transport remains executable; all
+eight DELETE commands remain implemented and directly CLI-reachable; the readiness and eligibility
+ledgers record zero destination-bound actions and eight direct-CLI-only delete-semantic actions.
+The source-traced `declarative-typed-destination-delete-semantics` gap cites
+`internal/app/issue_label_warehouse_transport.go:944`, which refuses DELETE as an ordinary
+`full_append` apply action. No alternate non-delete mapping and no transport bypass was introduced.
+
+Manual-GSD boundary: this is connector-owned declaration reconciliation, not a new shared
+foundation. A tombstone-aware delete destination remains a separately scoped shared capability;
+this lane keeps the commands reachable without claiming they are sync destinations.
+
+Red: after the certification source declaration was corrected, `go run ./cmd/connectorgen
+certification-matrix . --connector zoom --check` and `go run ./cmd/connectorgen
+certification-sweep . --connector zoom --check` both reported generated-artifact drift.
+
+Green: rerunning `certification-candidates`, `certification-matrix`, and `certification-sweep` for
+Zoom followed by each `--check` regenerated a 717-row sweep with 714 CLI commands and no drift.
+The generated mutation candidates now state that the typed actions are direct CLI actions and cite
+the delete-semantics limitation instead of claiming a declared destination.
+
 ## Lane-owned Meeting lifecycle continuation
 
 Manual-GSD fallback: the relaunch supplied an already-dirty connector branch after the production

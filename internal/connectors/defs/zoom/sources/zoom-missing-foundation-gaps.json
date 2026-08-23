@@ -1626,58 +1626,29 @@
       }
     },
     {
-      "id": "declarative-typed-destination-app-dispatch",
-      "missing_provider_neutral_capability": "persisted App and installed CLI dispatch selection for declaration-owned typed destinations",
+      "id": "declarative-typed-destination-delete-semantics",
+      "missing_provider_neutral_capability": "declaration-owned reverse-ETL delete semantics that distinguish source tombstones from ordinary record replay",
       "validator_or_runtime_evidence": [
-        "#4304 composes declarative typed destinations through the orchestrator, but persisted App dispatch does not yet auto-select the generic destination.",
-        "Zoom's selected source-mapped action cannot be called application-level deployable before the final #4304 head is merged and exercised."
+        "All eight Zoom users.id overlaps target provider DELETE actions; treating a source row as an ordinary apply would replay destructive provider deletion.",
+        "internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action."
       ],
       "owner": {
-        "issue": "#4303",
-        "pull_request": "#4304",
-        "lane": "fm/cli-reverse-etl-destination-r1",
-        "status": "assigned"
-      },
-      "status": "waiting_for_published_head",
-      "closure_verification": [
-        "go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run '^TestZoomTransportDeclaresTheExecutableSourceAndTypedDestination$'",
-        "built pm persisted-App reverse-ETL plan, approval, apply, acknowledgement, and provider read-back using lane-owned data"
-      ],
-      "fanout": {
-        "affected_connectors": [
-          "zoom"
-        ],
-        "affected_connector_count": 1,
-        "affected_operation_count": 1,
-        "affected_operation_ids": [
-          "zoom.rest/users/userSSOTokenDelete"
-        ]
-      }
-    },
-    {
-      "id": "declarative-typed-destination-action-multiplicity",
-      "missing_provider_neutral_capability": "exact multi-action typed-destination selection for one source and apply mode",
-      "validator_or_runtime_evidence": [
-        "The closed #4304 destination model selects one named action for each apply strategy and mode.",
-        "Seven Zoom source-mapped actions are eligible but cannot be selected alongside the one full_append strategy."
-      ],
-      "owner": {
-        "issue": "#4303",
-        "pull_request": "#4304",
-        "lane": "fm/cli-reverse-etl-destination-r1",
-        "status": "assigned"
+        "issue": null,
+        "lane": "foundation-backlog",
+        "status": "unassigned"
       },
       "status": "open",
       "closure_verification": [
-        "go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run '^TestReverseETLEligibilityDisposesEveryTypedAction$'",
-        "built pm persisted-App reverse-ETL plan, approval, apply, acknowledgement, and provider read-back for every declared eligible action"
+        "go test -count=1 -timeout 20m ./internal/app -run 'TestDeclarativeTypedDestinationTombstonesRequireDeclaredDeleteAction'",
+        "go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run 'TestZoomTransportDeclaresTheExecutableSourceOnlyUntilDeleteSemanticsExists|TestReverseETLEligibilityDisposesEveryTypedAction'",
+        "a shared delete-semantics destination proof with source tombstones, explicit approval, provider read-back, and cleanup"
       ],
       "fanout": {
         "affected_connectors": [
           "zoom"
         ],
         "affected_connector_count": 1,
-        "affected_operation_count": 7,
+        "affected_operation_count": 8,
         "affected_operation_ids": [
           "zoom.rest/contact-center/deleteUserRecordings",
           "zoom.rest/contact-center/userDelete",
@@ -1685,7 +1656,8 @@
           "zoom.rest/users/delUserVB",
           "zoom.rest/users/userDelete",
           "zoom.rest/users/userPictureDelete",
-          "zoom.rest/users/userSchedulersDelete"
+          "zoom.rest/users/userSchedulersDelete",
+          "zoom.rest/users/userSSOTokenDelete"
         ]
       }
     }
@@ -1776,7 +1748,7 @@
       "website_reachability": "not_currently_documentable_as_executable"
     },
     {
-      "gap_id": "declarative-typed-destination-action-multiplicity",
+      "gap_id": "declarative-typed-destination-delete-semantics",
       "connector": "zoom",
       "provider_operation": {
         "id": "zoom.rest/contact-center/deleteUserRecordings",
@@ -1796,8 +1768,8 @@
         "cli",
         "website"
       ],
-      "failing_validator_or_runtime_evidence": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-      "gap_catalog_ref": "declarative-typed-destination-action-multiplicity",
+      "failing_validator_or_runtime_evidence": "All eight users.id overlaps target provider DELETE actions. Replaying an ordinary source record would issue a destructive mutation; internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action. The commands remain implemented direct CLI actions, not sync destinations.",
+      "gap_catalog_ref": "declarative-typed-destination-delete-semantics",
       "binding": {
         "write_action": "zoom_contact_center_deleteuserrecordings",
         "command": "api contact-center deleteuserrecordings",
@@ -1808,7 +1780,7 @@
       "website_reachability": "generated_cli_documentation_required"
     },
     {
-      "gap_id": "declarative-typed-destination-action-multiplicity",
+      "gap_id": "declarative-typed-destination-delete-semantics",
       "connector": "zoom",
       "provider_operation": {
         "id": "zoom.rest/contact-center/userDelete",
@@ -1828,8 +1800,8 @@
         "cli",
         "website"
       ],
-      "failing_validator_or_runtime_evidence": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-      "gap_catalog_ref": "declarative-typed-destination-action-multiplicity",
+      "failing_validator_or_runtime_evidence": "All eight users.id overlaps target provider DELETE actions. Replaying an ordinary source record would issue a destructive mutation; internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action. The commands remain implemented direct CLI actions, not sync destinations.",
+      "gap_catalog_ref": "declarative-typed-destination-delete-semantics",
       "binding": {
         "write_action": "zoom_contact_center_userdelete",
         "command": "api contact-center userdelete",
@@ -1840,7 +1812,7 @@
       "website_reachability": "generated_cli_documentation_required"
     },
     {
-      "gap_id": "declarative-typed-destination-action-multiplicity",
+      "gap_id": "declarative-typed-destination-delete-semantics",
       "connector": "zoom",
       "provider_operation": {
         "id": "zoom.rest/scim2/userSCIM2Delete",
@@ -1860,8 +1832,8 @@
         "cli",
         "website"
       ],
-      "failing_validator_or_runtime_evidence": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-      "gap_catalog_ref": "declarative-typed-destination-action-multiplicity",
+      "failing_validator_or_runtime_evidence": "All eight users.id overlaps target provider DELETE actions. Replaying an ordinary source record would issue a destructive mutation; internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action. The commands remain implemented direct CLI actions, not sync destinations.",
+      "gap_catalog_ref": "declarative-typed-destination-delete-semantics",
       "binding": {
         "write_action": "zoom_scim2_userscim2delete",
         "command": "api scim2 userscim2delete",
@@ -1872,7 +1844,7 @@
       "website_reachability": "generated_cli_documentation_required"
     },
     {
-      "gap_id": "declarative-typed-destination-action-multiplicity",
+      "gap_id": "declarative-typed-destination-delete-semantics",
       "connector": "zoom",
       "provider_operation": {
         "id": "zoom.rest/users/delUserVB",
@@ -1892,8 +1864,8 @@
         "cli",
         "website"
       ],
-      "failing_validator_or_runtime_evidence": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-      "gap_catalog_ref": "declarative-typed-destination-action-multiplicity",
+      "failing_validator_or_runtime_evidence": "All eight users.id overlaps target provider DELETE actions. Replaying an ordinary source record would issue a destructive mutation; internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action. The commands remain implemented direct CLI actions, not sync destinations.",
+      "gap_catalog_ref": "declarative-typed-destination-delete-semantics",
       "binding": {
         "write_action": "zoom_users_deluservb",
         "command": "api users deluservb",
@@ -1904,7 +1876,7 @@
       "website_reachability": "generated_cli_documentation_required"
     },
     {
-      "gap_id": "declarative-typed-destination-action-multiplicity",
+      "gap_id": "declarative-typed-destination-delete-semantics",
       "connector": "zoom",
       "provider_operation": {
         "id": "zoom.rest/users/userDelete",
@@ -1924,8 +1896,8 @@
         "cli",
         "website"
       ],
-      "failing_validator_or_runtime_evidence": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-      "gap_catalog_ref": "declarative-typed-destination-action-multiplicity",
+      "failing_validator_or_runtime_evidence": "All eight users.id overlaps target provider DELETE actions. Replaying an ordinary source record would issue a destructive mutation; internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action. The commands remain implemented direct CLI actions, not sync destinations.",
+      "gap_catalog_ref": "declarative-typed-destination-delete-semantics",
       "binding": {
         "write_action": "zoom_users_userdelete",
         "command": "api users userdelete",
@@ -1936,7 +1908,7 @@
       "website_reachability": "generated_cli_documentation_required"
     },
     {
-      "gap_id": "declarative-typed-destination-action-multiplicity",
+      "gap_id": "declarative-typed-destination-delete-semantics",
       "connector": "zoom",
       "provider_operation": {
         "id": "zoom.rest/users/userPictureDelete",
@@ -1956,8 +1928,8 @@
         "cli",
         "website"
       ],
-      "failing_validator_or_runtime_evidence": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-      "gap_catalog_ref": "declarative-typed-destination-action-multiplicity",
+      "failing_validator_or_runtime_evidence": "All eight users.id overlaps target provider DELETE actions. Replaying an ordinary source record would issue a destructive mutation; internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action. The commands remain implemented direct CLI actions, not sync destinations.",
+      "gap_catalog_ref": "declarative-typed-destination-delete-semantics",
       "binding": {
         "write_action": "zoom_users_userpicturedelete",
         "command": "api users userpicturedelete",
@@ -1968,7 +1940,7 @@
       "website_reachability": "generated_cli_documentation_required"
     },
     {
-      "gap_id": "declarative-typed-destination-action-multiplicity",
+      "gap_id": "declarative-typed-destination-delete-semantics",
       "connector": "zoom",
       "provider_operation": {
         "id": "zoom.rest/users/userSchedulersDelete",
@@ -1988,8 +1960,8 @@
         "cli",
         "website"
       ],
-      "failing_validator_or_runtime_evidence": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-      "gap_catalog_ref": "declarative-typed-destination-action-multiplicity",
+      "failing_validator_or_runtime_evidence": "All eight users.id overlaps target provider DELETE actions. Replaying an ordinary source record would issue a destructive mutation; internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action. The commands remain implemented direct CLI actions, not sync destinations.",
+      "gap_catalog_ref": "declarative-typed-destination-delete-semantics",
       "binding": {
         "write_action": "zoom_users_userschedulersdelete",
         "command": "api users userschedulersdelete",
@@ -2000,7 +1972,7 @@
       "website_reachability": "generated_cli_documentation_required"
     },
     {
-      "gap_id": "declarative-typed-destination-app-dispatch",
+      "gap_id": "declarative-typed-destination-delete-semantics",
       "connector": "zoom",
       "provider_operation": {
         "id": "zoom.rest/users/userSSOTokenDelete",
@@ -2020,8 +1992,8 @@
         "cli",
         "website"
       ],
-      "failing_validator_or_runtime_evidence": "fm/cli-reverse-etl-destination-r1 persisted App/CLI dispatch integration; no deployability claim until its updated head is merged and exercised",
-      "gap_catalog_ref": "declarative-typed-destination-app-dispatch",
+      "failing_validator_or_runtime_evidence": "All eight users.id overlaps target provider DELETE actions. Replaying an ordinary source record would issue a destructive mutation; internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action. The commands remain implemented direct CLI actions, not sync destinations.",
+      "gap_catalog_ref": "declarative-typed-destination-delete-semantics",
       "binding": {
         "write_action": "zoom_users_userssotokendelete",
         "command": "api users userssotokendelete",
@@ -41178,7 +41150,7 @@
         "open_gap_rows": 293,
         "unique_affected_operations": 271,
         "gap_ids": [
-          "declarative-typed-destination-action-multiplicity",
+          "declarative-typed-destination-delete-semantics",
           "file-upload-executor",
           "operation-specific-fixture-evidence-projection",
           "rest-query-array-encoding",
@@ -41407,7 +41379,7 @@
         "open_gap_rows": 6,
         "unique_affected_operations": 6,
         "gap_ids": [
-          "declarative-typed-destination-action-multiplicity",
+          "declarative-typed-destination-delete-semantics",
           "rest-write-root-json-input"
         ],
         "affected_surfaces": [
@@ -41443,8 +41415,7 @@
         "unique_affected_operations": 57,
         "gap_ids": [
           "capability-scoped-live-evidence-publication",
-          "declarative-typed-destination-action-multiplicity",
-          "declarative-typed-destination-app-dispatch",
+          "declarative-typed-destination-delete-semantics",
           "definition-fixture-conformance-certification-stage",
           "file-upload-executor",
           "operation-specific-fixture-evidence-projection",
@@ -41564,8 +41535,7 @@
       "open_gap_ids": [
         "binary-redirect-origin-contract",
         "capability-scoped-live-evidence-publication",
-        "declarative-typed-destination-action-multiplicity",
-        "declarative-typed-destination-app-dispatch",
+        "declarative-typed-destination-delete-semantics",
         "definition-fixture-conformance-certification-stage",
         "file-upload-executor",
         "operation-specific-fixture-evidence-projection",

@@ -1,8 +1,8 @@
 # Zoom seven-surface readiness
 
 Issue: #4265
-Stacked base: `fm/cli-reverse-etl-destination-r1` at `d814875a902be684cb2a38b94f7a8077f66b70b1`; final
-Foundation-on-`main` proof remains pending.
+Base: `main` after the temporary reverse-ETL foundation stack landed. Final source-lock validation
+remains pending #4331's rendered-reference citation contract.
 
 [`sources/zoom-seven-surface-readiness.json`](../../../internal/connectors/defs/zoom/sources/zoom-seven-surface-readiness.json)
 is the committed machine-readable reconciliation ledger. It contains 1,939 records: all 1,937
@@ -13,7 +13,7 @@ implementation state, certification state, and a recoverable gap when it is not 
 ## Missing-foundation delivery
 
 [`sources/zoom-missing-foundation-gaps.json`](../../../internal/connectors/defs/zoom/sources/zoom-missing-foundation-gaps.json)
-is the captain-required companion ledger. It has one deduplicated catalog of 12 shared gaps and
+is the required companion ledger. It has one deduplicated catalog of 11 shared gaps and
 1,329 source-locked operation-gap rows across 1,299 provider operations. Every row records the
 exact provider operation, document URL/revision/SHA-256, relevant surface(s), current validator or
 runtime evidence, and an explicit `merge_ready_enabled: false`. The catalog supplies the shared
@@ -35,6 +35,7 @@ Zoom-specific executor or a connector-side workaround for any shared gap.
 | Command-bound installed-CLI entries | 714 | 505 direct reads, three ETL streams, and 206 reverse-ETL commands, plus capability/transport entries. |
 | Typed write actions / direct CLI reverse-ETL | 206 / 206 | Every typed action is directly user-reachable with existing approval and destructive safeguards. |
 | ETL-bound streams | 3 | Preserved `users`, `meetings`, and `webinars` streams. |
+| Reverse-ETL destination-bound actions | 0 | No ordinary replay destination is declared for a provider DELETE action. |
 | Binary read / write contracts | 1 / 34 | Zero executable binary commands: Clip download awaits redirect-origin evidence; uploads await the `file_upload` executor and multipart-policy contract. |
 | Disabled inventory rows | 1,155 | Each preserves a source or declaration-level reason; this lane does not call them provider-complete parity. |
 | Certified operations | 0 | No command is silently certified; every reconciliation record is explicitly uncertified. |
@@ -49,25 +50,26 @@ path remains mandatory.
 | Reverse-ETL disposition | Count | Meaning |
 | --- | ---: | --- |
 | Directly CLI-reachable | 206 | All named actions have an implemented reverse-ETL command. |
-| Exact source-record mappings | 8 | The existing `users.id` field maps to normalized action input `user_id`; the provider paths still receive `{userId}`. |
-| Selected by current destination strategy | 1 | `zoom_users_userssotokendelete` is the narrow initial proof action. |
-| Awaiting action multiplicity | 7 | They are source-mappable and allowlisted, but the closed contract selects one action for each mode. A second simultaneous `full_append` strategy would violate the current exact-selection model. |
+| DELETE actions with an exact source-key overlap | 8 | `users.id` maps to normalized action input `user_id`, but each target action is a provider DELETE. |
+| Direct CLI only — delete semantics | 8 | They remain implemented direct CLI commands, but no ordinary replay destination is declared: `internal/app/issue_label_warehouse_transport.go:944` rejects DELETE as `full_append`. |
 | Direct CLI only — missing exact source fields | 197 | The definition has no stream that provides every required action input. No values or body fields are invented. |
 | Direct CLI only — no source key | 1 | A source-record mapping cannot choose an unkeyed action safely. |
 
-The remote #4304 head (`d814875a902be684cb2a38b94f7a8077f66b70b1`) is the temporary stacked base
-of this branch, but the full final application-path proof remains a Foundation dependency. The
-captain-approved optional-query behavior was rehearsed only at non-ancestor SHA
-`c3f83cbf6eabbae00219566fb02719ca2d6c480d`; its evidence is isolated in
-[`FOUNDATION-REHEARSAL.md`](FOUNDATION-REHEARSAL.md). Until the Foundation lands on `main` and the
-installed App/CLI path is exercised, the selected action is **not application-level deployable**.
-No Zoom-specific dispatcher or generic writer is added here.
+The former #4304 stack and optional-query behavior are now present through `main`. The rehearsal at
+`c3f83cbf6eabbae00219566fb02719ca2d6c480d` remains isolated evidence in
+[`FOUNDATION-REHEARSAL.md`](FOUNDATION-REHEARSAL.md), not certification. No Zoom-specific
+dispatcher or generic writer is added. The subsequent delete-only reconciliation removes the
+invalid destination declaration rather than replaying a provider DELETE or substituting another
+action merely to claim coverage.
 
 ## Certification boundary
 
-The connector definition validates and the generated certification artifacts are current, but fixture
-proof is insufficient. After the required Foundation revisions land on `main` and are exercised
-through the persisted App/CLI path, certification requires built-binary proof using only the registered
+The connector definition cannot receive its current complete validation result until #4331 lands;
+the v3 OpenAPI-only source lock cannot honestly represent the 35 preserved rendered references.
+The current `connectorgen validate internal/connectors/defs/zoom --json` finding is exactly
+`sources/zoom-operation-source-lock.json: parse source lock: json: unknown field "retrieval"`.
+After that Foundation revision lands and the persisted App/CLI path is exercised, certification
+requires built-binary proof using only the registered
 secret-store reference at process execution time: authenticated read; a unique lane-owned
 create/read-back/update/delete-cleanup flow; ETL; reverse-ETL plan/apply/acknowledgement plus
 independent provider read-back; and a binary round-trip where supported. No pre-existing resource,
@@ -105,3 +107,9 @@ go run ./cmd/connectorgen certification-candidates --connector zoom --check
 go test -count=1 -timeout 20m ./internal/connectors/defs/zoom \
   -run '^TestMissingFoundationGapRowsAreSourceLockedAndRollUp$'
 ```
+
+The two certification generators are currently green after the delete-only reconciliation:
+`certification-candidates --check`, `certification-matrix --check`, and
+`certification-sweep --check` report no drift. Full `connectorgen validate` and
+`surface-sync --check` remain intentionally pending #4331; they must not be made to pass by
+rewriting the preserved rendered-reference source evidence.

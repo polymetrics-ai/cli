@@ -3,8 +3,8 @@
   "connector": "zoom",
   "source": "connector declarations",
   "declared_commands": 714,
-  "declared_rows": 718,
-  "status_total": 718,
+  "declared_rows": 717,
+  "status_total": 717,
   "commands": [
     {
       "summary": "Cancel data deletion request",
@@ -28753,18 +28753,6 @@
       "api_surface": [],
       "status": "fixture_required",
       "reason": "declared source transport requires connector-owned fixture and live proof"
-    },
-    {
-      "summary": "Declared managed destination transport",
-      "path": "transport destination",
-      "intent": "transport_destination",
-      "availability": "implemented",
-      "operation_kind": "reverse_etl",
-      "op_class": "reverse_etl",
-      "flags": [],
-      "api_surface": [],
-      "status": "fixture_required",
-      "reason": "declared managed destination transport requires connector-owned fixture and live proof"
     }
   ],
   "product_defects": [],

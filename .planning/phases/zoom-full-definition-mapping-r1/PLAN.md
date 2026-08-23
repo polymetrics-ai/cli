@@ -137,34 +137,33 @@ audit currently proves 204 commands, 204 distinct typed actions, and 204 candida
 8 updates, and 185 destructive deletes). A regression test keeps that future destination input
 complete before the typed-destination foundation landed. This remains a useful one-to-one command/action/candidate invariant, not the current availability boundary.
 
-## Relaunch continuation — #4304 typed destination (2026-08-20)
+## Relaunch continuation — post-foundation reconciliation (2026-08-23)
 
-PR #4304 is now the exact stacked base. It was merged into this branch without rewriting
-published history and PR #4285 was retargeted to `fm/cli-reverse-etl-destination-r1` through
-the GitHub API. Its definition-composition factory resolves the former generic executor gap. Its
-persisted App/CLI dispatch integration is still owned by the updated #4304 head and remains a
-named dependency until that head is merged, proven an ancestor, and exercised.
+The temporary #4304 stack has landed through `main`; PR #4285 is again a draft PR to `main`.
+The connector does not retain a destination declaration merely because the shared executor can
+compose one: destination eligibility must preserve the provider action's semantics.
 
 ### Exact-SHA optional-query rehearsal (2026-08-22)
 
-Captain-approved Foundation SHA `c3f83cbf6eabbae00219566fb02719ca2d6c480d` was rehearsed only
+The former Foundation SHA `c3f83cbf6eabbae00219566fb02719ca2d6c480d` was rehearsed only
 in an isolated detached temporary worktree. Its exact Zoom Meeting DELETE declaration emitted a
 fixture-approved loopback request while omitting absent `occurrence_id` and
 `cancel_meeting_reminder` query fields and retaining a present optional value. The full
-SHA-bound evidence is in [`FOUNDATION-REHEARSAL.md`](FOUNDATION-REHEARSAL.md). No Foundation
-ancestry was merged or pushed into the connector branch. The preserved branch stays RED for this
-fixture until Foundation reaches `main`; this rehearsal changes neither certification nor final
-merge readiness.
+SHA-bound evidence is in [`FOUNDATION-REHEARSAL.md`](FOUNDATION-REHEARSAL.md). The optional-query
+Foundation has since reached `main`; this rehearsal changes neither certification nor final merge
+readiness. Current source-lock validation instead waits for #4331's rendered-reference citation
+contract, because 35 preserved Zoom captures are rendered Next-data references rather than
+fetchable OpenAPI artifacts.
 
-The Zoom definition declares a truthful production destination template, not a generic writer: the
-existing `users` source stream supplies `id` to normalized `user_id` inputs (interpolated into the
-provider's `{userId}` path parameter) for eight exact record-driven typed actions. The route is
-restricted to `full_append` / `append`, uses the exact declarative source executor, declares durable
-warehouse acknowledgement and keyed replay, and carries its own conformance reference. The current
-closed one-action-per-mode strategy selects `zoom_users_userssotokendelete`; the other seven are
-allowlisted with explicit multiplicity-pending dispositions. All 206 actions remain implemented CLI
-commands with destructive confirmation and reverse-ETL approval as applicable. No live mutation is
-authorized by this declaration.
+The `users.id -> user_id` field overlap matches eight provider DELETE actions and no ordinary
+non-delete action. A source row replay would therefore issue a destructive provider deletion;
+`internal/app/issue_label_warehouse_transport.go:944` correctly refuses that as an ordinary
+`full_append` apply action. The connector declares its three executable ETL sources only. All eight
+DELETE commands remain implemented direct CLI commands with their existing destructive confirmation
+and reverse-ETL approval lifecycle, but none is declared as a sync destination. The committed
+source-traced gap `declarative-typed-destination-delete-semantics` records the bounded shared
+capability needed for a future tombstone-aware transport. No live mutation is authorized by this
+decision.
 
 The continuation also replaces the stale generic-destination deferral with an auditable
 seven-surface readiness ledger. Every documented source or ledger operation carries provider

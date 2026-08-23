@@ -5,8 +5,11 @@ Phase: `zoom-full-definition-mapping-r1`
 
 ## Delivered
 
-- Pinned 35 public Zoom Developer Docs modules (12,127,228 bytes; 1,937 source operations) and
-  crosswalked them with the 1,913-row provider ledger.
+- Preserved 35 captured Zoom Developer Docs modules (12,127,228 bytes; 1,937 source operations)
+  and crosswalked them with the 1,913-row provider ledger. Their v3 source-lock migration is
+  blocked on #4331's rendered-reference citation contract; their captured bytes, SHA-256 digests,
+  byte counts, capture URLs, and adapter evidence remain intact, and no unavailable URL is
+  fabricated as a fetchable OpenAPI artifact.
 - Declared 1,748 source-backed executor contracts: 776 `rest_read`, 971 `rest_write`, and one
   bounded binary-download contract, including 311 destructive DELETE contracts.
 - Added 505 source-backed direct-read commands, 202 approval-gated no-body scalar write commands,
@@ -15,10 +18,12 @@ Phase: `zoom-full-definition-mapping-r1`
   206 typed write actions, and 185 typed guarded deletes.
 - Rebuilt connector manuals, catalog/website data, root-help golden transcripts, and the generated
   operation endpoint ledger from the command declarations.
-- Declared the connector-neutral declarative ETL source for users, meetings, and webinars, plus a
-  closed `declarative_typed_destination` definition. Eight record-driven typed actions are
-  allowlisted from `users.id → user_id`; one is selected by the current `full_append` strategy and
-  seven are explicitly pending the foundation's one-action-per-mode multiplicity support.
+- Declared the connector-neutral declarative ETL source for users, meetings, and webinars. The
+  eight `users.id → user_id` matches are provider DELETE actions, not ordinary replay actions, so
+  no `declarative_typed_destination` is declared. All eight remain implemented direct CLI commands;
+  the explicit source-traced `declarative-typed-destination-delete-semantics` gap names the future
+  tombstone-aware transport requirement and the current refusal at
+  `internal/app/issue_label_warehouse_transport.go:944`.
 - Generated one bounded authenticated direct-read candidate and 206 typed mutation candidates.
   Historical observed GET evidence remains explicitly non-certifying; current credentialed proof
   must be rerun against the final #4304 App/CLI dispatch head.
@@ -32,7 +37,7 @@ Phase: `zoom-full-definition-mapping-r1`
 - Recorded a disposition for every 1,913 ledger row and 26 source-only rows. The 1,129 disabled
   ledger rows use only `foundation-gap`, `schema-incompatible`, `provider-does-not-expose`, or
   `requires-paid-tier`, with evidence and recovery state.
-- Added the captain-required missing-foundation ledger: 12 deduplicated shared-capability catalog
+- Added the required missing-foundation ledger: 11 deduplicated shared-capability catalog
   entries and 1,329 exact source-locked gap rows across 1,299 provider operations. Each row has
   provider document URL/revision/hash, affected surface(s), runtime evidence, an owner or explicit
   unassigned foundation backlog, closure command, complete fan-out, batch/portfolio rollups, and
@@ -57,16 +62,18 @@ Phase: `zoom-full-definition-mapping-r1`
   is still hard-wired to fail, the all-stream report aggregates the paid Webinar refusal, and the
   source-only connector receives irrelevant flow/schedule checks. Each foundation gap and its
   minimal recovery is recorded; no partial report is called certification.
-- Reverse-ETL mutations remain unassessed. The connector-local declaration has source bindings,
-  acknowledgement, and an exact strategy, but it has no destination fixture or reversible live
-  proof. The temporary #4304 stacked base and the optional-query rehearsal do not satisfy the
-  required Foundation-on-`main` App/CLI path gate, which must be exercised before any
-  application-level deployability claim.
+- Reverse-ETL mutations remain unassessed. No Zoom destination is declared, because every exact
+  source-key overlap is a provider DELETE and ordinary source replay would be unsafe. The direct
+  CLI commands are still implemented; a tombstone-aware shared delete destination is the exact
+  bounded future requirement.
 - The committed seven-surface ledger accounts for all 1,937 source operations plus two ledger-only
   identities. This is not provider-wide executable completeness: 1,155 inventory rows remain
   explicit implementation or technical-contract gaps, and no provider entitlement or destructive
   classification is presented as a reason to hide an otherwise-modelled command.
 - No auth, engine, generator, certification allowlist, or status code was changed.
+- The v3 multi-document source-lock foundation is on `main`, but its OpenAPI-only document kind
+  cannot honestly represent the 35 preserved rendered Next-data captures. #4331 owns that shared
+  rendered-reference contract; no Zoom source lock is migrated until it lands.
 - The later captain hard gate means this remains explicitly **not merge-ready**: open foundation
   gaps, incomplete all-operation CLI/website reachability, and the missing final six-surface live
   proof prevent any provider-wide completeness claim.

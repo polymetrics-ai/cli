@@ -88,7 +88,7 @@
   },
   "mutation_generation": {
     "cohort": {
-      "name": "declared_destination_proof_pending",
+      "name": "direct_cli_typed_action_proof_pending",
       "command_count": 206,
       "intents": [
         "reverse_etl"
@@ -96,14 +96,14 @@
     },
     "unassessed": {
       "code": "unassessed",
-      "evidence": "the one declaration-eligible Zoom destination lacks a connector-owned fixture and live create/readback/cleanup proof; all other typed actions remain command-reachable but have no exact source binding"
+      "evidence": "Zoom exposes typed actions through direct CLI commands, but no sync destination is declared. The eight users.id -\u003e user_id overlaps target provider DELETE actions and require tombstone-aware transport semantics rather than ordinary replay."
     },
     "families": [
       {
-        "id": "declared_typed_destination_proof_pending",
+        "id": "direct_cli_typed_action_proof_pending",
         "classification": {
           "code": "unassessed",
-          "evidence": "Zoom declares one exact typed destination action with source binding, acknowledgement, and apply strategy, but it has no connector-owned fixture or reversible live create/readback/cleanup proof; the remaining typed actions are independently CLI-reachable and remain outside this exact transport binding"
+          "evidence": "Zoom exposes 206 direct CLI typed actions but declares no sync destination. Eight users.id -\u003e user_id overlaps target provider DELETE actions; ordinary replay is refused at internal/app/issue_label_warehouse_transport.go:944 pending tombstone-aware transport semantics."
         },
         "intents": [
           "reverse_etl"

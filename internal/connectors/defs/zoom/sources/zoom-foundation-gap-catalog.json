@@ -10,7 +10,11 @@
         "internal/connectors/engine/bundle.go:679-721 rejects REST rest_write covered_by.operations coverage.",
         "cmd/connectorgen/validate.go:696-721 repeats the REST operation coverage restriction."
       ],
-      "owner": { "issue": "#4281", "lane": "foundation-operation-api-surface", "status": "assigned" },
+      "owner": {
+        "issue": "#4281",
+        "lane": "foundation-operation-api-surface",
+        "status": "assigned"
+      },
       "status": "open_no_unmitigated_zoom_operation",
       "closure_verification": [
         "go test -count=1 -timeout 20m ./internal/connectors/engine -run 'Operation.*REST|REST.*Operation'",
@@ -24,7 +28,11 @@
         "internal/connectors/commandrunner/runner.go:1372-1430 permits a literal root body override only for direct reads.",
         "internal/connectors/engine/direct_write.go:616-635 can only construct bodies from declared dotted record fields."
       ],
-      "owner": { "issue": null, "lane": "foundation-backlog", "status": "unassigned" },
+      "owner": {
+        "issue": null,
+        "lane": "foundation-backlog",
+        "status": "unassigned"
+      },
       "status": "open",
       "closure_verification": [
         "go test -count=1 -timeout 20m ./internal/connectors/engine -run 'Write.*Root.*JSON|Root.*JSON.*Write'",
@@ -39,7 +47,11 @@
         "internal/connectors/commandrunner/runner.go:1543-1548 stringifies array flag values instead of retaining a declared wire encoding.",
         "The pinned Zoom source identifies array query parameters with no safely inferred serialization."
       ],
-      "owner": { "issue": null, "lane": "foundation-backlog", "status": "unassigned" },
+      "owner": {
+        "issue": null,
+        "lane": "foundation-backlog",
+        "status": "unassigned"
+      },
       "status": "open",
       "closure_verification": [
         "go test -count=1 -timeout 20m ./internal/connectors/engine -run 'Query.*Array|Array.*Query'",
@@ -53,7 +65,11 @@
         "internal/connectors/engine/bundle.go:2745-2753 validates file_upload metadata but no file_upload command executor is registered.",
         "internal/connectors/engine/schema/operations.schema.json:139-168 cannot express multipart.parts[].allowed_file_extensions."
       ],
-      "owner": { "issue": "G12", "lane": "foundation-file-upload", "status": "assigned" },
+      "owner": {
+        "issue": "G12",
+        "lane": "foundation-file-upload",
+        "status": "assigned"
+      },
       "status": "open",
       "closure_verification": [
         "go test -count=1 -timeout 20m ./internal/connectors/engine -run 'FileUpload|Multipart'",
@@ -69,7 +85,11 @@
         "internal/connectors/engine/schema/operations.schema.json:90-169 lacks per-operation redirect origin metadata.",
         "internal/connectors/engine/binary_read_test.go:581-615 rejects an undeclared cross-host redirect."
       ],
-      "owner": { "issue": null, "lane": "foundation-backlog", "status": "unassigned" },
+      "owner": {
+        "issue": null,
+        "lane": "foundation-backlog",
+        "status": "unassigned"
+      },
       "status": "open",
       "closure_verification": [
         "go test -count=1 -timeout 20m ./internal/connectors/engine -run 'Binary.*Redirect|Redirect.*Binary'",
@@ -83,7 +103,11 @@
         "internal/connectors/engine/read.go:771-785 resolves write query templates through the shared optional-query helper, but :1338-1348 treats only config, secrets, and incremental references as omittable.",
         "Zoom's lane-owned Delete a meeting fixture fails before I/O when optional record.occurrence_id is absent."
       ],
-      "owner": { "issue": "#4305", "lane": "cli-rest-structured-body-r1", "status": "assigned" },
+      "owner": {
+        "issue": "#4305",
+        "lane": "cli-rest-structured-body-r1",
+        "status": "assigned"
+      },
       "status": "waiting_for_published_head",
       "closure_verification": [
         "go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run '^TestLaneOwnedMeetingLifecycleActionsAreClosedAndReachable$'",
@@ -97,7 +121,11 @@
         "cmd/connectorgen/certificationmatrix.go:1308-1352 projects fixtures only for capability:check/read/write, leaving operation-kind cells fixture_tested=false.",
         "Zoom has an observed rest-read exchange that cannot certify its exact operation cell."
       ],
-      "owner": { "issue": null, "lane": "foundation-certification-backlog", "status": "unassigned" },
+      "owner": {
+        "issue": null,
+        "lane": "foundation-certification-backlog",
+        "status": "unassigned"
+      },
       "status": "open",
       "closure_verification": [
         "go run ./cmd/connectorgen certification-matrix --connector zoom --check",
@@ -111,7 +139,11 @@
         "internal/connectors/certify/stages_source.go:811-814 always records fixture_conformance passed=false with obsolete noDefsBundleReason.",
         "Zoom's declared fixtures validate locally but cannot contribute accepted source certification."
       ],
-      "owner": { "issue": null, "lane": "foundation-certification-backlog", "status": "unassigned" },
+      "owner": {
+        "issue": null,
+        "lane": "foundation-certification-backlog",
+        "status": "unassigned"
+      },
       "status": "open",
       "closure_verification": [
         "go test -count=1 -timeout 20m ./internal/connectors/certify -run 'Definition.*Fixture|Fixture.*Definition'",
@@ -125,7 +157,11 @@
         "internal/connectors/certify/stages_source.go:673-695 runs every source stage in a full sweep, while :431 accepts only an all-passing report.",
         "Zoom users and meetings passes cannot publish independently when the paid Webinar capability refuses."
       ],
-      "owner": { "issue": null, "lane": "foundation-certification-backlog", "status": "unassigned" },
+      "owner": {
+        "issue": null,
+        "lane": "foundation-certification-backlog",
+        "status": "unassigned"
+      },
       "status": "open",
       "closure_verification": [
         "go test -count=1 -timeout 20m ./internal/connectors/certify -run 'Capability.*Evidence|Evidence.*Capability'",
@@ -139,7 +175,11 @@
         "internal/connectors/certify/stages_source.go:690-694 runs flow and schedule round-trips for every full-sweep source stream.",
         "Zoom declares source streams but no executable flow or schedule fixture contract."
       ],
-      "owner": { "issue": null, "lane": "foundation-certification-backlog", "status": "unassigned" },
+      "owner": {
+        "issue": null,
+        "lane": "foundation-certification-backlog",
+        "status": "unassigned"
+      },
       "status": "open",
       "closure_verification": [
         "go test -count=1 -timeout 20m ./internal/connectors/certify -run 'Schedule.*Source|Source.*Schedule'",
@@ -147,31 +187,22 @@
       ]
     },
     {
-      "id": "declarative-typed-destination-app-dispatch",
-      "missing_provider_neutral_capability": "persisted App and installed CLI dispatch selection for declaration-owned typed destinations",
+      "id": "declarative-typed-destination-delete-semantics",
+      "missing_provider_neutral_capability": "declaration-owned reverse-ETL delete semantics that distinguish source tombstones from ordinary record replay",
       "validator_or_runtime_evidence": [
-        "#4304 composes declarative typed destinations through the orchestrator, but persisted App dispatch does not yet auto-select the generic destination.",
-        "Zoom's selected source-mapped action cannot be called application-level deployable before the final #4304 head is merged and exercised."
+        "All eight Zoom users.id overlaps target provider DELETE actions; treating a source row as an ordinary apply would replay destructive provider deletion.",
+        "internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action."
       ],
-      "owner": { "issue": "#4303", "pull_request": "#4304", "lane": "fm/cli-reverse-etl-destination-r1", "status": "assigned" },
-      "status": "waiting_for_published_head",
-      "closure_verification": [
-        "go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run '^TestZoomTransportDeclaresTheExecutableSourceAndTypedDestination$'",
-        "built pm persisted-App reverse-ETL plan, approval, apply, acknowledgement, and provider read-back using lane-owned data"
-      ]
-    },
-    {
-      "id": "declarative-typed-destination-action-multiplicity",
-      "missing_provider_neutral_capability": "exact multi-action typed-destination selection for one source and apply mode",
-      "validator_or_runtime_evidence": [
-        "The closed #4304 destination model selects one named action for each apply strategy and mode.",
-        "Seven Zoom source-mapped actions are eligible but cannot be selected alongside the one full_append strategy."
-      ],
-      "owner": { "issue": "#4303", "pull_request": "#4304", "lane": "fm/cli-reverse-etl-destination-r1", "status": "assigned" },
+      "owner": {
+        "issue": null,
+        "lane": "foundation-backlog",
+        "status": "unassigned"
+      },
       "status": "open",
       "closure_verification": [
-        "go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run '^TestReverseETLEligibilityDisposesEveryTypedAction$'",
-        "built pm persisted-App reverse-ETL plan, approval, apply, acknowledgement, and provider read-back for every declared eligible action"
+        "go test -count=1 -timeout 20m ./internal/app -run 'TestDeclarativeTypedDestinationTombstonesRequireDeclaredDeleteAction'",
+        "go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run 'TestZoomTransportDeclaresTheExecutableSourceOnlyUntilDeleteSemanticsExists|TestReverseETLEligibilityDisposesEveryTypedAction'",
+        "a shared delete-semantics destination proof with source tombstones, explicit approval, provider read-back, and cleanup"
       ]
     }
   ]

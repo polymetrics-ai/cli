@@ -17,8 +17,6 @@
     "typed_action_bound": 206,
     "etl_bound_streams": 3,
     "reverse_etl_command_bound": 206,
-    "reverse_etl_exact_source_mappings": 8,
-    "reverse_etl_selected_by_current_strategy": 1,
     "binary_read_contracts": 1,
     "binary_write_contracts": 34,
     "binary_bound_executable": 0,
@@ -26,10 +24,11 @@
     "uncertified": 1939,
     "certified": 0,
     "pending_foundation_dependencies": [
-      "fm/cli-reverse-etl-destination-r1 persisted App/CLI dispatch integration",
-      "one-action-per-mode declarative typed destination selection",
+      "declaration-owned reverse-ETL delete semantics for source tombstones; ordinary source replay is rejected at internal/app/issue_label_warehouse_transport.go:944",
       "file_upload executor and bounded binary redirect-origin contract"
-    ]
+    ],
+    "reverse_etl_delete_source_key_overlaps": 8,
+    "reverse_etl_destination_bound": 0
   },
   "operations": [
     {
@@ -93,7 +92,7 @@
       "implementation_state": "inventory_only_unimplemented",
       "certification": {
         "state": "uncertified",
-      "fixture": false,
+        "fixture": false,
         "live_proof": false,
         "independent_readback": false,
         "cleanup": false,
@@ -49202,19 +49201,21 @@
         "transport": {
           "etl_source": null,
           "reverse_etl_destination": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         }
       },
@@ -49244,19 +49245,21 @@
           "applicable": true,
           "state": "implemented",
           "detail": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         },
         "cli_command": {
@@ -49610,19 +49613,21 @@
         "transport": {
           "etl_source": null,
           "reverse_etl_destination": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         }
       },
@@ -49652,19 +49657,21 @@
           "applicable": true,
           "state": "implemented",
           "detail": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         },
         "cli_command": {
@@ -130095,19 +130102,21 @@
         "transport": {
           "etl_source": null,
           "reverse_etl_destination": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         }
       },
@@ -130137,19 +130146,21 @@
           "applicable": true,
           "state": "implemented",
           "detail": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         },
         "cli_command": {
@@ -135046,19 +135057,21 @@
         "transport": {
           "etl_source": null,
           "reverse_etl_destination": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         }
       },
@@ -135088,19 +135101,21 @@
           "applicable": true,
           "state": "implemented",
           "detail": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         },
         "cli_command": {
@@ -136157,19 +136172,21 @@
         "transport": {
           "etl_source": null,
           "reverse_etl_destination": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         }
       },
@@ -136199,19 +136216,21 @@
           "applicable": true,
           "state": "implemented",
           "detail": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         },
         "cli_command": {
@@ -136501,19 +136520,21 @@
         "transport": {
           "etl_source": null,
           "reverse_etl_destination": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         }
       },
@@ -136543,19 +136564,21 @@
           "applicable": true,
           "state": "implemented",
           "detail": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         },
         "cli_command": {
@@ -136940,19 +136963,21 @@
         "transport": {
           "etl_source": null,
           "reverse_etl_destination": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         }
       },
@@ -136982,19 +137007,21 @@
           "applicable": true,
           "state": "implemented",
           "detail": {
-            "record_driven": true,
-            "status": "eligible_pending_action_multiplicity",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
             "selected_by_apply_strategy": false,
-            "pending_foundation_dependency": "the closed destination declares one action per mode through apply_strategies; this action is semantically bound and allowlisted but cannot be exactly selected alongside the one full_append strategy",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         },
         "cli_command": {
@@ -137205,19 +137232,21 @@
         "transport": {
           "etl_source": null,
           "reverse_etl_destination": {
-            "record_driven": true,
-            "status": "selected_pending_application_dispatch",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
-            "selected_by_apply_strategy": true,
-            "pending_foundation_dependency": "fm/cli-reverse-etl-destination-r1 persisted App/CLI dispatch integration; no deployability claim until its updated head is merged and exercised",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
+            "selected_by_apply_strategy": false,
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         }
       },
@@ -137247,19 +137276,21 @@
           "applicable": true,
           "state": "implemented",
           "detail": {
-            "record_driven": true,
-            "status": "selected_pending_application_dispatch",
-            "declared_eligible": true,
-            "source_stream": "users",
-            "input_fields": [
-              {
-                "input": "user_id",
-                "field": "id"
-              }
-            ],
-            "selected_by_apply_strategy": true,
-            "pending_foundation_dependency": "fm/cli-reverse-etl-destination-r1 persisted App/CLI dispatch integration; no deployability claim until its updated head is merged and exercised",
-            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof"
+            "record_driven": false,
+            "status": "direct_cli_only_delete_semantics",
+            "declared_eligible": false,
+            "selected_by_apply_strategy": false,
+            "certification": "uncertified: no connector-owned destination fixture or reversible live create/readback/cleanup proof",
+            "source_key_overlap": {
+              "stream": "users",
+              "input_fields": [
+                {
+                  "input": "user_id",
+                  "field": "id"
+                }
+              ]
+            },
+            "semantic_exclusion": "The users.id overlap would replay an ordinary source record as a provider DELETE. internal/app/issue_label_warehouse_transport.go:944 rejects a DELETE ordinary full_append action; the action remains implemented and directly CLI-reachable but is not a sync destination."
           }
         },
         "cli_command": {
