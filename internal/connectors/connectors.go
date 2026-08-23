@@ -1248,21 +1248,6 @@ func sanitizeProviderJSON(raw []byte, declaredFields []string) ([]byte, bool) {
 	return encoded, true
 }
 
-func providerOutputValueAtPath(value any, path string) (any, bool) {
-	current := value
-	for _, segment := range strings.Split(strings.TrimPrefix(path, "body."), ".") {
-		object, ok := current.(map[string]any)
-		if !ok {
-			return nil, false
-		}
-		current, ok = object[segment]
-		if !ok {
-			return nil, false
-		}
-	}
-	return current, true
-}
-
 func maskProviderOutputPath(value any, path string) {
 	segments := strings.Split(strings.TrimPrefix(path, "body."), ".")
 	maskProviderOutputSegments(value, segments)
