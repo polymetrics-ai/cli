@@ -35,6 +35,23 @@
 - [x] Reuse the existing write-command plan and engine binary payload preparation; no parallel raw upload/requester or generic CLI surface.
 - [x] Keep report data typed and capability names explicit rather than inferring upload from command strings or a single `binary` cell.
 
+### Post-merge CI attribution and repair
+
+- **Red / attribution:** clean `origin/main` at `db2892653` passed
+  `TestGoldenTranscripts/connectors_inspect_github_json` and
+  `TestGitHubExhaustiveProviderDouble`, while the merged PR head failed both.
+  This ruled out the retained-source-artifact foundation as a pre-existing mainline failure.
+- **Green / generated artifact:**
+  `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES=connectors_inspect_github_json GOFLAGS='-p=3' go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$/^connectors_inspect_github_json$' -count=1`
+  used the test's targeted canonical writer and changed one expected transcript line for the
+  declared GitHub binary-upload command surface; the same test then passed normally.
+- **Green / provider double:** prior to the repair, the actual plan → preview → approval →
+  execute double failed because it substituted a local upload origin but retained the public
+  source-origin allow-list, then because its generic `200` receipt violated the upload action's
+  declared exact `201`. The double now substitutes its own origin consistently and returns the
+  first declared action success receipt when no fixture provides one. Its real engine path passes
+  with `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/conformance -run '^TestGitHubExhaustiveProviderDouble$' -count=1`.
+
 ## Deliberate break proof
 
 - [x] Temporarily removed `binary_upload` planner admission and ran the public behavioral tests. `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/commandrunner -run '^(TestBuildWriteCommandPlansOnlyDeclaredBinaryUploadActions|TestGitHubReleaseAssetUploadBuildsBoundBinaryPlan)$' -count=1` failed: the installed GitHub case and all raw/base64/multipart cases were rejected with `connector command is not a reverse ETL write command`.

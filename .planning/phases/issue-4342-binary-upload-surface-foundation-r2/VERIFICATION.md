@@ -57,6 +57,20 @@
 - GitHub's `Website checks` and `Website generated data` initially failed because this intent changed three generated website artifacts. Ran `cd website && pnpm run gen:website-data`, then verified `pnpm run lint` (warnings only, exit 0), `pnpm run typecheck`, `pnpm run test:unit` (80 tests), `pnpm run test:scripts` (34 tests), and `pnpm run build` — all passed. The build emits existing Better Auth default-secret warnings while statically collecting pages but exits 0.
 - When `main` advanced again during CI readiness, merged it into the published branch and reran `GOFLAGS='-p=3' go test -timeout 20m ./cmd/connectorgen` (pass, 336.788s) plus `cd website && pnpm run gen:website-data` (no resulting diff).
 
+## Post-merge CI repair
+
+- [x] Attribution comparison at clean `origin/main` `db2892653`:
+  `GOFLAGS='-p=3' go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$/^connectors_inspect_github_json$' -count=1`
+  — pass (13.365s), and
+  `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/conformance -run '^TestGitHubExhaustiveProviderDouble$' -count=1`
+  — pass (37.725s). The same two tests failed on the PR head before repair, so neither was
+  absorbed as a pre-existing main failure.
+- [x] The golden was regenerated through its test-owned targeted writer, not edited manually:
+  `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES=connectors_inspect_github_json GOFLAGS='-p=3' go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$/^connectors_inspect_github_json$' -count=1` — pass (6.532s), changing one line.
+- [x] Final behavior checks:
+  `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/conformance -run '^TestGitHubExhaustiveProviderDouble$' -count=1` — pass (6.197s), and
+  `GOFLAGS='-p=3' go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$/^connectors_inspect_github_json$' -count=1` — pass (4.427s).
+
 ## Constraint
 
 The authorized provider proof is deliberately bounded to one disposable draft release and is not
