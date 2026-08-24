@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "connector": "stripe",
+  "source": "connector declarations",
+  "declared_commands": 8,
+  "declared_rows": 11,
+  "status_total": 11,
+  "commands": [
+    {
+      "summary": "Read Stripe charges through the declared ETL stream.",
+      "path": "charges list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "charges",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/charges"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Plan creation of a Stripe customer through reverse ETL.",
+      "path": "customers create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.email"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.phone"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/customers"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Plan deletion of a Stripe customer with typed destructive confirmation and customer ID redaction.",
+      "path": "customers delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/customers/{customer}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Read Stripe customers through the declared ETL stream.",
+      "path": "customers list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "customers",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/customers"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Plan an update to a Stripe customer through reverse ETL.",
+      "path": "customers update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.email"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.phone"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/customers/{customer}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Read Stripe invoices through the declared ETL stream.",
+      "path": "invoices list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "invoices",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/invoices"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Read Stripe products through the declared ETL stream.",
+      "path": "products list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "products",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/products"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Read Stripe subscriptions through the declared ETL stream.",
+      "path": "subscriptions list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "subscriptions",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/subscriptions"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Declared read capability",
+      "path": "capability read",
+      "intent": "capability_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared read capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared write capability",
+      "path": "capability write",
+      "intent": "capability_write",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared write capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
+    }
+  ],
+  "product_defects": [],
+  "provider_refusals": []
+}

@@ -1,0 +1,1515 @@
+{
+  "tagline": "Run CircleCI's declared streams and reverse-ETL actions.",
+  "usage": "pm circleci <command> [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "checkout keys list",
+        "contexts list",
+        "environment variables list",
+        "insights workflow summary list",
+        "jobs list",
+        "pipelines list",
+        "projects list",
+        "schedules list",
+        "workflows list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add environment variable to context apply",
+        "approve pending approval job by id apply",
+        "cancel job by job i d apply",
+        "cancel workflow apply",
+        "create checkout key apply",
+        "create context restriction apply",
+        "create environment variable apply",
+        "create organization group apply",
+        "create schedule apply",
+        "create usage export apply",
+        "create webhook apply",
+        "delete checkout key apply",
+        "delete checkout key by slug apply",
+        "delete context apply",
+        "delete context restriction apply",
+        "delete env var apply",
+        "delete environment variable apply",
+        "delete environment variable from context apply",
+        "delete group apply",
+        "delete org claims apply",
+        "delete organization apply",
+        "delete otel exporter apply",
+        "delete pipeline definition apply",
+        "delete project by slug apply",
+        "delete project claims apply",
+        "delete schedule apply",
+        "delete schedule by id apply",
+        "delete trigger apply",
+        "delete webhook apply",
+        "patch project settings apply",
+        "remove u r l orb allow list entry apply",
+        "update pipeline definition apply",
+        "update schedule apply",
+        "update webhook apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add environment variable to context apply",
+      "summary": "Plan and execute the add environment variable to context reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_environment_variable_to_context",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "context-id",
+          "summary": "Required context id record field.",
+          "type": "string",
+          "maps_to": "record.context_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "env-var-name",
+          "summary": "Required env var name record field.",
+          "type": "string",
+          "maps_to": "record.env_var_name",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "value",
+          "summary": "Required value record field.",
+          "type": "string",
+          "maps_to": "record.value",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci add environment variable to context apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/context/{context_id}/environment-variable/{env_var_name}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: addEnvironmentVariableToContext",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "approve pending approval job by id apply",
+      "summary": "Plan and execute the approve pending approval job by id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "approve_pending_approval_job_by_id",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "approval-request-id",
+          "summary": "Required approval request id record field.",
+          "type": "string",
+          "maps_to": "record.approval_request_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "type": "string",
+          "maps_to": "record.id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci approve pending approval job by id apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflow/{id}/approve/{approval_request_id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: approvePendingApprovalJobById",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "cancel job by job i d apply",
+      "summary": "Plan and execute the cancel job by job i d reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_job_by_job_i_d",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "job-id",
+          "summary": "Required job-id record field.",
+          "type": "string",
+          "maps_to": "record.job-id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci cancel job by job i d apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/jobs/{job-id}/cancel"
+        }
+      ],
+      "risk": "external CircleCI API mutation: cancelJobByJobID",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "cancel workflow apply",
+      "summary": "Plan and execute the cancel workflow reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_workflow",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "type": "string",
+          "maps_to": "record.id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci cancel workflow apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workflow/{id}/cancel"
+        }
+      ],
+      "risk": "external CircleCI API mutation: cancelWorkflow",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "checkout keys list",
+      "summary": "Run the checkout keys ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "checkout_keys",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci checkout keys list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/checkout-key"
+        }
+      ]
+    },
+    {
+      "path": "contexts list",
+      "summary": "Run the contexts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contexts",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci contexts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/context"
+        }
+      ]
+    },
+    {
+      "path": "create checkout key apply",
+      "summary": "Plan and execute the create checkout key reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_checkout_key",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci create checkout key apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project/{project-slug}/checkout-key"
+        }
+      ],
+      "risk": "external mutation; creates a new deploy/checkout SSH key with repository access",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create context restriction apply",
+      "summary": "Plan and execute the create context restriction reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_context_restriction",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "context-id",
+          "summary": "Required context id record field.",
+          "type": "string",
+          "maps_to": "record.context_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "restriction-type",
+          "type": "enum",
+          "values": [
+            "project",
+            "expression",
+            "group"
+          ],
+          "maps_to": "record.restriction_type"
+        },
+        {
+          "name": "restriction-value",
+          "type": "string",
+          "maps_to": "record.restriction_value",
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci create context restriction apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/context/{context_id}/restrictions"
+        }
+      ],
+      "risk": "external CircleCI API mutation: createContextRestriction",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create environment variable apply",
+      "summary": "Plan and execute the create environment variable reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_environment_variable",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci create environment variable apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project/{project-slug}/envvar"
+        }
+      ],
+      "risk": "external mutation; creates or overwrites a project environment variable used by every future CI run",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create organization group apply",
+      "summary": "Plan and execute the create organization group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_organization_group",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "maps_to": "record.description",
+          "max_bytes": 32768
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "org-id",
+          "summary": "Required org id record field.",
+          "type": "string",
+          "maps_to": "record.org_id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci create organization group apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{org_id}/groups"
+        }
+      ],
+      "risk": "external CircleCI API mutation: createOrganizationGroup",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create schedule apply",
+      "summary": "Plan and execute the create schedule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_schedule",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "attribution-actor",
+          "type": "string",
+          "summary": "Required attribution-actor record field.",
+          "maps_to": "record.attribution-actor",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "parameters",
+          "type": "json",
+          "summary": "Required parameters record field.",
+          "maps_to": "record.parameters",
+          "required": true
+        },
+        {
+          "name": "timetable",
+          "type": "json",
+          "summary": "Required timetable record field.",
+          "maps_to": "record.timetable",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci create schedule apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project/{project-slug}/schedule"
+        }
+      ],
+      "risk": "external mutation; creates a new scheduled-pipeline trigger for this project",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create usage export apply",
+      "summary": "Plan and execute the create usage export reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_usage_export",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "end",
+          "summary": "Required end record field.",
+          "type": "string",
+          "maps_to": "record.end",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "org-id",
+          "summary": "Required org id record field.",
+          "type": "string",
+          "maps_to": "record.org_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "shared-org-ids",
+          "type": "json",
+          "maps_to": "record.shared_org_ids",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "start",
+          "summary": "Required start record field.",
+          "type": "string",
+          "maps_to": "record.start",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci create usage export apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{org_id}/usage_export_job"
+        }
+      ],
+      "risk": "external CircleCI API mutation: createUsageExport",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "events",
+          "summary": "Required events record field.",
+          "type": "json",
+          "maps_to": "record.events",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "scope",
+          "summary": "Required scope record field.",
+          "type": "json",
+          "maps_to": "record.scope",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
+          "name": "signing-secret",
+          "summary": "Required signing-secret record field.",
+          "type": "string",
+          "maps_to": "record.signing-secret",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "url",
+          "summary": "Required url record field.",
+          "type": "string",
+          "maps_to": "record.url",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "verify-tls",
+          "summary": "Required verify-tls record field.",
+          "type": "boolean",
+          "maps_to": "record.verify-tls",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci create webhook apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhook"
+        }
+      ],
+      "risk": "external CircleCI API mutation: createWebhook",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete checkout key apply",
+      "summary": "Plan and execute the delete checkout key reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_checkout_key",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "fingerprint",
+          "type": "string",
+          "summary": "Required fingerprint record field.",
+          "maps_to": "record.fingerprint",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci delete checkout key apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/project/{project-slug}/checkout-key/{fingerprint}"
+        }
+      ],
+      "risk": "irreversible external revocation of a deploy/checkout SSH key; may break future CI checkouts that depend on it; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete checkout key by slug apply",
+      "summary": "Plan and execute the delete checkout key by slug reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_checkout_key_by_slug",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "fingerprint",
+          "summary": "Required fingerprint record field.",
+          "type": "string",
+          "maps_to": "record.fingerprint",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-slug",
+          "summary": "Required project-slug record field.",
+          "type": "string",
+          "maps_to": "record.project-slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete checkout key by slug apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/project/{project-slug}/checkout-key/{fingerprint}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deleteCheckoutKey",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete context apply",
+      "summary": "Plan and execute the delete context reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_context",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "context-id",
+          "summary": "Required context id record field.",
+          "type": "string",
+          "maps_to": "record.context_id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete context apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/context/{context_id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deleteContext",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete context restriction apply",
+      "summary": "Plan and execute the delete context restriction reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_context_restriction",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "context-id",
+          "summary": "Required context id record field.",
+          "type": "string",
+          "maps_to": "record.context_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "restriction-id",
+          "summary": "Required restriction id record field.",
+          "type": "string",
+          "maps_to": "record.restriction_id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete context restriction apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/context/{context_id}/restrictions/{restriction_id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deleteContextRestriction",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete env var apply",
+      "summary": "Plan and execute the delete env var reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_env_var",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-slug",
+          "summary": "Required project-slug record field.",
+          "type": "string",
+          "maps_to": "record.project-slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete env var apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/project/{project-slug}/envvar/{name}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deleteEnvVar",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete environment variable apply",
+      "summary": "Plan and execute the delete environment variable reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_environment_variable",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci delete environment variable apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/project/{project-slug}/envvar/{name}"
+        }
+      ],
+      "risk": "irreversible external deletion of a project environment variable; may break future CI runs that depend on it; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete environment variable from context apply",
+      "summary": "Plan and execute the delete environment variable from context reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_environment_variable_from_context",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "context-id",
+          "summary": "Required context id record field.",
+          "type": "string",
+          "maps_to": "record.context_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "env-var-name",
+          "summary": "Required env var name record field.",
+          "type": "string",
+          "maps_to": "record.env_var_name",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete environment variable from context apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/context/{context_id}/environment-variable/{env_var_name}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deleteEnvironmentVariableFromContext",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete group apply",
+      "summary": "Plan and execute the delete group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_group",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "group-id",
+          "summary": "Required group id record field.",
+          "type": "string",
+          "maps_to": "record.group_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "org-id",
+          "summary": "Required org id record field.",
+          "type": "string",
+          "maps_to": "record.org_id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete group apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{org_id}/groups/{group_id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deleteGroup",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete org claims apply",
+      "summary": "Plan and execute the delete org claims reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_org_claims",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "claims",
+          "summary": "Required claims record field.",
+          "type": "string",
+          "maps_to": "record.claims",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "orgID",
+          "summary": "Required orgID record field.",
+          "type": "string",
+          "maps_to": "record.orgID",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete org claims apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/org/{orgID}/oidc-custom-claims"
+        }
+      ],
+      "risk": "external CircleCI API mutation: DeleteOrgClaims",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete organization apply",
+      "summary": "Plan and execute the delete organization reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "org-slug-or-id",
+          "summary": "Required org-slug-or-id record field.",
+          "type": "string",
+          "maps_to": "record.org-slug-or-id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete organization apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organization/{org-slug-or-id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deleteOrganization",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete otel exporter apply",
+      "summary": "Plan and execute the delete otel exporter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_otel_exporter",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "otel-exporter-id",
+          "summary": "Required otel exporter id record field.",
+          "type": "string",
+          "maps_to": "record.otel_exporter_id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete otel exporter apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/otel/exporters/{otel_exporter_id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deleteOtelExporter",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete pipeline definition apply",
+      "summary": "Plan and execute the delete pipeline definition reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_pipeline_definition",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "pipeline-definition-id",
+          "summary": "Required pipeline definition id record field.",
+          "type": "string",
+          "maps_to": "record.pipeline_definition_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-id",
+          "summary": "Required project id record field.",
+          "type": "string",
+          "maps_to": "record.project_id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete pipeline definition apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deletePipelineDefinition",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete project by slug apply",
+      "summary": "Plan and execute the delete project by slug reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_project_by_slug",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "project-slug",
+          "summary": "Required project-slug record field.",
+          "type": "string",
+          "maps_to": "record.project-slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete project by slug apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/project/{project-slug}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deleteProjectBySlug",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete project claims apply",
+      "summary": "Plan and execute the delete project claims reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_project_claims",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "claims",
+          "summary": "Required claims record field.",
+          "type": "string",
+          "maps_to": "record.claims",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "orgID",
+          "summary": "Required orgID record field.",
+          "type": "string",
+          "maps_to": "record.orgID",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "projectID",
+          "summary": "Required projectID record field.",
+          "type": "string",
+          "maps_to": "record.projectID",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete project claims apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/org/{orgID}/project/{projectID}/oidc-custom-claims"
+        }
+      ],
+      "risk": "external CircleCI API mutation: DeleteProjectClaims",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete schedule apply",
+      "summary": "Plan and execute the delete schedule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_schedule",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci delete schedule apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/schedule/{schedule-id}"
+        }
+      ],
+      "risk": "irreversible external deletion of a scheduled-pipeline trigger; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete schedule by id apply",
+      "summary": "Plan and execute the delete schedule by id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_schedule_by_id",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "schedule-id",
+          "summary": "Required schedule-id record field.",
+          "type": "string",
+          "maps_to": "record.schedule-id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete schedule by id apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/schedule/{schedule-id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deleteScheduleById",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete trigger apply",
+      "summary": "Plan and execute the delete trigger reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_trigger",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "project-id",
+          "summary": "Required project id record field.",
+          "type": "string",
+          "maps_to": "record.project_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "trigger-id",
+          "summary": "Required trigger id record field.",
+          "type": "string",
+          "maps_to": "record.trigger_id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete trigger apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/triggers/{trigger_id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deleteTrigger",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "webhook-id",
+          "summary": "Required webhook id record field.",
+          "type": "string",
+          "maps_to": "record.webhook_id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci delete webhook apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhook/{webhook_id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: deleteWebhook",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "environment variables list",
+      "summary": "Run the environment variables ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "environment_variables",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci environment variables list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/envvar"
+        }
+      ]
+    },
+    {
+      "path": "insights workflow summary list",
+      "summary": "Run the insights workflow summary ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "insights_workflow_summary",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci insights workflow summary list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights/{project-slug}/workflows"
+        }
+      ]
+    },
+    {
+      "path": "jobs list",
+      "summary": "Run the jobs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "jobs",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci jobs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workflow/{id}/job"
+        }
+      ]
+    },
+    {
+      "path": "patch project settings apply",
+      "summary": "Plan and execute the patch project settings reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_project_settings",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "advanced",
+          "type": "json",
+          "maps_to": "record.advanced",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "organization",
+          "summary": "Required organization record field.",
+          "type": "string",
+          "maps_to": "record.organization",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project",
+          "summary": "Required project record field.",
+          "type": "string",
+          "maps_to": "record.project",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "provider",
+          "summary": "Required provider record field.",
+          "type": "enum",
+          "values": [
+            "github",
+            "gh",
+            "bitbucket",
+            "bb",
+            "circleci"
+          ],
+          "maps_to": "record.provider",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci patch project settings apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/project/{provider}/{organization}/{project}/settings"
+        }
+      ],
+      "risk": "external CircleCI API mutation: patchProjectSettings",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "pipelines list",
+      "summary": "Run the pipelines ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pipelines",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci pipelines list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/pipeline"
+        }
+      ]
+    },
+    {
+      "path": "projects list",
+      "summary": "Run the projects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci projects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}"
+        }
+      ]
+    },
+    {
+      "path": "remove u r l orb allow list entry apply",
+      "summary": "Plan and execute the remove u r l orb allow list entry reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_u_r_l_orb_allow_list_entry",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "allow-list-entry-id",
+          "summary": "Required allow-list-entry-id record field.",
+          "type": "string",
+          "maps_to": "record.allow-list-entry-id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "org-slug-or-id",
+          "summary": "Required org-slug-or-id record field.",
+          "type": "string",
+          "maps_to": "record.org-slug-or-id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci remove u r l orb allow list entry apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organization/{org-slug-or-id}/url-orb-allow-list/{allow-list-entry-id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: removeURLOrbAllowListEntry",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "schedules list",
+      "summary": "Run the schedules ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "schedules",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci schedules list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project/{project-slug}/schedule"
+        }
+      ]
+    },
+    {
+      "path": "update pipeline definition apply",
+      "summary": "Plan and execute the update pipeline definition reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_pipeline_definition",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "checkout-source",
+          "type": "json",
+          "maps_to": "record.checkout_source",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "config-source",
+          "type": "json",
+          "maps_to": "record.config_source",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "maps_to": "record.description",
+          "max_bytes": 32768
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "max_bytes": 32768
+        },
+        {
+          "name": "pipeline-definition-id",
+          "summary": "Required pipeline definition id record field.",
+          "type": "string",
+          "maps_to": "record.pipeline_definition_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-id",
+          "summary": "Required project id record field.",
+          "type": "string",
+          "maps_to": "record.project_id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci update pipeline definition apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: updatePipelineDefinition",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update schedule apply",
+      "summary": "Plan and execute the update schedule reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_schedule",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm circleci update schedule apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/schedule/{schedule-id}"
+        }
+      ],
+      "risk": "external mutation; updates an existing scheduled-pipeline trigger's timetable or parameters",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Plan and execute the update webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "flags": [
+        {
+          "name": "events",
+          "type": "json",
+          "maps_to": "record.events",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "max_bytes": 32768
+        },
+        {
+          "name": "signing-secret",
+          "type": "string",
+          "maps_to": "record.signing-secret",
+          "max_bytes": 32768
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "maps_to": "record.url",
+          "max_bytes": 32768
+        },
+        {
+          "name": "verify-tls",
+          "type": "boolean",
+          "maps_to": "record.verify-tls"
+        },
+        {
+          "name": "webhook-id",
+          "summary": "Required webhook id record field.",
+          "type": "string",
+          "maps_to": "record.webhook_id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ],
+      "examples": [
+        "pm circleci update webhook apply --plan <plan-name>"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/webhook/{webhook_id}"
+        }
+      ],
+      "risk": "external CircleCI API mutation: updateWebhook",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "workflows list",
+      "summary": "Run the workflows ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflows",
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "examples": [
+        "pm circleci workflows list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipeline/{pipeline-id}/workflow"
+        }
+      ]
+    }
+  ]
+}

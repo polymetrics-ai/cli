@@ -125,7 +125,7 @@ func TestReadStream_NoLinkHeaderStopsAfterOnePage(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	rt := newTestRuntime(srv, "projects", []string{"id", "slug"}, connectors.RuntimeConfig{})
+	rt := newTestRuntime(srv, "projects", []string{"id", "slug"}, connectors.RuntimeConfig{Config: map[string]string{"organization": "acme"}})
 	stream := engine.StreamSpec{Name: "projects"}
 
 	var got []connectors.Record
@@ -148,6 +148,22 @@ func TestReadStream_NoLinkHeaderStopsAfterOnePage(t *testing.T) {
 	}
 }
 
+func TestResolveStreamPathProjectsRequiresOrganization(t *testing.T) {
+	stream := engine.StreamSpec{Name: "projects"}
+
+	got, err := resolveStreamPath(stream, connectors.RuntimeConfig{Config: map[string]string{"organization": "acme"}})
+	if err != nil {
+		t.Fatalf("resolveStreamPath(projects): %v", err)
+	}
+	if want := "/api/0/organizations/acme/projects/"; got != want {
+		t.Fatalf("resolveStreamPath(projects) = %q, want %q", got, want)
+	}
+
+	if _, err := resolveStreamPath(stream, connectors.RuntimeConfig{}); err == nil {
+		t.Fatal("resolveStreamPath(projects) did not reject a missing organization")
+	}
+}
+
 func TestReadStream_ProjectionKeepsOnlySchemaProperties(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -155,7 +171,7 @@ func TestReadStream_ProjectionKeepsOnlySchemaProperties(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	rt := newTestRuntime(srv, "projects", []string{"id", "slug"}, connectors.RuntimeConfig{})
+	rt := newTestRuntime(srv, "projects", []string{"id", "slug"}, connectors.RuntimeConfig{Config: map[string]string{"organization": "acme"}})
 	stream := engine.StreamSpec{Name: "projects"}
 
 	var got []connectors.Record

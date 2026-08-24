@@ -1,3 +1,2163 @@
 {
-  "operations": []
+  "operations": [
+    {
+      "id": "dockerhub.postuserslogin",
+      "kind": "rest_write",
+      "summary": "Create an authentication token",
+      "description": "Disabled source-backed secret credential contract; the pinned schema names username/password and the response token. Source operation: dockerhub.rest.PostUsersLogin; source location: paths[\"/v2/users/login\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "create",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "password",
+          "token",
+          "login_2fa_token"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users/login",
+        "content_type": "application/json",
+        "parameters": [],
+        "body_schema": {
+          "description": "User login details",
+          "type": "object",
+          "required": [
+            "username",
+            "password"
+          ],
+          "properties": {
+            "username": {
+              "description": "The username of the Docker Hub account to authenticate with.",
+              "type": "string"
+            },
+            "password": {
+              "description": "The password or personal access token (PAT) of the Docker Hub account to authenticate with.\n",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "dockerhub.postusers2falogin",
+      "kind": "rest_write",
+      "summary": "Second factor authentication",
+      "description": "Disabled source-backed secret contract inventory; see sources/dockerhub-declaration-disposition.json for the fixed-vocabulary reason. Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.PostUsers2FALogin; source location: paths[\"/v2/users/2fa-login\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users/2fa-login",
+        "content_type": "application/json",
+        "parameters": [],
+        "body_schema": {
+          "description": "Second factor user login details",
+          "type": "object",
+          "required": [
+            "login_2fa_token",
+            "code"
+          ],
+          "properties": {
+            "login_2fa_token": {
+              "description": "The intermediate 2FA token returned from `/v2/users/login` API.",
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+            },
+            "code": {
+              "description": "The Time-based One-Time Password of the Docker Hub account to authenticate with.\n",
+              "type": "string",
+              "example": 123456
+            }
+          }
+        }
+      },
+      "mutation_class": "create",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "login_2fa_token",
+          "code",
+          "token"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "dockerhub.authcreateaccesstoken",
+      "kind": "rest_write",
+      "summary": "Create access token",
+      "description": "Disabled source-backed secret contract inventory; see sources/dockerhub-declaration-disposition.json for the fixed-vocabulary reason. Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.AuthCreateAccessToken; source location: paths[\"/v2/auth/token\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/auth/token",
+        "content_type": "application/json",
+        "parameters": [],
+        "body_schema": {
+          "description": "Request to create access token",
+          "type": "object",
+          "required": [
+            "identifier",
+            "secret"
+          ],
+          "properties": {
+            "identifier": {
+              "description": "The identifier of the account to create an access token for. If using a password or personal access token,\nthis must be a username. If using an organization access token, this must be an organization name.\n",
+              "type": "string",
+              "example": "myusername"
+            },
+            "secret": {
+              "description": "The secret of the account to create an access token for. This can be a password, personal access token, or\norganization access token.\n",
+              "type": "string",
+              "example": "dckr_pat_124509ugsdjga93"
+            }
+          }
+        }
+      },
+      "mutation_class": "create",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "secret",
+          "access_token"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "dockerhub.post__v2_access-tokens",
+      "kind": "rest_write",
+      "summary": "Create personal access token",
+      "description": "Disabled source-backed secret contract inventory; see sources/dockerhub-declaration-disposition.json for the fixed-vocabulary reason. Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.post_/v2/access-tokens; source location: paths[\"/v2/access-tokens\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/access-tokens",
+        "content_type": "application/json",
+        "parameters": [],
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "token_label",
+            "scopes"
+          ],
+          "properties": {
+            "token_label": {
+              "type": "string",
+              "description": "Friendly name for you to identify the token.",
+              "example": "My read only token",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "scopes": {
+              "type": "array",
+              "description": "Valid scopes: \"repo:admin\", \"repo:write\", \"repo:read\", \"repo:public_read\"\n",
+              "example": [
+                "repo:read"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "expires_at": {
+              "type": "string",
+              "description": "Optional expiration date for the token.\nIf omitted, the token will remain valid indefinitely.\n",
+              "format": "date-time",
+              "example": "2021-10-28T18:30:19.520861Z"
+            }
+          }
+        }
+      },
+      "mutation_class": "create",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ],
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "token"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_access-tokens",
+      "kind": "rest_read",
+      "summary": "List personal access tokens",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/access-tokens; source location: paths[\"/v2/access-tokens\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/access-tokens",
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.patch__v2_access-tokens__uuid_",
+      "kind": "rest_write",
+      "summary": "Update personal access token",
+      "description": "Enabled source-backed runnable Docker Hub mutation contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.patch_/v2/access-tokens/{uuid}; source location: paths[\"/v2/access-tokens/{uuid}\"].patch; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/access-tokens/{uuid}",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "token_label": {
+              "type": "string",
+              "example": "My read only token",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "is_active": {
+              "type": "boolean",
+              "example": false
+            }
+          }
+        }
+      },
+      "mutation_class": "update",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_access-tokens__uuid_",
+      "kind": "rest_read",
+      "summary": "Get personal access token",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/access-tokens/{uuid}; source location: paths[\"/v2/access-tokens/{uuid}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/access-tokens/{uuid}",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.delete__v2_access-tokens__uuid_",
+      "kind": "rest_write",
+      "summary": "Delete personal access token",
+      "description": "Enabled source-backed runnable Docker Hub mutation contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.delete_/v2/access-tokens/{uuid}; source location: paths[\"/v2/access-tokens/{uuid}\"].delete; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/access-tokens/{uuid}",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      },
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.auditlogs_listauditactions",
+      "kind": "rest_read",
+      "summary": "List audit log actions",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.AuditLogs_ListAuditActions; source location: paths[\"/v2/auditlogs/{account}/actions\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/auditlogs/{account}/actions",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Namespace to query audit log actions for."
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.auditlogs_listauditlogs",
+      "kind": "rest_read",
+      "summary": "List audit log events",
+      "description": "Enabled source-backed runnable Docker Hub paginated read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.AuditLogs_ListAuditLogs; source location: paths[\"/v2/auditlogs/{account}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/auditlogs/{account}",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Namespace to query audit logs for."
+          },
+          {
+            "name": "action",
+            "in": "query",
+            "type": "string",
+            "summary": "action name one of [\"repo.tag.push\", ...]. Optional parameter to filter specific audit log actions.\n"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string",
+            "summary": "name. Optional parameter to filter audit log events to a specific name. For repository events, this is the name of the repository. For organization events, this is the name of the organization. For team member events, this is the username of the team member.\n"
+          },
+          {
+            "name": "actor",
+            "in": "query",
+            "type": "string",
+            "summary": "actor name. Optional parameter to filter audit log events to the specific user who triggered the event.\n"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "type": "string",
+            "summary": "Start of the time window you wish to query audit events for."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "type": "string",
+            "summary": "End of the time window you wish to query audit events for."
+          }
+        ],
+        "pagination": {
+          "type": "page_number",
+          "page_param": "page",
+          "size_param": "page_size",
+          "start_page": 1,
+          "page_size": 25
+        },
+        "pagination_parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "summary": "Page number to get."
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer",
+            "summary": "Number of events to return per page."
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__name__settings",
+      "kind": "rest_read",
+      "summary": "Get organization settings",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/orgs/{name}/settings; source location: paths[\"/v2/orgs/{name}/settings\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{name}/settings",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization."
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.put__v2_orgs__name__settings",
+      "kind": "rest_write",
+      "summary": "Update organization settings",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.put_/v2/orgs/{name}/settings; source location: paths[\"/v2/orgs/{name}/settings\"].put; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/orgs/{name}/settings",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization."
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "required": [
+            "restricted_images"
+          ],
+          "properties": {
+            "restricted_images": {
+              "allOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "Whether or not to restrict image usage for users in the organization.",
+                      "example": true
+                    },
+                    "allow_official_images": {
+                      "type": "boolean",
+                      "description": "Allow usage of official images if \"enabled\" is `true`.",
+                      "example": true
+                    },
+                    "allow_verified_publishers": {
+                      "type": "boolean",
+                      "description": "Allow usage of verified publisher images if \"enabled\" is `true`.",
+                      "example": true
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "enabled",
+                    "allow_official_images",
+                    "allow_verified_publishers"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "mutation_class": "update",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.post__v2_orgs__name__access-tokens",
+      "kind": "rest_write",
+      "summary": "Create access token",
+      "description": "Disabled source-backed secret contract inventory; see sources/dockerhub-declaration-disposition.json for the fixed-vocabulary reason. Provider-source contract inventory only; api_surface remains blocked until a terminal command has its required policy, fixture, and certification evidence. Source operation: dockerhub.rest.post_/v2/orgs/{name}/access-tokens; source location: paths[\"/v2/orgs/{name}/access-tokens\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/orgs/{name}/access-tokens",
+        "content_type": "application/json",
+        "parameters": [],
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "description": "Label for the access token",
+              "example": "My organization token",
+              "required": true
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the access token",
+              "example": "Token for CI/CD pipeline"
+            },
+            "resources": {
+              "type": "array",
+              "description": "Resources this token has access to",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "TYPE_REPO",
+                      "TYPE_ORG"
+                    ],
+                    "example": "TYPE_REPO",
+                    "description": "The type of resource",
+                    "required": true
+                  },
+                  "path": {
+                    "type": "string",
+                    "example": "myorg/myrepo",
+                    "description": "The path of the resource. The format of this will change depending on the type of resource.\n\nFor TYPE_REPO resources:\n- Must be an existing repository name (e.g., \"myorg/myrepo\")\n- Can use glob patterns (e.g., \"myorg/*\" for all repositories in the organization)\n- Use \"*/*/public\" to reference all public repositories\n",
+                    "required": true
+                  },
+                  "scopes": {
+                    "type": "array",
+                    "description": "The scopes this token has access to",
+                    "items": {
+                      "type": "string",
+                      "example": "scope-image-pull"
+                    },
+                    "required": true
+                  }
+                }
+              }
+            },
+            "expires_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Expiration date for the token",
+              "example": "2023-05-20T00:54:18Z",
+              "nullable": true
+            }
+          }
+        }
+      },
+      "mutation_class": "create",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ],
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "token"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__name__access-tokens",
+      "kind": "rest_read",
+      "summary": "List access tokens",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/orgs/{name}/access-tokens; source location: paths[\"/v2/orgs/{name}/access-tokens\"].get; provider server: https://hub.docker.com. The pinned endpoint path supplies {name}; its required string parameter contract is cited from the identical organization-name path item at paths[\"/v2/orgs/{name}/settings\"].parameters[0] because this endpoint omits the formal parameter object.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{name}/access-tokens",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization."
+          }
+        ]
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__org_name__access-tokens__access_token_id_",
+      "kind": "rest_read",
+      "summary": "Get access token",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/orgs/{org_name}/access-tokens/{access_token_id}; source location: paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "access_token_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "The ID of the access token to retrieve"
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.patch__v2_orgs__org_name__access-tokens__access_token_id_",
+      "kind": "rest_write",
+      "summary": "Update access token",
+      "description": "Enabled source-backed runnable Docker Hub mutation contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.patch_/v2/orgs/{org_name}/access-tokens/{access_token_id}; source location: paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].patch; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "access_token_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "The ID of the access token to retrieve"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "description": "Label for the access token",
+              "example": "My organization token"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the access token",
+              "example": "Token for CI/CD pipeline"
+            },
+            "resources": {
+              "type": "array",
+              "description": "Resources this token has access to",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "TYPE_REPO",
+                      "TYPE_ORG"
+                    ],
+                    "example": "TYPE_REPO",
+                    "description": "The type of resource",
+                    "required": true
+                  },
+                  "path": {
+                    "type": "string",
+                    "example": "myorg/myrepo",
+                    "description": "The path of the resource. The format of this will change depending on the type of resource.\n\nFor TYPE_REPO resources:\n- Must be an existing repository name (e.g., \"myorg/myrepo\")\n- Can use glob patterns (e.g., \"myorg/*\" for all repositories in the organization)\n- Use \"*/*/public\" to reference all public repositories\n",
+                    "required": true
+                  },
+                  "scopes": {
+                    "type": "array",
+                    "description": "The scopes this token has access to",
+                    "items": {
+                      "type": "string",
+                      "example": "scope-image-pull"
+                    },
+                    "required": true
+                  }
+                }
+              }
+            },
+            "is_active": {
+              "type": "boolean",
+              "description": "Whether the token is active",
+              "example": true
+            }
+          }
+        }
+      },
+      "mutation_class": "update",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.delete__v2_orgs__org_name__access-tokens__access_token_id_",
+      "kind": "rest_write",
+      "summary": "Delete access token",
+      "description": "Enabled source-backed runnable Docker Hub mutation contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.delete_/v2/orgs/{org_name}/access-tokens/{access_token_id}; source location: paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].delete; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "access_token_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "The ID of the access token to retrieve"
+          }
+        ]
+      },
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.listrepositorytags",
+      "kind": "rest_read",
+      "summary": "List repository tags",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.ListRepositoryTags; source location: paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.getrepositorytag",
+      "kind": "rest_read",
+      "summary": "Read repository tag",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.GetRepositoryTag; source location: paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tag",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.updaterepositoryimmutabletags",
+      "kind": "rest_write",
+      "summary": "Update repository immutable tags",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.UpdateRepositoryImmutableTags; source location: paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags\"].patch; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "immutable_tags": {
+              "type": "boolean",
+              "description": "Whether immutable tags are enabled"
+            },
+            "immutable_tags_rules": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of immutable tag rules",
+              "example": [
+                "v.*",
+                ".*-RELEASE"
+              ]
+            }
+          },
+          "required": [
+            "immutable_tags",
+            "immutable_tags_rules"
+          ]
+        }
+      },
+      "mutation_class": "update",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.verifyrepositoryimmutabletags",
+      "kind": "rest_write",
+      "summary": "Verify repository immutable tags",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.VerifyRepositoryImmutableTags; source location: paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "regex": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+((\\\\.|_|__|-+)[a-z0-9]+)*(\\\\/[a-z0-9]+((\\\\.|_|__|-+)[a-z0-9]+)*)*$",
+              "description": "Immutable tags rule regex pattern. Must match format: [a-z0-9]+((\\\\.|_|__|-+)[a-z0-9]+)*(\\\\/[a-z0-9]+((\\\\.|_|__|-+)[a-z0-9]+)*)*",
+              "example": "v.*"
+            }
+          },
+          "required": [
+            "regex"
+          ]
+        }
+      },
+      "mutation_class": "create",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.createrepositorygroup",
+      "kind": "rest_write",
+      "summary": "Assign a group (Team) to a repository for access",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.CreateRepositoryGroup; source location: paths[\"/v2/repositories/{namespace}/{repository}/groups\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/repositories/{namespace}/{repository}/groups",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "group_id",
+            "permission"
+          ],
+          "properties": {
+            "group_id": {
+              "type": "integer",
+              "format": "int64",
+              "description": "The ID of the organization group to grant access to",
+              "example": 12345
+            },
+            "permission": {
+              "type": "string",
+              "description": "The permission level to grant to the group:\n- read: Can view and pull from the repository\n- write: Can view, pull, and push to the repository\n- admin: Can view, pull, push, and manage repository settings\n",
+              "enum": [
+                "read",
+                "write",
+                "admin"
+              ],
+              "example": "write"
+            }
+          }
+        }
+      },
+      "mutation_class": "create",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.listnamespacerepositories",
+      "kind": "rest_read",
+      "summary": "List repositories in a namespace",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.listNamespaceRepositories; source location: paths[\"/v2/namespaces/{namespace}/repositories\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/namespaces/{namespace}/repositories",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string",
+            "summary": "Filter repositories by name (partial match)."
+          },
+          {
+            "name": "ordering",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "name",
+              "-name",
+              "last_updated",
+              "-last_updated",
+              "pull_count",
+              "-pull_count"
+            ],
+            "summary": "Order repositories by the specified field. Prefix with '-' for descending order.\nAvailable options:\n- `name` / `-name`: Repository name (ascending/descending)\n- `last_updated` / `-last_updated`: Last update time (ascending/descending)\n- `pull_count` / `-pull_count`: Number of pulls (ascending/descending)\n"
+          }
+        ]
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.createrepository",
+      "kind": "rest_write",
+      "summary": "Create a new repository",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.CreateRepository; source location: paths[\"/v2/namespaces/{namespace}/repositories\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/namespaces/{namespace}/repositories",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "name",
+            "namespace"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the repository. Must be 2-255 characters long and may only include \nalphanumeric characters, periods (.), underscores (_), or hyphens (-). \nLetters must be lowercase.\n",
+              "minLength": 2,
+              "maxLength": 255,
+              "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$",
+              "example": "my-app"
+            },
+            "namespace": {
+              "type": "string",
+              "description": "The namespace where the repository will be created",
+              "example": "myorganization"
+            },
+            "description": {
+              "type": "string",
+              "description": "Short description of the repository",
+              "maxLength": 100,
+              "example": "A sample application repository"
+            },
+            "full_description": {
+              "type": "string",
+              "description": "Detailed description of the repository",
+              "maxLength": 25000,
+              "example": "This is a comprehensive description of my application repository that contains additional details about the project, its purpose, usage instructions, and other relevant information."
+            },
+            "registry": {
+              "type": "string",
+              "description": "The registry where the repository will be hosted",
+              "example": "docker.io"
+            },
+            "is_private": {
+              "type": "boolean",
+              "description": "Whether the repository should be private",
+              "default": false,
+              "example": false
+            }
+          }
+        }
+      },
+      "mutation_class": "create",
+      "auth_scopes": [
+        "Docker Hub BearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.getrepository",
+      "kind": "rest_read",
+      "summary": "Get repository in a namespace",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.GetRepository; source location: paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__org_name__members",
+      "kind": "rest_read",
+      "summary": "List org members",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/orgs/{org_name}/members; source location: paths[\"/v2/orgs/{org_name}/members\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/members",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "type": "integer",
+            "summary": "Search term."
+          },
+          {
+            "name": "invites",
+            "in": "query",
+            "type": "boolean",
+            "summary": "Include invites in the response."
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "all",
+              "invitee",
+              "member"
+            ]
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "owner",
+              "editor",
+              "member"
+            ]
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.put__v2_orgs__org_name__members__username_",
+      "kind": "rest_write",
+      "summary": "Update org member (role)",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.put_/v2/orgs/{org_name}/members/{username}; source location: paths[\"/v2/orgs/{org_name}/members/{username}\"].put; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/orgs/{org_name}/members/{username}",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Username, identifier for the user (namespace, DockerID)."
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "required": [
+            "role"
+          ],
+          "properties": {
+            "role": {
+              "type": "string",
+              "description": "Role of the member",
+              "enum": [
+                "owner",
+                "editor",
+                "member"
+              ]
+            }
+          }
+        }
+      },
+      "mutation_class": "update",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.delete__v2_orgs__org_name__members__username_",
+      "kind": "rest_write",
+      "summary": "Remove member from org",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.delete_/v2/orgs/{org_name}/members/{username}; source location: paths[\"/v2/orgs/{org_name}/members/{username}\"].delete; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/members/{username}",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Username, identifier for the user (namespace, DockerID)."
+          }
+        ]
+      },
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__org_name__invites",
+      "kind": "rest_read",
+      "summary": "List org invites",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/orgs/{org_name}/invites; source location: paths[\"/v2/orgs/{org_name}/invites\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/invites",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__org_name__groups",
+      "kind": "rest_read",
+      "summary": "Get groups of an organization",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/orgs/{org_name}/groups; source location: paths[\"/v2/orgs/{org_name}/groups\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/groups",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "type": "string",
+            "summary": "Get groups for the specified username in the organization."
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "type": "string",
+            "summary": "Get groups for the specified group in the organization."
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.post__v2_orgs__org_name__groups",
+      "kind": "rest_write",
+      "summary": "Create a new group",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.post_/v2/orgs/{org_name}/groups; source location: paths[\"/v2/orgs/{org_name}/groups\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/orgs/{org_name}/groups",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "mutation_class": "create",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__org_name__groups__group_name_",
+      "kind": "rest_read",
+      "summary": "Get a group of an organization",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the group (team) in the organization."
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.put__v2_orgs__org_name__groups__group_name_",
+      "kind": "rest_write",
+      "summary": "Update the details for an organization group",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.put_/v2/orgs/{org_name}/groups/{group_name}; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].put; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the group (team) in the organization."
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "mutation_class": "update",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.patch__v2_orgs__org_name__groups__group_name_",
+      "kind": "rest_write",
+      "summary": "Update some details for an organization group",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.patch_/v2/orgs/{org_name}/groups/{group_name}; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].patch; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the group (team) in the organization."
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "mutation_class": "update",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.delete__v2_orgs__org_name__groups__group_name_",
+      "kind": "rest_write",
+      "summary": "Delete an organization group",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].delete; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the group (team) in the organization."
+          }
+        ]
+      },
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_orgs__org_name__groups__group_name__members",
+      "kind": "rest_read",
+      "summary": "List members of a group",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}/members; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the group (team) in the organization."
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "type": "string",
+            "summary": "Search members by username, full_name or email."
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.post__v2_orgs__org_name__groups__group_name__members",
+      "kind": "rest_write",
+      "summary": "Add a member to a group",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.post_/v2/orgs/{org_name}/groups/{group_name}/members; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the group (team) in the organization."
+          }
+        ],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "member"
+          ],
+          "properties": {
+            "member": {
+              "type": "string",
+              "example": "jonsnow"
+            }
+          }
+        }
+      },
+      "mutation_class": "create",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.delete__v2_orgs__org_name__groups__group_name__members__username_",
+      "kind": "rest_write",
+      "summary": "Remove a user from a group",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}/members/{username}; source location: paths[\"/v2/orgs/{org_name}/groups/{group_name}/members/{username}\"].delete; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+        "parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the organization (namespace)."
+          },
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Name of the group (team) in the organization."
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "Username, identifier for the user (namespace, DockerID)."
+          }
+        ]
+      },
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.delete__v2_invites__id_",
+      "kind": "rest_write",
+      "summary": "Cancel an invite",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.delete_/v2/invites/{id}; source location: paths[\"/v2/invites/{id}\"].delete; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/invites/{id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      },
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.patch__v2_invites__id__resend",
+      "kind": "rest_write",
+      "summary": "Resend an invite",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.patch_/v2/invites/{id}/resend; source location: paths[\"/v2/invites/{id}/resend\"].patch; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/invites/{id}/resend",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      },
+      "mutation_class": "update",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.post__v2_invites_bulk",
+      "kind": "rest_write",
+      "summary": "Bulk create invites",
+      "description": "Enabled source-backed typed Docker Hub write contract; execution is bound to the reverse-ETL plan, preview, approval, and execute lifecycle. Provider authorization is runtime-enforced. Source operation: dockerhub.rest.post_/v2/invites/bulk; source location: paths[\"/v2/invites/bulk\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/invites/bulk",
+        "parameters": [],
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "org",
+            "invitees"
+          ],
+          "properties": {
+            "org": {
+              "type": "string",
+              "description": "organization name",
+              "example": "docker"
+            },
+            "team": {
+              "type": "string",
+              "description": "team name",
+              "example": "owners"
+            },
+            "role": {
+              "type": "string",
+              "description": "role for invitees",
+              "example": "member"
+            },
+            "invitees": {
+              "type": "array",
+              "description": "list of invitees emails or Docker Ids",
+              "items": {
+                "type": "string",
+                "description": "invitee email or Docker ID"
+              },
+              "example": [
+                "invitee1DockerId",
+                "invitee2@docker.com",
+                "invitee3@docker.com"
+              ]
+            },
+            "dry_run": {
+              "type": "boolean",
+              "description": "Optional, run through validation but don't actually change data.",
+              "example": true
+            }
+          }
+        }
+      },
+      "mutation_class": "create",
+      "auth_scopes": [
+        "Docker Hub bearerAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_serviceproviderconfig",
+      "kind": "rest_read",
+      "summary": "Get service provider config",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/scim/2.0/ServiceProviderConfig; source location: paths[\"/v2/scim/2.0/ServiceProviderConfig\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/ServiceProviderConfig",
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerSCIMAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_resourcetypes",
+      "kind": "rest_read",
+      "summary": "List resource types",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/scim/2.0/ResourceTypes; source location: paths[\"/v2/scim/2.0/ResourceTypes\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/ResourceTypes",
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerSCIMAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_resourcetypes__name_",
+      "kind": "rest_read",
+      "summary": "Get a resource type",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/scim/2.0/ResourceTypes/{name}; source location: paths[\"/v2/scim/2.0/ResourceTypes/{name}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/ResourceTypes/{name}",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerSCIMAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_schemas",
+      "kind": "rest_read",
+      "summary": "List schemas",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/scim/2.0/Schemas; source location: paths[\"/v2/scim/2.0/Schemas\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Schemas",
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerSCIMAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_schemas__id_",
+      "kind": "rest_read",
+      "summary": "Get a schema",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/scim/2.0/Schemas/{id}; source location: paths[\"/v2/scim/2.0/Schemas/{id}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Schemas/{id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerSCIMAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_users",
+      "kind": "rest_read",
+      "summary": "List users",
+      "description": "Enabled source-backed runnable Docker Hub paginated SCIM read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/scim/2.0/Users; source location: paths[\"/v2/scim/2.0/Users\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Users",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "attributes",
+            "in": "query",
+            "type": "string",
+            "summary": "Comma delimited list of attributes to limit to in the response."
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "ascending",
+              "descending"
+            ]
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "type": "string",
+            "summary": "User attribute to sort by."
+          }
+        ],
+        "pagination": {
+          "type": "start_index",
+          "start_index_param": "startIndex",
+          "count_param": "count",
+          "start_index_base": 1,
+          "start_index_path": "startIndex",
+          "total_path": "totalResults",
+          "page_size": 10
+        },
+        "pagination_parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerSCIMAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.post__v2_scim_2.0_users",
+      "kind": "rest_write",
+      "summary": "Create user",
+      "description": "Enabled source-backed runnable Docker Hub SCIM write contract. The declared application/scim+json body is executed through the approval-gated direct-write lifecycle. Source operation: dockerhub.rest.post_/v2/scim/2.0/Users; source location: paths[\"/v2/scim/2.0/Users\"].post; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/scim/2.0/Users",
+        "parameters": [],
+        "content_type": "application/scim+json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "schemas",
+            "userName"
+          ],
+          "properties": {
+            "schemas": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "urn:ietf:params:scim:schemas:core:2.0:User",
+                "minItems": 1
+              }
+            },
+            "userName": {
+              "type": "string",
+              "description": "The user's email address. This must be reachable via email.",
+              "example": "jon.snow@docker.com"
+            },
+            "name": {
+              "type": "object",
+              "properties": {
+                "givenName": {
+                  "type": "string",
+                  "example": "Jon"
+                },
+                "familyName": {
+                  "type": "string",
+                  "example": "Snow"
+                }
+              }
+            }
+          }
+        }
+      },
+      "mutation_class": "create",
+      "auth_scopes": [
+        "Docker Hub bearerSCIMAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.get__v2_scim_2.0_users__id_",
+      "kind": "rest_read",
+      "summary": "Get a user",
+      "description": "Enabled source-backed runnable Docker Hub read contract; provider authorization is runtime-enforced. Source operation: dockerhub.rest.get_/v2/scim/2.0/Users/{id}; source location: paths[\"/v2/scim/2.0/Users/{id}\"].get; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/scim/2.0/Users/{id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "The user ID."
+          }
+        ],
+        "max_bytes": 1048576
+      },
+      "auth_scopes": [
+        "Docker Hub bearerSCIMAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    },
+    {
+      "id": "dockerhub.put__v2_scim_2.0_users__id_",
+      "kind": "rest_write",
+      "summary": "Update a user",
+      "description": "Enabled source-backed runnable Docker Hub SCIM write contract. The declared application/scim+json body is executed through the approval-gated direct-write lifecycle. Source operation: dockerhub.rest.put_/v2/scim/2.0/Users/{id}; source location: paths[\"/v2/scim/2.0/Users/{id}\"].put; provider server: https://hub.docker.com.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/scim/2.0/Users/{id}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "summary": "The user ID."
+          }
+        ],
+        "content_type": "application/scim+json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "schemas"
+          ],
+          "properties": {
+            "schemas": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "urn:ietf:params:scim:schemas:core:2.0:User",
+                "minItems": 1
+              }
+            },
+            "name": {
+              "type": "object",
+              "description": "Pinned source normalizes an allOf containing this object shape plus this annotation; when omitted, Docker Hub skips the name update and never clears it.",
+              "properties": {
+                "givenName": {
+                  "type": "string",
+                  "example": "Jon"
+                },
+                "familyName": {
+                  "type": "string",
+                  "example": "Snow"
+                }
+              }
+            },
+            "enabled": {
+              "type": "boolean",
+              "default": false,
+              "description": "If this is omitted from the request, it will default to false resulting in a deactivated user."
+            }
+          }
+        }
+      },
+      "mutation_class": "update",
+      "auth_scopes": [
+        "Docker Hub bearerSCIMAuth security scheme (pinned source; no granular OAuth scope enumerated)"
+      ]
+    }
+  ]
 }

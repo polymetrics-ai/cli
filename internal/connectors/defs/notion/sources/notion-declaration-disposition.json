@@ -1,0 +1,2369 @@
+{
+  "schema_version": 1,
+  "connector": "notion",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/notion-operation-source-lock.json",
+    "source_url": "https://developers.notion.com/openapi.json",
+    "source_sha256": "c90a4587bc951a7357419af4126c5ce6924a600255ef2b460dc6834938ea36dc",
+    "source_bytes": 884260,
+    "source_operation_count": 49
+  },
+  "summary": {
+    "api_surface_rows": 55,
+    "exact_source_rows": 49,
+    "declared_operations": 49,
+    "enabled_operations": 43,
+    "enabled_percent": 87.76,
+    "disabled_operations": 6,
+    "documented_deletes": 4,
+    "enabled_deletes": 4,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 18
+      },
+      {
+        "key": "direct_write",
+        "count": 25
+      },
+      {
+        "key": "etl",
+        "count": 5
+      },
+      {
+        "key": "binary_read",
+        "count": 0
+      },
+      {
+        "key": "binary_write",
+        "count": 1
+      }
+    ],
+    "stream_bindings": 6,
+    "writes_actions": 24,
+    "terminal_commands": 45,
+    "live_certification": "pending",
+    "gap_ids": [
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 1
+      }
+    ],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 6
+      }
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
+      "source_transport": {
+        "state": "declared",
+        "file": "sync_transport.json",
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "databases",
+          "pages",
+          "users",
+          "custom_emojis",
+          "file_uploads",
+          "views"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "notion_all_executable_streams_v1"
+        },
+        "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83; source descriptor is loaded and registered through definition-owned composition."
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "reason": "The production composition has no connector-neutral typed destination DefinitionFactory for these declarative API bundles.",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        },
+        "recoverable": true
+      }
+    },
+    "declaration_pending_ids": [
+      "command-availability-notion",
+      "cli-command-contract-notion"
+    ],
+    "declaration_pending": [
+      {
+        "id": "command-availability-notion",
+        "count": 3
+      },
+      {
+        "id": "cli-command-contract-notion",
+        "count": 3
+      }
+    ],
+    "direct_write_commands": 20,
+    "reverse_etl_commands": 0,
+    "reverse_etl_eligibility": {
+      "state": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "applicable_direct_write_operations": 25,
+      "eligible_operations": 0,
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+      "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+      "recoverable": true
+    },
+    "operations_found": 49,
+    "operations_mapped": 49,
+    "coverage_confidence": {
+      "level": "high",
+      "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+      "source_kind": "openapi",
+      "source_lock": "internal/connectors/defs/notion/sources/notion-operation-source-lock.json",
+      "operations_found": 49
+    },
+    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage.",
+    "api_surface_reality_audit": {
+      "old_api_surface_count": 55,
+      "provider_operations_found": 49,
+      "new_api_surface_count": 55,
+      "provider_operations_missing_from_api_surface": 0,
+      "retained_non_source_entries": 6,
+      "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+      "coverage_confidence": "high",
+      "basis": "complete provider-published OpenAPI pinned at https://developers.notion.com/openapi.json; counts.total=49, per-method total=49, operation inventory=49",
+      "retained_non_source_entry_basis": "six connector-specific variants split a single provider operation into distinct bounded command contracts"
+    }
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/v1/users/me",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/users/me",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "user me get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.get-self",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/users/me\"].get",
+        "operation_id": "get-self",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:635: implemented direct_read command binds GET /v1/users/me.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_bot_user"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"user me get\" binds the pinned source contract",
+        "command": {
+          "path": "user me get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_bot_user"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/{user_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/users/{user_id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "user get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.get-user",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/users/{user_id}\"].get",
+        "operation_id": "get-user",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:655: implemented direct_read command binds GET /v1/users/{user_id}.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_user"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"user get\" binds the pinned source contract",
+        "command": {
+          "path": "user get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_user"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/users",
+        "operation": null,
+        "covered_by": {
+          "stream": "users"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.get-users",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/users\"].get",
+        "operation_id": "get-users",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:186: implemented etl command binds GET /v1/users.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable etl command \"users list\" binds the pinned source contract",
+        "command": {
+          "path": "users list",
+          "intent": "etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/pages",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/pages",
+        "operation": null,
+        "covered_by": {
+          "write": "create_page"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.post-page",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/pages\"].post",
+        "operation_id": "post-page",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1216: implemented reverse_etl command binds POST /v1/pages.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"page create\" binds the pinned source contract",
+        "command": {
+          "path": "page create",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pages/{page_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/pages/{page_id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "page get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.retrieve-a-page",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/pages/{page_id}\"].get",
+        "operation_id": "retrieve-a-page",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:526: implemented direct_read command binds GET /v1/pages/{page_id}.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_page"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"page get\" binds the pinned source contract",
+        "command": {
+          "path": "page get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_page"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/pages/{page_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/v1/pages/{page_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_page"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.patch-page",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/pages/{page_id}\"].patch",
+        "operation_id": "patch-page",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1249: implemented reverse_etl command binds PATCH /v1/pages/{page_id}.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"page update\" binds the pinned source contract",
+        "command": {
+          "path": "page update",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/pages/{page_id}/move",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/pages/{page_id}/move",
+        "operation": null,
+        "covered_by": {
+          "write": "move_page"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.move-page",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/pages/{page_id}/move\"].post",
+        "operation_id": "move-page",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1335: implemented reverse_etl command binds POST /v1/pages/{page_id}/move.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"page move\" binds the pinned source contract",
+        "command": {
+          "path": "page move",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pages/{page_id}/properties/{property_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/pages/{page_id}/properties/{property_id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "page property get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.retrieve-a-page-property",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/pages/{page_id}/properties/{property_id}\"].get",
+        "operation_id": "retrieve-a-page-property",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:594: implemented direct_read command binds GET /v1/pages/{page_id}/properties/{property_id}.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_page_property"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"page property get\" binds the pinned source contract",
+        "command": {
+          "path": "page property get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_page_property"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pages/{page_id}/markdown",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/pages/{page_id}/markdown",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "page markdown get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.retrieve-page-markdown",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/pages/{page_id}/markdown\"].get",
+        "operation_id": "retrieve-page-markdown",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:560: implemented direct_read command binds GET /v1/pages/{page_id}/markdown.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_page_markdown"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"page markdown get\" binds the pinned source contract",
+        "command": {
+          "path": "page markdown get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_page_markdown"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/pages/{page_id}/markdown",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/v1/pages/{page_id}/markdown",
+        "operation": null,
+        "covered_by": {
+          "write": "update_page_markdown"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.update-page-markdown",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/pages/{page_id}/markdown\"].patch",
+        "operation_id": "update-page-markdown",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1301: implemented reverse_etl command binds PATCH /v1/pages/{page_id}/markdown.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"page markdown update\" binds the pinned source contract",
+        "command": {
+          "path": "page markdown update",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/async_tasks/{task_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/async_tasks/{task_id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "async-task get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.retrieve-async-task",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/async_tasks/{task_id}\"].get",
+        "operation_id": "retrieve-async-task",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:250: implemented direct_read command binds GET /v1/async_tasks/{task_id}.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_async_task"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"async-task get\" binds the pinned source contract",
+        "command": {
+          "path": "async-task get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_async_task"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/blocks/{block_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/blocks/{block_id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "block get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.retrieve-a-block",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/blocks/{block_id}\"].get",
+        "operation_id": "retrieve-a-block",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:278: implemented direct_read command binds GET /v1/blocks/{block_id}.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_block"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"block get\" binds the pinned source contract",
+        "command": {
+          "path": "block get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_block"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/blocks/{block_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/v1/blocks/{block_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_block"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.update-a-block",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/blocks/{block_id}\"].patch",
+        "operation_id": "update-a-block",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:864: implemented reverse_etl command binds PATCH /v1/blocks/{block_id}.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"block update\" binds the pinned source contract",
+        "command": {
+          "path": "block update",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/blocks/{block_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/v1/blocks/{block_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_block"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.delete-a-block",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/blocks/{block_id}\"].delete",
+        "operation_id": "delete-a-block",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:898: implemented reverse_etl command binds DELETE /v1/blocks/{block_id}.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"block delete\" binds the pinned source contract",
+        "command": {
+          "path": "block delete",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/blocks/{block_id}/children",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/blocks/{block_id}/children",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "block children list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.get-block-children",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/blocks/{block_id}/children\"].get",
+        "operation_id": "get-block-children",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:306: implemented direct_read command binds GET /v1/blocks/{block_id}/children.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_block_children"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"block children list\" binds the pinned source contract",
+        "command": {
+          "path": "block children list",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_block_children"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/blocks/{block_id}/children",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/v1/blocks/{block_id}/children",
+        "operation": null,
+        "covered_by": {
+          "write": "append_block_children"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.patch-block-children",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/blocks/{block_id}/children\"].patch",
+        "operation_id": "patch-block-children",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "command-availability-notion",
+          "evidence": "internal/connectors/defs/notion/cli_surface.json:926: command availability is partial; internal/connectors/defs/notion/sources/notion-operation-source-lock.json: paths paths[\"/v1/blocks/{block_id}/children\"].patch.",
+          "minimal_change": "Complete the command’s pinned-schema input/output contract and mark it implemented only after runtime preflight accepts it."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:926: command availability is partial; internal/connectors/defs/notion/sources/notion-operation-source-lock.json: paths paths[\"/v1/blocks/{block_id}/children\"].patch."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending command-availability-notion",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/data_sources/{data_source_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/data_sources/{data_source_id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "data-source get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.retrieve-a-data-source",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/data_sources/{data_source_id}\"].get",
+        "operation_id": "retrieve-a-data-source",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:402: implemented direct_read command binds GET /v1/data_sources/{data_source_id}.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_data_source"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"data-source get\" binds the pinned source contract",
+        "command": {
+          "path": "data-source get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_data_source"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/data_sources/{data_source_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/v1/data_sources/{data_source_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_data_source"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.update-a-data-source",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/data_sources/{data_source_id}\"].patch",
+        "operation_id": "update-a-data-source",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1096: implemented reverse_etl command binds PATCH /v1/data_sources/{data_source_id}.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"data-source update\" binds the pinned source contract",
+        "command": {
+          "path": "data-source update",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/data_sources/{data_source_id}/query",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/data_sources/{data_source_id}/query",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "data-source query"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.post-database-query",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/data_sources/{data_source_id}/query\"].post",
+        "operation_id": "post-database-query",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:752: implemented direct_read command binds POST /v1/data_sources/{data_source_id}/query.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.query_data_source"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"data-source query\" binds the pinned source contract",
+        "command": {
+          "path": "data-source query",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.query_data_source"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/data_sources",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/data_sources",
+        "operation": null,
+        "covered_by": {
+          "write": "create_data_source"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.create-a-database",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/data_sources\"].post",
+        "operation_id": "create-a-database",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "command-availability-notion",
+          "evidence": "internal/connectors/defs/notion/cli_surface.json:1067: command availability is partial; internal/connectors/defs/notion/sources/notion-operation-source-lock.json: paths paths[\"/v1/data_sources\"].post.",
+          "minimal_change": "Complete the command’s pinned-schema input/output contract and mark it implemented only after runtime preflight accepts it."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1067: command availability is partial; internal/connectors/defs/notion/sources/notion-operation-source-lock.json: paths paths[\"/v1/data_sources\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending command-availability-notion",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/data_sources/{data_source_id}/templates",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/data_sources/{data_source_id}/templates",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "data-source templates list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.list-data-source-templates",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/data_sources/{data_source_id}/templates\"].get",
+        "operation_id": "list-data-source-templates",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:430: implemented direct_read command binds GET /v1/data_sources/{data_source_id}/templates.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.list_data_source_templates"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"data-source templates list\" binds the pinned source contract",
+        "command": {
+          "path": "data-source templates list",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.list_data_source_templates"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/databases/{database_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/databases/{database_id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "database get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.retrieve-database",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/databases/{database_id}\"].get",
+        "operation_id": "retrieve-database",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:470: implemented direct_read command binds GET /v1/databases/{database_id}.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_database"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"database get\" binds the pinned source contract",
+        "command": {
+          "path": "database get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_database"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/databases/{database_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/v1/databases/{database_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_database"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.update-database",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/databases/{database_id}\"].patch",
+        "operation_id": "update-database",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1164: implemented reverse_etl command binds PATCH /v1/databases/{database_id}.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"database update\" binds the pinned source contract",
+        "command": {
+          "path": "database update",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/databases",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/databases",
+        "operation": null,
+        "covered_by": {
+          "write": "create_database"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.create-database",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/databases\"].post",
+        "operation_id": "create-database",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1130: implemented reverse_etl command binds POST /v1/databases.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"database create\" binds the pinned source contract",
+        "command": {
+          "path": "database create",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/search",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/search (object=database)",
+        "operation": null,
+        "covered_by": {
+          "stream": "databases"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.post-search",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/search\"].post",
+        "operation_id": "post-search",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:154: implemented etl command binds POST /v1/search.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable etl command \"databases list\" binds the pinned source contract",
+        "command": {
+          "path": "databases list",
+          "intent": "etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/comments",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/comments",
+        "operation": null,
+        "covered_by": {
+          "write": "create_comment"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.create-a-comment",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/comments\"].post",
+        "operation_id": "create-a-comment",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:955: implemented reverse_etl command binds POST /v1/comments.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"comment create\" binds the pinned source contract",
+        "command": {
+          "path": "comment create",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/comments",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/comments",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "comment list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.list-comments",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/comments\"].get",
+        "operation_id": "list-comments",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:340: implemented direct_read command binds GET /v1/comments.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.list_comments"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"comment list\" binds the pinned source contract",
+        "command": {
+          "path": "comment list",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.list_comments"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/comments/{comment_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/comments/{comment_id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "comment get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.retrieve-comment",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/comments/{comment_id}\"].get",
+        "operation_id": "retrieve-comment",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:374: implemented direct_read command binds GET /v1/comments/{comment_id}.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_comment"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"comment get\" binds the pinned source contract",
+        "command": {
+          "path": "comment get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_comment"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/comments/{comment_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/v1/comments/{comment_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_comment"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.update-a-comment",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/comments/{comment_id}\"].patch",
+        "operation_id": "update-a-comment",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1004: implemented reverse_etl command binds PATCH /v1/comments/{comment_id}.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"comment update-markdown\" binds the pinned source contract",
+        "command": {
+          "path": "comment update-markdown",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/comments/{comment_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/v1/comments/{comment_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_comment"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.delete-a-comment",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/comments/{comment_id}\"].delete",
+        "operation_id": "delete-a-comment",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1039: implemented reverse_etl command binds DELETE /v1/comments/{comment_id}.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"comment delete\" binds the pinned source contract",
+        "command": {
+          "path": "comment delete",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/file_uploads",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/file_uploads",
+        "operation": null,
+        "covered_by": {
+          "write": "create_file_upload"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.create-file",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/file_uploads\"].post",
+        "operation_id": "create-file",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1590: implemented reverse_etl command binds POST /v1/file_uploads.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"file-upload create\" binds the pinned source contract",
+        "command": {
+          "path": "file-upload create",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/file_uploads",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/file_uploads",
+        "operation": null,
+        "covered_by": {
+          "stream": "file_uploads"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.list-file-uploads",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/file_uploads\"].get",
+        "operation_id": "list-file-uploads",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:218: implemented etl command binds GET /v1/file_uploads.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable etl command \"file-uploads list\" binds the pinned source contract",
+        "command": {
+          "path": "file-uploads list",
+          "intent": "etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/file_uploads/{file_upload_id}/send",
+      "parity_class": "binary_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/file_uploads/{file_upload_id}/send",
+        "operation": {
+          "model": "sensitive_reverse_etl",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Notion multipart file upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner can bind provider paths to approved payload digests without adding connector-local runtime code.",
+          "source_url": "https://developers.notion.com/reference/upload-file",
+          "notes": "named_dependency=shared file upload runner; operation_id=notion.send_file_upload; artifact=https://developers.notion.com/openapi.json"
+        },
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.upload-file",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/file_uploads/{file_upload_id}/send\"].post",
+        "operation_id": "upload-file",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "command-availability-notion",
+          "evidence": "internal/connectors/defs/notion/cli_surface.json:1669: command availability is planned; internal/connectors/defs/notion/sources/notion-operation-source-lock.json: paths paths[\"/v1/file_uploads/{file_upload_id}/send\"].post.",
+          "minimal_change": "Complete the command’s pinned-schema input/output contract and mark it implemented only after runtime preflight accepts it."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1669: command availability is planned; internal/connectors/defs/notion/sources/notion-operation-source-lock.json: paths paths[\"/v1/file_uploads/{file_upload_id}/send\"].post."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending command-availability-notion",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/file_uploads/{file_upload_id}/complete",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/file_uploads/{file_upload_id}/complete",
+        "operation": null,
+        "covered_by": {
+          "write": "complete_file_upload"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.complete-file-upload",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/file_uploads/{file_upload_id}/complete\"].post",
+        "operation_id": "complete-file-upload",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1641: implemented reverse_etl command binds POST /v1/file_uploads/{file_upload_id}/complete.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"file-upload complete\" binds the pinned source contract",
+        "command": {
+          "path": "file-upload complete",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/file_uploads/{file_upload_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/file_uploads/{file_upload_id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "file-upload get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.retrieve-file-upload",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/file_uploads/{file_upload_id}\"].get",
+        "operation_id": "retrieve-file-upload",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:498: implemented direct_read command binds GET /v1/file_uploads/{file_upload_id}.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_file_upload"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"file-upload get\" binds the pinned source contract",
+        "command": {
+          "path": "file-upload get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_file_upload"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/custom_emojis",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/custom_emojis",
+        "operation": null,
+        "covered_by": {
+          "stream": "custom_emojis"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.list-custom-emojis",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/custom_emojis\"].get",
+        "operation_id": "list-custom-emojis",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:202: implemented etl command binds GET /v1/custom_emojis.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable etl command \"custom-emojis list\" binds the pinned source contract",
+        "command": {
+          "path": "custom-emojis list",
+          "intent": "etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/views",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/views",
+        "operation": null,
+        "covered_by": {
+          "stream": "views"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.list-views",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/views\"].get",
+        "operation_id": "list-views",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:234: implemented etl command binds GET /v1/views.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable etl command \"views list\" binds the pinned source contract",
+        "command": {
+          "path": "views list",
+          "intent": "etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/views",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/views",
+        "operation": null,
+        "covered_by": {
+          "write": "create_view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.create-view",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/views\"].post",
+        "operation_id": "create-view",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1405: implemented reverse_etl command binds POST /v1/views.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"view create\" binds the pinned source contract",
+        "command": {
+          "path": "view create",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/views/{view_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/views/{view_id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "view get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.retrieve-a-view",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/views/{view_id}\"].get",
+        "operation_id": "retrieve-a-view",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:683: implemented direct_read command binds GET /v1/views/{view_id}.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_view"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"view get\" binds the pinned source contract",
+        "command": {
+          "path": "view get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_view"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/views/{view_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/v1/views/{view_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "update_view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.update-a-view",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/views/{view_id}\"].patch",
+        "operation_id": "update-a-view",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1459: implemented reverse_etl command binds PATCH /v1/views/{view_id}.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"view update\" binds the pinned source contract",
+        "command": {
+          "path": "view update",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/views/{view_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/v1/views/{view_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.delete-view",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/views/{view_id}\"].delete",
+        "operation_id": "delete-view",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1493: implemented reverse_etl command binds DELETE /v1/views/{view_id}.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"view delete\" binds the pinned source contract",
+        "command": {
+          "path": "view delete",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/views/{view_id}/queries",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/views/{view_id}/queries",
+        "operation": null,
+        "covered_by": {
+          "write": "create_view_query"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.create-view-query",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/views/{view_id}/queries\"].post",
+        "operation_id": "create-view-query",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1521: implemented reverse_etl command binds POST /v1/views/{view_id}/queries.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"view query create\" binds the pinned source contract",
+        "command": {
+          "path": "view query create",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/views/{view_id}/queries/{query_id}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/views/{view_id}/queries/{query_id}",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "view query results get"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.get-view-query-results",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/views/{view_id}/queries/{query_id}\"].get",
+        "operation_id": "get-view-query-results",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:711: implemented direct_read command binds GET /v1/views/{view_id}/queries/{query_id}.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_view_query_results"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"view query results get\" binds the pinned source contract",
+        "command": {
+          "path": "view query results get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.retrieve_view_query_results"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/views/{view_id}/queries/{query_id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/v1/views/{view_id}/queries/{query_id}",
+        "operation": null,
+        "covered_by": {
+          "write": "delete_view_query"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.delete-view-query",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/views/{view_id}/queries/{query_id}\"].delete",
+        "operation_id": "delete-view-query",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:1555: implemented reverse_etl command binds DELETE /v1/views/{view_id}/queries/{query_id}.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"view query delete\" binds the pinned source contract",
+        "command": {
+          "path": "view query delete",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/blocks/meeting_notes",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/blocks/meeting_notes",
+        "operation": null,
+        "covered_by": {
+          "write": "create_meeting_note"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.create-meeting-note",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/blocks/meeting_notes\"].post",
+        "operation_id": "create-meeting-note",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:831: implemented reverse_etl command binds POST /v1/blocks/meeting_notes.",
+        "contract": null
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable typed write command \"meeting-note create\" binds the pinned source contract",
+        "command": {
+          "path": "meeting-note create",
+          "intent": "reverse_etl",
+          "availability": "implemented"
+        },
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/blocks/meeting_notes/query",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/blocks/meeting_notes/query",
+        "operation": null,
+        "covered_by": {
+          "direct_read": "meeting-note query"
+        }
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.query-meeting-notes",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/blocks/meeting_notes/query\"].post",
+        "operation_id": "query-meeting-notes",
+        "deprecated": false
+      },
+      "state": "enabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "internal/connectors/defs/notion/cli_surface.json:804: implemented direct_read command binds POST /v1/blocks/meeting_notes/query.",
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.query_meeting_notes"
+        }
+      },
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"meeting-note query\" binds the pinned source contract",
+        "command": {
+          "path": "meeting-note query",
+          "intent": "direct_read",
+          "availability": "implemented"
+        },
+        "contract": {
+          "kind": "rest_read",
+          "id": "notion.query_meeting_notes"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/oauth/token",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/oauth/token",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Pinned OAuth token exchange returns access_token and refresh_token. The secret-sensitive source contract is declared, but the engine lacks the live sensitive_policy path and secret-response handling.",
+          "source_url": "https://developers.notion.com/openapi.json",
+          "notes": "foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
+        },
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.create-a-token",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/oauth/token\"].post",
+        "operation_id": "create-a-token",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "cli-command-contract-notion",
+          "evidence": "internal/connectors/defs/notion/operations.json:340 has rest_write contract notion.create_a_token, but internal/connectors/defs/notion/cli_surface.json has no implemented command bound to POST /v1/oauth/token; cmd/connectorgen/surfacesync.go:63-64 does not invent one.",
+          "minimal_change": "Add a connector-owned CLI command bound to this existing typed operation, retaining its source-derived parameters and output policy."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/notion/operations.json:340 has rest_write contract notion.create_a_token, but internal/connectors/defs/notion/cli_surface.json has no implemented command bound to POST /v1/oauth/token; cmd/connectorgen/surfacesync.go:63-64 does not invent one."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending cli-command-contract-notion",
+        "contract": {
+          "kind": "rest_write",
+          "id": "notion.create_a_token"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/oauth/revoke",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/oauth/revoke",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Pinned OAuth revoke requires a token supplied under basicAuth. The secret-sensitive source contract is declared, but the engine lacks the live sensitive_policy path.",
+          "source_url": "https://developers.notion.com/openapi.json",
+          "notes": "foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
+        },
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.revoke-token",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/oauth/revoke\"].post",
+        "operation_id": "revoke-token",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "cli-command-contract-notion",
+          "evidence": "internal/connectors/defs/notion/operations.json:422 has rest_write contract notion.revoke_token, but internal/connectors/defs/notion/cli_surface.json has no implemented command bound to POST /v1/oauth/revoke; cmd/connectorgen/surfacesync.go:63-64 does not invent one.",
+          "minimal_change": "Add a connector-owned CLI command bound to this existing typed operation, retaining its source-derived parameters and output policy."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/notion/operations.json:422 has rest_write contract notion.revoke_token, but internal/connectors/defs/notion/cli_surface.json has no implemented command bound to POST /v1/oauth/revoke; cmd/connectorgen/surfacesync.go:63-64 does not invent one."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending cli-command-contract-notion",
+        "contract": {
+          "kind": "rest_write",
+          "id": "notion.revoke_token"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/oauth/introspect",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/oauth/introspect",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Pinned OAuth introspection requires a token supplied under basicAuth. The secret-sensitive source contract is declared, but the engine lacks the live sensitive_policy path and safe token-derived response handling.",
+          "source_url": "https://developers.notion.com/openapi.json",
+          "notes": "foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
+        },
+        "covered_by": null
+      },
+      "source": {
+        "source_lock": "sources/notion-operation-source-lock.json",
+        "source_id": "notion.rest.introspect-token",
+        "source_url": "https://developers.notion.com/openapi.json",
+        "source_location": "paths[\"/v1/oauth/introspect\"].post",
+        "operation_id": "introspect-token",
+        "deprecated": false
+      },
+      "state": "disabled",
+      "foundation": {
+        "state": "present",
+        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
+        "declaration_pending": {
+          "id": "cli-command-contract-notion",
+          "evidence": "internal/connectors/defs/notion/operations.json:459 has rest_write contract notion.introspect_token, but internal/connectors/defs/notion/cli_surface.json has no implemented command bound to POST /v1/oauth/introspect; cmd/connectorgen/surfacesync.go:63-64 does not invent one.",
+          "minimal_change": "Add a connector-owned CLI command bound to this existing typed operation, retaining its source-derived parameters and output policy."
+        }
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
+        "evidence": "internal/connectors/defs/notion/operations.json:459 has rest_write contract notion.introspect_token, but internal/connectors/defs/notion/cli_surface.json has no implemented command bound to POST /v1/oauth/introspect; cmd/connectorgen/surfacesync.go:63-64 does not invent one."
+      },
+      "declaration": {
+        "status": "disabled; declaration-pending cli-command-contract-notion",
+        "contract": {
+          "kind": "rest_write",
+          "id": "notion.introspect_token"
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    }
+  ],
+  "source_only_dispositions": [],
+  "notes": [
+    "Source-input completeness: 49 operations found in the complete provider-published OpenAPI document; confidence=high because counts.total, per-method counts, and operation inventory agree.",
+    "ENABLED% is implemented CLI commands bound to source operations, never inventory count or declared coverage.",
+    "Missing typed contracts, commands and sync-transport definitions are declaration-pending, not foundation gaps.",
+    "Complete source-locked endpoint map. Every documented operation has one primary endpoint class: direct_read, direct_write, etl, binary_read, or binary_write.",
+    "Reverse ETL is an eligibility attribute on every direct_write row, not an endpoint class. It is currently blocked by generic-typed-destination-executor because no connector-neutral typed destination factory accepts these definitions.",
+    "ETL source transport is declared through the connector-neutral declarative_stream_source adapter; no transport_binding action is invented."
+  ]
+}

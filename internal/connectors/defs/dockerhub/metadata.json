@@ -1,14 +1,14 @@
 {
   "name": "dockerhub",
   "display_name": "Docker Hub",
-  "description": "Reads public Docker Hub repositories and image tags for a configured username or organization via the Docker Hub registry API.",
+  "description": "Reads public Docker Hub repositories and image tags, and performs source-declared organization mutations through the approved reverse-ETL write lifecycle.",
   "integration_type": "api",
   "docs_url": "https://docs.docker.com/docker-hub/api/latest/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Docker Hub API read of public repository and tag data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Docker Hub API reads, including public repository and authenticated organization resources",
+    "write": "source-declared Docker Hub organization mutations require reverse-ETL plan, preview, approval, and execute",
+    "approval": "reverse-ETL writes require plan, preview, approval, and execute"
   }
 }

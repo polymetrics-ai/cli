@@ -22665,6 +22665,166 @@
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
         "notes": "classification=implementable_now; counting=read; operationId=getApiV4SwaggerDocName; summary=Swagger compatible API description for specific API; tags=(none); request_content_types=(none declared); source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
       }
+    },
+    {
+      "method": "GET",
+      "path": "/internal/gitlab_subscriptions/namespaces/{id}/projects",
+      "provenance": {
+        "artifact": "gitlab-operation-source-lock-2026-08-19",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof.",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rollouts/{id}",
+      "provenance": {
+        "artifact": "gitlab-operation-source-lock-2026-08-19",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof.",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{id}/ai_agent/sessions",
+      "provenance": {
+        "artifact": "gitlab-operation-source-lock-2026-08-19",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof.",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/ai_agent/sessions",
+      "provenance": {
+        "artifact": "gitlab-operation-source-lock-2026-08-19",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof.",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/projects/{id}/ai_agent/sessions/{session_id}",
+      "provenance": {
+        "artifact": "gitlab-operation-source-lock-2026-08-19",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof.",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{id}/ai_agent/audit_events",
+      "provenance": {
+        "artifact": "gitlab-operation-source-lock-2026-08-19",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof.",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/duo_workflows/workflows/{id}/checkpoints/by_thread_ts",
+      "provenance": {
+        "artifact": "gitlab-operation-source-lock-2026-08-19",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof.",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user/push_subscriptions",
+      "provenance": {
+        "artifact": "gitlab-operation-source-lock-2026-08-19",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof.",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/user/push_subscriptions",
+      "provenance": {
+        "artifact": "gitlab-operation-source-lock-2026-08-19",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof.",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/glql/schema",
+      "provenance": {
+        "artifact": "gitlab-operation-source-lock-2026-08-19",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof.",
+        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml"
+      }
     }
   ]
 }

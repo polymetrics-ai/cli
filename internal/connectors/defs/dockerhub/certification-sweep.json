@@ -1,0 +1,1662 @@
+{
+  "schema_version": 1,
+  "connector": "dockerhub",
+  "source": "connector declarations",
+  "declared_commands": 45,
+  "declared_rows": 48,
+  "status_total": 48,
+  "commands": [
+    {
+      "summary": "List audit log actions",
+      "path": "audit log actions view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "account",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.account"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/auditlogs/{account}/actions"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --account",
+      "required_flags": [
+        "--account"
+      ]
+    },
+    {
+      "summary": "List audit log events",
+      "path": "audit logs list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "account",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.account"
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.action"
+        },
+        {
+          "name": "actor",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.actor"
+        },
+        {
+          "name": "from",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.from"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.name"
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.to"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/auditlogs/{account}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --account",
+      "required_flags": [
+        "--account"
+      ]
+    },
+    {
+      "summary": "Delete access token",
+      "path": "organization access token delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "access-token-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.access_token_id"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.org_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --access-token-id, --org-name",
+      "required_flags": [
+        "--access-token-id",
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "Update access token",
+      "path": "organization access token update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "access-token-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.access_token_id"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "is-active",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.is_active"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.label"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.org_name"
+        },
+        {
+          "name": "resources",
+          "type": "json",
+          "required": false,
+          "maps_to": "record.resources"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --access-token-id, --org-name",
+      "required_flags": [
+        "--access-token-id",
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "Get access token",
+      "path": "organization access token view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "access-token-id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.access_token_id"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.org_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --access-token-id, --org-name",
+      "required_flags": [
+        "--access-token-id",
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "List access tokens",
+      "path": "organization access tokens list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{name}/access-tokens"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --name",
+      "required_flags": [
+        "--name"
+      ]
+    },
+    {
+      "summary": "Create a new group",
+      "path": "organization group create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.org_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_name}/groups"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --name, --org-name",
+      "required_flags": [
+        "--name",
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "Delete an organization group",
+      "path": "organization group delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "group-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.group_name"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.org_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --group-name, --org-name",
+      "required_flags": [
+        "--group-name",
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "Add a member to a group",
+      "path": "organization group member add",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "group-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.group_name"
+        },
+        {
+          "name": "member",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.member"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.org_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}/members"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --group-name, --member, --org-name",
+      "required_flags": [
+        "--group-name",
+        "--member",
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "Remove a user from a group",
+      "path": "organization group member delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "group-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.group_name"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.org_name"
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.username"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --group-name, --org-name, --username",
+      "required_flags": [
+        "--group-name",
+        "--org-name",
+        "--username"
+      ]
+    },
+    {
+      "summary": "List members of a group",
+      "path": "organization group members list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "group-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.group_name"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.org_name"
+        },
+        {
+          "name": "search",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.search"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}/members"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --group-name, --org-name",
+      "required_flags": [
+        "--group-name",
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "Update the details for an organization group",
+      "path": "organization group replace",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "group-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.group_name"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.org_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --group-name, --name, --org-name",
+      "required_flags": [
+        "--group-name",
+        "--name",
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "Update some details for an organization group",
+      "path": "organization group update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "group-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.group_name"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.org_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --group-name, --org-name",
+      "required_flags": [
+        "--group-name",
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "Get a group of an organization",
+      "path": "organization group view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "group-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.group_name"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.org_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --group-name, --org-name",
+      "required_flags": [
+        "--group-name",
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "Get groups of an organization",
+      "path": "organization groups list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.org_name"
+        },
+        {
+          "name": "search",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.search"
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.username"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/groups"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org-name",
+      "required_flags": [
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "Bulk create invites",
+      "path": "organization invite bulk-create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "dry-run",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.dry_run"
+        },
+        {
+          "name": "invitees",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "record.invitees"
+        },
+        {
+          "name": "org",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.org"
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.role"
+        },
+        {
+          "name": "team",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.team"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/invites/bulk"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --invitees, --org",
+      "required_flags": [
+        "--invitees",
+        "--org"
+      ]
+    },
+    {
+      "summary": "Cancel an invite",
+      "path": "organization invite delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/invites/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "Resend an invite",
+      "path": "organization invite resend",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/invites/{id}/resend"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List org invites",
+      "path": "organization invites list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.org_name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/invites"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org-name",
+      "required_flags": [
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "Remove member from org",
+      "path": "organization member delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.org_name"
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.username"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_name}/members/{username}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --org-name, --username",
+      "required_flags": [
+        "--org-name",
+        "--username"
+      ]
+    },
+    {
+      "summary": "Update org member (role)",
+      "path": "organization member update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.org_name"
+        },
+        {
+          "name": "role",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "owner",
+            "editor",
+            "member"
+          ],
+          "maps_to": "record.role"
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.username"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/orgs/{org_name}/members/{username}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --org-name, --role, --username",
+      "required_flags": [
+        "--org-name",
+        "--role",
+        "--username"
+      ]
+    },
+    {
+      "summary": "List org members",
+      "path": "organization members list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "invites",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "query.invites"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.org_name"
+        },
+        {
+          "name": "role",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "owner",
+            "editor",
+            "member"
+          ],
+          "maps_to": "query.role"
+        },
+        {
+          "name": "search",
+          "type": "integer",
+          "required": false,
+          "maps_to": "query.search"
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "all",
+            "invitee",
+            "member"
+          ],
+          "maps_to": "query.type"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/members"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --org-name",
+      "required_flags": [
+        "--org-name"
+      ]
+    },
+    {
+      "summary": "Update organization settings",
+      "path": "organization settings update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "restricted-images",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.restricted_images"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/orgs/{name}/settings"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --name, --restricted-images",
+      "required_flags": [
+        "--name",
+        "--restricted-images"
+      ]
+    },
+    {
+      "summary": "Get organization settings",
+      "path": "organization settings view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{name}/settings"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --name",
+      "required_flags": [
+        "--name"
+      ]
+    },
+    {
+      "summary": "Delete personal access token",
+      "path": "personal access token delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.uuid"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/access-tokens/{uuid}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --uuid",
+      "required_flags": [
+        "--uuid"
+      ]
+    },
+    {
+      "summary": "Update personal access token",
+      "path": "personal access token update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "is-active",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.is_active"
+        },
+        {
+          "name": "token-label",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.token_label"
+        },
+        {
+          "name": "uuid",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.uuid"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/access-tokens/{uuid}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --uuid",
+      "required_flags": [
+        "--uuid"
+      ]
+    },
+    {
+      "summary": "Get personal access token",
+      "path": "personal access token view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.uuid"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/access-tokens/{uuid}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --uuid",
+      "required_flags": [
+        "--uuid"
+      ]
+    },
+    {
+      "summary": "List personal access tokens",
+      "path": "personal access tokens list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/access-tokens"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "Run the repositories ETL stream",
+      "path": "repositories list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "repositories",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Create a new repository",
+      "path": "repository create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "full-description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.full_description"
+        },
+        {
+          "name": "is-private",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.is_private"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "namespace",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.namespace"
+        },
+        {
+          "name": "registry",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.registry"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/namespaces/{namespace}/repositories"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --name, --namespace",
+      "required_flags": [
+        "--name",
+        "--namespace"
+      ]
+    },
+    {
+      "summary": "Run the repository detail ETL stream",
+      "path": "repository detail list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "repository_detail",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Assign a group (Team) to a repository for access",
+      "path": "repository group create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "group-id",
+          "type": "integer",
+          "required": true,
+          "maps_to": "record.group_id"
+        },
+        {
+          "name": "namespace",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.namespace"
+        },
+        {
+          "name": "permission",
+          "type": "enum",
+          "required": true,
+          "values": [
+            "read",
+            "write",
+            "admin"
+          ],
+          "maps_to": "record.permission"
+        },
+        {
+          "name": "repository",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.repository"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/repositories/{namespace}/{repository}/groups"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --group-id, --namespace, --permission, --repository",
+      "required_flags": [
+        "--group-id",
+        "--namespace",
+        "--permission",
+        "--repository"
+      ]
+    },
+    {
+      "summary": "Update repository immutable tags",
+      "path": "repository immutable-tags update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "immutable-tags",
+          "type": "boolean",
+          "required": true,
+          "maps_to": "record.immutable_tags"
+        },
+        {
+          "name": "immutable-tags-rules",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "record.immutable_tags_rules"
+        },
+        {
+          "name": "namespace",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.namespace"
+        },
+        {
+          "name": "repository",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.repository"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --immutable-tags, --immutable-tags-rules, --namespace, --repository",
+      "required_flags": [
+        "--immutable-tags",
+        "--immutable-tags-rules",
+        "--namespace",
+        "--repository"
+      ]
+    },
+    {
+      "summary": "Verify repository immutable tags",
+      "path": "repository immutable-tags verify",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "namespace",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.namespace"
+        },
+        {
+          "name": "regex",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.regex"
+        },
+        {
+          "name": "repository",
+          "type": "string",
+          "required": true,
+          "maps_to": "record.repository"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --namespace, --regex, --repository",
+      "required_flags": [
+        "--namespace",
+        "--regex",
+        "--repository"
+      ]
+    },
+    {
+      "summary": "Get a resource type",
+      "path": "scim resource-type view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.name"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/ResourceTypes/{name}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --name",
+      "required_flags": [
+        "--name"
+      ]
+    },
+    {
+      "summary": "List resource types",
+      "path": "scim resource-types list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/ResourceTypes"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "Get a schema",
+      "path": "scim schema view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Schemas/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List schemas",
+      "path": "scim schemas list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Schemas"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "Get service provider config",
+      "path": "scim service-provider-config view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/ServiceProviderConfig"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "Create user",
+      "path": "scim user create",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "family-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.name.familyName"
+        },
+        {
+          "name": "given-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.name.givenName"
+        },
+        {
+          "name": "schemas",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.schemas"
+        },
+        {
+          "name": "user-name",
+          "type": "string",
+          "required": true,
+          "maps_to": "body.userName"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/scim/2.0/Users"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --schemas, --user-name",
+      "required_flags": [
+        "--schemas",
+        "--user-name"
+      ]
+    },
+    {
+      "summary": "Update a user",
+      "path": "scim user update",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "body.enabled"
+        },
+        {
+          "name": "family-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.name.familyName"
+        },
+        {
+          "name": "given-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "body.name.givenName"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        },
+        {
+          "name": "schemas",
+          "type": "string_array",
+          "required": true,
+          "maps_to": "body.schemas"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/scim/2.0/Users/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --id, --schemas",
+      "required_flags": [
+        "--id",
+        "--schemas"
+      ]
+    },
+    {
+      "summary": "Get a user",
+      "path": "scim user view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Users/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List users",
+      "path": "scim users list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "attributes",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.attributes"
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.filter"
+        },
+        {
+          "name": "sortBy",
+          "type": "string",
+          "required": false,
+          "maps_to": "query.sortBy"
+        },
+        {
+          "name": "sortOrder",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "ascending",
+            "descending"
+          ],
+          "maps_to": "query.sortOrder"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Users"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required"
+    },
+    {
+      "summary": "Run the tag detail ETL stream",
+      "path": "tag detail list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "tag_detail",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Run the tags ETL stream",
+      "path": "tags list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "tags",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Declared read capability",
+      "path": "capability read",
+      "intent": "capability_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared read capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared write capability",
+      "path": "capability write",
+      "intent": "capability_write",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared write capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
+    }
+  ],
+  "product_defects": [],
+  "provider_refusals": []
+}

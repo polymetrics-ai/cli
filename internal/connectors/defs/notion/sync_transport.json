@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "source_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "eligible_streams": [
+      "databases",
+      "pages",
+      "users",
+      "custom_emojis",
+      "file_uploads",
+      "views"
+    ],
+    "modes": [
+      "full_overwrite",
+      "full_append",
+      "incremental_upsert",
+      "incremental_dedupe",
+      "incremental_dedupe_history"
+    ],
+    "delivery": {
+      "idempotency": "at_least_once",
+      "ordering": "source_ordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "batch1_declarative_stream_transport",
+      "run_id": "notion_all_executable_streams_v1"
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This bundle records the complete official Bitbucket Cloud REST API 2.0 OpenAPI inventory from `https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json`. The inventory observed 331 operations with method counts {'DELETE': 54, 'GET': 179, 'POST': 50, 'PUT': 48} and source SHA-256 `efd23d3948bf0b4d4ff5ad6ae6bab9479d8f00200783751e871df66b8db232c2`. The connector declares declarative streams for JSON GET operations that the current engine can express, a narrow closed-schema reverse-ETL surface for typed repository creation and path-only deletes, and connector-local blocked operation rows for untyped JSON body mutations, binary transfer, typed JSON direct reads, multipart upload, and provider-search/query surfaces whose shared bounded-command foundations are not present in this worktree.
+This bundle records the complete official Bitbucket Cloud REST API 2.0 OpenAPI inventory from `https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json`. The inventory observed 331 operations with method counts {'DELETE': 54, 'GET': 179, 'POST': 50, 'PUT': 48} and source SHA-256 `cc6411982ef4dad138bbdfc16d4ccf1bb87054e0df5aaf9f79a40b446df58e9e`, retrieved 2026-08-19 and pinned in `sources/bitbucket-operation-source-lock.json`. The connector declares declarative streams for JSON GET operations that the current engine can express, a narrow closed-schema reverse-ETL surface for typed repository creation and path-only deletes, and connector-local blocked operation rows for untyped JSON body mutations, binary transfer, typed JSON direct reads, multipart upload, and provider-search/query surfaces whose shared bounded-command foundations are not present in this worktree.
 
 ## Auth setup
 

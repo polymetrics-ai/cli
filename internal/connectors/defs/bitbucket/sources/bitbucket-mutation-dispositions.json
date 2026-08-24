@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "dispositions": [
+    {
+      "source": {
+        "source_id": "bitbucket.rest.delete_/addon",
+        "method": "DELETE",
+        "path": "/addon"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commit/{commit}/approve",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/downloads",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/downloads"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "updateEnvironmentForRepository",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/hooks",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/hooks"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "createRepositoryRunner",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "stopPipeline",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/src",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/src"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.post_/workspaces/{workspace}/hooks",
+        "method": "POST",
+        "path": "/workspaces/{workspace}/hooks"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "createWorkspaceRunner",
+        "method": "POST",
+        "path": "/workspaces/{workspace}/pipelines-config/runners"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.post_/workspaces/{workspace}/projects/{project_key}/deploy-keys",
+        "method": "POST",
+        "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/addon",
+        "method": "PUT",
+        "path": "/addon"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/branching-model/settings",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/override-settings",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/override-settings"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "updateRepositoryRunner",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/snippets/{workspace}/{encoded_id}",
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/snippets/{workspace}/{encoded_id}/watch",
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}/watch"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/snippets/{workspace}/{encoded_id}/{node_id}",
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}/{node_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/workspaces/{workspace}/hooks/{uid}",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/hooks/{uid}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "updateWorkspaceRunner",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}/branching-model/settings",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    }
+  ]
+}

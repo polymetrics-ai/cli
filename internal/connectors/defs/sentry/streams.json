@@ -13,7 +13,7 @@
     },
     "check": {
       "method": "GET",
-      "path": "/api/0/projects/"
+      "path": "/api/0/organizations/{{ config.organization }}/projects/"
     },
     "error_map": [
       {
@@ -34,7 +34,7 @@
   "streams": [
     {
       "name": "projects",
-      "path": "/api/0/projects/",
+      "path": "/api/0/organizations/{{ config.organization }}/projects/",
       "records": {
         "path": ""
       },

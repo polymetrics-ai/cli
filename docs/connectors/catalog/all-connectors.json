@@ -26074,6 +26074,41 @@
       "write": true,
       "query": false
     },
+    "sync_transport": {
+      "source_transport": {
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "projects",
+          "pipelines",
+          "workflows",
+          "jobs",
+          "contexts",
+          "schedules",
+          "checkout_keys",
+          "environment_variables",
+          "insights_workflow_summary"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "circleci_all_executable_streams_v1"
+        }
+      }
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "CircleCI Connection Specification",
@@ -26279,6 +26314,211 @@
         "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key/{{ record.fingerprint }}",
         "risk": "irreversible external revocation of a deploy/checkout SSH key; may break future CI checkouts that depend on it; approval required",
         "confirm": "destructive"
+      },
+      {
+        "name": "delete_context",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/context/{{ record.context_id }}",
+        "risk": "external CircleCI API mutation: deleteContext",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_environment_variable_from_context",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/context/{{ record.context_id }}/environment-variable/{{ record.env_var_name }}",
+        "risk": "external CircleCI API mutation: deleteEnvironmentVariableFromContext",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_context_restriction",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/context/{{ record.context_id }}/restrictions/{{ record.restriction_id }}",
+        "risk": "external CircleCI API mutation: deleteContextRestriction",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_org_claims",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/org/{{ record.orgID }}/oidc-custom-claims",
+        "risk": "external CircleCI API mutation: DeleteOrgClaims",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_project_claims",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/org/{{ record.orgID }}/project/{{ record.projectID }}/oidc-custom-claims",
+        "risk": "external CircleCI API mutation: DeleteProjectClaims",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_organization",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organization/{{ record.org-slug-or-id }}",
+        "risk": "external CircleCI API mutation: deleteOrganization",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_u_r_l_orb_allow_list_entry",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organization/{{ record.org-slug-or-id }}/url-orb-allow-list/{{ record.allow-list-entry-id }}",
+        "risk": "external CircleCI API mutation: removeURLOrbAllowListEntry",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/organizations/{{ record.org_id }}/groups/{{ record.group_id }}",
+        "risk": "external CircleCI API mutation: deleteGroup",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_otel_exporter",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/otel/exporters/{{ record.otel_exporter_id }}",
+        "risk": "external CircleCI API mutation: deleteOtelExporter",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_project_by_slug",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project/{{ record.project-slug }}",
+        "risk": "external CircleCI API mutation: deleteProjectBySlug",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_checkout_key_by_slug",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project/{{ record.project-slug }}/checkout-key/{{ record.fingerprint }}",
+        "risk": "external CircleCI API mutation: deleteCheckoutKey",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_env_var",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project/{{ record.project-slug }}/envvar/{{ record.name }}",
+        "risk": "external CircleCI API mutation: deleteEnvVar",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_pipeline_definition",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.project_id }}/pipeline-definitions/{{ record.pipeline_definition_id }}",
+        "risk": "external CircleCI API mutation: deletePipelineDefinition",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_trigger",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projects/{{ record.project_id }}/triggers/{{ record.trigger_id }}",
+        "risk": "external CircleCI API mutation: deleteTrigger",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_schedule_by_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/schedule/{{ record.schedule-id }}",
+        "risk": "external CircleCI API mutation: deleteScheduleById",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_webhook",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/webhook/{{ record.webhook_id }}",
+        "risk": "external CircleCI API mutation: deleteWebhook",
+        "confirm": "destructive"
+      },
+      {
+        "name": "patch_project_settings",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/project/{{ record.provider }}/{{ record.organization }}/{{ record.project }}/settings",
+        "risk": "external CircleCI API mutation: patchProjectSettings"
+      },
+      {
+        "name": "update_pipeline_definition",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/projects/{{ record.project_id }}/pipeline-definitions/{{ record.pipeline_definition_id }}",
+        "risk": "external CircleCI API mutation: updatePipelineDefinition"
+      },
+      {
+        "name": "create_context_restriction",
+        "kind": "create",
+        "method": "POST",
+        "path": "/context/{{ record.context_id }}/restrictions",
+        "risk": "external CircleCI API mutation: createContextRestriction"
+      },
+      {
+        "name": "cancel_job_by_job_i_d",
+        "kind": "create",
+        "method": "POST",
+        "path": "/jobs/{{ record.job-id }}/cancel",
+        "risk": "external CircleCI API mutation: cancelJobByJobID"
+      },
+      {
+        "name": "create_organization_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/organizations/{{ record.org_id }}/groups",
+        "risk": "external CircleCI API mutation: createOrganizationGroup"
+      },
+      {
+        "name": "create_usage_export",
+        "kind": "create",
+        "method": "POST",
+        "path": "/organizations/{{ record.org_id }}/usage_export_job",
+        "risk": "external CircleCI API mutation: createUsageExport"
+      },
+      {
+        "name": "create_webhook",
+        "kind": "create",
+        "method": "POST",
+        "path": "/webhook",
+        "risk": "external CircleCI API mutation: createWebhook"
+      },
+      {
+        "name": "approve_pending_approval_job_by_id",
+        "kind": "create",
+        "method": "POST",
+        "path": "/workflow/{{ record.id }}/approve/{{ record.approval_request_id }}",
+        "risk": "external CircleCI API mutation: approvePendingApprovalJobById"
+      },
+      {
+        "name": "cancel_workflow",
+        "kind": "create",
+        "method": "POST",
+        "path": "/workflow/{{ record.id }}/cancel",
+        "risk": "external CircleCI API mutation: cancelWorkflow"
+      },
+      {
+        "name": "add_environment_variable_to_context",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/context/{{ record.context_id }}/environment-variable/{{ record.env_var_name }}",
+        "risk": "external CircleCI API mutation: addEnvironmentVariableToContext"
+      },
+      {
+        "name": "update_webhook",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/webhook/{{ record.webhook_id }}",
+        "risk": "external CircleCI API mutation: updateWebhook"
       }
     ],
     "risk": {

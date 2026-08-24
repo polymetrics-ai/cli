@@ -1,6 +1,6 @@
 {
   "tagline": "Run Docker Hub's declared streams and reverse-ETL actions.",
-  "usage": "pm dockerhub \u003ccommand\u003e [flags]",
+  "usage": "pm dockerhub <command> [flags]",
   "groups": [
     {
       "id": "read",
@@ -79,6 +79,1461 @@
         {
           "method": "GET",
           "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags"
+        }
+      ]
+    },
+    {
+      "path": "audit log actions view",
+      "summary": "List audit log actions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.auditlogs_listauditactions",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/auditlogs/{account}/actions"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "account",
+          "type": "string",
+          "summary": "Namespace to query audit log actions for.",
+          "required": true,
+          "maps_to": "path.account"
+        }
+      ]
+    },
+    {
+      "path": "organization settings view",
+      "summary": "Get organization settings",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_orgs__name__settings",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{name}/settings"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Name of the organization.",
+          "required": true,
+          "maps_to": "path.name"
+        }
+      ]
+    },
+    {
+      "path": "organization members list",
+      "summary": "List org members",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_orgs__org_name__members",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/members"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "org-name",
+          "type": "string",
+          "summary": "Name of the organization (namespace).",
+          "required": true,
+          "maps_to": "path.org_name"
+        },
+        {
+          "name": "search",
+          "type": "integer",
+          "summary": "Search term.",
+          "maps_to": "query.search"
+        },
+        {
+          "name": "invites",
+          "type": "boolean",
+          "summary": "Include invites in the response.",
+          "maps_to": "query.invites"
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "values": [
+            "all",
+            "invitee",
+            "member"
+          ],
+          "maps_to": "query.type"
+        },
+        {
+          "name": "role",
+          "type": "enum",
+          "values": [
+            "owner",
+            "editor",
+            "member"
+          ],
+          "maps_to": "query.role"
+        }
+      ]
+    },
+    {
+      "path": "organization invites list",
+      "summary": "List org invites",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_orgs__org_name__invites",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/invites"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "org-name",
+          "type": "string",
+          "summary": "Name of the organization (namespace).",
+          "required": true,
+          "maps_to": "path.org_name"
+        }
+      ]
+    },
+    {
+      "path": "organization groups list",
+      "summary": "Get groups of an organization",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_orgs__org_name__groups",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/groups"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "org-name",
+          "type": "string",
+          "summary": "Name of the organization (namespace).",
+          "required": true,
+          "maps_to": "path.org_name"
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "summary": "Get groups for the specified username in the organization.",
+          "maps_to": "query.username"
+        },
+        {
+          "name": "search",
+          "type": "string",
+          "summary": "Get groups for the specified group in the organization.",
+          "maps_to": "query.search"
+        }
+      ]
+    },
+    {
+      "path": "organization group view",
+      "summary": "Get a group of an organization",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_orgs__org_name__groups__group_name_",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "org-name",
+          "type": "string",
+          "summary": "Name of the organization (namespace).",
+          "required": true,
+          "maps_to": "path.org_name"
+        },
+        {
+          "name": "group-name",
+          "type": "string",
+          "summary": "Name of the group (team) in the organization.",
+          "required": true,
+          "maps_to": "path.group_name"
+        }
+      ]
+    },
+    {
+      "path": "organization group members list",
+      "summary": "List members of a group",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_orgs__org_name__groups__group_name__members",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}/members"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "org-name",
+          "type": "string",
+          "summary": "Name of the organization (namespace).",
+          "required": true,
+          "maps_to": "path.org_name"
+        },
+        {
+          "name": "group-name",
+          "type": "string",
+          "summary": "Name of the group (team) in the organization.",
+          "required": true,
+          "maps_to": "path.group_name"
+        },
+        {
+          "name": "search",
+          "type": "string",
+          "summary": "Search members by username, full_name or email.",
+          "maps_to": "query.search"
+        }
+      ]
+    },
+    {
+      "path": "scim service-provider-config view",
+      "summary": "Get service provider config",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_scim_2.0_serviceproviderconfig",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/ServiceProviderConfig"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim resource-types list",
+      "summary": "List resource types",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_scim_2.0_resourcetypes",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/ResourceTypes"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim resource-type view",
+      "summary": "Get a resource type",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_scim_2.0_resourcetypes__name_",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/ResourceTypes/{name}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.name"
+        }
+      ]
+    },
+    {
+      "path": "scim schemas list",
+      "summary": "List schemas",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_scim_2.0_schemas",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Schemas"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "scim schema view",
+      "summary": "Get a schema",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_scim_2.0_schemas__id_",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Schemas/{id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ]
+    },
+    {
+      "path": "scim user view",
+      "summary": "Get a user",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_scim_2.0_users__id_",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Users/{id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "The user ID.",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ]
+    },
+    {
+      "path": "organization settings update",
+      "summary": "Update organization settings",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_organization_settings",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "restricted-images",
+          "summary": "Docker Hub request field restricted_images.",
+          "maps_to": "record.restricted_images",
+          "type": "json",
+          "required": true
+        },
+        {
+          "name": "name",
+          "summary": "Docker Hub request field name.",
+          "maps_to": "record.name",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/orgs/{name}/settings"
+        }
+      ]
+    },
+    {
+      "path": "repository immutable-tags update",
+      "summary": "Update repository immutable tags",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_repository_immutable_tags",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "immutable-tags",
+          "summary": "Whether immutable tags are enabled",
+          "maps_to": "record.immutable_tags",
+          "type": "boolean",
+          "required": true
+        },
+        {
+          "name": "immutable-tags-rules",
+          "summary": "List of immutable tag rules",
+          "maps_to": "record.immutable_tags_rules",
+          "type": "string_array",
+          "required": true
+        },
+        {
+          "name": "namespace",
+          "summary": "Docker Hub request field namespace.",
+          "maps_to": "record.namespace",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "repository",
+          "summary": "Docker Hub request field repository.",
+          "maps_to": "record.repository",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags"
+        }
+      ]
+    },
+    {
+      "path": "repository immutable-tags verify",
+      "summary": "Verify repository immutable tags",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "verify_repository_immutable_tags",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "regex",
+          "summary": "Immutable tags rule regex pattern. Must match format: [a-z0-9]+((\\\\.|_|__|-+)[a-z0-9]+)*(\\\\/[a-z0-9]+((\\\\.|_|__|-+)[a-z0-9]+)*)*",
+          "maps_to": "record.regex",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "namespace",
+          "summary": "Docker Hub request field namespace.",
+          "maps_to": "record.namespace",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "repository",
+          "summary": "Docker Hub request field repository.",
+          "maps_to": "record.repository",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify"
+        }
+      ]
+    },
+    {
+      "path": "repository group create",
+      "summary": "Assign a group (Team) to a repository for access",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_repository_group",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "group-id",
+          "summary": "The ID of the organization group to grant access to",
+          "maps_to": "record.group_id",
+          "type": "integer",
+          "required": true
+        },
+        {
+          "name": "permission",
+          "summary": "The permission level to grant to the group:\n- read: Can view and pull from the repository\n- write: Can view, pull, and push to the repository\n- admin: Can view, pull, push, and manage repository settings\n",
+          "maps_to": "record.permission",
+          "type": "enum",
+          "values": [
+            "read",
+            "write",
+            "admin"
+          ],
+          "required": true
+        },
+        {
+          "name": "namespace",
+          "summary": "Docker Hub request field namespace.",
+          "maps_to": "record.namespace",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "repository",
+          "summary": "Docker Hub request field repository.",
+          "maps_to": "record.repository",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/repositories/{namespace}/{repository}/groups"
+        }
+      ]
+    },
+    {
+      "path": "repository create",
+      "summary": "Create a new repository",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_repository",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "name",
+          "summary": "The name of the repository. Must be 2-255 characters long and may only include \nalphanumeric characters, periods (.), underscores (_), or hyphens (-). \nLetters must be lowercase.\n",
+          "maps_to": "record.name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "namespace",
+          "summary": "The namespace where the repository will be created",
+          "maps_to": "record.namespace",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "description",
+          "summary": "Short description of the repository",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "full-description",
+          "summary": "Detailed description of the repository",
+          "maps_to": "record.full_description",
+          "type": "string"
+        },
+        {
+          "name": "registry",
+          "summary": "The registry where the repository will be hosted",
+          "maps_to": "record.registry",
+          "type": "string"
+        },
+        {
+          "name": "is-private",
+          "summary": "Whether the repository should be private",
+          "maps_to": "record.is_private",
+          "type": "boolean"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/namespaces/{namespace}/repositories"
+        }
+      ]
+    },
+    {
+      "path": "organization member update",
+      "summary": "Update org member (role)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_organization_member",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "role",
+          "summary": "Role of the member",
+          "maps_to": "record.role",
+          "type": "enum",
+          "values": [
+            "owner",
+            "editor",
+            "member"
+          ],
+          "required": true
+        },
+        {
+          "name": "org-name",
+          "summary": "Docker Hub request field org_name.",
+          "maps_to": "record.org_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "username",
+          "summary": "Docker Hub request field username.",
+          "maps_to": "record.username",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/orgs/{org_name}/members/{username}"
+        }
+      ]
+    },
+    {
+      "path": "organization member delete",
+      "summary": "Remove member from org",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization_member",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "org-name",
+          "summary": "Docker Hub request field org_name.",
+          "maps_to": "record.org_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "username",
+          "summary": "Docker Hub request field username.",
+          "maps_to": "record.username",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_name}/members/{username}"
+        }
+      ]
+    },
+    {
+      "path": "organization group create",
+      "summary": "Create a new group",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_organization_group",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "name",
+          "summary": "Docker Hub request field name.",
+          "maps_to": "record.name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "description",
+          "summary": "Docker Hub request field description.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "org-name",
+          "summary": "Docker Hub request field org_name.",
+          "maps_to": "record.org_name",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_name}/groups"
+        }
+      ]
+    },
+    {
+      "path": "organization group replace",
+      "summary": "Update the details for an organization group",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "replace_organization_group",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "name",
+          "summary": "Docker Hub request field name.",
+          "maps_to": "record.name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "description",
+          "summary": "Docker Hub request field description.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "org-name",
+          "summary": "Docker Hub request field org_name.",
+          "maps_to": "record.org_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "group-name",
+          "summary": "Docker Hub request field group_name.",
+          "maps_to": "record.group_name",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}"
+        }
+      ]
+    },
+    {
+      "path": "organization group update",
+      "summary": "Update some details for an organization group",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_organization_group",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "name",
+          "summary": "Docker Hub request field name.",
+          "maps_to": "record.name",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "summary": "Docker Hub request field description.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "org-name",
+          "summary": "Docker Hub request field org_name.",
+          "maps_to": "record.org_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "group-name",
+          "summary": "Docker Hub request field group_name.",
+          "maps_to": "record.group_name",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}"
+        }
+      ]
+    },
+    {
+      "path": "organization group delete",
+      "summary": "Delete an organization group",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization_group",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "org-name",
+          "summary": "Docker Hub request field org_name.",
+          "maps_to": "record.org_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "group-name",
+          "summary": "Docker Hub request field group_name.",
+          "maps_to": "record.group_name",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}"
+        }
+      ]
+    },
+    {
+      "path": "organization group member add",
+      "summary": "Add a member to a group",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_organization_group_member",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "member",
+          "summary": "Docker Hub request field member.",
+          "maps_to": "record.member",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "org-name",
+          "summary": "Docker Hub request field org_name.",
+          "maps_to": "record.org_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "group-name",
+          "summary": "Docker Hub request field group_name.",
+          "maps_to": "record.group_name",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}/members"
+        }
+      ]
+    },
+    {
+      "path": "organization group member delete",
+      "summary": "Remove a user from a group",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization_group_member",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "org-name",
+          "summary": "Docker Hub request field org_name.",
+          "maps_to": "record.org_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "group-name",
+          "summary": "Docker Hub request field group_name.",
+          "maps_to": "record.group_name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "username",
+          "summary": "Docker Hub request field username.",
+          "maps_to": "record.username",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}"
+        }
+      ]
+    },
+    {
+      "path": "organization invite delete",
+      "summary": "Cancel an invite",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization_invite",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Docker Hub request field id.",
+          "maps_to": "record.id",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/invites/{id}"
+        }
+      ]
+    },
+    {
+      "path": "organization invite resend",
+      "summary": "Resend an invite",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "resend_organization_invite",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Docker Hub request field id.",
+          "maps_to": "record.id",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/invites/{id}/resend"
+        }
+      ]
+    },
+    {
+      "path": "organization invite bulk-create",
+      "summary": "Bulk create invites",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_organization_invites",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "flags": [
+        {
+          "name": "org",
+          "summary": "organization name",
+          "maps_to": "record.org",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "team",
+          "summary": "team name",
+          "maps_to": "record.team",
+          "type": "string"
+        },
+        {
+          "name": "role",
+          "summary": "role for invitees",
+          "maps_to": "record.role",
+          "type": "string"
+        },
+        {
+          "name": "invitees",
+          "summary": "list of invitees emails or Docker Ids",
+          "maps_to": "record.invitees",
+          "type": "string_array",
+          "required": true
+        },
+        {
+          "name": "dry-run",
+          "summary": "Optional, run through validation but don't actually change data.",
+          "maps_to": "record.dry_run",
+          "type": "boolean"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/invites/bulk"
+        }
+      ]
+    },
+    {
+      "path": "personal access tokens list",
+      "summary": "List personal access tokens",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_access-tokens",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/access-tokens"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "personal access token view",
+      "summary": "Get personal access token",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_access-tokens__uuid_",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/access-tokens/{uuid}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.uuid"
+        }
+      ]
+    },
+    {
+      "path": "organization access tokens list",
+      "summary": "List access tokens",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_orgs__name__access-tokens",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{name}/access-tokens"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Name of the organization.",
+          "required": true,
+          "maps_to": "path.name"
+        }
+      ]
+    },
+    {
+      "path": "organization access token view",
+      "summary": "Get access token",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_orgs__org_name__access-tokens__access_token_id_",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "org-name",
+          "type": "string",
+          "summary": "Name of the organization (namespace).",
+          "required": true,
+          "maps_to": "path.org_name"
+        },
+        {
+          "name": "access-token-id",
+          "type": "string",
+          "summary": "The ID of the access token to retrieve",
+          "required": true,
+          "maps_to": "path.access_token_id"
+        }
+      ]
+    },
+    {
+      "path": "personal access token update",
+      "summary": "Update personal access token",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_personal_access_token",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/access-tokens/{uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "summary": "The personal access token UUID.",
+          "required": true,
+          "maps_to": "record.uuid"
+        },
+        {
+          "name": "token-label",
+          "type": "string",
+          "summary": "Friendly name for you to identify the token.",
+          "maps_to": "record.token_label"
+        },
+        {
+          "name": "is-active",
+          "type": "boolean",
+          "summary": "Whether the personal access token is active.",
+          "maps_to": "record.is_active"
+        }
+      ]
+    },
+    {
+      "path": "personal access token delete",
+      "summary": "Delete personal access token",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_personal_access_token",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/access-tokens/{uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "summary": "The personal access token UUID.",
+          "required": true,
+          "maps_to": "record.uuid"
+        }
+      ]
+    },
+    {
+      "path": "organization access token update",
+      "summary": "Update access token",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_organization_access_token",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "Label for the access token",
+          "maps_to": "record.label"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Description for the access token",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "resources",
+          "type": "json",
+          "summary": "Resources this token has access to",
+          "maps_to": "record.resources"
+        },
+        {
+          "name": "is-active",
+          "type": "boolean",
+          "summary": "Whether the token is active",
+          "maps_to": "record.is_active"
+        },
+        {
+          "name": "org-name",
+          "type": "string",
+          "summary": "Name of the organization (namespace).",
+          "required": true,
+          "maps_to": "record.org_name"
+        },
+        {
+          "name": "access-token-id",
+          "type": "string",
+          "summary": "The ID of the access token to retrieve",
+          "required": true,
+          "maps_to": "record.access_token_id"
+        }
+      ]
+    },
+    {
+      "path": "organization access token delete",
+      "summary": "Delete access token",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization_access_token",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub mutation; reverse ETL requires plan, preview, approval, and execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "org-name",
+          "type": "string",
+          "summary": "Name of the organization (namespace).",
+          "required": true,
+          "maps_to": "record.org_name"
+        },
+        {
+          "name": "access-token-id",
+          "type": "string",
+          "summary": "The ID of the access token to retrieve",
+          "required": true,
+          "maps_to": "record.access_token_id"
+        }
+      ]
+    },
+    {
+      "path": "audit logs list",
+      "summary": "List audit log events",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.auditlogs_listauditlogs",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/auditlogs/{account}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "account",
+          "type": "string",
+          "summary": "Namespace to query audit logs for.",
+          "required": true,
+          "maps_to": "path.account"
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "summary": "Optional audit action filter.",
+          "maps_to": "query.action"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional audit object-name filter.",
+          "maps_to": "query.name"
+        },
+        {
+          "name": "actor",
+          "type": "string",
+          "summary": "Optional audit actor filter.",
+          "maps_to": "query.actor"
+        },
+        {
+          "name": "from",
+          "type": "string",
+          "summary": "Optional start of the audit time window.",
+          "maps_to": "query.from"
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "summary": "Optional end of the audit time window.",
+          "maps_to": "query.to"
+        }
+      ]
+    },
+    {
+      "path": "scim users list",
+      "summary": "List users",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "dockerhub.get__v2_scim_2.0_users",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub provider authorization is enforced at runtime.",
+      "approval": "none",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Users"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "filter",
+          "type": "string",
+          "maps_to": "query.filter"
+        },
+        {
+          "name": "attributes",
+          "type": "string",
+          "summary": "Comma-delimited response attributes.",
+          "maps_to": "query.attributes"
+        },
+        {
+          "name": "sortOrder",
+          "type": "enum",
+          "values": [
+            "ascending",
+            "descending"
+          ],
+          "maps_to": "query.sortOrder"
+        },
+        {
+          "name": "sortBy",
+          "type": "string",
+          "summary": "User attribute to sort by.",
+          "maps_to": "query.sortBy"
+        }
+      ]
+    },
+    {
+      "path": "scim user create",
+      "summary": "Create user",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "dockerhub.post__v2_scim_2.0_users",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub SCIM user provisioning; direct write requires plan, preview, approval, and execute.",
+      "approval": "Direct writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/scim/2.0/Users"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "schemas",
+          "type": "string_array",
+          "summary": "SCIM schema URNs for the user.",
+          "required": true,
+          "min_items": 1,
+          "maps_to": "body.schemas"
+        },
+        {
+          "name": "user-name",
+          "type": "string",
+          "summary": "Reachable email address for the user.",
+          "required": true,
+          "maps_to": "body.userName"
+        },
+        {
+          "name": "given-name",
+          "type": "string",
+          "maps_to": "body.name.givenName"
+        },
+        {
+          "name": "family-name",
+          "type": "string",
+          "maps_to": "body.name.familyName"
+        }
+      ]
+    },
+    {
+      "path": "scim user update",
+      "summary": "Update a user",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "dockerhub.put__v2_scim_2.0_users__id_",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "Docker Hub SCIM user update; direct write requires plan, preview, approval, and execute.",
+      "approval": "Direct writes require plan, preview, approval, and execute.",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/scim/2.0/Users/{id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "The user ID.",
+          "required": true,
+          "maps_to": "path.id"
+        },
+        {
+          "name": "schemas",
+          "type": "string_array",
+          "summary": "SCIM schema URNs for the user.",
+          "required": true,
+          "min_items": 1,
+          "maps_to": "body.schemas"
+        },
+        {
+          "name": "given-name",
+          "type": "string",
+          "maps_to": "body.name.givenName"
+        },
+        {
+          "name": "family-name",
+          "type": "string",
+          "maps_to": "body.name.familyName"
+        },
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "maps_to": "body.enabled"
         }
       ]
     }

@@ -1,0 +1,1316 @@
+{
+  "schema_version": 1,
+  "connector": "notion",
+  "source_lock": "sources/notion-operation-source-lock.json",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_operations": [
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.get-self",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/users/me\"].get",
+      "operation_id": "get-self",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/users/me",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/users/me",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "user me get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_bot_user"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.get-user",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/users/{user_id}\"].get",
+      "operation_id": "get-user",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/users/{user_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/users/{user_id}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "user get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_user"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.get-users",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/users\"].get",
+      "operation_id": "get-users",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/users",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/users",
+          "operation": null,
+          "covered_by": {
+            "stream": "users"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.post-page",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/pages\"].post",
+      "operation_id": "post-page",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/pages",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/pages",
+          "operation": null,
+          "covered_by": {
+            "write": "create_page"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.retrieve-a-page",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/pages/{page_id}\"].get",
+      "operation_id": "retrieve-a-page",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/pages/{page_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/pages/{page_id}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "page get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_page"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.patch-page",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/pages/{page_id}\"].patch",
+      "operation_id": "patch-page",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v1/pages/{page_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v1/pages/{page_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_page"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.move-page",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/pages/{page_id}/move\"].post",
+      "operation_id": "move-page",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/pages/{page_id}/move",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/pages/{page_id}/move",
+          "operation": null,
+          "covered_by": {
+            "write": "move_page"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.retrieve-a-page-property",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/pages/{page_id}/properties/{property_id}\"].get",
+      "operation_id": "retrieve-a-page-property",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/pages/{page_id}/properties/{property_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/pages/{page_id}/properties/{property_id}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "page property get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_page_property"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.retrieve-page-markdown",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/pages/{page_id}/markdown\"].get",
+      "operation_id": "retrieve-page-markdown",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/pages/{page_id}/markdown",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/pages/{page_id}/markdown",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "page markdown get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_page_markdown"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.update-page-markdown",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/pages/{page_id}/markdown\"].patch",
+      "operation_id": "update-page-markdown",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v1/pages/{page_id}/markdown",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v1/pages/{page_id}/markdown",
+          "operation": null,
+          "covered_by": {
+            "write": "update_page_markdown"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.retrieve-async-task",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/async_tasks/{task_id}\"].get",
+      "operation_id": "retrieve-async-task",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/async_tasks/{task_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/async_tasks/{task_id}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "async-task get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_async_task"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.retrieve-a-block",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/blocks/{block_id}\"].get",
+      "operation_id": "retrieve-a-block",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/blocks/{block_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/blocks/{block_id}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "block get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_block"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.update-a-block",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/blocks/{block_id}\"].patch",
+      "operation_id": "update-a-block",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v1/blocks/{block_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v1/blocks/{block_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_block"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.delete-a-block",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/blocks/{block_id}\"].delete",
+      "operation_id": "delete-a-block",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/v1/blocks/{block_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v1/blocks/{block_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_block"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.get-block-children",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/blocks/{block_id}/children\"].get",
+      "operation_id": "get-block-children",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/blocks/{block_id}/children",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/blocks/{block_id}/children",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "block children list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_block_children"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.patch-block-children",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/blocks/{block_id}/children\"].patch",
+      "operation_id": "patch-block-children",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v1/blocks/{block_id}/children",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v1/blocks/{block_id}/children",
+          "operation": null,
+          "covered_by": {
+            "write": "append_block_children"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.retrieve-a-data-source",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/data_sources/{data_source_id}\"].get",
+      "operation_id": "retrieve-a-data-source",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/data_sources/{data_source_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/data_sources/{data_source_id}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "data-source get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_data_source"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.update-a-data-source",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/data_sources/{data_source_id}\"].patch",
+      "operation_id": "update-a-data-source",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v1/data_sources/{data_source_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v1/data_sources/{data_source_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_data_source"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.post-database-query",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/data_sources/{data_source_id}/query\"].post",
+      "operation_id": "post-database-query",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/data_sources/{data_source_id}/query",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/data_sources/{data_source_id}/query",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "data-source query"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.query_data_source"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.create-a-database",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/data_sources\"].post",
+      "operation_id": "create-a-database",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/data_sources",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/data_sources",
+          "operation": null,
+          "covered_by": {
+            "write": "create_data_source"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.list-data-source-templates",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/data_sources/{data_source_id}/templates\"].get",
+      "operation_id": "list-data-source-templates",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/data_sources/{data_source_id}/templates",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/data_sources/{data_source_id}/templates",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "data-source templates list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.list_data_source_templates"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.retrieve-database",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/databases/{database_id}\"].get",
+      "operation_id": "retrieve-database",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/databases/{database_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/databases/{database_id}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "database get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_database"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.update-database",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/databases/{database_id}\"].patch",
+      "operation_id": "update-database",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v1/databases/{database_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v1/databases/{database_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_database"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.create-database",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/databases\"].post",
+      "operation_id": "create-database",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/databases",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/databases",
+          "operation": null,
+          "covered_by": {
+            "write": "create_database"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.post-search",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/search\"].post",
+      "operation_id": "post-search",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/search",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/search (object=database)",
+          "operation": null,
+          "covered_by": {
+            "stream": "databases"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.create-a-comment",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/comments\"].post",
+      "operation_id": "create-a-comment",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/comments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/comments",
+          "operation": null,
+          "covered_by": {
+            "write": "create_comment"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.list-comments",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/comments\"].get",
+      "operation_id": "list-comments",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/comments",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/comments",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "comment list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.list_comments"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.retrieve-comment",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/comments/{comment_id}\"].get",
+      "operation_id": "retrieve-comment",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/comments/{comment_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/comments/{comment_id}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "comment get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_comment"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.update-a-comment",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/comments/{comment_id}\"].patch",
+      "operation_id": "update-a-comment",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v1/comments/{comment_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v1/comments/{comment_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_comment"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.delete-a-comment",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/comments/{comment_id}\"].delete",
+      "operation_id": "delete-a-comment",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/v1/comments/{comment_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v1/comments/{comment_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_comment"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.create-file",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/file_uploads\"].post",
+      "operation_id": "create-file",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/file_uploads",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/file_uploads",
+          "operation": null,
+          "covered_by": {
+            "write": "create_file_upload"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.list-file-uploads",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/file_uploads\"].get",
+      "operation_id": "list-file-uploads",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/file_uploads",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/file_uploads",
+          "operation": null,
+          "covered_by": {
+            "stream": "file_uploads"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.upload-file",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/file_uploads/{file_upload_id}/send\"].post",
+      "operation_id": "upload-file",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/file_uploads/{file_upload_id}/send",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/file_uploads/{file_upload_id}/send",
+          "operation": {
+            "model": "sensitive_reverse_etl",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Notion multipart file upload is in scope and bounded in operations.json, but execution is blocked until the shared file upload runner can bind provider paths to approved payload digests without adding connector-local runtime code.",
+            "source_url": "https://developers.notion.com/reference/upload-file",
+            "notes": "named_dependency=shared file upload runner; operation_id=notion.send_file_upload; artifact=https://developers.notion.com/openapi.json"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.complete-file-upload",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/file_uploads/{file_upload_id}/complete\"].post",
+      "operation_id": "complete-file-upload",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/file_uploads/{file_upload_id}/complete",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/file_uploads/{file_upload_id}/complete",
+          "operation": null,
+          "covered_by": {
+            "write": "complete_file_upload"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.retrieve-file-upload",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/file_uploads/{file_upload_id}\"].get",
+      "operation_id": "retrieve-file-upload",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/file_uploads/{file_upload_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/file_uploads/{file_upload_id}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "file-upload get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_file_upload"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.list-custom-emojis",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/custom_emojis\"].get",
+      "operation_id": "list-custom-emojis",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/custom_emojis",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/custom_emojis",
+          "operation": null,
+          "covered_by": {
+            "stream": "custom_emojis"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.list-views",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/views\"].get",
+      "operation_id": "list-views",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/views",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/views",
+          "operation": null,
+          "covered_by": {
+            "stream": "views"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.create-view",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/views\"].post",
+      "operation_id": "create-view",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/views",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/views",
+          "operation": null,
+          "covered_by": {
+            "write": "create_view"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.retrieve-a-view",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/views/{view_id}\"].get",
+      "operation_id": "retrieve-a-view",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/views/{view_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/views/{view_id}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "view get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_view"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.update-a-view",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/views/{view_id}\"].patch",
+      "operation_id": "update-a-view",
+      "deprecated": false,
+      "method": "PATCH",
+      "path": "/v1/views/{view_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v1/views/{view_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "update_view"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.delete-view",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/views/{view_id}\"].delete",
+      "operation_id": "delete-view",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/v1/views/{view_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v1/views/{view_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_view"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.create-view-query",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/views/{view_id}/queries\"].post",
+      "operation_id": "create-view-query",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/views/{view_id}/queries",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/views/{view_id}/queries",
+          "operation": null,
+          "covered_by": {
+            "write": "create_view_query"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.get-view-query-results",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/views/{view_id}/queries/{query_id}\"].get",
+      "operation_id": "get-view-query-results",
+      "deprecated": false,
+      "method": "GET",
+      "path": "/v1/views/{view_id}/queries/{query_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v1/views/{view_id}/queries/{query_id}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "view query results get"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.retrieve_view_query_results"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.delete-view-query",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/views/{view_id}/queries/{query_id}\"].delete",
+      "operation_id": "delete-view-query",
+      "deprecated": false,
+      "method": "DELETE",
+      "path": "/v1/views/{view_id}/queries/{query_id}",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v1/views/{view_id}/queries/{query_id}",
+          "operation": null,
+          "covered_by": {
+            "write": "delete_view_query"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.create-meeting-note",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/blocks/meeting_notes\"].post",
+      "operation_id": "create-meeting-note",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/blocks/meeting_notes",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/blocks/meeting_notes",
+          "operation": null,
+          "covered_by": {
+            "write": "create_meeting_note"
+          }
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.query-meeting-notes",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/blocks/meeting_notes/query\"].post",
+      "operation_id": "query-meeting-notes",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/blocks/meeting_notes/query",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/blocks/meeting_notes/query",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "meeting-note query"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "notion.query_meeting_notes"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.create-a-token",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/oauth/token\"].post",
+      "operation_id": "create-a-token",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/oauth/token",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/oauth/token",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Pinned OAuth token exchange returns access_token and refresh_token. The secret-sensitive source contract is declared, but the engine lacks the live sensitive_policy path and secret-response handling.",
+            "source_url": "https://developers.notion.com/openapi.json",
+            "notes": "foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "notion.create_a_token"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.revoke-token",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/oauth/revoke\"].post",
+      "operation_id": "revoke-token",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/oauth/revoke",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/oauth/revoke",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Pinned OAuth revoke requires a token supplied under basicAuth. The secret-sensitive source contract is declared, but the engine lacks the live sensitive_policy path.",
+            "source_url": "https://developers.notion.com/openapi.json",
+            "notes": "foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "notion.revoke_token"
+        }
+      }
+    },
+    {
+      "source_lock": "sources/notion-operation-source-lock.json",
+      "source_id": "notion.rest.introspect-token",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "source_location": "paths[\"/v1/oauth/introspect\"].post",
+      "operation_id": "introspect-token",
+      "deprecated": false,
+      "method": "POST",
+      "path": "/v1/oauth/introspect",
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v1/oauth/introspect",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "Pinned OAuth introspection requires a token supplied under basicAuth. The secret-sensitive source contract is declared, but the engine lacks the live sensitive_policy path and safe token-derived response handling.",
+            "source_url": "https://developers.notion.com/openapi.json",
+            "notes": "foundation-gap=sensitive_policy; the source contract remains declared and recoverable; no live credential path is attempted."
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "notion.introspect_token"
+        }
+      }
+    }
+  ],
+  "surface_only": [
+    {
+      "method": "GET",
+      "path": "/v1/databases",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Legacy 'List databases' endpoint, documented only under the reference nav's explicit 'Databases (deprecated)' group and absent from the current OpenAPI document. Superseded by POST /v1/search, which this bundle implements as the databases stream. Source: https://developers.notion.com/reference/get-databases",
+        "source_url": "https://developers.notion.com/reference/get-databases",
+        "notes": "named_dependency=none - provider-deprecated, superseded by POST /v1/search; artifact=https://developers.notion.com/openapi.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/databases/{database_id}/query",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Legacy 'Query a database' endpoint, documented only under the reference nav's explicit 'Databases (deprecated)' group and absent from the current OpenAPI document. Superseded by POST /v1/data_sources/{data_source_id}/query, which this bundle implements as the data-source query direct read. Source: https://developers.notion.com/reference/post-database-query",
+        "source_url": "https://developers.notion.com/reference/post-database-query",
+        "notes": "named_dependency=none - provider-deprecated, superseded by the data source query; artifact=https://developers.notion.com/openapi.json"
+      }
+    }
+  ],
+  "accounting": {
+    "source_operations": 49,
+    "source_unique_method_path": 49,
+    "api_surface_endpoints": 55,
+    "api_surface_unique_method_path": 51,
+    "exact_source_to_surface": 49,
+    "source_only": 0,
+    "surface_only": 2,
+    "duplicate_source_identity": []
+  }
+}

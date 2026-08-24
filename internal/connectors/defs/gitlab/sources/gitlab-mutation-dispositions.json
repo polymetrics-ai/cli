@@ -1,0 +1,1389 @@
+{
+  "schema_version": 1,
+  "dispositions": [
+    {
+      "source": {
+        "source_id": "deleteApiV4AdminActiveContextDeadQueue",
+        "method": "DELETE",
+        "path": "/api/v4/admin/active_context/dead_queue"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4AdminCiVariablesKey",
+        "method": "DELETE",
+        "path": "/api/v4/admin/ci/variables/{key}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4AdminClustersClusterId",
+        "method": "DELETE",
+        "path": "/api/v4/admin/clusters/{cluster_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4AdminSidekiqQueuesQueueName",
+        "method": "DELETE",
+        "path": "/api/v4/admin/sidekiq/queues/{queue_name}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4AdminZoektShardsNodeIdIndexedNamespacesNamespaceId",
+        "method": "DELETE",
+        "path": "/api/v4/admin/zoekt/shards/{node_id}/indexed_namespaces/{namespace_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4AdminMemberRolesMemberRoleId",
+        "method": "DELETE",
+        "path": "/api/v4/admin_member_roles/{member_role_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4AiDuoWorkflowsFlowCallbacksId",
+        "method": "DELETE",
+        "path": "/api/v4/ai/duo_workflows/flow_callbacks/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ApplicationsId",
+        "method": "DELETE",
+        "path": "/api/v4/applications/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4BroadcastMessagesId",
+        "method": "DELETE",
+        "path": "/api/v4/broadcast_messages/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ExperimentsNameCache",
+        "method": "DELETE",
+        "path": "/api/v4/experiments/{name}/cache"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4FeaturesName",
+        "method": "DELETE",
+        "path": "/api/v4/features/{name}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GeoNodesId",
+        "method": "DELETE",
+        "path": "/api/v4/geo_nodes/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GeoSitesId",
+        "method": "DELETE",
+        "path": "/api/v4/geo_sites/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdDashEpicsEpicIid",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/(-/)epics/{epic_iid}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdDashEpicsEpicIidEpicsChildEpicId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/(-/)epics/{epic_iid}/epics/{child_epic_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdAccessRequestsUserId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/access_requests/{user_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdAccessTokensTokenId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/access_tokens/{token_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdBadgesBadgeId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/badges/{badge_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdBillableMembersUserId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/billable_members/{user_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdBoardsBoardId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/boards/{board_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdBoardsBoardIdListsListId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/boards/{board_id}/lists/{list_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdClustersClusterId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/clusters/{cluster_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdEpicsEpicIidRelatedEpicsRelatedEpicLinkId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/epics/{epic_iid}/related_epics/{related_epic_link_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdEpicsNoteableIdDiscussionsDiscussionIdNotesNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/epics/{noteable_id}/discussions/{discussion_id}/notes/{note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdEpicsNoteableIdNotesNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/epics/{noteable_id}/notes/{note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdInvitationsEmail",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/invitations/{email}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdLabels",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/labels"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdLabelsName",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/labels/{name}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdManagePersonalAccessTokensPatId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/manage/personal_access_tokens/{pat_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdMembersUserId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/members/{user_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdMembersUserIdOverride",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/members/{user_id}/override"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdMilestonesMilestoneId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/milestones/{milestone_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdProtectedBranchesName",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/protected_branches/{name}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdPushRule",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/push_rule"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdSamlUid",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/saml/{uid}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdScimUid",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/scim/{uid}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdShareGroupId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/share/{group_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdSharedProjectsProjectId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/shared_projects/{project_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdVariablesKey",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/variables/{key}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4GroupsIdWikiPagesNoteableIdNotesNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/groups/{id}/wiki_pages/{noteable_id}/notes/{note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4HooksHookId",
+        "method": "DELETE",
+        "path": "/api/v4/hooks/{hook_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4HooksHookIdCustomHeadersKey",
+        "method": "DELETE",
+        "path": "/api/v4/hooks/{hook_id}/custom_headers/{key}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4HooksHookIdUrlVariablesKey",
+        "method": "DELETE",
+        "path": "/api/v4/hooks/{hook_id}/url_variables/{key}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4IntegrationsJiraForgeSubscriptionsId",
+        "method": "DELETE",
+        "path": "/api/v4/integrations/jira_forge/subscriptions/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4LicenseId",
+        "method": "DELETE",
+        "path": "/api/v4/license/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4MemberRolesMemberRoleId",
+        "method": "DELETE",
+        "path": "/api/v4/member_roles/{member_role_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4OrganizationsId",
+        "method": "DELETE",
+        "path": "/api/v4/organizations/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannel",
+        "method": "DELETE",
+        "path": "/api/v4/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4PersonalAccessTokensSelf",
+        "method": "DELETE",
+        "path": "/api/v4/personal_access_tokens/self"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4PersonalAccessTokensId",
+        "method": "DELETE",
+        "path": "/api/v4/personal_access_tokens/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectAliasesName",
+        "method": "DELETE",
+        "path": "/api/v4/project_aliases/{name}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdAccessRequestsUserId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/access_requests/{user_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdAccessTokensTokenId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/access_tokens/{token_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdBadgesBadgeId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/badges/{badge_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdInvitationsEmail",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/invitations/{email}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdIssuesNoteableIdDiscussionsDiscussionIdNotesNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/issues/{noteable_id}/discussions/{discussion_id}/notes/{note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdIssuesNoteableIdNotesNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/issues/{noteable_id}/notes/{note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdJobTokenScopeAllowlistTargetProjectId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/job_token_scope/allowlist/{target_project_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdJobTokenScopeGroupsAllowlistTargetGroupId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/job_token_scope/groups_allowlist/{target_group_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdMembersUserId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/members/{user_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdMergeRequestsMergeRequestIidDraftNotesDraftNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/draft_notes/{draft_note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdMergeRequestsNoteableIdDiscussionsDiscussionIdNotesNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/merge_requests/{noteable_id}/discussions/{discussion_id}/notes/{note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdMergeRequestsNoteableIdNotesNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/merge_requests/{noteable_id}/notes/{note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdPipelinesPipelineId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/pipelines/{pipeline_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdRepositoryCommitsNoteableIdDiscussionsDiscussionIdNotesNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/repository/commits/{noteable_id}/discussions/{discussion_id}/notes/{note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdRepositoryFilesFilePath",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/repository/files/{file_path}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdSnippetsNoteableIdDiscussionsDiscussionIdNotesNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/snippets/{noteable_id}/discussions/{discussion_id}/notes/{note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdSnippetsNoteableIdNotesNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/snippets/{noteable_id}/notes/{note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdVulnerabilitiesNoteableIdNotesNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/vulnerabilities/{noteable_id}/notes/{note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4ProjectsIdWikiPagesNoteableIdNotesNoteId",
+        "method": "DELETE",
+        "path": "/api/v4/projects/{id}/wiki_pages/{noteable_id}/notes/{note_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4RunnerControllersId",
+        "method": "DELETE",
+        "path": "/api/v4/runner_controllers/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4RunnerControllersIdScopesInstance",
+        "method": "DELETE",
+        "path": "/api/v4/runner_controllers/{id}/scopes/instance"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4RunnerControllersIdScopesRunnersRunnerId",
+        "method": "DELETE",
+        "path": "/api/v4/runner_controllers/{id}/scopes/runners/{runner_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4RunnerControllersRunnerControllerIdTokensId",
+        "method": "DELETE",
+        "path": "/api/v4/runner_controllers/{runner_controller_id}/tokens/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4Runners",
+        "method": "DELETE",
+        "path": "/api/v4/runners"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4RunnersManagers",
+        "method": "DELETE",
+        "path": "/api/v4/runners/managers"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4RunnersId",
+        "method": "DELETE",
+        "path": "/api/v4/runners/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4SnippetsId",
+        "method": "DELETE",
+        "path": "/api/v4/snippets/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4TopicsId",
+        "method": "DELETE",
+        "path": "/api/v4/topics/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4UserApplicationsId",
+        "method": "DELETE",
+        "path": "/api/v4/user/applications/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4UserEmailsEmailId",
+        "method": "DELETE",
+        "path": "/api/v4/user/emails/{email_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4UserGpgKeysKeyId",
+        "method": "DELETE",
+        "path": "/api/v4/user/gpg_keys/{key_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4UserKeysKeyId",
+        "method": "DELETE",
+        "path": "/api/v4/user/keys/{key_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4UserPushSubscriptions",
+        "method": "DELETE",
+        "path": "/api/v4/user/push_subscriptions"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4UsersId",
+        "method": "DELETE",
+        "path": "/api/v4/users/{id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4UsersIdEmailsEmailId",
+        "method": "DELETE",
+        "path": "/api/v4/users/{id}/emails/{email_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4UsersIdGpgKeysKeyId",
+        "method": "DELETE",
+        "path": "/api/v4/users/{id}/gpg_keys/{key_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4UsersIdIdentitiesProvider",
+        "method": "DELETE",
+        "path": "/api/v4/users/{id}/identities/{provider}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4UsersIdKeysKeyId",
+        "method": "DELETE",
+        "path": "/api/v4/users/{id}/keys/{key_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4UsersUserIdImpersonationTokensImpersonationTokenId",
+        "method": "DELETE",
+        "path": "/api/v4/users/{user_id}/impersonation_tokens/{impersonation_token_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4VscodeSettingsSyncV1Collection",
+        "method": "DELETE",
+        "path": "/api/v4/vscode/settings_sync/v1/collection"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4VscodeSettingsSyncSettingsContextHashV1Collection",
+        "method": "DELETE",
+        "path": "/api/v4/vscode/settings_sync/{settings_context_hash}/v1/collection"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "deleteApiV4VulnerabilitiesIdIssueLinksIssueLinkId",
+        "method": "DELETE",
+        "path": "/api/v4/vulnerabilities/{id}/issue_links/{issue_link_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "patchApiV4NamespacesIdMinutesMoveTargetId",
+        "method": "PATCH",
+        "path": "/api/v4/namespaces/{id}/minutes/move/{target_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "patchApiV4UsersIdDisableTwoFactor",
+        "method": "PATCH",
+        "path": "/api/v4/users/{id}/disable_two_factor"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4AiThirdPartyAgentsDirectAccess",
+        "method": "POST",
+        "path": "/api/v4/ai/third_party_agents/direct_access"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ApplicationsIdRenewSecret",
+        "method": "POST",
+        "path": "/api/v4/applications/{id}/renew-secret"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4BulkImportsImportIdCancel",
+        "method": "POST",
+        "path": "/api/v4/bulk_imports/{import_id}/cancel"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4CodeSuggestionsConnectionDetails",
+        "method": "POST",
+        "path": "/api/v4/code_suggestions/connection_details"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ContainerRegistryEventEvents",
+        "method": "POST",
+        "path": "/api/v4/container_registry_event/events"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GeoNodeProxyIdGraphql",
+        "method": "POST",
+        "path": "/api/v4/geo/node_proxy/{id}/graphql"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GeoNodesIdRepair",
+        "method": "POST",
+        "path": "/api/v4/geo_nodes/{id}/repair"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GeoSitesIdRepair",
+        "method": "POST",
+        "path": "/api/v4/geo_sites/{id}/repair"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsImportAuthorize",
+        "method": "POST",
+        "path": "/api/v4/groups/import/authorize"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdDashEpicsEpicIidEpicsChildEpicId",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/(-/)epics/{epic_iid}/epics/{child_epic_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdAccessRequests",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/access_requests"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdArchive",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/archive"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdEpicsEpicIidTodo",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/epics/{epic_iid}/todo"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdExport",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/export"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdLabelsSubscribableIdSubscribe",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/labels/{subscribable_id}/subscribe"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdLabelsSubscribableIdUnsubscribe",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/labels/{subscribable_id}/unsubscribe"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdMembersApproveAll",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/members/approve_all"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdMembersUserIdOverride",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/members/{user_id}/override"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdPlaceholderReassignmentsAuthorize",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/placeholder_reassignments/authorize"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdProjectsProjectId",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/projects/{project_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdRestore",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/restore"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdRunnersResetRegistrationToken",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/runners/reset_registration_token"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4GroupsIdUnarchive",
+        "method": "POST",
+        "path": "/api/v4/groups/{id}/unarchive"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4HooksHookId",
+        "method": "POST",
+        "path": "/api/v4/hooks/{hook_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4IntegrationsJiraForgeInstallationForgeToken",
+        "method": "POST",
+        "path": "/api/v4/integrations/jira_forge/installation/forge_token"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4IntegrationsSlackInteractions",
+        "method": "POST",
+        "path": "/api/v4/integrations/slack/interactions"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4IntegrationsSlackOptions",
+        "method": "POST",
+        "path": "/api/v4/integrations/slack/options"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls",
+        "method": "POST",
+        "path": "/api/v4/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
+        "method": "POST",
+        "path": "/api/v4/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4PackagesNpmDashNpmV1SecurityAdvisoriesBulk",
+        "method": "POST",
+        "path": "/api/v4/packages/npm/-/npm/v1/security/advisories/bulk"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4PackagesNpmDashNpmV1SecurityAuditsQuick",
+        "method": "POST",
+        "path": "/api/v4/packages/npm/-/npm/v1/security/audits/quick"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsImportRelationAuthorize",
+        "method": "POST",
+        "path": "/api/v4/projects/import-relation/authorize"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsImportAuthorize",
+        "method": "POST",
+        "path": "/api/v4/projects/import/authorize"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdAccessRequests",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/access_requests"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdIssuesIssueIidTodo",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/issues/{issue_iid}/todo"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdIssuesSubscribableIdSubscribe",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/issues/{subscribable_id}/subscribe"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdIssuesSubscribableIdUnsubscribe",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/issues/{subscribable_id}/unsubscribe"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdLabelsSubscribableIdSubscribe",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/labels/{subscribable_id}/subscribe"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdLabelsSubscribableIdUnsubscribe",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/labels/{subscribable_id}/unsubscribe"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdMergeRequestsMergeRequestIidStatusChecksExternalStatusCheckIdRetry",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/status_checks/{external_status_check_id}/retry"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdMergeRequestsMergeRequestIidTodo",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/todo"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdMergeRequestsSubscribableIdSubscribe",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/merge_requests/{subscribable_id}/subscribe"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdMergeRequestsSubscribableIdUnsubscribe",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/merge_requests/{subscribable_id}/unsubscribe"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdPipelinesPipelineIdCancel",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/pipelines/{pipeline_id}/cancel"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdPipelinesPipelineIdRetry",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/pipelines/{pipeline_id}/retry"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4ProjectsIdRunnersResetRegistrationToken",
+        "method": "POST",
+        "path": "/api/v4/projects/{id}/runners/reset_registration_token"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4RunnerControllersIdScopesInstance",
+        "method": "POST",
+        "path": "/api/v4/runner_controllers/{id}/scopes/instance"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4RunnerControllersIdScopesRunnersRunnerId",
+        "method": "POST",
+        "path": "/api/v4/runner_controllers/{id}/scopes/runners/{runner_id}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4RunnerControllersRunnerControllerIdTokensIdRotate",
+        "method": "POST",
+        "path": "/api/v4/runner_controllers/{runner_controller_id}/tokens/{id}/rotate"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4RunnersResetRegistrationToken",
+        "method": "POST",
+        "path": "/api/v4/runners/reset_registration_token"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4RunnersIdResetAuthenticationToken",
+        "method": "POST",
+        "path": "/api/v4/runners/{id}/reset_authentication_token"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4TodosMarkAsDone",
+        "method": "POST",
+        "path": "/api/v4/todos/mark_as_done"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4TodosIdMarkAsDone",
+        "method": "POST",
+        "path": "/api/v4/todos/{id}/mark_as_done"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UserGpgKeysKeyIdRevoke",
+        "method": "POST",
+        "path": "/api/v4/user/gpg_keys/{key_id}/revoke"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UserSupportPin",
+        "method": "POST",
+        "path": "/api/v4/user/support_pin"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UsersIdActivate",
+        "method": "POST",
+        "path": "/api/v4/users/{id}/activate"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UsersIdApprove",
+        "method": "POST",
+        "path": "/api/v4/users/{id}/approve"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UsersIdBan",
+        "method": "POST",
+        "path": "/api/v4/users/{id}/ban"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UsersIdBlock",
+        "method": "POST",
+        "path": "/api/v4/users/{id}/block"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UsersIdDeactivate",
+        "method": "POST",
+        "path": "/api/v4/users/{id}/deactivate"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UsersIdFollow",
+        "method": "POST",
+        "path": "/api/v4/users/{id}/follow"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UsersIdGpgKeysKeyIdRevoke",
+        "method": "POST",
+        "path": "/api/v4/users/{id}/gpg_keys/{key_id}/revoke"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UsersIdReject",
+        "method": "POST",
+        "path": "/api/v4/users/{id}/reject"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UsersIdSupportPinRevoke",
+        "method": "POST",
+        "path": "/api/v4/users/{id}/support_pin/revoke"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UsersIdUnban",
+        "method": "POST",
+        "path": "/api/v4/users/{id}/unban"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UsersIdUnblock",
+        "method": "POST",
+        "path": "/api/v4/users/{id}/unblock"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4UsersIdUnfollow",
+        "method": "POST",
+        "path": "/api/v4/users/{id}/unfollow"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4VscodeSettingsSyncV1ResourceResourceName",
+        "method": "POST",
+        "path": "/api/v4/vscode/settings_sync/v1/resource/{resource_name}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4VscodeSettingsSyncSettingsContextHashV1ResourceResourceName",
+        "method": "POST",
+        "path": "/api/v4/vscode/settings_sync/{settings_context_hash}/v1/resource/{resource_name}"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "postApiV4VulnerabilitiesIdDismiss",
+        "method": "POST",
+        "path": "/api/v4/vulnerabilities/{id}/dismiss"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "putApiV4AdminDataManagementModelNameRecordIdentifierChecksum",
+        "method": "PUT",
+        "path": "/api/v4/admin/data_management/{model_name}/{record_identifier}/checksum"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "putApiV4AdminZoektProjectsProjectIdIndex",
+        "method": "PUT",
+        "path": "/api/v4/admin/zoekt/projects/{project_id}/index"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "putApiV4GroupsIdMembersMemberIdApprove",
+        "method": "PUT",
+        "path": "/api/v4/groups/{id}/members/{member_id}/approve"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "putApiV4LicenseIdRefreshBillableUsers",
+        "method": "PUT",
+        "path": "/api/v4/license/{id}/refresh_billable_users"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "putApiV4PackagesConanV1FilesPackageNamePackageVersionPackageUsernamePackageChannelRecipeRevisionExportFileNameAuthorize",
+        "method": "PUT",
+        "path": "/api/v4/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/export/{file_name}/authorize"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "putApiV4PackagesConanV1FilesPackageNamePackageVersionPackageUsernamePackageChannelRecipeRevisionPackageConanPackageReferencePackageRevisionFileNameAuthorize",
+        "method": "PUT",
+        "path": "/api/v4/packages/conan/v1/files/{package_name}/{package_version}/{package_username}/{package_channel}/{recipe_revision}/package/{conan_package_reference}/{package_revision}/{file_name}/authorize"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "putApiV4ProjectsIdMergeRequestsMergeRequestIidDraftNotesDraftNoteIdPublish",
+        "method": "PUT",
+        "path": "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/draft_notes/{draft_note_id}/publish"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    }
+  ]
+}

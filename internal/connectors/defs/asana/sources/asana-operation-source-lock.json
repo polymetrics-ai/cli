@@ -1,0 +1,2261 @@
+{
+  "schema_version": 2,
+  "connector": "asana",
+  "captured_at": "2026-08-19T11:28:09Z",
+  "rest": {
+    "source_url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
+    "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+    "bytes": 3066750,
+    "openapi": "3.0.0",
+    "info_version": "1.0",
+    "operations": [
+      {
+        "id": "asana.rest.getAccessRequests",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/access_requests",
+        "operation_id": "getAccessRequests",
+        "deprecated": false,
+        "source_location": "paths[\"/access_requests\"].get"
+      },
+      {
+        "id": "asana.rest.createAccessRequest",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/access_requests",
+        "operation_id": "createAccessRequest",
+        "deprecated": false,
+        "source_location": "paths[\"/access_requests\"].post"
+      },
+      {
+        "id": "asana.rest.approveAccessRequest",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/access_requests/{access_request_gid}/approve",
+        "operation_id": "approveAccessRequest",
+        "deprecated": false,
+        "source_location": "paths[\"/access_requests/{access_request_gid}/approve\"].post"
+      },
+      {
+        "id": "asana.rest.rejectAccessRequest",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/access_requests/{access_request_gid}/reject",
+        "operation_id": "rejectAccessRequest",
+        "deprecated": false,
+        "source_location": "paths[\"/access_requests/{access_request_gid}/reject\"].post"
+      },
+      {
+        "id": "asana.rest.getAgentsForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/agents",
+        "operation_id": "getAgentsForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/agents\"].get"
+      },
+      {
+        "id": "asana.rest.getAgent",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/agents/{agent_gid}",
+        "operation_id": "getAgent",
+        "deprecated": false,
+        "source_location": "paths[\"/agents/{agent_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.getAiStudioRuns",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/ai_studio/runs",
+        "operation_id": "getAiStudioRuns",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/ai_studio/runs\"].get"
+      },
+      {
+        "id": "asana.rest.getAiStudioSeats",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/ai_studio/seats",
+        "operation_id": "getAiStudioSeats",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/ai_studio/seats\"].get"
+      },
+      {
+        "id": "asana.rest.getAllocation",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/allocations/{allocation_gid}",
+        "operation_id": "getAllocation",
+        "deprecated": false,
+        "source_location": "paths[\"/allocations/{allocation_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateAllocation",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/allocations/{allocation_gid}",
+        "operation_id": "updateAllocation",
+        "deprecated": false,
+        "source_location": "paths[\"/allocations/{allocation_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteAllocation",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/allocations/{allocation_gid}",
+        "operation_id": "deleteAllocation",
+        "deprecated": false,
+        "source_location": "paths[\"/allocations/{allocation_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getAllocations",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/allocations",
+        "operation_id": "getAllocations",
+        "deprecated": false,
+        "source_location": "paths[\"/allocations\"].get"
+      },
+      {
+        "id": "asana.rest.createAllocation",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/allocations",
+        "operation_id": "createAllocation",
+        "deprecated": false,
+        "source_location": "paths[\"/allocations\"].post"
+      },
+      {
+        "id": "asana.rest.getAttachment",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/attachments/{attachment_gid}",
+        "operation_id": "getAttachment",
+        "deprecated": false,
+        "source_location": "paths[\"/attachments/{attachment_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.deleteAttachment",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/attachments/{attachment_gid}",
+        "operation_id": "deleteAttachment",
+        "deprecated": false,
+        "source_location": "paths[\"/attachments/{attachment_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getAttachmentsForObject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/attachments",
+        "operation_id": "getAttachmentsForObject",
+        "deprecated": false,
+        "source_location": "paths[\"/attachments\"].get"
+      },
+      {
+        "id": "asana.rest.createAttachmentForObject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/attachments",
+        "operation_id": "createAttachmentForObject",
+        "deprecated": false,
+        "source_location": "paths[\"/attachments\"].post"
+      },
+      {
+        "id": "asana.rest.getAuditLogEvents",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/audit_log_events",
+        "operation_id": "getAuditLogEvents",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/audit_log_events\"].get"
+      },
+      {
+        "id": "asana.rest.createBatchRequest",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/batch",
+        "operation_id": "createBatchRequest",
+        "deprecated": false,
+        "source_location": "paths[\"/batch\"].post"
+      },
+      {
+        "id": "asana.rest.getBudgets",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/budgets",
+        "operation_id": "getBudgets",
+        "deprecated": false,
+        "source_location": "paths[\"/budgets\"].get"
+      },
+      {
+        "id": "asana.rest.createBudget",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/budgets",
+        "operation_id": "createBudget",
+        "deprecated": false,
+        "source_location": "paths[\"/budgets\"].post"
+      },
+      {
+        "id": "asana.rest.getBudget",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/budgets/{budget_gid}",
+        "operation_id": "getBudget",
+        "deprecated": false,
+        "source_location": "paths[\"/budgets/{budget_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateBudget",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/budgets/{budget_gid}",
+        "operation_id": "updateBudget",
+        "deprecated": false,
+        "source_location": "paths[\"/budgets/{budget_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteBudget",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/budgets/{budget_gid}",
+        "operation_id": "deleteBudget",
+        "deprecated": false,
+        "source_location": "paths[\"/budgets/{budget_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getCustomFieldSettingsForProject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects/{project_gid}/custom_field_settings",
+        "operation_id": "getCustomFieldSettingsForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/custom_field_settings\"].get"
+      },
+      {
+        "id": "asana.rest.getCustomFieldSettingsForPortfolio",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/custom_field_settings",
+        "operation_id": "getCustomFieldSettingsForPortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}/custom_field_settings\"].get"
+      },
+      {
+        "id": "asana.rest.getCustomFieldSettingsForGoal",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/goals/{goal_gid}/custom_field_settings",
+        "operation_id": "getCustomFieldSettingsForGoal",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}/custom_field_settings\"].get"
+      },
+      {
+        "id": "asana.rest.getCustomFieldSettingsForTeam",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/teams/{team_gid}/custom_field_settings",
+        "operation_id": "getCustomFieldSettingsForTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_gid}/custom_field_settings\"].get"
+      },
+      {
+        "id": "asana.rest.createCustomField",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_fields",
+        "operation_id": "createCustomField",
+        "deprecated": false,
+        "source_location": "paths[\"/custom_fields\"].post"
+      },
+      {
+        "id": "asana.rest.getCustomField",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_fields/{custom_field_gid}",
+        "operation_id": "getCustomField",
+        "deprecated": false,
+        "source_location": "paths[\"/custom_fields/{custom_field_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateCustomField",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/custom_fields/{custom_field_gid}",
+        "operation_id": "updateCustomField",
+        "deprecated": false,
+        "source_location": "paths[\"/custom_fields/{custom_field_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteCustomField",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/custom_fields/{custom_field_gid}",
+        "operation_id": "deleteCustomField",
+        "deprecated": false,
+        "source_location": "paths[\"/custom_fields/{custom_field_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getCustomFieldsForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/custom_fields",
+        "operation_id": "getCustomFieldsForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/custom_fields\"].get"
+      },
+      {
+        "id": "asana.rest.createEnumOptionForCustomField",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_fields/{custom_field_gid}/enum_options",
+        "operation_id": "createEnumOptionForCustomField",
+        "deprecated": false,
+        "source_location": "paths[\"/custom_fields/{custom_field_gid}/enum_options\"].post"
+      },
+      {
+        "id": "asana.rest.insertEnumOptionForCustomField",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/custom_fields/{custom_field_gid}/enum_options/insert",
+        "operation_id": "insertEnumOptionForCustomField",
+        "deprecated": false,
+        "source_location": "paths[\"/custom_fields/{custom_field_gid}/enum_options/insert\"].post"
+      },
+      {
+        "id": "asana.rest.updateEnumOption",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/enum_options/{enum_option_gid}",
+        "operation_id": "updateEnumOption",
+        "deprecated": false,
+        "source_location": "paths[\"/enum_options/{enum_option_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.getCustomTypes",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_types",
+        "operation_id": "getCustomTypes",
+        "deprecated": false,
+        "source_location": "paths[\"/custom_types\"].get"
+      },
+      {
+        "id": "asana.rest.getCustomType",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/custom_types/{custom_type_gid}",
+        "operation_id": "getCustomType",
+        "deprecated": false,
+        "source_location": "paths[\"/custom_types/{custom_type_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.getEvents",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/events",
+        "operation_id": "getEvents",
+        "deprecated": false,
+        "source_location": "paths[\"/events\"].get"
+      },
+      {
+        "id": "asana.rest.createGraphExport",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/exports/graph",
+        "operation_id": "createGraphExport",
+        "deprecated": false,
+        "source_location": "paths[\"/exports/graph\"].post"
+      },
+      {
+        "id": "asana.rest.createResourceExport",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/exports/resource",
+        "operation_id": "createResourceExport",
+        "deprecated": false,
+        "source_location": "paths[\"/exports/resource\"].post"
+      },
+      {
+        "id": "asana.rest.getGoalRelationship",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/goal_relationships/{goal_relationship_gid}",
+        "operation_id": "getGoalRelationship",
+        "deprecated": false,
+        "source_location": "paths[\"/goal_relationships/{goal_relationship_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateGoalRelationship",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/goal_relationships/{goal_relationship_gid}",
+        "operation_id": "updateGoalRelationship",
+        "deprecated": false,
+        "source_location": "paths[\"/goal_relationships/{goal_relationship_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.getGoalRelationships",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/goal_relationships",
+        "operation_id": "getGoalRelationships",
+        "deprecated": false,
+        "source_location": "paths[\"/goal_relationships\"].get"
+      },
+      {
+        "id": "asana.rest.addSupportingRelationship",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/addSupportingRelationship",
+        "operation_id": "addSupportingRelationship",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}/addSupportingRelationship\"].post"
+      },
+      {
+        "id": "asana.rest.removeSupportingRelationship",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/removeSupportingRelationship",
+        "operation_id": "removeSupportingRelationship",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}/removeSupportingRelationship\"].post"
+      },
+      {
+        "id": "asana.rest.getGoal",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/goals/{goal_gid}",
+        "operation_id": "getGoal",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateGoal",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/goals/{goal_gid}",
+        "operation_id": "updateGoal",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteGoal",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/goals/{goal_gid}",
+        "operation_id": "deleteGoal",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getGoals",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/goals",
+        "operation_id": "getGoals",
+        "deprecated": false,
+        "source_location": "paths[\"/goals\"].get"
+      },
+      {
+        "id": "asana.rest.createGoal",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals",
+        "operation_id": "createGoal",
+        "deprecated": false,
+        "source_location": "paths[\"/goals\"].post"
+      },
+      {
+        "id": "asana.rest.createGoalMetric",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/setMetric",
+        "operation_id": "createGoalMetric",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}/setMetric\"].post"
+      },
+      {
+        "id": "asana.rest.updateGoalMetric",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/setMetricCurrentValue",
+        "operation_id": "updateGoalMetric",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}/setMetricCurrentValue\"].post"
+      },
+      {
+        "id": "asana.rest.addFollowers",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/addFollowers",
+        "operation_id": "addFollowers",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}/addFollowers\"].post"
+      },
+      {
+        "id": "asana.rest.removeFollowers",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/removeFollowers",
+        "operation_id": "removeFollowers",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}/removeFollowers\"].post"
+      },
+      {
+        "id": "asana.rest.getParentGoalsForGoal",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/goals/{goal_gid}/parentGoals",
+        "operation_id": "getParentGoalsForGoal",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}/parentGoals\"].get"
+      },
+      {
+        "id": "asana.rest.addCustomFieldSettingForGoal",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/addCustomFieldSetting",
+        "operation_id": "addCustomFieldSettingForGoal",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}/addCustomFieldSetting\"].post"
+      },
+      {
+        "id": "asana.rest.removeCustomFieldSettingForGoal",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/removeCustomFieldSetting",
+        "operation_id": "removeCustomFieldSettingForGoal",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}/removeCustomFieldSetting\"].post"
+      },
+      {
+        "id": "asana.rest.getJob",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/jobs/{job_gid}",
+        "operation_id": "getJob",
+        "deprecated": false,
+        "source_location": "paths[\"/jobs/{job_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.getMemberships",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/memberships",
+        "operation_id": "getMemberships",
+        "deprecated": false,
+        "source_location": "paths[\"/memberships\"].get"
+      },
+      {
+        "id": "asana.rest.createMembership",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/memberships",
+        "operation_id": "createMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/memberships\"].post"
+      },
+      {
+        "id": "asana.rest.getMembership",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/memberships/{membership_gid}",
+        "operation_id": "getMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/memberships/{membership_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateMembership",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/memberships/{membership_gid}",
+        "operation_id": "updateMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/memberships/{membership_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteMembership",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/memberships/{membership_gid}",
+        "operation_id": "deleteMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/memberships/{membership_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getOooEntry",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ooo_entries/{ooo_entry_gid}",
+        "operation_id": "getOooEntry",
+        "deprecated": false,
+        "source_location": "paths[\"/ooo_entries/{ooo_entry_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateOooEntry",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/ooo_entries/{ooo_entry_gid}",
+        "operation_id": "updateOooEntry",
+        "deprecated": false,
+        "source_location": "paths[\"/ooo_entries/{ooo_entry_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteOooEntry",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/ooo_entries/{ooo_entry_gid}",
+        "operation_id": "deleteOooEntry",
+        "deprecated": false,
+        "source_location": "paths[\"/ooo_entries/{ooo_entry_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getOooEntries",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/ooo_entries",
+        "operation_id": "getOooEntries",
+        "deprecated": false,
+        "source_location": "paths[\"/ooo_entries\"].get"
+      },
+      {
+        "id": "asana.rest.createOooEntry",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/ooo_entries",
+        "operation_id": "createOooEntry",
+        "deprecated": false,
+        "source_location": "paths[\"/ooo_entries\"].post"
+      },
+      {
+        "id": "asana.rest.createOrganizationExport",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/organization_exports",
+        "operation_id": "createOrganizationExport",
+        "deprecated": false,
+        "source_location": "paths[\"/organization_exports\"].post"
+      },
+      {
+        "id": "asana.rest.getOrganizationExport",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/organization_exports/{organization_export_gid}",
+        "operation_id": "getOrganizationExport",
+        "deprecated": false,
+        "source_location": "paths[\"/organization_exports/{organization_export_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.getPortfolioMemberships",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/portfolio_memberships",
+        "operation_id": "getPortfolioMemberships",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolio_memberships\"].get"
+      },
+      {
+        "id": "asana.rest.getPortfolioMembership",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/portfolio_memberships/{portfolio_membership_gid}",
+        "operation_id": "getPortfolioMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolio_memberships/{portfolio_membership_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.getPortfolioMembershipsForPortfolio",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/portfolio_memberships",
+        "operation_id": "getPortfolioMembershipsForPortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}/portfolio_memberships\"].get"
+      },
+      {
+        "id": "asana.rest.getPortfolios",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/portfolios",
+        "operation_id": "getPortfolios",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios\"].get"
+      },
+      {
+        "id": "asana.rest.createPortfolio",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/portfolios",
+        "operation_id": "createPortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios\"].post"
+      },
+      {
+        "id": "asana.rest.getPortfolio",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}",
+        "operation_id": "getPortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updatePortfolio",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/portfolios/{portfolio_gid}",
+        "operation_id": "updatePortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deletePortfolio",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/portfolios/{portfolio_gid}",
+        "operation_id": "deletePortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getItemsForPortfolio",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/items",
+        "operation_id": "getItemsForPortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}/items\"].get"
+      },
+      {
+        "id": "asana.rest.addItemForPortfolio",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/addItem",
+        "operation_id": "addItemForPortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}/addItem\"].post"
+      },
+      {
+        "id": "asana.rest.removeItemForPortfolio",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/removeItem",
+        "operation_id": "removeItemForPortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}/removeItem\"].post"
+      },
+      {
+        "id": "asana.rest.addCustomFieldSettingForPortfolio",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/addCustomFieldSetting",
+        "operation_id": "addCustomFieldSettingForPortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}/addCustomFieldSetting\"].post"
+      },
+      {
+        "id": "asana.rest.removeCustomFieldSettingForPortfolio",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/removeCustomFieldSetting",
+        "operation_id": "removeCustomFieldSettingForPortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}/removeCustomFieldSetting\"].post"
+      },
+      {
+        "id": "asana.rest.addMembersForPortfolio",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/addMembers",
+        "operation_id": "addMembersForPortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}/addMembers\"].post"
+      },
+      {
+        "id": "asana.rest.removeMembersForPortfolio",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/removeMembers",
+        "operation_id": "removeMembersForPortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}/removeMembers\"].post"
+      },
+      {
+        "id": "asana.rest.duplicatePortfolio",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/portfolios/{portfolio_gid}/duplicate",
+        "operation_id": "duplicatePortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}/duplicate\"].post"
+      },
+      {
+        "id": "asana.rest.getProjectBrief",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project_briefs/{project_brief_gid}",
+        "operation_id": "getProjectBrief",
+        "deprecated": false,
+        "source_location": "paths[\"/project_briefs/{project_brief_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateProjectBrief",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/project_briefs/{project_brief_gid}",
+        "operation_id": "updateProjectBrief",
+        "deprecated": false,
+        "source_location": "paths[\"/project_briefs/{project_brief_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteProjectBrief",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/project_briefs/{project_brief_gid}",
+        "operation_id": "deleteProjectBrief",
+        "deprecated": false,
+        "source_location": "paths[\"/project_briefs/{project_brief_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.createProjectBrief",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_gid}/project_briefs",
+        "operation_id": "createProjectBrief",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/project_briefs\"].post"
+      },
+      {
+        "id": "asana.rest.getProjectMembership",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project_memberships/{project_membership_gid}",
+        "operation_id": "getProjectMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/project_memberships/{project_membership_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.getProjectMembershipsForProject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects/{project_gid}/project_memberships",
+        "operation_id": "getProjectMembershipsForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/project_memberships\"].get"
+      },
+      {
+        "id": "asana.rest.getProjectPortfolioSetting",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project_portfolio_settings/{project_portfolio_setting_gid}",
+        "operation_id": "getProjectPortfolioSetting",
+        "deprecated": false,
+        "source_location": "paths[\"/project_portfolio_settings/{project_portfolio_setting_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateProjectPortfolioSetting",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/project_portfolio_settings/{project_portfolio_setting_gid}",
+        "operation_id": "updateProjectPortfolioSetting",
+        "deprecated": false,
+        "source_location": "paths[\"/project_portfolio_settings/{project_portfolio_setting_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.getProjectPortfolioSettingsForProject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects/{project_gid}/project_portfolio_settings",
+        "operation_id": "getProjectPortfolioSettingsForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/project_portfolio_settings\"].get"
+      },
+      {
+        "id": "asana.rest.getProjectPortfolioSettingsForPortfolio",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/portfolios/{portfolio_gid}/project_portfolio_settings",
+        "operation_id": "getProjectPortfolioSettingsForPortfolio",
+        "deprecated": false,
+        "source_location": "paths[\"/portfolios/{portfolio_gid}/project_portfolio_settings\"].get"
+      },
+      {
+        "id": "asana.rest.getProjectStatus",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project_statuses/{project_status_gid}",
+        "operation_id": "getProjectStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/project_statuses/{project_status_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.deleteProjectStatus",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/project_statuses/{project_status_gid}",
+        "operation_id": "deleteProjectStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/project_statuses/{project_status_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getProjectStatusesForProject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects/{project_gid}/project_statuses",
+        "operation_id": "getProjectStatusesForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/project_statuses\"].get"
+      },
+      {
+        "id": "asana.rest.createProjectStatusForProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_gid}/project_statuses",
+        "operation_id": "createProjectStatusForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/project_statuses\"].post"
+      },
+      {
+        "id": "asana.rest.getProjectTemplate",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project_templates/{project_template_gid}",
+        "operation_id": "getProjectTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/project_templates/{project_template_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.deleteProjectTemplate",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/project_templates/{project_template_gid}",
+        "operation_id": "deleteProjectTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/project_templates/{project_template_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getProjectTemplates",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/project_templates",
+        "operation_id": "getProjectTemplates",
+        "deprecated": false,
+        "source_location": "paths[\"/project_templates\"].get"
+      },
+      {
+        "id": "asana.rest.getProjectTemplatesForTeam",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/teams/{team_gid}/project_templates",
+        "operation_id": "getProjectTemplatesForTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_gid}/project_templates\"].get"
+      },
+      {
+        "id": "asana.rest.instantiateProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/project_templates/{project_template_gid}/instantiateProject",
+        "operation_id": "instantiateProject",
+        "deprecated": false,
+        "source_location": "paths[\"/project_templates/{project_template_gid}/instantiateProject\"].post"
+      },
+      {
+        "id": "asana.rest.getProjects",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects",
+        "operation_id": "getProjects",
+        "deprecated": false,
+        "source_location": "paths[\"/projects\"].get"
+      },
+      {
+        "id": "asana.rest.createProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects",
+        "operation_id": "createProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects\"].post"
+      },
+      {
+        "id": "asana.rest.getProject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects/{project_gid}",
+        "operation_id": "getProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateProject",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/projects/{project_gid}",
+        "operation_id": "updateProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteProject",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/projects/{project_gid}",
+        "operation_id": "deleteProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.duplicateProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_gid}/duplicate",
+        "operation_id": "duplicateProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/duplicate\"].post"
+      },
+      {
+        "id": "asana.rest.getProjectsForTask",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/projects",
+        "operation_id": "getProjectsForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/projects\"].get"
+      },
+      {
+        "id": "asana.rest.getProjectsForTeam",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/teams/{team_gid}/projects",
+        "operation_id": "getProjectsForTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_gid}/projects\"].get"
+      },
+      {
+        "id": "asana.rest.createProjectForTeam",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/teams/{team_gid}/projects",
+        "operation_id": "createProjectForTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_gid}/projects\"].post"
+      },
+      {
+        "id": "asana.rest.getProjectsForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/projects",
+        "operation_id": "getProjectsForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/projects\"].get"
+      },
+      {
+        "id": "asana.rest.createProjectForWorkspace",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workspaces/{workspace_gid}/projects",
+        "operation_id": "createProjectForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/projects\"].post"
+      },
+      {
+        "id": "asana.rest.searchProjectsForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/projects/search",
+        "operation_id": "searchProjectsForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/projects/search\"].get"
+      },
+      {
+        "id": "asana.rest.addCustomFieldSettingForProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_gid}/addCustomFieldSetting",
+        "operation_id": "addCustomFieldSettingForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/addCustomFieldSetting\"].post"
+      },
+      {
+        "id": "asana.rest.removeCustomFieldSettingForProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_gid}/removeCustomFieldSetting",
+        "operation_id": "removeCustomFieldSettingForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/removeCustomFieldSetting\"].post"
+      },
+      {
+        "id": "asana.rest.getTaskCountsForProject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects/{project_gid}/task_counts",
+        "operation_id": "getTaskCountsForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/task_counts\"].get"
+      },
+      {
+        "id": "asana.rest.addMembersForProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_gid}/addMembers",
+        "operation_id": "addMembersForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/addMembers\"].post"
+      },
+      {
+        "id": "asana.rest.removeMembersForProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_gid}/removeMembers",
+        "operation_id": "removeMembersForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/removeMembers\"].post"
+      },
+      {
+        "id": "asana.rest.addFollowersForProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_gid}/addFollowers",
+        "operation_id": "addFollowersForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/addFollowers\"].post"
+      },
+      {
+        "id": "asana.rest.removeFollowersForProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_gid}/removeFollowers",
+        "operation_id": "removeFollowersForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/removeFollowers\"].post"
+      },
+      {
+        "id": "asana.rest.projectSaveAsTemplate",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_gid}/saveAsTemplate",
+        "operation_id": "projectSaveAsTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/saveAsTemplate\"].post"
+      },
+      {
+        "id": "asana.rest.getRates",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/rates",
+        "operation_id": "getRates",
+        "deprecated": false,
+        "source_location": "paths[\"/rates\"].get"
+      },
+      {
+        "id": "asana.rest.createRate",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/rates",
+        "operation_id": "createRate",
+        "deprecated": false,
+        "source_location": "paths[\"/rates\"].post"
+      },
+      {
+        "id": "asana.rest.getRate",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/rates/{rate_gid}",
+        "operation_id": "getRate",
+        "deprecated": false,
+        "source_location": "paths[\"/rates/{rate_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateRate",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/rates/{rate_gid}",
+        "operation_id": "updateRate",
+        "deprecated": false,
+        "source_location": "paths[\"/rates/{rate_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteRate",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/rates/{rate_gid}",
+        "operation_id": "deleteRate",
+        "deprecated": false,
+        "source_location": "paths[\"/rates/{rate_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getReactionsOnObject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/reactions",
+        "operation_id": "getReactionsOnObject",
+        "deprecated": false,
+        "source_location": "paths[\"/reactions\"].get"
+      },
+      {
+        "id": "asana.rest.getRoles",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/roles",
+        "operation_id": "getRoles",
+        "deprecated": false,
+        "source_location": "paths[\"/roles\"].get"
+      },
+      {
+        "id": "asana.rest.createRole",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/roles",
+        "operation_id": "createRole",
+        "deprecated": false,
+        "source_location": "paths[\"/roles\"].post"
+      },
+      {
+        "id": "asana.rest.getRole",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/roles/{role_gid}",
+        "operation_id": "getRole",
+        "deprecated": false,
+        "source_location": "paths[\"/roles/{role_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateRole",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/roles/{role_gid}",
+        "operation_id": "updateRole",
+        "deprecated": false,
+        "source_location": "paths[\"/roles/{role_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteRole",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/roles/{role_gid}",
+        "operation_id": "deleteRole",
+        "deprecated": false,
+        "source_location": "paths[\"/roles/{role_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.triggerRule",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/rule_triggers/{rule_trigger_gid}/run",
+        "operation_id": "triggerRule",
+        "deprecated": false,
+        "source_location": "paths[\"/rule_triggers/{rule_trigger_gid}/run\"].post"
+      },
+      {
+        "id": "asana.rest.getSection",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sections/{section_gid}",
+        "operation_id": "getSection",
+        "deprecated": false,
+        "source_location": "paths[\"/sections/{section_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateSection",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/sections/{section_gid}",
+        "operation_id": "updateSection",
+        "deprecated": false,
+        "source_location": "paths[\"/sections/{section_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteSection",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/sections/{section_gid}",
+        "operation_id": "deleteSection",
+        "deprecated": false,
+        "source_location": "paths[\"/sections/{section_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getSectionsForProject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects/{project_gid}/sections",
+        "operation_id": "getSectionsForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/sections\"].get"
+      },
+      {
+        "id": "asana.rest.createSectionForProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_gid}/sections",
+        "operation_id": "createSectionForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/sections\"].post"
+      },
+      {
+        "id": "asana.rest.addTaskForSection",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/sections/{section_gid}/addTask",
+        "operation_id": "addTaskForSection",
+        "deprecated": false,
+        "source_location": "paths[\"/sections/{section_gid}/addTask\"].post"
+      },
+      {
+        "id": "asana.rest.insertSectionForProject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/projects/{project_gid}/sections/insert",
+        "operation_id": "insertSectionForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/sections/insert\"].post"
+      },
+      {
+        "id": "asana.rest.getStatus",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/status_updates/{status_update_gid}",
+        "operation_id": "getStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/status_updates/{status_update_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.deleteStatus",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/status_updates/{status_update_gid}",
+        "operation_id": "deleteStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/status_updates/{status_update_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getStatusesForObject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/status_updates",
+        "operation_id": "getStatusesForObject",
+        "deprecated": false,
+        "source_location": "paths[\"/status_updates\"].get"
+      },
+      {
+        "id": "asana.rest.createStatusForObject",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/status_updates",
+        "operation_id": "createStatusForObject",
+        "deprecated": false,
+        "source_location": "paths[\"/status_updates\"].post"
+      },
+      {
+        "id": "asana.rest.getStory",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/stories/{story_gid}",
+        "operation_id": "getStory",
+        "deprecated": false,
+        "source_location": "paths[\"/stories/{story_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateStory",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/stories/{story_gid}",
+        "operation_id": "updateStory",
+        "deprecated": false,
+        "source_location": "paths[\"/stories/{story_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteStory",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/stories/{story_gid}",
+        "operation_id": "deleteStory",
+        "deprecated": false,
+        "source_location": "paths[\"/stories/{story_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getStoriesForTask",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/stories",
+        "operation_id": "getStoriesForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/stories\"].get"
+      },
+      {
+        "id": "asana.rest.createStoryForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/stories",
+        "operation_id": "createStoryForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/stories\"].post"
+      },
+      {
+        "id": "asana.rest.getStoriesForGoal",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/goals/{goal_gid}/stories",
+        "operation_id": "getStoriesForGoal",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}/stories\"].get"
+      },
+      {
+        "id": "asana.rest.createStoryForGoal",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/goals/{goal_gid}/stories",
+        "operation_id": "createStoryForGoal",
+        "deprecated": false,
+        "source_location": "paths[\"/goals/{goal_gid}/stories\"].post"
+      },
+      {
+        "id": "asana.rest.getTags",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tags",
+        "operation_id": "getTags",
+        "deprecated": false,
+        "source_location": "paths[\"/tags\"].get"
+      },
+      {
+        "id": "asana.rest.createTag",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tags",
+        "operation_id": "createTag",
+        "deprecated": false,
+        "source_location": "paths[\"/tags\"].post"
+      },
+      {
+        "id": "asana.rest.getTag",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tags/{tag_gid}",
+        "operation_id": "getTag",
+        "deprecated": false,
+        "source_location": "paths[\"/tags/{tag_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateTag",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/tags/{tag_gid}",
+        "operation_id": "updateTag",
+        "deprecated": false,
+        "source_location": "paths[\"/tags/{tag_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteTag",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/tags/{tag_gid}",
+        "operation_id": "deleteTag",
+        "deprecated": false,
+        "source_location": "paths[\"/tags/{tag_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getTagsForTask",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/tags",
+        "operation_id": "getTagsForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/tags\"].get"
+      },
+      {
+        "id": "asana.rest.getTagsForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/tags",
+        "operation_id": "getTagsForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/tags\"].get"
+      },
+      {
+        "id": "asana.rest.createTagForWorkspace",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workspaces/{workspace_gid}/tags",
+        "operation_id": "createTagForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/tags\"].post"
+      },
+      {
+        "id": "asana.rest.getTaskTemplates",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/task_templates",
+        "operation_id": "getTaskTemplates",
+        "deprecated": false,
+        "source_location": "paths[\"/task_templates\"].get"
+      },
+      {
+        "id": "asana.rest.getTaskTemplate",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/task_templates/{task_template_gid}",
+        "operation_id": "getTaskTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/task_templates/{task_template_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.deleteTaskTemplate",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/task_templates/{task_template_gid}",
+        "operation_id": "deleteTaskTemplate",
+        "deprecated": false,
+        "source_location": "paths[\"/task_templates/{task_template_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.instantiateTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/task_templates/{task_template_gid}/instantiateTask",
+        "operation_id": "instantiateTask",
+        "deprecated": false,
+        "source_location": "paths[\"/task_templates/{task_template_gid}/instantiateTask\"].post"
+      },
+      {
+        "id": "asana.rest.getTasks",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tasks",
+        "operation_id": "getTasks",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks\"].get"
+      },
+      {
+        "id": "asana.rest.createTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks",
+        "operation_id": "createTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks\"].post"
+      },
+      {
+        "id": "asana.rest.getTask",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tasks/{task_gid}",
+        "operation_id": "getTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateTask",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/tasks/{task_gid}",
+        "operation_id": "updateTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteTask",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/tasks/{task_gid}",
+        "operation_id": "deleteTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.duplicateTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/duplicate",
+        "operation_id": "duplicateTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/duplicate\"].post"
+      },
+      {
+        "id": "asana.rest.getTasksForProject",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/projects/{project_gid}/tasks",
+        "operation_id": "getTasksForProject",
+        "deprecated": false,
+        "source_location": "paths[\"/projects/{project_gid}/tasks\"].get"
+      },
+      {
+        "id": "asana.rest.getTasksForSection",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/sections/{section_gid}/tasks",
+        "operation_id": "getTasksForSection",
+        "deprecated": false,
+        "source_location": "paths[\"/sections/{section_gid}/tasks\"].get"
+      },
+      {
+        "id": "asana.rest.getTasksForTag",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tags/{tag_gid}/tasks",
+        "operation_id": "getTasksForTag",
+        "deprecated": false,
+        "source_location": "paths[\"/tags/{tag_gid}/tasks\"].get"
+      },
+      {
+        "id": "asana.rest.getTasksForUserTaskList",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user_task_lists/{user_task_list_gid}/tasks",
+        "operation_id": "getTasksForUserTaskList",
+        "deprecated": false,
+        "source_location": "paths[\"/user_task_lists/{user_task_list_gid}/tasks\"].get"
+      },
+      {
+        "id": "asana.rest.getSubtasksForTask",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/subtasks",
+        "operation_id": "getSubtasksForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/subtasks\"].get"
+      },
+      {
+        "id": "asana.rest.createSubtaskForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/subtasks",
+        "operation_id": "createSubtaskForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/subtasks\"].post"
+      },
+      {
+        "id": "asana.rest.setParentForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/setParent",
+        "operation_id": "setParentForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/setParent\"].post"
+      },
+      {
+        "id": "asana.rest.getDependenciesForTask",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/dependencies",
+        "operation_id": "getDependenciesForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/dependencies\"].get"
+      },
+      {
+        "id": "asana.rest.addDependenciesForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/addDependencies",
+        "operation_id": "addDependenciesForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/addDependencies\"].post"
+      },
+      {
+        "id": "asana.rest.removeDependenciesForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/removeDependencies",
+        "operation_id": "removeDependenciesForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/removeDependencies\"].post"
+      },
+      {
+        "id": "asana.rest.getDependentsForTask",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/dependents",
+        "operation_id": "getDependentsForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/dependents\"].get"
+      },
+      {
+        "id": "asana.rest.addDependentsForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/addDependents",
+        "operation_id": "addDependentsForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/addDependents\"].post"
+      },
+      {
+        "id": "asana.rest.removeDependentsForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/removeDependents",
+        "operation_id": "removeDependentsForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/removeDependents\"].post"
+      },
+      {
+        "id": "asana.rest.addProjectForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/addProject",
+        "operation_id": "addProjectForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/addProject\"].post"
+      },
+      {
+        "id": "asana.rest.removeProjectForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/removeProject",
+        "operation_id": "removeProjectForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/removeProject\"].post"
+      },
+      {
+        "id": "asana.rest.addTagForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/addTag",
+        "operation_id": "addTagForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/addTag\"].post"
+      },
+      {
+        "id": "asana.rest.removeTagForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/removeTag",
+        "operation_id": "removeTagForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/removeTag\"].post"
+      },
+      {
+        "id": "asana.rest.addFollowersForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/addFollowers",
+        "operation_id": "addFollowersForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/addFollowers\"].post"
+      },
+      {
+        "id": "asana.rest.removeFollowerForTask",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/removeFollowers",
+        "operation_id": "removeFollowerForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/removeFollowers\"].post"
+      },
+      {
+        "id": "asana.rest.getTaskForCustomID",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/tasks/custom_id/{custom_id}",
+        "operation_id": "getTaskForCustomID",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/tasks/custom_id/{custom_id}\"].get"
+      },
+      {
+        "id": "asana.rest.searchTasksForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/tasks/search",
+        "operation_id": "searchTasksForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/tasks/search\"].get"
+      },
+      {
+        "id": "asana.rest.getTeamMembership",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/team_memberships/{team_membership_gid}",
+        "operation_id": "getTeamMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/team_memberships/{team_membership_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.getTeamMemberships",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/team_memberships",
+        "operation_id": "getTeamMemberships",
+        "deprecated": false,
+        "source_location": "paths[\"/team_memberships\"].get"
+      },
+      {
+        "id": "asana.rest.getTeamMembershipsForTeam",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/teams/{team_gid}/team_memberships",
+        "operation_id": "getTeamMembershipsForTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_gid}/team_memberships\"].get"
+      },
+      {
+        "id": "asana.rest.getTeamMembershipsForUser",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{user_gid}/team_memberships",
+        "operation_id": "getTeamMembershipsForUser",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{user_gid}/team_memberships\"].get"
+      },
+      {
+        "id": "asana.rest.createTeam",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/teams",
+        "operation_id": "createTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams\"].post"
+      },
+      {
+        "id": "asana.rest.getTeam",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/teams/{team_gid}",
+        "operation_id": "getTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateTeam",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/teams/{team_gid}",
+        "operation_id": "updateTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.getTeamsForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/teams",
+        "operation_id": "getTeamsForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/teams\"].get"
+      },
+      {
+        "id": "asana.rest.getTeamsForUser",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{user_gid}/teams",
+        "operation_id": "getTeamsForUser",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{user_gid}/teams\"].get"
+      },
+      {
+        "id": "asana.rest.addUserForTeam",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/teams/{team_gid}/addUser",
+        "operation_id": "addUserForTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_gid}/addUser\"].post"
+      },
+      {
+        "id": "asana.rest.removeUserForTeam",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/teams/{team_gid}/removeUser",
+        "operation_id": "removeUserForTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_gid}/removeUser\"].post"
+      },
+      {
+        "id": "asana.rest.getTimePeriod",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/time_periods/{time_period_gid}",
+        "operation_id": "getTimePeriod",
+        "deprecated": false,
+        "source_location": "paths[\"/time_periods/{time_period_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.getTimePeriods",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/time_periods",
+        "operation_id": "getTimePeriods",
+        "deprecated": false,
+        "source_location": "paths[\"/time_periods\"].get"
+      },
+      {
+        "id": "asana.rest.getTimeTrackingCategory",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}",
+        "operation_id": "getTimeTrackingCategory",
+        "deprecated": false,
+        "source_location": "paths[\"/time_tracking_categories/{time_tracking_category_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateTimeTrackingCategory",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}",
+        "operation_id": "updateTimeTrackingCategory",
+        "deprecated": false,
+        "source_location": "paths[\"/time_tracking_categories/{time_tracking_category_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteTimeTrackingCategory",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}",
+        "operation_id": "deleteTimeTrackingCategory",
+        "deprecated": false,
+        "source_location": "paths[\"/time_tracking_categories/{time_tracking_category_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getTimeTrackingEntriesForTimeTrackingCategory",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/time_tracking_categories/{time_tracking_category_gid}/time_tracking_entries",
+        "operation_id": "getTimeTrackingEntriesForTimeTrackingCategory",
+        "deprecated": false,
+        "source_location": "paths[\"/time_tracking_categories/{time_tracking_category_gid}/time_tracking_entries\"].get"
+      },
+      {
+        "id": "asana.rest.getTimeTrackingCategories",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/time_tracking_categories",
+        "operation_id": "getTimeTrackingCategories",
+        "deprecated": false,
+        "source_location": "paths[\"/time_tracking_categories\"].get"
+      },
+      {
+        "id": "asana.rest.createTimeTrackingCategory",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/time_tracking_categories",
+        "operation_id": "createTimeTrackingCategory",
+        "deprecated": false,
+        "source_location": "paths[\"/time_tracking_categories\"].post"
+      },
+      {
+        "id": "asana.rest.getTimeTrackingEntriesForTask",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/tasks/{task_gid}/time_tracking_entries",
+        "operation_id": "getTimeTrackingEntriesForTask",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/time_tracking_entries\"].get"
+      },
+      {
+        "id": "asana.rest.createTimeTrackingEntry",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/tasks/{task_gid}/time_tracking_entries",
+        "operation_id": "createTimeTrackingEntry",
+        "deprecated": false,
+        "source_location": "paths[\"/tasks/{task_gid}/time_tracking_entries\"].post"
+      },
+      {
+        "id": "asana.rest.getTimeTrackingEntry",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/time_tracking_entries/{time_tracking_entry_gid}",
+        "operation_id": "getTimeTrackingEntry",
+        "deprecated": false,
+        "source_location": "paths[\"/time_tracking_entries/{time_tracking_entry_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateTimeTrackingEntry",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/time_tracking_entries/{time_tracking_entry_gid}",
+        "operation_id": "updateTimeTrackingEntry",
+        "deprecated": false,
+        "source_location": "paths[\"/time_tracking_entries/{time_tracking_entry_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteTimeTrackingEntry",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/time_tracking_entries/{time_tracking_entry_gid}",
+        "operation_id": "deleteTimeTrackingEntry",
+        "deprecated": false,
+        "source_location": "paths[\"/time_tracking_entries/{time_tracking_entry_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getTimeTrackingEntries",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/time_tracking_entries",
+        "operation_id": "getTimeTrackingEntries",
+        "deprecated": false,
+        "source_location": "paths[\"/time_tracking_entries\"].get"
+      },
+      {
+        "id": "asana.rest.getTimesheetApprovalStatus",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timesheet_approval_statuses/{timesheet_approval_status_gid}",
+        "operation_id": "getTimesheetApprovalStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/timesheet_approval_statuses/{timesheet_approval_status_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateTimesheetApprovalStatus",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/timesheet_approval_statuses/{timesheet_approval_status_gid}",
+        "operation_id": "updateTimesheetApprovalStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/timesheet_approval_statuses/{timesheet_approval_status_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.getTimesheetApprovalStatuses",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/timesheet_approval_statuses",
+        "operation_id": "getTimesheetApprovalStatuses",
+        "deprecated": false,
+        "source_location": "paths[\"/timesheet_approval_statuses\"].get"
+      },
+      {
+        "id": "asana.rest.createTimesheetApprovalStatus",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/timesheet_approval_statuses",
+        "operation_id": "createTimesheetApprovalStatus",
+        "deprecated": false,
+        "source_location": "paths[\"/timesheet_approval_statuses\"].post"
+      },
+      {
+        "id": "asana.rest.typeaheadForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/typeahead",
+        "operation_id": "typeaheadForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/typeahead\"].get"
+      },
+      {
+        "id": "asana.rest.getUserTaskList",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user_task_lists/{user_task_list_gid}",
+        "operation_id": "getUserTaskList",
+        "deprecated": false,
+        "source_location": "paths[\"/user_task_lists/{user_task_list_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.getUserTaskListForUser",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{user_gid}/user_task_list",
+        "operation_id": "getUserTaskListForUser",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{user_gid}/user_task_list\"].get"
+      },
+      {
+        "id": "asana.rest.getUsers",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users",
+        "operation_id": "getUsers",
+        "deprecated": false,
+        "source_location": "paths[\"/users\"].get"
+      },
+      {
+        "id": "asana.rest.getUser",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{user_gid}",
+        "operation_id": "getUser",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{user_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateUser",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/users/{user_gid}",
+        "operation_id": "updateUser",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{user_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.getFavoritesForUser",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{user_gid}/favorites",
+        "operation_id": "getFavoritesForUser",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{user_gid}/favorites\"].get"
+      },
+      {
+        "id": "asana.rest.getUsersForTeam",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/teams/{team_gid}/users",
+        "operation_id": "getUsersForTeam",
+        "deprecated": false,
+        "source_location": "paths[\"/teams/{team_gid}/users\"].get"
+      },
+      {
+        "id": "asana.rest.getUsersForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/users",
+        "operation_id": "getUsersForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/users\"].get"
+      },
+      {
+        "id": "asana.rest.getUserForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/users/{user_gid}",
+        "operation_id": "getUserForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/users/{user_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateUserForWorkspace",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/workspaces/{workspace_gid}/users/{user_gid}",
+        "operation_id": "updateUserForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/users/{user_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.getWebhooks",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhooks",
+        "operation_id": "getWebhooks",
+        "deprecated": false,
+        "source_location": "paths[\"/webhooks\"].get"
+      },
+      {
+        "id": "asana.rest.createWebhook",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/webhooks",
+        "operation_id": "createWebhook",
+        "deprecated": false,
+        "source_location": "paths[\"/webhooks\"].post"
+      },
+      {
+        "id": "asana.rest.getWebhook",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/webhooks/{webhook_gid}",
+        "operation_id": "getWebhook",
+        "deprecated": false,
+        "source_location": "paths[\"/webhooks/{webhook_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateWebhook",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/webhooks/{webhook_gid}",
+        "operation_id": "updateWebhook",
+        "deprecated": false,
+        "source_location": "paths[\"/webhooks/{webhook_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.deleteWebhook",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/webhooks/{webhook_gid}",
+        "operation_id": "deleteWebhook",
+        "deprecated": false,
+        "source_location": "paths[\"/webhooks/{webhook_gid}\"].delete"
+      },
+      {
+        "id": "asana.rest.getWorkspaceMembership",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspace_memberships/{workspace_membership_gid}",
+        "operation_id": "getWorkspaceMembership",
+        "deprecated": false,
+        "source_location": "paths[\"/workspace_memberships/{workspace_membership_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.getWorkspaceMembershipsForUser",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{user_gid}/workspace_memberships",
+        "operation_id": "getWorkspaceMembershipsForUser",
+        "deprecated": false,
+        "source_location": "paths[\"/users/{user_gid}/workspace_memberships\"].get"
+      },
+      {
+        "id": "asana.rest.getWorkspaceMembershipsForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/workspace_memberships",
+        "operation_id": "getWorkspaceMembershipsForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/workspace_memberships\"].get"
+      },
+      {
+        "id": "asana.rest.getWorkspaces",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces",
+        "operation_id": "getWorkspaces",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces\"].get"
+      },
+      {
+        "id": "asana.rest.getWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}",
+        "operation_id": "getWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}\"].get"
+      },
+      {
+        "id": "asana.rest.updateWorkspace",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/workspaces/{workspace_gid}",
+        "operation_id": "updateWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}\"].put"
+      },
+      {
+        "id": "asana.rest.addUserForWorkspace",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workspaces/{workspace_gid}/addUser",
+        "operation_id": "addUserForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/addUser\"].post"
+      },
+      {
+        "id": "asana.rest.removeUserForWorkspace",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workspaces/{workspace_gid}/removeUser",
+        "operation_id": "removeUserForWorkspace",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/removeUser\"].post"
+      },
+      {
+        "id": "asana.rest.getWorkspaceEvents",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace_gid}/events",
+        "operation_id": "getWorkspaceEvents",
+        "deprecated": false,
+        "source_location": "paths[\"/workspaces/{workspace_gid}/events\"].get"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 249,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 249
+  }
+}

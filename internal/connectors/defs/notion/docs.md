@@ -17,6 +17,9 @@ are excluded per the sweep counting policy. Notion publishes **no webhook manage
 
 Every documented operation is partitioned exactly once in `api_surface.json` and carries exactly one
 disposition — executable, blocked with a named dependency, or not executable with a source citation.
+
+The exact public document URL, retrieval time, byte count, SHA-256, and operation inventory are
+pinned in `sources/notion-operation-source-lock.json` (retrieved 2026-08-19).
 None is blank.
 
 ## Auth setup

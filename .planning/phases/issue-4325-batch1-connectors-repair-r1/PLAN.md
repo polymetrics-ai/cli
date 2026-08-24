@@ -76,6 +76,26 @@
 
 ## External foundation holds
 
+### Post-#4340 Bitbucket and GitLab disposition slice
+
+- Scope: only `bitbucket` and `gitlab` connector-owned source inventories and
+  non-executable mutation dispositions. The shared implementation landed in
+  #4340; this slice neither changes shared source-import code nor promotes a
+  non-executable mutation to an action or command.
+- Red: with the stale inventory masked only for measurement, Bitbucket imports
+  297 pinned source operations but source projection reports 29 missing actions
+  and validation exposes 77 mutation coverage rows; GitLab imports 1,752 and
+  reports 173 missing actions. The temporary zero-row locks are restored
+  byte-for-byte after each measurement.
+- Green: refresh each existing v2 lock's REST inventory from its already
+  pinned descriptor without changing URL, source bytes, or SHA-256; derive one
+  exact source-id/method/path disposition for every non-executable mutation;
+  rerun source-import and validation. A disposition is a merge-blocking gap,
+  never an executable action or `availability: implemented` command.
+- Refactor/check: build the real binary and sweep every declared implemented
+  Bitbucket and GitLab command in isolated credential-free projects. Each must
+  reach `missing --credential`; zero unknown commands are acceptable evidence.
+
 - **Asana:** pending #4326. The provider-owned OpenAPI 3.0 document cannot
   import because `sourceReferenceResolver.referenceTargetWithCount`
   (`cmd/connectorgen/sourceimport.go:5088-5091`) rejects its response `$ref`

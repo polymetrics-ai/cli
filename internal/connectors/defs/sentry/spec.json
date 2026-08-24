@@ -16,7 +16,7 @@
     },
     "organization": {
       "type": "string",
-      "description": "Organization slug; required to read the issues, events, and releases streams."
+      "description": "Organization slug; required to check the connection and read the projects, issues, events, and releases streams."
     },
     "project": {
       "type": "string",

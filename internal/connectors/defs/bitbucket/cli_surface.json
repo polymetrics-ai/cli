@@ -30,31 +30,36 @@
       ],
       "flags": [
         {
-          "maps_to": "record.workspace",
-          "name": "workspace",
-          "summary": "Workspace slug or UUID.",
-          "type": "string"
+          "name": "is-private",
+          "summary": "Whether the repository is private.",
+          "type": "boolean",
+          "maps_to": "record.is_private"
         },
         {
-          "maps_to": "record.repo_slug",
           "name": "repo-slug",
           "summary": "Repository slug to create.",
-          "type": "string"
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
         },
         {
-          "maps_to": "record.scm",
           "name": "scm",
           "summary": "Repository SCM type.",
           "type": "enum",
           "values": [
             "git"
-          ]
+          ],
+          "maps_to": "record.scm",
+          "required": true
         },
         {
-          "maps_to": "record.is_private",
-          "name": "private",
-          "summary": "Whether the repository is private.",
-          "type": "boolean"
+          "name": "workspace",
+          "summary": "Workspace slug or UUID.",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "intent": "reverse_etl",
@@ -77,16 +82,26 @@
       ],
       "flags": [
         {
-          "maps_to": "record.workspace",
-          "name": "workspace",
-          "summary": "Workspace slug or UUID.",
-          "type": "string"
+          "name": "redirect-to",
+          "type": "string",
+          "maps_to": "record.redirect_to",
+          "max_bytes": 32768
         },
         {
-          "maps_to": "record.repo_slug",
           "name": "repo-slug",
           "summary": "Repository slug to delete.",
-          "type": "string"
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "summary": "Workspace slug or UUID.",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "intent": "reverse_etl",
@@ -118,6 +133,1843 @@
       "risk": "planned bounded binary transfer; no generic byte-stream command is exposed",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Planned bounded Bitbucket binary download command; blocked pending binary transfer foundation."
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} branch-restrictions {id}",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_branch_restrictions_id",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/branch-restrictions/{id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "maps_to": "record.id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} commit {commit} approve",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/approve",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_commit_commit_approve",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/approve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
+        }
+      ],
+      "flags": [
+        {
+          "name": "commit",
+          "type": "string",
+          "maps_to": "record.commit",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} commit {commit} comments {comment-id}",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_commit_commit_comments_comment_id",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true
+        },
+        {
+          "name": "commit",
+          "type": "string",
+          "maps_to": "record.commit",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteCommitHostedPropertyValue",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "app-key",
+          "type": "string",
+          "maps_to": "record.app_key",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "commit",
+          "type": "string",
+          "maps_to": "record.commit",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "property-name",
+          "type": "string",
+          "maps_to": "record.property_name",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteReport",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_commit_commit_reports_reportid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "commit",
+          "type": "string",
+          "maps_to": "record.commit",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "reportId",
+          "type": "string",
+          "maps_to": "record.reportId",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteAnnotation",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "annotationId",
+          "type": "string",
+          "maps_to": "record.annotationId",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "commit",
+          "type": "string",
+          "maps_to": "record.commit",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "reportId",
+          "type": "string",
+          "maps_to": "record.reportId",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} default-reviewers {target-username}",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_default_reviewers_target_username",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "target-username",
+          "type": "string",
+          "maps_to": "record.target_username",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} deploy-keys {key-id}",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_deploy_keys_key_id",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "key-id",
+          "type": "string",
+          "maps_to": "record.key_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteDeploymentVariable",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_deployments_config_environments_environment_uui_171d7214",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "environment-uuid",
+          "type": "string",
+          "maps_to": "record.environment_uuid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "variable-uuid",
+          "type": "string",
+          "maps_to": "record.variable_uuid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} downloads {filename}",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/downloads/{filename}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_downloads_filename",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/downloads/{filename}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "filename",
+          "type": "string",
+          "maps_to": "record.filename",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteEnvironmentForRepository",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/environments/{environment_uuid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_environments_environment_uuid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/environments/{environment_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "environment-uuid",
+          "type": "string",
+          "maps_to": "record.environment_uuid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} hooks {uid}",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/hooks/{uid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_hooks_uid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/hooks/{uid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "uid",
+          "type": "string",
+          "maps_to": "record.uid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} permissions-config groups {group-slug}",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_permissions_config_groups_group_slug",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "group-slug",
+          "type": "string",
+          "maps_to": "record.group_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} permissions-config users {selected-user-id}",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "selected-user-id",
+          "type": "string",
+          "maps_to": "record.selected_user_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteRepositoryPipelineCaches",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pipelines_config_caches",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteRepositoryPipelineCache",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "cache-uuid",
+          "type": "string",
+          "maps_to": "record.cache_uuid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteRepositoryRunner",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "runner-uuid",
+          "type": "string",
+          "maps_to": "record.runner_uuid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteRepositoryPipelineSchedule",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "schedule-uuid",
+          "type": "string",
+          "maps_to": "record.schedule_uuid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteRepositoryPipelineKeyPair",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair"
+        }
+      ],
+      "flags": [
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteRepositoryPipelineKnownHost",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "known-host-uuid",
+          "type": "string",
+          "maps_to": "record.known_host_uuid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteRepositoryPipelineVariable",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "variable-uuid",
+          "type": "string",
+          "maps_to": "record.variable_uuid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteRepositoryHostedPropertyValue",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_properties_app_key_property_name",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "app-key",
+          "type": "string",
+          "maps_to": "record.app_key",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "property-name",
+          "type": "string",
+          "maps_to": "record.property_name",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} pullrequests {pull-request-id} approve",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
+        }
+      ],
+      "flags": [
+        {
+          "name": "pull-request-id",
+          "type": "integer",
+          "maps_to": "record.pull_request_id",
+          "required": true
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} pullrequests {pull-request-id} comments {comment-id}",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true
+        },
+        {
+          "name": "pull-request-id",
+          "type": "integer",
+          "maps_to": "record.pull_request_id",
+          "required": true
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} pullrequests {pull-request-id} comments {comment-id} resolve",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
+        }
+      ],
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true
+        },
+        {
+          "name": "pull-request-id",
+          "type": "integer",
+          "maps_to": "record.pull_request_id",
+          "required": true
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} pullrequests {pull-request-id} request-changes",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
+        }
+      ],
+      "flags": [
+        {
+          "name": "pull-request-id",
+          "type": "integer",
+          "maps_to": "record.pull_request_id",
+          "required": true
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} pullrequests {pull-request-id} tasks {task-id}",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "pull-request-id",
+          "type": "integer",
+          "maps_to": "record.pull_request_id",
+          "required": true
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "task-id",
+          "type": "integer",
+          "maps_to": "record.task_id",
+          "required": true
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deletePullRequestHostedPropertyValue",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_629f4f2b",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "app-key",
+          "type": "string",
+          "maps_to": "record.app_key",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "property-name",
+          "type": "string",
+          "maps_to": "record.property_name",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "pullrequest-id",
+          "type": "string",
+          "maps_to": "record.pullrequest_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} refs branches {name}",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/refs/branches/{name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_refs_branches_name",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/branches/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/refs/branches/{name}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} refs tags {name}",
+      "summary": "DELETE /repositories/{workspace}/{repo_slug}/refs/tags/{name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repositories_workspace_repo_slug_refs_tags_name",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/tags/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/refs/tags/{name}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "maps_to": "record.repo_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- snippets {workspace} {encoded-id}",
+      "summary": "DELETE /snippets/{workspace}/{encoded_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_snippets_workspace_encoded_id",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /snippets/{workspace}/{encoded_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/snippets/{workspace}/{encoded_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "encoded-id",
+          "type": "string",
+          "maps_to": "record.encoded_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- snippets {workspace} {encoded-id} comments {comment-id}",
+      "summary": "DELETE /snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_snippets_workspace_encoded_id_comments_comment_id",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /snippets/{workspace}/{encoded_id}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "maps_to": "record.comment_id",
+          "required": true
+        },
+        {
+          "name": "encoded-id",
+          "type": "string",
+          "maps_to": "record.encoded_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- snippets {workspace} {encoded-id} watch",
+      "summary": "DELETE /snippets/{workspace}/{encoded_id}/watch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_snippets_workspace_encoded_id_watch",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /snippets/{workspace}/{encoded_id}/watch; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/snippets/{workspace}/{encoded_id}/watch"
+        }
+      ],
+      "flags": [
+        {
+          "name": "encoded-id",
+          "type": "string",
+          "maps_to": "record.encoded_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- snippets {workspace} {encoded-id} {node-id}",
+      "summary": "DELETE /snippets/{workspace}/{encoded_id}/{node_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_snippets_workspace_encoded_id_node_id",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /snippets/{workspace}/{encoded_id}/{node_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/snippets/{workspace}/{encoded_id}/{node_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "encoded-id",
+          "type": "string",
+          "maps_to": "record.encoded_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "node-id",
+          "type": "string",
+          "maps_to": "record.node_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deletePipelineVariableForTeam",
+      "summary": "DELETE /teams/{username}/pipelines_config/variables/{variable_uuid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_teams_username_pipelines_config_variables_variable_uuid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /teams/{username}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "variable-uuid",
+          "type": "string",
+          "maps_to": "record.variable_uuid",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- users {selected-user} gpg-keys {fingerprint}",
+      "summary": "DELETE /users/{selected_user}/gpg-keys/{fingerprint}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_users_selected_user_gpg_keys_fingerprint",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /users/{selected_user}/gpg-keys/{fingerprint}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{selected_user}/gpg-keys/{fingerprint}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "fingerprint",
+          "type": "string",
+          "maps_to": "record.fingerprint",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "selected-user",
+          "type": "string",
+          "maps_to": "record.selected_user",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deletePipelineVariableForUser",
+      "summary": "DELETE /users/{selected_user}/pipelines_config/variables/{variable_uuid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_users_selected_user_pipelines_config_variables_variable_uuid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /users/{selected_user}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "selected-user",
+          "type": "string",
+          "maps_to": "record.selected_user",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "variable-uuid",
+          "type": "string",
+          "maps_to": "record.variable_uuid",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteUserHostedPropertyValue",
+      "summary": "DELETE /users/{selected_user}/properties/{app_key}/{property_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_users_selected_user_properties_app_key_property_name",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /users/{selected_user}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{selected_user}/properties/{app_key}/{property_name}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "app-key",
+          "type": "string",
+          "maps_to": "record.app_key",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "property-name",
+          "type": "string",
+          "maps_to": "record.property_name",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "selected-user",
+          "type": "string",
+          "maps_to": "record.selected_user",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- users {selected-user} ssh-keys {key-id}",
+      "summary": "DELETE /users/{selected_user}/ssh-keys/{key_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_users_selected_user_ssh_keys_key_id",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /users/{selected_user}/ssh-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{selected_user}/ssh-keys/{key_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "key-id",
+          "type": "string",
+          "maps_to": "record.key_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "selected-user",
+          "type": "string",
+          "maps_to": "record.selected_user",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- workspaces {workspace} hooks {uid}",
+      "summary": "DELETE /workspaces/{workspace}/hooks/{uid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workspaces_workspace_hooks_uid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /workspaces/{workspace}/hooks/{uid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspace}/hooks/{uid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "uid",
+          "type": "string",
+          "maps_to": "record.uid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deleteWorkspaceRunner",
+      "summary": "DELETE /workspaces/{workspace}/pipelines-config/runners/{runner_uuid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workspaces_workspace_pipelines_config_runners_runner_uuid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /workspaces/{workspace}/pipelines-config/runners/{runner_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "runner-uuid",
+          "type": "string",
+          "maps_to": "record.runner_uuid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api deletePipelineVariableForWorkspace",
+      "summary": "DELETE /workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workspaces_workspace_pipelines_config_variables_variable_uuid",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /workspaces/{workspace}/pipelines-config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "variable-uuid",
+          "type": "string",
+          "maps_to": "record.variable_uuid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- workspaces {workspace} projects {project-key}",
+      "summary": "DELETE /workspaces/{workspace}/projects/{project_key}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workspaces_workspace_projects_project_key",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspace}/projects/{project_key}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-key",
+          "type": "string",
+          "maps_to": "record.project_key",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- workspaces {workspace} projects {project-key} default-reviewers {selected-user}",
+      "summary": "DELETE /workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workspaces_workspace_projects_project_key_default_reviewers_selected_user",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-key",
+          "type": "string",
+          "maps_to": "record.project_key",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "selected-user",
+          "type": "string",
+          "maps_to": "record.selected_user",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- workspaces {workspace} projects {project-key} deploy-keys {key-id}",
+      "summary": "DELETE /workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workspaces_workspace_projects_project_key_deploy_keys_key_id",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "key-id",
+          "type": "string",
+          "maps_to": "record.key_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-key",
+          "type": "string",
+          "maps_to": "record.project_key",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- workspaces {workspace} projects {project-key} permissions-config groups {group-slug}",
+      "summary": "DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "group-slug",
+          "type": "string",
+          "maps_to": "record.group_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-key",
+          "type": "string",
+          "maps_to": "record.project_key",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api bitbucket.rest.delete- workspaces {workspace} projects {project-key} permissions-config users {selected-user-id}",
+      "summary": "DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-key",
+          "type": "string",
+          "maps_to": "record.project_key",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "selected-user-id",
+          "type": "string",
+          "maps_to": "record.selected_user_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "maps_to": "record.workspace",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
     }
   ],
   "global_flags": [

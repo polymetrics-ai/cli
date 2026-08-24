@@ -83,7 +83,7 @@
 | `cimis` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | CIMIS | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://cimis.water.ca.gov/WSNReportCriteria.aspx) | bundle definition |
 | `cin7` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Cin7 | `api` | ga | check, catalog, read, write | 16 | 13 | [Documentation](https://dearinventory.docs.apiary.io/) | bundle definition |
 | `circa` | [`icons/circa.svg`](../icons/circa.svg) | Circa | `api` | ga | check, catalog, read, write | 9 | 12 | [Documentation](https://docs.circa.co/) | bundle definition |
-| `circleci` | [`icons/simple-icons/circleci.svg`](../icons/simple-icons/circleci.svg) | CircleCI | `api` | ga | check, catalog, read, write | 9 | 7 | [Documentation](https://circleci.com/docs/api/v2/) | bundle definition |
+| `circleci` | [`icons/simple-icons/circleci.svg`](../icons/simple-icons/circleci.svg) | CircleCI | `api` | ga | check, catalog, read, write | 9 | 34 | [Documentation](https://circleci.com/docs/api/v2/) | bundle definition |
 | `cisco-meraki` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Cisco Meraki | `api` | beta | check, catalog, read, write | 11 | 13 | [Documentation](https://developer.cisco.com/meraki/api-v1/) | bundle definition |
 | `clarif-ai` | [`icons/simple-icons/clarifai.svg`](../icons/simple-icons/clarifai.svg) | Clarif-ai | `api` | ga | check, catalog, read, write | 5 | 4 | [Documentation](https://docs.clarifai.com/api-guide/api-overview) | bundle definition |
 | `clazar` | [`icons/clazar.svg`](../icons/clazar.svg) | Clazar | `api` | ga | check, catalog, read, write | 8 | 10 | [Documentation](https://developers.clazar.io/reference) | bundle definition |

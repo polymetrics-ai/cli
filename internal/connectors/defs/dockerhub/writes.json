@@ -1,0 +1,796 @@
+{
+  "actions": [
+    {
+      "name": "update_organization_settings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/orgs/{{ record.name }}/settings",
+      "path_fields": [
+        "name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "required": [
+          "restricted_images",
+          "name"
+        ],
+        "properties": {
+          "restricted_images": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean",
+                "description": "Whether or not to restrict image usage for users in the organization."
+              },
+              "allow_official_images": {
+                "type": "boolean",
+                "description": "Allow usage of official images if \"enabled\" is `true`."
+              },
+              "allow_verified_publishers": {
+                "type": "boolean",
+                "description": "Allow usage of verified publisher images if \"enabled\" is `true`."
+              }
+            },
+            "required": [
+              "enabled",
+              "allow_official_images",
+              "allow_verified_publishers"
+            ]
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "body_fields": [
+        "restricted_images"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "update_repository_immutable_tags",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/namespaces/{{ record.namespace }}/repositories/{{ record.repository }}/immutabletags",
+      "path_fields": [
+        "namespace",
+        "repository"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "immutable_tags": {
+            "type": "boolean",
+            "description": "Whether immutable tags are enabled"
+          },
+          "immutable_tags_rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of immutable tag rules"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "repository": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "immutable_tags",
+          "immutable_tags_rules",
+          "namespace",
+          "repository"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "body_fields": [
+        "immutable_tags",
+        "immutable_tags_rules"
+      ]
+    },
+    {
+      "name": "verify_repository_immutable_tags",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/namespaces/{{ record.namespace }}/repositories/{{ record.repository }}/immutabletags/verify",
+      "path_fields": [
+        "namespace",
+        "repository"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "regex": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+((\\\\.|_|__|-+)[a-z0-9]+)*(\\\\/[a-z0-9]+((\\\\.|_|__|-+)[a-z0-9]+)*)*$",
+            "description": "Immutable tags rule regex pattern. Must match format: [a-z0-9]+((\\\\.|_|__|-+)[a-z0-9]+)*(\\\\/[a-z0-9]+((\\\\.|_|__|-+)[a-z0-9]+)*)*"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "repository": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "regex",
+          "namespace",
+          "repository"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "body_fields": [
+        "regex"
+      ]
+    },
+    {
+      "name": "create_repository_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/repositories/{{ record.namespace }}/{{ record.repository }}/groups",
+      "path_fields": [
+        "namespace",
+        "repository"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "group_id",
+          "permission",
+          "namespace",
+          "repository"
+        ],
+        "properties": {
+          "group_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The ID of the organization group to grant access to"
+          },
+          "permission": {
+            "type": "string",
+            "description": "The permission level to grant to the group:\n- read: Can view and pull from the repository\n- write: Can view, pull, and push to the repository\n- admin: Can view, pull, push, and manage repository settings\n",
+            "enum": [
+              "read",
+              "write",
+              "admin"
+            ]
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "repository": {
+            "type": "string"
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "body_fields": [
+        "group_id",
+        "permission"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "create_repository",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/namespaces/{{ record.namespace }}/repositories",
+      "path_fields": [
+        "namespace"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the repository. Must be 2-255 characters long and may only include \nalphanumeric characters, periods (.), underscores (_), or hyphens (-). \nLetters must be lowercase.\n",
+            "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+          },
+          "namespace": {
+            "type": "string",
+            "description": "The namespace where the repository will be created"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description of the repository"
+          },
+          "full_description": {
+            "type": "string",
+            "description": "Detailed description of the repository"
+          },
+          "registry": {
+            "type": "string",
+            "description": "The registry where the repository will be hosted"
+          },
+          "is_private": {
+            "type": "boolean",
+            "description": "Whether the repository should be private",
+            "default": false
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "body_fields": [
+        "name",
+        "namespace",
+        "description",
+        "full_description",
+        "registry",
+        "is_private"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "update_organization_member",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/orgs/{{ record.org_name }}/members/{{ record.username }}",
+      "path_fields": [
+        "org_name",
+        "username"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "required": [
+          "role",
+          "org_name",
+          "username"
+        ],
+        "properties": {
+          "role": {
+            "type": "string",
+            "description": "Role of the member",
+            "enum": [
+              "owner",
+              "editor",
+              "member"
+            ]
+          },
+          "org_name": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "body_fields": [
+        "role"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "delete_organization_member",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/orgs/{{ record.org_name }}/members/{{ record.username }}",
+      "path_fields": [
+        "org_name",
+        "username"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "org_name": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "org_name",
+          "username"
+        ]
+      },
+      "risk": "high",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "create_organization_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/orgs/{{ record.org_name }}/groups",
+      "path_fields": [
+        "org_name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "required": [
+          "name",
+          "org_name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "org_name": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "body_fields": [
+        "name",
+        "description"
+      ]
+    },
+    {
+      "name": "replace_organization_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/orgs/{{ record.org_name }}/groups/{{ record.group_name }}",
+      "path_fields": [
+        "org_name",
+        "group_name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "required": [
+          "name",
+          "org_name",
+          "group_name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "org_name": {
+            "type": "string"
+          },
+          "group_name": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "body_fields": [
+        "name",
+        "description"
+      ]
+    },
+    {
+      "name": "update_organization_group",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/orgs/{{ record.org_name }}/groups/{{ record.group_name }}",
+      "path_fields": [
+        "org_name",
+        "group_name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "org_name": {
+            "type": "string"
+          },
+          "group_name": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "required": [
+          "org_name",
+          "group_name"
+        ]
+      },
+      "risk": "high",
+      "body_fields": [
+        "name",
+        "description"
+      ]
+    },
+    {
+      "name": "delete_organization_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/orgs/{{ record.org_name }}/groups/{{ record.group_name }}",
+      "path_fields": [
+        "org_name",
+        "group_name"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "org_name": {
+            "type": "string"
+          },
+          "group_name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "org_name",
+          "group_name"
+        ]
+      },
+      "risk": "high",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "add_organization_group_member",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/orgs/{{ record.org_name }}/groups/{{ record.group_name }}/members",
+      "path_fields": [
+        "org_name",
+        "group_name"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "member",
+          "org_name",
+          "group_name"
+        ],
+        "properties": {
+          "member": {
+            "type": "string"
+          },
+          "org_name": {
+            "type": "string"
+          },
+          "group_name": {
+            "type": "string"
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "body_fields": [
+        "member"
+      ]
+    },
+    {
+      "name": "delete_organization_group_member",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/orgs/{{ record.org_name }}/groups/{{ record.group_name }}/members/{{ record.username }}",
+      "path_fields": [
+        "org_name",
+        "group_name",
+        "username"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "org_name": {
+            "type": "string"
+          },
+          "group_name": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "org_name",
+          "group_name",
+          "username"
+        ]
+      },
+      "risk": "high",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "delete_organization_invite",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/invites/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "resend_organization_invite",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/invites/{{ record.id }}/resend",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_organization_invites",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/invites/bulk",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "org",
+          "invitees"
+        ],
+        "properties": {
+          "org": {
+            "type": "string",
+            "description": "organization name"
+          },
+          "team": {
+            "type": "string",
+            "description": "team name"
+          },
+          "role": {
+            "type": "string",
+            "description": "role for invitees"
+          },
+          "invitees": {
+            "type": "array",
+            "description": "list of invitees emails or Docker Ids",
+            "items": {
+              "type": "string",
+              "description": "invitee email or Docker ID"
+            }
+          },
+          "dry_run": {
+            "type": "boolean",
+            "description": "Optional, run through validation but don't actually change data."
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "body_fields": [
+        "org",
+        "team",
+        "role",
+        "invitees",
+        "dry_run"
+      ]
+    },
+    {
+      "name": "update_personal_access_token",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/access-tokens/{{ record.uuid }}",
+      "path_fields": [
+        "uuid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "token_label": {
+            "type": "string"
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "uuid"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "body_fields": [
+        "token_label",
+        "is_active"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "delete_personal_access_token",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/access-tokens/{{ record.uuid }}",
+      "path_fields": [
+        "uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "uuid"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "update_organization_access_token",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/orgs/{{ record.org_name }}/access-tokens/{{ record.access_token_id }}",
+      "path_fields": [
+        "org_name",
+        "access_token_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Label for the access token"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the access token"
+          },
+          "resources": {
+            "type": "array",
+            "description": "Resources this token has access to",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "TYPE_REPO",
+                    "TYPE_ORG"
+                  ],
+                  "description": "The type of resource"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "The path of the resource. The format of this will change depending on the type of resource.\n\nFor TYPE_REPO resources:\n- Must be an existing repository name (e.g., \"myorg/myrepo\")\n- Can use glob patterns (e.g., \"myorg/*\" for all repositories in the organization)\n- Use \"*/*/public\" to reference all public repositories\n"
+                },
+                "scopes": {
+                  "type": "array",
+                  "description": "The scopes this token has access to",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "is_active": {
+            "type": "boolean",
+            "description": "Whether the token is active"
+          },
+          "org_name": {
+            "type": "string",
+            "description": "Name of the organization (namespace)."
+          },
+          "access_token_id": {
+            "type": "string",
+            "description": "The ID of the access token to retrieve"
+          }
+        },
+        "required": [
+          "org_name",
+          "access_token_id"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "body_fields": [
+        "label",
+        "description",
+        "resources",
+        "is_active"
+      ],
+      "body_required": true
+    },
+    {
+      "name": "delete_organization_access_token",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/orgs/{{ record.org_name }}/access-tokens/{{ record.access_token_id }}",
+      "path_fields": [
+        "org_name",
+        "access_token_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "org_name": {
+            "type": "string",
+            "description": "Name of the organization (namespace)."
+          },
+          "access_token_id": {
+            "type": "string",
+            "description": "The ID of the access token to retrieve"
+          }
+        },
+        "required": [
+          "org_name",
+          "access_token_id"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "risk": "high",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    }
+  ]
+}

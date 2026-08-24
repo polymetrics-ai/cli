@@ -159,6 +159,38 @@ weakened or skipped to advance a row.
 - No failure is a rendered-reference contract request: every observed error is
   in the OpenAPI importer/projection/engine path after source retrieval.
 
+## Post-#4340 Bitbucket and GitLab source-cited mutation dispositions
+
+- Red: After #4340 merged, temporarily masking each stale REST inventory while
+  preserving its source artifact identity lets the real importer reach the
+  projection gate. Bitbucket has 29 source-import missing actions and 77 total
+  source executable-coverage findings; GitLab has 173 for both. The locks were
+  restored byte-for-byte after the measurements.
+- Green assertion: connector-owned `*-mutation-dispositions.json` files cite
+  the exact source ID, method, and path for every retained non-executable
+  mutation. Source-import accepts the refreshed 297/1,752 inventories and
+  validator coverage accepts only merge-blocking, non-implemented gaps.
+- Behavioral assertion: every remaining command declared `implemented` in the
+  Bitbucket or GitLab bundle dispatches in an isolated built binary to exactly
+  `error: missing --credential`; zero commands may be unknown.
+- Green source: Bitbucket refresh retained its pinned 1,359,673-byte / SHA-256
+  `3dbfe6a80143511a287e58c21a193d3551ab5d41e8b60e65c1ae121b7000dec3`
+  artifact, replaced 331 stale lock rows with 297 exact source identities,
+  added 29 exact non-executable mutation dispositions, and source projection
+  reconciled 49 write/CLI contracts. GitLab retained 3,576,860 bytes /
+  `6b6ad591ff1b54ab429d0502812a2b2955501f1f6bebdae1888ba0bea086cf82`,
+  refreshed 1,755 rows to 1,752, and accepted 173 exact dispositions. Each
+  connector validates with zero findings.
+- New red / foundation stop: Bitbucket source projection creates 50
+  `implemented` command paths, 28 containing literal `{parameter}` segments.
+  An isolated built binary rejects those at command parsing with `error:
+  command path segment 4 contains invalid character '{'`, before credential
+  preflight. `sourceProjectionGeneratedCommandPath`
+  (`cmd/connectorgen/sourceprojection.go:1871-1874`) must derive runtime-valid
+  segments rather than emitting raw source IDs; no existing foundation owns the
+  shared generator/runtime contract, so connector-local path edits would be
+  regenerated and are forbidden.
+
 ## Sentry red/green evidence
 
 - Red: the baseline `pm sentry operations list` exited 2 with

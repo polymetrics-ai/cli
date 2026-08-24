@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/api/0/projects/" },
+  "request": { "method": "GET", "path": "/api/0/organizations/synthetic-conformance-value/projects/" },
   "response": {
     "status": 200,
     "body": [

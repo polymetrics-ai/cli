@@ -120,13 +120,18 @@ func (h *Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req co
 }
 
 // resolveStreamPath builds the request path for stream, matching legacy's
-// endpointPath (sentry/sentry.go:248-276) exactly: projects is
-// org/project-independent, issues/events require organization+project,
-// releases requires organization only.
+// endpointPath (sentry/sentry.go:248-276) except for the former global
+// projects route, which the current provider specification no longer exposes:
+// projects and releases require organization; issues/events require
+// organization+project.
 func resolveStreamPath(stream engine.StreamSpec, cfg connectors.RuntimeConfig) (string, error) {
 	switch stream.Name {
 	case "projects":
-		return "/api/0/projects/", nil
+		org, err := requireSlug(cfg, "organization")
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("/api/0/organizations/%s/projects/", org), nil
 	case "issues", "events":
 		org, err := requireSlug(cfg, "organization")
 		if err != nil {

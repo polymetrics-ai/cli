@@ -9,13 +9,28 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["name", "timetable", "attribution-actor", "parameters"],
+        "required": [
+          "name",
+          "timetable",
+          "attribution-actor",
+          "parameters"
+        ],
         "properties": {
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "timetable": { "type": "object" },
-          "attribution-actor": { "type": "string" },
-          "parameters": { "type": "object" }
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "timetable": {
+            "type": "object"
+          },
+          "attribution-actor": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "object"
+          }
         }
       },
       "risk": "external mutation; creates a new scheduled-pipeline trigger for this project"
@@ -25,19 +40,35 @@
       "kind": "update",
       "method": "PATCH",
       "path": "/schedule/{{ record.id }}",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id": { "type": "string" },
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "timetable": { "type": "object" },
-          "attribution-actor": { "type": "string" },
-          "parameters": { "type": "object" }
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "timetable": {
+            "type": "object"
+          },
+          "attribution-actor": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "object"
+          }
         }
       },
       "risk": "external mutation; updates an existing scheduled-pipeline trigger's timetable or parameters"
@@ -47,17 +78,27 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/schedule/{{ record.id }}",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id": { "type": "string" }
+          "id": {
+            "type": "string"
+          }
         }
       },
-      "delete": { "missing_ok_status": [404] },
+      "delete": {
+        "missing_ok_status": [
+          404
+        ]
+      },
       "risk": "irreversible external deletion of a scheduled-pipeline trigger; approval required"
     },
     {
@@ -69,10 +110,17 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["name", "value"],
+        "required": [
+          "name",
+          "value"
+        ],
         "properties": {
-          "name": { "type": "string" },
-          "value": { "type": "string" }
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
         }
       },
       "risk": "external mutation; creates or overwrites a project environment variable used by every future CI run"
@@ -82,17 +130,27 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/envvar/{{ record.name }}",
-      "path_fields": ["name"],
+      "path_fields": [
+        "name"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
-          "name": { "type": "string" }
+          "name": {
+            "type": "string"
+          }
         }
       },
-      "delete": { "missing_ok_status": [404] },
+      "delete": {
+        "missing_ok_status": [
+          404
+        ]
+      },
       "risk": "irreversible external deletion of a project environment variable; may break future CI runs that depend on it; approval required"
     },
     {
@@ -104,9 +162,13 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["type"],
+        "required": [
+          "type"
+        ],
         "properties": {
-          "type": { "type": "string" }
+          "type": {
+            "type": "string"
+          }
         }
       },
       "risk": "external mutation; creates a new deploy/checkout SSH key with repository access"
@@ -116,18 +178,1053 @@
       "kind": "delete",
       "method": "DELETE",
       "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key/{{ record.fingerprint }}",
-      "path_fields": ["fingerprint"],
+      "path_fields": [
+        "fingerprint"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["fingerprint"],
+        "required": [
+          "fingerprint"
+        ],
         "properties": {
-          "fingerprint": { "type": "string" }
+          "fingerprint": {
+            "type": "string"
+          }
         }
       },
-      "delete": { "missing_ok_status": [404] },
+      "delete": {
+        "missing_ok_status": [
+          404
+        ]
+      },
       "risk": "irreversible external revocation of a deploy/checkout SSH key; may break future CI checkouts that depend on it; approval required"
+    },
+    {
+      "name": "delete_context",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/context/{{ record.context_id }}",
+      "risk": "external CircleCI API mutation: deleteContext",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "context_id"
+        ],
+        "properties": {
+          "context_id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "context_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_environment_variable_from_context",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/context/{{ record.context_id }}/environment-variable/{{ record.env_var_name }}",
+      "risk": "external CircleCI API mutation: deleteEnvironmentVariableFromContext",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "context_id",
+          "env_var_name"
+        ],
+        "properties": {
+          "context_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "env_var_name": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "context_id",
+        "env_var_name"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_context_restriction",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/context/{{ record.context_id }}/restrictions/{{ record.restriction_id }}",
+      "risk": "external CircleCI API mutation: deleteContextRestriction",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "context_id",
+          "restriction_id"
+        ],
+        "properties": {
+          "context_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "restriction_id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "context_id",
+        "restriction_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_org_claims",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/org/{{ record.orgID }}/oidc-custom-claims",
+      "risk": "external CircleCI API mutation: DeleteOrgClaims",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claims",
+          "orgID"
+        ],
+        "properties": {
+          "claims": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "orgID": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "orgID"
+      ],
+      "query": {
+        "claims": "{{ record.claims }}"
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "delete_project_claims",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/org/{{ record.orgID }}/project/{{ record.projectID }}/oidc-custom-claims",
+      "risk": "external CircleCI API mutation: DeleteProjectClaims",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claims",
+          "orgID",
+          "projectID"
+        ],
+        "properties": {
+          "claims": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "orgID": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "projectID": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "orgID",
+        "projectID"
+      ],
+      "query": {
+        "claims": "{{ record.claims }}"
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "delete_organization",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organization/{{ record.org-slug-or-id }}",
+      "risk": "external CircleCI API mutation: deleteOrganization",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "org-slug-or-id"
+        ],
+        "properties": {
+          "org-slug-or-id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "org-slug-or-id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "remove_u_r_l_orb_allow_list_entry",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organization/{{ record.org-slug-or-id }}/url-orb-allow-list/{{ record.allow-list-entry-id }}",
+      "risk": "external CircleCI API mutation: removeURLOrbAllowListEntry",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "allow-list-entry-id",
+          "org-slug-or-id"
+        ],
+        "properties": {
+          "allow-list-entry-id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "org-slug-or-id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "allow-list-entry-id",
+        "org-slug-or-id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/organizations/{{ record.org_id }}/groups/{{ record.group_id }}",
+      "risk": "external CircleCI API mutation: deleteGroup",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "group_id",
+          "org_id"
+        ],
+        "properties": {
+          "group_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "org_id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "group_id",
+        "org_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_otel_exporter",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/otel/exporters/{{ record.otel_exporter_id }}",
+      "risk": "external CircleCI API mutation: deleteOtelExporter",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "otel_exporter_id"
+        ],
+        "properties": {
+          "otel_exporter_id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "otel_exporter_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_project_by_slug",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project/{{ record.project-slug }}",
+      "risk": "external CircleCI API mutation: deleteProjectBySlug",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "project-slug"
+        ],
+        "properties": {
+          "project-slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "project-slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_checkout_key_by_slug",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project/{{ record.project-slug }}/checkout-key/{{ record.fingerprint }}",
+      "risk": "external CircleCI API mutation: deleteCheckoutKey",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fingerprint",
+          "project-slug"
+        ],
+        "properties": {
+          "fingerprint": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project-slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "fingerprint",
+        "project-slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_env_var",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project/{{ record.project-slug }}/envvar/{{ record.name }}",
+      "risk": "external CircleCI API mutation: deleteEnvVar",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "project-slug"
+        ],
+        "properties": {
+          "name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project-slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "name",
+        "project-slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_pipeline_definition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.project_id }}/pipeline-definitions/{{ record.pipeline_definition_id }}",
+      "risk": "external CircleCI API mutation: deletePipelineDefinition",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pipeline_definition_id",
+          "project_id"
+        ],
+        "properties": {
+          "pipeline_definition_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "pipeline_definition_id",
+        "project_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_trigger",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projects/{{ record.project_id }}/triggers/{{ record.trigger_id }}",
+      "risk": "external CircleCI API mutation: deleteTrigger",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "project_id",
+          "trigger_id"
+        ],
+        "properties": {
+          "project_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "trigger_id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "project_id",
+        "trigger_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_schedule_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/schedule/{{ record.schedule-id }}",
+      "risk": "external CircleCI API mutation: deleteScheduleById",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schedule-id"
+        ],
+        "properties": {
+          "schedule-id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "schedule-id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhook/{{ record.webhook_id }}",
+      "risk": "external CircleCI API mutation: deleteWebhook",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "patch_project_settings",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/project/{{ record.provider }}/{{ record.organization }}/{{ record.project }}/settings",
+      "risk": "external CircleCI API mutation: patchProjectSettings",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization",
+          "project",
+          "provider"
+        ],
+        "properties": {
+          "advanced": {
+            "additionalProperties": false,
+            "properties": {
+              "autocancel_builds": {
+                "type": "boolean"
+              },
+              "build_fork_prs": {
+                "type": "boolean"
+              },
+              "build_prs_only": {
+                "type": "boolean"
+              },
+              "disable_ssh": {
+                "type": "boolean"
+              },
+              "forks_receive_secret_env_vars": {
+                "type": "boolean"
+              },
+              "oss": {
+                "type": "boolean"
+              },
+              "pr_only_branch_overrides": {
+                "items": {
+                  "maxLength": 8192,
+                  "type": "string"
+                },
+                "maxItems": 256,
+                "type": "array"
+              },
+              "set_github_status": {
+                "type": "boolean"
+              },
+              "setup_workflows": {
+                "type": "boolean"
+              },
+              "write_settings_requires_admin": {
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          },
+          "organization": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "provider": {
+            "enum": [
+              "github",
+              "gh",
+              "bitbucket",
+              "bb",
+              "circleci"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "organization",
+        "project",
+        "provider"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "advanced"
+      ]
+    },
+    {
+      "name": "update_pipeline_definition",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/projects/{{ record.project_id }}/pipeline-definitions/{{ record.pipeline_definition_id }}",
+      "risk": "external CircleCI API mutation: updatePipelineDefinition",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pipeline_definition_id",
+          "project_id"
+        ],
+        "properties": {
+          "checkout_source": {
+            "additionalProperties": false,
+            "properties": {
+              "provider": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "repo": {
+                "additionalProperties": false,
+                "properties": {
+                  "external_id": {
+                    "maxLength": 8192,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "config_source": {
+            "additionalProperties": false,
+            "properties": {
+              "file_path": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "description": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "pipeline_definition_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "pipeline_definition_id",
+        "project_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "checkout_source",
+        "config_source",
+        "description",
+        "name"
+      ]
+    },
+    {
+      "name": "create_context_restriction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/context/{{ record.context_id }}/restrictions",
+      "risk": "external CircleCI API mutation: createContextRestriction",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "context_id"
+        ],
+        "properties": {
+          "context_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "restriction_type": {
+            "enum": [
+              "project",
+              "expression",
+              "group"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "restriction_value": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "context_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "restriction_type",
+        "restriction_value"
+      ]
+    },
+    {
+      "name": "cancel_job_by_job_i_d",
+      "kind": "create",
+      "method": "POST",
+      "path": "/jobs/{{ record.job-id }}/cancel",
+      "risk": "external CircleCI API mutation: cancelJobByJobID",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "job-id"
+        ],
+        "properties": {
+          "job-id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "job-id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_organization_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ record.org_id }}/groups",
+      "risk": "external CircleCI API mutation: createOrganizationGroup",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "org_id"
+        ],
+        "properties": {
+          "description": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "org_id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "org_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "description",
+        "name"
+      ]
+    },
+    {
+      "name": "create_usage_export",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organizations/{{ record.org_id }}/usage_export_job",
+      "risk": "external CircleCI API mutation: createUsageExport",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "end",
+          "org_id",
+          "start"
+        ],
+        "properties": {
+          "end": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "org_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "shared_org_ids": {
+            "items": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "start": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "org_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "end",
+        "shared_org_ids",
+        "start"
+      ]
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhook",
+      "risk": "external CircleCI API mutation: createWebhook",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "events",
+          "name",
+          "scope",
+          "signing-secret",
+          "url",
+          "verify-tls"
+        ],
+        "properties": {
+          "events": {
+            "items": {
+              "enum": [
+                "workflow-completed",
+                "job-completed"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "scope": {
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "project"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "type"
+            ],
+            "type": "object"
+          },
+          "signing-secret": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "url": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "verify-tls": {
+            "type": "boolean"
+          }
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "events",
+        "name",
+        "scope",
+        "signing-secret",
+        "url",
+        "verify-tls"
+      ],
+      "redact_fields": [
+        "signing-secret"
+      ]
+    },
+    {
+      "name": "approve_pending_approval_job_by_id",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workflow/{{ record.id }}/approve/{{ record.approval_request_id }}",
+      "risk": "external CircleCI API mutation: approvePendingApprovalJobById",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "approval_request_id",
+          "id"
+        ],
+        "properties": {
+          "approval_request_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "approval_request_id",
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "cancel_workflow",
+      "kind": "create",
+      "method": "POST",
+      "path": "/workflow/{{ record.id }}/cancel",
+      "risk": "external CircleCI API mutation: cancelWorkflow",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "add_environment_variable_to_context",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/context/{{ record.context_id }}/environment-variable/{{ record.env_var_name }}",
+      "risk": "external CircleCI API mutation: addEnvironmentVariableToContext",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "context_id",
+          "env_var_name",
+          "value"
+        ],
+        "properties": {
+          "context_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "env_var_name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "value": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "context_id",
+        "env_var_name"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "value"
+      ]
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhook/{{ record.webhook_id }}",
+      "risk": "external CircleCI API mutation: updateWebhook",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "events": {
+            "items": {
+              "enum": [
+                "workflow-completed",
+                "job-completed"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "signing-secret": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "url": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "verify-tls": {
+            "type": "boolean"
+          },
+          "webhook_id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "events",
+        "name",
+        "signing-secret",
+        "url",
+        "verify-tls"
+      ],
+      "redact_fields": [
+        "signing-secret"
+      ]
     }
   ]
 }

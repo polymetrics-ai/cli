@@ -6,9 +6,11 @@ variables, checkout keys, and workflow insights through the CircleCI v2 REST API
 Readable streams: `projects`, `pipelines`, `workflows`, `jobs`, `contexts`, `schedules`,
 `checkout_keys`, `environment_variables`, `insights_workflow_summary`.
 
-Write actions: `create_schedule`, `update_schedule`, `delete_schedule`,
-`create_environment_variable`, `delete_environment_variable`, `create_checkout_key`,
-`delete_checkout_key`.
+Write actions: 34 closed contracts. Seven existing schedule, environment-variable, and checkout-key
+actions remain alongside 27 source-derived CircleCI v2 contracts for contexts, webhooks, project
+settings, pipeline definitions, organization groups, usage exports, OIDC claims, and typed
+cancel/approve actions. Run `pm connectors inspect circleci --json` for the authoritative action
+schemas, provider paths, and risk descriptions.
 
 Service API documentation: https://circleci.com/docs/api/v2/.
 
@@ -84,47 +86,20 @@ lower bound is available.
 
 ## Write actions & risks
 
-Overall write risk: external mutation of CircleCI project configuration:
-schedule/environment-variable/checkout-key create and delete; never triggers, cancels, or approves a
-live CI run.
+Every CircleCI mutation uses reverse ETL plan → preview → approval → execute. Delete actions also
+require typed destructive confirmation. The generated terminal surface exposes nine stream commands
+and 34 typed action commands; it has no raw HTTP or generic request-body escape hatch.
 
-Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
-
-- `create_schedule`: POST `/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo
-  }}/schedule` - kind `create`; body type `json`; required record fields `name`, `timetable`,
-  `attribution-actor`, `parameters`; accepted fields `attribution-actor`, `description`, `name`,
-  `parameters`, `timetable`; risk: external mutation; creates a new scheduled-pipeline trigger for
-  this project.
-- `update_schedule`: PATCH `/schedule/{{ record.id }}` - kind `update`; body type `json`; path
-  fields `id`; required record fields `id`; accepted fields `attribution-actor`, `description`,
-  `id`, `name`, `parameters`, `timetable`; risk: external mutation; updates an existing
-  scheduled-pipeline trigger's timetable or parameters.
-- `delete_schedule`: DELETE `/schedule/{{ record.id }}` - kind `delete`; body type `none`; path
-  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
-  for status `404`; risk: irreversible external deletion of a scheduled-pipeline trigger; approval
-  required.
-- `create_environment_variable`: POST `/project/{{ config.vcs_type }}/{{ config.org }}/{{
-  config.repo }}/envvar` - kind `create`; body type `json`; required record fields `name`, `value`;
-  accepted fields `name`, `value`; risk: external mutation; creates or overwrites a project
-  environment variable used by every future CI run.
-- `delete_environment_variable`: DELETE `/project/{{ config.vcs_type }}/{{ config.org }}/{{
-  config.repo }}/envvar/{{ record.name }}` - kind `delete`; body type `none`; path fields `name`;
-  required record fields `name`; accepted fields `name`; missing records treated as success for
-  status `404`; risk: irreversible external deletion of a project environment variable; may break
-  future CI runs that depend on it; approval required.
-- `create_checkout_key`: POST `/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo
-  }}/checkout-key` - kind `create`; body type `json`; required record fields `type`; accepted fields
-  `type`; risk: external mutation; creates a new deploy/checkout SSH key with repository access.
-- `delete_checkout_key`: DELETE `/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo
-  }}/checkout-key/{{ record.fingerprint }}` - kind `delete`; body type `none`; path fields
-  `fingerprint`; required record fields `fingerprint`; accepted fields `fingerprint`; missing
-  records treated as success for status `404`; risk: irreversible external revocation of a
-  deploy/checkout SSH key; may break future CI checkouts that depend on it; approval required.
+Webhook create/update actions redact `signing-secret` in write errors and previews. No secret value
+is included in fixtures, examples, or this documentation.
 
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 9 stream-backed endpoint group(s), 7 write-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  destructive_admin=5, duplicate_of=22, non_data_endpoint=1, out_of_scope=39,
-  requires_elevated_scope=28.
+- The v2 provider-artifact ledger has 111 documented operations: 40 executable bindings (nine
+  stream-backed endpoints and 31 write-backed endpoints for 34 actions) and 71 source-cited blocked
+  or disallowed rows.
+- The current public OpenAPI document is pinned in `sources/circleci-operation-source-lock.json`
+  (111 documented operations, retrieved 2026-08-23; SHA-256
+  `61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07`). Operations not represented
+  by a typed stream or action remain explicitly blocked with provider-artifact provenance.

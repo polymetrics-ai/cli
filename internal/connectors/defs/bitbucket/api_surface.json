@@ -29,12 +29,12 @@
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bitbucket.rest.get_/addon/{addon_key}/client-key has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/addon/{addon_key}/client-key"
       },
       "path": "/addon/{addon_key}/client-key"
     },
@@ -575,12 +575,12 @@
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/diff/{spec} has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/diff/{spec}"
       },
       "path": "/repositories/{workspace}/{repo_slug}/diff/{spec}"
     },
@@ -594,12 +594,12 @@
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/downloads has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/downloads"
       },
       "path": "/repositories/{workspace}/{repo_slug}/downloads"
     },
@@ -625,12 +625,12 @@
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/downloads/{filename} has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/downloads/{filename}"
       },
       "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}"
     },
@@ -1073,12 +1073,12 @@
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/patch/{spec} has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/patch/{spec}"
       },
       "path": "/repositories/{workspace}/{repo_slug}/patch/{spec}"
     },
@@ -1264,60 +1264,60 @@
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation getPipelineStepLogForRepository has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getPipelineStepLogForRepository"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log"
     },
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation getPipelineContainerLog has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getPipelineContainerLog"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid}"
     },
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getPipelineTestReports has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getPipelineTestReports"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports"
     },
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getPipelineTestReportTestCases has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getPipelineTestReportTestCases"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases"
     },
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getPipelineTestReportTestCaseReasons has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getPipelineTestReportTestCaseReasons"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases/{test_case_uuid}/test_case_reasons"
     },
@@ -1580,12 +1580,12 @@
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/activity has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/activity"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/activity"
     },
@@ -1611,12 +1611,12 @@
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity"
     },
@@ -1706,24 +1706,24 @@
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits"
     },
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts"
     },
@@ -1742,24 +1742,24 @@
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff"
     },
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat"
     },
@@ -1778,24 +1778,24 @@
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id} has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}"
     },
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch"
       },
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch"
     },
@@ -1991,12 +1991,12 @@
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/src/{commit}/{path} has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/src/{commit}/{path}"
       },
       "path": "/repositories/{workspace}/{repo_slug}/src/{commit}/{path}"
     },
@@ -2147,12 +2147,12 @@
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/files/{path} has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/files/{path}"
       },
       "path": "/snippets/{workspace}/{encoded_id}/files/{path}"
     },
@@ -2166,12 +2166,12 @@
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/watch has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/watch"
       },
       "path": "/snippets/{workspace}/{encoded_id}/watch"
     },
@@ -2223,36 +2223,36 @@
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{node_id}/files/{path} has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}"
       },
       "path": "/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}"
     },
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{revision}/diff has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{revision}/diff"
       },
       "path": "/snippets/{workspace}/{encoded_id}/{revision}/diff"
     },
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{revision}/patch has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{revision}/patch"
       },
       "path": "/snippets/{workspace}/{encoded_id}/{revision}/patch"
     },
@@ -2304,12 +2304,12 @@
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
+        "status": "blocked",
         "risk": "low",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "blocked_by_default": true,
+        "reason": "Locked source operation searchTeam has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=searchTeam"
       },
       "path": "/teams/{username}/search/code"
     },
@@ -2324,24 +2324,24 @@
       "method": "GET",
       "path": "/user/emails",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "Bitbucket user-email GET responses have no provider-published 2xx schema in the official OpenAPI document; the endpoints stay blocked until a connector-owned email-address schema and fixtures exist.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bitbucket.rest.get_/user/emails has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/user/emails"
       }
     },
     {
       "method": "GET",
       "path": "/user/emails/{email}",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "Bitbucket user-email GET responses have no provider-published 2xx schema in the official OpenAPI document; the endpoints stay blocked until a connector-owned email-address schema and fixtures exist.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bitbucket.rest.get_/user/emails/{email} has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/user/emails/{email}"
       }
     },
     {
@@ -2493,12 +2493,12 @@
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
+        "status": "blocked",
         "risk": "low",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "blocked_by_default": true,
+        "reason": "Locked source operation searchAccount has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=searchAccount"
       },
       "path": "/users/{selected_user}/search/code"
     },
@@ -2644,24 +2644,24 @@
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getOIDCConfiguration has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOIDCConfiguration"
       },
       "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/.well-known/openid-configuration"
     },
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getOIDCKeys has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOIDCKeys"
       },
       "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/keys.json"
     },
@@ -2968,24 +2968,24 @@
     {
       "method": "GET",
       "operation": {
-        "blocked_by_default": true,
         "model": "direct_read",
-        "reason": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
+        "status": "blocked",
         "risk": "low",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "blocked_by_default": true,
+        "reason": "Locked source operation searchWorkspace has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=searchWorkspace"
       },
       "path": "/workspaces/{workspace}/search/code"
     },
     {
       "method": "GET",
       "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
         "blocked_by_default": true,
-        "model": "binary_read",
-        "reason": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-        "risk": "medium",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-        "status": "blocked"
+        "reason": "Locked source operation bitbucket.rest.get_/workspaces/{workspace}/settings/gpg/public-key has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bitbucket.rest.get_/workspaces/{workspace}/settings/gpg/public-key"
       },
       "path": "/workspaces/{workspace}/settings/gpg/public-key"
     }

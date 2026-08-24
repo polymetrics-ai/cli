@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "connector": "bitbucket",
+  "source": "connector declarations",
+  "declared_commands": 5,
+  "declared_rows": 8,
+  "status_total": 8,
+  "commands": [
+    {
+      "summary": "Planned bounded Bitbucket binary download command; blocked pending binary transfer foundation.",
+      "path": "downloads get",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation_kind": null,
+      "op_class": null,
+      "flags": [],
+      "api_surface": null,
+      "status": "product_defect",
+      "reason": "parity projection: direct_read command \"downloads get\" references operation kind \"binary_download\""
+    },
+    {
+      "summary": "Create or initialize a Bitbucket repository through typed reverse ETL.",
+      "path": "repositories create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "private",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.is_private"
+        },
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.repo_slug"
+        },
+        {
+          "name": "scm",
+          "type": "enum",
+          "required": false,
+          "values": [
+            "git"
+          ],
+          "maps_to": "record.scm"
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.workspace"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Bitbucket repository through a destructive typed reverse-ETL action.",
+      "path": "repositories delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "repo-slug",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.repo_slug"
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.workspace"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "List public Bitbucket repositories as paginated ETL records.",
+      "path": "repositories list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "repositories",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Planned bounded Bitbucket provider search/query command; blocked pending shared provider-query foundation #2985.",
+      "path": "search code",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": null,
+      "status": "not_applicable",
+      "reason": "declared availability is \"planned\", not implemented"
+    },
+    {
+      "summary": "Declared read capability",
+      "path": "capability read",
+      "intent": "capability_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared read capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared write capability",
+      "path": "capability write",
+      "intent": "capability_write",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared write capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
+    }
+  ],
+  "product_defects": [
+    {
+      "command": "downloads get",
+      "flag": "\u003cparity-projection\u003e",
+      "path_parameter": "\u003cparity-projection\u003e",
+      "reason": "parity projection: direct_read command \"downloads get\" references operation kind \"binary_download\""
+    }
+  ],
+  "provider_refusals": []
+}

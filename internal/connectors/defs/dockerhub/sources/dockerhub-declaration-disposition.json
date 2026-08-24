@@ -1,0 +1,4201 @@
+{
+  "schema_version": 1,
+  "connector": "dockerhub",
+  "generated_at": "2026-08-19T16:53:31.151Z",
+  "source_basis": {
+    "source_lock": "sources/dockerhub-operation-source-lock.json",
+    "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+    "api_surface": "api_surface.json",
+    "reverse_etl_action_audit": "sources/dockerhub-reverse-etl-action-audit.json"
+  },
+  "summary": {
+    "api_surface_rows": 54,
+    "exact_source_rows": 54,
+    "declared_operations": 54,
+    "enabled_operations": 45,
+    "enabled_percent": 83.33,
+    "disabled_operations": 9,
+    "enabled_deletes": 6,
+    "documented_deletes": 6,
+    "stream_bindings": 4,
+    "disabled_api_surface_rows": 9,
+    "operation_inventory_entries": 50,
+    "operation_inventory_by_kind": [
+      {
+        "key": "rest_read",
+        "count": 23
+      },
+      {
+        "key": "rest_write",
+        "count": 27
+      }
+    ],
+    "delete_operation_inventory_entries": 6,
+    "terminal_commands": 45,
+    "writes_actions": 20,
+    "live_certification": "pending",
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 5
+      },
+      {
+        "key": "foundation-gap",
+        "count": 4
+      }
+    ],
+    "direct_read_commands": 19,
+    "reverse_etl_commands": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 22
+      },
+      {
+        "key": "direct_write",
+        "count": 27
+      },
+      {
+        "key": "etl",
+        "count": 4
+      },
+      {
+        "key": "binary_read",
+        "count": 1
+      },
+      {
+        "key": "binary_write",
+        "count": 0
+      }
+    ],
+    "gap_ids": [
+      "operation-kind-loader-registration",
+      "typed-action-content-type",
+      "generic-typed-destination-executor"
+    ],
+    "foundation_gaps": [
+      {
+        "id": "operation-kind-loader-registration",
+        "count": 4
+      },
+      {
+        "id": "typed-action-content-type",
+        "count": 2
+      },
+      {
+        "id": "generic-typed-destination-executor",
+        "count": 1
+      }
+    ],
+    "declaration_pending_ids": [
+      "declaration-pending-dockerhub"
+    ],
+    "transport": {
+      "contract": "docs/sync-transport-definition.md (PR #4286, merged at acb85dc03)",
+      "source_transport": {
+        "state": "declared",
+        "file": "sync_transport.json",
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": [
+          "repositories",
+          "tags",
+          "repository_detail",
+          "tag_detail"
+        ],
+        "modes": [
+          "full_overwrite",
+          "full_append",
+          "incremental_upsert",
+          "incremental_dedupe",
+          "incremental_dedupe_history"
+        ],
+        "delivery": {
+          "idempotency": "at_least_once",
+          "ordering": "source_ordered",
+          "deletes": "not_available"
+        },
+        "conformance": {
+          "suite": "batch1_declarative_stream_transport",
+          "run_id": "dockerhub_all_executable_streams_v1"
+        },
+        "evidence": "docs/sync-transport-definition.md:15-38; internal/app/issue_label_warehouse_transport.go:71-83; source descriptor is loaded and registered through definition-owned composition."
+      },
+      "destination_transport": {
+        "state": "foundation-gap",
+        "foundation_gap": {
+          "id": "generic-typed-destination-executor",
+          "reason": "The production composition has no connector-neutral typed destination DefinitionFactory for these declarative API bundles.",
+          "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+          "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies"
+        },
+        "recoverable": true
+      }
+    },
+    "direct_write_commands": 22,
+    "reverse_etl_eligibility": {
+      "state": "foundation-gap",
+      "foundation_gap_id": "generic-typed-destination-executor",
+      "applicable_direct_write_operations": 27,
+      "eligible_operations": 0,
+      "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+      "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+      "recoverable": true
+    },
+    "reverse_etl_preparation": {
+      "action_audit": "sources/dockerhub-reverse-etl-action-audit.json",
+      "direct_write_operations_identified": 27,
+      "typed_actions_ready": 20,
+      "typed_action_content_type_gap": 2,
+      "credential_lifecycle_or_session_excluded": 5,
+      "destination_declarations": 0,
+      "note": "No transport_binding is authored before a connector-neutral typed destination factory exists."
+    },
+    "operations_found": 54,
+    "operations_mapped": 54,
+    "coverage_confidence": {
+      "level": "high",
+      "basis": "complete provider-published machine-readable OpenAPI document pinned in the connector source lock; counts.total, per-method counts, and the operation inventory agree",
+      "source_kind": "openapi",
+      "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json",
+      "operations_found": 54
+    },
+    "coverage_basis": "operations_found comes from the complete pinned provider OpenAPI document; operations_mapped is the exact connector-local classification count. This record does not report a self-referential declaration percentage.",
+    "api_surface_reality_audit": {
+      "old_api_surface_count": 54,
+      "provider_operations_found": 54,
+      "new_api_surface_count": 54,
+      "provider_operations_missing_from_api_surface": 0,
+      "retained_non_source_entries": 0,
+      "action": "unchanged: every operation in the complete provider-published OpenAPI source is already represented; no understate regeneration was required",
+      "coverage_confidence": "high",
+      "basis": "complete provider-published OpenAPI pinned at https://docs.docker.com/reference/api/hub/latest.yaml; counts.total=54, per-method total=54, operation inventory=54"
+    }
+  },
+  "notes": [
+    "Source-input completeness: 54 operations found in the complete provider-published OpenAPI document; confidence=high because counts.total, per-method counts, and operation inventory agree.",
+    "All other non-enabled rows are declaration-pending or source-schema dispositions, not foundation requests.",
+    "Complete source-locked endpoint map. Every documented operation has one primary endpoint class: direct_read, direct_write, etl, binary_read, or binary_write.",
+    "Reverse ETL is an eligibility attribute on every direct_write row, not an endpoint class. It is currently blocked by generic-typed-destination-executor because no connector-neutral typed destination factory accepts these definitions.",
+    "ETL source transport is declared through the connector-neutral declarative_stream_source adapter; no transport_binding action is invented."
+  ],
+  "ledger_dispositions": [
+    {
+      "method": "POST",
+      "path": "/v2/users/login",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "username+password session-token exchange; this bundle's spec.json declares no password field and the public registry read surface needs no auth, so no login flow is wired"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.PostUsersLogin",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/users/login\"].post",
+        "security_requirements": [],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/UsersLoginRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/PostUsersLoginErrorResponse",
+            "#/components/schemas/PostUsersLoginSuccessResponse"
+          ],
+          "secret_fields": [
+            "password",
+            "token",
+            "login_2fa_token"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The pinned UsersLoginRequest requires password and the success response returns token; the 401 continuation can return login_2fa_token. The matching x-secret spec fields and sensitive_policy are declared, but bundle.go:2772-2776 explicitly says live secret writes remain blocked.",
+        "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.postuserslogin",
+        "secret_sensitive": true,
+        "sensitive_policy": "env_or_stdin + typed_confirmation; pinned secret-bearing request and/or response fields are redacted",
+        "status": "disabled; declared source-backed secret contract pending the named engine foundation gap",
+        "authorization": {
+          "required_security_schemes": [],
+          "source_scope_note": "The pinned operation declares no operation-level security requirement."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "This row is not assigned to the foundation lane; its remaining work is connector-local declaration or source-schema disposition.",
+        "declaration_pending": {
+          "id": "declaration-pending-dockerhub",
+          "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
+          "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/users/2fa-login",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "second-factor login continuation of the excluded /v2/users/login session exchange"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.PostUsers2FALogin",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/users/2fa-login\"].post",
+        "security_requirements": [],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/Users2FALoginRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/PostUsers2FALoginErrorResponse",
+            "#/components/schemas/PostUsersLoginSuccessResponse"
+          ],
+          "secret_fields": [
+            "login_2fa_token",
+            "code",
+            "token"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The pinned Users2FALoginRequest requires login_2fa_token and code, and the success response returns token. The matching x-secret spec fields and sensitive_policy are declared, but bundle.go:2772-2776 explicitly says live secret writes remain blocked.",
+        "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.postusers2falogin",
+        "secret_sensitive": true,
+        "sensitive_policy": "env_or_stdin + typed_confirmation; pinned secret-bearing request and/or response fields are redacted",
+        "status": "disabled; declared source-backed secret contract pending the named engine foundation gap",
+        "authorization": {
+          "required_security_schemes": [],
+          "source_scope_note": "The pinned operation declares no operation-level security requirement."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "This row is not assigned to the foundation lane; its remaining work is connector-local declaration or source-schema disposition.",
+        "declaration_pending": {
+          "id": "declaration-pending-dockerhub",
+          "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
+          "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/auth/token",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "scoped registry bearer-token exchange (docker login/pull credential flow); not a data-read endpoint and out of scope for this credential-free public bundle"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.AuthCreateAccessToken",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/auth/token\"].post",
+        "security_requirements": [],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/AuthCreateTokenResponse",
+            "#/components/schemas/error"
+          ],
+          "secret_fields": [
+            "secret",
+            "access_token"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The pinned request requires secret and AuthCreateTokenResponse returns access_token. The matching x-secret spec field and sensitive_policy are declared, but bundle.go:2772-2776 explicitly says live secret writes remain blocked.",
+        "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.authcreateaccesstoken",
+        "secret_sensitive": true,
+        "sensitive_policy": "env_or_stdin + typed_confirmation; pinned secret-bearing request and/or response fields are redacted",
+        "status": "disabled; declared source-backed secret contract pending the named engine foundation gap",
+        "authorization": {
+          "required_security_schemes": [],
+          "source_scope_note": "The pinned operation declares no operation-level security requirement."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "This row is not assigned to the foundation lane; its remaining work is connector-local declaration or source-schema disposition.",
+        "declaration_pending": {
+          "id": "declaration-pending-dockerhub",
+          "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
+          "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/access-tokens",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "personal access token creation; authenticated-session-only"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.post_/v2/access-tokens",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/access-tokens\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/createAccessTokenRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/ValueError",
+            "#/components/schemas/createAccessTokensResponse"
+          ],
+          "secret_fields": [
+            "token"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The pinned 201 response is createAccessTokensResponse -> accessToken.token, the actual personal token value. It is marked secret_sensitive with sensitive_policy redaction, but a secret-response contract that redacts stdout/logs/warehouse and routes the value to secure storage is not implemented.",
+        "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.post__v2_access-tokens",
+        "secret_sensitive": true,
+        "sensitive_policy": "env_or_stdin + typed_confirmation; pinned secret-bearing request and/or response fields are redacted",
+        "status": "disabled; declared source-backed secret contract pending the named engine foundation gap",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "This row is not assigned to the foundation lane; its remaining work is connector-local declaration or source-schema disposition.",
+        "declaration_pending": {
+          "id": "declaration-pending-dockerhub",
+          "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
+          "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/access-tokens",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "personal access token management requires an authenticated user session this bundle has no credential for"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/access-tokens",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/access-tokens\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "type": "number"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "number"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/ValueError",
+            "#/components/schemas/getAccessTokensResponse"
+          ]
+        }
+      },
+      "state": "enabled",
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"personal access tokens list\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/access-tokens/{uuid}",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "personal access token update; authenticated-session-only"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.patch_/v2/access-tokens/{uuid}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/access-tokens/{uuid}\"].patch",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "uuid",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/patchAccessTokenRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/ValueError",
+            "#/components/schemas/patchAccessTokenResponse"
+          ]
+        }
+      },
+      "state": "enabled",
+      "declaration": {
+        "status": "enabled; typed update write action \"update_personal_access_token\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null,
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/access-tokens/{uuid}",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "personal access token detail; authenticated-session-only"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/access-tokens/{uuid}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/access-tokens/{uuid}\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "uuid",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"personal access token view\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/access-tokens/{uuid}",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "revokes a personal access token; destructive and authenticated-session-only"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.delete_/v2/access-tokens/{uuid}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/access-tokens/{uuid}\"].delete",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "uuid",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "declaration": {
+        "status": "enabled; typed delete write action \"delete_personal_access_token\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null,
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/auditlogs/{account}/actions",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "audit log actions view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.AuditLogs_ListAuditActions",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/auditlogs/{account}/actions\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "account",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/GetAuditActionsResponse",
+            "#/components/schemas/rpcStatus"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"audit log actions view\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/auditlogs/{account}",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "audit logs list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.AuditLogs_ListAuditLogs",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/auditlogs/{account}\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "account",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "action",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "actor",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "from",
+              "in": "query",
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "name": "name",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer",
+              "format": "int32"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "integer",
+              "format": "int32"
+            },
+            {
+              "name": "to",
+              "in": "query",
+              "type": "string",
+              "format": "date-time"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/GetAuditLogsResponse",
+            "#/components/schemas/rpcStatus"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.auditlogs_listauditlogs",
+        "status": "enabled; runnable direct_read command \"audit logs list\" uses the source-derived page/page_size operation pagination contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "PR #4297 supplies per-operation REST pagination; surface-sync derives the non-pagination command flags from the pinned contract.",
+        "contract": "PR #4297"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{name}/settings",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "organization settings view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{name}/settings",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{name}/settings\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/orgSettings"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"organization settings view\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/orgs/{name}/settings",
+      "api_surface": {
+        "covered_by": {
+          "write": "update_organization_settings"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.put_/v2/orgs/{name}/settings",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{name}/settings\"].put",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/orgSettings"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed update write action \"update_organization_settings\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orgs/{name}/access-tokens",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "org-scoped access token creation; authenticated org-admin session required"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.post_/v2/orgs/{name}/access-tokens",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/createOrgAccessTokenRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/ValueError",
+            "#/components/schemas/createOrgAccessTokenResponse"
+          ],
+          "secret_fields": [
+            "token"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The pinned 201 createOrgAccessTokenResponse exposes token, the actual organization access-token value. It is marked secret_sensitive with sensitive_policy redaction, but a secret-response contract that redacts stdout/logs/warehouse and routes the value to secure storage is not implemented.",
+        "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts."
+      },
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.post__v2_orgs__name__access-tokens",
+        "secret_sensitive": true,
+        "sensitive_policy": "env_or_stdin + typed_confirmation; pinned secret-bearing request and/or response fields are redacted",
+        "status": "disabled; declared source-backed secret contract pending the named engine foundation gap",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "This row is not assigned to the foundation lane; its remaining work is connector-local declaration or source-schema disposition.",
+        "declaration_pending": {
+          "id": "declaration-pending-dockerhub",
+          "evidence": "internal/connectors/engine/bundle.go:2772-2776: sensitive_policy is schema/validator support only; live secret writes remain blocked pending the execution and secret-response contracts.",
+          "minimal_change": "Complete the connector-local declaration without requesting a shared engine change."
+        }
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{name}/access-tokens",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "org-scoped access token listing; authenticated org-admin session required"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{name}/access-tokens",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "name",
+              "in": "path",
+              "required": true,
+              "type": "string",
+              "summary": "Name of the organization."
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "type": "number"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "number"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": [],
+          "parameter_derivation": {
+            "source_path_template": "paths[\"/v2/orgs/{name}/access-tokens\"].get",
+            "source_parameter_contract": "paths[\"/v2/orgs/{name}/settings\"].parameters[0]",
+            "note": "The pinned access-token GET path contains {name} but omits a formal parameter object. The same pinned Docker Hub document declares the identical {name} organization path parameter as required string; the runnable flag uses that cited contract instead of inventing a value shape."
+          }
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/getOrgAccessTokensResponse"
+          ]
+        }
+      },
+      "state": "enabled",
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"organization access tokens list\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "org-scoped access token detail; authenticated org-admin session required"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "access_token_id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/getOrgAccessTokenResponse"
+          ]
+        }
+      },
+      "state": "enabled",
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"organization access token view\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "org-scoped access token update; authenticated org-admin session required"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.patch_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].patch",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "access_token_id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/updateOrgAccessTokenRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/updateOrgAccessTokenResponse"
+          ]
+        }
+      },
+      "state": "enabled",
+      "declaration": {
+        "status": "enabled; typed update write action \"update_organization_access_token\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null,
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "revokes an org-scoped access token; destructive and authenticated-session-only"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].delete",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "access_token_id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "declaration": {
+        "status": "enabled; typed delete write action \"delete_organization_access_token\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "rejection": null,
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+      "api_surface": {
+        "covered_by": {
+          "stream": "tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.ListRepositoryTags",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "integer"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/paginated_tags"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing runnable ETL command binds the pinned source endpoint",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation-kind loader/validation path does not register rest_status."
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].head",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared operation-kind loader/validation path does not register either kind, so a definition cannot declare them.",
+        "foundation_gap": {
+          "id": "operation-kind-loader-registration",
+          "evidence": [
+            "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
+          ],
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
+        },
+        "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
+      },
+      "declaration": {
+        "status": "disabled; executor exists but its operation kind cannot pass the shared bundle execution-block validator",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "absent",
+        "foundation_gap": {
+          "id": "operation-kind-loader-registration",
+          "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+      "api_surface": {
+        "covered_by": {
+          "stream": "tag_detail"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.GetRepositoryTag",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "tag",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/tag"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing runnable ETL command binds the pinned source endpoint",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation-kind loader/validation path does not register rest_status."
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].head",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "tag",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared operation-kind loader/validation path does not register either kind, so a definition cannot declare them.",
+        "foundation_gap": {
+          "id": "operation-kind-loader-registration",
+          "evidence": [
+            "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
+          ],
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
+        },
+        "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
+      },
+      "declaration": {
+        "status": "disabled; executor exists but its operation kind cannot pass the shared bundle execution-block validator",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "absent",
+        "foundation_gap": {
+          "id": "operation-kind-loader-registration",
+          "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags",
+      "api_surface": {
+        "covered_by": {
+          "write": "update_repository_immutable_tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.UpdateRepositoryImmutableTags",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags\"].patch",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/update_repository_immutable_tags_request"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/repository_info"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed update write action \"update_repository_immutable_tags\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify",
+      "api_surface": {
+        "covered_by": {
+          "write": "verify_repository_immutable_tags"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.VerifyRepositoryImmutableTags",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/immutable_tags_verify_request"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/immutable_tags_verify_response"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed create write action \"verify_repository_immutable_tags\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/repositories/{namespace}/{repository}/groups",
+      "api_surface": {
+        "covered_by": {
+          "write": "create_repository_group"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.CreateRepositoryGroup",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/repositories/{namespace}/{repository}/groups\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/RepositoryGroupCreationRequest"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/Error",
+            "#/components/schemas/RepositoryGroup",
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed create write action \"create_repository_group\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/namespaces/{namespace}/repositories",
+      "api_surface": {
+        "covered_by": {
+          "stream": "repositories"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.listNamespaceRepositories",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          },
+          {}
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "name",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "ordering",
+              "in": "query",
+              "type": "string",
+              "values": [
+                "name",
+                "-name",
+                "last_updated",
+                "-last_updated",
+                "pull_count",
+                "-pull_count"
+              ]
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "integer"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/list_repositories_response"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing runnable ETL command binds the pinned source endpoint",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/namespaces/{namespace}/repositories",
+      "api_surface": {
+        "covered_by": {
+          "write": "create_repository"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.CreateRepository",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].post",
+        "security_requirements": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": [
+            "#/components/schemas/repo_creation_request"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/repository_info"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed create write action \"create_repository\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "BearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+      "api_surface": {
+        "covered_by": {
+          "stream": "repository_detail"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.GetRepository",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          },
+          {}
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/repository_info"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; existing runnable ETL command binds the pinned source endpoint",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "etl",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "HEAD",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation-kind loader/validation path does not register rest_status."
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.CheckRepository",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].head",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          },
+          {}
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "namespace",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "repository",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/repository_info"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared operation-kind loader/validation path does not register either kind, so a definition cannot declare them.",
+        "foundation_gap": {
+          "id": "operation-kind-loader-registration",
+          "evidence": [
+            "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
+          ],
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
+        },
+        "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
+      },
+      "declaration": {
+        "status": "disabled; executor exists but its operation kind cannot pass the shared bundle execution-block validator",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "absent",
+        "foundation_gap": {
+          "id": "operation-kind-loader-registration",
+          "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/members",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "organization members list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/members",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/members\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "invites",
+              "in": "query",
+              "type": "boolean"
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "role",
+              "in": "query",
+              "type": "string",
+              "values": [
+                "owner",
+                "editor",
+                "member"
+              ]
+            },
+            {
+              "name": "search",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "type",
+              "in": "query",
+              "type": "string",
+              "values": [
+                "all",
+                "invitee",
+                "member"
+              ]
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"organization members list\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/members/export",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Bounded text/csv export; the typed text_export executor is present but engine operation-kind loader/validation path does not register text_export."
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/members/export",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/members/export\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json",
+            "text/csv"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "disabled",
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "The #4297 rest_status and text_export executors are implemented, but the shared operation-kind loader/validation path does not register either kind, so a definition cannot declare them.",
+        "foundation_gap": {
+          "id": "operation-kind-loader-registration",
+          "evidence": [
+            "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
+          ],
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
+        },
+        "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export."
+      },
+      "declaration": {
+        "status": "disabled; executor exists but its operation kind cannot pass the shared bundle execution-block validator",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "binary_read",
+      "foundation": {
+        "state": "absent",
+        "foundation_gap": {
+          "id": "operation-kind-loader-registration",
+          "evidence": "internal/connectors/engine/bundle.go:2451,2676,2705,2733: the operation-kind loader/validation path omits rest_status and text_export.",
+          "minimal_change": "register rest_status and text_export in the bundle loader operation-kind switch and validation so a definition can declare them"
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/orgs/{org_name}/members/{username}",
+      "api_surface": {
+        "covered_by": {
+          "write": "update_organization_member"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.put_/v2/orgs/{org_name}/members/{username}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].put",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "username",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/org_member"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed update write action \"update_organization_member\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/members/{username}",
+      "api_surface": {
+        "covered_by": {
+          "write": "delete_organization_member"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/members/{username}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].delete",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "username",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed delete write action \"delete_organization_member\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/invites",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "organization invites list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/invites",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/invites\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"organization invites list\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/groups",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "organization groups list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "search",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "username",
+              "in": "query",
+              "type": "string"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"organization groups list\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orgs/{org_name}/groups",
+      "api_surface": {
+        "covered_by": {
+          "write": "create_organization_group"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.post_/v2/orgs/{org_name}/groups",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/org_group"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed create write action \"create_organization_group\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "organization group view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/org_group"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"organization group view\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "api_surface": {
+        "covered_by": {
+          "write": "replace_organization_group"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.put_/v2/orgs/{org_name}/groups/{group_name}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].put",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/org_group"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed update write action \"replace_organization_group\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "api_surface": {
+        "covered_by": {
+          "write": "update_organization_group"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.patch_/v2/orgs/{org_name}/groups/{group_name}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].patch",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error",
+            "#/components/schemas/org_group"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed update write action \"update_organization_group\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "api_surface": {
+        "covered_by": {
+          "write": "delete_organization_group"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].delete",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed delete write action \"delete_organization_group\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "organization group members list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}/members",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].get",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "page_size",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "search",
+              "in": "query",
+              "type": "string"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"organization group members list\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+      "api_surface": {
+        "covered_by": {
+          "write": "add_organization_group_member"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.post_/v2/orgs/{org_name}/groups/{group_name}/members",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed create write action \"add_organization_group_member\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+      "api_surface": {
+        "covered_by": {
+          "write": "delete_organization_group_member"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members/{username}\"].delete",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "group_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "org_name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "username",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed delete write action \"delete_organization_group_member\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/invites/{id}",
+      "api_surface": {
+        "covered_by": {
+          "write": "delete_organization_invite"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.delete_/v2/invites/{id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/invites/{id}\"].delete",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed delete write action \"delete_organization_invite\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/invites/{id}/resend",
+      "api_surface": {
+        "covered_by": {
+          "write": "resend_organization_invite"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.patch_/v2/invites/{id}/resend",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/invites/{id}/resend\"].patch",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed update write action \"resend_organization_invite\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/invites/bulk",
+      "api_surface": {
+        "covered_by": {
+          "write": "create_organization_invites"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.post_/v2/invites/bulk",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/invites/bulk\"].post",
+        "security_requirements": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "schema_references": [
+            "#/components/schemas/error"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; typed create write action \"create_organization_invites\" and runnable typed write command bind the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/ServiceProviderConfig",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "scim service-provider-config view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/ServiceProviderConfig",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/ServiceProviderConfig\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": [
+            "#/components/schemas/scim_service_provider_config"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"scim service-provider-config view\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerSCIMAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/ResourceTypes",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "scim resource-types list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/ResourceTypes\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": []
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"scim resource-types list\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerSCIMAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/ResourceTypes/{name}",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "scim resource-type view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes/{name}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/ResourceTypes/{name}\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "name",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": [
+            "#/components/schemas/scim_resource_type"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"scim resource-type view\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerSCIMAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/Schemas",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "scim schemas list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/Schemas",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/Schemas\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": []
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"scim schemas list\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerSCIMAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/Schemas/{id}",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "scim schema view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/Schemas/{id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/Schemas/{id}\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": [
+            "#/components/schemas/scim_schema"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"scim schema view\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerSCIMAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/Users",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "scim users list"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/Users",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/Users\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [
+            {
+              "name": "attributes",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "count",
+              "in": "query",
+              "type": "integer"
+            },
+            {
+              "name": "filter",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "sortBy",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "sortOrder",
+              "in": "query",
+              "type": "string",
+              "values": [
+                "ascending",
+                "descending"
+              ]
+            },
+            {
+              "name": "startIndex",
+              "in": "query",
+              "type": "integer"
+            }
+          ],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": []
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "kind": "rest_read",
+        "id": "dockerhub.get__v2_scim_2.0_users",
+        "status": "enabled; runnable direct_read command \"scim users list\" uses the source-derived SCIM startIndex/count operation pagination contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerSCIMAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "PR #4297 supplies per-operation REST pagination; surface-sync derives the non-pagination command flags from the pinned contract.",
+        "contract": "PR #4297"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/scim/2.0/Users",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "The executable direct-write command is bound to the source-pinned rest_write contract. api_surface operation metadata remains blocked-by-default because its schema has no implemented direct-write classifier."
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.post_/v2/scim/2.0/Users",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/Users\"].post",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/scim+json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": [
+            "#/components/schemas/scim_user"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.post__v2_scim_2.0_users",
+        "status": "enabled; approval-gated direct_write command \"scim user create\" executes the source-declared application/scim+json contract",
+        "mutation_class": "create",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerSCIMAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "PR #4297 supplies the closed application/scim+json direct-write media type. The request body remains the pinned provider contract.",
+        "contract": "PR #4297"
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/scim/2.0/Users/{id}",
+      "api_surface": {
+        "covered_by": {
+          "direct_read": "scim user view"
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.get_/v2/scim/2.0/Users/{id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].get",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": [
+            "#/components/schemas/scim_user"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "status": "enabled; runnable direct_read command \"scim user view\" binds the pinned source contract",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerSCIMAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_read",
+      "foundation": {
+        "state": "present",
+        "evidence": "Implemented Docker Hub command/action binding is recorded in the source disposition.",
+        "contract": null
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/scim/2.0/Users/{id}",
+      "api_surface": {
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "The executable direct-write command is bound to the source-pinned rest_write contract. api_surface operation metadata remains blocked-by-default because its schema has no implemented direct-write classifier."
+        }
+      },
+      "source": {
+        "source_lock": "sources/dockerhub-operation-source-lock.json",
+        "crosswalk": "sources/dockerhub-operation-crosswalk.json",
+        "source_id": "dockerhub.rest.put_/v2/scim/2.0/Users/{id}",
+        "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].put",
+        "security_requirements": [
+          {
+            "bearerSCIMAuth": []
+          }
+        ],
+        "request": {
+          "path_parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "query_parameters": [],
+          "body_content_types": [
+            "application/scim+json"
+          ],
+          "body_schema_references": []
+        },
+        "response": {
+          "content_types": [
+            "application/scim+json"
+          ],
+          "schema_references": [
+            "#/components/schemas/scim_user"
+          ]
+        }
+      },
+      "state": "enabled",
+      "rejection": null,
+      "declaration": {
+        "kind": "rest_write",
+        "id": "dockerhub.put__v2_scim_2.0_users__id_",
+        "status": "enabled; approval-gated direct_write command \"scim user update\" executes the source-declared application/scim+json contract",
+        "mutation_class": "update",
+        "authorization": {
+          "required_security_schemes": [
+            "bearerSCIMAuth"
+          ],
+          "source_scope_note": "The pinned source names these security schemes but enumerates no granular OAuth scopes; authorization is enforced at runtime."
+        }
+      },
+      "parity_class": "direct_write",
+      "foundation": {
+        "state": "present",
+        "evidence": "PR #4297 supplies the closed application/scim+json direct-write media type. The source allOf annotation is mechanically normalized to the same object shape the engine can validate.",
+        "contract": "PR #4297"
+      },
+      "reverse_etl_eligibility": {
+        "state": "foundation-gap",
+        "foundation_gap_id": "generic-typed-destination-executor",
+        "evidence": "internal/app/issue_label_warehouse_transport.go:85-95 registers only issue_label_destination and BuildDestination calls issueLabelTransportConnectorContract.",
+        "minimal_change": "register a connector-neutral typed destination DefinitionFactory selected by the definition, with per-connector evidence, explicit source bindings, acknowledgement and per-mode apply strategies",
+        "recoverable": true,
+        "eligible": false,
+        "note": "A typed direct-write action is not reverse ETL. Reverse ETL additionally requires a destination transport binding, per-mode apply strategies, and an acknowledgement contract."
+      }
+    }
+  ],
+  "source_only_dispositions": []
+}

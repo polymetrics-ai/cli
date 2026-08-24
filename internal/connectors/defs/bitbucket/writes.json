@@ -14,26 +14,39 @@
       "name": "delete_repositories_workspace_repo_slug",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}",
       "path_fields": [
-        "workspace",
-        "repo_slug"
+        "repo_slug",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
+          "redirect_to": {
+            "maxLength": 8192,
+            "type": "string"
+          },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug"
-        ],
-        "type": "object"
+        }
       },
-      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "query": {
+        "redirect_to": {
+          "template": "{{ record.redirect_to }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "kind": "create",
@@ -41,36 +54,45 @@
       "name": "create_repositories_workspace_repo_slug",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}",
       "path_fields": [
-        "workspace",
-        "repo_slug"
+        "repo_slug",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "repo_slug",
+          "scm",
+          "workspace"
+        ],
         "properties": {
           "is_private": {
             "type": "boolean"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "scm": {
-            "type": "string",
             "enum": [
               "git"
-            ]
+            ],
+            "maxLength": 8192,
+            "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "scm"
-        ],
-        "type": "object"
+        }
       },
-      "risk": "POST /repositories/{workspace}/{repo_slug} Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction."
+      "risk": "POST /repositories/{workspace}/{repo_slug} Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction.",
+      "body_type": "json",
+      "body_fields": [
+        "is_private",
+        "scm"
+      ]
     },
     {
       "body_type": "none",
@@ -86,33 +108,33 @@
       "name": "delete_repositories_workspace_repo_slug_branch_restrictions_id",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/branch-restrictions/{{ record.id }}",
       "path_fields": [
-        "workspace",
+        "id",
         "repo_slug",
-        "id"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "id",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "maxLength": 8192,
+            "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/branch-restrictions/{id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -130,29 +152,33 @@
       "name": "delete_repositories_workspace_repo_slug_commit_commit_approve",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/approve",
       "path_fields": [
-        "workspace",
+        "commit",
         "repo_slug",
-        "commit"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "commit",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "commit": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "commit"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/approve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -170,38 +196,38 @@
       "name": "delete_repositories_workspace_repo_slug_commit_commit_comments_comment_id",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/comments/{{ record.comment_id }}",
       "path_fields": [
-        "workspace",
-        "repo_slug",
+        "comment_id",
         "commit",
-        "comment_id"
+        "repo_slug",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "comment_id",
+          "commit",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "comment_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "type": "integer"
           },
           "commit": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "commit",
-          "comment_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -219,39 +245,45 @@
       "name": "delete_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/properties/{{ record.app_key }}/{{ record.property_name }}",
       "path_fields": [
-        "workspace",
-        "repo_slug",
-        "commit",
         "app_key",
-        "property_name"
+        "commit",
+        "property_name",
+        "repo_slug",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "app_key",
+          "commit",
+          "property_name",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "app_key": {
+            "maxLength": 8192,
             "type": "string"
           },
           "commit": {
+            "maxLength": 8192,
             "type": "string"
           },
           "property_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "commit",
-          "app_key",
-          "property_name"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -269,34 +301,39 @@
       "name": "delete_repositories_workspace_repo_slug_commit_commit_reports_reportid",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/reports/{{ record.reportId }}",
       "path_fields": [
-        "workspace",
-        "repo_slug",
         "commit",
-        "reportId"
+        "repo_slug",
+        "reportId",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "commit",
+          "repo_slug",
+          "reportId",
+          "workspace"
+        ],
         "properties": {
           "commit": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "reportId": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "commit",
-          "reportId"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -314,39 +351,45 @@
       "name": "delete_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/reports/{{ record.reportId }}/annotations/{{ record.annotationId }}",
       "path_fields": [
-        "workspace",
-        "repo_slug",
+        "annotationId",
         "commit",
+        "repo_slug",
         "reportId",
-        "annotationId"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "annotationId",
+          "commit",
+          "repo_slug",
+          "reportId",
+          "workspace"
+        ],
         "properties": {
           "annotationId": {
+            "maxLength": 8192,
             "type": "string"
           },
           "commit": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "reportId": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "commit",
-          "reportId",
-          "annotationId"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -364,29 +407,33 @@
       "name": "delete_repositories_workspace_repo_slug_default_reviewers_target_username",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/default-reviewers/{{ record.target_username }}",
       "path_fields": [
-        "workspace",
         "repo_slug",
-        "target_username"
+        "target_username",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "repo_slug",
+          "target_username",
+          "workspace"
+        ],
         "properties": {
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "target_username": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "target_username"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -404,33 +451,33 @@
       "name": "delete_repositories_workspace_repo_slug_deploy_keys_key_id",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/deploy-keys/{{ record.key_id }}",
       "path_fields": [
-        "workspace",
+        "key_id",
         "repo_slug",
-        "key_id"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "key_id",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "key_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "maxLength": 8192,
+            "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "key_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -448,34 +495,39 @@
       "name": "delete_repositories_workspace_repo_slug_deployments_config_environments_environment_uui_171d7214",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/deployments_config/environments/{{ record.environment_uuid }}/variables/{{ record.variable_uuid }}",
       "path_fields": [
-        "workspace",
-        "repo_slug",
         "environment_uuid",
-        "variable_uuid"
+        "repo_slug",
+        "variable_uuid",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "environment_uuid",
+          "repo_slug",
+          "variable_uuid",
+          "workspace"
+        ],
         "properties": {
           "environment_uuid": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "variable_uuid": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "environment_uuid",
-          "variable_uuid"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -493,29 +545,33 @@
       "name": "delete_repositories_workspace_repo_slug_downloads_filename",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/downloads/{{ record.filename }}",
       "path_fields": [
-        "workspace",
+        "filename",
         "repo_slug",
-        "filename"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "filename",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "filename": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "filename"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/downloads/{filename}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -533,29 +589,33 @@
       "name": "delete_repositories_workspace_repo_slug_environments_environment_uuid",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/environments/{{ record.environment_uuid }}",
       "path_fields": [
-        "workspace",
+        "environment_uuid",
         "repo_slug",
-        "environment_uuid"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "environment_uuid",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "environment_uuid": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "environment_uuid"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/environments/{environment_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -573,29 +633,33 @@
       "name": "delete_repositories_workspace_repo_slug_hooks_uid",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/hooks/{{ record.uid }}",
       "path_fields": [
-        "workspace",
         "repo_slug",
-        "uid"
+        "uid",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "repo_slug",
+          "uid",
+          "workspace"
+        ],
         "properties": {
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "uid": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "uid"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/hooks/{uid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -847,29 +911,33 @@
       "name": "delete_repositories_workspace_repo_slug_permissions_config_groups_group_slug",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/permissions-config/groups/{{ record.group_slug }}",
       "path_fields": [
-        "workspace",
+        "group_slug",
         "repo_slug",
-        "group_slug"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "group_slug",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "group_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "group_slug"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -887,29 +955,33 @@
       "name": "delete_repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/permissions-config/users/{{ record.selected_user_id }}",
       "path_fields": [
-        "workspace",
         "repo_slug",
-        "selected_user_id"
+        "selected_user_id",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "repo_slug",
+          "selected_user_id",
+          "workspace"
+        ],
         "properties": {
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "selected_user_id": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "selected_user_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -927,26 +999,37 @@
       "name": "delete_repositories_workspace_repo_slug_pipelines_config_caches",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines-config/caches",
       "path_fields": [
-        "workspace",
-        "repo_slug"
+        "repo_slug",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "name",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
+          "name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug"
-        ],
-        "type": "object"
+        }
       },
-      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
+      "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.",
+      "query": {
+        "name": "{{ record.name }}"
+      }
     },
     {
       "body_type": "none",
@@ -962,29 +1045,33 @@
       "name": "delete_repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines-config/caches/{{ record.cache_uuid }}",
       "path_fields": [
-        "workspace",
+        "cache_uuid",
         "repo_slug",
-        "cache_uuid"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "cache_uuid",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "cache_uuid": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "cache_uuid"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1002,29 +1089,33 @@
       "name": "delete_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines-config/runners/{{ record.runner_uuid }}",
       "path_fields": [
-        "workspace",
         "repo_slug",
-        "runner_uuid"
+        "runner_uuid",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "repo_slug",
+          "runner_uuid",
+          "workspace"
+        ],
         "properties": {
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "runner_uuid": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "runner_uuid"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1042,29 +1133,33 @@
       "name": "delete_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines_config/schedules/{{ record.schedule_uuid }}",
       "path_fields": [
-        "workspace",
         "repo_slug",
-        "schedule_uuid"
+        "schedule_uuid",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "repo_slug",
+          "schedule_uuid",
+          "workspace"
+        ],
         "properties": {
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "schedule_uuid": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "schedule_uuid"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1082,24 +1177,27 @@
       "name": "delete_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines_config/ssh/key_pair",
       "path_fields": [
-        "workspace",
-        "repo_slug"
+        "repo_slug",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1117,29 +1215,33 @@
       "name": "delete_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines_config/ssh/known_hosts/{{ record.known_host_uuid }}",
       "path_fields": [
-        "workspace",
+        "known_host_uuid",
         "repo_slug",
-        "known_host_uuid"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "known_host_uuid",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "known_host_uuid": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "known_host_uuid"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1157,29 +1259,33 @@
       "name": "delete_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines_config/variables/{{ record.variable_uuid }}",
       "path_fields": [
-        "workspace",
         "repo_slug",
-        "variable_uuid"
+        "variable_uuid",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "repo_slug",
+          "variable_uuid",
+          "workspace"
+        ],
         "properties": {
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "variable_uuid": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "variable_uuid"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1197,34 +1303,39 @@
       "name": "delete_repositories_workspace_repo_slug_properties_app_key_property_name",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/properties/{{ record.app_key }}/{{ record.property_name }}",
       "path_fields": [
-        "workspace",
-        "repo_slug",
         "app_key",
-        "property_name"
+        "property_name",
+        "repo_slug",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "app_key",
+          "property_name",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "app_key": {
+            "maxLength": 8192,
             "type": "string"
           },
           "property_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "app_key",
-          "property_name"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1242,33 +1353,32 @@
       "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/approve",
       "path_fields": [
-        "workspace",
+        "pull_request_id",
         "repo_slug",
-        "pull_request_id"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "pull_request_id",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "pull_request_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "type": "integer"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "pull_request_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1286,42 +1396,37 @@
       "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/comments/{{ record.comment_id }}",
       "path_fields": [
-        "workspace",
-        "repo_slug",
+        "comment_id",
         "pull_request_id",
-        "comment_id"
+        "repo_slug",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "comment_id",
+          "pull_request_id",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "comment_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "type": "integer"
           },
           "pull_request_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "type": "integer"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "pull_request_id",
-          "comment_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1339,42 +1444,37 @@
       "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/comments/{{ record.comment_id }}/resolve",
       "path_fields": [
-        "workspace",
-        "repo_slug",
+        "comment_id",
         "pull_request_id",
-        "comment_id"
+        "repo_slug",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "comment_id",
+          "pull_request_id",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "comment_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "type": "integer"
           },
           "pull_request_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "type": "integer"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "pull_request_id",
-          "comment_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1392,33 +1492,32 @@
       "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/request-changes",
       "path_fields": [
-        "workspace",
+        "pull_request_id",
         "repo_slug",
-        "pull_request_id"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "pull_request_id",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "pull_request_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "type": "integer"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "pull_request_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1436,42 +1535,37 @@
       "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/tasks/{{ record.task_id }}",
       "path_fields": [
-        "workspace",
-        "repo_slug",
         "pull_request_id",
-        "task_id"
+        "repo_slug",
+        "task_id",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "pull_request_id",
+          "repo_slug",
+          "task_id",
+          "workspace"
+        ],
         "properties": {
           "pull_request_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "type": "integer"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "task_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "type": "integer"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "pull_request_id",
-          "task_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1489,43 +1583,45 @@
       "name": "delete_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_629f4f2b",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pullrequest_id }}/properties/{{ record.app_key }}/{{ record.property_name }}",
       "path_fields": [
-        "workspace",
-        "repo_slug",
-        "pullrequest_id",
         "app_key",
-        "property_name"
+        "property_name",
+        "pullrequest_id",
+        "repo_slug",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "app_key",
+          "property_name",
+          "pullrequest_id",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "app_key": {
+            "maxLength": 8192,
             "type": "string"
           },
           "property_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "pullrequest_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "maxLength": 8192,
+            "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "pullrequest_id",
-          "app_key",
-          "property_name"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1543,29 +1639,33 @@
       "name": "delete_repositories_workspace_repo_slug_refs_branches_name",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/refs/branches/{{ record.name }}",
       "path_fields": [
-        "workspace",
+        "name",
         "repo_slug",
-        "name"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "name",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "name"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/branches/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1583,29 +1683,33 @@
       "name": "delete_repositories_workspace_repo_slug_refs_tags_name",
       "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/refs/tags/{{ record.name }}",
       "path_fields": [
-        "workspace",
+        "name",
         "repo_slug",
-        "name"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "name",
+          "repo_slug",
+          "workspace"
+        ],
         "properties": {
           "name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "repo_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "repo_slug",
-          "name"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/tags/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1623,24 +1727,27 @@
       "name": "delete_snippets_workspace_encoded_id",
       "path": "/snippets/{{ record.workspace }}/{{ record.encoded_id }}",
       "path_fields": [
-        "workspace",
-        "encoded_id"
+        "encoded_id",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "encoded_id",
+          "workspace"
+        ],
         "properties": {
           "encoded_id": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "encoded_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /snippets/{workspace}/{encoded_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1658,33 +1765,32 @@
       "name": "delete_snippets_workspace_encoded_id_comments_comment_id",
       "path": "/snippets/{{ record.workspace }}/{{ record.encoded_id }}/comments/{{ record.comment_id }}",
       "path_fields": [
-        "workspace",
+        "comment_id",
         "encoded_id",
-        "comment_id"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "comment_id",
+          "encoded_id",
+          "workspace"
+        ],
         "properties": {
           "comment_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "type": "integer"
           },
           "encoded_id": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "encoded_id",
-          "comment_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /snippets/{workspace}/{encoded_id}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1702,24 +1808,27 @@
       "name": "delete_snippets_workspace_encoded_id_watch",
       "path": "/snippets/{{ record.workspace }}/{{ record.encoded_id }}/watch",
       "path_fields": [
-        "workspace",
-        "encoded_id"
+        "encoded_id",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "encoded_id",
+          "workspace"
+        ],
         "properties": {
           "encoded_id": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "encoded_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /snippets/{workspace}/{encoded_id}/watch; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1737,29 +1846,33 @@
       "name": "delete_snippets_workspace_encoded_id_node_id",
       "path": "/snippets/{{ record.workspace }}/{{ record.encoded_id }}/{{ record.node_id }}",
       "path_fields": [
-        "workspace",
         "encoded_id",
-        "node_id"
+        "node_id",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "encoded_id",
+          "node_id",
+          "workspace"
+        ],
         "properties": {
           "encoded_id": {
+            "maxLength": 8192,
             "type": "string"
           },
           "node_id": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "encoded_id",
-          "node_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /snippets/{workspace}/{encoded_id}/{node_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1781,20 +1894,23 @@
         "variable_uuid"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
-        "properties": {
-          "username": {
-            "type": "string"
-          },
-          "variable_uuid": {
-            "type": "string"
-          }
-        },
         "required": [
           "username",
           "variable_uuid"
         ],
-        "type": "object"
+        "properties": {
+          "username": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "variable_uuid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
       },
       "risk": "Destructive DELETE /teams/{username}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1812,24 +1928,27 @@
       "name": "delete_users_selected_user_gpg_keys_fingerprint",
       "path": "/users/{{ record.selected_user }}/gpg-keys/{{ record.fingerprint }}",
       "path_fields": [
-        "selected_user",
-        "fingerprint"
+        "fingerprint",
+        "selected_user"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "fingerprint",
+          "selected_user"
+        ],
         "properties": {
           "fingerprint": {
+            "maxLength": 8192,
             "type": "string"
           },
           "selected_user": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "selected_user",
-          "fingerprint"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /users/{selected_user}/gpg-keys/{fingerprint}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1851,20 +1970,23 @@
         "variable_uuid"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
-        "properties": {
-          "selected_user": {
-            "type": "string"
-          },
-          "variable_uuid": {
-            "type": "string"
-          }
-        },
         "required": [
           "selected_user",
           "variable_uuid"
         ],
-        "type": "object"
+        "properties": {
+          "selected_user": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "variable_uuid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
       },
       "risk": "Destructive DELETE /users/{selected_user}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1882,29 +2004,33 @@
       "name": "delete_users_selected_user_properties_app_key_property_name",
       "path": "/users/{{ record.selected_user }}/properties/{{ record.app_key }}/{{ record.property_name }}",
       "path_fields": [
-        "selected_user",
         "app_key",
-        "property_name"
+        "property_name",
+        "selected_user"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "app_key",
+          "property_name",
+          "selected_user"
+        ],
         "properties": {
           "app_key": {
+            "maxLength": 8192,
             "type": "string"
           },
           "property_name": {
+            "maxLength": 8192,
             "type": "string"
           },
           "selected_user": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "selected_user",
-          "app_key",
-          "property_name"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /users/{selected_user}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1922,28 +2048,27 @@
       "name": "delete_users_selected_user_ssh_keys_key_id",
       "path": "/users/{{ record.selected_user }}/ssh-keys/{{ record.key_id }}",
       "path_fields": [
-        "selected_user",
-        "key_id"
+        "key_id",
+        "selected_user"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "key_id",
+          "selected_user"
+        ],
         "properties": {
           "key_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "maxLength": 8192,
+            "type": "string"
           },
           "selected_user": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "selected_user",
-          "key_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /users/{selected_user}/ssh-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1961,24 +2086,27 @@
       "name": "delete_workspaces_workspace_hooks_uid",
       "path": "/workspaces/{{ record.workspace }}/hooks/{{ record.uid }}",
       "path_fields": [
-        "workspace",
-        "uid"
+        "uid",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "uid",
+          "workspace"
+        ],
         "properties": {
           "uid": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "uid"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /workspaces/{workspace}/hooks/{uid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -1996,24 +2124,27 @@
       "name": "delete_workspaces_workspace_pipelines_config_runners_runner_uuid",
       "path": "/workspaces/{{ record.workspace }}/pipelines-config/runners/{{ record.runner_uuid }}",
       "path_fields": [
-        "workspace",
-        "runner_uuid"
+        "runner_uuid",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "runner_uuid",
+          "workspace"
+        ],
         "properties": {
           "runner_uuid": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "runner_uuid"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /workspaces/{workspace}/pipelines-config/runners/{runner_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -2031,24 +2162,27 @@
       "name": "delete_workspaces_workspace_pipelines_config_variables_variable_uuid",
       "path": "/workspaces/{{ record.workspace }}/pipelines-config/variables/{{ record.variable_uuid }}",
       "path_fields": [
-        "workspace",
-        "variable_uuid"
+        "variable_uuid",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "variable_uuid",
+          "workspace"
+        ],
         "properties": {
           "variable_uuid": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "variable_uuid"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /workspaces/{workspace}/pipelines-config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -2066,24 +2200,27 @@
       "name": "delete_workspaces_workspace_projects_project_key",
       "path": "/workspaces/{{ record.workspace }}/projects/{{ record.project_key }}",
       "path_fields": [
-        "workspace",
-        "project_key"
+        "project_key",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "project_key",
+          "workspace"
+        ],
         "properties": {
           "project_key": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "project_key"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -2101,29 +2238,33 @@
       "name": "delete_workspaces_workspace_projects_project_key_default_reviewers_selected_user",
       "path": "/workspaces/{{ record.workspace }}/projects/{{ record.project_key }}/default-reviewers/{{ record.selected_user }}",
       "path_fields": [
-        "workspace",
         "project_key",
-        "selected_user"
+        "selected_user",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "project_key",
+          "selected_user",
+          "workspace"
+        ],
         "properties": {
           "project_key": {
+            "maxLength": 8192,
             "type": "string"
           },
           "selected_user": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "project_key",
-          "selected_user"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -2141,33 +2282,33 @@
       "name": "delete_workspaces_workspace_projects_project_key_deploy_keys_key_id",
       "path": "/workspaces/{{ record.workspace }}/projects/{{ record.project_key }}/deploy-keys/{{ record.key_id }}",
       "path_fields": [
-        "workspace",
+        "key_id",
         "project_key",
-        "key_id"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "key_id",
+          "project_key",
+          "workspace"
+        ],
         "properties": {
           "key_id": {
-            "type": [
-              "string",
-              "integer",
-              "number"
-            ]
+            "maxLength": 8192,
+            "type": "string"
           },
           "project_key": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "project_key",
-          "key_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -2185,29 +2326,33 @@
       "name": "delete_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
       "path": "/workspaces/{{ record.workspace }}/projects/{{ record.project_key }}/permissions-config/groups/{{ record.group_slug }}",
       "path_fields": [
-        "workspace",
+        "group_slug",
         "project_key",
-        "group_slug"
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "group_slug",
+          "project_key",
+          "workspace"
+        ],
         "properties": {
           "group_slug": {
+            "maxLength": 8192,
             "type": "string"
           },
           "project_key": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "project_key",
-          "group_slug"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     },
@@ -2225,29 +2370,33 @@
       "name": "delete_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
       "path": "/workspaces/{{ record.workspace }}/projects/{{ record.project_key }}/permissions-config/users/{{ record.selected_user_id }}",
       "path_fields": [
-        "workspace",
         "project_key",
-        "selected_user_id"
+        "selected_user_id",
+        "workspace"
       ],
       "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
         "additionalProperties": false,
+        "required": [
+          "project_key",
+          "selected_user_id",
+          "workspace"
+        ],
         "properties": {
           "project_key": {
+            "maxLength": 8192,
             "type": "string"
           },
           "selected_user_id": {
+            "maxLength": 8192,
             "type": "string"
           },
           "workspace": {
+            "maxLength": 8192,
             "type": "string"
           }
-        },
-        "required": [
-          "workspace",
-          "project_key",
-          "selected_user_id"
-        ],
-        "type": "object"
+        }
       },
       "risk": "Destructive DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute."
     }

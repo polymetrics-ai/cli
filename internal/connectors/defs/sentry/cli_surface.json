@@ -1,0 +1,86 @@
+{
+  "tagline": "Run Sentry's declared streams and reverse-ETL actions.",
+  "usage": "pm sentry \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "events list",
+        "issues list",
+        "projects list",
+        "releases list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "examples": [
+        "pm sentry events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/events/"
+        }
+      ]
+    },
+    {
+      "path": "issues list",
+      "summary": "Run the issues ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issues",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "examples": [
+        "pm sentry issues list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/"
+        }
+      ]
+    },
+    {
+      "path": "projects list",
+      "summary": "Run the projects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "examples": [
+        "pm sentry projects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/0/organizations/{organization_id_or_slug}/projects/"
+        }
+      ]
+    },
+    {
+      "path": "releases list",
+      "summary": "Run the releases ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "releases",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "examples": [
+        "pm sentry releases list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/0/organizations/{organization_id_or_slug}/releases/"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2693 @@
+{
+  "schema_version": 2,
+  "connector": "bitbucket",
+  "captured_at": "2026-08-19T11:28:09Z",
+  "rest": {
+    "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+    "sha256": "3dbfe6a80143511a287e58c21a193d3551ab5d41e8b60e65c1ae121b7000dec3",
+    "bytes": 1359673,
+    "openapi": "3.0.0",
+    "info_version": "2.0",
+    "operations": [
+      {
+        "id": "bitbucket.rest.delete_/addon",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/addon",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/addon\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/commit/{commit}/approve",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/approve\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}\"].delete"
+      },
+      {
+        "id": "deleteCommitHostedPropertyValue",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}",
+        "operation_id": "deleteCommitHostedPropertyValue",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}\"].delete"
+      },
+      {
+        "id": "deleteReport",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}",
+        "operation_id": "deleteReport",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}\"].delete"
+      },
+      {
+        "id": "deleteAnnotation",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}",
+        "operation_id": "deleteAnnotation",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}\"].delete"
+      },
+      {
+        "id": "deleteDeploymentVariable",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}",
+        "operation_id": "deleteDeploymentVariable",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/downloads/{filename}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/downloads/{filename}\"].delete"
+      },
+      {
+        "id": "deleteEnvironmentForRepository",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}",
+        "operation_id": "deleteEnvironmentForRepository",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/hooks/{uid}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}\"].delete"
+      },
+      {
+        "id": "deleteRepositoryPipelineCaches",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches",
+        "operation_id": "deleteRepositoryPipelineCaches",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines-config/caches\"].delete"
+      },
+      {
+        "id": "deleteRepositoryPipelineCache",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}",
+        "operation_id": "deleteRepositoryPipelineCache",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}\"].delete"
+      },
+      {
+        "id": "deleteRepositoryRunner",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}",
+        "operation_id": "deleteRepositoryRunner",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}\"].delete"
+      },
+      {
+        "id": "deleteRepositoryPipelineSchedule",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}",
+        "operation_id": "deleteRepositoryPipelineSchedule",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}\"].delete"
+      },
+      {
+        "id": "deleteRepositoryPipelineKeyPair",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
+        "operation_id": "deleteRepositoryPipelineKeyPair",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair\"].delete"
+      },
+      {
+        "id": "deleteRepositoryPipelineKnownHost",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}",
+        "operation_id": "deleteRepositoryPipelineKnownHost",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}\"].delete"
+      },
+      {
+        "id": "deleteRepositoryPipelineVariable",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
+        "operation_id": "deleteRepositoryPipelineVariable",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}\"].delete"
+      },
+      {
+        "id": "deleteRepositoryHostedPropertyValue",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}",
+        "operation_id": "deleteRepositoryHostedPropertyValue",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}\"].delete"
+      },
+      {
+        "id": "deletePullRequestHostedPropertyValue",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}",
+        "operation_id": "deletePullRequestHostedPropertyValue",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/refs/branches/{name}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/refs/branches/{name}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/refs/branches/{name}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/refs/tags/{name}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/repositories/{workspace}/{repo_slug}/refs/tags/{name}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/refs/tags/{name}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/snippets/{workspace}/{encoded_id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/snippets/{workspace}/{encoded_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/comments/{comment_id}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/snippets/{workspace}/{encoded_id}/watch",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/snippets/{workspace}/{encoded_id}/watch",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/watch\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/snippets/{workspace}/{encoded_id}/{node_id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/snippets/{workspace}/{encoded_id}/{node_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/{node_id}\"].delete"
+      },
+      {
+        "id": "deletePipelineVariableForTeam",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}",
+        "operation_id": "deletePipelineVariableForTeam",
+        "deprecated": null,
+        "source_location": "paths[\"/teams/{username}/pipelines_config/variables/{variable_uuid}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/users/{selected_user}/gpg-keys/{fingerprint}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/users/{selected_user}/gpg-keys/{fingerprint}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/gpg-keys/{fingerprint}\"].delete"
+      },
+      {
+        "id": "deletePipelineVariableForUser",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}",
+        "operation_id": "deletePipelineVariableForUser",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/pipelines_config/variables/{variable_uuid}\"].delete"
+      },
+      {
+        "id": "deleteUserHostedPropertyValue",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/users/{selected_user}/properties/{app_key}/{property_name}",
+        "operation_id": "deleteUserHostedPropertyValue",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/properties/{app_key}/{property_name}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/users/{selected_user}/ssh-keys/{key_id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/users/{selected_user}/ssh-keys/{key_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/ssh-keys/{key_id}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/workspaces/{workspace}/hooks/{uid}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/workspaces/{workspace}/hooks/{uid}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/hooks/{uid}\"].delete"
+      },
+      {
+        "id": "deleteWorkspaceRunner",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}",
+        "operation_id": "deleteWorkspaceRunner",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}\"].delete"
+      },
+      {
+        "id": "deletePipelineVariableForWorkspace",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
+        "operation_id": "deletePipelineVariableForWorkspace",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/workspaces/{workspace}/projects/{project_key}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/workspaces/{workspace}/projects/{project_key}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.delete_/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}\"].delete"
+      },
+      {
+        "id": "bitbucket.rest.get_/addon/{addon_key}/client-key",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/addon/{addon_key}/client-key",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/addon/{addon_key}/client-key\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/hook_events",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/hook_events",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/hook_events\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/hook_events/{subject_type}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/hook_events/{subject_type}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/hook_events/{subject_type}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/branch-restrictions",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/branch-restrictions\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/branching-model",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/branching-model",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/branching-model\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/branching-model/settings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/branching-model/settings\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commit/{commit}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commit/{commit}/comments",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/comments\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}\"].get"
+      },
+      {
+        "id": "getCommitHostedPropertyValue",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}",
+        "operation_id": "getCommitHostedPropertyValue",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}\"].get"
+      },
+      {
+        "id": "getPullrequestsForCommit",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/pullrequests",
+        "operation_id": "getPullrequestsForCommit",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/pullrequests\"].get"
+      },
+      {
+        "id": "getReportsForCommit",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports",
+        "operation_id": "getReportsForCommit",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/reports\"].get"
+      },
+      {
+        "id": "getReport",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}",
+        "operation_id": "getReport",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}\"].get"
+      },
+      {
+        "id": "getAnnotationsForReport",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations",
+        "operation_id": "getAnnotationsForReport",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations\"].get"
+      },
+      {
+        "id": "getAnnotation",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}",
+        "operation_id": "getAnnotation",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commits",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commits",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commits\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commits/{revision}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commits/{revision}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/default-reviewers",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/default-reviewers",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/default-reviewers\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/deploy-keys",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/deploy-keys",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/deploy-keys\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}\"].get"
+      },
+      {
+        "id": "getDeploymentsForRepository",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/deployments",
+        "operation_id": "getDeploymentsForRepository",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/deployments\"].get"
+      },
+      {
+        "id": "getDeploymentForRepository",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/deployments/{deployment_uuid}",
+        "operation_id": "getDeploymentForRepository",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/deployments/{deployment_uuid}\"].get"
+      },
+      {
+        "id": "getDeploymentVariables",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables",
+        "operation_id": "getDeploymentVariables",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/diff/{spec}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/diff/{spec}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/diff/{spec}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/diffstat/{spec}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/diffstat/{spec}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/diffstat/{spec}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/downloads",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/downloads",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/downloads\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/downloads/{filename}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/downloads/{filename}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/effective-branching-model",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/effective-branching-model",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/effective-branching-model\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/effective-default-reviewers",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/effective-default-reviewers",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/effective-default-reviewers\"].get"
+      },
+      {
+        "id": "getEnvironmentsForRepository",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/environments",
+        "operation_id": "getEnvironmentsForRepository",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/environments\"].get"
+      },
+      {
+        "id": "getEnvironmentForRepository",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}",
+        "operation_id": "getEnvironmentForRepository",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/file-conflicts/{spec}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/file-conflicts/{spec}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/file-conflicts/{spec}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/filehistory/{commit}/{path}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/filehistory/{commit}/{path}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/filehistory/{commit}/{path}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/forks",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/forks",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/forks\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/hooks",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/hooks",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/hooks\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/hooks/{uid}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/merge-base/{revspec}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/merge-base/{revspec}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/merge-base/{revspec}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/override-settings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/override-settings",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/override-settings\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/patch/{spec}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/patch/{spec}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/patch/{spec}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/permissions-config/groups",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/permissions-config/groups\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/permissions-config/users",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/permissions-config/users\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}\"].get"
+      },
+      {
+        "id": "getPipelinesForRepository",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines",
+        "operation_id": "getPipelinesForRepository",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines\"].get"
+      },
+      {
+        "id": "getRepositoryPipelineCaches",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches",
+        "operation_id": "getRepositoryPipelineCaches",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines-config/caches\"].get"
+      },
+      {
+        "id": "getRepositoryPipelineCacheContentURI",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}/content-uri",
+        "operation_id": "getRepositoryPipelineCacheContentURI",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}/content-uri\"].get"
+      },
+      {
+        "id": "getRepositoryRunners",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners",
+        "operation_id": "getRepositoryRunners",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines-config/runners\"].get"
+      },
+      {
+        "id": "getRepositoryRunner",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}",
+        "operation_id": "getRepositoryRunner",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}\"].get"
+      },
+      {
+        "id": "getPipelineForRepository",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}",
+        "operation_id": "getPipelineForRepository",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}\"].get"
+      },
+      {
+        "id": "getPipelineStepsForRepository",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps",
+        "operation_id": "getPipelineStepsForRepository",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps\"].get"
+      },
+      {
+        "id": "getPipelineStepForRepository",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}",
+        "operation_id": "getPipelineStepForRepository",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}\"].get"
+      },
+      {
+        "id": "getPipelineStepLogForRepository",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log",
+        "operation_id": "getPipelineStepLogForRepository",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log\"].get"
+      },
+      {
+        "id": "getPipelineContainerLog",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid}",
+        "operation_id": "getPipelineContainerLog",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid}\"].get"
+      },
+      {
+        "id": "getPipelineTestReports",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports",
+        "operation_id": "getPipelineTestReports",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports\"].get"
+      },
+      {
+        "id": "getPipelineTestReportTestCases",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases",
+        "operation_id": "getPipelineTestReportTestCases",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases\"].get"
+      },
+      {
+        "id": "getPipelineTestReportTestCaseReasons",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases/{test_case_uuid}/test_case_reasons",
+        "operation_id": "getPipelineTestReportTestCaseReasons",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases/{test_case_uuid}/test_case_reasons\"].get"
+      },
+      {
+        "id": "getRepositoryPipelineConfig",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config",
+        "operation_id": "getRepositoryPipelineConfig",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config\"].get"
+      },
+      {
+        "id": "getRepositoryPipelineSchedules",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules",
+        "operation_id": "getRepositoryPipelineSchedules",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/schedules\"].get"
+      },
+      {
+        "id": "getRepositoryPipelineSchedule",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}",
+        "operation_id": "getRepositoryPipelineSchedule",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}\"].get"
+      },
+      {
+        "id": "getRepositoryPipelineScheduleExecutions",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}/executions",
+        "operation_id": "getRepositoryPipelineScheduleExecutions",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}/executions\"].get"
+      },
+      {
+        "id": "getRepositoryPipelineSshKeyPair",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
+        "operation_id": "getRepositoryPipelineSshKeyPair",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair\"].get"
+      },
+      {
+        "id": "getRepositoryPipelineKnownHosts",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts",
+        "operation_id": "getRepositoryPipelineKnownHosts",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts\"].get"
+      },
+      {
+        "id": "getRepositoryPipelineKnownHost",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}",
+        "operation_id": "getRepositoryPipelineKnownHost",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}\"].get"
+      },
+      {
+        "id": "getRepositoryPipelineVariables",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables",
+        "operation_id": "getRepositoryPipelineVariables",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/variables\"].get"
+      },
+      {
+        "id": "getRepositoryPipelineVariable",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
+        "operation_id": "getRepositoryPipelineVariable",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}\"].get"
+      },
+      {
+        "id": "getRepositoryHostedPropertyValue",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}",
+        "operation_id": "getRepositoryHostedPropertyValue",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/activity",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/activity",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/activity\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/statuses",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/statuses",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/statuses\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}\"].get"
+      },
+      {
+        "id": "getPullRequestHostedPropertyValue",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}",
+        "operation_id": "getPullRequestHostedPropertyValue",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/refs",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/refs",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/refs\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/refs/branches",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/refs/branches",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/refs/branches\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/refs/branches/{name}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/refs/branches/{name}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/refs/branches/{name}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/refs/tags",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/refs/tags",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/refs/tags\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/refs/tags/{name}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/refs/tags/{name}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/refs/tags/{name}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/src",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/src",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/src\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/src/{commit}/{path}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/src/{commit}/{path}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/src/{commit}/{path}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/watchers",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/watchers",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/watchers\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/comments",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/comments",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/comments\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/comments/{comment_id}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/commits",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/commits",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/commits\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/commits/{revision}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/commits/{revision}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/commits/{revision}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/files/{path}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/files/{path}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/files/{path}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/watch",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/watch",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/watch\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/watchers",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/watchers",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/watchers\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{node_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/{node_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/{node_id}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{revision}/diff",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/{revision}/diff",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/{revision}/diff\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{revision}/patch",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/{revision}/patch",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/{revision}/patch\"].get"
+      },
+      {
+        "id": "getPipelineVariablesForTeam",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/teams/{username}/pipelines_config/variables",
+        "operation_id": "getPipelineVariablesForTeam",
+        "deprecated": null,
+        "source_location": "paths[\"/teams/{username}/pipelines_config/variables\"].get"
+      },
+      {
+        "id": "getPipelineVariableForTeam",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}",
+        "operation_id": "getPipelineVariableForTeam",
+        "deprecated": null,
+        "source_location": "paths[\"/teams/{username}/pipelines_config/variables/{variable_uuid}\"].get"
+      },
+      {
+        "id": "searchTeam",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/teams/{username}/search/code",
+        "operation_id": "searchTeam",
+        "deprecated": null,
+        "source_location": "paths[\"/teams/{username}/search/code\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/user",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/user\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/user/emails",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/emails",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/user/emails\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/user/emails/{email}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/emails/{email}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/user/emails/{email}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/user/permissions/repositories",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/permissions/repositories",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/user/permissions/repositories\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/user/workspaces",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/workspaces",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/user/workspaces\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/user/workspaces/{workspace}/permission",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/workspaces/{workspace}/permission",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/user/workspaces/{workspace}/permission\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/user/workspaces/{workspace}/permissions/repositories",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/user/workspaces/{workspace}/permissions/repositories",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/user/workspaces/{workspace}/permissions/repositories\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/users/{selected_user}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{selected_user}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/users/{selected_user}/gpg-keys",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{selected_user}/gpg-keys",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/gpg-keys\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/users/{selected_user}/gpg-keys/{fingerprint}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{selected_user}/gpg-keys/{fingerprint}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/gpg-keys/{fingerprint}\"].get"
+      },
+      {
+        "id": "getPipelineVariablesForUser",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{selected_user}/pipelines_config/variables",
+        "operation_id": "getPipelineVariablesForUser",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/pipelines_config/variables\"].get"
+      },
+      {
+        "id": "getPipelineVariableForUser",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}",
+        "operation_id": "getPipelineVariableForUser",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/pipelines_config/variables/{variable_uuid}\"].get"
+      },
+      {
+        "id": "retrieveUserHostedPropertyValue",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{selected_user}/properties/{app_key}/{property_name}",
+        "operation_id": "retrieveUserHostedPropertyValue",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/properties/{app_key}/{property_name}\"].get"
+      },
+      {
+        "id": "searchAccount",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{selected_user}/search/code",
+        "operation_id": "searchAccount",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/search/code\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/users/{selected_user}/ssh-keys",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{selected_user}/ssh-keys",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/ssh-keys\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/users/{selected_user}/ssh-keys/{key_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/users/{selected_user}/ssh-keys/{key_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/ssh-keys/{key_id}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/hooks",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/hooks",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/hooks\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/hooks/{uid}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/hooks/{uid}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/hooks/{uid}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/members",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/members",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/members\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/members/{member}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/members/{member}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/members/{member}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/permissions",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/permissions",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/permissions\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/permissions/repositories",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/permissions/repositories",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/permissions/repositories\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/permissions/repositories/{repo_slug}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/permissions/repositories/{repo_slug}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/permissions/repositories/{repo_slug}\"].get"
+      },
+      {
+        "id": "getOIDCConfiguration",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/.well-known/openid-configuration",
+        "operation_id": "getOIDCConfiguration",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pipelines-config/identity/oidc/.well-known/openid-configuration\"].get"
+      },
+      {
+        "id": "getOIDCKeys",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/keys.json",
+        "operation_id": "getOIDCKeys",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pipelines-config/identity/oidc/keys.json\"].get"
+      },
+      {
+        "id": "getWorkspaceRunners",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/pipelines-config/runners",
+        "operation_id": "getWorkspaceRunners",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pipelines-config/runners\"].get"
+      },
+      {
+        "id": "getWorkspaceRunner",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}",
+        "operation_id": "getWorkspaceRunner",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}\"].get"
+      },
+      {
+        "id": "getPipelineVariablesForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/pipelines-config/variables",
+        "operation_id": "getPipelineVariablesForWorkspace",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pipelines-config/variables\"].get"
+      },
+      {
+        "id": "getPipelineVariableForWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
+        "operation_id": "getPipelineVariableForWorkspace",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/projects",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/projects/{project_key}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/branching-model",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/projects/{project_key}/branching-model",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/branching-model\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/branching-model/settings",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/branching-model/settings\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/default-reviewers",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/default-reviewers\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/deploy-keys",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/deploy-keys\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/permissions-config/groups",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/permissions-config/groups\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/permissions-config/users",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/permissions-config/users\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/pullrequests/{selected_user}",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/pullrequests/{selected_user}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pullrequests/{selected_user}\"].get"
+      },
+      {
+        "id": "searchWorkspace",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/search/code",
+        "operation_id": "searchWorkspace",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/search/code\"].get"
+      },
+      {
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/settings/gpg/public-key",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/workspaces/{workspace}/settings/gpg/public-key",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/settings/gpg/public-key\"].get"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/branch-restrictions",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/branch-restrictions\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commit/{commit}/approve",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/approve\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commit/{commit}/comments",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/comments\"].post"
+      },
+      {
+        "id": "bulkCreateOrUpdateAnnotations",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations",
+        "operation_id": "bulkCreateOrUpdateAnnotations",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commits",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commits",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commits\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commits/{revision}",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commits/{revision}\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/deploy-keys",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/deploy-keys",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/deploy-keys\"].post"
+      },
+      {
+        "id": "createDeploymentVariable",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables",
+        "operation_id": "createDeploymentVariable",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/downloads",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/downloads",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/downloads\"].post"
+      },
+      {
+        "id": "createEnvironment",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/environments",
+        "operation_id": "createEnvironment",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/environments\"].post"
+      },
+      {
+        "id": "updateEnvironmentForRepository",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes",
+        "operation_id": "updateEnvironmentForRepository",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/forks",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/forks",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/forks\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/hooks",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/hooks",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/hooks\"].post"
+      },
+      {
+        "id": "createPipelineForRepository",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines",
+        "operation_id": "createPipelineForRepository",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines\"].post"
+      },
+      {
+        "id": "createRepositoryRunner",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners",
+        "operation_id": "createRepositoryRunner",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines-config/runners\"].post"
+      },
+      {
+        "id": "stopPipeline",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline",
+        "operation_id": "stopPipeline",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline\"].post"
+      },
+      {
+        "id": "createRepositoryPipelineSchedule",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules",
+        "operation_id": "createRepositoryPipelineSchedule",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/schedules\"].post"
+      },
+      {
+        "id": "createRepositoryPipelineKnownHost",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts",
+        "operation_id": "createRepositoryPipelineKnownHost",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts\"].post"
+      },
+      {
+        "id": "createRepositoryPipelineVariable",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables",
+        "operation_id": "createRepositoryPipelineVariable",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/variables\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/refs/branches",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/refs/branches",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/refs/branches\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/refs/tags",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/refs/tags",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/refs/tags\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/src",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/src",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/src\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/snippets",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/snippets",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/snippets/{workspace}",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/snippets/{workspace}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/snippets/{workspace}/{encoded_id}/comments",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/snippets/{workspace}/{encoded_id}/comments",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/comments\"].post"
+      },
+      {
+        "id": "createPipelineVariableForTeam",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/teams/{username}/pipelines_config/variables",
+        "operation_id": "createPipelineVariableForTeam",
+        "deprecated": null,
+        "source_location": "paths[\"/teams/{username}/pipelines_config/variables\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/users/{selected_user}/gpg-keys",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/{selected_user}/gpg-keys",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/gpg-keys\"].post"
+      },
+      {
+        "id": "createPipelineVariableForUser",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/{selected_user}/pipelines_config/variables",
+        "operation_id": "createPipelineVariableForUser",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/pipelines_config/variables\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/users/{selected_user}/ssh-keys",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/users/{selected_user}/ssh-keys",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/ssh-keys\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/workspaces/{workspace}/hooks",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workspaces/{workspace}/hooks",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/hooks\"].post"
+      },
+      {
+        "id": "createWorkspaceRunner",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workspaces/{workspace}/pipelines-config/runners",
+        "operation_id": "createWorkspaceRunner",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pipelines-config/runners\"].post"
+      },
+      {
+        "id": "createPipelineVariableForWorkspace",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workspaces/{workspace}/pipelines-config/variables",
+        "operation_id": "createPipelineVariableForWorkspace",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pipelines-config/variables\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/workspaces/{workspace}/projects",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workspaces/{workspace}/projects",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects\"].post"
+      },
+      {
+        "id": "bitbucket.rest.post_/workspaces/{workspace}/projects/{project_key}/deploy-keys",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/deploy-keys\"].post"
+      },
+      {
+        "id": "bitbucket.rest.put_/addon",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/addon",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/addon\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/branching-model/settings",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/branching-model/settings\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}\"].put"
+      },
+      {
+        "id": "updateCommitHostedPropertyValue",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}",
+        "operation_id": "updateCommitHostedPropertyValue",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}\"].put"
+      },
+      {
+        "id": "createOrUpdateReport",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}",
+        "operation_id": "createOrUpdateReport",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}\"].put"
+      },
+      {
+        "id": "createOrUpdateAnnotation",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}",
+        "operation_id": "createOrUpdateAnnotation",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}\"].put"
+      },
+      {
+        "id": "updateDeploymentVariable",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}",
+        "operation_id": "updateDeploymentVariable",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/hooks/{uid}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/override-settings",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/override-settings",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/override-settings\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}\"].put"
+      },
+      {
+        "id": "updateRepositoryRunner",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}",
+        "operation_id": "updateRepositoryRunner",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}\"].put"
+      },
+      {
+        "id": "updateRepositoryPipelineConfig",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config",
+        "operation_id": "updateRepositoryPipelineConfig",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config\"].put"
+      },
+      {
+        "id": "updateRepositoryBuildNumber",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/build_number",
+        "operation_id": "updateRepositoryBuildNumber",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/build_number\"].put"
+      },
+      {
+        "id": "updateRepositoryPipelineSchedule",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}",
+        "operation_id": "updateRepositoryPipelineSchedule",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}\"].put"
+      },
+      {
+        "id": "updateRepositoryPipelineKeyPair",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
+        "operation_id": "updateRepositoryPipelineKeyPair",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair\"].put"
+      },
+      {
+        "id": "updateRepositoryPipelineKnownHost",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}",
+        "operation_id": "updateRepositoryPipelineKnownHost",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}\"].put"
+      },
+      {
+        "id": "updateRepositoryPipelineVariable",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
+        "operation_id": "updateRepositoryPipelineVariable",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}\"].put"
+      },
+      {
+        "id": "updateRepositoryHostedPropertyValue",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}",
+        "operation_id": "updateRepositoryHostedPropertyValue",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}\"].put"
+      },
+      {
+        "id": "updatePullRequestHostedPropertyValue",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}",
+        "operation_id": "updatePullRequestHostedPropertyValue",
+        "deprecated": null,
+        "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/snippets/{workspace}/{encoded_id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/comments/{comment_id}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/snippets/{workspace}/{encoded_id}/watch",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}/watch",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/watch\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/snippets/{workspace}/{encoded_id}/{node_id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}/{node_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/snippets/{workspace}/{encoded_id}/{node_id}\"].put"
+      },
+      {
+        "id": "updatePipelineVariableForTeam",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}",
+        "operation_id": "updatePipelineVariableForTeam",
+        "deprecated": null,
+        "source_location": "paths[\"/teams/{username}/pipelines_config/variables/{variable_uuid}\"].put"
+      },
+      {
+        "id": "updatePipelineVariableForUser",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}",
+        "operation_id": "updatePipelineVariableForUser",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/pipelines_config/variables/{variable_uuid}\"].put"
+      },
+      {
+        "id": "updateUserHostedPropertyValue",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/users/{selected_user}/properties/{app_key}/{property_name}",
+        "operation_id": "updateUserHostedPropertyValue",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/properties/{app_key}/{property_name}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/users/{selected_user}/ssh-keys/{key_id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/users/{selected_user}/ssh-keys/{key_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/users/{selected_user}/ssh-keys/{key_id}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/workspaces/{workspace}/hooks/{uid}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/hooks/{uid}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/hooks/{uid}\"].put"
+      },
+      {
+        "id": "updateWorkspaceRunner",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}",
+        "operation_id": "updateWorkspaceRunner",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}\"].put"
+      },
+      {
+        "id": "updatePipelineVariableForWorkspace",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
+        "operation_id": "updatePipelineVariableForWorkspace",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}/branching-model/settings",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/branching-model/settings\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}\"].put"
+      },
+      {
+        "id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+        "operation_id": "",
+        "deprecated": null,
+        "source_location": "paths[\"/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}\"].put"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 297,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 297
+  }
+}

@@ -4,8 +4,9 @@ Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.
 
 Readable streams: `projects`, `groups`, `users`, `issues`.
 
-The provider-owned OpenAPI v3 inventory covers 1,745 callable GitLab operations. This G1 wave makes
-only the four existing stream reads executable; it does not add any new provider operation.
+The provider-owned OpenAPI v3 inventory pinned on 2026-08-19 covers 1,755 callable GitLab
+operations. Only the four existing stream reads are executable; every other public operation remains
+explicitly disabled until it has a bounded connector-local contract.
 
 Service API documentation: https://docs.gitlab.com/ee/api/rest/.
 
@@ -54,7 +55,7 @@ Default pagination: follows RFC 5988 Link headers with rel=next.
 
 ## Write actions & risks
 
-The GitLab provider inventory includes 975 writes. `capabilities.write=false` until at least one
+The GitLab provider inventory includes 1,006 writes. `capabilities.write=false` until at least one
 GitLab write action is executable; the provider inventory is not an executable capability. This G1
 bundle declares no GitLab write action.
 
@@ -64,12 +65,11 @@ use plan, preview, explicit approval, and execute. Output is not redacted by thi
 ## Known limits
 
 - Batch defaults: read_page_size=50.
-- Provider inventory: 1,745 callable OpenAPI operations (770 reads; 975 writes), sourced from GitLab
-  OpenAPI 3.0.0 `info.version` `19.3.0-pre`, retrieved 2026-08-05.
+- Provider inventory: 1,755 callable OpenAPI operations (749 reads; 1,006 writes), sourced from
+  GitLab OpenAPI 3.0.0 `info.version` `v4`, retrieved 2026-08-19 and pinned in
+  `sources/gitlab-operation-source-lock.json`.
 - Executable in G1: 4 stream-backed reads (`GET /projects`, `GET /groups`, `GET /users`, and
   `GET /issues`).
-- Remaining provider operations: 1,618 need connector-owned declarations; 45 are blocked on the
-  named multipart/file-upload operation foundation; 64 are provider-restricted; and 14 are deprecated
-  justified exclusions. Each disposition is in `api_surface.json`; the four G1 command citations are
-  in `cli_surface.json`.
-- The next planned wave is a bounded collaboration read slice (no more than 20 operations).
+- Remaining provider operations: 1,751 are explicitly disabled with an exact reason in
+  `api_surface.json`; the batch rejection ledger retains the fixed-vocabulary disposition and recovery
+  condition for each one. The four command citations are in `cli_surface.json`.
