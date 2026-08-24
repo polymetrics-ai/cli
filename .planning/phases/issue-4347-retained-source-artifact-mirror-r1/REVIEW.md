@@ -61,3 +61,7 @@ in `VERIFICATION.md`.
   production embed test still named its old digest. The test retains its
   embedded-versus-disk byte comparison and now pins the documented committed
   lock SHA-256; the targeted test is green.
+- **Resolved after CI parity check — combined ledger source hash:** all
+  source-derived GraphQL ledger rows are regenerated from the lock, so their
+  per-row source hash cannot silently lag a documented re-pin. The canonical
+  no-network refresh plus parity-artifact and frozen-identity tests are green.
