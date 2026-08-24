@@ -540,7 +540,9 @@ go run ./cmd/connectorgen surface-sync internal/connectors/defs
 
 `params-import` writes the accepted parameter set into `operations.json` under the registered
 operation block's `parameters` field (`rest.parameters` or `binary.parameters`; name, location,
-type, requiredness, enum values, summary). When an operation declares `rest.pagination`, it
+type, requiredness, enum values, summary, and exact provider-declared numeric minimum/maximum when
+present). Numeric bounds retain their source decimal lexemes rather than passing through `float64`.
+When an operation declares `rest.pagination`, it
 additionally writes the pager's source-only query set under `rest.pagination_parameters`; these
 values remain excluded from generated flags.
 `surface-sync` then derives the command flags from it. The split exists so CI
@@ -1698,8 +1700,26 @@ provider `operation_id`, including an empty value, alongside its deterministic
 `source_id`. The source ID falls back to the connector, lower-case method, and
 connector-relative path only when the provider ID is empty. Resolve only
 bounded, unambiguous in-artifact references: external, cyclic, unresolved, or
-ambiguous references, oversized schemas, and unbounded or dynamic request
-contracts fail before descriptor output.
+ambiguous references and oversized schemas fail before descriptor output. A v3
+descriptor does not treat the absence of optional JSON Schema resource
+assertions (`maxLength`, numeric minimum/maximum, or `maxItems`) as malformed
+provider input. It preserves the provider schema byte-for-byte at that node and
+records a separate `execution_envelope` using policy
+`pm-request-contract-bounds-v1`. Path and query scalars default to 4096 exact
+wire-encoded bytes with a 65536-byte hard ceiling; a tighter safely-derived
+provider constraint wins. JSON request bodies record the existing PM body,
+item, property, depth, and node ceilings. These are PM execution limits, not
+provider validation assertions: exceeding one rejects before authentication or
+network I/O and never truncates the value.
+
+Generation still fails closed when an otherwise executable v3 input is missing
+its positive execution envelope. Dynamic path/query serialization,
+composition or untyped schemas whose exact meaning cannot be represented, and
+other semantic dialect gaps remain source-traced and `merge_blocked`; the
+envelope is not a bypass for provider validation. A source-unbounded request
+header also remains `merge_blocked` until the shared default has been censused
+against shipped commands. Do not invent a per-provider header limit or present
+a PM resource ceiling as `maxLength`.
 
 Descriptors preserve fixed method/path and separated typed input schemas, plus
 the complete provider-declared response status shapes and ordinary output
@@ -1728,3 +1748,10 @@ later executable callback/webhook surface, and an affected connector remains
 merge-blocked until that foundation closes the gap. This preserves the captain's
 final-release invariant: no declared provider operation is omitted or left
 unreachable.
+
+Generated command help labels effective byte caps as PM execution policy and
+uses `encoded bytes` for path/query values. `pm connectors inspect <name>
+--json` publishes the same effective values under
+`request_execution_limits`, including command, flag, mapping, unit, origin, and
+policy version. Inspection remains local metadata-only and does not read
+credentials.

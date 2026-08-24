@@ -18,6 +18,9 @@ import (
 	"sync"
 	"testing"
 	"time"
+	"unicode/utf8"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestSourceImportProducesClosedCanonicalDescriptors(t *testing.T) {
@@ -133,6 +136,246 @@ func TestSourceImportAcceptsStringScalarUnionPathWireContract(t *testing.T) {
 	arms, _ := schema["oneOf"].([]any)
 	if len(arms) != 2 {
 		t.Fatalf("path union arms = %#v, want exact two-arm source contract", schema)
+	}
+}
+
+func TestSourceImportVersion3RepresentsGongWorkspaceQueryWithPMExecutionEnvelope(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{
+  "openapi":"3.0.3",
+  "info":{"title":"Gong API","version":"V2"},
+  "paths":{
+    "/v2/all-permission-profiles":{
+      "get":{
+        "operationId":"shared",
+        "parameters":[{
+          "name":"workspaceId",
+          "in":"query",
+          "required":true,
+          "schema":{"type":"string"}
+        }],
+        "responses":{"200":{"description":"ok"}}
+      }
+    }
+  }
+}`)
+	document := sourceImportV3FixtureDocument{
+		ID:       "gong-v2",
+		Path:     "/v2/all-permission-profiles",
+		Artifact: artifact,
+	}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "gong", []sourceImportV3FixtureDocument{document}), "gong")
+	if err != nil {
+		t.Fatalf("parse Gong-shaped v3 source lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return artifact, nil
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import Gong-shaped source: %v", err)
+	}
+	if len(result.Operations) != 1 {
+		t.Fatalf("operations = %d, want 1", len(result.Operations))
+	}
+	operation := result.Operations[0]
+	if operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 0 {
+		t.Fatalf("ordinary unbounded Gong query must be represented, runtime = %+v", operation.Runtime)
+	}
+	if len(operation.Request.Query) != 1 || operation.Request.Query[0].Name != "workspaceId" || !operation.Request.Query[0].Required {
+		t.Fatalf("Gong query descriptor = %#v", operation.Request.Query)
+	}
+	parameterRaw, err := json.Marshal(operation.Request.Query[0])
+	if err != nil {
+		t.Fatalf("marshal Gong query descriptor: %v", err)
+	}
+	var parameter map[string]any
+	if err := json.Unmarshal(parameterRaw, &parameter); err != nil {
+		t.Fatalf("decode Gong query descriptor: %v", err)
+	}
+	schema, _ := parameter["schema"].(map[string]any)
+	if !reflect.DeepEqual(schema, map[string]any{"type": "string"}) {
+		t.Fatalf("provider schema = %#v, want exact source schema without synthetic maxLength", schema)
+	}
+	execution, _ := parameter["execution_envelope"].(map[string]any)
+	if execution["policy_version"] != "pm-request-contract-bounds-v1" || execution["origin"] != "pm_policy" || execution["source_location"] != `request.query["workspaceId"]` {
+		t.Fatalf("execution envelope provenance = %#v", execution)
+	}
+	limits, _ := execution["limits"].([]any)
+	if len(limits) != 1 {
+		t.Fatalf("execution limits = %#v, want one encoded-byte limit", limits)
+	}
+	encodedBytes, _ := limits[0].(map[string]any)
+	if encodedBytes["kind"] != "wire_value" || encodedBytes["unit"] != "encoded_bytes" || encodedBytes["default"] != float64(4096) || encodedBytes["hard_ceiling"] != float64(65536) || encodedBytes["effective"] != float64(4096) {
+		t.Fatalf("encoded-byte execution limit = %#v", encodedBytes)
+	}
+	result.Operations[0].Request.Query[0].ExecutionEnvelope = nil
+	if err := validateSourceProjectionExecutionEnvelopes(result); err == nil || !strings.Contains(err.Error(), "requires a PM execution envelope") {
+		t.Fatalf("projection accepted missing Gong execution envelope: %v", err)
+	}
+}
+
+func TestSourceRequestSchemaDispositionSeparatesPolicyBoundsFromMalformedInput(t *testing.T) {
+	t.Parallel()
+	form := sourceDocumentForm{Family: "openapi", Version: "3.0.3"}
+	for _, test := range []struct {
+		name   string
+		schema map[string]any
+	}{
+		{name: "string", schema: map[string]any{"type": "string"}},
+		{name: "number", schema: map[string]any{"type": "number"}},
+		{name: "array", schema: map[string]any{"type": "array", "items": map[string]any{"type": "boolean"}}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			strict := defaultSourceImportLimits()
+			err := validateBoundedRequestSchema(test.schema, form, strict, 0)
+			if got := sourceRequestSchemaDispositionOf(err); got != sourceRequestRepresentedWithPolicyBound {
+				t.Fatalf("strict disposition = %q, error %v; want %q", got, err, sourceRequestRepresentedWithPolicyBound)
+			}
+			policy := strict
+			policy.UseExecutionEnvelopes = true
+			if err := validateBoundedRequestSchema(test.schema, form, policy, 0); err != nil {
+				t.Fatalf("policy-bounded schema: %v", err)
+			}
+		})
+	}
+
+	policy := defaultSourceImportLimits()
+	policy.UseExecutionEnvelopes = true
+	err := validateBoundedRequestSchema(map[string]any{"type": "string", "minLength": json.Number("2"), "maxLength": json.Number("1")}, form, policy, 0)
+	if err == nil || sourceRequestSchemaDispositionOf(err) != sourceRequestMalformedSourceGap || !strings.Contains(err.Error(), "contradictory") {
+		t.Fatalf("contradictory schema disposition/error = %q/%v, want malformed source", sourceRequestSchemaDispositionOf(err), err)
+	}
+}
+
+func TestSourceParameterExecutionEnvelopeUsesTighterProviderDerivedByteCap(t *testing.T) {
+	limits := defaultSourceImportLimits()
+	limits.UseExecutionEnvelopes = true
+	parameter := sourceParameterValue{
+		Name: "slug",
+		In:   "path",
+		Schema: map[string]any{
+			"type":      "string",
+			"maxLength": json.Number("8"),
+		},
+	}
+	envelope := sourceParameterExecutionEnvelopeFor(parameter, limits)
+	if envelope == nil || envelope.Origin != "provider_and_pm_policy" || len(envelope.Limits) != 1 {
+		t.Fatalf("provider-bounded envelope = %+v", envelope)
+	}
+	limit := envelope.Limits[0]
+	if limit.Default != engine.DefaultOperationParameterMaxBytes || limit.Effective != 8*utf8.UTFMax || limit.HardCeiling != engine.MaxOperationParameterMaxBytes || limit.Unit != "encoded_bytes" {
+		t.Fatalf("provider-bounded execution limit = %+v", limit)
+	}
+	parameter.Schema.(map[string]any)["maxLength"] = json.Number("2000")
+	envelope = sourceParameterExecutionEnvelopeFor(parameter, limits)
+	if envelope.Limits[0].Effective != engine.DefaultOperationParameterMaxBytes {
+		t.Fatalf("PM default did not win over larger provider-derived cap: %+v", envelope.Limits[0])
+	}
+}
+
+func TestSourceImportVersion3KeepsUnboundedHeaderAsMergeBlockingGap(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{
+  "openapi":"3.0.3",
+  "info":{"title":"header fixture","version":"1"},
+  "paths":{"/headers":{"get":{
+    "operationId":"shared",
+    "parameters":[{"name":"X-Request-Context","in":"header","schema":{"type":"string"}}],
+    "responses":{"200":{"description":"ok"}}
+  }}}
+}`)
+	document := sourceImportV3FixtureDocument{ID: "header", Path: "/headers", Artifact: artifact}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture")
+	if err != nil {
+		t.Fatalf("parse v3 header lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return artifact, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import v3 header source: %v", err)
+	}
+	operation := result.Operations[0]
+	if !operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 1 || operation.Runtime.Gaps[0].Foundation != "cli-request-schema-foundation-r1" || !strings.Contains(operation.Runtime.Gaps[0].Reason, "compatibility-censused PM byte envelope") {
+		t.Fatalf("unbounded header runtime gap = %+v", operation.Runtime)
+	}
+	if operation.Request.Header[0].ExecutionEnvelope != nil {
+		t.Fatalf("uncensused header unexpectedly received an execution envelope: %+v", operation.Request.Header[0].ExecutionEnvelope)
+	}
+}
+
+func TestSourceProjectionKeepsNumericHeaderWithoutTextualByteBoundMergeBlocked(t *testing.T) {
+	limits := defaultSourceImportLimits()
+	limits.UseExecutionEnvelopes = true
+	schema := map[string]any{
+		"type":    "integer",
+		"minimum": json.Number("0"),
+		"maximum": json.Number("100"),
+	}
+	err := sourceProjectionOperationParameterGap(schema, sourceDocumentForm{Family: "openapi", Version: "3.0.3"}, limits, "header", http.MethodGet)
+	if err == nil || !strings.Contains(err.Error(), "compatibility-censused PM byte envelope") {
+		t.Fatalf("numeric header without a textual byte bound gap = %v", err)
+	}
+}
+
+func TestSourceImportVersion3RepresentsCommonBodyBoundsWithSeparateEnvelope(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{
+  "openapi":"3.0.3",
+  "info":{"title":"body fixture","version":"1"},
+  "paths":{"/records":{"post":{
+    "operationId":"createRecord",
+    "requestBody":{"required":true,"content":{"application/json":{"schema":{
+      "type":"object",
+      "additionalProperties":false,
+      "properties":{
+        "name":{"type":"string"},
+        "weight":{"type":"number"},
+        "enabled":{"type":"boolean"},
+        "tags":{"type":"array","items":{"type":"string"}}
+      },
+      "required":["name","weight","tags"]
+    }}}},
+    "responses":{"200":{"description":"ok"}}
+  }}}
+}`)
+	document := sourceImportV3FixtureDocument{ID: "body", Path: "/records", Method: "POST", OperationID: "createRecord", Artifact: artifact}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture")
+	if err != nil {
+		t.Fatalf("parse v3 body lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return artifact, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import v3 body source: %v", err)
+	}
+	operation := result.Operations[0]
+	if operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 0 || operation.Request.Body == nil {
+		t.Fatalf("common body bounds were not represented: request/runtime = %+v/%+v", operation.Request, operation.Runtime)
+	}
+	body, _ := operation.Request.Body.Schema.(map[string]any)
+	properties, _ := body["properties"].(map[string]any)
+	name, _ := properties["name"].(map[string]any)
+	weight, _ := properties["weight"].(map[string]any)
+	tags, _ := properties["tags"].(map[string]any)
+	if _, exists := name["maxLength"]; exists {
+		t.Fatalf("source name schema received synthetic maxLength: %#v", name)
+	}
+	if _, exists := weight["minimum"]; exists {
+		t.Fatalf("source number schema received synthetic minimum: %#v", weight)
+	}
+	if _, exists := weight["maximum"]; exists {
+		t.Fatalf("source number schema received synthetic maximum: %#v", weight)
+	}
+	if _, exists := tags["maxItems"]; exists {
+		t.Fatalf("source array schema received synthetic maxItems: %#v", tags)
+	}
+	envelope := operation.Request.Body.ExecutionEnvelope
+	if envelope == nil || envelope.PolicyVersion != engine.OperationParameterExecutionPolicyVersion || len(envelope.Limits) != 5 {
+		t.Fatalf("body execution envelope = %+v", envelope)
+	}
+	envelope.Limits[0].Effective--
+	policy := defaultSourceImportLimits()
+	policy.UseExecutionEnvelopes = true
+	if err := validateSourceRequestBodyExecutionEnvelope(envelope, operation.Request.MediaType, policy); err == nil || !strings.Contains(err.Error(), "valid PM execution envelope") {
+		t.Fatalf("projection accepted altered body execution envelope: %v", err)
 	}
 }
 
@@ -720,7 +963,7 @@ func TestSourceImportCommandContractAndMigrationDocumentation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read migration conventions: %v", err)
 	}
-	if !strings.Contains(string(docs), "connectorgen source-import") || !strings.Contains(string(docs), "source-lock refresh") || !strings.Contains(string(docs), "non-symlink cache root") || !strings.Contains(string(docs), "identity_query") {
+	if !strings.Contains(string(docs), "connectorgen source-import") || !strings.Contains(string(docs), "source-lock refresh") || !strings.Contains(string(docs), "non-symlink cache root") || !strings.Contains(string(docs), "identity_query") || !strings.Contains(string(docs), "pm-request-contract-bounds-v1") || !strings.Contains(string(docs), "request_execution_limits") {
 		t.Fatalf("migration conventions lack source-import adoption contract")
 	}
 }
@@ -2498,6 +2741,8 @@ func descriptorResponse(t *testing.T, descriptor sourceOperationDescriptor, stat
 type sourceImportV3FixtureDocument struct {
 	ID            string
 	Path          string
+	Method        string
+	OperationID   string
 	Artifact      []byte
 	ArtifactURL   string
 	IdentityQuery *bool
@@ -2526,6 +2771,14 @@ func sourceImportV3FixtureLock(t *testing.T, connector string, documents []sourc
 		if document.IdentityQuery != nil {
 			artifact["identity_query"] = *document.IdentityQuery
 		}
+		method := document.Method
+		if method == "" {
+			method = "GET"
+		}
+		operationID := document.OperationID
+		if operationID == "" {
+			operationID = "shared"
+		}
 		sourceDocuments = append(sourceDocuments, map[string]any{
 			"id":       document.ID,
 			"artifact": artifact,
@@ -2540,10 +2793,10 @@ func sourceImportV3FixtureLock(t *testing.T, connector string, documents []sourc
 			"operations": []any{map[string]any{
 				"id":              connector + ".rest." + document.ID + ".shared",
 				"protocol":        "rest",
-				"method":          "GET",
+				"method":          method,
 				"path":            document.Path,
-				"operation_id":    "shared",
-				"source_location": `paths["` + document.Path + `"].get`,
+				"operation_id":    operationID,
+				"source_location": `paths["` + document.Path + `"].` + strings.ToLower(method),
 			}},
 		})
 	}

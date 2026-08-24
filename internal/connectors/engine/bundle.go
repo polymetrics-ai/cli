@@ -848,12 +848,14 @@ type OperationParameter struct {
 	// CLIName is an optional declaration-owned spelling for a fixed path
 	// placeholder. It exists when the runtime's safe placeholder differs from
 	// the provider's public resource name; it never changes the wire mapping.
-	CLIName    string   `json:"cli_name,omitempty"`
-	Type       string   `json:"type,omitempty"`
-	Required   bool     `json:"required,omitempty"`
-	Repeatable bool     `json:"repeatable,omitempty"`
-	Values     []string `json:"values,omitempty"`
-	Summary    string   `json:"summary,omitempty"`
+	CLIName    string                  `json:"cli_name,omitempty"`
+	Type       string                  `json:"type,omitempty"`
+	Required   bool                    `json:"required,omitempty"`
+	Repeatable bool                    `json:"repeatable,omitempty"`
+	Values     []string                `json:"values,omitempty"`
+	Summary    string                  `json:"summary,omitempty"`
+	Minimum    *connectors.ExactNumber `json:"minimum,omitempty"`
+	Maximum    *connectors.ExactNumber `json:"maximum,omitempty"`
 	// Schema and MaxBytes are required for a caller-provided header. Headers
 	// are strings on the wire, so their schema is deliberately a bounded
 	// string schema rather than a second generic request-body dialect.

@@ -188,6 +188,7 @@ COMMAND SURFACE
   Inspect, read, and safely plan typed Gong operations.
   Usage: pm gong <command> [flags]
   Source CLI: Gong API (Public OpenAPI 3.0.1)
+  PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
   Global flags:
     --credential (string): Credential name to use for the Gong request.
     --connection (string): Alias for --credential.

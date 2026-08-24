@@ -1144,7 +1144,7 @@ func commandSurfaceEndpointRefs(refs []CLISurfaceEndpointRef) []connectors.Comma
 }
 
 func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
-	return connectors.CommandSurfaceFlag{
+	projected := connectors.CommandSurfaceFlag{
 		Name:            flag.Name,
 		Type:            flag.Type,
 		Summary:         flag.Summary,
@@ -1162,6 +1162,11 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 		MinItems:        flag.MinItems,
 		MaxBytes:        flag.MaxBytes,
 	}
+	if projected.MaxBytes > 0 {
+		projected.MaxBytesOrigin = "pm_policy"
+		projected.MaxBytesPolicyVersion = OperationParameterExecutionPolicyVersion
+	}
+	return projected
 }
 
 func commandSurfaceOperationFlag(b Bundle, cmd CLICommand, flag CLIFlag) connectors.CommandSurfaceFlag {
@@ -1172,6 +1177,8 @@ func commandSurfaceOperationFlag(b Bundle, cmd CLICommand, flag CLIFlag) connect
 	}
 	declaredCLIBytes := projected.MaxBytes
 	projected.MaxBytes = defaultOperationParameterMaxBytes
+	projected.MaxBytesOrigin = "pm_policy"
+	projected.MaxBytesPolicyVersion = OperationParameterExecutionPolicyVersion
 	if declaredCLIBytes > 0 && declaredCLIBytes < projected.MaxBytes {
 		projected.MaxBytes = declaredCLIBytes
 	}
