@@ -128,6 +128,19 @@ operations can be moved to a document-owned v3 lock.
   This is a distinct shared source-contract gap: safely normalize only the nullable-null form or
   record a per-operation source gap; never choose an arbitrary `anyOf` arm in connector JSON.
 
+## V3 source retention increments — 2026-08-24
+
+The first ten migrated source locks reached the v3 document validator and each correctly advances
+only to its missing canonical descriptor. `source-retain` was then run against exactly the locked
+public document URL, without credentials and without a provider API operation. Close is the sole
+byte-identical artifact: it retained one verified OpenAPI document and its offline import exposed
+the nullable-union foundation gap above. The other nine writes were refused before artifact
+publication: Salesloft, Copper, Zoho Bigin, Klaviyo, Customer.io, and Intercom have byte/SHA drift;
+Braze redirects; Freshdesk returns HTTP 403; and Segment returns HTTP 404. No lock, URL, digest,
+or byte count was rewritten.
+
+The machine-readable state is [`SOURCE-LOCK-MIGRATION-READINESS.json`](SOURCE-LOCK-MIGRATION-READINESS.json).
+
 ## Relaunch baseline and CI repair — 2026-08-20
 
 - **RED:** PR run `32283259925` failed `TestGorgiasAPISurfaceOperationLedger`: the recovered v2

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "issue": 4291,
+  "recorded_at": "2026-08-24T17:34:37Z",
+  "purpose": "Incremental source-lock migration state. It supplements READINESS-BASELINE.json; it does not replace the seven-surface operation evidence.",
+  "preconversion_split": {
+    "documented_operations": 3932,
+    "runtime_enabled_with_generated_cli_path": 288,
+    "connector_definition_declarable": 3644,
+    "genuinely_execution_foundation_blocked": 0,
+    "qualification": "The zero is provisional: source-retention and source-import refusals are recorded per connector as discovered."
+  },
+  "connectors": [
+    {"connector": "close-com", "source_lock": "v3", "retention": "verified", "descriptor": "blocked_nullable_anyof", "detail": "GET /activity/ optional id__in is anyOf(array<string>, null); sourceimport.go:7175-7178 rejects it."},
+    {"connector": "outreach", "source_lock": "v2", "retention": "not_attempted", "descriptor": "blocked_cross_origin_citation_capture", "detail": "Six custom-object citations require a separately captured developers.outreach.io document."},
+    {"connector": "salesloft", "source_lock": "v3", "retention": "refused_byte_sha_drift", "descriptor": "not_generated"},
+    {"connector": "copper", "source_lock": "v3", "retention": "refused_byte_sha_drift", "descriptor": "not_generated"},
+    {"connector": "zoho-bigin", "source_lock": "v3", "retention": "refused_byte_sha_drift", "descriptor": "not_generated"},
+    {"connector": "klaviyo", "source_lock": "v3", "retention": "refused_byte_sha_drift", "descriptor": "not_generated"},
+    {"connector": "braze", "source_lock": "v3", "retention": "refused_redirect", "descriptor": "not_generated"},
+    {"connector": "customer-io", "source_lock": "v3", "retention": "refused_byte_sha_drift", "descriptor": "not_generated"},
+    {"connector": "intercom", "source_lock": "v3", "retention": "refused_byte_sha_drift", "descriptor": "not_generated"},
+    {"connector": "freshdesk", "source_lock": "v3", "retention": "refused_http_403", "descriptor": "not_generated"},
+    {"connector": "segment", "source_lock": "v3", "retention": "refused_http_404", "descriptor": "not_generated"},
+    {"connector": "activecampaign", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated"},
+    {"connector": "iterable", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated"},
+    {"connector": "help-scout", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated", "closed_foundations": ["operation_route", "action_specific_destination_source_binding"]},
+    {"connector": "gorgias", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated"},
+    {"connector": "service-now", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated"},
+    {"connector": "chatwoot", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated"},
+    {"connector": "chargebee", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated"},
+    {"connector": "square", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated"},
+    {"connector": "braintree", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated"}
+  ],
+  "shared_foundations": [
+    {"id": "v3_operation_evidence_projection", "status": "missing", "evidence": "cmd/connectorgen/operationevidence.go readOperationEvidenceSourceLock reads rest.operations but not rest.source_documents[].operations."},
+    {"id": "openapi_nullable_anyof_source_import", "status": "missing", "evidence": "cmd/connectorgen/sourceimport.go:7175-7178 rejects a documented nullable anyOf before a Close descriptor can be emitted."}
+  ]
+}
