@@ -1,2132 +1,2144 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "connector": "salesloft",
   "captured_at": "2026-08-19T00:00:00Z",
   "rest": {
-    "source_url": "https://developers.salesloft.com/docs/api/",
-    "source_kind": "complete_rendered_reference",
-    "source_discovery_url": "https://developers.salesloft.com/sitemap.xml",
-    "source_document_count": 315,
-    "sha256": "fa347769532335503ef647faf667eaf6d149831b7d784e825f13bc3d9766f8f2",
-    "bytes": 17172169,
-    "openapi": "rendered-reference",
-    "info_version": "Salesloft REST API public reference",
-    "operation_counts": {
-      "DELETE": 18,
-      "GET": 120,
-      "POST": 50,
-      "PUT": 23
+    "retrieval": "Migrated schema-version 2 complete_rendered_reference source-lock capture.",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "complete_rendered_reference",
+      "basis": "Fetched every 315 public Salesloft docs/api page listed by https://developers.salesloft.com/sitemap.xml; parsed 211 unique rendered operation blocks with their endpoint-page citations."
     },
-    "operations": [
-      {
-        "id": "salesloft.rest.delete.V2AccountsId0",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/accounts/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/accounts-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2BulkJobsId1",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/bulk_jobs/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2CadenceMembershipsId2",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/cadence_memberships/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-memberships-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2CustomFieldsId3",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/custom_fields/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/custom-fields-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2ExternalConfigurationsId4",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/external/configurations/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/external-configurations-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2ExternalMappingsId5",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/external/mappings/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/external-mappings-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2GroupsId6",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/groups/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/groups-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2ImportsId7",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/imports/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/imports-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2IntegrationsSignalsRegistrationsId8",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/integrations/signals/registrations/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2IntegrationsSignalsRegistrationsPlaysId9",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/integrations/signals/registrations/plays/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2NotesId10",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/notes/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/notes-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2OpportunityPeopleId11",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/opportunity_people/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/opportunity-people-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2OpportunityStagesId12",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/opportunity_stages/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/opportunity-stages-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2PeopleId13",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/people/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/people-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2PersonStagesId14",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/person_stages/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/person-stages-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2SavedListViewsId15",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/saved_list_views/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/saved-list-views-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2TasksId16",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/tasks/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/tasks-destroy/"
-      },
-      {
-        "id": "salesloft.rest.delete.V2WebhookSubscriptionsId17",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v2/webhook_subscriptions/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-destroy/"
-      },
-      {
-        "id": "salesloft.rest.get.PublicApiV1Cadences18",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/public_api/v1/cadences",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-cadences-index/"
-      },
-      {
-        "id": "salesloft.rest.get.PublicApiV1Calls19",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/public_api/v1/calls",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-calls-index/"
-      },
-      {
-        "id": "salesloft.rest.get.PublicApiV1CompaniesId20",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/public_api/v1/companies/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-companies-show/"
-      },
-      {
-        "id": "salesloft.rest.get.PublicApiV1CustomFields21",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/public_api/v1/custom_fields",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-custom-fields-index/"
-      },
-      {
-        "id": "salesloft.rest.get.PublicApiV1Me22",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/public_api/v1/me",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-credentials-me/"
-      },
-      {
-        "id": "salesloft.rest.get.PublicApiV1PeopleId23",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/public_api/v1/people/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-people-show/"
-      },
-      {
-        "id": "salesloft.rest.get.PublicApiV1PeoplePersonIdCadenceMemberships24",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/public_api/v1/people/{person_id}/cadence_memberships",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-person-cadence-memberships-index/"
-      },
-      {
-        "id": "salesloft.rest.get.PublicApiV1Successes25",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/public_api/v1/successes",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-successes-index/"
-      },
-      {
-        "id": "salesloft.rest.get.PublicApiV1Tags26",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/public_api/v1/tags",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-tags-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2AccountStages27",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/account_stages",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/account-stages-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2AccountStagesId28",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/account_stages/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/account-stages-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2AccountTeamMemberRoles29",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/account_team_member_roles",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/account-team-member-roles-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2AccountTiers30",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/account_tiers",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/account-tiers-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2AccountTiersId31",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/account_tiers/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/account-tiers-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2AccountTypes32",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/account_types",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/account-types-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Accounts33",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/accounts",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/accounts-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2AccountsId34",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/accounts/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/accounts-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ActionDetailsCallInstructions35",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/action_details/call_instructions",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/action-details-call-instructions-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ActionDetailsCallInstructionsId36",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/action_details/call_instructions/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/action-details-call-instructions-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Actions37",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/actions",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/actions-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ActionsId38",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/actions/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/actions-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ActivitiesCalls39",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/activities/calls",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/activities-calls-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ActivitiesCallsId40",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/activities/calls/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/activities-calls-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ActivitiesEmails41",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/activities/emails",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/activities-emails-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ActivitiesEmailsId42",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/activities/emails/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/activities-emails-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ActivityHistories43",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/activity_histories",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/activity-histories-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2AuditReports44",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/audit_reports",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/audit-reports-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2AuditReportsId45",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/audit_reports/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/audit-reports-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2BulkJobs46",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/bulk_jobs",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2BulkJobsBulkJobsIdJobData47",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/bulk_jobs/{bulk_jobs_id}/job_data",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-job-data-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2BulkJobsBulkJobsIdResults48",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/bulk_jobs/{bulk_jobs_id}/results",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-results-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2BulkJobsId49",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/bulk_jobs/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CadenceCollectionExportsId50",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/cadence_collection_exports/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-collection-exports-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CadenceCollections51",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/cadence_collections",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-collections-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CadenceCollectionsId52",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/cadence_collections/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-collections-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CadenceExportsId53",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/cadence_exports/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-exports-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CadenceMemberships54",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/cadence_memberships",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-memberships-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CadenceMembershipsId55",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/cadence_memberships/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-memberships-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CadenceStatsId56",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/cadence_stats/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-stats-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Cadences57",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/cadences",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadences-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CadencesId58",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/cadences/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadences-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CalendarAvailabilities59",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/calendar_availabilities",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/calendar-availabilities-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CalendarEvents60",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/calendar/events",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/calendar-events-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CalendarEventsWithRecurring61",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/calendar/events_with_recurring",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/calendar-events-with-recurring-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CallDataRecords62",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/call_data_records",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/call-data-records-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CallDataRecordsId63",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/call_data_records/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/call-data-records-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CallDispositions64",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/call_dispositions",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/call-dispositions-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CallDispositionsId65",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/call_dispositions/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/call-dispositions-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CallSentiments66",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/call_sentiments",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/call-sentiments-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CallSentimentsId67",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/call_sentiments/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/call-sentiments-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Conversations68",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/conversations",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/conversations-find-all/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ConversationsId69",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/conversations/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/conversations-find-one/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ConversationsIdExtensive70",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/conversations/{id}/extensive",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/conversations-find-one-extensive/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ConversationsIdRecording71",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/conversations/{id}/recording",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/conversations-find-one-conversation-recording/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CrmAccountTeamMembers72",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/crm_account_team_members",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/crm-account-team-members-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CrmActivities73",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/crm_activities",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/crm-activities-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CrmActivitiesId74",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/crm_activities/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/crm-activities-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CrmActivityFields75",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/crm_activity_fields",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/crm-activity-fields-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CrmTeamMembersWithRoles76",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/crm_team_members_with_roles",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/crm-team-members-with-roles-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CrmUsers77",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/crm_users",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/crm-users-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CustomFields78",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/custom_fields",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/custom-fields-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CustomFieldsId79",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/custom_fields/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/custom-fields-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CustomRoles80",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/custom_roles",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/custom-roles-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2CustomRolesId81",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/custom_roles/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/custom-roles-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2DataControlRequests82",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/data_control/requests",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/data-control-requests-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2DataControlRequestsId83",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/data_control/requests/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/data-control-requests-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2EmailTemplateAttachments84",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/email_template_attachments",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/email-template-attachments-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2EmailTemplates85",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/email_templates",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/email-templates-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2EmailTemplatesId86",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/email_templates/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/email-templates-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ExternalConfigurations87",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/external/configurations",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/external-configurations-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ExternalMappings88",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/external/mappings",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/external-mappings-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Groups89",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/groups",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/groups-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2GroupsId90",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/groups/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/groups-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Imports91",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/imports",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/imports-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2ImportsId92",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/imports/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/imports-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2IntegrationsSignalsRegistrations93",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/integrations/signals/registrations",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2IntegrationsSignalsRegistrationsId94",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/integrations/signals/registrations/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2IntegrationsSignalsRegistrationsPlays95",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/integrations/signals/registrations/plays",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2IntegrationsSignalsRegistrationsPlaysId96",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/integrations/signals/registrations/plays/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Me97",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/me",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/me-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Meetings98",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/meetings",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/meetings-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2MeetingsRescheduleLinksId99",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/meetings/reschedule_links/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/meetings-reschedule-links-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2MimeEmailPayloadsId100",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/mime_email_payloads/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/mime-email-payloads-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Notes101",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/notes",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/notes-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2NotesId102",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/notes/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/notes-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Opportunities103",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/opportunities",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/opportunities-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2OpportunitiesId104",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/opportunities/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/opportunities-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2OpportunityPeople105",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/opportunity_people",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/opportunity-people-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2OpportunityStages106",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/opportunity_stages",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/opportunity-stages-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2OpportunityStagesId107",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/opportunity_stages/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/opportunity-stages-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2PendingEmails108",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/pending_emails",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/pending-emails-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2People109",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/people",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/people-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2PeopleId110",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/people/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/people-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2PersonStages111",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/person_stages",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/person-stages-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2PersonStagesId112",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/person_stages/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/person-stages-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2PhoneNumberAssignments113",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/phone_number_assignments",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/phone-number-assignments-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2PhoneNumberAssignmentsId114",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/phone_number_assignments/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/phone-number-assignments-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2PhoneNumbersCallerIds115",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/phone_numbers/caller_ids",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/phone-numbers-caller-ids-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2PhoneNumbersRecordingSettingsId116",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/phone_numbers/recording_settings/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/phone-numbers-recording-settings-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2SavedListViews117",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/saved_list_views",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/saved-list-views-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2SavedListViewsId118",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/saved_list_views/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/saved-list-views-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Steps119",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/steps",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/steps-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2StepsId120",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/steps/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/steps-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Successes121",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/successes",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/successes-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Tags122",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/tags",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/tags-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Tasks123",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/tasks",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/tasks-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2TasksId124",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/tasks/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/tasks-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2TasksCounts125",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/tasks/counts",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/tasks-counts-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Team126",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/team",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/team-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2TeamTemplateAttachments127",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/team_template_attachments",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/team-template-attachments-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2TeamTemplates128",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/team_templates",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/team-templates-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2TeamTemplatesId129",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/team_templates/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/team-templates-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Transcriptions130",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/transcriptions",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/conversations-transcriptions-find-all-transcripts/"
-      },
-      {
-        "id": "salesloft.rest.get.V2TranscriptionsId131",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/transcriptions/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/conversations-transcriptions-find-one-transcript/"
-      },
-      {
-        "id": "salesloft.rest.get.V2TranscriptionsIdArtifact132",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/transcriptions/{id}/artifact",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/conversations-transcriptions-find-one-transcript-artifact/"
-      },
-      {
-        "id": "salesloft.rest.get.V2TranscriptionsIdSentences133",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/transcriptions/{id}/sentences",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/conversations-transcriptions-find-one-transcript-sentences/"
-      },
-      {
-        "id": "salesloft.rest.get.V2Users134",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/users",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/users-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2UsersId135",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/users/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/users-show/"
-      },
-      {
-        "id": "salesloft.rest.get.V2WebhookSubscriptions136",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/webhook_subscriptions",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-index/"
-      },
-      {
-        "id": "salesloft.rest.get.V2WebhookSubscriptionsId137",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/webhook_subscriptions/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-show/"
-      },
-      {
-        "id": "salesloft.rest.post.PublicApiV1Companies138",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/public_api/v1/companies",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-companies-create/"
-      },
-      {
-        "id": "salesloft.rest.post.PublicApiV1People139",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/public_api/v1/people",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-people-create/"
-      },
-      {
-        "id": "salesloft.rest.post.PublicApiV1PeoplePersonIdCadenceMemberships140",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/public_api/v1/people/{person_id}/cadence_memberships",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-person-cadence-memberships-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2AccountUpserts141",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/account_upserts",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/account-upserts-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2Accounts142",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/accounts",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/accounts-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2Activities143",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/activities",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/activities-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2ActivitiesCalls144",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/activities/calls",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/activities-calls-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2AuditReports145",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/audit_reports",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/audit-reports-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2BulkJobs146",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/bulk_jobs",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2BulkJobsBulkJobsIdJobData147",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/bulk_jobs/{bulk_jobs_id}/job_data",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-job-data-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2BulkRescheduleTasks148",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/bulk_reschedule_tasks",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/bulk-reschedule-tasks-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2CadenceBulkMemberships149",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/cadence_bulk_memberships",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-bulk-memberships-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2CadenceCollectionExportDownloads150",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/cadence_collection_export_downloads",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-collection-export-downloads-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2CadenceCollectionImports151",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/cadence_collection_imports",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-collection-imports-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2CadenceExportDownloads152",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/cadence_export_downloads",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-export-downloads-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2CadenceImports153",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/cadence_imports",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-imports-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2CadenceMemberships154",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/cadence_memberships",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/cadence-memberships-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2CalendarEvents155",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/calendar_events",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/calendar-events-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2CalendarEventsUpsert156",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/calendar/events/upsert",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/calendar-events-upsert-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2CallDataRecords157",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/call_data_records",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/call-data-records-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2ConversationsCalls158",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/conversations/calls",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/conversations-calls-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2CustomFields159",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/custom_fields",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/custom-fields-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2DataControlAccountAndPeopleRedaction160",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/data_control/account_and_people_redaction",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/data-control-account-and-people-redaction-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2DataControlAccountRedaction161",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/data_control/account_redaction",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/data-control-account-redaction-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2DataControlPeopleSoftDeletion162",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/data_control/people_soft_deletion",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/data-control-people-soft-deletion-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2DataControlRightToBeForgotten163",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/data_control/right_to_be_forgotten",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/data-control-right-to-be-forgotten-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2EmailMissingTags164",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/email_missing_tags",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/email-missing-tags-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2EmailTemplates165",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/email_templates",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/email-templates-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2ExternalEmails166",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/external_emails",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/external-emails-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2ExternalConfigurations167",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/external/configurations",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/external-configurations-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2ExternalMappings168",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/external/mappings",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/external-mappings-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2Groups169",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/groups",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/groups-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2Imports170",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/imports",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/imports-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2IntegrationsSignalsRegistrations171",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/integrations/signals/registrations",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2IntegrationsSignalsRegistrationsPlays172",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/integrations/signals/registrations/plays",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2LiveWebsiteTrackingParameters173",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/live_website_tracking_parameters",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/live-website-tracking-parameters-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2MeetingsSettingsSearches174",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/meetings/settings/searches",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/meetings-settings-searches-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2Notes175",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/notes",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/notes-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2OngoingActions176",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/ongoing_actions",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/ongoing-actions-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2OpportunityPeople177",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/opportunity_people",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/opportunity-people-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2OpportunityStages178",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/opportunity_stages",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/opportunity-stages-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2People179",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/people",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/people-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2PersonStages180",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/person_stages",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/person-stages-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2PersonUpserts181",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/person_upserts",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/person-upserts-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2SavedListViews182",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/saved_list_views",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/saved-list-views-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2Signals183",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/signals",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/signals-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2Tasks184",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/tasks",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/tasks-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2TeamTemplates185",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/team_templates",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/team-templates-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2ThirdPartyLiveFeedItems186",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/third_party_live_feed_items",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/third-party-live-feed-items-create/"
-      },
-      {
-        "id": "salesloft.rest.post.V2WebhookSubscriptions187",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/webhook_subscriptions",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-create/"
-      },
-      {
-        "id": "salesloft.rest.put.PublicApiV1CompaniesId188",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/public_api/v1/companies/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-companies-update/"
-      },
-      {
-        "id": "salesloft.rest.put.PublicApiV1PeopleId189",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/public_api/v1/people/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-people-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2AccountsId190",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/accounts/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/accounts-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2BulkJobsId191",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/bulk_jobs/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/bulk-jobs-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2CalendarEventsId192",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/calendar_events/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/calendar-events-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2CallDataRecordsId193",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/call_data_records/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/call-data-records-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2EmailTemplatesId194",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/email_templates/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/email-templates-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2GroupsId195",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/groups/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/groups-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2ImportsId196",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/imports/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/imports-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2IntegrationsSignalsRegistrationsId197",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/integrations/signals/registrations/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2IntegrationsSignalsRegistrationsPlaysId198",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/integrations/signals/registrations/plays/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2MeetingsId199",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/meetings/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/meetings-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2MeetingsSettingsId200",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/meetings/settings/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/meetings-settings-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2NotesId201",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/notes/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/notes-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2OpportunityStagesId202",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/opportunity_stages/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/opportunity-stages-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2PendingEmailsId203",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/pending_emails/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/pending-emails-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2PeopleId204",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/people/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/people-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2PersonStagesId205",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/person_stages/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/person-stages-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2SavedListViewsId206",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/saved_list_views/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/saved-list-views-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2TasksId207",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/tasks/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/tasks-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2TeamTemplatesId208",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/team_templates/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/team-templates-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2UsersId209",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/users/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/users-update/"
-      },
-      {
-        "id": "salesloft.rest.put.V2WebhookSubscriptionsId210",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/webhook_subscriptions/{id}",
-        "operation_id": null,
-        "deprecated": false,
-        "source_location": "rendered reference operation block",
-        "source_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-update/"
+    "source_documents": [
+      {
+        "id": "primary",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://developers.salesloft.com/docs/api/",
+          "sha256": "fa347769532335503ef647faf667eaf6d149831b7d784e825f13bc3d9766f8f2",
+          "bytes": 17172169
+        },
+        "published_source": {
+          "source_url": "https://developers.salesloft.com/docs/api/",
+          "capture_url": "https://developers.salesloft.com/docs/api/",
+          "sha256": "fa347769532335503ef647faf667eaf6d149831b7d784e825f13bc3d9766f8f2",
+          "bytes": 17172169,
+          "adapter": "schema-v2-source-lock-migration"
+        },
+        "info_version": "Salesloft REST API public reference",
+        "operations": [
+          {
+            "id": "salesloft.rest.delete.V2AccountsId0",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/accounts/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/accounts-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2BulkJobsId1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/bulk_jobs/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/bulk-jobs-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2CadenceMembershipsId2",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/cadence_memberships/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-memberships-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2CustomFieldsId3",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/custom_fields/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/custom-fields-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2ExternalConfigurationsId4",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/external/configurations/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/external-configurations-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2ExternalMappingsId5",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/external/mappings/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/external-mappings-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2GroupsId6",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/groups/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/groups-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2ImportsId7",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/imports/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/imports-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2IntegrationsSignalsRegistrationsId8",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/integrations/signals/registrations/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2IntegrationsSignalsRegistrationsPlaysId9",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/integrations/signals/registrations/plays/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2NotesId10",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/notes/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/notes-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2OpportunityPeopleId11",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/opportunity_people/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/opportunity-people-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2OpportunityStagesId12",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/opportunity_stages/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/opportunity-stages-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2PeopleId13",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/people/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/people-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2PersonStagesId14",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/person_stages/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/person-stages-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2SavedListViewsId15",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/saved_list_views/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/saved-list-views-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2TasksId16",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/tasks/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/tasks-destroy/"
+          },
+          {
+            "id": "salesloft.rest.delete.V2WebhookSubscriptionsId17",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v2/webhook_subscriptions/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-destroy/"
+          },
+          {
+            "id": "salesloft.rest.get.PublicApiV1Cadences18",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/public_api/v1/cadences",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-cadences-index/"
+          },
+          {
+            "id": "salesloft.rest.get.PublicApiV1Calls19",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/public_api/v1/calls",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-calls-index/"
+          },
+          {
+            "id": "salesloft.rest.get.PublicApiV1CompaniesId20",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/public_api/v1/companies/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-companies-show/"
+          },
+          {
+            "id": "salesloft.rest.get.PublicApiV1CustomFields21",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/public_api/v1/custom_fields",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-custom-fields-index/"
+          },
+          {
+            "id": "salesloft.rest.get.PublicApiV1Me22",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/public_api/v1/me",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-credentials-me/"
+          },
+          {
+            "id": "salesloft.rest.get.PublicApiV1PeopleId23",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/public_api/v1/people/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-people-show/"
+          },
+          {
+            "id": "salesloft.rest.get.PublicApiV1PeoplePersonIdCadenceMemberships24",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/public_api/v1/people/{person_id}/cadence_memberships",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-person-cadence-memberships-index/"
+          },
+          {
+            "id": "salesloft.rest.get.PublicApiV1Successes25",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/public_api/v1/successes",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-successes-index/"
+          },
+          {
+            "id": "salesloft.rest.get.PublicApiV1Tags26",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/public_api/v1/tags",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-tags-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2AccountStages27",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/account_stages",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/account-stages-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2AccountStagesId28",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/account_stages/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/account-stages-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2AccountTeamMemberRoles29",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/account_team_member_roles",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/account-team-member-roles-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2AccountTiers30",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/account_tiers",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/account-tiers-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2AccountTiersId31",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/account_tiers/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/account-tiers-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2AccountTypes32",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/account_types",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/account-types-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Accounts33",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/accounts",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/accounts-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2AccountsId34",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/accounts/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/accounts-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ActionDetailsCallInstructions35",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/action_details/call_instructions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/action-details-call-instructions-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ActionDetailsCallInstructionsId36",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/action_details/call_instructions/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/action-details-call-instructions-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Actions37",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/actions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/actions-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ActionsId38",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/actions/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/actions-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ActivitiesCalls39",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/activities/calls",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/activities-calls-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ActivitiesCallsId40",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/activities/calls/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/activities-calls-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ActivitiesEmails41",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/activities/emails",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/activities-emails-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ActivitiesEmailsId42",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/activities/emails/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/activities-emails-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ActivityHistories43",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/activity_histories",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/activity-histories-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2AuditReports44",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/audit_reports",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/audit-reports-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2AuditReportsId45",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/audit_reports/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/audit-reports-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2BulkJobs46",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/bulk_jobs",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/bulk-jobs-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2BulkJobsBulkJobsIdJobData47",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/bulk_jobs/{bulk_jobs_id}/job_data",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/bulk-jobs-job-data-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2BulkJobsBulkJobsIdResults48",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/bulk_jobs/{bulk_jobs_id}/results",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/bulk-jobs-results-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2BulkJobsId49",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/bulk_jobs/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/bulk-jobs-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CadenceCollectionExportsId50",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/cadence_collection_exports/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-collection-exports-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CadenceCollections51",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/cadence_collections",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-collections-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CadenceCollectionsId52",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/cadence_collections/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-collections-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CadenceExportsId53",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/cadence_exports/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-exports-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CadenceMemberships54",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/cadence_memberships",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-memberships-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CadenceMembershipsId55",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/cadence_memberships/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-memberships-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CadenceStatsId56",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/cadence_stats/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-stats-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Cadences57",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/cadences",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadences-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CadencesId58",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/cadences/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadences-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CalendarAvailabilities59",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/calendar_availabilities",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/calendar-availabilities-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CalendarEvents60",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/calendar/events",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/calendar-events-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CalendarEventsWithRecurring61",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/calendar/events_with_recurring",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/calendar-events-with-recurring-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CallDataRecords62",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/call_data_records",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/call-data-records-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CallDataRecordsId63",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/call_data_records/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/call-data-records-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CallDispositions64",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/call_dispositions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/call-dispositions-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CallDispositionsId65",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/call_dispositions/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/call-dispositions-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CallSentiments66",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/call_sentiments",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/call-sentiments-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CallSentimentsId67",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/call_sentiments/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/call-sentiments-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Conversations68",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/conversations",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/conversations-find-all/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ConversationsId69",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/conversations/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/conversations-find-one/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ConversationsIdExtensive70",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/conversations/{id}/extensive",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/conversations-find-one-extensive/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ConversationsIdRecording71",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/conversations/{id}/recording",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/conversations-find-one-conversation-recording/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CrmAccountTeamMembers72",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/crm_account_team_members",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/crm-account-team-members-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CrmActivities73",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/crm_activities",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/crm-activities-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CrmActivitiesId74",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/crm_activities/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/crm-activities-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CrmActivityFields75",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/crm_activity_fields",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/crm-activity-fields-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CrmTeamMembersWithRoles76",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/crm_team_members_with_roles",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/crm-team-members-with-roles-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CrmUsers77",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/crm_users",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/crm-users-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CustomFields78",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/custom_fields",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/custom-fields-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CustomFieldsId79",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/custom_fields/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/custom-fields-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CustomRoles80",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/custom_roles",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/custom-roles-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2CustomRolesId81",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/custom_roles/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/custom-roles-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2DataControlRequests82",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/data_control/requests",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/data-control-requests-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2DataControlRequestsId83",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/data_control/requests/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/data-control-requests-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2EmailTemplateAttachments84",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/email_template_attachments",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/email-template-attachments-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2EmailTemplates85",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/email_templates",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/email-templates-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2EmailTemplatesId86",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/email_templates/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/email-templates-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ExternalConfigurations87",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/external/configurations",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/external-configurations-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ExternalMappings88",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/external/mappings",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/external-mappings-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Groups89",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/groups",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/groups-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2GroupsId90",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/groups/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/groups-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Imports91",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/imports",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/imports-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2ImportsId92",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/imports/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/imports-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2IntegrationsSignalsRegistrations93",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/integrations/signals/registrations",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2IntegrationsSignalsRegistrationsId94",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/integrations/signals/registrations/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2IntegrationsSignalsRegistrationsPlays95",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/integrations/signals/registrations/plays",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2IntegrationsSignalsRegistrationsPlaysId96",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/integrations/signals/registrations/plays/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Me97",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/me",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/me-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Meetings98",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/meetings",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/meetings-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2MeetingsRescheduleLinksId99",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/meetings/reschedule_links/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/meetings-reschedule-links-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2MimeEmailPayloadsId100",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/mime_email_payloads/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/mime-email-payloads-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Notes101",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/notes",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/notes-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2NotesId102",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/notes/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/notes-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Opportunities103",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/opportunities",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/opportunities-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2OpportunitiesId104",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/opportunities/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/opportunities-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2OpportunityPeople105",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/opportunity_people",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/opportunity-people-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2OpportunityStages106",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/opportunity_stages",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/opportunity-stages-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2OpportunityStagesId107",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/opportunity_stages/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/opportunity-stages-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2PendingEmails108",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/pending_emails",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/pending-emails-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2People109",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/people",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/people-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2PeopleId110",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/people/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/people-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2PersonStages111",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/person_stages",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/person-stages-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2PersonStagesId112",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/person_stages/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/person-stages-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2PhoneNumberAssignments113",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/phone_number_assignments",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/phone-number-assignments-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2PhoneNumberAssignmentsId114",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/phone_number_assignments/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/phone-number-assignments-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2PhoneNumbersCallerIds115",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/phone_numbers/caller_ids",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/phone-numbers-caller-ids-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2PhoneNumbersRecordingSettingsId116",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/phone_numbers/recording_settings/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/phone-numbers-recording-settings-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2SavedListViews117",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/saved_list_views",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/saved-list-views-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2SavedListViewsId118",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/saved_list_views/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/saved-list-views-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Steps119",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/steps",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/steps-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2StepsId120",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/steps/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/steps-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Successes121",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/successes",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/successes-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Tags122",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/tags",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/tags-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Tasks123",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/tasks",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/tasks-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2TasksId124",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/tasks/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/tasks-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2TasksCounts125",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/tasks/counts",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/tasks-counts-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Team126",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/team",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/team-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2TeamTemplateAttachments127",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/team_template_attachments",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/team-template-attachments-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2TeamTemplates128",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/team_templates",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/team-templates-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2TeamTemplatesId129",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/team_templates/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/team-templates-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Transcriptions130",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/transcriptions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/conversations-transcriptions-find-all-transcripts/"
+          },
+          {
+            "id": "salesloft.rest.get.V2TranscriptionsId131",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/transcriptions/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/conversations-transcriptions-find-one-transcript/"
+          },
+          {
+            "id": "salesloft.rest.get.V2TranscriptionsIdArtifact132",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/transcriptions/{id}/artifact",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/conversations-transcriptions-find-one-transcript-artifact/"
+          },
+          {
+            "id": "salesloft.rest.get.V2TranscriptionsIdSentences133",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/transcriptions/{id}/sentences",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/conversations-transcriptions-find-one-transcript-sentences/"
+          },
+          {
+            "id": "salesloft.rest.get.V2Users134",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/users",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/users-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2UsersId135",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/users/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/users-show/"
+          },
+          {
+            "id": "salesloft.rest.get.V2WebhookSubscriptions136",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/webhook_subscriptions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-index/"
+          },
+          {
+            "id": "salesloft.rest.get.V2WebhookSubscriptionsId137",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/webhook_subscriptions/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-show/"
+          },
+          {
+            "id": "salesloft.rest.post.PublicApiV1Companies138",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/public_api/v1/companies",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-companies-create/"
+          },
+          {
+            "id": "salesloft.rest.post.PublicApiV1People139",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/public_api/v1/people",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-people-create/"
+          },
+          {
+            "id": "salesloft.rest.post.PublicApiV1PeoplePersonIdCadenceMemberships140",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/public_api/v1/people/{person_id}/cadence_memberships",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-person-cadence-memberships-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2AccountUpserts141",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/account_upserts",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/account-upserts-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2Accounts142",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/accounts",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/accounts-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2Activities143",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/activities",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/activities-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2ActivitiesCalls144",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/activities/calls",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/activities-calls-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2AuditReports145",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/audit_reports",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/audit-reports-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2BulkJobs146",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/bulk_jobs",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/bulk-jobs-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2BulkJobsBulkJobsIdJobData147",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/bulk_jobs/{bulk_jobs_id}/job_data",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/bulk-jobs-job-data-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2BulkRescheduleTasks148",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/bulk_reschedule_tasks",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/bulk-reschedule-tasks-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2CadenceBulkMemberships149",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/cadence_bulk_memberships",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-bulk-memberships-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2CadenceCollectionExportDownloads150",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/cadence_collection_export_downloads",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-collection-export-downloads-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2CadenceCollectionImports151",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/cadence_collection_imports",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-collection-imports-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2CadenceExportDownloads152",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/cadence_export_downloads",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-export-downloads-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2CadenceImports153",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/cadence_imports",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-imports-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2CadenceMemberships154",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/cadence_memberships",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/cadence-memberships-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2CalendarEvents155",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/calendar_events",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/calendar-events-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2CalendarEventsUpsert156",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/calendar/events/upsert",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/calendar-events-upsert-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2CallDataRecords157",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/call_data_records",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/call-data-records-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2ConversationsCalls158",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/conversations/calls",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/conversations-calls-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2CustomFields159",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/custom_fields",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/custom-fields-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2DataControlAccountAndPeopleRedaction160",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/data_control/account_and_people_redaction",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/data-control-account-and-people-redaction-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2DataControlAccountRedaction161",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/data_control/account_redaction",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/data-control-account-redaction-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2DataControlPeopleSoftDeletion162",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/data_control/people_soft_deletion",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/data-control-people-soft-deletion-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2DataControlRightToBeForgotten163",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/data_control/right_to_be_forgotten",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/data-control-right-to-be-forgotten-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2EmailMissingTags164",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/email_missing_tags",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/email-missing-tags-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2EmailTemplates165",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/email_templates",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/email-templates-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2ExternalEmails166",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/external_emails",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/external-emails-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2ExternalConfigurations167",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/external/configurations",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/external-configurations-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2ExternalMappings168",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/external/mappings",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/external-mappings-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2Groups169",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/groups",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/groups-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2Imports170",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/imports",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/imports-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2IntegrationsSignalsRegistrations171",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/integrations/signals/registrations",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2IntegrationsSignalsRegistrationsPlays172",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/integrations/signals/registrations/plays",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2LiveWebsiteTrackingParameters173",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/live_website_tracking_parameters",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/live-website-tracking-parameters-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2MeetingsSettingsSearches174",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/meetings/settings/searches",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/meetings-settings-searches-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2Notes175",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/notes",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/notes-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2OngoingActions176",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/ongoing_actions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/ongoing-actions-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2OpportunityPeople177",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/opportunity_people",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/opportunity-people-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2OpportunityStages178",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/opportunity_stages",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/opportunity-stages-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2People179",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/people",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/people-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2PersonStages180",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/person_stages",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/person-stages-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2PersonUpserts181",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/person_upserts",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/person-upserts-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2SavedListViews182",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/saved_list_views",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/saved-list-views-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2Signals183",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/signals",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/signals-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2Tasks184",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/tasks",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/tasks-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2TeamTemplates185",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/team_templates",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/team-templates-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2ThirdPartyLiveFeedItems186",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/third_party_live_feed_items",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/third-party-live-feed-items-create/"
+          },
+          {
+            "id": "salesloft.rest.post.V2WebhookSubscriptions187",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/webhook_subscriptions",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-create/"
+          },
+          {
+            "id": "salesloft.rest.put.PublicApiV1CompaniesId188",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/public_api/v1/companies/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-companies-update/"
+          },
+          {
+            "id": "salesloft.rest.put.PublicApiV1PeopleId189",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/public_api/v1/people/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/1.0/public-api-v-1-people-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2AccountsId190",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/accounts/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/accounts-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2BulkJobsId191",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/bulk_jobs/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/bulk-jobs-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2CalendarEventsId192",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/calendar_events/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/calendar-events-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2CallDataRecordsId193",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/call_data_records/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/call-data-records-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2EmailTemplatesId194",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/email_templates/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/email-templates-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2GroupsId195",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/groups/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/groups-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2ImportsId196",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/imports/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/imports-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2IntegrationsSignalsRegistrationsId197",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/integrations/signals/registrations/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2IntegrationsSignalsRegistrationsPlaysId198",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/integrations/signals/registrations/plays/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/integrations-signals-registrations-plays-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2MeetingsId199",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/meetings/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/meetings-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2MeetingsSettingsId200",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/meetings/settings/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/meetings-settings-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2NotesId201",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/notes/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/notes-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2OpportunityStagesId202",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/opportunity_stages/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/opportunity-stages-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2PendingEmailsId203",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/pending_emails/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/pending-emails-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2PeopleId204",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/people/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/people-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2PersonStagesId205",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/person_stages/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/person-stages-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2SavedListViewsId206",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/saved_list_views/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/saved-list-views-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2TasksId207",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/tasks/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/tasks-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2TeamTemplatesId208",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/team_templates/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/team-templates-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2UsersId209",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/users/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/users-update/"
+          },
+          {
+            "id": "salesloft.rest.put.V2WebhookSubscriptionsId210",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/webhook_subscriptions/{id}",
+            "operation_id": null,
+            "deprecated": false,
+            "source_location": "rendered reference operation block",
+            "citation_url": "https://developers.salesloft.com/docs/api/webhook-subscriptions-update/"
+          }
+        ]
       }
     ]
   },
@@ -2135,15 +2147,5 @@
     "graphql_query": 0,
     "graphql_mutation": 0,
     "total": 211
-  },
-  "operations_found": {
-    "rest": 211,
-    "graphql_query": 0,
-    "graphql_mutation": 0,
-    "total": 211
-  },
-  "coverage_confidence": {
-    "level": "complete_rendered_reference",
-    "basis": "Fetched every 315 public Salesloft docs/api page listed by https://developers.salesloft.com/sitemap.xml; parsed 211 unique rendered operation blocks with their endpoint-page citations."
   }
 }

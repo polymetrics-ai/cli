@@ -118,6 +118,15 @@ operations can be moved to a document-owned v3 lock.
   `rest.source_documents[].operations`. Restoring the preserved v2 lock made the check pass again
   at 5,457 rows. This must be repaired in the shared foundation before valid v3 locks can land;
   no connector-local shim is permitted.
+- **Close importer correction:** `source-retain close-com` verified and retained the pre-pinned
+  1,340,508-byte OpenAPI document at SHA-256
+  `0dcf3303e9d7b875429c4247a4b6c6419a6e7676b3155c7596d15436c1d9aa94`.
+  The post-`#4345` importer no longer stops at a missing numeric bound. It now correctly reaches
+  `GET /activity/`'s optional `id__in` query parameter and refuses its documented
+  `anyOf: [array<string>, null]` shape at
+  `validateBoundedRequestSchemaWithinEnum` (`cmd/connectorgen/sourceimport.go:7175-7178`).
+  This is a distinct shared source-contract gap: safely normalize only the nullable-null form or
+  record a per-operation source gap; never choose an arbitrary `anyOf` arm in connector JSON.
 
 ## Relaunch baseline and CI repair — 2026-08-20
 
