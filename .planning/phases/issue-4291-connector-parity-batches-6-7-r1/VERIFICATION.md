@@ -155,6 +155,28 @@ the fixed global source-reference index byte limit before source descriptors are
 shared closure is a bounded, operation-scoped reference index or equivalent streaming traversal;
 raising the package budget or discarding source positions would weaken the parser contract.
 
+## Gorgias executor-boundary reconciliation — 2026-08-24
+
+The retained Gorgias source supplies six non-declarable operations that the initial global
+projection incorrectly counted as ordinary declaration work. Five are genuine engine foundation
+gaps: the two bare-scalar writes `UpdateCustomerCustomFieldValue91` and
+`UpdateTicketCustomField107` cannot use the default JSON writer because it always materializes an
+object (`internal/connectors/engine/write.go:674-692`); `GetStatistic71` requires a recursive
+50-arm filter-expression input and direct read deliberately allows raw input only for an exact
+`text/plain` root-string contract (`direct_read.go:286-293`, `:785-786`);
+`DownloadLegacyStatistic77` is a POST CSV export but the binary executor requires GET
+(`binary_read.go:292-293`, `:333-334`); and `UpdateViewItems112` is a provider-defined PUT read
+while the operation reader accepts GET or POST only (`direct_read.go:429-432`).
+
+`DownloadFile18` is deliberately not a foundation gap: its provider source documents a signed
+cross-host redirect but no exact allowed redirect host or final media contract. The engine already
+has the safe capability and refuses only unbounded redirect metadata
+(`operation_headers.go:455-491`); the necessary change is provider evidence, not an engine or
+connector shim. The machine-readable split is therefore **288 runtime-enabled**, **3,638
+connector-declaration-pending**, **5 execution-foundation-blocked**, and **1
+provider-contract-unavailable** (3,932 total). No credentials, provider operation, or live
+certification was used for this source-only audit.
+
 Outreach remains intentionally at schema v2. Current `source-retain` stops at
 `parse source lock: json: unknown field "source_url"` before it can verify the existing OpenAPI
 artifact, while its six custom-object operations also cite `developers.outreach.io` rather than the
