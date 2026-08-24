@@ -35,6 +35,17 @@
         "script contexts list",
         "script languages list"
       ]
+    },
+    {
+      "id": "lifecycle-and-platform-metadata",
+      "title": "Elasticsearch lifecycle and platform metadata direct reads",
+      "commands": [
+        "lifecycle stats get",
+        "inference region policy get",
+        "ingest geoip stats get",
+        "ingest processor grok get",
+        "migration system features get"
+      ]
     }
   ],
   "global_flags": [
@@ -184,6 +195,26 @@
       "risk": "bounded read; requires the Elasticsearch manage cluster privilege; the response is capped at 1 MiB and redacted before JSON output",
       "approval": "none",
       "examples": ["pm elasticsearch script languages list --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "lifecycle stats get", "summary": "Get Elasticsearch data stream lifecycle statistics.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.lifecycle.stats.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_lifecycle/stats"}], "output_policy": "json_redacted", "risk": "bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch lifecycle stats get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "inference region policy get", "summary": "Get Elasticsearch inference region policy.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.inference.region_policy.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_inference/_region_policy"}], "output_policy": "json_redacted", "risk": "bounded read; requires the Elasticsearch monitor_inference cluster privilege; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch inference region policy get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "ingest geoip stats get", "summary": "Get Elasticsearch GeoIP statistics.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.ingest.geoip.stats.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_ingest/geoip/stats"}], "output_policy": "json_redacted", "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch ingest geoip stats get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "ingest processor grok get", "summary": "Get Elasticsearch grok processor metadata.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.ingest.processor.grok.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_ingest/processor/grok"}], "output_policy": "json_redacted", "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch ingest processor grok get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "migration system features get", "summary": "Get Elasticsearch system feature migration status.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.migration.system_features.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_migration/system_features"}], "output_policy": "json_redacted", "risk": "bounded read; requires the Elasticsearch manage cluster privilege; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch migration system features get --credential elasticsearch-local --json"]
     }
   ]
 }

@@ -249,3 +249,26 @@ help checks pass. A fresh binary from five separately initialized no-credential
 projects exits 1 with no stdout and exactly `error: missing --credential` for
 every command. Evidence:
 `evidence/elasticsearch-administrative-direct-read-command-proof-20260825.json`.
+
+## Elasticsearch Lifecycle and Platform Metadata Direct Reads — Red
+
+**Red:** `indices-get-data-lifecycle-stats`, `inference-get-region-policy`,
+`ingest-geo-ip-stats`, `ingest-processor-grok`, and
+`migration-get-feature-upgrade-status` are parameterless JSON GET operations in
+the pinned Elasticsearch source, but their source/API-surface entries remain
+declaration-pending. No installed command can prove dispatch. The provider's
+`monitor`, `monitor_inference`, and `manage` requirements must be operation
+metadata, never a disabling disposition.
+
+**Planned Green:** add only the five exact 1 MiB `json_redacted` rest-read
+contracts and source-bound commands. The built binary must stop at exactly
+`error: missing --credential` in a fresh isolated project for every command;
+no request, body, pagination, or provider call is invented.
+
+**Green:** the five source-bound contracts now retain all provider-stated
+cluster privileges as `auth_scopes` and reach credential preflight as installed
+commands. Commandrunner preflight, Elasticsearch conformance, generated docs
+validation, and help checks pass. A fresh binary in five isolated projects with
+no credential exits 1 with zero stdout and exactly `error: missing
+--credential` for every command. Evidence:
+`evidence/elasticsearch-platform-direct-read-command-proof-20260825.json`.

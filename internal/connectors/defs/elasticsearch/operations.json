@@ -168,6 +168,69 @@
         "path": "/_script_language",
         "max_bytes": 1048576
       }
+    },
+    {
+      "id": "elasticsearch.lifecycle.stats.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch data stream lifecycle statistics.",
+      "description": "Bounded direct read of the source-pinned indices-get-data-lifecycle-stats operation. The provider declares no path-item or operation parameters and returns JSON lifecycle statistics.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["monitor"],
+      "mutation_class": "none",
+      "rest": {"method": "GET", "path": "/_lifecycle/stats", "max_bytes": 1048576}
+    },
+    {
+      "id": "elasticsearch.inference.region_policy.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch inference region policy.",
+      "description": "Bounded direct read of the source-pinned inference-get-region-policy operation. The provider declares no path-item or operation parameters and returns a JSON inference region policy.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["monitor_inference"],
+      "mutation_class": "none",
+      "rest": {"method": "GET", "path": "/_inference/_region_policy", "max_bytes": 1048576}
+    },
+    {
+      "id": "elasticsearch.ingest.geoip.stats.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch GeoIP statistics.",
+      "description": "Bounded direct read of the source-pinned ingest-geo-ip-stats operation. The provider declares no path-item or operation parameters and returns JSON GeoIP statistics.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {"method": "GET", "path": "/_ingest/geoip/stats", "max_bytes": 1048576}
+    },
+    {
+      "id": "elasticsearch.ingest.processor.grok.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch grok processor metadata.",
+      "description": "Bounded direct read of the source-pinned ingest-processor-grok operation. The provider declares no path-item or operation parameters and returns JSON grok processor metadata.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {"method": "GET", "path": "/_ingest/processor/grok", "max_bytes": 1048576}
+    },
+    {
+      "id": "elasticsearch.migration.system_features.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch system feature migration status.",
+      "description": "Bounded direct read of the source-pinned migration-get-feature-upgrade-status operation. The provider declares no path-item or operation parameters and returns JSON feature migration information.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["manage"],
+      "mutation_class": "none",
+      "rest": {"method": "GET", "path": "/_migration/system_features", "max_bytes": 1048576}
     }
   ]
 }

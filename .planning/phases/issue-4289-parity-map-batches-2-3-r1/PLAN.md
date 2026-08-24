@@ -235,6 +235,17 @@ operation metadata and never suppress the command. The connector-local slice
 adds only bounded 1 MiB `json_redacted` direct-read contracts, source/API
 bindings, and commands proven by the credential-preflight boundary.
 
+### Elasticsearch Lifecycle and Platform Metadata Direct-Read Slice
+
+The pinned source also declares five exact parameterless JSON GETs: data-stream
+lifecycle statistics at `/_lifecycle/stats`, inference region policy at
+`/_inference/_region_policy`, GeoIP statistics at `/_ingest/geoip/stats`, grok
+processor metadata at `/_ingest/processor/grok`, and feature migration status
+at `/_migration/system_features`. The source declares `monitor`,
+`monitor_inference`, and `manage` where applicable; all are retained as runtime
+metadata. This connector-local slice adds only the exact bounded direct-read
+contracts and commands, without inventing inputs, schemas, or response shapes.
+
 ## Captain Delivery Discipline — 2026-08-24
 
 The 4,535-operation declarable-now inventory is planning input, not delivered

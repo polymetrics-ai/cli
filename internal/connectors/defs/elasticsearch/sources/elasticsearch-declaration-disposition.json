@@ -21,9 +21,9 @@
       "level": "complete",
       "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
     },
-    "enabled_operations": 10,
-    "enabled_percent": 1.18,
-    "disabled_operations": 835,
+    "enabled_operations": 15,
+    "enabled_percent": 1.78,
+    "disabled_operations": 830,
     "documented_deletes": 72,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -54,7 +54,7 @@
     ],
     "stream_bindings": 2,
     "writes_actions": 0,
-    "terminal_commands": 10,
+    "terminal_commands": 15,
     "live_certification": "pending",
     "gap_ids": [
       "generic-typed-destination-app-dispatch",
@@ -75,7 +75,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 835
+        "count": 830
       }
     ],
     "reverse_etl_eligibility": {
@@ -115,7 +115,7 @@
     "declaration_pending": [
       {
         "id": "typed-operation-contract-elasticsearch",
-        "count": 833
+        "count": 828
       },
       {
         "id": "sync-transport-source-definition-elasticsearch",
@@ -13187,15 +13187,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/_lifecycle/stats",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-          "notes": "classification=declaration-pending; source_id=elasticsearch.rest.indices-get-data-lifecycle-stats; source_location=paths[\"/_lifecycle/stats\"].get"
+        "covered_by": {
+          "direct_read": "lifecycle stats get"
         }
       },
       "source": {
@@ -13206,25 +13199,15 @@
         "operation_id": "indices-get-data-lifecycle-stats",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-elasticsearch",
-          "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_lifecycle/stats is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/elasticsearch/operations.json: elasticsearch.lifecycle.stats.get binds the source-pinned parameterless GET /_lifecycle/stats operation to the connector-local rest_read executor."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_lifecycle/stats is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-elasticsearch",
-        "contract": null
+        "status": "enabled; source-bound bounded rest_read contract and runnable command",
+        "contract": {"operation": "elasticsearch.lifecycle.stats.get", "command": "lifecycle stats get"}
       }
     },
     {
@@ -16477,15 +16460,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/_inference/_region_policy",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-          "notes": "classification=declaration-pending; source_id=elasticsearch.rest.inference-get-region-policy; source_location=paths[\"/_inference/_region_policy\"].get"
+        "covered_by": {
+          "direct_read": "inference region policy get"
         }
       },
       "source": {
@@ -16496,25 +16472,15 @@
         "operation_id": "inference-get-region-policy",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-elasticsearch",
-          "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_inference/_region_policy is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/elasticsearch/operations.json: elasticsearch.inference.region_policy.get binds the source-pinned parameterless GET /_inference/_region_policy operation to the connector-local rest_read executor."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_inference/_region_policy is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-elasticsearch",
-        "contract": null
+        "status": "enabled; source-bound bounded rest_read contract and runnable command",
+        "contract": {"operation": "elasticsearch.inference.region_policy.get", "command": "inference region policy get"}
       }
     },
     {
@@ -18766,15 +18732,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/_ingest/geoip/stats",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-          "notes": "classification=declaration-pending; source_id=elasticsearch.rest.ingest-geo-ip-stats; source_location=paths[\"/_ingest/geoip/stats\"].get"
+        "covered_by": {
+          "direct_read": "ingest geoip stats get"
         }
       },
       "source": {
@@ -18785,25 +18744,15 @@
         "operation_id": "ingest-geo-ip-stats",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-elasticsearch",
-          "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_ingest/geoip/stats is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/elasticsearch/operations.json: elasticsearch.ingest.geoip.stats.get binds the source-pinned parameterless GET /_ingest/geoip/stats operation to the connector-local rest_read executor."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_ingest/geoip/stats is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-elasticsearch",
-        "contract": null
+        "status": "enabled; source-bound bounded rest_read contract and runnable command",
+        "contract": {"operation": "elasticsearch.ingest.geoip.stats.get", "command": "ingest geoip stats get"}
       }
     },
     {
@@ -18954,15 +18903,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/_ingest/processor/grok",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-          "notes": "classification=declaration-pending; source_id=elasticsearch.rest.ingest-processor-grok; source_location=paths[\"/_ingest/processor/grok\"].get"
+        "covered_by": {
+          "direct_read": "ingest processor grok get"
         }
       },
       "source": {
@@ -18973,25 +18915,15 @@
         "operation_id": "ingest-processor-grok",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-elasticsearch",
-          "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_ingest/processor/grok is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/elasticsearch/operations.json: elasticsearch.ingest.processor.grok.get binds the source-pinned parameterless GET /_ingest/processor/grok operation to the connector-local rest_read executor."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_ingest/processor/grok is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-elasticsearch",
-        "contract": null
+        "status": "enabled; source-bound bounded rest_read contract and runnable command",
+        "contract": {"operation": "elasticsearch.ingest.processor.grok.get", "command": "ingest processor grok get"}
       }
     },
     {
@@ -20101,15 +20033,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/_migration/system_features",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-          "notes": "classification=declaration-pending; source_id=elasticsearch.rest.migration-get-feature-upgrade-status; source_location=paths[\"/_migration/system_features\"].get"
+        "covered_by": {
+          "direct_read": "migration system features get"
         }
       },
       "source": {
@@ -20120,25 +20045,15 @@
         "operation_id": "migration-get-feature-upgrade-status",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-elasticsearch",
-          "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_migration/system_features is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/elasticsearch/operations.json: elasticsearch.migration.system_features.get binds the source-pinned parameterless GET /_migration/system_features operation to the connector-local rest_read executor."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_migration/system_features is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-elasticsearch",
-        "contract": null
+        "status": "enabled; source-bound bounded rest_read contract and runnable command",
+        "contract": {"operation": "elasticsearch.migration.system_features.get", "command": "migration system features get"}
       }
     },
     {

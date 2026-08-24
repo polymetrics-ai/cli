@@ -3613,14 +3613,8 @@
     {
       "method": "GET",
       "path": "/_lifecycle/stats",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.indices-get-data-lifecycle-stats; source_location=paths[\"/_lifecycle/stats\"].get"
+      "covered_by": {
+        "direct_read": "lifecycle stats get"
       }
     },
     {
@@ -4523,14 +4517,8 @@
     {
       "method": "GET",
       "path": "/_inference/_region_policy",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.inference-get-region-policy; source_location=paths[\"/_inference/_region_policy\"].get"
+      "covered_by": {
+        "direct_read": "inference region policy get"
       }
     },
     {
@@ -4809,14 +4797,8 @@
     {
       "method": "GET",
       "path": "/_ingest/geoip/stats",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.ingest-geo-ip-stats; source_location=paths[\"/_ingest/geoip/stats\"].get"
+      "covered_by": {
+        "direct_read": "ingest geoip stats get"
       }
     },
     {
@@ -4861,14 +4843,8 @@
     {
       "method": "GET",
       "path": "/_ingest/processor/grok",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.ingest-processor-grok; source_location=paths[\"/_ingest/processor/grok\"].get"
+      "covered_by": {
+        "direct_read": "ingest processor grok get"
       }
     },
     {
@@ -5174,14 +5150,8 @@
     {
       "method": "GET",
       "path": "/_migration/system_features",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.migration-get-feature-upgrade-status; source_location=paths[\"/_migration/system_features\"].get"
+      "covered_by": {
+        "direct_read": "migration system features get"
       }
     },
     {

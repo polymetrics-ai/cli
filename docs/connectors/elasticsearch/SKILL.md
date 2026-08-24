@@ -69,6 +69,7 @@ Reads Elasticsearch index metadata and documents through the REST API. Read-only
 - Elasticsearch cluster direct reads
 - Elasticsearch lifecycle and license direct reads
 - Elasticsearch administrative metadata direct reads
+- Elasticsearch lifecycle and platform metadata direct reads
 - Other Commands
   - cluster info get - Get Elasticsearch cluster information. [intent=direct_read availability=implemented operation=elasticsearch.cluster.info.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
   - cluster remote info get - Get Elasticsearch remote-cluster information. [intent=direct_read availability=implemented operation=elasticsearch.cluster.remote.info.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
@@ -80,6 +81,11 @@ Reads Elasticsearch index metadata and documents through the REST API. Read-only
   - esql queries list - List running Elasticsearch ES|QL queries. [intent=direct_read availability=implemented operation=elasticsearch.esql.queries.list]; approval: none; risk: bounded read; requires the Elasticsearch monitor_esql cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
   - script contexts list - List Elasticsearch script contexts. [intent=direct_read availability=implemented operation=elasticsearch.script.contexts.list]; approval: none; risk: bounded read; requires the Elasticsearch manage cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
   - script languages list - List Elasticsearch script languages. [intent=direct_read availability=implemented operation=elasticsearch.script.languages.list]; approval: none; risk: bounded read; requires the Elasticsearch manage cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+  - lifecycle stats get - Get Elasticsearch data stream lifecycle statistics. [intent=direct_read availability=implemented operation=elasticsearch.lifecycle.stats.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+  - inference region policy get - Get Elasticsearch inference region policy. [intent=direct_read availability=implemented operation=elasticsearch.inference.region_policy.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor_inference cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+  - ingest geoip stats get - Get Elasticsearch GeoIP statistics. [intent=direct_read availability=implemented operation=elasticsearch.ingest.geoip.stats.get]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+  - ingest processor grok get - Get Elasticsearch grok processor metadata. [intent=direct_read availability=implemented operation=elasticsearch.ingest.processor.grok.get]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+  - migration system features get - Get Elasticsearch system feature migration status. [intent=direct_read availability=implemented operation=elasticsearch.migration.system_features.get]; approval: none; risk: bounded read; requires the Elasticsearch manage cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
 
 ## Commands
 

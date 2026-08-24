@@ -1157,6 +1157,36 @@
       "path": "/_script_language",
       "kind": "rest_read",
       "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_lifecycle/stats",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_inference/_region_policy",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_ingest/geoip/stats",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_ingest/processor/grok",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_migration/system_features",
+      "kind": "rest_read",
+      "max_bytes": 1048576
     }
   ],
   "emailoctopus": [],
