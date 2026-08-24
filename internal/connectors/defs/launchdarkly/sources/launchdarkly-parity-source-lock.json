@@ -1,20 +1,20 @@
 {
   "schema_version": 1,
   "connector": "launchdarkly",
-  "captured_at": "2026-08-19T00:00:00Z",
+  "captured_at": "2026-08-24T12:05:15Z",
   "source_retrieval": {
     "state": "fetched",
     "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
     "requested_url": "https://app.launchdarkly.com/api/v2/openapi.json",
-    "sha256": "41fc8c76b779790f405bc0f1f500ab54a6a3695bb14a9916c537c180e5469419",
-    "bytes": 2953979,
+    "sha256": "5712a80c347abfc6a731296e487eee0e9d282ef910ba10c3ff16949daa8d9b3e",
+    "bytes": 2936808,
     "content_type": "application/json",
     "artifacts": [
       {
         "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
         "requested_url": "https://app.launchdarkly.com/api/v2/openapi.json",
-        "sha256": "41fc8c76b779790f405bc0f1f500ab54a6a3695bb14a9916c537c180e5469419",
-        "bytes": 2953979,
+        "sha256": "5712a80c347abfc6a731296e487eee0e9d282ef910ba10c3ff16949daa8d9b3e",
+        "bytes": 2936808,
         "content_type": "application/json"
       }
     ],
@@ -32,8 +32,8 @@
   },
   "rest": {
     "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
-    "sha256": "41fc8c76b779790f405bc0f1f500ab54a6a3695bb14a9916c537c180e5469419",
-    "bytes": 2953979,
+    "sha256": "5712a80c347abfc6a731296e487eee0e9d282ef910ba10c3ff16949daa8d9b3e",
+    "bytes": 2936808,
     "operation_counts": [
       {
         "key": "DELETE",
@@ -4428,8 +4428,8 @@
   },
   "graphql": {
     "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
-    "sha256": "41fc8c76b779790f405bc0f1f500ab54a6a3695bb14a9916c537c180e5469419",
-    "bytes": 2953979,
+    "sha256": "5712a80c347abfc6a731296e487eee0e9d282ef910ba10c3ff16949daa8d9b3e",
+    "bytes": 2936808,
     "operation_counts": [],
     "operations": []
   },

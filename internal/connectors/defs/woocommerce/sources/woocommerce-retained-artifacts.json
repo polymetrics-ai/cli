@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "woocommerce",
+  "artifacts": [
+    {
+      "sha256": "a02e504ae56786d94f6a859e55b5c7e3229749ea3d43147424cfd987b2ec550e",
+      "bytes": 4400931,
+      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
+      "retrieved_at": "2026-08-24T12:03:25Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

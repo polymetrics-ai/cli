@@ -391,3 +391,43 @@ before any lock update; `source-retain` itself still cannot alter a lock.
   reader uses the existing public URL/SSRF policy, requires a matching connector name and v1 lock,
   allows only the lock's own non-secret query, and runs the same byte/digest validation before any
   write. It never accepts a runtime URL, artifact path, or credentials.
+
+### Retention execution — 2026-08-24
+
+This execution supersedes the *current verification* classifications in the earlier inventory; the
+earlier values remain the historical audit observations. `source-retain` was invoked with
+`--retrieved-at 2026-08-24T12:05:15Z --license undetermined --terms undetermined`. It receives no
+provider URL or credentials. It fetched only the source URL already recorded by each connector,
+rejected redirects/non-200 bodies, validated byte count and SHA-256 before writing, then created
+the connector-owned artifact and provenance manifest.
+
+| Connector | Result | Retained/re-pin evidence |
+| --- | --- | --- |
+| Airtable | Refused; no re-pin. The rendered document is not stable enough to lock honestly: the old `623469` / `9a61c17ca297d70ba6ec186a7acb03a00d15915b3007bc11db6263cf0b2cb239` differs from two 623785-byte reads, `70a3f7090044871d48e050620c6c0ee74ffc91013e4cae40373b4999c38322a5` and `0705bc2fd16cd02296778fc48a66ecfb5d1351fb4bb289c37021b6a7ed2d587a`. | `source-retain` refused the old pin; no artifact or manifest was written. |
+| BambooHR | **Re-pinned and retained.** | Old `1562871` / `ecfc63823d7f08942bec89f7175ac6fedc582b07177346fdc8e4d03400ebf15a` → real provider reference `1627565` / `a04e654442c3980b7f3172b7160404723a1ae096ca78aca1cead0721f1177890`; artifact and manifest retained. |
+| Buildkite | Refused; no re-pin. The rendered document produced different current identities: old `440978` / `350d758449efdfcf9e0522cf10731c824a8cde8570869187a2ea1bb95982eedd`, then `439436` / `c969b9e057a29c90321c0615264e67f2c08c767c94fc6b5770ccda77e07262d2`, then `439436` / `3c8895da56b4ee032cc7eeffe1dab906fef96f95ad762984bbb733734c310dd3`. | `source-retain` refused the old pin; no artifact or manifest was written. |
+| eBay Fulfillment | Unmappable. | The parity lock has no retained artifact identity; `source-retain` correctly reported `parity source lock has no retainable provider artifacts`. The current official API page is recorded above, but no error-page or guessed OAS was pinned. |
+| Fastly | **Retained unchanged.** | `c6ae5b0fd118fe2d87e7d0ef431f67cda703d1487d27b5f02725d82219386677`, 2341028 bytes. |
+| Google Analytics Data API | Refused; no re-pin. The locked v1 discovery document changed despite its byte count remaining 14971: old `92487efec56020b9ef2f9644b55a352f9ae9ca34eba41612f90a82d54266b499`, then `da7d18b86488d5d8fcceda6f13774284e88e7c70da2d26dbffcec00a885c3e13`, then `893dcd5a0f81bfc260f84bbb396011f04c7756803094e5f4e7a6228f2098680b`. | `source-retain` refused the existing multi-artifact lock before write; no artifact or manifest was written. |
+| HubSpot | **Retained unchanged.** | `7bfcdb27e8d7e52341e90284f670768020f62aeebf43f5cd339263fa5d801619`, 4132728 bytes. |
+| LaunchDarkly | **Re-pinned and retained.** | Old `2953979` / `41fc8c76b779790f405bc0f1f500ab54a6a3695bb14a9916c537c180e5469419` → real provider OAS `2936808` / `5712a80c347abfc6a731296e487eee0e9d282ef910ba10c3ff16949daa8d9b3e`; artifact and manifest retained. |
+| Linear | Refused; no re-pin. | The public browser-rendered schema remains a valid citation, but the maintenance HTTP fetch sees the 7460-byte application shell rather than the old rendered capture. `source-retain` rejected it; no shell artifact was pinned. |
+| Mailchimp | Refused as an atomic 182-artifact set. | The root Swagger match is insufficient: at least one of the remaining locked operation artifacts now differs. `source-retain` wrote nothing, so no partial root-only lock is falsely presented as retained. |
+| Pinterest | Refused; no re-pin. The rendered reference changed from old `651974` / `2fd707bc8df87440903b46711e836370da639f485078a600019760f3e29a6d63`, through `657429` / `1a5d73b752b5839c0853a2f481c85bf99200c6175cffd177e24a0f0ae231dece`, to `657190` / `1e8062a4c822de21589e334778a0135c3ebd7634be1faabf8dd7f98204bf2d1a`. | `source-retain` refused the old pin; no artifact or manifest was written. |
+| Pipedrive | **Retained unchanged.** | `302b0d7c2c1a6cb96a2d299717c6be0c2cf3eac6dfd884ea8352962ebf501c2b`, 1782400 bytes. |
+| QuickBooks | **Retained unchanged.** | `source-retain` obtained the original `387314`-byte `24c6accfab8236fdba4f03bff33214dab5b891e3a0c82b243cf6ca4f297fdb7a` provider entity document. An earlier ad-hoc direct-client body of 33372 bytes was not accepted or used; it is not a re-pin. |
+| Salesforce | Unmappable. | The browser-rendered provenance has no artifact list, so `source-retain` correctly reported no retainable provider artifacts. Tenant-specific REST surface discovery remains unavailable without credentials. |
+| ShipStation | **Retained unchanged.** | `c71c20d26559b1d0dad5c3718889fc8d4063cfad3abeaf5f63cc1651bef32307`, 186490 bytes; the locked `download` query is recorded as identity provenance. |
+| SonarCloud | Refused; no re-pin. The provider catalog changed from old `209845` / `76f39c511c7ab51254d2d2032baf9b1ff062d37a6b2eac766c6dba2d8553db5e`, through `211930` / `f160f7f6764d6750544e2dde53acba1a7ffaac2d8912c773b7c92b2c71ca4080`, to `211920` / `701e57f73a1d91c1ceea91301e7de8e043e0d5e46b86e637fc289502d1db13a9`. | `source-retain` refused the old pin; no artifact or manifest was written. |
+| Squarespace | **Retained unchanged.** | `eff1274e6e87cfa998a5125c2ebf53ee459202d108598dacf6507b32b2b2debc`, 345839 bytes. |
+| TikTok Marketing | Unmappable. | The parity lock has no artifact identity and the stale direct documentation route still fails TLS. `source-retain` wrote nothing; no third-party OAS or failure response was substituted. |
+| WooCommerce | **Retained unchanged.** | `a02e504ae56786d94f6a859e55b5c7e3229749ea3d43147424cfd987b2ec550e`, 4400931 bytes. |
+| Zendesk Support | **Retained unchanged.** | `a487892c8e1f3feeba96c234148be69fddd50afce17bf30437bcb8de36d9a0c8`, 1757202 bytes. |
+
+Independent local verification recomputed every retained artifact's byte count and SHA-256 and
+matched it both to its new `*-retained-artifacts.json` record and to its parity-lock artifact
+identity. The retained set is **10/20 connectors, 10 artifacts**: BambooHR, Fastly, HubSpot,
+LaunchDarkly, Pipedrive, QuickBooks, ShipStation, Squarespace, WooCommerce, and Zendesk Support.
+There are **two re-pins** (BambooHR, LaunchDarkly) and **eight preserved pins**. The unresolved
+half is intentionally left without a raw artifact rather than retaining a changed document,
+application shell, error page, or incomplete multi-artifact set.

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "squarespace",
+  "artifacts": [
+    {
+      "sha256": "eff1274e6e87cfa998a5125c2ebf53ee459202d108598dacf6507b32b2b2debc",
+      "bytes": 345839,
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "retrieved_at": "2026-08-24T12:03:25Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

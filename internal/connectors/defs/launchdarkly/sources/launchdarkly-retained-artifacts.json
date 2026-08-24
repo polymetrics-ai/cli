@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "launchdarkly",
+  "artifacts": [
+    {
+      "sha256": "5712a80c347abfc6a731296e487eee0e9d282ef910ba10c3ff16949daa8d9b3e",
+      "bytes": 2936808,
+      "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
+      "retrieved_at": "2026-08-24T12:05:15Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}
