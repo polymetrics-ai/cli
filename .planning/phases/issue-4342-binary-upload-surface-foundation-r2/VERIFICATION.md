@@ -25,6 +25,7 @@
 ## Post-PR website correction
 
 - GitHub's `Website checks` and `Website generated data` initially failed because this intent changed three generated website artifacts. Ran `cd website && pnpm run gen:website-data`, then verified `pnpm run lint` (warnings only, exit 0), `pnpm run typecheck`, `pnpm run test:unit` (80 tests), `pnpm run test:scripts` (34 tests), and `pnpm run build` — all passed. The build emits existing Better Auth default-secret warnings while statically collecting pages but exits 0.
+- When `main` advanced again during CI readiness, merged it into the published branch and reran `GOFLAGS='-p=3' go test -timeout 20m ./cmd/connectorgen` (pass, 336.788s) plus `cd website && pnpm run gen:website-data` (no resulting diff).
 
 ## Constraint
 
