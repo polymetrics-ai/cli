@@ -201097,13 +201097,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "reverse_etl": {
-          "state": "not_enabled_foundation_gap",
+          "state": "bound_foundation_available_pending_connector_app_cli_proof",
           "eligible_typed_action": true,
-          "foundation_gap": {
-            "id": "declarative-typed-destination-action-specific-source-bindings",
-            "evidence": "The selected update_conversation binding maps conversations.id to conversationId. A second customers.id to customerId binding for the same declarative source executor is rejected by internal/connectors/sync_transport.go:443 before I/O.",
-            "minimal_change": "Support definition-owned action-specific source bindings for one selected declarative source executor, retaining closed schema validation before I/O."
-          }
+          "foundation_gap": null
         },
         "binary_read": {
           "state": "not_mapped_for_this_provider_operation"
@@ -201132,11 +201128,7 @@
       },
       "merge_readiness": {
         "enabled": true,
-        "open_foundation_gap": {
-          "id": "declarative-typed-destination-action-specific-source-bindings",
-          "evidence": "The selected update_conversation binding maps conversations.id to conversationId. A second customers.id to customerId binding for the same declarative source executor is rejected by internal/connectors/sync_transport.go:443 before I/O.",
-          "minimal_change": "Support definition-owned action-specific source bindings for one selected declarative source executor, retaining closed schema validation before I/O."
-        },
+        "open_foundation_gap": null,
         "merge_ready": false
       }
     },
@@ -209200,27 +209192,22 @@
         "provider_version_evidence": "internal/connectors/defs/help-scout/sources/help-scout-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; foundation-gap declarative-operation-route-override",
-        "contract": null,
-        "api_surface_binding": null,
-        "rejection": {
-          "reason": "foundation-gap",
-          "recoverable": true,
-          "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
-          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
-        }
+        "source_state": "enabled",
+        "declaration_status": "enabled; runtime-preflight runnable command binds the source-locked v3 route",
+        "contract": {
+          "operation": "help-scout.v3_get_conversation",
+          "direct_read": "direct get-conversation-v3"
+        },
+        "api_surface_binding": {
+          "direct_read": "direct get-conversation-v3"
+        },
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
           "state": "mapped",
-          "source_state": "disabled",
-          "rejection": {
-            "reason": "foundation-gap",
-            "recoverable": true,
-            "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
-            "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
-          }
+          "source_state": "enabled",
+          "rejection": null
         },
         "direct_write": {
           "state": "not_mapped_for_this_provider_operation"
@@ -209238,7 +209225,10 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "no_generated_binding"
+          "state": "generated_binding_present",
+          "binding": {
+            "direct_read": "direct get-conversation-v3"
+          }
         }
       },
       "generated_projections": {
@@ -209254,12 +209244,8 @@
         "provider_live": "pending"
       },
       "merge_readiness": {
-        "enabled": false,
-        "open_foundation_gap": {
-          "id": "declarative-operation-route-override",
-          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
-          "minimal_change": "Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
-        },
+        "enabled": true,
+        "open_foundation_gap": null,
         "merge_ready": false
       }
     },
@@ -209281,27 +209267,22 @@
         "provider_version_evidence": "internal/connectors/defs/help-scout/sources/help-scout-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; foundation-gap declarative-operation-route-override",
-        "contract": null,
-        "api_surface_binding": null,
-        "rejection": {
-          "reason": "foundation-gap",
-          "recoverable": true,
-          "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
-          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
-        }
+        "source_state": "enabled",
+        "declaration_status": "enabled; runtime-preflight runnable command binds the source-locked v3 route",
+        "contract": {
+          "operation": "help-scout.v3_list_conversation_threads",
+          "direct_read": "direct list-conversation-threads-v3"
+        },
+        "api_surface_binding": {
+          "direct_read": "direct list-conversation-threads-v3"
+        },
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
           "state": "mapped",
-          "source_state": "disabled",
-          "rejection": {
-            "reason": "foundation-gap",
-            "recoverable": true,
-            "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
-            "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
-          }
+          "source_state": "enabled",
+          "rejection": null
         },
         "direct_write": {
           "state": "not_mapped_for_this_provider_operation"
@@ -209319,7 +209300,10 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "no_generated_binding"
+          "state": "generated_binding_present",
+          "binding": {
+            "direct_read": "direct list-conversation-threads-v3"
+          }
         }
       },
       "generated_projections": {
@@ -209335,12 +209319,8 @@
         "provider_live": "pending"
       },
       "merge_readiness": {
-        "enabled": false,
-        "open_foundation_gap": {
-          "id": "declarative-operation-route-override",
-          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
-          "minimal_change": "Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
-        },
+        "enabled": true,
+        "open_foundation_gap": null,
         "merge_ready": false
       }
     },
@@ -209362,27 +209342,22 @@
         "provider_version_evidence": "internal/connectors/defs/help-scout/sources/help-scout-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; foundation-gap declarative-operation-route-override",
-        "contract": null,
-        "api_surface_binding": null,
-        "rejection": {
-          "reason": "foundation-gap",
-          "recoverable": true,
-          "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
-          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
-        }
+        "source_state": "enabled",
+        "declaration_status": "enabled; runtime-preflight runnable command binds the source-locked v3 route",
+        "contract": {
+          "operation": "help-scout.v3_list_customers",
+          "direct_read": "direct list-customers-v3"
+        },
+        "api_surface_binding": {
+          "direct_read": "direct list-customers-v3"
+        },
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
           "state": "mapped",
-          "source_state": "disabled",
-          "rejection": {
-            "reason": "foundation-gap",
-            "recoverable": true,
-            "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
-            "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
-          }
+          "source_state": "enabled",
+          "rejection": null
         },
         "direct_write": {
           "state": "not_mapped_for_this_provider_operation"
@@ -209400,7 +209375,10 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "no_generated_binding"
+          "state": "generated_binding_present",
+          "binding": {
+            "direct_read": "direct list-customers-v3"
+          }
         }
       },
       "generated_projections": {
@@ -209416,12 +209394,8 @@
         "provider_live": "pending"
       },
       "merge_readiness": {
-        "enabled": false,
-        "open_foundation_gap": {
-          "id": "declarative-operation-route-override",
-          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
-          "minimal_change": "Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
-        },
+        "enabled": true,
+        "open_foundation_gap": null,
         "merge_ready": false
       }
     },
@@ -209443,27 +209417,22 @@
         "provider_version_evidence": "internal/connectors/defs/help-scout/sources/help-scout-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; foundation-gap declarative-operation-route-override",
-        "contract": null,
-        "api_surface_binding": null,
-        "rejection": {
-          "reason": "foundation-gap",
-          "recoverable": true,
-          "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
-          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
-        }
+        "source_state": "enabled",
+        "declaration_status": "enabled; runtime-preflight runnable command binds the source-locked v3 route",
+        "contract": {
+          "operation": "help-scout.v3_list_system_users",
+          "direct_read": "direct list-system-users-v3"
+        },
+        "api_surface_binding": {
+          "direct_read": "direct list-system-users-v3"
+        },
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
           "state": "mapped",
-          "source_state": "disabled",
-          "rejection": {
-            "reason": "foundation-gap",
-            "recoverable": true,
-            "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
-            "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
-          }
+          "source_state": "enabled",
+          "rejection": null
         },
         "direct_write": {
           "state": "not_mapped_for_this_provider_operation"
@@ -209481,7 +209450,10 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "no_generated_binding"
+          "state": "generated_binding_present",
+          "binding": {
+            "direct_read": "direct list-system-users-v3"
+          }
         }
       },
       "generated_projections": {
@@ -209497,12 +209469,8 @@
         "provider_live": "pending"
       },
       "merge_readiness": {
-        "enabled": false,
-        "open_foundation_gap": {
-          "id": "declarative-operation-route-override",
-          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
-          "minimal_change": "Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
-        },
+        "enabled": true,
+        "open_foundation_gap": null,
         "merge_ready": false
       }
     },
@@ -209524,27 +209492,22 @@
         "provider_version_evidence": "internal/connectors/defs/help-scout/sources/help-scout-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; foundation-gap declarative-operation-route-override",
-        "contract": null,
-        "api_surface_binding": null,
-        "rejection": {
-          "reason": "foundation-gap",
-          "recoverable": true,
-          "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
-          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
-        }
+        "source_state": "enabled",
+        "declaration_status": "enabled; runtime-preflight runnable command binds the source-locked v3 route",
+        "contract": {
+          "operation": "help-scout.v3_get_system_user",
+          "direct_read": "direct get-system-user-v3"
+        },
+        "api_surface_binding": {
+          "direct_read": "direct get-system-user-v3"
+        },
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
           "state": "mapped",
-          "source_state": "disabled",
-          "rejection": {
-            "reason": "foundation-gap",
-            "recoverable": true,
-            "detail": "The documented operation requires a closed per-operation API base/version/route selection contract that the runtime does not yet provide.",
-            "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations."
-          }
+          "source_state": "enabled",
+          "rejection": null
         },
         "direct_write": {
           "state": "not_mapped_for_this_provider_operation"
@@ -209562,7 +209525,10 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "no_generated_binding"
+          "state": "generated_binding_present",
+          "binding": {
+            "direct_read": "direct get-system-user-v3"
+          }
         }
       },
       "generated_projections": {
@@ -209578,12 +209544,8 @@
         "provider_live": "pending"
       },
       "merge_readiness": {
-        "enabled": false,
-        "open_foundation_gap": {
-          "id": "declarative-operation-route-override",
-          "evidence": "internal/connectors/engine/direct_read.go:701-717 only strips the configured base path and leaves a different version path intact; internal/connectors/engine/direct_read_paginate.go:499-504 then joins that path to the configured base URL, producing /v2/v3/... for these source-locked Help Scout operations.",
-          "minimal_change": "Add a closed, connector-definition-owned per-operation API base/version/route selection contract used consistently by direct read, direct write, binary download/upload, ETL, and reverse ETL. It must select only predeclared routes before I/O; callers cannot supply a URL and no silent base fallback is allowed."
-        },
+        "enabled": true,
+        "open_foundation_gap": null,
         "merge_ready": false
       }
     },

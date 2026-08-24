@@ -8,14 +8,16 @@
       "missing_provider_neutral_capability": "Closed connector-definition-owned per-operation API base, version, and route selection across direct read, direct write, binary download, binary upload, ETL, and reverse ETL.",
       "owning_issue": "cli-operation-route-override-foundation-r1",
       "owning_lane": "cli-operation-route-override-foundation-r1",
-      "status": "open"
+      "status": "resolved",
+      "resolved_by_foundation_sha": "6410fe59c"
     },
     {
       "stable_gap_id": "declarative-typed-destination-action-specific-source-bindings",
       "missing_provider_neutral_capability": "A declarative typed destination needs definition-owned source bindings selected by the persisted exact action, so distinct eligible actions from one source executor can carry distinct input_fields mappings.",
       "owning_issue": "#4304",
       "owning_lane": "fm/cli-reverse-etl-destination-r1",
-      "status": "open"
+      "status": "resolved",
+      "resolved_by_foundation_sha": "609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57"
     },
     {
       "stable_gap_id": "declarative-typed-destination-app-dispatch",
@@ -40,6 +42,34 @@
       "owning_lane": "fm/cli-reverse-etl-destination-r1",
       "status": "resolved",
       "resolved_by_foundation_sha": "609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57"
+    },
+    {
+      "stable_gap_id": "scalar_json_write_body",
+      "missing_provider_neutral_capability": "A declaration-owned, schema-validated JSON request-body mode for exactly one top-level scalar rather than the existing object or array body forms.",
+      "owning_issue": "#4291 (foundation handoff required)",
+      "owning_lane": "unassigned",
+      "status": "open"
+    },
+    {
+      "stable_gap_id": "structured_recursive_filter_input",
+      "missing_provider_neutral_capability": "A closed operation-specific structured input/builder that validates the documented recursive provider filter grammar without admitting a generic JSON body escape hatch.",
+      "owning_issue": "#4291 (foundation handoff required)",
+      "owning_lane": "unassigned",
+      "status": "open"
+    },
+    {
+      "stable_gap_id": "post_binary_text_export",
+      "missing_provider_neutral_capability": "A bounded declaration-owned POST binary/text-export executor with exact request-body, response, and destination contracts.",
+      "owning_issue": "#4291 (foundation handoff required)",
+      "owning_lane": "unassigned",
+      "status": "open"
+    },
+    {
+      "stable_gap_id": "put_operation_direct_read",
+      "missing_provider_neutral_capability": "A bounded operation direct-read executor that faithfully supports the provider-defined PUT method and validated request body.",
+      "owning_issue": "#4291 (foundation handoff required)",
+      "owning_lane": "unassigned",
+      "status": "open"
     }
   ],
   "rows": [
@@ -16748,13 +16778,13 @@
       ],
       "missing_provider_neutral_capability": "A declarative typed destination needs definition-owned source bindings selected by the persisted exact action, so distinct eligible actions from one source executor can carry distinct input_fields mappings.",
       "runtime_reachability": {
-        "status": "not_enabled",
-        "reason": "Open provider-neutral source-binding multiplicity gap; update_customer cannot be selected without a connector-specific workaround."
+        "status": "foundation_resolved_connector_app_cli_proof_pending",
+        "reason": "The connector now owns a customers(id) -> update_customer(customerId) action-specific source binding; source binding is no longer a shared refusal."
       },
       "closure_requires_generated_projections": true,
       "owning_issue": "#4304",
       "owning_lane": "fm/cli-reverse-etl-destination-r1",
-      "status": "open",
+      "status": "resolved",
       "closure_verification": [
         "foundation test permits two definition-owned action-specific bindings for one declarative source executor and refuses cross-action and unknown bindings before I/O",
         "Help Scout transport declaration maps conversations.id to conversationId and customers.id to customerId under their selected actions",
@@ -16762,7 +16792,8 @@
         "go run ./cmd/connectorgen surface-sync --check",
         "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
         "exercise installed App/CLI path for each persisted action selection with fixtures"
-      ]
+      ],
+      "resolved_by_foundation_sha": "609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57"
     },
     {
       "stable_gap_id": "declarative-operation-route-override",
@@ -16793,13 +16824,13 @@
       ],
       "missing_provider_neutral_capability": "Closed connector-definition-owned per-operation API base, version, and route selection across direct read, direct write, binary download, binary upload, ETL, and reverse ETL.",
       "runtime_reachability": {
-        "status": "not_enabled",
-        "reason": "Open provider-neutral route-override foundation gap; no connector-specific base URL rewrite or fallback is permitted."
+        "status": "enabled_fixture_proven",
+        "reason": "Definition-owned mailbox_v3 route resolves the source-locked path before I/O; TestHelpScoutV3DirectReadsUseTheirDeclaredRoute passes."
       },
       "closure_requires_generated_projections": true,
       "owning_issue": "cli-operation-route-override-foundation-r1",
       "owning_lane": "cli-operation-route-override-foundation-r1",
-      "status": "open",
+      "status": "resolved",
       "closure_verification": [
         "foundation tests cover closed per-operation base/version/route selection for direct read, direct write, binary download/upload, ETL, and reverse ETL; arbitrary caller URL, undeclared route, and silent fallback fail before I/O",
         "Help Scout fixture proves each declared v3 request targets exactly its source-locked /v3 path and never /v2/v3",
@@ -16808,7 +16839,8 @@
         "go run ./cmd/connectorgen surface-sync --check",
         "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
         "exercise every installed Help Scout v3 command through no-credential preflight and fixture conformance"
-      ]
+      ],
+      "resolved_by_foundation_sha": "6410fe59c"
     },
     {
       "stable_gap_id": "declarative-operation-route-override",
@@ -16839,13 +16871,13 @@
       ],
       "missing_provider_neutral_capability": "Closed connector-definition-owned per-operation API base, version, and route selection across direct read, direct write, binary download, binary upload, ETL, and reverse ETL.",
       "runtime_reachability": {
-        "status": "not_enabled",
-        "reason": "Open provider-neutral route-override foundation gap; no connector-specific base URL rewrite or fallback is permitted."
+        "status": "enabled_fixture_proven",
+        "reason": "Definition-owned mailbox_v3 route resolves the source-locked path before I/O; TestHelpScoutV3DirectReadsUseTheirDeclaredRoute passes."
       },
       "closure_requires_generated_projections": true,
       "owning_issue": "cli-operation-route-override-foundation-r1",
       "owning_lane": "cli-operation-route-override-foundation-r1",
-      "status": "open",
+      "status": "resolved",
       "closure_verification": [
         "foundation tests cover closed per-operation base/version/route selection for direct read, direct write, binary download/upload, ETL, and reverse ETL; arbitrary caller URL, undeclared route, and silent fallback fail before I/O",
         "Help Scout fixture proves each declared v3 request targets exactly its source-locked /v3 path and never /v2/v3",
@@ -16854,7 +16886,8 @@
         "go run ./cmd/connectorgen surface-sync --check",
         "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
         "exercise every installed Help Scout v3 command through no-credential preflight and fixture conformance"
-      ]
+      ],
+      "resolved_by_foundation_sha": "6410fe59c"
     },
     {
       "stable_gap_id": "declarative-operation-route-override",
@@ -16885,13 +16918,13 @@
       ],
       "missing_provider_neutral_capability": "Closed connector-definition-owned per-operation API base, version, and route selection across direct read, direct write, binary download, binary upload, ETL, and reverse ETL.",
       "runtime_reachability": {
-        "status": "not_enabled",
-        "reason": "Open provider-neutral route-override foundation gap; no connector-specific base URL rewrite or fallback is permitted."
+        "status": "enabled_fixture_proven",
+        "reason": "Definition-owned mailbox_v3 route resolves the source-locked path before I/O; TestHelpScoutV3DirectReadsUseTheirDeclaredRoute passes."
       },
       "closure_requires_generated_projections": true,
       "owning_issue": "cli-operation-route-override-foundation-r1",
       "owning_lane": "cli-operation-route-override-foundation-r1",
-      "status": "open",
+      "status": "resolved",
       "closure_verification": [
         "foundation tests cover closed per-operation base/version/route selection for direct read, direct write, binary download/upload, ETL, and reverse ETL; arbitrary caller URL, undeclared route, and silent fallback fail before I/O",
         "Help Scout fixture proves each declared v3 request targets exactly its source-locked /v3 path and never /v2/v3",
@@ -16900,7 +16933,8 @@
         "go run ./cmd/connectorgen surface-sync --check",
         "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
         "exercise every installed Help Scout v3 command through no-credential preflight and fixture conformance"
-      ]
+      ],
+      "resolved_by_foundation_sha": "6410fe59c"
     },
     {
       "stable_gap_id": "declarative-operation-route-override",
@@ -16931,13 +16965,13 @@
       ],
       "missing_provider_neutral_capability": "Closed connector-definition-owned per-operation API base, version, and route selection across direct read, direct write, binary download, binary upload, ETL, and reverse ETL.",
       "runtime_reachability": {
-        "status": "not_enabled",
-        "reason": "Open provider-neutral route-override foundation gap; no connector-specific base URL rewrite or fallback is permitted."
+        "status": "enabled_fixture_proven",
+        "reason": "Definition-owned mailbox_v3 route resolves the source-locked path before I/O; TestHelpScoutV3DirectReadsUseTheirDeclaredRoute passes."
       },
       "closure_requires_generated_projections": true,
       "owning_issue": "cli-operation-route-override-foundation-r1",
       "owning_lane": "cli-operation-route-override-foundation-r1",
-      "status": "open",
+      "status": "resolved",
       "closure_verification": [
         "foundation tests cover closed per-operation base/version/route selection for direct read, direct write, binary download/upload, ETL, and reverse ETL; arbitrary caller URL, undeclared route, and silent fallback fail before I/O",
         "Help Scout fixture proves each declared v3 request targets exactly its source-locked /v3 path and never /v2/v3",
@@ -16946,7 +16980,8 @@
         "go run ./cmd/connectorgen surface-sync --check",
         "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
         "exercise every installed Help Scout v3 command through no-credential preflight and fixture conformance"
-      ]
+      ],
+      "resolved_by_foundation_sha": "6410fe59c"
     },
     {
       "stable_gap_id": "declarative-operation-route-override",
@@ -16977,13 +17012,13 @@
       ],
       "missing_provider_neutral_capability": "Closed connector-definition-owned per-operation API base, version, and route selection across direct read, direct write, binary download, binary upload, ETL, and reverse ETL.",
       "runtime_reachability": {
-        "status": "not_enabled",
-        "reason": "Open provider-neutral route-override foundation gap; no connector-specific base URL rewrite or fallback is permitted."
+        "status": "enabled_fixture_proven",
+        "reason": "Definition-owned mailbox_v3 route resolves the source-locked path before I/O; TestHelpScoutV3DirectReadsUseTheirDeclaredRoute passes."
       },
       "closure_requires_generated_projections": true,
       "owning_issue": "cli-operation-route-override-foundation-r1",
       "owning_lane": "cli-operation-route-override-foundation-r1",
-      "status": "open",
+      "status": "resolved",
       "closure_verification": [
         "foundation tests cover closed per-operation base/version/route selection for direct read, direct write, binary download/upload, ETL, and reverse ETL; arbitrary caller URL, undeclared route, and silent fallback fail before I/O",
         "Help Scout fixture proves each declared v3 request targets exactly its source-locked /v3 path and never /v2/v3",
@@ -16992,6 +17027,229 @@
         "go run ./cmd/connectorgen surface-sync --check",
         "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
         "exercise every installed Help Scout v3 command through no-credential preflight and fixture conformance"
+      ],
+      "resolved_by_foundation_sha": "6410fe59c"
+    },
+    {
+      "stable_gap_id": "scalar_json_write_body",
+      "connector": "gorgias",
+      "provider_operation": {
+        "source_id": "gorgias.rest.put.UpdateCustomerCustomFieldValue91",
+        "operation_id": "update-customer-custom-field-value",
+        "method": "PUT",
+        "path": "/api/customers/{customer_id}/custom-fields/{id}",
+        "canonical_mapping": {
+          "parity_class": "direct_write",
+          "cli_command": null,
+          "disposition": "not_enabled_foundation_gap"
+        }
+      },
+      "source": {
+        "url": "https://developers.gorgias.com/reference/update-customer-custom-field-value",
+        "version": "Gorgias REST API public OpenAPI specification",
+        "sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+        "source_lock": "sources/gorgias-operation-source-lock.json"
+      },
+      "affected_surfaces": [
+        "direct_write",
+        "reverse_etl",
+        "executable_cli_command"
+      ],
+      "failing_evidence": [
+        "internal/connectors/engine/write.go:674-692 builds the default JSON payload as map[string]any and has no scalar body type."
+      ],
+      "runtime_reachability": {
+        "status": "not_enabled",
+        "reason": "Open provider-neutral scalar_json_write_body foundation gap; no connector-local shim or generic escape hatch is permitted."
+      },
+      "closure_requires_generated_projections": true,
+      "owning_issue": "#4291 (foundation handoff required)",
+      "owning_lane": "unassigned",
+      "status": "open",
+      "closure_verification": [
+        "Add focused executor tests proving the closed provider shape and rejecting generic/raw-body bypasses before I/O",
+        "go run ./cmd/connectorgen validate",
+        "go run ./cmd/connectorgen surface-sync --check",
+        "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
+        "exercise the installed generated command through no-credential preflight and a local fixture",
+        "Add a closed scalar JSON write body type that validates exactly the provider-declared string/integer/boolean schema."
+      ]
+    },
+    {
+      "stable_gap_id": "scalar_json_write_body",
+      "connector": "gorgias",
+      "provider_operation": {
+        "source_id": "gorgias.rest.put.UpdateTicketCustomField107",
+        "operation_id": "update-ticket-custom-field",
+        "method": "PUT",
+        "path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+        "canonical_mapping": {
+          "parity_class": "direct_write",
+          "cli_command": null,
+          "disposition": "not_enabled_foundation_gap"
+        }
+      },
+      "source": {
+        "url": "https://developers.gorgias.com/reference/update-ticket-custom-field",
+        "version": "Gorgias REST API public OpenAPI specification",
+        "sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+        "source_lock": "sources/gorgias-operation-source-lock.json"
+      },
+      "affected_surfaces": [
+        "direct_write",
+        "reverse_etl",
+        "executable_cli_command"
+      ],
+      "failing_evidence": [
+        "internal/connectors/engine/write.go:674-692 builds the default JSON payload as map[string]any and has no scalar body type."
+      ],
+      "runtime_reachability": {
+        "status": "not_enabled",
+        "reason": "Open provider-neutral scalar_json_write_body foundation gap; no connector-local shim or generic escape hatch is permitted."
+      },
+      "closure_requires_generated_projections": true,
+      "owning_issue": "#4291 (foundation handoff required)",
+      "owning_lane": "unassigned",
+      "status": "open",
+      "closure_verification": [
+        "Add focused executor tests proving the closed provider shape and rejecting generic/raw-body bypasses before I/O",
+        "go run ./cmd/connectorgen validate",
+        "go run ./cmd/connectorgen surface-sync --check",
+        "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
+        "exercise the installed generated command through no-credential preflight and a local fixture",
+        "Add a closed scalar JSON write body type that validates exactly the provider-declared string/integer/boolean schema."
+      ]
+    },
+    {
+      "stable_gap_id": "structured_recursive_filter_input",
+      "connector": "gorgias",
+      "provider_operation": {
+        "source_id": "gorgias.rest.post.GetStatistic71",
+        "operation_id": "get-statistic",
+        "method": "POST",
+        "path": "/api/reporting/stats",
+        "canonical_mapping": {
+          "parity_class": "direct_read",
+          "cli_command": null,
+          "disposition": "not_enabled_foundation_gap"
+        }
+      },
+      "source": {
+        "url": "https://developers.gorgias.com/reference/get-statistic",
+        "version": "Gorgias REST API public OpenAPI specification",
+        "sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+        "source_lock": "sources/gorgias-operation-source-lock.json"
+      },
+      "affected_surfaces": [
+        "direct_read",
+        "executable_cli_command"
+      ],
+      "failing_evidence": [
+        "internal/connectors/engine/direct_read.go:286-293 and :785-786 admit raw input only for the exact text/plain root-string contract, not an arbitrary JSON filter tree."
+      ],
+      "runtime_reachability": {
+        "status": "not_enabled",
+        "reason": "Open provider-neutral structured_recursive_filter_input foundation gap; no connector-local shim or generic escape hatch is permitted."
+      },
+      "closure_requires_generated_projections": true,
+      "owning_issue": "#4291 (foundation handoff required)",
+      "owning_lane": "unassigned",
+      "status": "open",
+      "closure_verification": [
+        "Add focused executor tests proving the closed provider shape and rejecting generic/raw-body bypasses before I/O",
+        "go run ./cmd/connectorgen validate",
+        "go run ./cmd/connectorgen surface-sync --check",
+        "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
+        "exercise the installed generated command through no-credential preflight and a local fixture",
+        "Add a closed structured filter-expression input/builder for the documented recursive 50-arm provider grammar."
+      ]
+    },
+    {
+      "stable_gap_id": "post_binary_text_export",
+      "connector": "gorgias",
+      "provider_operation": {
+        "source_id": "gorgias.rest.post.DownloadLegacyStatistic77",
+        "operation_id": "download-legacy-statistic",
+        "method": "POST",
+        "path": "/api/stats/{name}/download",
+        "canonical_mapping": {
+          "parity_class": "binary_read",
+          "cli_command": null,
+          "disposition": "not_enabled_foundation_gap"
+        }
+      },
+      "source": {
+        "url": "https://developers.gorgias.com/reference/download-legacy-statistic",
+        "version": "Gorgias REST API public OpenAPI specification",
+        "sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+        "source_lock": "sources/gorgias-operation-source-lock.json"
+      },
+      "affected_surfaces": [
+        "binary_download",
+        "executable_cli_command"
+      ],
+      "failing_evidence": [
+        "internal/connectors/engine/binary_read.go:292-293 and :333-334 require GET."
+      ],
+      "runtime_reachability": {
+        "status": "not_enabled",
+        "reason": "Open provider-neutral post_binary_text_export foundation gap; no connector-local shim or generic escape hatch is permitted."
+      },
+      "closure_requires_generated_projections": true,
+      "owning_issue": "#4291 (foundation handoff required)",
+      "owning_lane": "unassigned",
+      "status": "open",
+      "closure_verification": [
+        "Add focused executor tests proving the closed provider shape and rejecting generic/raw-body bypasses before I/O",
+        "go run ./cmd/connectorgen validate",
+        "go run ./cmd/connectorgen surface-sync --check",
+        "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
+        "exercise the installed generated command through no-credential preflight and a local fixture",
+        "Add a bounded POST-capable binary/text-export executor with exact request-body and response contracts."
+      ]
+    },
+    {
+      "stable_gap_id": "put_operation_direct_read",
+      "connector": "gorgias",
+      "provider_operation": {
+        "source_id": "gorgias.rest.put.UpdateViewItems112",
+        "operation_id": "update-view-items",
+        "method": "PUT",
+        "path": "/api/views/{view_id}/items",
+        "canonical_mapping": {
+          "parity_class": "direct_read",
+          "cli_command": null,
+          "disposition": "not_enabled_foundation_gap"
+        }
+      },
+      "source": {
+        "url": "https://developers.gorgias.com/reference/update-view-items",
+        "version": "Gorgias REST API public OpenAPI specification",
+        "sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+        "source_lock": "sources/gorgias-operation-source-lock.json"
+      },
+      "affected_surfaces": [
+        "direct_read",
+        "executable_cli_command"
+      ],
+      "failing_evidence": [
+        "internal/connectors/engine/direct_read.go:429-432 accepts only GET or POST operation direct reads."
+      ],
+      "runtime_reachability": {
+        "status": "not_enabled",
+        "reason": "Open provider-neutral put_operation_direct_read foundation gap; no connector-local shim or generic escape hatch is permitted."
+      },
+      "closure_requires_generated_projections": true,
+      "owning_issue": "#4291 (foundation handoff required)",
+      "owning_lane": "unassigned",
+      "status": "open",
+      "closure_verification": [
+        "Add focused executor tests proving the closed provider shape and rejecting generic/raw-body bypasses before I/O",
+        "go run ./cmd/connectorgen validate",
+        "go run ./cmd/connectorgen surface-sync --check",
+        "go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
+        "exercise the installed generated command through no-credential preflight and a local fixture",
+        "Add a bounded PUT-capable operation direct-read executor with the current route/body validation contract."
       ]
     }
   ],
@@ -16999,7 +17257,7 @@
     "per_gap": [
       {
         "stable_gap_id": "declarative-operation-route-override",
-        "status": "open",
+        "status": "resolved",
         "affected_operations": 5,
         "affected_connectors": [
           "help-scout"
@@ -17010,7 +17268,7 @@
       },
       {
         "stable_gap_id": "declarative-typed-destination-action-specific-source-bindings",
-        "status": "open",
+        "status": "resolved",
         "affected_operations": 1,
         "affected_connectors": [
           "help-scout"
@@ -17067,6 +17325,50 @@
         "connector_count": 9,
         "owning_issue": "#4304",
         "owning_lane": "fm/cli-reverse-etl-destination-r1"
+      },
+      {
+        "stable_gap_id": "scalar_json_write_body",
+        "status": "open",
+        "affected_operations": 2,
+        "affected_connectors": [
+          "gorgias"
+        ],
+        "connector_count": 1,
+        "owning_issue": "#4291 (foundation handoff required)",
+        "owning_lane": "unassigned"
+      },
+      {
+        "stable_gap_id": "structured_recursive_filter_input",
+        "status": "open",
+        "affected_operations": 1,
+        "affected_connectors": [
+          "gorgias"
+        ],
+        "connector_count": 1,
+        "owning_issue": "#4291 (foundation handoff required)",
+        "owning_lane": "unassigned"
+      },
+      {
+        "stable_gap_id": "post_binary_text_export",
+        "status": "open",
+        "affected_operations": 1,
+        "affected_connectors": [
+          "gorgias"
+        ],
+        "connector_count": 1,
+        "owning_issue": "#4291 (foundation handoff required)",
+        "owning_lane": "unassigned"
+      },
+      {
+        "stable_gap_id": "put_operation_direct_read",
+        "status": "open",
+        "affected_operations": 1,
+        "affected_connectors": [
+          "gorgias"
+        ],
+        "connector_count": 1,
+        "owning_issue": "#4291 (foundation handoff required)",
+        "owning_lane": "unassigned"
       }
     ],
     "per_batch": {
@@ -17105,7 +17407,7 @@
       "batch_7": [
         {
           "stable_gap_id": "declarative-operation-route-override",
-          "status": "open",
+          "status": "resolved",
           "affected_operations": 5,
           "affected_connectors": [
             "help-scout"
@@ -17116,7 +17418,7 @@
         },
         {
           "stable_gap_id": "declarative-typed-destination-action-specific-source-bindings",
-          "status": "open",
+          "status": "resolved",
           "affected_operations": 1,
           "affected_connectors": [
             "help-scout"
@@ -17163,13 +17465,59 @@
           "connector_count": 4,
           "owning_issue": "#4304",
           "owning_lane": "fm/cli-reverse-etl-destination-r1"
+        },
+        {
+          "stable_gap_id": "scalar_json_write_body",
+          "status": "open",
+          "affected_operations": 2,
+          "affected_connectors": [
+            "gorgias"
+          ],
+          "connector_count": 1,
+          "owning_issue": "#4291 (foundation handoff required)",
+          "owning_lane": "unassigned"
+        },
+        {
+          "stable_gap_id": "structured_recursive_filter_input",
+          "status": "open",
+          "affected_operations": 1,
+          "affected_connectors": [
+            "gorgias"
+          ],
+          "connector_count": 1,
+          "owning_issue": "#4291 (foundation handoff required)",
+          "owning_lane": "unassigned"
+        },
+        {
+          "stable_gap_id": "post_binary_text_export",
+          "status": "open",
+          "affected_operations": 1,
+          "affected_connectors": [
+            "gorgias"
+          ],
+          "connector_count": 1,
+          "owning_issue": "#4291 (foundation handoff required)",
+          "owning_lane": "unassigned"
+        },
+        {
+          "stable_gap_id": "put_operation_direct_read",
+          "status": "open",
+          "affected_operations": 1,
+          "affected_connectors": [
+            "gorgias"
+          ],
+          "connector_count": 1,
+          "owning_issue": "#4291 (foundation handoff required)",
+          "owning_lane": "unassigned"
         }
       ]
     },
     "portfolio": {
       "open_gap_ids": [
-        "declarative-operation-route-override",
-        "declarative-typed-destination-action-specific-source-bindings"
+        "scalar_json_write_body",
+        "structured_recursive_filter_input",
+        "post_binary_text_export",
+        "put_operation_direct_read"
       ],
       "merge_ready": false,
       "merge_ready_reason": "Open provider-neutral foundation gaps prevent every affected operation from contributing to a merge-ready verdict."

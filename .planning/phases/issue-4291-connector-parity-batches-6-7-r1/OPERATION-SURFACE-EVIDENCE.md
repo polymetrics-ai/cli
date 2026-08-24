@@ -20,8 +20,8 @@ and conformance work named.
 
 | Open gap id | Rows | Status |
 | --- | ---: | --- |
-| `declarative-operation-route-override` | 5 | Open: Help Scout v3 route selection; owned by `cli-operation-route-override-foundation-r1` |
-| `declarative-typed-destination-action-specific-source-bindings` | 1 | Open: exact Help Scout `update_customer` source binding |
+| `declarative-operation-route-override` | 5 | Resolved by `6410fe59c`; the five `mailbox_v3` commands now route through declared operation routes. |
+| `declarative-typed-destination-action-specific-source-bindings` | 1 | Resolved by `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` plus the connector-owned `customers.id → customerId` binding. |
 
 ## Increment 2 — stale destination-gap reconciliation complete
 
@@ -51,3 +51,12 @@ The resulting provisional portfolio split is **287 runtime-enabled**, **3,639
 connector-declaration-pending**, **5 execution-foundation-blocked**, and **1
 provider-contract-unavailable**. Every affected row now has a specific surface classification and
 refusal; none is counted as an enabled command.
+
+## Increment 4 — Help Scout foundation reconciliation
+
+The five v3 direct-read rows are now enabled and command-bound through their named `mailbox_v3`
+operation routes. The focused route test proves requests use `/v3`, never `/v2/v3`. The exact
+`customers(id) → update_customer(customerId)` destination binding is no longer a foundation gap;
+it remains correctly marked as connector-owned App/CLI/conformance work rather than falsely
+certified. The foundation register now has four open Gorgias executor gaps and no open Help Scout
+foundation gap.

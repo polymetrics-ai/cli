@@ -184,6 +184,18 @@ it is only a check that existing ledgers do not already identify another executo
 is the sole concrete dependency holder. Its deprecated ticket-messages entry is explicitly
 `named_dependency=none` and remains reachable, so it is not an exception or an omission.
 
+## Help Scout foundation closure reconciliation — 2026-08-24
+
+Both former Help Scout shared rows are closed. `go test -timeout 20m
+./internal/connectors/engine -run '^TestHelpScoutV3DirectReadsUseTheirDeclaredRoute$' -count=1`
+passed: the five source-locked direct reads select `route: mailbox_v3` and hit `/v3`, never
+`/v2/v3`. `go test -timeout 20m ./internal/connectors -run
+'^(TestDestinationTransportDescriptorRequiresExactActionClosure|TestDestinationSourceBindingJSONOmitsAbsentBatch)$'
+-count=1` also passed: `sync_transport.json` binds `customers.id` to `customerId` for the exact
+`update_customer` action. The former route-override and action-specific-binding rows are now
+resolved in `FOUNDATION-GAPS.json`; `update_customer` retains its connector-owned App/CLI and
+conformance evidence debt, not a shared engine-gap label.
+
 Outreach remains intentionally at schema v2. Current `source-retain` stops at
 `parse source lock: json: unknown field "source_url"` before it can verify the existing OpenAPI
 artifact, while its six custom-object operations also cite `developers.outreach.io` rather than the
