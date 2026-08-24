@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 4347,
   "phase": "issue-4347-source-lock-usability-foundation-r1",
-  "status": "repository_gates_passed_pending_pr",
+  "status": "bot_block_followup_in_progress",
   "execution": "inline_manual_gsd_fallback",
   "base_branch": "main",
   "working_branch": "fm/cli-source-lock-usability-foundation-r1",

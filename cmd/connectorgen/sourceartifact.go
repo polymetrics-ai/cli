@@ -25,9 +25,11 @@ or parity source lock, verifies the lock-selected identity, and stores the raw
 bytes under sources/artifacts/. Byte identity is exact size plus SHA-256;
 canonical_json identity key-sorts parsed JSON before SHA-256 comparison. It
 records the fetched byte identity and detected form/version (or undetermined)
-without changing a source lock. A denied, redirected, login, or drastically
-undersized response is reported as wrong source rather than drift. Builds and
-source-import remain offline: this is an explicit maintenance command only.
+without changing a source lock. Redirected, login, or drastically undersized
+responses are wrong source rather than drift; HTTP 403 and TLS refusal are
+BOT-BLOCK and direct the reader to a browser capture or provider-owned
+repository. Builds and source-import remain offline: this is an explicit
+maintenance command only.
 
   <connector>       connector whose source lock is retained
   --defs <dir>      connector defs root (default internal/connectors/defs)
@@ -65,6 +67,16 @@ type sourceRetainWrongSourceError struct {
 
 func (err sourceRetainWrongSourceError) Error() string {
 	return "wrong source: " + err.Reason
+}
+
+// sourceRetainBotBlockError identifies an automated fetch that is refused by
+// the provider. It is neither evidence that the source is absent nor drift.
+type sourceRetainBotBlockError struct {
+	Reason string
+}
+
+func (err sourceRetainBotBlockError) Error() string {
+	return err.Reason
 }
 
 func runSourceRetain(args []string, stdout, stderr io.Writer) int {
@@ -339,6 +351,9 @@ func sourceRetainFetchLockedArtifacts(ctx context.Context, lock sourceRetainLock
 	for _, artifact := range lock.Artifacts {
 		raw, err := fetchSourceRetainArtifact(ctx, fetcher, artifact)
 		if err != nil {
+			if sourceRetainFetchIsBotBlock(err) {
+				return nil, fmt.Errorf("BOT-BLOCK for locked artifact %s: %w; try a browser capture or the provider's own repository", artifact.SourceURL, err)
+			}
 			if sourceRetainFetchIsWrongSource(err) {
 				return nil, fmt.Errorf("wrong source for locked artifact %s: %w", artifact.SourceURL, err)
 			}
@@ -366,7 +381,16 @@ func sourceRetainFetchIsWrongSource(err error) bool {
 		return true
 	}
 	lower := strings.ToLower(err.Error())
-	return strings.Contains(lower, "http 401") || strings.Contains(lower, "http 403") || strings.Contains(lower, "http 404") || strings.Contains(lower, "redirect") || strings.Contains(lower, "login") || strings.Contains(lower, "sign in")
+	return strings.Contains(lower, "http 401") || strings.Contains(lower, "http 404") || strings.Contains(lower, "redirect") || strings.Contains(lower, "login") || strings.Contains(lower, "sign in")
+}
+
+func sourceRetainFetchIsBotBlock(err error) bool {
+	var botBlock sourceRetainBotBlockError
+	if errors.As(err, &botBlock) {
+		return true
+	}
+	lower := strings.ToLower(err.Error())
+	return strings.Contains(lower, "http 403") || strings.Contains(lower, "tls") || strings.Contains(lower, "x509") || strings.Contains(lower, "certificate")
 }
 
 func sourceRetainClassifyFetchedArtifact(raw []byte, artifact sourceImportArtifact) error {

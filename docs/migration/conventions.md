@@ -1674,10 +1674,12 @@ provenance, while the retained manifest records the raw byte count/SHA-256
 actually fetched. A canonical match with changed raw bytes is not drift and
 does not silently re-pin the lock.
 
-Classify the fetch before comparing its identity. HTTP denial, a redirect, a
-login wall, or a response drastically smaller than the lock is `wrong source`,
-not drift; correct the URL or authentication/publication path before any
-re-pin. If a current provider document differs from a pin, do not use
+Classify the fetch before comparing its identity. A redirect, login wall, or a
+response drastically smaller than the lock is `wrong source`, not drift;
+correct the URL or publication path before any re-pin. A provider HTTP 403 or
+TLS/certificate failure is `BOT-BLOCK`, not evidence that a source is absent:
+try a browser capture or the provider's own repository before treating the
+connector as unmappable. If a current provider document differs from a pin, do not use
 `source-retain` to make it fit. Preserve the lock first; only the separately
 recorded delivery-owner authorization and re-pin report described below may
 replace that identity. A terminal HTTP response, redirect, login wall, or

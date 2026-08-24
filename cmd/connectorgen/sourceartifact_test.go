@@ -142,7 +142,7 @@ func TestSourceRetainHelpAndMigrationDocumentationDescribeIdentityAndWrongSource
 	if code := runSourceRetain([]string{"source-retain", "--help"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("source-retain help exit = %d, stderr=%s", code, stderr.String())
 	}
-	for _, want := range []string{"canonical_json", "wrong source", "operation\nor parity"} {
+	for _, want := range []string{"canonical_json", "wrong source", "BOT-BLOCK", "operation\nor parity"} {
 		if !strings.Contains(stdout.String(), want) {
 			t.Fatalf("source-retain help missing %q: %s", want, stdout.String())
 		}
@@ -151,7 +151,7 @@ func TestSourceRetainHelpAndMigrationDocumentationDescribeIdentityAndWrongSource
 	if err != nil {
 		t.Fatalf("read migration conventions: %v", err)
 	}
-	for _, want := range []string{"canonical_json", "wrong source", "retained-byte-sha256", "does not silently re-pin"} {
+	for _, want := range []string{"canonical_json", "wrong source", "BOT-BLOCK", "retained-byte-sha256", "does not silently re-pin"} {
 		if !strings.Contains(string(docs), want) {
 			t.Fatalf("migration conventions missing %q", want)
 		}
@@ -418,9 +418,9 @@ func TestSourceRetainReportsWrongSourceBeforeDrift(t *testing.T) {
 		fetcher sourceImportFetchFunc
 	}{
 		{
-			name: "http forbidden",
+			name: "http missing",
 			fetcher: func(context.Context, string) ([]byte, error) {
-				return nil, fmt.Errorf("source-lock artifact returned HTTP 403 Forbidden")
+				return nil, fmt.Errorf("source-lock artifact returned HTTP 404 Not Found")
 			},
 		},
 		{
@@ -437,6 +437,39 @@ func TestSourceRetainReportsWrongSourceBeforeDrift(t *testing.T) {
 			code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-24T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, tc.fetcher)
 			if code != 1 || !strings.Contains(stderr.String(), "wrong source") || strings.Contains(stderr.String(), "source-lock refresh required") {
 				t.Fatalf("source-retain exit/stderr = %d/%q, want wrong-source classification before drift", code, stderr.String())
+			}
+		})
+	}
+}
+
+func TestSourceRetainReportsBotBlockBeforeWrongSourceOrDrift(t *testing.T) {
+	t.Parallel()
+	artifact := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", artifact)
+	for _, tc := range []struct {
+		name    string
+		fetcher sourceImportFetchFunc
+	}{
+		{
+			name: "http forbidden",
+			fetcher: func(context.Context, string) ([]byte, error) {
+				return nil, fmt.Errorf("source-lock artifact returned HTTP 403 Forbidden")
+			},
+		},
+		{
+			name: "TLS blocked",
+			fetcher: func(context.Context, string) ([]byte, error) {
+				return nil, fmt.Errorf("tls handshake rejected by provider edge")
+			},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			defsRoot := t.TempDir()
+			writeSourceRetainFixtureLock(t, defsRoot, lock)
+			var stdout, stderr bytes.Buffer
+			code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-24T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, tc.fetcher)
+			if code != 1 || !strings.Contains(stderr.String(), "BOT-BLOCK") || !strings.Contains(stderr.String(), "browser capture") || strings.Contains(stderr.String(), "wrong source") || strings.Contains(stderr.String(), "source-lock refresh required") {
+				t.Fatalf("source-retain exit/stderr = %d/%q, want distinct actionable bot-block verdict", code, stderr.String())
 			}
 		})
 	}

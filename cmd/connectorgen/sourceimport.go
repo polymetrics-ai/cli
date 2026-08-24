@@ -8904,7 +8904,13 @@ func (fetcher httpSourceImportFetcher) fetch(ctx context.Context, sourceURL stri
 	}
 	if response.StatusCode != http.StatusOK {
 		if closeErr := response.Body.Close(); closeErr != nil {
+			if response.StatusCode == http.StatusForbidden {
+				return nil, sourceRetainBotBlockError{Reason: fmt.Sprintf("provider returned HTTP %d and its response could not be closed: %v", response.StatusCode, closeErr)}
+			}
 			return nil, sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked URL returned HTTP %d and its response could not be closed: %v", response.StatusCode, closeErr)}
+		}
+		if response.StatusCode == http.StatusForbidden {
+			return nil, sourceRetainBotBlockError{Reason: "provider returned HTTP 403 to an automated fetch"}
 		}
 		return nil, sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked URL returned HTTP %d", response.StatusCode)}
 	}

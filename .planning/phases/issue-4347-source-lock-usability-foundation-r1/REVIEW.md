@@ -14,6 +14,10 @@ once the main-targeted PR opens.
   could reject an unknown future form. `FetchRetainArtifact` now uses only
   retain validation, and `TestSourceRetainHTTPFetchDoesNotRequireImportFormValidation`
   proves the separation.
+- **Accepted follow-up evidence:** a 403 or TLS refusal can mean provider
+  automation blocking, not source absence. `BOT-BLOCK` now directs the reader
+  to a browser capture or provider-owned repository, with red/green coverage
+  in `TestSourceRetainReportsBotBlockBeforeWrongSourceOrDrift`.
 - **No remaining actionable findings:** lock loading stays connector-owned;
   redirects, denial, and drastic source collapse are classified before drift;
   canonical identity preserves fetched-byte provenance; no source lock is
