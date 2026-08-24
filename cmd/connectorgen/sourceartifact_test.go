@@ -7,6 +7,9 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -210,6 +213,29 @@ func TestSourceRetainRetainsV3ArtifactWithoutImportTimeFormInventory(t *testing.
 	}
 }
 
+func TestSourceRetainHTTPFetchDoesNotRequireImportFormValidation(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	artifact := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", artifact)
+	lock.Rest.OpenAPI = "3.2.0" // Source import rejects this unknown form; retention must not.
+	writeSourceRetainFixtureLock(t, defsRoot, lock)
+	fetcher := httpSourceImportFetcher{
+		limits: defaultSourceImportLimits(),
+		lookup: batchArtifactLookupIPAddr(func(context.Context, string) ([]net.IPAddr, error) {
+			return []net.IPAddr{{IP: net.ParseIP("8.8.8.8")}}, nil
+		}),
+		client: &http.Client{Transport: sourceImportRoundTripFunc(func(request *http.Request) (*http.Response, error) {
+			return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(bytes.NewReader(artifact)), Request: request}, nil
+		})},
+	}
+	var stdout, stderr bytes.Buffer
+	code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-24T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, fetcher)
+	if code != 0 {
+		t.Fatalf("source-retain exit = %d, want retain despite unknown import form; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+}
+
 func TestSourceRetainSupportsParitySourceLock(t *testing.T) {
 	t.Parallel()
 	defsRoot := t.TempDir()
@@ -299,6 +325,32 @@ func TestSourceRetainDoesNotMisclassifyExpectedHTMLWithLoginText(t *testing.T) {
 	}))
 	if code != 0 || strings.Contains(stderr.String(), "wrong source") {
 		t.Fatalf("source-retain exit/stderr = %d/%q, want expected HTML source retained", code, stderr.String())
+	}
+}
+
+func TestSourceRetainEnrichesExistingManifestWithIdentityAndDetectedForm(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	artifact := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", artifact)
+	writeSourceRetainFixtureLock(t, defsRoot, lock)
+	sourcesDir := filepath.Join(defsRoot, "alpha", "sources")
+	writeSourceImportRetainedFixture(t, sourcesDir, "alpha", lock.Rest.sourceImportArtifact, artifact)
+	var stdout, stderr bytes.Buffer
+	code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-24T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return artifact, nil
+	}))
+	if code != 0 {
+		t.Fatalf("source-retain exit = %d, want legacy-manifest enrichment; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	manifestRaw, err := os.ReadFile(filepath.Join(sourcesDir, "alpha-retained-artifacts.json"))
+	if err != nil {
+		t.Fatalf("read enriched retained manifest: %v", err)
+	}
+	for _, want := range []string{`"identity": "byte"`, `"retained_sha256"`, `"form": "openapi"`, `"version": "3.0.3"`} {
+		if !bytes.Contains(manifestRaw, []byte(want)) {
+			t.Fatalf("enriched retained manifest missing %s: %s", want, manifestRaw)
+		}
 	}
 }
 

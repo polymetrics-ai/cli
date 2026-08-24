@@ -630,11 +630,25 @@ type sourceImportVerifiedArtifactFetcher interface {
 	FetchArtifact(context.Context, sourceImportArtifact) ([]byte, error)
 }
 
+// sourceRetainVerifiedArtifactFetcher is intentionally narrower than the
+// import fetcher contract: source retention validates only URL and identity
+// facts, while source import additionally validates form and inventory facts.
+type sourceRetainVerifiedArtifactFetcher interface {
+	FetchRetainArtifact(context.Context, sourceImportArtifact) ([]byte, error)
+}
+
 func fetchSourceImportArtifact(ctx context.Context, fetcher sourceImportFetcher, artifact sourceImportArtifact) ([]byte, error) {
 	if verified, ok := fetcher.(sourceImportVerifiedArtifactFetcher); ok {
 		return verified.FetchArtifact(ctx, artifact)
 	}
 	return fetcher.Fetch(ctx, artifact.SourceURL)
+}
+
+func fetchSourceRetainArtifact(ctx context.Context, fetcher sourceImportFetcher, artifact sourceImportArtifact) ([]byte, error) {
+	if verified, ok := fetcher.(sourceRetainVerifiedArtifactFetcher); ok {
+		return verified.FetchRetainArtifact(ctx, artifact)
+	}
+	return fetchSourceImportArtifact(ctx, fetcher, artifact)
 }
 
 func parseSourceImportLock(raw []byte, expectedConnector string) (sourceImportLock, error) {
@@ -8850,6 +8864,13 @@ func (fetcher httpSourceImportFetcher) Fetch(ctx context.Context, sourceURL stri
 
 func (fetcher httpSourceImportFetcher) FetchArtifact(ctx context.Context, artifact sourceImportArtifact) ([]byte, error) {
 	if err := validateSourceImportArtifact(artifact); err != nil {
+		return nil, err
+	}
+	return fetcher.fetch(ctx, artifact.SourceURL, batchArtifactURLPolicy{allowIdentityQuery: artifact.IdentityQuery})
+}
+
+func (fetcher httpSourceImportFetcher) FetchRetainArtifact(ctx context.Context, artifact sourceImportArtifact) ([]byte, error) {
+	if err := validateSourceRetainArtifact(artifact); err != nil {
 		return nil, err
 	}
 	return fetcher.fetch(ctx, artifact.SourceURL, batchArtifactURLPolicy{allowIdentityQuery: artifact.IdentityQuery})

@@ -337,7 +337,7 @@ func sourceRetainFetchLockedArtifacts(ctx context.Context, lock sourceRetainLock
 	}
 	payloads := make([]sourceRetainPayload, 0, len(lock.Artifacts))
 	for _, artifact := range lock.Artifacts {
-		raw, err := fetchSourceImportArtifact(ctx, fetcher, artifact)
+		raw, err := fetchSourceRetainArtifact(ctx, fetcher, artifact)
 		if err != nil {
 			if sourceRetainFetchIsWrongSource(err) {
 				return nil, fmt.Errorf("wrong source for locked artifact %s: %w", artifact.SourceURL, err)
@@ -497,8 +497,8 @@ func sourceRetainWriteManifest(sourcesDir string, opts sourceRetainOptions, payl
 		return fmt.Errorf("inspect retained artifact manifest: %w", err)
 	}
 
-	seen := make(map[string]sourceImportRetainedArtifactRecord, len(manifest.Artifacts))
-	for _, record := range manifest.Artifacts {
+	seen := make(map[string]int, len(manifest.Artifacts))
+	for index, record := range manifest.Artifacts {
 		if err := sourceRetainValidateManifestRecord(record); err != nil {
 			return fmt.Errorf("existing retained artifact manifest record: %w", err)
 		}
@@ -506,7 +506,7 @@ func sourceRetainWriteManifest(sourcesDir string, opts sourceRetainOptions, payl
 		if _, exists := seen[key]; exists {
 			return fmt.Errorf("existing retained artifact manifest duplicates fetched-byte provenance")
 		}
-		seen[key] = record
+		seen[key] = index
 	}
 	for _, payload := range payloads {
 		record := sourceImportRetainedArtifactRecord{
@@ -514,7 +514,7 @@ func sourceRetainWriteManifest(sourcesDir string, opts sourceRetainOptions, payl
 			Bytes:           payload.Artifact.Bytes,
 			SourceURL:       payload.Artifact.SourceURL,
 			IdentityQuery:   payload.Artifact.IdentityQuery,
-			Identity:        payload.Artifact.Identity,
+			Identity:        sourceArtifactIdentity(payload.Artifact),
 			CanonicalSHA256: strings.ToLower(payload.Artifact.CanonicalSHA256),
 			RetainedSHA256:  strings.ToLower(payload.RetainedSHA256),
 			RetainedBytes:   payload.RetainedBytes,
@@ -525,14 +525,33 @@ func sourceRetainWriteManifest(sourcesDir string, opts sourceRetainOptions, payl
 			Terms:           opts.Terms,
 		}
 		key := sourceRetainRecordKey(record)
-		if existing, exists := seen[key]; exists {
+		if index, exists := seen[key]; exists {
+			existing := &manifest.Artifacts[index]
 			if existing.Bytes != payload.Artifact.Bytes || !strings.EqualFold(existing.CanonicalSHA256, record.CanonicalSHA256) {
 				return fmt.Errorf("existing retained artifact manifest conflicts with locked bytes")
+			}
+			if existing.Identity == "" {
+				existing.Identity = record.Identity
+			}
+			if existing.CanonicalSHA256 == "" {
+				existing.CanonicalSHA256 = record.CanonicalSHA256
+			}
+			if existing.RetainedSHA256 == "" {
+				existing.RetainedSHA256 = record.RetainedSHA256
+			}
+			if existing.RetainedBytes == 0 {
+				existing.RetainedBytes = record.RetainedBytes
+			}
+			if existing.Form == "" {
+				existing.Form = record.Form
+			}
+			if existing.Version == "" {
+				existing.Version = record.Version
 			}
 			continue
 		}
 		manifest.Artifacts = append(manifest.Artifacts, record)
-		seen[key] = record
+		seen[key] = len(manifest.Artifacts) - 1
 	}
 	sort.Slice(manifest.Artifacts, func(left, right int) bool {
 		leftKey := sourceRetainRecordKey(manifest.Artifacts[left])
