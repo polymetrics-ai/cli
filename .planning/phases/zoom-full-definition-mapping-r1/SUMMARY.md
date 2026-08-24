@@ -6,10 +6,11 @@ Phase: `zoom-full-definition-mapping-r1`
 ## Delivered
 
 - Preserved 35 captured Zoom Developer Docs modules (12,127,228 bytes; 1,937 source operations)
-  and crosswalked them with the 1,913-row provider ledger. Their v3 source-lock migration is
-  blocked on #4331's rendered-reference citation contract; their captured bytes, SHA-256 digests,
-  byte counts, capture URLs, and adapter evidence remain intact, and no unavailable URL is
-  fabricated as a fetchable OpenAPI artifact.
+  and crosswalked them with the 1,913-row provider ledger. #4332 landed v3 rendered-reference
+  citations, and a migration probe correctly advanced to the next terminal cause: the first
+  immutable Next-data artifact returns HTTP 404 and no verified cache contains the pinned bytes.
+  The 2026-08-23 stable-capture decision requires an attested mirror; the original lock is retained
+  byte-for-byte and no unavailable URL is fabricated as a fetchable artifact or descriptor.
 - Declared 1,748 source-backed executor contracts: 776 `rest_read`, 971 `rest_write`, and one
   bounded binary-download contract, including 311 destructive DELETE contracts.
 - Added 505 source-backed direct-read commands, 202 approval-gated no-body scalar write commands,
@@ -71,9 +72,9 @@ Phase: `zoom-full-definition-mapping-r1`
   explicit implementation or technical-contract gaps, and no provider entitlement or destructive
   classification is presented as a reason to hide an otherwise-modelled command.
 - No auth, engine, generator, certification allowlist, or status code was changed.
-- The v3 multi-document source-lock foundation is on `main`, but its OpenAPI-only document kind
-  cannot honestly represent the 35 preserved rendered Next-data captures. #4331 owns that shared
-  rendered-reference contract; no Zoom source lock is migrated until it lands.
+- The v3 multi-document and rendered-reference foundations are on `main`, but stable capture
+  attestation is still required before the 35 rotating Next-data artifacts can be re-verified.
+  No Zoom source lock is migrated or descriptor synthesized until that separate foundation lands.
 - The later captain hard gate means this remains explicitly **not merge-ready**: open foundation
   gaps, incomplete all-operation CLI/website reachability, and the missing final six-surface live
   proof prevent any provider-wide completeness claim.

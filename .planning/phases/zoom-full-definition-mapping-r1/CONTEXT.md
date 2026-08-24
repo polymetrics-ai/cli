@@ -5,7 +5,7 @@
 - Issue: Refs #4265 — Zoom five-class parity foundation cohort.
 - Base branch: `main` (the temporary #4304 stack has landed).
 - Merges into: `fm/cli-zoom-full-definition-mapping-r1` → `main`.
-- Delivery: PR #4285 remains draft to `main`, with committed Zoom-local definitions, generated artifacts, and a complete seven-surface readiness ledger. Final local and live gates remain pending #4331's rendered-reference source-lock contract and credentialed proof. It is never merged by this lane.
+- Delivery: PR #4285 remains draft to `main`, with committed Zoom-local definitions, generated artifacts, and a complete seven-surface readiness ledger. #4332 landed the rendered-reference source-lock contract, but final source validation now awaits the separately decided stable, attested mirror of the 35 rotating captures, followed by credentialed proof. It is never merged by this lane.
 - Working branch: `fm/cli-zoom-full-definition-mapping-r1`.
 - Task: Reconcile the 1,937-operation source inventory and 206 typed action candidates, retaining user-reachable CLI actions without declaring a destination whose provider delete semantics cannot be represented safely.
 - Verification: connector-local red/green tests; `connectorgen validate`, certification artifact generation/checks, `surface-sync --check`, `connector-boundary`, focused CLI timeout reproduction, and `make verify`.
@@ -22,7 +22,7 @@
 - #4304 has landed through `main`; PR #4285 stays draft to `main` and is never merged by this lane.
 - Definitions, tests, fixtures, generated artifacts, and readiness evidence remain under `internal/connectors/defs/zoom/`. No shared engine hook is authorized for delete semantics.
 - All eight `user_id`-only source-key overlaps are provider DELETE actions. `internal/app/issue_label_warehouse_transport.go:944` correctly rejects DELETE as ordinary `full_append`; no destination is declared, no substitute action is invented, and all eight actions remain independently direct-CLI-reachable.
-- The 35 preserved Next-data captures remain intact. #4331 owns the rendered-reference source-lock contract that can represent them without fabricating a currently unavailable artifact.
+- #4332 landed the rendered-reference source-lock contract. A v3 migration probe preserved the exact 35-document inventory but stopped at the next terminal cause: the first immutable Next-data capture artifact returns HTTP 404 and no verified cache contains it. Per the 2026-08-23 stable-capture decision, this lane does not fabricate a replacement artifact, descriptor, or provenance; it waits for the separate attested mirror contract.
 - A destructive action may be declared and command-reachable, but live execution remains limited to lane-created resources with plan → preview → approval → execute. No destructive Zoom call is part of this continuation.
 - Certification remains fixture-plus-live-proof only. Existing evidence is retained as observed/live proof where applicable; no uncertified cell is promoted.
 - The GSD lifecycle is executed inline because the canonical single-worker contract forbids role spawning. `no-mistakes` is not run because the direct-PR brief expressly excludes it.

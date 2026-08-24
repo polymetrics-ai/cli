@@ -1,8 +1,9 @@
 # Zoom seven-surface readiness
 
 Issue: #4265
-Base: `main` after the temporary reverse-ETL foundation stack landed. Final source-lock validation
-remains pending #4331's rendered-reference citation contract.
+Base: `main` after the temporary reverse-ETL foundation stack landed. #4332 has landed the
+rendered-reference citation contract; final source-lock validation now awaits the separately
+decided stable, attested mirror of the 35 rotating Next-data captures.
 
 [`sources/zoom-seven-surface-readiness.json`](../../../internal/connectors/defs/zoom/sources/zoom-seven-surface-readiness.json)
 is the committed machine-readable reconciliation ledger. It contains 1,939 records: all 1,937
@@ -64,12 +65,13 @@ action merely to claim coverage.
 
 ## Certification boundary
 
-The connector definition cannot receive its current complete validation result until #4331 lands;
-the v3 OpenAPI-only source lock cannot honestly represent the 35 preserved rendered references.
-The current `connectorgen validate internal/connectors/defs/zoom --json` finding is exactly
-`sources/zoom-operation-source-lock.json: parse source lock: json: unknown field "retrieval"`.
-After that Foundation revision lands and the persisted App/CLI path is exercised, certification
-requires built-binary proof using only the registered
+The connector definition cannot receive its current complete validation result until the stable
+attested mirror exists. #4332 accepts the 35 rendered-reference documents, and the migration probe
+preserved all 1,937 identities, but `source-import` then reached the first immutable artifact and
+received HTTP 404. The cited provenance URL was not fetched; the missing verified artifact prevents
+creating the required canonical descriptor. The original v2 lock remains byte-identical, rather
+than inventing an artifact for a rotating URL. After that Foundation revision lands and the persisted
+App/CLI path is exercised, certification requires built-binary proof using only the registered
 secret-store reference at process execution time: authenticated read; a unique lane-owned
 create/read-back/update/delete-cleanup flow; ETL; reverse-ETL plan/apply/acknowledgement plus
 independent provider read-back; and a binary round-trip where supported. No pre-existing resource,
@@ -111,5 +113,5 @@ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom \
 The two certification generators are currently green after the delete-only reconciliation:
 `certification-candidates --check`, `certification-matrix --check`, and
 `certification-sweep --check` report no drift. Full `connectorgen validate` and
-`surface-sync --check` remain intentionally pending #4331; they must not be made to pass by
-rewriting the preserved rendered-reference source evidence.
+`surface-sync --check` remain intentionally pending stable capture attestation; they must not be
+made to pass by rewriting the preserved rendered-reference source evidence.

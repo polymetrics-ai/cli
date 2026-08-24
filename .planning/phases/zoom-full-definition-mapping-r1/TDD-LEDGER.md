@@ -18,6 +18,29 @@ Refactor: server-root normalization is recorded in the source lock (`server_url`
 `source_path`) so the standard `/v2` routes and the key-connector `/api/v2` route are compared
 without changing their provider path contracts.
 
+## Rendered-reference v3 migration probe (2026-08-24)
+
+Red: after #4332 landed, the source-lock assertions were changed to require 35
+`rendered_reference` documents, immutable per-document capture/provenance evidence, 1,937 nested
+operation identities, and empty aggregate OpenAPI versions. The preserved v2 lock failed those
+assertions, and `connectorgen validate` then advanced from the former `retrieval` parse rejection
+to the missing canonical source descriptor.
+
+Green (probe only): a mechanical v3 conversion preserved every document hash/byte count, all 1,937
+operation IDs/routes/locations, and the existing provider citations. `go test -count=1 -timeout
+20m ./internal/connectors/defs/zoom -run
+'^(TestPinnedSourceCrosswalkAccountsForEveryIdentity|TestMissingFoundationGapRowsAreSourceLockedAndRollUp)$'`
+passed against that conversion.
+
+Terminal boundary: `go run ./cmd/connectorgen source-import zoom --out
+internal/connectors/defs/zoom/sources/zoom-operation-descriptor.json` then fetched only the first
+declared artifact and received HTTP 404 for `accounts`; no verified cache contained its SHA-256.
+The cited provider URL was not fetched. Per the 2026-08-23 stable-capture decision, source bytes
+may not be re-created from an unavailable URL or accepted without re-verification. The probe was
+reverted and the original v2 lock restored byte-for-byte at SHA-256
+`2e102acffd89467374405829abd994714f994f237c4a38c4ad0d9a553c42c3f7` pending the separate attested
+mirror foundation.
+
 ## Declaration contract tests
 
 Red: `TestSourceBackedOperationInventoryKeepsEveryContractVisible` first observed zero source-backed

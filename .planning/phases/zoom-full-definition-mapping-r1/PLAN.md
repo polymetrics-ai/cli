@@ -151,9 +151,12 @@ fixture-approved loopback request while omitting absent `occurrence_id` and
 `cancel_meeting_reminder` query fields and retaining a present optional value. The full
 SHA-bound evidence is in [`FOUNDATION-REHEARSAL.md`](FOUNDATION-REHEARSAL.md). The optional-query
 Foundation has since reached `main`; this rehearsal changes neither certification nor final merge
-readiness. Current source-lock validation instead waits for #4331's rendered-reference citation
-contract, because 35 preserved Zoom captures are rendered Next-data references rather than
-fetchable OpenAPI artifacts.
+readiness. #4332 has since landed the rendered-reference citation contract. A Zoom migration probe
+then advanced source validation to its terminal capture boundary: every original Next-data artifact
+URL now returns HTTP 404 and no verified cache contains the pinned bytes. The 2026-08-23 stable
+capture decision requires an attested mirror for those 35 captures; this lane keeps the preserved
+v2 lock unchanged and does not invent a v3 artifact or descriptor while that separate foundation
+slice is absent.
 
 The `users.id -> user_id` field overlap matches eight provider DELETE actions and no ordinary
 non-delete action. A source row replay would therefore issue a destructive provider deletion;
