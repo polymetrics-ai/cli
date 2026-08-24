@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -19,6 +20,7 @@ import (
 	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/safety"
 )
 
 const (
@@ -1951,8 +1953,27 @@ func sourceProjectionNewCommand(operation sourceOperationDescriptor, action *ord
 }
 
 func sourceProjectionGeneratedCommandPath(operation sourceOperationDescriptor) string {
+	// Source IDs are provider-owned provenance, not a command grammar: several
+	// OpenAPI importers use the raw method/path as their ID, including `{name}`
+	// parameter syntax that commandrunner rejects. Encode the normalized endpoint
+	// instead. Hex is injective over the complete endpoint key, so a literal and
+	// a path parameter (or two parameter names) cannot collapse to one command.
+	endpoint := sourceProjectionEndpointKey(operation.Method, operation.Path)
+	return "api op-" + hex.EncodeToString([]byte(endpoint))
+}
+
+func sourceProjectionLegacyGeneratedCommandPath(operation sourceOperationDescriptor) string {
 	path := strings.NewReplacer("/", " ", "_", "-").Replace(operation.SourceID)
 	return "api " + path
+}
+
+func sourceProjectionCommandPathIsRuntimeValid(path string) bool {
+	for index, segment := range strings.Fields(path) {
+		if err := safety.ValidateIdentifier(segment, fmt.Sprintf("command path segment %d", index+1)); err != nil {
+			return false
+		}
+	}
+	return strings.TrimSpace(path) != ""
 }
 
 // sourceProjectionRefreshGeneratedCommandMetadata refreshes only the command
@@ -1960,10 +1981,20 @@ func sourceProjectionGeneratedCommandPath(operation sourceOperationDescriptor) s
 // keep their own prose, while the generated command must continue to publish
 // the declaration's actual approval lifecycle after a later projection pass.
 func sourceProjectionRefreshGeneratedCommandMetadata(command *orderedObject, operation sourceOperationDescriptor, action *orderedObject) bool {
-	if stringField(command, "path") != sourceProjectionGeneratedCommandPath(operation) {
+	currentPath := stringField(command, "path")
+	generatedPath := sourceProjectionGeneratedCommandPath(operation)
+	if currentPath == generatedPath {
+		return setOrderedIfDifferent(command, "approval", sourceProjectionApproval(action))
+	}
+	if currentPath != sourceProjectionLegacyGeneratedCommandPath(operation) {
 		return false
 	}
-	return setOrderedIfDifferent(command, "approval", sourceProjectionApproval(action))
+	if sourceProjectionCommandPathIsRuntimeValid(currentPath) {
+		return setOrderedIfDifferent(command, "approval", sourceProjectionApproval(action))
+	}
+	command.set("path", generatedPath)
+	setOrderedIfDifferent(command, "approval", sourceProjectionApproval(action))
+	return true
 }
 
 // sourceProjectionApproval publishes the same plan lifecycle the declaration
