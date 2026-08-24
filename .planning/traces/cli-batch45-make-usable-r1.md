@@ -463,3 +463,93 @@ LaunchDarkly, Pipedrive, QuickBooks, ShipStation, Squarespace, WooCommerce, and 
 There are **two re-pins** (BambooHR, LaunchDarkly) and **eight preserved pins**. The unresolved
 half is intentionally left without a raw artifact rather than retaining a changed document,
 application shell, error page, or incomplete multi-artifact set.
+
+## Source-cited deferred-operation audit — 2026-08-24
+
+### Manual GSD / TDD plan
+
+The canonical GSD paths for `discuss-phase`, `plan-phase --tdd`, `execute-phase`,
+`verify-work`, and `code-review` were re-resolved and their generated prompts reviewed for #4349.
+This is the documented inline/manual fallback: the canonical connector delivery contract forbids
+role spawning, and Firstmate expressly limited this slice to cited deferred-operation accounting
+while transport admission remains external. Required skills loaded: `golang-how-to`, `golang-cli`,
+`golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`,
+`golang-design-patterns`, `golang-structs-interfaces`, and `golang-documentation`. The CLI
+help/manual/website parity guidance was read; no `pm` command, help, output, or generated manual
+changes in this slice, so all runtime/manual/website parity edits are not applicable.
+
+- **Scope:** source-citation accounting in the twenty existing declaration-disposition ledgers,
+  their two stale re-pin bases, and binary credential-boundary evidence. No `cli_surface`,
+  `operations.json`, `writes.json`, `sync_transport.json`, engine, or command-runner change.
+- **Red:** the exact source-basis audit found BambooHR's disposition ledger still cited
+  `1562871` / `ecfc6382…00ebf15a` and LaunchDarkly's still cited `2953979` /
+  `41fc8c76…e5469419`, although their retained parity locks now establish
+  `1627565` / `a04e6544…f1177890` and `2936808` / `5712a80c…aa8d9b3e`, respectively.
+  `go run ./cmd/connectorgen source-import fastly --check` also fails before projection because
+  this batch has no `fastly-operation-source-lock.json`; all twenty carry legacy parity locks,
+  not v3 operation locks/descriptors. That blocks application of
+  `sourceProjectionApplyNonExecutableMutationDispositions` without inventing a source contract.
+- **Green:** correct only BambooHR and LaunchDarkly's ledger `source_basis` SHA-256 and bytes to
+  their already retained, connector-owned parity-lock identities. Re-audit all ten retained
+  connectors, validate the two edited bundles, and preserve the source projection refusal as an
+  explicit foundation/source-lock-transition gap rather than a command downgrade or a fabricated
+  deferred-operation descriptor.
+- **Credential-boundary proof:** build `pm`; in isolated initialized projects with no credential
+  configured, invoke every existing `availability: implemented` command. Success is only exit 1
+  with exactly `error: missing --credential`; no provider call is possible at that boundary.
+
+### Audited split before the narrow citation repair
+
+The legacy declaration-disposition ledgers have **7,421 mapped source rows**. A row holds its
+provider URL and location; its connector-level `source_basis` supplies the SHA-256 and byte count.
+The table separates a currently usable source citation from a known source transition or a
+no-public-source verdict. Thus a reported `unexplained` zero does not conceal a stale source URL:
+those rows have their own named state and are not promoted as cited provider contracts.
+
+| Connector | Mapped source rows | Credential-boundary commands | Cited-and-deferred | Source transition / unavailable | Unexplained |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Airtable | 105 | 0 | 105 | 0 | 0 |
+| BambooHR | 345 | 0 | 345 | 0 | 0 |
+| Buildkite | 132 | 0 | 132 | 0 | 0 |
+| eBay Fulfillment | 11 | 0 | 0 | 11 unavailable | 0 |
+| Fastly | 732 | 0 | 732 | 0 | 0 |
+| Google Analytics Data API | 28 | 0 | 0 | 28 transition | 0 |
+| HubSpot | 3,118 | 0 | 3,118 | 0 | 0 |
+| LaunchDarkly | 399 | 0 | 399 | 0 | 0 |
+| Linear | 543 | 0 | 0 | 543 transition | 0 |
+| Mailchimp | 323 | 295 | 0 | 28 transition | 0 |
+| Pinterest | 284 | 0 | 284 | 0 | 0 |
+| Pipedrive | 218 | 0 | 218 | 0 | 0 |
+| QuickBooks | 134 | 0 | 0 | 134 transition | 0 |
+| Salesforce | 10 | 0 | 0 | 10 transition | 0 |
+| ShipStation | 47 | 0 | 47 | 0 | 0 |
+| SonarCloud | 157 | 0 | 157 | 0 | 0 |
+| Squarespace | 53 | 0 | 53 | 0 | 0 |
+| TikTok Marketing | 7 | 0 | 0 | 7 unavailable | 0 |
+| WooCommerce | 140 | 0 | 140 | 0 | 0 |
+| Zendesk Support | 635 | 95 | 540 | 0 | 0 |
+| **Total** | **7,421** | **390** | **6,270** | **761** | **0** |
+
+The five transition counts are Google Analytics Data API, Linear, Mailchimp, QuickBooks, and
+Salesforce. Their actual replacement URLs and fetched byte counts are cited in
+`data/cli-top100-source-research-r1/report.md` rows 31, 34, 36, 39, and 43, but that report does
+not provide a checked-in replacement SHA-256/location projection. They remain source-transition
+debt until a reviewed source-lock migration can supply all four citation values. eBay Fulfillment
+and TikTok Marketing are the research report's explicit no-public-source verdicts (rows 49 and
+42); they remain declared debt, not shell/error-page derived pseudo-citations.
+
+All 390 existing implemented commands have now been proved against the built binary: Mailchimp
+**295/295** and Zendesk Support **95/95** each stopped at exactly `error: missing --credential` in
+isolated initialized projects. No credentials or provider requests were used. The remaining
+7,031 rows are declared `partial`/`declaration-pending`: 6,270 are currently cited deferred debt,
+743 are source-transition debt, and 18 have an explicit no-public-source verdict. None claims
+that the runtime can execute it.
+
+The new v3 source-projection disposition mechanism remains unavailable for this legacy batch until
+each affected connector receives a verified `*-operation-source-lock.json` and generated
+descriptor. It cannot be forced from a parity lock: `source-import` is intentionally hermetic and
+refuses the absent v3 lock before projection. Seven connectors also lack a usable current source
+artifact or provider source (Airtable, Buildkite, Google Analytics Data API, Linear, Mailchimp,
+Pinterest, SonarCloud drift/volatile; eBay Fulfillment and TikTok Marketing no public source;
+Salesforce tenant-dynamic), so a batch-wide v3 migration would require separate source-transition
+work, not the still-pending transport-admission foundation. No such migration is attempted here.
