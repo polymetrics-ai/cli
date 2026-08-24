@@ -87,6 +87,38 @@ operations cite `developers.outreach.io`, while the only retained immutable capt
 captured developer-document artifact (bytes, SHA-256, and capture provenance) before those six
 operations can be moved to a document-owned v3 lock.
 
+## Main foundation reconciliation and three-way baseline — 2026-08-24
+
+- Merged `origin/main` `060bb7864` without a stash at `e06b27835`. The nineteen pending source-lock
+  migrations and the committed Iterable lock were first copied under this phase and then restored
+  byte-for-byte after the merge.
+- The current 20-connector source-locked inventory has **3,932** operations. The current
+  `operation-evidence` projection classifies **288** as runtime-enabled with a generated CLI path,
+  **3,644** as connector-definition-declarable (`runtime.enabled: false` and no declared
+  foundation), and **0** as genuinely execution-foundation-blocked. This is a pre-conversion
+  classification; provider-live certification is pending, and the installed-binary no-credential
+  sweep is still required for every newly declared command.
+- The five Help Scout v3 route rows are no longer a foundation gap: the definition uses
+  `route: mailbox_v3`, and `TestHelpScoutV3DirectReadsUseTheirDeclaredRoute` passed against the
+  real direct-read executor (`/v3`, never `/v2/v3`). `validateOperationRoutes` and
+  `resolveOperationRoute` in `internal/connectors/engine/operation_route.go` now own the
+  fail-closed route contract.
+- The Help Scout `update_customer` action-specific binding is also closed. Its
+  `sync_transport.json` has a second action-owned `customers(id) -> update_customer(customerId)`
+  binding, and the focused `DestinationSourceBinding` tests passed. The shared closure is
+  `DestinationTransportDescriptor.SourceBindingForAction` in
+  `internal/connectors/sync_transport.go`, which selects the exact declared action and refuses a
+  legacy fallback when action-owned bindings exist.
+- **Remaining shared evidence gate:** a reversible Close v3 probe produced a valid
+  `rest.source_documents[0]` OpenAPI inventory with 300 operations, but
+  `go run ./cmd/connectorgen operation-evidence . --check` failed
+  `source lock for "close-com" has no operations and no provider-evidenced absence`. The current
+  `readOperationEvidenceSourceLock` (`cmd/connectorgen/operationevidence.go`) accepts
+  `schema_version == 3` but iterates only legacy `rest.operations`; it does not read
+  `rest.source_documents[].operations`. Restoring the preserved v2 lock made the check pass again
+  at 5,457 rows. This must be repaired in the shared foundation before valid v3 locks can land;
+  no connector-local shim is permitted.
+
 ## Relaunch baseline and CI repair — 2026-08-20
 
 - **RED:** PR run `32283259925` failed `TestGorgiasAPISurfaceOperationLedger`: the recovered v2
