@@ -2,14 +2,19 @@ Refs #4291
 
 ## Status
 
-Reconciliation is paused; do not merge. PR #4296 now targets `main`, confirmed by
-the GitHub API after this branch merged `origin/main` at `cf493b834`. The current
-tree contains the route and action-specific source-binding foundations, and the
-independent Help Scout proof is committed separately. The remaining blocker is
-`cli-rendered-reference-citation-contract-r1`: the twenty legacy locks have
-faithful per-operation rendered-reference citations, but neither strict schema v2
-nor the OpenAPI-artifact-only v3 form can represent them. The migration remains
-uncommitted and the branch must not be pushed while `connectorgen validate` is red.
+Reconciliation is paused; do not merge. GitHub currently reports PR #4296 targets
+`main`. Nineteen source locks are committed in schema v3 using the rendered-reference
+citation contract; Outreach remains deliberately unstaged until its second
+`developers.outreach.io` document has an immutable retained artifact. The remaining
+shared blocker is not the citation schema: `readOperationEvidenceSourceLock` in
+`cmd/connectorgen/operationevidence.go` accepts schema v3 but reads only legacy
+`rest.operations`, not `rest.source_documents[].operations`. Therefore the current
+tree must not be represented as globally generator-green or pushed as complete.
+
+PR #4350 is an additional retain-only source-lock-reader dependency for Outreach's
+legacy-lock verification. It does not supply the schema-v3 operation-evidence
+projection, and a second immutable Outreach developer-document capture is still
+required before that lock can migrate faithfully.
 
 ## Twenty-connector seven-surface baseline
 
@@ -34,7 +39,7 @@ certification never make an operation unreachable.
 | segment | complete | 0 / 97 | 0 / 101 | 0 | 0 / 3 | 0 | 0 / 0 | 28 |
 | activecampaign | complete | 0 / 128 | 0 / 157 | 0 | 0 / 11 | 0 | 0 / 0 | 50 |
 | iterable | complete | 0 / 49 | 0 / 96 | 0 | 0 / 3 | 0 | 0 / 0 | 12 |
-| help-scout | unproven | 50 / 55 | 65 / 65 | 65 | 1 / 24 | 1 (fixture/preflight proven; action-specific gap open) | 1 / 0 | 18 |
+| help-scout | unproven | 55 / 55 | 65 / 65 | 65 | 1 / 24 | 1 (two exact source bindings; connector fixture/CLI proof pending) | 1 / 0 | 18 |
 | gorgias | complete | 41 / 42 | 61 / 68 | 61 | 1 / 4 | 1 (foundation merged; connector App proof pending) | 1 / 1 | 18 |
 | service-now | dynamic templates | 0 / 1 | 2 / 4 | 0 | 1 / 3 | 1 (foundation merged; connector App proof pending) | 0 / 0 | 1 |
 | chatwoot | complete | 32 / 57 | 60 / 84 | 60 | 1 / 7 | 1 (foundation merged; connector App proof pending) | 0 / 0 | 18 |
@@ -42,10 +47,22 @@ certification never make an operation unreachable.
 | square | complete | 0 / 117 | 0 / 213 | 0 | 0 / 4 | 0 | 0 / 0 | 27 |
 | braintree | unproven | 0 / 18 | 0 / 45 | 0 | 0 / 10 | 0 | 0 / 0 | 6 |
 
-## Remaining gaps
+## Current reconciliation and remaining gaps
 
-- 1,342 direct reads need provider-evidenced bounded operation contracts and generated CLI
-  bindings; 1,745 direct writes need exact typed actions. Gorgias already has 61 user-reachable
+- The authoritative 3,932-row machine ledger currently has **576** enabled generated CLI bindings,
+  **3,350** connector-local `declaration-pending` operations, **5** execution-foundation-blocked
+  operations, and **1** provider-contract-unavailable operation. These are seven-surface claims,
+  not provider-live certification; every enabled command remains subject to its normal safety and
+  authorization controls.
+- The five genuine execution-foundation gaps are all Gorgias: two scalar JSON `PUT` write bodies,
+  one recursive structured reporting-filter input, one POST text-export binary read, and one
+  provider `PUT` direct read. `FOUNDATION-GAPS.json` names each refusing file/function and minimum
+  provider-neutral hook. Gorgias file download remains a separate
+  `provider-contract-unavailable` row because the provider supplies no exact stable final-media
+  host contract for its signed cross-host redirect; it is not a foundation gap.
+- The 3,350 unauthored operations are `declaration-pending`, rather than unsupported: they need
+  exact connector-local operation contracts, generated command paths, typed request mappings,
+  destination conformance, and/or fixtures. Gorgias already has 61 user-reachable
   approval-governed write commands; its native `direct_write` intent count remains zero, so the
   ledger keeps direct capability distinct from reverse-ETL deployment.
 - Gorgias, Chatwoot, Customer.io, Close, Outreach, Zoho Bigin, Chargebee, ServiceNow, and Braze now declare their current ETL stream sets and
@@ -60,28 +77,18 @@ certification never make an operation unreachable.
   their exact source mappings and conformance evidence; un-authored direct writes remain
   declaration-pending, and Gorgias multipart `upload_file` has a named binary/multipart semantic
   exclusion while remaining CLI-reachable.
-- Help Scout now declares and fixture/preflight proves
-  `conversations(id) → update_conversation(conversationId)`. The common camelCase rule and persisted
-  App/CLI route are present at `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57`; the installed connection
-  route correctly stops at missing credentials before provider I/O. Its `update_customer` operation
-  is not enabled because the current closed model permits only one source binding per executor.
-  `FOUNDATION-GAPS.json` records the exact source-traced
-  `declarative-typed-destination-action-specific-source-bindings` dependency; no connector-specific
-  workaround was added.
-- Five source-locked Help Scout Mailbox API v3 reads are explicitly not enabled behind the assigned
-  `declarative-operation-route-override` foundation lane
-  `cli-operation-route-override-foundation-r1`. The current `/v2` bundle base would construct
-  `/v2/v3/...`; no base rewrite, caller URL, generic HTTP path, or silent fallback is permitted.
-  Their source URL/version/hash, exact runtime evidence, owner, fan-out, and closure checks are in
-  `FOUNDATION-GAPS.json`; portfolio `merge_ready` remains false.
+- Help Scout's former shared gaps are closed. The five Mailbox API v3 direct reads use the declared
+  `mailbox_v3` route and reach `/v3`, and both `update_conversation` and `update_customer` have
+  exact action-specific source bindings. The remaining connector-owned work is fixture/installed
+  CLI conformance evidence, not an execution-foundation gap.
 - Braze, Help Scout, and Braintree source inventories remain unproven; the rest use a complete
   provider specification/reference or ServiceNow's explicitly dynamic fixed-template basis.
 - Help Scout still needs its binary command represented as a binary parity row; Gorgias now is.
 - Every connector is provider-live-certification pending; no credentials or provider calls are
   authorized for this lane.
 - `FOUNDATION-GAPS.json` records shared provider-neutral gaps once per stable ID, with exact
-  source URL/version/hash rows and batch/portfolio fan-out. Its current `merge_ready: false` is
-  authoritative: no open foundation-gap operation is counted as enabled or merge-ready.
+  source URL/version/hash rows and batch/portfolio fan-out. No open foundation-gap operation is
+  counted as enabled or merge-ready.
 - `OPERATION-SURFACE-EVIDENCE.json` is the captain-required machine record for all 3,932 provider
   operations: source URL/version/SHA-256, canonical mapping, seven surface cells, generated
   projection cells, fixture/conformance status, and merge readiness. Its first independent
@@ -99,11 +106,18 @@ certification never make an operation unreachable.
   `golang-testing`, `golang-cli`, and `golang-documentation`.
 - Red/green evidence and exact commands are in
   `.planning/phases/issue-4291-connector-parity-batches-6-7-r1/VERIFICATION.md`.
-- Current foundation-reconciliation checks all pass: `go run ./cmd/connectorgen validate`,
-  `go run ./cmd/connectorgen surface-sync --check`, Help Scout commandrunner/engine/App/CLI/
-  connectors focused tests, `npm --prefix website run gen:website-data`, and `git diff --check`.
-  The first operation-evidence increment also passed exact five-ledger and 3,932-row `jq`
-  assertions before its connector validation and surface-sync checks.
+- Focused current checks: `go test -timeout 20m ./internal/connectors/engine -run
+  '^TestHelpScoutV3DirectReadsUseTheirDeclaredRoute$' -count=1`, `go test -timeout 20m
+  ./internal/connectors -run
+  '^(TestDestinationTransportDescriptorRequiresExactActionClosure|TestDestinationSourceBindingJSONOmitsAbsentBatch)$'
+  -count=1`, and `go test -timeout 20m ./internal/connectors/commandrunner -run
+  '^TestEveryImplementedCommandPassesRuntimePreflight$' -count=1` all pass. The machine-ledger
+  exact aggregate assertion also passes at 576/3,350/5/1.
+- `go run ./cmd/connectorgen operation-evidence . --check`, full `connectorgen validate`,
+  `surface-sync --check`, generated checks, `connector-boundary`, and `make verify` remain final
+  gates. They must be rerun after the shared schema-v3 evidence reader and Outreach retained
+  developer-document capture unblock the current source-lock tree. Earlier pre-v3 green runs are
+  historical evidence only; they do not certify this worktree.
 - Before the latest push, `origin/fm/cli-reverse-etl-destination-r1` was fetched and merged
   (already current); foundation `609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57` is an ancestor. A
   fresh installed binary passed declarative-typed-destination help and Help Scout transport
