@@ -333,8 +333,8 @@ func operationResponseSpec(op OperationSpec) *OperationResponseSpec {
 // operationResponseHeaders materializes the declaration's bounded metadata
 // projection. It intentionally iterates the declaration, not the provider
 // map, so an endpoint cannot turn response metadata into an arbitrary output
-// channel. Each admitted ordinary value is preserved exactly and a known
-// credential/transport value is represented by an explicit redaction marker.
+// channel. Each admitted provider value is preserved exactly. Only an
+// operation-owned output-secret declaration may classify a value for masking.
 func operationResponseHeaders(b Bundle, op OperationSpec, headers http.Header, secrets map[string]string) (map[string]connectors.OperationResponseHeader, error) {
 	if err := validateOperationResponseContract(op); err != nil {
 		return nil, fmt.Errorf("operation %q response headers: %w", op.ID, err)
@@ -367,8 +367,8 @@ func operationResponseHeaders(b Bundle, op OperationSpec, headers http.Header, s
 			return nil, fmt.Errorf("operation %q response header %q exceeds declared byte cap %d", op.ID, declared.Name, declared.MaxBytes)
 		}
 		// Header names are not sensitivity evidence. The public command boundary
-		// masks only values that equal configured credential material, preserving
-		// ordinary provider metadata such as WWW-Authenticate and duplicate IDs.
+		// preserves declared provider metadata such as WWW-Authenticate and
+		// duplicate IDs, even when a value equals configured credential bytes.
 		result[declared.Name] = connectors.OperationResponseHeader{Values: append([]string(nil), values...)}
 	}
 	return connectors.SanitizeProviderResponseHeadersForOutput(result, secrets), nil
