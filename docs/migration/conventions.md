@@ -1634,12 +1634,32 @@ wave-close after the path-guard (`git status --porcelain` limited to assigned di
 
 Connector batches begin with the connector-owned
 `sources/<connector>-operation-source-lock.json`; never give the generator an
-alternate provider URL or a downloaded production artifact. Run:
+alternate provider URL or a downloaded production artifact. Each locked input
+also has an exact tracked retained copy at
+`sources/artifacts/<lowercase-lock-sha256>.artifact` and a connector-owned
+`sources/<connector>-retained-artifacts.json` provenance manifest. Run:
 
 ```sh
 go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-path>
 go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-path> --check
 ```
+
+The only command allowed to obtain a retained copy is the explicit maintenance
+operation below. It fetches the source URL already named by the lock, proves
+the returned bytes against that lock before writing, and does **not** change a
+URL, byte count, or digest. It is never part of a build or verification path:
+
+```sh
+go run ./cmd/connectorgen source-retain <connector> \
+  --retrieved-at <RFC3339> --license <known-license-or-status> \
+  --terms <known-terms-or-status>
+```
+
+If a current provider document differs from a pin, do not use
+`source-retain` to make it fit. Preserve the lock first; only the separately
+recorded delivery-owner authorization and re-pin report described below may
+replace that identity. A terminal HTTP response, redirect, login wall, or
+other non-document response is never re-pin material.
 
 Version 1 and 2 locks pin one fixed public artifact URL. Version 3 locks retain
 that wire contract for existing locks but use `rest.retrieval`, a sorted aggregate
@@ -1651,13 +1671,25 @@ declare `artifact.identity_query: true`; this is valid only on a v3 REST source
 document and makes the exact bounded, non-secret query already locked in its
 `artifact.source_url` part of the retrieval identity. It never accepts a query
 or URL from source-import command input. The importer retrieves only each
-document's fixed artifact URL without credentials and verifies its exact locked
-byte count and SHA-256 before parsing. A mismatch is a **source-lock refresh**
-decision: do not infer a replacement schema or accept source drift. The generated
+document's retained content-addressed artifact without credentials, a provider
+request, or a user cache. It verifies the retained bytes against the lock's
+already-recorded byte count and SHA-256 before parsing. A missing copy or
+mismatch is terminal: do not infer a replacement schema, accept source drift,
+or fall back to a live URL. The generated
 descriptor preserves each operation's document ID, stable artifact, published
 URL, capture identity, and provider operation ID; a document-qualified locked
 `id` is the descriptor source identity even when the provider repeats an
 `operationId` in another document.
+
+The retained-artifact manifest is provenance only and cannot alter lock
+identity. Every artifact record repeats the locked `sha256`, `bytes`, and
+`source_url`, names an RFC3339 `retrieved_at` value, and records non-empty
+`license` and `terms` data (use `undetermined` when that is all that can be
+established). A manifest record must match the lock before its digest-addressed
+file is read. The importer treats plain OpenAPI/Swagger, rendered-reference
+captures, and zip/gzip bundle bytes alike at this boundary: it first proves the
+opaque retained bytes are the locked bytes, then dispatches to the source-kind
+specific parser/projection path.
 
 A v3 `published_source.source_url` is a historical citation, not a retrieval
 endpoint. It may carry only a bounded, non-secret provider query (for example a
@@ -1675,16 +1707,17 @@ The generated descriptor is an intermediate provider contract for later fixed
 declaration materializers, never an execution command or a generic HTTP escape
 hatch.
 
-A cold source fetch has a three-minute upper bound. After a successful fetch,
-the generator stores the public artifact in a content-addressed cache keyed by
-the locked SHA-256. `--cache-dir <existing-directory>` selects an explicit,
-non-symlink cache root for isolated qualification; it changes only where an
-already lock-verified public artifact is stored and cannot change the source
-URL, digest, byte count, or request authority. Every cache hit is still bounded
-and re-verifies its exact byte count and digest before parsing; missing, stale,
-corrupt, oversized, or digest-mismatched cache content is never used. It may be replaced only by a
-fresh response that passes the same immutable lock, so cache recovery cannot
-become an unverified fallback.
+When migrating an existing lock, preserve the lock first because it may be
+untracked during a connector lane. Add a retained artifact only after its raw
+bytes validate against that lock; then add the matching provenance record.
+Normally, do not regenerate a digest from a current provider response or store
+a current body that differs from the lock. An exception requires the recorded
+authorization of the delivery owner: classify the response as a real provider
+document (never an error, redirect, login wall, or equivalent), explicitly
+record its connector/artifact, old and new byte counts and SHA-256 values, and
+record the retrieval date before re-pinning and retaining it. There is no
+`--cache-dir` fallback: an untracked cache cannot provide clone recovery and a
+provider fetch is forbidden during source verification.
 
 The lock must pin an OpenAPI 3.0/3.1 or Swagger 2.0 source document; JSON and
 YAML are accepted only in those forms. Each operation descriptor retains the

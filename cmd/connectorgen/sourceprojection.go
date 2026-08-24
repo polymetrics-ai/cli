@@ -592,7 +592,7 @@ func sourceProjectionReachableReadSources(result sourceImportResult) map[string]
 // caller values. Required inputs and all other source gaps remain blocking.
 func sourceProjectionReadHasBlockingGap(operation sourceOperationDescriptor) bool {
 	for _, gap := range operation.Runtime.Gaps {
-		if sourceProjectionOptionalAmbiguousParameterGap(operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(operation, gap) {
+		if sourceProjectionOptionalParameterSchemaGap(operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(operation, gap) {
 			continue
 		}
 		if sourceProjectionHasBlockingGap([]sourceContractGap{gap}) {
@@ -617,7 +617,7 @@ func sourceProjectionNormalizeNonBlockingReadGaps(result *sourceImportResult) {
 		}
 		gaps := operation.Runtime.Gaps[:0]
 		for _, gap := range operation.Runtime.Gaps {
-			if sourceProjectionOptionalAmbiguousParameterGap(*operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(*operation, gap) {
+			if sourceProjectionOptionalParameterSchemaGap(*operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(*operation, gap) {
 				continue
 			}
 			gaps = append(gaps, gap)
@@ -634,8 +634,8 @@ func sourceProjectionOmittedOptionalRequestBodySchemaGap(operation sourceOperati
 		!operation.Request.Body.Required
 }
 
-func sourceProjectionOptionalAmbiguousParameterGap(operation sourceOperationDescriptor, gap sourceContractGap) bool {
-	if gap.Foundation != "cli-request-schema-foundation-r1" || !strings.HasPrefix(gap.Location, "parameter ") || !strings.Contains(gap.Reason, "ambiguous request schema uses ") {
+func sourceProjectionOptionalParameterSchemaGap(operation sourceOperationDescriptor, gap sourceContractGap) bool {
+	if gap.Foundation != "cli-request-schema-foundation-r1" || !strings.HasPrefix(gap.Location, "parameter ") {
 		return false
 	}
 	name := strings.TrimPrefix(gap.Location, "parameter ")
