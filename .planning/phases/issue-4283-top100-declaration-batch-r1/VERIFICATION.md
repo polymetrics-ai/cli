@@ -530,3 +530,12 @@ pre-existing.
   .`, `go vet ./cmd/connectorgen`, and `git diff --check`.
 - [ ] A broader fixed cohort remains an additive, separately reviewed proposal;
   it must not replace the shipped all-GitHub evidence reference.
+- [ ] The remaining local reachability gap is unchanged and foundation-owned:
+  `go test -timeout 20m -count=1 -run
+  '^TestEveryImplementedCommandPassesRuntimePreflight$'
+  ./internal/connectors/commandrunner` fails only for Docker Hub `scim user
+  create` and `scim user update`. Their pinned open request objects are refused
+  by `internal/connectors/engine/structured_rest_body.go:1441-1444`, which
+  requires `additionalProperties: false`. No connector-local schema was
+  narrowed or invented; the earlier source-import refresh wait remains in
+  effect until Firstmate directs a new refresh.
