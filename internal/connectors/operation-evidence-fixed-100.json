@@ -3,6 +3,136 @@
   "source": "official provider source locks, stratified across available executable capability classes as a fixed 100-operation aggregate cohort",
   "rows": [
     {
+      "source_id": "chatwoot.rest.get.ContactList28",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/contacts",
+      "cli_paths": [
+        "contacts list"
+      ],
+      "website_paths": [
+        "contacts list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/contacts/page_1.json",
+        "fixtures/streams/contacts/page_2.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "chatwoot.rest.get.ConversationList34",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/conversations",
+      "cli_paths": [
+        "conversations list"
+      ],
+      "website_paths": [
+        "conversations list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/conversations/page_1.json",
+        "fixtures/streams/conversations/page_2.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "chatwoot.rest.get.GetAccountAgents22",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/agents",
+      "cli_paths": [
+        "agents list"
+      ],
+      "website_paths": [
+        "agents list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/agents/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "chatwoot.rest.get.ListAllInboxes45",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/inboxes",
+      "cli_paths": [
+        "inboxes list"
+      ],
+      "website_paths": [
+        "inboxes list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/inboxes/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "chatwoot.rest.get.ListAllLabels50",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/labels",
+      "cli_paths": [
+        "labels list"
+      ],
+      "website_paths": [
+        "labels list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/labels/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "chatwoot.rest.get.ListAllMessages37",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
+      "cli_paths": [
+        "messages list"
+      ],
+      "website_paths": [
+        "messages list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/messages/page_1.json",
+        "fixtures/streams/messages/page_2.json",
+        "fixtures/streams/messages/page_3.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "chatwoot.rest.get.ListAllTeams54",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/teams",
+      "cli_paths": [
+        "teams list"
+      ],
+      "website_paths": [
+        "teams list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/teams/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
       "source_id": "github.rest.actions/list-repo-workflows",
       "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
       "canonical_method": "GET",
@@ -184,6 +314,168 @@
       ],
       "classifications": [
         "etl"
+      ]
+    },
+    {
+      "source_id": "gorgias.rest.get.ListCustomers23",
+      "source_sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+      "canonical_method": "GET",
+      "canonical_path": "/api/customers",
+      "cli_paths": [
+        "customers list"
+      ],
+      "website_paths": [
+        "customers list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/customers/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "gorgias.rest.get.ListMessages34",
+      "source_sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+      "canonical_method": "GET",
+      "canonical_path": "/api/messages",
+      "cli_paths": [
+        "messages list"
+      ],
+      "website_paths": [
+        "messages list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/messages/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "gorgias.rest.get.ListSatisfactionSurveys45",
+      "source_sha256": "b824de51f33dfa90c6c6115eef74ff4b62277634a471347b01d769176f161897",
+      "canonical_method": "GET",
+      "canonical_path": "/api/satisfaction-surveys",
+      "cli_paths": [
+        "satisfaction-surveys list"
+      ],
+      "website_paths": [
+        "satisfaction-surveys list"
+      ],
+      "fixture_paths": [
+        "fixtures/streams/satisfaction_surveys/page_1.json"
+      ],
+      "classifications": [
+        "etl"
+      ]
+    },
+    {
+      "source_id": "chatwoot.rest.post.ContactCreate87",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "POST",
+      "canonical_path": "/api/v1/accounts/{account_id}/contacts",
+      "cli_paths": [
+        "contacts create"
+      ],
+      "website_paths": [
+        "contacts create"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/create_contact.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "chatwoot.rest.post.CreateALabel107",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "POST",
+      "canonical_path": "/api/v1/accounts/{account_id}/labels",
+      "cli_paths": [
+        "labels create"
+      ],
+      "website_paths": [
+        "labels create"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/create_label.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "chatwoot.rest.post.CreateANewMessageInAConversation96",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "POST",
+      "canonical_path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
+      "cli_paths": [
+        "messages send"
+      ],
+      "website_paths": [
+        "messages send"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/send_message.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "chatwoot.rest.post.NewConversation91",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "POST",
+      "canonical_path": "/api/v1/accounts/{account_id}/conversations",
+      "cli_paths": [
+        "conversations create"
+      ],
+      "website_paths": [
+        "conversations create"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/create_conversation.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "chatwoot.rest.post.ToggleStatusOfAConversation98",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "POST",
+      "canonical_path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status",
+      "cli_paths": [
+        "conversations toggle-status"
+      ],
+      "website_paths": [
+        "conversations toggle-status"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/toggle_conversation_status.json"
+      ],
+      "classifications": [
+        "reverse_etl"
+      ]
+    },
+    {
+      "source_id": "chatwoot.rest.put.ContactUpdate124",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "PUT",
+      "canonical_path": "/api/v1/accounts/{account_id}/contacts/{id}",
+      "cli_paths": [
+        "contacts update"
+      ],
+      "website_paths": [
+        "contacts update"
+      ],
+      "fixture_paths": [
+        "fixtures/writes/update_contact.json"
+      ],
+      "classifications": [
+        "reverse_etl"
       ]
     },
     {
@@ -442,126 +734,15 @@
       ]
     },
     {
-      "source_id": "github.rest.issues/create",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/issues",
+      "source_id": "chatwoot.rest.get.ContactConversations31",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/contacts/{id}/conversations",
       "cli_paths": [
-        "issue create"
+        "contacts list-conversations"
       ],
       "website_paths": [
-        "issue create"
-      ],
-      "fixture_paths": [
-        "fixtures/writes/create_issue.json"
-      ],
-      "classifications": [
-        "reverse_etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.issues/create-comment",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/issues/{issue_number}/comments",
-      "cli_paths": [
-        "issue comment",
-        "pr comment"
-      ],
-      "website_paths": [
-        "issue comment",
-        "pr comment"
-      ],
-      "fixture_paths": [
-        "fixtures/writes/comment_issue.json"
-      ],
-      "classifications": [
-        "reverse_etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.issues/create-label",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/labels",
-      "cli_paths": [
-        "label clone",
-        "label create"
-      ],
-      "website_paths": [
-        "label create"
-      ],
-      "fixture_paths": [
-        "fixtures/writes/create_label.json"
-      ],
-      "classifications": [
-        "reverse_etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.issues/create-milestone",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "POST",
-      "canonical_path": "/repos/{owner}/{repo}/milestones",
-      "cli_paths": [
-        "api issues create-milestone"
-      ],
-      "website_paths": [
-        "api issues create-milestone"
-      ],
-      "fixture_paths": [
-        "fixtures/writes/create_milestone.json"
-      ],
-      "classifications": [
-        "reverse_etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.issues/delete-comment",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "DELETE",
-      "canonical_path": "/repos/{owner}/{repo}/issues/comments/{comment_id}",
-      "cli_paths": [
-        "api issues delete-comment"
-      ],
-      "website_paths": [
-        "api issues delete-comment"
-      ],
-      "fixture_paths": [
-        "fixtures/writes/delete_issue_comment.json"
-      ],
-      "classifications": [
-        "reverse_etl"
-      ]
-    },
-    {
-      "source_id": "github.rest.issues/delete-label",
-      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
-      "canonical_method": "DELETE",
-      "canonical_path": "/repos/{owner}/{repo}/labels/{name}",
-      "cli_paths": [
-        "label delete"
-      ],
-      "website_paths": [
-        "label delete"
-      ],
-      "fixture_paths": [
-        "fixtures/writes/delete_label.json"
-      ],
-      "classifications": [
-        "reverse_etl"
-      ]
-    },
-    {
-      "source_id": "github.graphql.query.codeOfConduct",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql query code-of-conduct"
-      ],
-      "website_paths": [
-        "graphql query code-of-conduct"
+        "contacts list-conversations"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -571,15 +752,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.codesOfConduct",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.ContactDetails29",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/contacts/{id}",
       "cli_paths": [
-        "graphql query codes-of-conduct"
+        "contacts get"
       ],
       "website_paths": [
-        "graphql query codes-of-conduct"
+        "contacts get"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -589,15 +770,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.enterprise",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.ContactSearch33",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/contacts/search",
       "cli_paths": [
-        "graphql query enterprise"
+        "contacts search"
       ],
       "website_paths": [
-        "graphql query enterprise"
+        "contacts search"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -607,15 +788,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.enterpriseAdministratorInvitation",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.ContactableInboxesGet30",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes",
       "cli_paths": [
-        "graphql query enterprise-administrator-invitation"
+        "contacts list-contactable-inboxes"
       ],
       "website_paths": [
-        "graphql query enterprise-administrator-invitation"
+        "contacts list-contactable-inboxes"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -625,15 +806,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.enterpriseAdministratorInvitationByToken",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.ConversationListMeta39",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/conversations/meta",
       "cli_paths": [
-        "graphql query enterprise-administrator-invitation-by-token"
+        "conversations meta"
       ],
       "website_paths": [
-        "graphql query enterprise-administrator-invitation-by-token"
+        "conversations meta"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -643,15 +824,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.enterpriseMemberInvitation",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetAccountAuditLogs23",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/audit_logs",
       "cli_paths": [
-        "graphql query enterprise-member-invitation"
+        "audit-logs list"
       ],
       "website_paths": [
-        "graphql query enterprise-member-invitation"
+        "audit-logs list"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -661,15 +842,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.enterpriseMemberInvitationByToken",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetAccountAutomationRule24",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/automation_rules",
       "cli_paths": [
-        "graphql query enterprise-member-invitation-by-token"
+        "automation-rules list"
       ],
       "website_paths": [
-        "graphql query enterprise-member-invitation-by-token"
+        "automation-rules list"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -679,15 +860,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.id",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetAccountBrandedEmailLayout26",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/branded_email_layout",
       "cli_paths": [
-        "graphql query id"
+        "account get-branded-email-layout"
       ],
       "website_paths": [
-        "graphql query id"
+        "account get-branded-email-layout"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -697,15 +878,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.license",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetAccountCannedResponse27",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/canned_responses",
       "cli_paths": [
-        "graphql query license"
+        "canned-responses list"
       ],
       "website_paths": [
-        "graphql query license"
+        "canned-responses list"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -715,15 +896,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.licenses",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetAccountCustomAttribute40",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
       "cli_paths": [
-        "graphql query licenses"
+        "custom-attributes list"
       ],
       "website_paths": [
-        "graphql query licenses"
+        "custom-attributes list"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -733,15 +914,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.marketplaceCategories",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetAccountDetails19",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}",
       "cli_paths": [
-        "graphql query marketplace-categories"
+        "account get"
       ],
       "website_paths": [
-        "graphql query marketplace-categories"
+        "account get"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -751,15 +932,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.marketplaceCategory",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetAccountReportingEvents53",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/reporting_events",
       "cli_paths": [
-        "graphql query marketplace-category"
+        "reporting-events list"
       ],
       "website_paths": [
-        "graphql query marketplace-category"
+        "reporting-events list"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -769,15 +950,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.marketplaceListing",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetConversationReportingEvents38",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events",
       "cli_paths": [
-        "graphql query marketplace-listing"
+        "conversations list-reporting-events"
       ],
       "website_paths": [
-        "graphql query marketplace-listing"
+        "conversations list-reporting-events"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -787,15 +968,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.marketplaceListings",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetDetailsOfAConversation35",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
       "cli_paths": [
-        "graphql query marketplace-listings"
+        "conversations get"
       ],
       "website_paths": [
-        "graphql query marketplace-listings"
+        "conversations get"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -805,15 +986,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.meta",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetDetailsOfASingleAccountAgentBot21",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
       "cli_paths": [
-        "graphql query meta"
+        "agent-bots get"
       ],
       "website_paths": [
-        "graphql query meta"
+        "agent-bots get"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -823,15 +1004,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.node",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetDetailsOfASingleAutomationRule25",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
       "cli_paths": [
-        "graphql query node"
+        "automation-rules get"
       ],
       "website_paths": [
-        "graphql query node"
+        "automation-rules get"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -841,15 +1022,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.nodes",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetDetailsOfASingleCustomAttribute41",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
       "cli_paths": [
-        "graphql query nodes"
+        "custom-attributes get"
       ],
       "website_paths": [
-        "graphql query nodes"
+        "custom-attributes get"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -859,15 +1040,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.organization",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetDetailsOfASingleCustomFilter43",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
       "cli_paths": [
-        "graphql query organization"
+        "custom-filters get"
       ],
       "website_paths": [
-        "graphql query organization"
+        "custom-filters get"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -877,15 +1058,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.rateLimit",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetDetailsOfASingleLabel51",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/labels/{id}",
       "cli_paths": [
-        "graphql query rate-limit"
+        "labels get"
       ],
       "website_paths": [
-        "graphql query rate-limit"
+        "labels get"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -895,15 +1076,15 @@
       ]
     },
     {
-      "source_id": "github.graphql.query.relay",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetDetailsOfASingleTeam55",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/teams/{team_id}",
       "cli_paths": [
-        "graphql query relay"
+        "teams get"
       ],
       "website_paths": [
-        "graphql query relay"
+        "teams get"
       ],
       "fixture_paths": [
         "fixtures/check.json"
@@ -1519,309 +1700,129 @@
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addPullRequestReviewComment",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetDetailsOfAllIntegrations49",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/integrations/apps",
       "cli_paths": [
-        "graphql mutation add-pull-request-review-comment"
+        "integrations list-apps"
       ],
       "website_paths": [
-        "graphql mutation add-pull-request-review-comment"
+        "integrations list-apps"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "direct_write"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addPullRequestReviewThread",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetInbox46",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/inboxes/{id}",
       "cli_paths": [
-        "graphql mutation add-pull-request-review-thread"
+        "inboxes get"
       ],
       "website_paths": [
-        "graphql mutation add-pull-request-review-thread"
+        "inboxes get"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "direct_write"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addPullRequestReviewThreadReply",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetInboxAgentBot47",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/inboxes/{id}/agent_bot",
       "cli_paths": [
-        "graphql mutation add-pull-request-review-thread-reply"
+        "inboxes get-agent-bot"
       ],
       "website_paths": [
-        "graphql mutation add-pull-request-review-thread-reply"
+        "inboxes get-agent-bot"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "direct_write"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addReaction",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetInboxMembers44",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/inbox_members/{inbox_id}",
       "cli_paths": [
-        "graphql mutation add-reaction"
+        "inbox-members list"
       ],
       "website_paths": [
-        "graphql mutation add-reaction"
+        "inbox-members list"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "direct_write"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addStar",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetPortal52",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/portals",
       "cli_paths": [
-        "graphql mutation add-star"
+        "portals list"
       ],
       "website_paths": [
-        "graphql mutation add-star"
+        "portals list"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "direct_write"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addSubIssue",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.GetTeamMembers56",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
       "cli_paths": [
-        "graphql mutation add-sub-issue"
+        "teams list-members"
       ],
       "website_paths": [
-        "graphql mutation add-sub-issue"
+        "teams list-members"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "direct_write"
+        "direct_read"
       ]
     },
     {
-      "source_id": "github.graphql.mutation.addUpvote",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
+      "source_id": "chatwoot.rest.get.ListAllAccountAgentBots20",
+      "source_sha256": "52f7aa853797eee056ef52baf81a7886172392991bb1a89a46c114affa45a3a1",
+      "canonical_method": "GET",
+      "canonical_path": "/api/v1/accounts/{account_id}/agent_bots",
       "cli_paths": [
-        "graphql mutation add-upvote"
+        "agent-bots list"
       ],
       "website_paths": [
-        "graphql mutation add-upvote"
+        "agent-bots list"
       ],
       "fixture_paths": [
         "fixtures/check.json"
       ],
       "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.addVerifiableDomain",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation add-verifiable-domain"
-      ],
-      "website_paths": [
-        "graphql mutation add-verifiable-domain"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.applyPendingIssueSuggestions",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation apply-pending-issue-suggestions"
-      ],
-      "website_paths": [
-        "graphql mutation apply-pending-issue-suggestions"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.approveDeployments",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation approve-deployments"
-      ],
-      "website_paths": [
-        "graphql mutation approve-deployments"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.approveVerifiableDomain",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation approve-verifiable-domain"
-      ],
-      "website_paths": [
-        "graphql mutation approve-verifiable-domain"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.archiveProjectV2Item",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation archive-project-v2-item"
-      ],
-      "website_paths": [
-        "graphql mutation archive-project-v2-item"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.archivePullRequest",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation archive-pull-request"
-      ],
-      "website_paths": [
-        "graphql mutation archive-pull-request"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.archiveRepository",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation archive-repository"
-      ],
-      "website_paths": [
-        "graphql mutation archive-repository"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.cancelEnterpriseAdminInvitation",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation cancel-enterprise-admin-invitation"
-      ],
-      "website_paths": [
-        "graphql mutation cancel-enterprise-admin-invitation"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.cancelEnterpriseMemberInvitation",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation cancel-enterprise-member-invitation"
-      ],
-      "website_paths": [
-        "graphql mutation cancel-enterprise-member-invitation"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.cancelSponsorship",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation cancel-sponsorship"
-      ],
-      "website_paths": [
-        "graphql mutation cancel-sponsorship"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
+        "direct_read"
       ]
     }
   ]

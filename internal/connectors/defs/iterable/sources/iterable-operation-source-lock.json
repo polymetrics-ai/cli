@@ -4,19 +4,10 @@
   "captured_at": "2026-08-19T00:00:00Z",
   "rest": {
     "source_url": "https://api.iterable.com/api-docs",
-    "source_kind": "official_openapi",
-    "source_document_count": 1,
     "sha256": "0b1ae1058635c09386aba007807aa08d54f89969ad48e8e7717d279ef0cab431",
     "bytes": 284471,
     "openapi": "2.0",
     "info_version": "1.8",
-    "operation_counts": {
-      "DELETE": 12,
-      "GET": 52,
-      "PATCH": 3,
-      "POST": 76,
-      "PUT": 5
-    },
     "operations": [
       {
         "id": "iterable.rest.delete.deleteCatalog",
@@ -59,7 +50,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.delete.delete",
+        "id": "iterable.rest.delete.delete.lists-listid",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/lists/{listId}",
@@ -69,7 +60,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.delete.delete",
+        "id": "iterable.rest.delete.delete.metadata-table",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/metadata/{table}",
@@ -79,7 +70,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.delete.delete",
+        "id": "iterable.rest.delete.delete.metadata-table-key",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/metadata/{table}/{key}",
@@ -119,7 +110,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.delete.delete",
+        "id": "iterable.rest.delete.delete.users-email",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/users/{email}",
@@ -129,7 +120,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.delete.delete",
+        "id": "iterable.rest.delete.delete.users-byuserid-userid",
         "protocol": "rest",
         "method": "DELETE",
         "path": "/users/byUserId/{userId}",
@@ -159,7 +150,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.get.metrics",
+        "id": "iterable.rest.get.metrics.campaigns-metrics",
         "protocol": "rest",
         "method": "GET",
         "path": "/campaigns/metrics",
@@ -269,7 +260,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.get.list",
+        "id": "iterable.rest.get.list.experiments",
         "protocol": "rest",
         "method": "GET",
         "path": "/experiments",
@@ -279,7 +270,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.get.get",
+        "id": "iterable.rest.get.get.experiments-experimentid",
         "protocol": "rest",
         "method": "GET",
         "path": "/experiments/{experimentId}",
@@ -299,7 +290,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.get.metrics",
+        "id": "iterable.rest.get.metrics.experiments-metrics",
         "protocol": "rest",
         "method": "GET",
         "path": "/experiments/metrics",
@@ -359,7 +350,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.get.getMessages",
+        "id": "iterable.rest.get.getMessages.inapp-getmessages",
         "protocol": "rest",
         "method": "GET",
         "path": "/inApp/getMessages",
@@ -379,7 +370,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.get.getMessages",
+        "id": "iterable.rest.get.getMessages.inapp-web-getmessages",
         "protocol": "rest",
         "method": "GET",
         "path": "/inApp/web/getMessages",
@@ -459,7 +450,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.get.list",
+        "id": "iterable.rest.get.list.metadata-table",
         "protocol": "rest",
         "method": "GET",
         "path": "/metadata/{table}",
@@ -469,7 +460,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.get.get",
+        "id": "iterable.rest.get.get.metadata-table-key",
         "protocol": "rest",
         "method": "GET",
         "path": "/metadata/{table}/{key}",
@@ -569,7 +560,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.get.getUser",
+        "id": "iterable.rest.get.getUser.users-email",
         "protocol": "rest",
         "method": "GET",
         "path": "/users/{email}",
@@ -579,7 +570,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.get.getUserById",
+        "id": "iterable.rest.get.getUserById.users-byuserid",
         "protocol": "rest",
         "method": "GET",
         "path": "/users/byUserId",
@@ -589,7 +580,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.get.getUserById",
+        "id": "iterable.rest.get.getUserById.users-byuserid-userid",
         "protocol": "rest",
         "method": "GET",
         "path": "/users/byUserId/{userId}",
@@ -619,7 +610,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.get.getUser",
+        "id": "iterable.rest.get.getUser.users-getbyemail",
         "protocol": "rest",
         "method": "GET",
         "path": "/users/getByEmail",
@@ -829,7 +820,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.post.cancel",
+        "id": "iterable.rest.post.cancel.email-cancel",
         "protocol": "rest",
         "method": "POST",
         "path": "/email/cancel",
@@ -839,7 +830,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.post.target",
+        "id": "iterable.rest.post.target.email-target",
         "protocol": "rest",
         "method": "POST",
         "path": "/email/target",
@@ -979,7 +970,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.post.cancel",
+        "id": "iterable.rest.post.cancel.inapp-cancel",
         "protocol": "rest",
         "method": "POST",
         "path": "/inApp/cancel",
@@ -989,7 +980,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.post.target",
+        "id": "iterable.rest.post.target.inapp-target",
         "protocol": "rest",
         "method": "POST",
         "path": "/inApp/target",
@@ -1029,7 +1020,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.post.cancel",
+        "id": "iterable.rest.post.cancel.push-cancel",
         "protocol": "rest",
         "method": "POST",
         "path": "/push/cancel",
@@ -1039,7 +1030,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.post.target",
+        "id": "iterable.rest.post.target.push-target",
         "protocol": "rest",
         "method": "POST",
         "path": "/push/target",
@@ -1049,7 +1040,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.post.cancel",
+        "id": "iterable.rest.post.cancel.sms-cancel",
         "protocol": "rest",
         "method": "POST",
         "path": "/sms/cancel",
@@ -1059,7 +1050,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.post.target",
+        "id": "iterable.rest.post.target.sms-target",
         "protocol": "rest",
         "method": "POST",
         "path": "/sms/target",
@@ -1399,7 +1390,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.post.cancel",
+        "id": "iterable.rest.post.cancel.webpush-cancel",
         "protocol": "rest",
         "method": "POST",
         "path": "/webPush/cancel",
@@ -1409,7 +1400,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.post.target",
+        "id": "iterable.rest.post.target.webpush-target",
         "protocol": "rest",
         "method": "POST",
         "path": "/webPush/target",
@@ -1419,7 +1410,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.post.cancel",
+        "id": "iterable.rest.post.cancel.whatsapp-cancel",
         "protocol": "rest",
         "method": "POST",
         "path": "/whatsApp/cancel",
@@ -1429,7 +1420,7 @@
         "source_url": "https://api.iterable.com/api-docs"
       },
       {
-        "id": "iterable.rest.post.target",
+        "id": "iterable.rest.post.target.whatsapp-target",
         "protocol": "rest",
         "method": "POST",
         "path": "/whatsApp/target",
@@ -1505,15 +1496,5 @@
     "graphql_query": 0,
     "graphql_mutation": 0,
     "total": 148
-  },
-  "operations_found": {
-    "rest": 148,
-    "graphql_query": 0,
-    "graphql_mutation": 0,
-    "total": 148
-  },
-  "coverage_confidence": {
-    "level": "complete_machine_readable_specification",
-    "basis": "Parsed every HTTP operation in the provider-published Swagger artifact at https://api.iterable.com/api-docs."
   }
 }

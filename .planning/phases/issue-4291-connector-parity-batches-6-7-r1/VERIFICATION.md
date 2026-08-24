@@ -52,6 +52,41 @@ The earlier complete-map validation is superseded by the 2026-08-19 source-lock 
 
 `go test -timeout 20m ./...` and aggregate `make verify` were deliberately not run as single commands: the repository AGENTS instruction says agents under a per-command timeout must run changed packages plus `internal/cli` separately and execute `make verify`'s non-suite gates individually, because the full 550+ connector suite is routinely cut off and indistinguishable from a hang. The targeted package tests and each applicable gate above were run; CI retains the full suite.
 
+## Rendered-reference citation-contract reconciliation — 2026-08-24
+
+- **Foundation merge:** merged `origin/main` at `3c66c33b8` (`#4332`) without a stash. Main deletes
+  the lane source-lock paths, so all twenty local locks were copied and byte-compared under this
+  issue phase before the merge and restored afterward.
+- **RED → GREEN, source identity:** `go run ./cmd/connectorgen operation-evidence . --check` first
+  refused Iterable's duplicate provider identity `iterable.rest.delete.delete`. The lock has nine
+  duplicate provider IDs across 29 routes. Route-qualified source IDs and matching disposition
+  crosswalk values make the same check pass after regeneration: `5,457` rows, `5` rollups, and the
+  fixed-100 reference passes.
+- **V3 parser increment:** `node .planning/phases/issue-4291-connector-parity-batches-6-7-r1/tools/migrate-source-lock-v3.mjs close-com salesloft copper zoho-bigin klaviyo` converts the first
+  five locks from schema v2 to the landed v3 document shape. Each individual `connectorgen validate`
+  reaches `canonical source descriptor is missing`, proving the source-lock parser and rendered
+  citation validation have passed for that connector.
+- **Next terminal refusal:** `go run ./cmd/connectorgen source-import close-com --out
+  internal/connectors/defs/close-com/sources/close-com-operation-descriptor.json` reaches the
+  hash-pinned public OpenAPI grammar and exits `1`: `/activity/` GET parameter 0 is a documented
+  number without a `minimum`. The refusing generic code is
+  `validateBoundedRequestSchemaType` (`cmd/connectorgen/sourceimport.go:6989-6991`) through
+  `sourceValidateNumericBounds` (`:7277-7281`). No descriptor was written, no credentials were
+  used, and no provider operation was called.
+- **Second terminal refusal:** the valid v3 trial causes `go run ./cmd/connectorgen operation-evidence
+  . --check` to report `source lock for "close-com" has no operations and no provider-evidenced
+  absence`. `readOperationEvidenceSourceLock` has a schema-v3 branch at
+  `cmd/connectorgen/operationevidence.go:460-462`, but reads only the legacy `rest.operations`
+  block at `:483-498` and never iterates `rest.source_documents[].operations`. The five trial locks
+  were restored from the byte-compared preservation copy; the mapper remains for the shared reader
+  decision.
+
+The remaining Outreach source migration is intentionally not fabricated: six custom-object
+operations cite `developers.outreach.io`, while the only retained immutable capture is at
+`api.outreach.io`. The landed same-origin rendered-reference contract correctly requires a second
+captured developer-document artifact (bytes, SHA-256, and capture provenance) before those six
+operations can be moved to a document-owned v3 lock.
+
 ## Relaunch baseline and CI repair — 2026-08-20
 
 - **RED:** PR run `32283259925` failed `TestGorgiasAPISurfaceOperationLedger`: the recovered v2

@@ -332,7 +332,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.delete.delete",
+        "source_id": "iterable.rest.delete.delete.lists-listid",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/lists/{listId}\"].delete",
         "operation_id": "delete",
@@ -382,7 +382,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.delete.delete",
+        "source_id": "iterable.rest.delete.delete.metadata-table",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/metadata/{table}\"].delete",
         "operation_id": "delete",
@@ -432,7 +432,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.delete.delete",
+        "source_id": "iterable.rest.delete.delete.metadata-table-key",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/metadata/{table}/{key}\"].delete",
         "operation_id": "delete",
@@ -632,7 +632,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.delete.delete",
+        "source_id": "iterable.rest.delete.delete.users-email",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/users/{email}\"].delete",
         "operation_id": "delete",
@@ -682,7 +682,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.delete.delete",
+        "source_id": "iterable.rest.delete.delete.users-byuserid-userid",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/users/byUserId/{userId}\"].delete",
         "operation_id": "delete",
@@ -818,7 +818,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.get.metrics",
+        "source_id": "iterable.rest.get.metrics.campaigns-metrics",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/campaigns/metrics\"].get",
         "operation_id": "metrics",
@@ -1313,7 +1313,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.get.list",
+        "source_id": "iterable.rest.get.list.experiments",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/experiments\"].get",
         "operation_id": "list",
@@ -1358,7 +1358,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.get.get",
+        "source_id": "iterable.rest.get.get.experiments-experimentid",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/experiments/{experimentId}\"].get",
         "operation_id": "get",
@@ -1448,7 +1448,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.get.metrics",
+        "source_id": "iterable.rest.get.metrics.experiments-metrics",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/experiments/metrics\"].get",
         "operation_id": "metrics",
@@ -1718,7 +1718,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.get.getMessages",
+        "source_id": "iterable.rest.get.getMessages.inapp-getmessages",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/inApp/getMessages\"].get",
         "operation_id": "getMessages",
@@ -1808,7 +1808,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.get.getMessages",
+        "source_id": "iterable.rest.get.getMessages.inapp-web-getmessages",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/inApp/web/getMessages\"].get",
         "operation_id": "getMessages",
@@ -2164,7 +2164,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.get.list",
+        "source_id": "iterable.rest.get.list.metadata-table",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/metadata/{table}\"].get",
         "operation_id": "list",
@@ -2209,7 +2209,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.get.get",
+        "source_id": "iterable.rest.get.get.metadata-table-key",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/metadata/{table}/{key}\"].get",
         "operation_id": "get",
@@ -2655,7 +2655,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.get.getUser",
+        "source_id": "iterable.rest.get.getUser.users-email",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/users/{email}\"].get",
         "operation_id": "getUser",
@@ -2700,7 +2700,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.get.getUserById",
+        "source_id": "iterable.rest.get.getUserById.users-byuserid",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/users/byUserId\"].get",
         "operation_id": "getUserById",
@@ -2745,7 +2745,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.get.getUserById",
+        "source_id": "iterable.rest.get.getUserById.users-byuserid-userid",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/users/byUserId/{userId}\"].get",
         "operation_id": "getUserById",
@@ -2880,7 +2880,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.get.getUser",
+        "source_id": "iterable.rest.get.getUser.users-getbyemail",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/users/getByEmail\"].get",
         "operation_id": "getUser",
@@ -3910,7 +3910,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.post.cancel",
+        "source_id": "iterable.rest.post.cancel.email-cancel",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/email/cancel\"].post",
         "operation_id": "cancel",
@@ -3960,7 +3960,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.post.target",
+        "source_id": "iterable.rest.post.target.email-target",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/email/target\"].post",
         "operation_id": "target",
@@ -4660,7 +4660,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.post.cancel",
+        "source_id": "iterable.rest.post.cancel.inapp-cancel",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/inApp/cancel\"].post",
         "operation_id": "cancel",
@@ -4710,7 +4710,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.post.target",
+        "source_id": "iterable.rest.post.target.inapp-target",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/inApp/target\"].post",
         "operation_id": "target",
@@ -4910,7 +4910,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.post.cancel",
+        "source_id": "iterable.rest.post.cancel.push-cancel",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/push/cancel\"].post",
         "operation_id": "cancel",
@@ -4960,7 +4960,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.post.target",
+        "source_id": "iterable.rest.post.target.push-target",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/push/target\"].post",
         "operation_id": "target",
@@ -5010,7 +5010,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.post.cancel",
+        "source_id": "iterable.rest.post.cancel.sms-cancel",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/sms/cancel\"].post",
         "operation_id": "cancel",
@@ -5060,7 +5060,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.post.target",
+        "source_id": "iterable.rest.post.target.sms-target",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/sms/target\"].post",
         "operation_id": "target",
@@ -6760,7 +6760,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.post.cancel",
+        "source_id": "iterable.rest.post.cancel.webpush-cancel",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/webPush/cancel\"].post",
         "operation_id": "cancel",
@@ -6810,7 +6810,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.post.target",
+        "source_id": "iterable.rest.post.target.webpush-target",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/webPush/target\"].post",
         "operation_id": "target",
@@ -6860,7 +6860,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.post.cancel",
+        "source_id": "iterable.rest.post.cancel.whatsapp-cancel",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/whatsApp/cancel\"].post",
         "operation_id": "cancel",
@@ -6910,7 +6910,7 @@
       },
       "source": {
         "source_lock": "sources/iterable-operation-source-lock.json",
-        "source_id": "iterable.rest.post.target",
+        "source_id": "iterable.rest.post.target.whatsapp-target",
         "source_url": "https://api.iterable.com/api-docs",
         "source_location": "paths[\"/api/whatsApp/target\"].post",
         "operation_id": "target",
