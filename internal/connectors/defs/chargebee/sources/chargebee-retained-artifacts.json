@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "chargebee",
+  "artifacts": [
+    {
+      "sha256": "82df374b2e5ebcde85ce482eb96b343e7706338521bbf838b1203df3b917cac0",
+      "bytes": 11421508,
+      "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json",
+      "retrieved_at": "2026-08-24T17:38:55Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

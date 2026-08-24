@@ -27,14 +27,15 @@
     {"connector": "help-scout", "source_lock": "v3", "retention": "refused_byte_sha_drift", "descriptor": "not_generated", "closed_foundations": ["operation_route", "action_specific_destination_source_binding"]},
     {"connector": "gorgias", "source_lock": "v3", "retention": "verified", "descriptor": "blocked_dynamic_additional_properties", "detail": "POST /api/account/settings application/json body is an open object; sourceimport.go rejects dynamic additionalProperties."},
     {"connector": "service-now", "source_lock": "v3", "retention": "refused_redirect", "descriptor": "not_generated"},
-    {"connector": "chatwoot", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated"},
-    {"connector": "chargebee", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated"},
-    {"connector": "square", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated"},
-    {"connector": "braintree", "source_lock": "v2", "retention": "not_attempted", "descriptor": "not_generated"}
+    {"connector": "chatwoot", "source_lock": "v3", "retention": "refused_byte_sha_drift", "descriptor": "not_generated"},
+    {"connector": "chargebee", "source_lock": "v3", "retention": "verified", "descriptor": "blocked_reference_index_limit", "detail": "The 11 MB retained OpenAPI source exhausts source-reference index bytes before a descriptor can be emitted."},
+    {"connector": "square", "source_lock": "v3", "retention": "verified", "descriptor": "blocked_dynamic_additional_properties", "detail": "POST /oauth2/revoke RevokeTokenRequest is an open object; sourceimport.go rejects dynamic additionalProperties."},
+    {"connector": "braintree", "source_lock": "v3", "retention": "refused_byte_sha_drift", "descriptor": "not_generated"}
   ],
   "shared_foundations": [
     {"id": "v3_operation_evidence_projection", "status": "missing", "evidence": "cmd/connectorgen/operationevidence.go readOperationEvidenceSourceLock reads rest.operations but not rest.source_documents[].operations."},
     {"id": "openapi_nullable_anyof_source_import", "status": "missing", "evidence": "cmd/connectorgen/sourceimport.go:7175-7178 rejects a documented nullable anyOf before a Close descriptor can be emitted."},
-    {"id": "per_operation_open_request_schema_disposition", "status": "missing", "evidence": "cmd/connectorgen/sourceimport.go rejects documented open-object inputs terminally, blocking all descriptor output instead of preserving each affected source operation with a non-executable contract gap."}
+    {"id": "per_operation_open_request_schema_disposition", "status": "missing", "evidence": "cmd/connectorgen/sourceimport.go rejects documented open-object inputs terminally, blocking all descriptor output instead of preserving each affected source operation with a non-executable contract gap."},
+    {"id": "scoped_source_reference_index", "status": "missing", "evidence": "cmd/connectorgen/sourceimport.go:2491-2497 applies the global 64 MiB source-reference index cap to the 11 MB Chargebee OpenAPI artifact before any per-operation descriptor is emitted."}
   ]
 }

@@ -149,6 +149,12 @@ The smallest safe foundation is a per-operation non-executable source-contract d
 open request shapes, preserving every other operation in the descriptor; a connector-local
 closed object would invent a provider contract.
 
+Chargebee supplies a separate import-scaling refusal: its retained 11 MB OpenAPI artifact reaches
+the fixed global source-reference index byte limit before source descriptors are emitted
+(`sourceReferenceIndex.checkAddition`, `cmd/connectorgen/sourceimport.go:2491-2497`). The safe
+shared closure is a bounded, operation-scoped reference index or equivalent streaming traversal;
+raising the package budget or discarding source positions would weaken the parser contract.
+
 ## Relaunch baseline and CI repair — 2026-08-20
 
 - **RED:** PR run `32283259925` failed `TestGorgiasAPISurfaceOperationLedger`: the recovered v2

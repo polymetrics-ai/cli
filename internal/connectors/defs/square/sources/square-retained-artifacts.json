@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "square",
+  "artifacts": [
+    {
+      "sha256": "a0d0db22c202f68282fd359772461697b3f635df03d3b19b11bb60add7f8ff7c",
+      "bytes": 3279392,
+      "source_url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+      "retrieved_at": "2026-08-24T17:38:55Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}
