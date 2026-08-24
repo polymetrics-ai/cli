@@ -177,6 +177,12 @@ connector-declaration-pending**, **5 execution-foundation-blocked**, and **1
 provider-contract-unavailable** (3,932 total). No credentials, provider operation, or live
 certification was used for this source-only audit.
 
+A connector-local exception scan then reviewed every batch 6/7 `api_surface.json` row whose
+blocked record names `named_dependency=`. It is not used as the provider operation denominator;
+it is only a check that existing ledgers do not already identify another executor refusal. Gorgias
+is the sole concrete dependency holder. Its deprecated ticket-messages entry is explicitly
+`named_dependency=none` and remains reachable, so it is not an exception or an omission.
+
 Outreach remains intentionally at schema v2. Current `source-retain` stops at
 `parse source lock: json: unknown field "source_url"` before it can verify the existing OpenAPI
 artifact, while its six custom-object operations also cite `developers.outreach.io` rather than the

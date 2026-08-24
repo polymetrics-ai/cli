@@ -11,6 +11,11 @@
     "provider_contract_unavailable": 1,
     "qualification": "Provisional: five Gorgias operations require a concrete shared executor capability; one Gorgias binary operation lacks the provider-published exact redirect/media contract required to declare it safely. Source-retention and source-import refusals are recorded per connector as discovered."
   },
+  "named_dependency_audit": {
+    "scope": "Connector-local api_surface.json rows with status=blocked and notes containing named_dependency=; this is an exception scan, not the authoritative provider inventory.",
+    "result": "Only Gorgias has a concrete runtime/provider technical dependency. The deprecated Gorgias ticket-messages row has named_dependency=none and is excluded because the documented operation is already executable.",
+    "connectors_without_named_dependency": ["close-com", "outreach", "salesloft", "copper", "zoho-bigin", "klaviyo", "braze", "customer-io", "intercom", "freshdesk", "segment", "activecampaign", "iterable", "help-scout", "service-now", "chatwoot", "chargebee", "square", "braintree"]
+  },
   "connectors": [
     {"connector": "close-com", "source_lock": "v3", "retention": "verified", "descriptor": "blocked_nullable_anyof", "detail": "GET /activity/ optional id__in is anyOf(array<string>, null); sourceimport.go:7175-7178 rejects it."},
     {"connector": "outreach", "source_lock": "v2", "retention": "blocked_legacy_lock_reader", "descriptor": "blocked_cross_origin_citation_capture", "detail": "Current source-retain rejects legacy per-operation source_url before it can verify the OpenAPI artifact; six custom-object citations separately require a captured developers.outreach.io document."},
