@@ -511,3 +511,11 @@ pre-existing.
   row. Generated artifact checks, connector boundary, and `make verify` remain
   held: do not write or commit a regenerated
   `operation-evidence-fixed-100.json` until the shipped-baseline decision.
+
+## Authorized shipped-baseline restoration — 2026-08-24
+
+- [ ] Restore `operation-evidence-fixed-100.json` byte-for-byte from
+  `origin/main`; prove zero byte difference and exactly 100 GitHub rows.
+- [ ] Regenerate only `operation-evidence.json` without `--write-fixed-100`,
+  then require the normal `operation-evidence --check` and fixed-100 tests to
+  pass under the corrected selector.

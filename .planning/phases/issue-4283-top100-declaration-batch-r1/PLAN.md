@@ -76,6 +76,22 @@ the required generated/declaration checks, and `make verify` before any push.
 CLI help/manual/website output does not change because this alters evidence
 eligibility only; still check generated artifacts for drift.
 
+### Authorized shipped-baseline restoration — 2026-08-24
+
+Firstmate decision `[fixed100-shipped-baseline]` directs restoration of the
+accepted `origin/main` 100-row GitHub reference. The preceding read-only audit
+proves all 100 of those rows still meet the corrected selector and none depended
+on the Docker Hub metadata-only defect. Restore the bytes exactly from
+`origin/main`; do not run `--write-fixed-100`, hand-select a replacement, or
+mix prospective corrected-selector rows into the shipped reference.
+
+The separate `operation-evidence.json` artifact must be regenerated with the
+ordinary projector command (without `--write-fixed-100`) so it records the
+corrected preflight gap. Verify the reference's byte equality to `origin/main`,
+then require the restored baseline to pass the normal fixed-100 validator.
+Record that broader evidence, if desired, is additive and needs its own review;
+it must never replace a known-good shipped cohort by default.
+
 ## Current reachability supersession — 2026-08-20
 
 The later captain decision supersedes the preceding historical disabled-command

@@ -860,3 +860,20 @@ lazily, only after it finds an implemented matching command. This avoids a
 per-source-row allocation for operations with no executable command while
 retaining the same binary preflight path. The focused green test and
 `go vet ./cmd/connectorgen` pass afterward.
+
+## Authorized shipped-baseline restoration — 2026-08-24
+
+**Red:** the branch fixed reference differs from `origin/main` by 571 inserted
+and 576 deleted lines, replacing 63 of 100 accepted GitHub rows with an
+unapproved mixed cohort. The corrected selector rejects its two Docker Hub
+SCIM rows, so the old branch reference cannot pass fixed-100 validation.
+
+**Green plan:** restore the exact `origin/main` fixed-reference bytes and
+regenerate only `operation-evidence.json` without `--write-fixed-100`. Prove
+byte equality to `origin/main` and run the fixed-100 validator. The restored
+all-GitHub reference is expected to pass because the read-only audit proves
+100/100 rows remain eligible under real preflight.
+
+**Boundary:** no source lock, connector declaration, engine rule, or manual
+cohort selection changes. Broader mixed evidence remains a future additive
+proposal requiring separate review.
