@@ -482,6 +482,26 @@ foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
   artifact and must not receive invented form pins or digests. `cli-rendered-reference-citation-contract-r1`
   owns the discriminated rendered-reference document form. The 20 source-lock changes are deliberately
   left uncommitted and the branch is not pushed until that contract lands.
+
+## Outreach no-credential reachability and destination correction — 2026-08-25
+
+- **RED:** before the correction, a fresh `pm outreach account-notes list --credential absent`
+  stopped while composing connector definitions: `build declared destination transport
+  "declarative_typed_destination": declarative typed destination requires an action-owned source
+  binding`. `pm outreach account-notes list` was previously unknown because no Outreach CLI surface
+  existed.
+- **GREEN:** after adding the 96 exact ETL command/API-surface bindings and removing only the ten
+  invalid branch-only destination blocks, a fresh `go build -o /tmp/cli-map-batch67-r1-outreach-proof
+  ./cmd/pm` completed. Four concurrent batches of 24 commands proved all 96 installed paths exit
+  1 with exactly `error: missing --credential`. `go test -timeout 20m
+  ./internal/connectors/commandrunner -run '^TestEveryImplementedCommandPassesRuntimePreflight$'
+  -count=1` passed.
+- **Known generated-check blocker:** `go run ./cmd/connectorgen validate` and `surface-sync --check`
+  remain red before connector comparison because all 19 schema-v3 locks have no canonical operation
+  descriptor in `readOperationEvidenceSourceLock`; Outreach's held schema-v2 lock additionally
+  retains cross-document per-operation `source_url`, which strict legacy parsing rejects. No source
+  lock was changed for this increment. The result is 20 expected source-projection findings, not a
+  generated surface drift or a runtime preflight failure.
 # Stale typed-destination gap reconciliation — increment 1 (2026-08-20)
 
 - **RED:** The operation-evidence ledger exposed 1,111 direct-write rows that still named

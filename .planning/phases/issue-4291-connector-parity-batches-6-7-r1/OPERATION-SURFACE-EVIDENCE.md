@@ -60,3 +60,18 @@ operation routes. The focused route test proves requests use `/v3`, never `/v2/v
 it remains correctly marked as connector-owned App/CLI/conformance work rather than falsely
 certified. The foundation register now has four open Gorgias executor gaps and no open Help Scout
 foundation gap.
+
+## Increment 5 — Outreach reachability and typed-destination contract correction
+
+The 3,350 declaration-pending rows split into **3,254 schema-v3 evidence-reader-gated rows** and
+**96 independently convertible Outreach ETL rows**. The latter now have exact API-surface command
+bindings and source-disposition evidence. A fresh built binary reached exactly `error: missing
+--credential` for all 96 `pm outreach <stream> list` paths; no credential, provider request, or
+provider-live certification was used.
+
+The ten branch-only `declarative_typed_destination` declarations are retracted from this readiness
+claim. Each selected `full_overwrite`, which the closed adapter rejects, and none supplied the
+action-owned per-record batch, private receipt locator, provider-state read-back, or matching
+conformance evidence required by [the sync transport contract](../../../docs/sync-transport-definition.md).
+Their typed direct-write actions remain enabled; their reverse-ETL cells are accurately
+`eligible_declaration_pending`, not foundation gaps. The source transports remain declared.

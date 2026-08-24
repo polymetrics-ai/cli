@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // This inventory is intentionally not a sync transport declaration. It gives
-// #4303 adoption work the complete connector-owned direct-write source set and
+// #4291 adoption work the complete connector-owned direct-write source set and
 // distinguishes actions already typed from operations that still need a closed
 // action contract. No transport_binding, source binding, acknowledgement, or
 // apply strategy can be authored until the neutral destination schema exists.
@@ -36,8 +36,8 @@ for (const connector of connectors) {
         typed_action_status: action ? 'authored' : 'needs_authoring',
         action_kind: action?.kind ?? null,
         current_reverse_etl_state: row.declaration.reverse_etl.state,
-        current_foundation_gap: row.declaration.reverse_etl.foundation_gap.id,
-        transport_qualification: 'pending #4303 connector-neutral typed destination contract',
+        current_foundation_gap: row.declaration.reverse_etl.foundation_gap?.id ?? null,
+        transport_qualification: 'connector-owned declaration pending exact action/source mapping, acknowledgement, provider read-back, fixture, and conformance evidence',
       };
     });
   inventory.push({
@@ -54,8 +54,8 @@ writeFileSync(output, `${JSON.stringify({
   schema_version: 1,
   generated_at: '2026-08-19T00:00:00Z',
   issue: 4291,
-  foundation_issue: 4303,
-  prohibition: 'This inventory does not declare transport_binding, sync_transport, source bindings, acknowledgement, or apply strategies. The current destination executor is GitHub issue-label bound.',
+  foundation_issue: 4304,
+  prohibition: 'This inventory does not declare transport_binding, sync_transport, source bindings, acknowledgement, or apply strategies. The closed declarative typed-destination contract rejects a declaration without exact provider-evidenced acknowledgement and read-back facts.',
   totals: {
     documented_direct_writes: total('documented_direct_writes'),
     typed_actions_authored: total('typed_actions_authored'),

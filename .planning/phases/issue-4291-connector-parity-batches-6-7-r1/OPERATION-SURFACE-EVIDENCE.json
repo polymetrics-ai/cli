@@ -21428,7 +21428,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "reverse_etl": {
-          "state": "bound_foundation_available_pending_connector_app_cli_proof",
+          "state": "eligible_declaration_pending",
           "eligible_typed_action": true,
           "foundation_gap": null
         },
@@ -25832,18 +25832,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"account-notes list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "account_notes"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[36] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/accountNotes\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -25854,7 +25849,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -25866,7 +25861,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "account_notes"
           }
@@ -25908,18 +25903,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"account-note list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "account_note"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[37] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/accountNotes/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -25930,7 +25920,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -25942,7 +25932,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "account_note"
           }
@@ -25984,18 +25974,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"accounts list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "accounts"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[38] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/accounts\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26006,7 +25991,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26018,7 +26003,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "accounts"
           }
@@ -26060,18 +26045,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"account list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "account"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[39] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/accounts/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26082,7 +26062,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26094,7 +26074,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "account"
           }
@@ -26136,18 +26116,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"audit-logs list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "audit_logs"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[40] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/auditLogs\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26158,7 +26133,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26170,7 +26145,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "audit_logs"
           }
@@ -26212,18 +26187,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"batches list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "batches"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[41] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/batches\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26234,7 +26204,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26246,7 +26216,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "batches"
           }
@@ -26288,18 +26258,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"batch list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "batch"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[42] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/batches/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26310,7 +26275,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26322,7 +26287,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "batch"
           }
@@ -26364,18 +26329,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"batch-items list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "batch_items"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[43] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/batchItems\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26386,7 +26346,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26398,7 +26358,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "batch_items"
           }
@@ -26440,18 +26400,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"batch-item list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "batch_item"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[44] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/batchItems/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26462,7 +26417,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26474,7 +26429,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "batch_item"
           }
@@ -26516,18 +26471,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"call-dispositions list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "call_dispositions"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[45] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/callDispositions\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26538,7 +26488,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26550,7 +26500,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "call_dispositions"
           }
@@ -26592,18 +26542,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"call-disposition list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "call_disposition"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[46] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/callDispositions/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26614,7 +26559,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26626,7 +26571,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "call_disposition"
           }
@@ -26668,18 +26613,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"call-purposes list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "call_purposes"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[47] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/callPurposes\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26690,7 +26630,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26702,7 +26642,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "call_purposes"
           }
@@ -26744,18 +26684,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"call-purpose list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "call_purpose"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[48] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/callPurposes/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26766,7 +26701,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26778,7 +26713,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "call_purpose"
           }
@@ -26820,18 +26755,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"calls list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "calls"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[49] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/calls\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26842,7 +26772,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26854,7 +26784,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "calls"
           }
@@ -26896,18 +26826,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"call list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "call"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[50] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/calls/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26918,7 +26843,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -26930,7 +26855,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "call"
           }
@@ -26972,18 +26897,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"compliance-requests list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "compliance_requests"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[51] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/complianceRequests\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -26994,7 +26914,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27006,7 +26926,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "compliance_requests"
           }
@@ -27048,18 +26968,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"compliance-request list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "compliance_request"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[52] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/complianceRequests/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27070,7 +26985,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27082,7 +26997,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "compliance_request"
           }
@@ -27124,18 +27039,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"content-categories list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "content_categories"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[53] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/contentCategories\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27146,7 +27056,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27158,7 +27068,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "content_categories"
           }
@@ -27200,18 +27110,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"content-category list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "content_category"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[54] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/contentCategories/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27222,7 +27127,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27234,7 +27139,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "content_category"
           }
@@ -27276,18 +27181,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"content-category-memberships list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "content_category_memberships"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[55] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/contentCategoryMemberships\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27298,7 +27198,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27310,7 +27210,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "content_category_memberships"
           }
@@ -27352,18 +27252,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"content-category-membership list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "content_category_membership"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[56] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/contentCategoryMemberships/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27374,7 +27269,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27386,7 +27281,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "content_category_membership"
           }
@@ -27428,18 +27323,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"content-category-ownerships list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "content_category_ownerships"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[57] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/contentCategoryOwnerships\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27450,7 +27340,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27462,7 +27352,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "content_category_ownerships"
           }
@@ -27504,18 +27394,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"custom-object-records list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "custom_object_records"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[58] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: Custom Objects via API: generic CRUD endpoint declaration."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27526,7 +27411,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27538,7 +27423,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "custom_object_records"
           }
@@ -27580,18 +27465,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"custom-object-record list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "custom_object_record"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[59] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: Custom Objects via API: generic CRUD endpoint declaration."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27602,7 +27482,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27614,7 +27494,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "custom_object_record"
           }
@@ -27656,18 +27536,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"duties list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "duties"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[60] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/duties\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27678,7 +27553,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27690,7 +27565,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "duties"
           }
@@ -27732,18 +27607,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"email-addresses list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "email_addresses"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[61] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/emailAddresses\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27754,7 +27624,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27766,7 +27636,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "email_addresses"
           }
@@ -27808,18 +27678,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"email-address list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "email_address"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[62] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/emailAddresses/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27830,7 +27695,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27842,7 +27707,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "email_address"
           }
@@ -27884,18 +27749,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"events list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "events"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[63] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/events\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27906,7 +27766,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27918,7 +27778,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "events"
           }
@@ -27960,18 +27820,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"event list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "event"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[64] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/events/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -27982,7 +27837,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -27994,7 +27849,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "event"
           }
@@ -28036,18 +27891,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"favorites list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "favorites"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[65] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/favorites\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28058,7 +27908,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28070,7 +27920,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "favorites"
           }
@@ -28112,18 +27962,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"favorite list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "favorite"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[66] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/favorites/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28134,7 +27979,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28146,7 +27991,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "favorite"
           }
@@ -28188,18 +28033,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"import list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "import"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[67] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/imports/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28210,7 +28050,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28222,7 +28062,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "import"
           }
@@ -28264,18 +28104,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"kaia-recordings list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "kaia_recordings"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[68] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/kaiaRecordings\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28286,7 +28121,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28298,7 +28133,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "kaia_recordings"
           }
@@ -28340,18 +28175,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"kaia-recording list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "kaia_recording"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[69] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/kaiaRecordings/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28362,7 +28192,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28374,7 +28204,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "kaia_recording"
           }
@@ -28416,18 +28246,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"mail-aliases list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "mail_aliases"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[70] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/mailAliases\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28438,7 +28263,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28450,7 +28275,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "mail_aliases"
           }
@@ -28492,18 +28317,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"mail-alias list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "mail_alias"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[71] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/mailAliases/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28514,7 +28334,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28526,7 +28346,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "mail_alias"
           }
@@ -28568,18 +28388,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"mailboxes list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "mailboxes"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[72] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/mailboxes\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28590,7 +28405,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28602,7 +28417,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "mailboxes"
           }
@@ -28644,18 +28459,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"mailbox list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "mailbox"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[73] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/mailboxes/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28666,7 +28476,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28678,7 +28488,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "mailbox"
           }
@@ -28720,18 +28530,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"mailings list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "mailings"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[74] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/mailings\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28742,7 +28547,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28754,7 +28559,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "mailings"
           }
@@ -28796,18 +28601,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"mailing list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "mailing"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[75] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/mailings/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28818,7 +28618,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28830,7 +28630,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "mailing"
           }
@@ -28872,18 +28672,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"opportunities list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "opportunities"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[76] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/opportunities\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28894,7 +28689,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28906,7 +28701,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "opportunities"
           }
@@ -28948,18 +28743,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"opportunity list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "opportunity"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[77] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/opportunities/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -28970,7 +28760,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -28982,7 +28772,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "opportunity"
           }
@@ -29024,18 +28814,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"opportunity-prospect-roles list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "opportunity_prospect_roles"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[78] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/opportunityProspectRoles\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29046,7 +28831,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29058,7 +28843,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "opportunity_prospect_roles"
           }
@@ -29100,18 +28885,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"opportunity-prospect-role list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "opportunity_prospect_role"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[79] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/opportunityProspectRoles/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29122,7 +28902,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29134,7 +28914,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "opportunity_prospect_role"
           }
@@ -29176,18 +28956,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"opportunity-stages list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "opportunity_stages"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[80] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/opportunityStages\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29198,7 +28973,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29210,7 +28985,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "opportunity_stages"
           }
@@ -29252,18 +29027,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"opportunity-stage list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "opportunity_stage"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[81] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/opportunityStages/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29274,7 +29044,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29286,7 +29056,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "opportunity_stage"
           }
@@ -29328,18 +29098,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"org-setting list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "org_setting"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[82] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/orgSettings/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29350,7 +29115,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29362,7 +29127,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "org_setting"
           }
@@ -29404,18 +29169,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"personas list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "personas"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[83] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/personas\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29426,7 +29186,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29438,7 +29198,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "personas"
           }
@@ -29480,18 +29240,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"persona list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "persona"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[84] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/personas/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29502,7 +29257,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29514,7 +29269,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "persona"
           }
@@ -29556,18 +29311,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"phone-numbers list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "phone_numbers"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[85] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/phoneNumbers\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29578,7 +29328,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29590,7 +29340,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "phone_numbers"
           }
@@ -29632,18 +29382,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"phone-number list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "phone_number"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[86] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/phoneNumbers/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29654,7 +29399,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29666,7 +29411,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "phone_number"
           }
@@ -29708,18 +29453,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"products list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "products"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[87] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/products\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29730,7 +29470,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29742,7 +29482,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "products"
           }
@@ -29784,18 +29524,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"product list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "product"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[88] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/products/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29806,7 +29541,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29818,7 +29553,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "product"
           }
@@ -29860,18 +29595,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"profiles list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "profiles"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[89] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/profiles\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29882,7 +29612,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29894,7 +29624,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "profiles"
           }
@@ -29936,18 +29666,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"profile list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "profile"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[90] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/profiles/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -29958,7 +29683,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -29970,7 +29695,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "profile"
           }
@@ -30012,18 +29737,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"prospect-notes list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "prospect_notes"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[91] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/prospectNotes\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30034,7 +29754,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30046,7 +29766,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "prospect_notes"
           }
@@ -30088,18 +29808,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"prospect-note list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "prospect_note"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[92] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/prospectNotes/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30110,7 +29825,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30122,7 +29837,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "prospect_note"
           }
@@ -30164,18 +29879,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"prospects list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "prospects"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[93] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/prospects\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30186,7 +29896,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30198,7 +29908,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "prospects"
           }
@@ -30240,18 +29950,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"prospect list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "prospect"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[94] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/prospects/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30262,7 +29967,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30274,7 +29979,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "prospect"
           }
@@ -30316,18 +30021,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"purchases list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "purchases"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[95] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/purchases\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30338,7 +30038,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30350,7 +30050,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "purchases"
           }
@@ -30392,18 +30092,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"purchase list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "purchase"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[96] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/purchases/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30414,7 +30109,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30426,7 +30121,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "purchase"
           }
@@ -30468,18 +30163,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"recipients list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "recipients"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[97] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/recipients\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30490,7 +30180,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30502,7 +30192,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "recipients"
           }
@@ -30544,18 +30234,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"recipient list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "recipient"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[98] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/recipients/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30566,7 +30251,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30578,7 +30263,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "recipient"
           }
@@ -30620,18 +30305,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"roles list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "roles"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[99] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/roles\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30642,7 +30322,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30654,7 +30334,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "roles"
           }
@@ -30696,18 +30376,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"role list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "role"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[100] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/roles/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30718,7 +30393,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30730,7 +30405,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "role"
           }
@@ -30772,18 +30447,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"rulesets list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "rulesets"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[101] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/rulesets\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30794,7 +30464,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30806,7 +30476,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "rulesets"
           }
@@ -30848,18 +30518,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"ruleset list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "ruleset"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[102] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/rulesets/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30870,7 +30535,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30882,7 +30547,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "ruleset"
           }
@@ -30924,18 +30589,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"schema-definitions list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "schema_definitions"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[103] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: Custom Objects via API: generic CRUD endpoint declaration."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -30946,7 +30606,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -30958,7 +30618,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "schema_definitions"
           }
@@ -31000,18 +30660,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"sequences list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "sequences"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[104] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/sequences\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31022,7 +30677,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31034,7 +30689,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "sequences"
           }
@@ -31076,18 +30731,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"sequence list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "sequence"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[105] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/sequences/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31098,7 +30748,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31110,7 +30760,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "sequence"
           }
@@ -31152,18 +30802,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"sequence-states list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "sequence_states"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[106] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/sequenceStates\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31174,7 +30819,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31186,7 +30831,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "sequence_states"
           }
@@ -31228,18 +30873,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"sequence-state list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "sequence_state"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[107] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/sequenceStates/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31250,7 +30890,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31262,7 +30902,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "sequence_state"
           }
@@ -31304,18 +30944,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"sequence-steps list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "sequence_steps"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[108] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/sequenceSteps\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31326,7 +30961,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31338,7 +30973,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "sequence_steps"
           }
@@ -31380,18 +31015,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"sequence-step list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "sequence_step"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[109] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/sequenceSteps/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31402,7 +31032,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31414,7 +31044,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "sequence_step"
           }
@@ -31456,18 +31086,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"sequence-templates list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "sequence_templates"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[110] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/sequenceTemplates\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31478,7 +31103,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31490,7 +31115,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "sequence_templates"
           }
@@ -31532,18 +31157,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"sequence-template list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "sequence_template"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[111] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/sequenceTemplates/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31554,7 +31174,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31566,7 +31186,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "sequence_template"
           }
@@ -31608,18 +31228,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"snippets list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "snippets"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[112] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/snippets\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31630,7 +31245,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31642,7 +31257,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "snippets"
           }
@@ -31684,18 +31299,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"snippet list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "snippet"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[113] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/snippets/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31706,7 +31316,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31718,7 +31328,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "snippet"
           }
@@ -31760,18 +31370,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"stages list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "stages"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[114] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/stages\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31782,7 +31387,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31794,7 +31399,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "stages"
           }
@@ -31836,18 +31441,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"stage list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "stage"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[115] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/stages/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31858,7 +31458,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31870,7 +31470,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "stage"
           }
@@ -31912,18 +31512,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"task-dispositions list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "task_dispositions"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[116] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/taskDispositions\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -31934,7 +31529,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -31946,7 +31541,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "task_dispositions"
           }
@@ -31988,18 +31583,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"task-disposition list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "task_disposition"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[117] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/taskDispositions/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32010,7 +31600,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32022,7 +31612,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "task_disposition"
           }
@@ -32064,18 +31654,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"task-priorities list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "task_priorities"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[118] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/taskPriorities\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32086,7 +31671,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32098,7 +31683,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "task_priorities"
           }
@@ -32140,18 +31725,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"task-priority list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "task_priority"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[119] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/taskPriorities/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32162,7 +31742,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32174,7 +31754,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "task_priority"
           }
@@ -32216,18 +31796,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"task-purposes list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "task_purposes"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[120] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/taskPurposes\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32238,7 +31813,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32250,7 +31825,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "task_purposes"
           }
@@ -32292,18 +31867,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"task-purpose list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "task_purpose"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[121] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/taskPurposes/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32314,7 +31884,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32326,7 +31896,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "task_purpose"
           }
@@ -32368,18 +31938,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"tasks list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "tasks"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[122] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/tasks\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32390,7 +31955,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32402,7 +31967,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "tasks"
           }
@@ -32444,18 +32009,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"task list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "task"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[123] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/tasks/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32466,7 +32026,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32478,7 +32038,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "task"
           }
@@ -32520,18 +32080,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"teams list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "teams"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[124] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/teams\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32542,7 +32097,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32554,7 +32109,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "teams"
           }
@@ -32596,18 +32151,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"team list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "team"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[125] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/teams/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32618,7 +32168,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32630,7 +32180,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "team"
           }
@@ -32672,18 +32222,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"templates list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "templates"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[126] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/templates\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32694,7 +32239,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32706,7 +32251,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "templates"
           }
@@ -32748,18 +32293,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"template list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "template"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[127] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/templates/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32770,7 +32310,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32782,7 +32322,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "template"
           }
@@ -32824,18 +32364,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"users list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "users"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[128] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/users\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32846,7 +32381,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32858,7 +32393,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "users"
           }
@@ -32900,18 +32435,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"user list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "user"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[129] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/users/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32922,7 +32452,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -32934,7 +32464,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "user"
           }
@@ -32976,18 +32506,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"webhooks list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "webhooks"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[130] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/webhooks\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -32998,7 +32523,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -33010,7 +32535,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "webhooks"
           }
@@ -33052,18 +32577,13 @@
         "provider_version_evidence": "internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-outreach",
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"webhook list\" binds the pinned source endpoint",
         "contract": null,
         "api_surface_binding": {
           "stream": "webhook"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/outreach/api_surface.json endpoints[131] is bound to the pinned provider operation; internal/connectors/defs/outreach/sources/outreach-operation-source-lock.json: .paths[\"/webhooks/{id}\"].get."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -33074,7 +32594,7 @@
         },
         "etl": {
           "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "source_state": "enabled"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -33086,7 +32606,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
             "stream": "webhook"
           }
@@ -38091,7 +37611,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "reverse_etl": {
-          "state": "bound_foundation_available_pending_connector_app_cli_proof",
+          "state": "eligible_declaration_pending",
           "eligible_typed_action": true,
           "foundation_gap": null
         },
@@ -65970,7 +65490,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "reverse_etl": {
-          "state": "bound_foundation_available_pending_connector_app_cli_proof",
+          "state": "eligible_declaration_pending",
           "eligible_typed_action": true,
           "foundation_gap": null
         },
@@ -99972,7 +99492,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "reverse_etl": {
-          "state": "bound_foundation_available_pending_connector_app_cli_proof",
+          "state": "eligible_declaration_pending",
           "eligible_typed_action": true,
           "foundation_gap": null
         },
@@ -118006,7 +117526,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "reverse_etl": {
-          "state": "bound_foundation_available_pending_connector_app_cli_proof",
+          "state": "eligible_declaration_pending",
           "eligible_typed_action": true,
           "foundation_gap": null
         },
@@ -199053,7 +198573,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "reverse_etl": {
-          "state": "bound_fixture_preflight_proven",
+          "state": "eligible_declaration_pending",
           "eligible_typed_action": true,
           "foundation_gap": null
         },
@@ -201097,7 +200617,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "reverse_etl": {
-          "state": "bound_foundation_available_pending_connector_app_cli_proof",
+          "state": "eligible_declaration_pending",
           "eligible_typed_action": true,
           "foundation_gap": null
         },
@@ -217491,7 +217011,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "reverse_etl": {
-          "state": "bound_foundation_available_pending_connector_app_cli_proof",
+          "state": "eligible_declaration_pending",
           "eligible_typed_action": true,
           "foundation_gap": null
         },
@@ -218483,7 +218003,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "reverse_etl": {
-          "state": "bound_foundation_available_pending_connector_app_cli_proof",
+          "state": "eligible_declaration_pending",
           "eligible_typed_action": true,
           "foundation_gap": null
         },
@@ -228032,7 +227552,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "reverse_etl": {
-          "state": "bound_foundation_available_pending_connector_app_cli_proof",
+          "state": "eligible_declaration_pending",
           "eligible_typed_action": true,
           "foundation_gap": null
         },
@@ -245993,7 +245513,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "reverse_etl": {
-          "state": "bound_foundation_available_pending_connector_app_cli_proof",
+          "state": "eligible_declaration_pending",
           "eligible_typed_action": true,
           "foundation_gap": null
         },
