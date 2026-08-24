@@ -503,6 +503,8 @@ pre-existing.
   `runtime_reachability` and the prospective cohort contains no SCIM row. It
   would contain Asana 33, Bitbucket 1, CircleCI 1, Docker Hub 23, GitHub 39,
   and Jira 3 rows.
+- [x] **Focused static verification:** `go vet ./cmd/connectorgen` passes after
+  the selector correction and its lazy connector-construction refactor.
 - [ ] **Captain-gated regression:** `go test -timeout 20m -count=1 -run
   '^TestOperationEvidenceFixed100' ./cmd/connectorgen` correctly stops at the
   checked-in branch cohort's stale `dockerhub.rest.post_/v2/scim/2.0/Users`

@@ -854,3 +854,9 @@ do not expose raw bodies, and do not change the actual cohort baseline. Skills:
 `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`,
 `golang-error-handling`, `golang-security`, `golang-safety`, and
 `golang-testing`.
+
+**Refactor:** the preflight helper now constructs its declarative connector
+lazily, only after it finds an implemented matching command. This avoids a
+per-source-row allocation for operations with no executable command while
+retaining the same binary preflight path. The focused green test and
+`go vet ./cmd/connectorgen` pass afterward.

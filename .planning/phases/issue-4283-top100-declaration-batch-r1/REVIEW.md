@@ -2,6 +2,36 @@
 
 Manual GSD code-review fallback: the project-local Pi adapter generated the `code-review` command, but this environment cannot run its incompatible reviewer role. The review was performed inline as required by the delivery contract.
 
+## Fixed-100 runtime-preflight selector — 2026-08-24
+
+Scope reviewed: commits `1708c910f` and `b8053cb35`, limited to
+`cmd/connectorgen/operationevidence.go` and its focused test.
+
+No actionable correctness, security, or quality finding.
+
+- The projector delegates to the exact runtime `commandrunner.Preflight` entry
+  point using the same `engine.New`/`engine.HooksFor` construction and
+  `strings.Fields(command.Path)` conversion as the batch runtime preflight. It
+  does not restate the structured-body rule.
+- A matching source operation is runtime-enabled only when every implemented
+  command attributed to it passes real preflight. Partial commands remain
+  non-evidence as before; no provider I/O or credential path is introduced.
+- The regression test proves the two Docker Hub SCIM operations fall out of the
+  prospective selector result and records its deterministic 100-row
+  composition. The existing checked-in cohort is deliberately not regenerated
+  pending the captain's baseline decision.
+
+Focused green command:
+
+```sh
+go test -timeout 20m -count=1 -run '^TestOperationEvidenceFixed100UsesRuntimePreflightForDockerHubSCIMWrites$' ./cmd/connectorgen
+go vet ./cmd/connectorgen
+```
+
+The known `^TestOperationEvidenceFixed100` failure is a desired stale-baseline
+signal, not a suppressed test failure; its exact evidence is in
+`FIXED-100-RUNTIME-PREFLIGHT-CORRECTION-2026-08-24.md`.
+
 ## Scope reviewed
 
 - Ten connector-local source locks, empty ledgers where no safe executor/action exists, generated non-live sweep artifacts, and four source/API-surface drift reconciliations.
