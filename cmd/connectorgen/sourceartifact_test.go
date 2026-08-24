@@ -3,7 +3,10 @@ package main
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -75,15 +78,18 @@ func TestSourceRetainRetainsRenderedReferenceAndBundleArtifacts(t *testing.T) {
 			if code != 0 {
 				t.Fatalf("source-retain exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 			}
-			artifacts := sourceRetainLockArtifacts(lock)
-			if len(artifacts) != 1 {
-				t.Fatalf("retained artifacts = %d, want 1", len(artifacts))
+			retainedLock, err := parseSourceRetainLock(tc.lockRaw, lock.Connector)
+			if err != nil {
+				t.Fatalf("parse retain lock: %v", err)
+			}
+			if len(retainedLock.Artifacts) != 1 {
+				t.Fatalf("retained artifacts = %d, want 1", len(retainedLock.Artifacts))
 			}
 			fetcher, err := newSourceImportRetainedArtifactFetcher(filepath.Join(defsRoot, "fixture", "sources"), "fixture", defaultSourceImportLimits())
 			if err != nil {
 				t.Fatalf("construct retained reader: %v", err)
 			}
-			got, err := fetcher.FetchArtifact(context.Background(), artifacts[0])
+			got, err := fetcher.FetchArtifact(context.Background(), retainedLock.Artifacts[0])
 			if err != nil {
 				t.Fatalf("read retained %s artifact: %v", tc.name, err)
 			}
@@ -125,6 +131,225 @@ func TestSourceRetainRejectsIncompleteProvenanceBeforeAnyFetch(t *testing.T) {
 	if code != 2 || fetches != 0 || !strings.Contains(stderr.String(), "--terms must be non-empty provenance text") {
 		t.Fatalf("incomplete provenance exit=%d fetches=%d stderr=%q", code, fetches, stderr.String())
 	}
+}
+
+func TestSourceRetainHelpAndMigrationDocumentationDescribeIdentityAndWrongSource(t *testing.T) {
+	t.Parallel()
+	var stdout, stderr bytes.Buffer
+	if code := runSourceRetain([]string{"source-retain", "--help"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("source-retain help exit = %d, stderr=%s", code, stderr.String())
+	}
+	for _, want := range []string{"canonical_json", "wrong source", "operation\nor parity"} {
+		if !strings.Contains(stdout.String(), want) {
+			t.Fatalf("source-retain help missing %q: %s", want, stdout.String())
+		}
+	}
+	docs, err := os.ReadFile(filepath.Join("..", "..", "docs", "migration", "conventions.md"))
+	if err != nil {
+		t.Fatalf("read migration conventions: %v", err)
+	}
+	for _, want := range []string{"canonical_json", "wrong source", "retained-byte-sha256", "does not silently re-pin"} {
+		if !strings.Contains(string(docs), want) {
+			t.Fatalf("migration conventions missing %q", want)
+		}
+	}
+}
+
+func TestSourceRetainRetainsV3ArtifactWithoutImportTimeFormInventory(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	artifact := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	digest := sha256.Sum256(artifact)
+	lockRaw, err := json.Marshal(map[string]any{
+		"schema_version": 3,
+		"connector":      "alpha",
+		"rest": map[string]any{
+			"retrieval": "fixture retain-only capture",
+			"source_documents": []any{map[string]any{
+				"id": "alpha",
+				"artifact": map[string]any{
+					"source_url": "https://fixtures.polymetrics.invalid/alpha-openapi.yaml",
+					"sha256":     hex.EncodeToString(digest[:]),
+					"bytes":      len(artifact),
+				},
+				"published_source": map[string]any{
+					"source_url":  "https://docs.polymetrics.invalid/alpha",
+					"capture_url": "https://fixtures.polymetrics.invalid/alpha-openapi.yaml",
+					"sha256":      hex.EncodeToString(digest[:]),
+					"bytes":       len(artifact),
+					"adapter":     "fixture",
+				},
+				"operations": []any{map[string]any{
+					"id":              "alpha.widgets.list",
+					"protocol":        "rest",
+					"method":          "GET",
+					"path":            "/widgets",
+					"source_location": "paths./widgets.get",
+				}},
+			}},
+		},
+		"counts": map[string]any{"rest": 1, "graphql_query": 0, "graphql_mutation": 0, "total": 1},
+	})
+	if err != nil {
+		t.Fatalf("marshal retain-only fixture lock: %v", err)
+	}
+	writeSourceRetainFixtureLockRaw(t, defsRoot, "alpha", lockRaw)
+
+	if _, err := parseSourceImportLock(lockRaw, "alpha"); err == nil {
+		t.Fatal("fixture unexpectedly passes source-import validation without an OpenAPI form inventory")
+	}
+	var stdout, stderr bytes.Buffer
+	code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-24T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return artifact, nil
+	}))
+	if code != 0 {
+		t.Fatalf("source-retain exit = %d, want 0 for retain-only lock; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if got, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "sources", "alpha-operation-source-lock.json")); err != nil || !bytes.Equal(got, lockRaw) {
+		t.Fatalf("retain-only source lock changed or unreadable: %v", err)
+	}
+}
+
+func TestSourceRetainSupportsParitySourceLock(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	artifact := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	digest := sha256.Sum256(artifact)
+	lockRaw, err := json.Marshal(map[string]any{
+		"schema_version": 1,
+		"connector":      "alpha",
+		"rest": map[string]any{
+			"source_url":       "https://fixtures.polymetrics.invalid/alpha-openapi.yaml",
+			"sha256":           hex.EncodeToString(digest[:]),
+			"bytes":            len(artifact),
+			"operation_counts": map[string]any{"get": 1},
+			"operations":       []any{},
+		},
+	})
+	if err != nil {
+		t.Fatalf("marshal parity source lock: %v", err)
+	}
+	sourcesDir := filepath.Join(defsRoot, "alpha", "sources")
+	if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+		t.Fatalf("create parity source directory: %v", err)
+	}
+	lockPath := filepath.Join(sourcesDir, "alpha-parity-source-lock.json")
+	if err := os.WriteFile(lockPath, lockRaw, 0o644); err != nil {
+		t.Fatalf("write parity source lock: %v", err)
+	}
+
+	var stdout, stderr bytes.Buffer
+	code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-24T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return artifact, nil
+	}))
+	if code != 0 {
+		t.Fatalf("source-retain exit = %d, want parity-lock success; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if got, err := os.ReadFile(lockPath); err != nil || !bytes.Equal(got, lockRaw) {
+		t.Fatalf("parity source lock changed or unreadable: %v", err)
+	}
+}
+
+func TestSourceRetainVerifiesReorderedJSONByCanonicalIdentity(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	first := []byte(`{"a":{"nested":true},"b":[2,1]}`)
+	second := []byte(`{"b":[2,1],"a":{"nested":true}}`)
+	firstDigest := sha256.Sum256(first)
+	canonicalDigest := sourceRetainTestCanonicalJSONDigest(t, first)
+	if canonicalDigest != sourceRetainTestCanonicalJSONDigest(t, second) || bytes.Equal(first, second) {
+		t.Fatal("fixture must prove equal canonical JSON with unequal bytes")
+	}
+	lockRaw, err := json.Marshal(map[string]any{
+		"schema_version": 1,
+		"connector":      "alpha",
+		"rest": map[string]any{
+			"source_url":       "https://fixtures.polymetrics.invalid/discovery.json",
+			"sha256":           hex.EncodeToString(firstDigest[:]),
+			"bytes":            len(first),
+			"identity":         "canonical_json",
+			"canonical_sha256": canonicalDigest,
+			"operations":       []any{},
+		},
+		"counts": map[string]any{"rest": 0, "graphql_query": 0, "graphql_mutation": 0, "total": 0},
+	})
+	if err != nil {
+		t.Fatalf("marshal canonical identity lock: %v", err)
+	}
+	writeSourceRetainFixtureLockRaw(t, defsRoot, "alpha", lockRaw)
+	var stdout, stderr bytes.Buffer
+	code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-24T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return second, nil
+	}))
+	if code != 0 {
+		t.Fatalf("source-retain exit = %d, want canonical-identity success; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	manifestRaw, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "sources", "alpha-retained-artifacts.json"))
+	if err != nil {
+		t.Fatalf("read canonical retained artifact manifest: %v", err)
+	}
+	if !bytes.Contains(manifestRaw, []byte(`"identity": "canonical_json"`)) || !bytes.Contains(manifestRaw, []byte(canonicalDigest)) {
+		t.Fatalf("canonical retained manifest = %s", manifestRaw)
+	}
+	lock, err := parseSourceImportLock(lockRaw, "alpha")
+	if err != nil {
+		t.Fatalf("parse canonical source lock: %v", err)
+	}
+	retainedFetcher, err := newSourceImportRetainedArtifactFetcher(filepath.Join(defsRoot, "alpha", "sources"), "alpha", defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("construct canonical retained fetcher: %v", err)
+	}
+	got, err := retainedFetcher.FetchArtifact(context.Background(), lock.Rest.sourceImportArtifact)
+	if err != nil || !bytes.Equal(got, second) {
+		t.Fatalf("canonical retained artifact = %q/%v, want second serialisation", got, err)
+	}
+}
+
+func TestSourceRetainReportsWrongSourceBeforeDrift(t *testing.T) {
+	t.Parallel()
+	artifact := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", artifact)
+	for _, tc := range []struct {
+		name    string
+		fetcher sourceImportFetchFunc
+	}{
+		{
+			name: "http forbidden",
+			fetcher: func(context.Context, string) ([]byte, error) {
+				return nil, fmt.Errorf("source-lock artifact returned HTTP 403 Forbidden")
+			},
+		},
+		{
+			name: "landing page too small",
+			fetcher: func(context.Context, string) ([]byte, error) {
+				return []byte("landing"), nil
+			},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			defsRoot := t.TempDir()
+			writeSourceRetainFixtureLock(t, defsRoot, lock)
+			var stdout, stderr bytes.Buffer
+			code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-24T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, tc.fetcher)
+			if code != 1 || !strings.Contains(stderr.String(), "wrong source") || strings.Contains(stderr.String(), "source-lock refresh required") {
+				t.Fatalf("source-retain exit/stderr = %d/%q, want wrong-source classification before drift", code, stderr.String())
+			}
+		})
+	}
+}
+
+func sourceRetainTestCanonicalJSONDigest(t *testing.T, raw []byte) string {
+	t.Helper()
+	var document any
+	if err := json.Unmarshal(raw, &document); err != nil {
+		t.Fatalf("parse canonical JSON fixture: %v", err)
+	}
+	canonical, err := json.Marshal(document)
+	if err != nil {
+		t.Fatalf("marshal canonical JSON fixture: %v", err)
+	}
+	digest := sha256.Sum256(canonical)
+	return hex.EncodeToString(digest[:])
 }
 
 func writeSourceRetainFixtureLock(t *testing.T, defsRoot string, lock sourceImportLock) []byte {

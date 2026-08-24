@@ -44,11 +44,12 @@ generators. It never contacts a provider or a local cache.
   --defs <dir>    connector defs root (default internal/connectors/defs)
   --check         compare generated descriptors with --out; do not write
 
-The source lock is authoritative. A byte or SHA-256 mismatch requires a
-source-lock refresh; this command never accepts a replacement URL, method,
-path, header, body, credential, or generic request input. Version 3 locks may
-cite provider URLs with bounded queries, but the importer never fetches those
-citations: it reads only the retained content-addressed document artifacts.`
+The source lock is authoritative. A mismatch against its selected byte or
+canonical-JSON identity requires a source-lock refresh; this command never
+accepts a replacement URL, method, path, header, body, credential, or generic
+request input. Version 3 locks may cite provider URLs with bounded queries,
+but the importer never fetches those citations: it reads only the retained
+content-addressed document artifacts.`
 
 const (
 	defaultSourceImportArtifactBytes = int64(16 << 20)
@@ -138,12 +139,14 @@ func defaultSourceImportLimits() sourceImportLimits {
 }
 
 type sourceImportArtifact struct {
-	SourceURL     string `json:"source_url"`
-	SHA256        string `json:"sha256"`
-	Bytes         int64  `json:"bytes"`
-	OpenAPI       string `json:"openapi,omitempty"`
-	Swagger       string `json:"swagger,omitempty"`
-	IdentityQuery bool   `json:"identity_query,omitempty"`
+	SourceURL       string `json:"source_url"`
+	SHA256          string `json:"sha256"`
+	Bytes           int64  `json:"bytes"`
+	OpenAPI         string `json:"openapi,omitempty"`
+	Swagger         string `json:"swagger,omitempty"`
+	IdentityQuery   bool   `json:"identity_query,omitempty"`
+	Identity        string `json:"identity,omitempty"`
+	CanonicalSHA256 string `json:"canonical_sha256,omitempty"`
 }
 
 type sourceImportRESTOperation struct {
@@ -1009,6 +1012,33 @@ func validateSourceImportConnector(connector string) error {
 }
 
 func validateSourceImportArtifact(artifact sourceImportArtifact) error {
+	if err := validateSourceRetainArtifact(artifact); err != nil {
+		return err
+	}
+	if artifact.OpenAPI != "" && artifact.Swagger != "" {
+		return fmt.Errorf("source lock has ambiguous OpenAPI and Swagger form pins")
+	}
+	if artifact.OpenAPI != "" {
+		major, minor, ok := sourceOpenAPIMajorMinor(artifact.OpenAPI)
+		if !ok || major != 3 || (minor != 0 && minor != 1) {
+			return fmt.Errorf("source lock has unsupported OpenAPI form pin %q", artifact.OpenAPI)
+		}
+	}
+	if artifact.Swagger != "" && artifact.Swagger != "2.0" {
+		return fmt.Errorf("source lock has unsupported Swagger form pin %q", artifact.Swagger)
+	}
+	return nil
+}
+
+const (
+	sourceArtifactIdentityBytes         = "byte"
+	sourceArtifactIdentityCanonicalJSON = "canonical_json"
+)
+
+// validateSourceRetainArtifact deliberately validates only the facts needed to
+// fetch and preserve source bytes. Import adds document-form and complete
+// inventory checks after retained bytes are available.
+func validateSourceRetainArtifact(artifact sourceImportArtifact) error {
 	policy := batchArtifactURLPolicy{allowIdentityQuery: artifact.IdentityQuery}
 	parsed, err := parseBatchArtifactURLWithPolicy(artifact.SourceURL, policy)
 	if err != nil {
@@ -1028,19 +1058,29 @@ func validateSourceImportArtifact(artifact sourceImportArtifact) error {
 	if _, err := hex.DecodeString(artifact.SHA256); err != nil {
 		return fmt.Errorf("source lock has invalid SHA-256: %w", err)
 	}
-	if artifact.OpenAPI != "" && artifact.Swagger != "" {
-		return fmt.Errorf("source lock has ambiguous OpenAPI and Swagger form pins")
-	}
-	if artifact.OpenAPI != "" {
-		major, minor, ok := sourceOpenAPIMajorMinor(artifact.OpenAPI)
-		if !ok || major != 3 || (minor != 0 && minor != 1) {
-			return fmt.Errorf("source lock has unsupported OpenAPI form pin %q", artifact.OpenAPI)
+	switch sourceArtifactIdentity(artifact) {
+	case sourceArtifactIdentityBytes:
+		if artifact.CanonicalSHA256 != "" {
+			return fmt.Errorf("source lock byte identity must not declare canonical SHA-256")
 		}
-	}
-	if artifact.Swagger != "" && artifact.Swagger != "2.0" {
-		return fmt.Errorf("source lock has unsupported Swagger form pin %q", artifact.Swagger)
+	case sourceArtifactIdentityCanonicalJSON:
+		if len(artifact.CanonicalSHA256) != sha256.Size*2 {
+			return fmt.Errorf("source lock canonical JSON identity has invalid SHA-256")
+		}
+		if _, err := hex.DecodeString(artifact.CanonicalSHA256); err != nil {
+			return fmt.Errorf("source lock canonical JSON identity has invalid SHA-256: %w", err)
+		}
+	default:
+		return fmt.Errorf("source lock has unsupported artifact identity %q", artifact.Identity)
 	}
 	return nil
+}
+
+func sourceArtifactIdentity(artifact sourceImportArtifact) string {
+	if artifact.Identity == "" {
+		return sourceArtifactIdentityBytes
+	}
+	return artifact.Identity
 }
 
 const (
@@ -8554,13 +8594,53 @@ type sourceImportRetainedArtifactManifestDocument struct {
 }
 
 type sourceImportRetainedArtifactRecord struct {
-	SHA256        string `json:"sha256"`
-	Bytes         int64  `json:"bytes"`
-	SourceURL     string `json:"source_url"`
-	IdentityQuery bool   `json:"identity_query,omitempty"`
-	RetrievedAt   string `json:"retrieved_at"`
-	License       string `json:"license"`
-	Terms         string `json:"terms"`
+	SHA256          string `json:"sha256"`
+	Bytes           int64  `json:"bytes"`
+	SourceURL       string `json:"source_url"`
+	IdentityQuery   bool   `json:"identity_query,omitempty"`
+	Identity        string `json:"identity,omitempty"`
+	CanonicalSHA256 string `json:"canonical_sha256,omitempty"`
+	RetainedSHA256  string `json:"retained_sha256,omitempty"`
+	RetainedBytes   int64  `json:"retained_bytes,omitempty"`
+	Form            string `json:"form,omitempty"`
+	Version         string `json:"version,omitempty"`
+	RetrievedAt     string `json:"retrieved_at"`
+	License         string `json:"license"`
+	Terms           string `json:"terms"`
+}
+
+func sourceRetainedArtifactRecordLockKey(record sourceImportRetainedArtifactRecord) string {
+	return sourceRetainArtifactLockKey(sourceImportArtifact{
+		SourceURL:       record.SourceURL,
+		SHA256:          record.SHA256,
+		Bytes:           record.Bytes,
+		IdentityQuery:   record.IdentityQuery,
+		Identity:        record.Identity,
+		CanonicalSHA256: record.CanonicalSHA256,
+	})
+}
+
+func sourceRetainedArtifactRecordRawSHA256(record sourceImportRetainedArtifactRecord) string {
+	if record.RetainedSHA256 != "" {
+		return record.RetainedSHA256
+	}
+	return record.SHA256
+}
+
+func sourceRetainedArtifactRecordRawBytes(record sourceImportRetainedArtifactRecord) int64 {
+	if record.RetainedBytes != 0 {
+		return record.RetainedBytes
+	}
+	return record.Bytes
+}
+
+func sourceRetainedArtifactRecordMatches(record sourceImportRetainedArtifactRecord, artifact sourceImportArtifact) bool {
+	return record.SourceURL == artifact.SourceURL &&
+		record.IdentityQuery == artifact.IdentityQuery &&
+		record.SHA256 == artifact.SHA256 &&
+		record.Bytes == artifact.Bytes &&
+		sourceArtifactIdentity(sourceImportArtifact{Identity: record.Identity}) == sourceArtifactIdentity(artifact) &&
+		strings.EqualFold(record.CanonicalSHA256, artifact.CanonicalSHA256)
 }
 
 // sourceImportRetainedArtifactFetcher is the sole production source-import
@@ -8625,20 +8705,13 @@ func newSourceImportRetainedArtifactFetcher(sourcesDir, connector string, limits
 	}
 	records := make(map[string][]sourceImportRetainedArtifactRecord, len(manifest.Artifacts))
 	for _, record := range manifest.Artifacts {
-		artifact := sourceImportArtifact{SourceURL: record.SourceURL, SHA256: record.SHA256, Bytes: record.Bytes, IdentityQuery: record.IdentityQuery}
-		if err := validateSourceImportArtifact(artifact); err != nil {
+		if err := sourceRetainValidateManifestRecord(record); err != nil {
 			return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest record: %w", err)
 		}
-		if _, err := time.Parse(time.RFC3339, record.RetrievedAt); err != nil {
-			return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest record has invalid retrieval timestamp: %w", err)
-		}
-		if strings.TrimSpace(record.License) == "" || strings.TrimSpace(record.Terms) == "" {
-			return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest record must state license and terms as data")
-		}
-		key := strings.ToLower(record.SHA256)
+		key := sourceRetainedArtifactRecordLockKey(record)
 		for _, existing := range records[key] {
-			if existing.SourceURL == record.SourceURL {
-				return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest duplicates source URL for SHA-256 %q", record.SHA256)
+			if strings.EqualFold(sourceRetainedArtifactRecordRawSHA256(existing), sourceRetainedArtifactRecordRawSHA256(record)) {
+				return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest duplicates retained bytes for source lock identity")
 			}
 		}
 		records[key] = append(records[key], record)
@@ -8663,19 +8736,19 @@ func (fetcher sourceImportRetainedArtifactFetcher) FetchArtifact(ctx context.Con
 	if artifact.Bytes > fetcher.limits.MaxArtifactBytes {
 		return nil, fmt.Errorf("artifact byte limit exceeded by source lock")
 	}
-	key := strings.ToLower(artifact.SHA256)
-	foundRecord := false
+	key := sourceRetainArtifactLockKey(artifact)
+	var foundRecord *sourceImportRetainedArtifactRecord
 	for _, record := range fetcher.records[key] {
-		if record.Bytes == artifact.Bytes && record.SourceURL == artifact.SourceURL && record.IdentityQuery == artifact.IdentityQuery {
-			foundRecord = true
-			break
+		if sourceRetainedArtifactRecordMatches(record, artifact) && (foundRecord == nil || record.RetrievedAt > foundRecord.RetrievedAt || (record.RetrievedAt == foundRecord.RetrievedAt && sourceRetainedArtifactRecordRawSHA256(record) > sourceRetainedArtifactRecordRawSHA256(*foundRecord))) {
+			candidate := record
+			foundRecord = &candidate
 		}
 	}
-	if !foundRecord {
+	if foundRecord == nil {
 		return nil, fmt.Errorf("retained source artifact provenance does not match source lock")
 	}
 	artifactDir := filepath.Join(fetcher.sourcesDir, sourceImportRetainedArtifactDirectory)
-	artifactPath := filepath.Join(artifactDir, key+sourceImportRetainedArtifactExtension)
+	artifactPath := filepath.Join(artifactDir, strings.ToLower(sourceRetainedArtifactRecordRawSHA256(*foundRecord))+sourceImportRetainedArtifactExtension)
 	dirInfo, err := os.Lstat(artifactDir)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -8711,8 +8784,12 @@ func (fetcher sourceImportRetainedArtifactFetcher) FetchArtifact(ctx context.Con
 	if int64(len(raw)) > fetcher.limits.MaxArtifactBytes {
 		return nil, fmt.Errorf("retained source artifact exceeds byte limit")
 	}
+	rawDigest := sha256.Sum256(raw)
+	if !strings.EqualFold(hex.EncodeToString(rawDigest[:]), sourceRetainedArtifactRecordRawSHA256(*foundRecord)) || int64(len(raw)) != sourceRetainedArtifactRecordRawBytes(*foundRecord) {
+		return nil, fmt.Errorf("retained source artifact does not match its recorded fetched bytes and SHA-256")
+	}
 	if err := validateSourceImportArtifactBytes(raw, artifact); err != nil {
-		return nil, fmt.Errorf("retained source artifact does not match locked bytes and SHA-256")
+		return nil, fmt.Errorf("retained source artifact does not match the source lock identity")
 	}
 	return raw, nil
 }
@@ -8724,11 +8801,47 @@ type httpSourceImportFetcher struct {
 }
 
 func validateSourceImportArtifactBytes(raw []byte, artifact sourceImportArtifact) error {
-	digest := sha256.Sum256(raw)
-	if int64(len(raw)) != artifact.Bytes || !strings.EqualFold(hex.EncodeToString(digest[:]), artifact.SHA256) {
-		return fmt.Errorf("source-lock refresh required: fetched artifact does not match locked bytes and SHA-256")
+	switch sourceArtifactIdentity(artifact) {
+	case sourceArtifactIdentityBytes:
+		digest := sha256.Sum256(raw)
+		if int64(len(raw)) != artifact.Bytes || !strings.EqualFold(hex.EncodeToString(digest[:]), artifact.SHA256) {
+			return fmt.Errorf("source-lock refresh required: fetched artifact does not match locked bytes and SHA-256")
+		}
+		return nil
+	case sourceArtifactIdentityCanonicalJSON:
+		canonicalDigest, err := sourceCanonicalJSONSHA256(raw)
+		if err != nil {
+			return fmt.Errorf("source-lock refresh required: canonical JSON identity cannot parse fetched artifact: %w", err)
+		}
+		if !strings.EqualFold(canonicalDigest, artifact.CanonicalSHA256) {
+			return fmt.Errorf("source-lock refresh required: fetched artifact does not match locked canonical JSON SHA-256")
+		}
+		return nil
+	default:
+		return fmt.Errorf("source lock has unsupported artifact identity %q", artifact.Identity)
 	}
-	return nil
+}
+
+// sourceCanonicalJSONSHA256 hashes JSON after decoding with preserved number
+// tokens and re-marshalling Go's deterministic, key-sorted object form. It is
+// intentionally an identity for parsed JSON, not a claim that the provider
+// delivered byte-identical serialisation.
+func sourceCanonicalJSONSHA256(raw []byte) (string, error) {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.UseNumber()
+	var document any
+	if err := decoder.Decode(&document); err != nil {
+		return "", err
+	}
+	if err := sourceJSONEOF(decoder); err != nil {
+		return "", err
+	}
+	canonical, err := json.Marshal(document)
+	if err != nil {
+		return "", err
+	}
+	digest := sha256.Sum256(canonical)
+	return hex.EncodeToString(digest[:]), nil
 }
 
 func (fetcher httpSourceImportFetcher) Fetch(ctx context.Context, sourceURL string) ([]byte, error) {
@@ -8770,9 +8883,9 @@ func (fetcher httpSourceImportFetcher) fetch(ctx context.Context, sourceURL stri
 	}
 	if response.StatusCode != http.StatusOK {
 		if closeErr := response.Body.Close(); closeErr != nil {
-			return nil, fmt.Errorf("close source-lock artifact response after HTTP %d: %w", response.StatusCode, closeErr)
+			return nil, sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked URL returned HTTP %d and its response could not be closed: %v", response.StatusCode, closeErr)}
 		}
-		return nil, fmt.Errorf("source-lock artifact returned HTTP %d", response.StatusCode)
+		return nil, sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked URL returned HTTP %d", response.StatusCode)}
 	}
 	raw, readErr := io.ReadAll(io.LimitReader(response.Body, fetcher.limits.MaxArtifactBytes+1))
 	closeErr := response.Body.Close()
@@ -8789,7 +8902,7 @@ func newSourceImportHTTPClient(lookup batchArtifactLookupIPAddr) *http.Client {
 	client := newBatchArtifactHTTPClient(lookup)
 	client.Timeout = defaultSourceImportFetchTimeout
 	client.CheckRedirect = func(*http.Request, []*http.Request) error {
-		return fmt.Errorf("source-lock artifact redirects are not permitted")
+		return sourceRetainWrongSourceError{Reason: "locked URL redirected instead of serving the pinned artifact"}
 	}
 	return client
 }

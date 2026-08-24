@@ -21,8 +21,8 @@
 //	                           emits canonical provider contracts for later
 //	                           declaration materializers
 //	source-retain <connector> --retrieved-at <RFC3339> --license <text> --terms <text>
-//	                           explicitly obtains, verifies, and stores the
-//	                           bytes already pinned by a source lock
+//	                           explicitly obtains, verifies, and stores source
+//	                           bytes using the lock-selected identity
 //	surface-reconcile [dir] [--check] [--json] [--reason-contains text]
 //	                           derives direct-read api_surface coverage and
 //	                           blocked reasons from runtime preflight
