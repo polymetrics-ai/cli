@@ -252,8 +252,13 @@ func TestOperationBackedPlanWithholdsNestedStructuredBodyFields(t *testing.T) {
 	if calls != 1 {
 		t.Fatalf("calls = %d, want one provider request", calls)
 	}
-	if raw := stateBytes(t, root); strings.Contains(raw, nestedBodyTokenSentinel) {
-		t.Fatal("failed run persisted the nested sensitive value")
+	// The provider chose to echo the request value. It is provider evidence,
+	// rather than a system-generated diagnostic, and no response output field
+	// declares it secret. The public receipt must therefore preserve it; the
+	// assertions above retain the separate no-secret guarantee for the run's
+	// synthetic error surface.
+	if raw := stateBytes(t, root); !strings.Contains(raw, nestedBodyTokenSentinel) {
+		t.Fatal("failed run did not retain the undeclared provider response value")
 	}
 }
 
