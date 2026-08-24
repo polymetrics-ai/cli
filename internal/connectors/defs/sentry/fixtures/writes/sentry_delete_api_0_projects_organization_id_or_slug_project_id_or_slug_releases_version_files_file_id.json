@@ -1,0 +1,15 @@
+{
+  "record": {
+    "file_id": "fixture-file-id",
+    "organization_id_or_slug": "fixture-organization-id-or-slug",
+    "project_id_or_slug": "fixture-project-id-or-slug",
+    "version": "fixture-version"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/0/projects/fixture-organization-id-or-slug/fixture-project-id-or-slug/releases/fixture-version/files/fixture-file-id/"
+  },
+  "response": {
+    "status": 204
+  }
+}

@@ -1,0 +1,1447 @@
+{
+  "actions": [
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_dashboards_dashboard_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/dashboards/{{ record.dashboard_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "dashboard_id",
+          "organization_id_or_slug"
+        ],
+        "properties": {
+          "dashboard_id": {
+            "type": "integer"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "dashboard_id",
+        "organization_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_detectors_detector_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/detectors/{{ record.detector_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "detector_id",
+          "organization_id_or_slug"
+        ],
+        "properties": {
+          "detector_id": {
+            "type": "integer"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "detector_id",
+        "organization_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_discover_saved_query_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/discover/saved/{{ record.query_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id_or_slug",
+          "query_id"
+        ],
+        "properties": {
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "query_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "organization_id_or_slug",
+        "query_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_external_users_external_user_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/external-users/{{ record.external_user_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "external_user_id",
+          "organization_id_or_slug"
+        ],
+        "properties": {
+          "external_user_id": {
+            "type": "integer"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "external_user_id",
+        "organization_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_forwarding_data_forwarder_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/forwarding/{{ record.data_forwarder_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data_forwarder_id",
+          "organization_id_or_slug"
+        ],
+        "properties": {
+          "data_forwarder_id": {
+            "type": "integer"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "data_forwarder_id",
+        "organization_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_integrations_integration_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/integrations/{{ record.integration_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "integration_id",
+          "organization_id_or_slug"
+        ],
+        "properties": {
+          "integration_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "integration_id",
+        "organization_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_issues_issue_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/issues/{{ record.issue_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "issue_id",
+          "organization_id_or_slug"
+        ],
+        "properties": {
+          "issue_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        202
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "issue_id",
+        "organization_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_issues_issue_id_integrations_integration_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/issues/{{ record.issue_id }}/integrations/{{ record.integration_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "externalIssue",
+          "integration_id",
+          "issue_id",
+          "organization_id_or_slug"
+        ],
+        "properties": {
+          "externalIssue": {
+            "type": "integer"
+          },
+          "integration_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "issue_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "integration_id",
+        "issue_id",
+        "organization_id_or_slug"
+      ],
+      "query": {
+        "externalIssue": "{{ record.externalIssue }}"
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_members_member_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/members/{{ record.member_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "member_id",
+          "organization_id_or_slug"
+        ],
+        "properties": {
+          "member_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/members/{member_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "member_id",
+        "organization_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_members_member_id_teams_team_id_or_slug",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/members/{{ record.member_id }}/teams/{{ record.team_id_or_slug }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "member_id",
+          "organization_id_or_slug",
+          "team_id_or_slug"
+        ],
+        "properties": {
+          "member_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "team_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        200
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "member_id",
+        "organization_id_or_slug",
+        "team_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_notifications_actions_action_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/notifications/actions/{{ record.action_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "action_id",
+          "organization_id_or_slug"
+        ],
+        "properties": {
+          "action_id": {
+            "type": "integer"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "action_id",
+        "organization_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_preprodartifacts_snapshots_snapshot_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/preprodartifacts/snapshots/{{ record.snapshot_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id_or_slug",
+          "snapshot_id"
+        ],
+        "properties": {
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "snapshot_id": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "organization_id_or_slug",
+        "snapshot_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_releases_version",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/releases/{{ record.version }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id_or_slug",
+          "version"
+        ],
+        "properties": {
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "version": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/releases/{version}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "organization_id_or_slug",
+        "version"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_releases_version_files_file_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/releases/{{ record.version }}/files/{{ record.file_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "file_id",
+          "organization_id_or_slug",
+          "version"
+        ],
+        "properties": {
+          "file_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "version": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "file_id",
+        "organization_id_or_slug",
+        "version"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_scim_v2_groups_team_id_or_slug",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/scim/v2/Groups/{{ record.team_id_or_slug }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id_or_slug",
+          "team_id_or_slug"
+        ],
+        "properties": {
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "team_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "organization_id_or_slug",
+        "team_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_scim_v2_users_member_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/scim/v2/Users/{{ record.member_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "member_id",
+          "organization_id_or_slug"
+        ],
+        "properties": {
+          "member_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "member_id",
+        "organization_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_organizations_organization_id_or_slug_workflows_workflow_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/workflows/{{ record.workflow_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id_or_slug",
+          "workflow_id"
+        ],
+        "properties": {
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "workflow_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "organization_id_or_slug",
+        "workflow_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/projects/{{ record.organization_id_or_slug }}/{{ record.project_id_or_slug }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id_or_slug",
+          "project_id_or_slug"
+        ],
+        "properties": {
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "organization_id_or_slug",
+        "project_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_hooks_hook_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/projects/{{ record.organization_id_or_slug }}/{{ record.project_id_or_slug }}/hooks/{{ record.hook_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "hook_id",
+          "organization_id_or_slug",
+          "project_id_or_slug"
+        ],
+        "properties": {
+          "hook_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "hook_id",
+        "organization_id_or_slug",
+        "project_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_issues",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/projects/{{ record.organization_id_or_slug }}/{{ record.project_id_or_slug }}/issues/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id_or_slug",
+          "project_id_or_slug"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "organization_id_or_slug",
+        "project_id_or_slug"
+      ],
+      "query": {
+        "id": {
+          "template": "{{ record.id }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_keys_key_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/projects/{{ record.organization_id_or_slug }}/{{ record.project_id_or_slug }}/keys/{{ record.key_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key_id",
+          "organization_id_or_slug",
+          "project_id_or_slug"
+        ],
+        "properties": {
+          "key_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "key_id",
+        "organization_id_or_slug",
+        "project_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_releases_version_files_file_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/projects/{{ record.organization_id_or_slug }}/{{ record.project_id_or_slug }}/releases/{{ record.version }}/files/{{ record.file_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "file_id",
+          "organization_id_or_slug",
+          "project_id_or_slug",
+          "version"
+        ],
+        "properties": {
+          "file_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "version": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "file_id",
+        "organization_id_or_slug",
+        "project_id_or_slug",
+        "version"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_replays_replay_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/projects/{{ record.organization_id_or_slug }}/{{ record.project_id_or_slug }}/replays/{{ record.replay_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id_or_slug",
+          "project_id_or_slug",
+          "replay_id"
+        ],
+        "properties": {
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "replay_id": {
+            "maxLength": 8192,
+            "pattern": "^[0-9a-f]{32}$",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "organization_id_or_slug",
+        "project_id_or_slug",
+        "replay_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_symbol_sources",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/projects/{{ record.organization_id_or_slug }}/{{ record.project_id_or_slug }}/symbol-sources/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "organization_id_or_slug",
+          "project_id_or_slug"
+        ],
+        "properties": {
+          "id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "organization_id_or_slug",
+        "project_id_or_slug"
+      ],
+      "query": {
+        "id": "{{ record.id }}"
+      },
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_teams_team_id_or_slug",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/projects/{{ record.organization_id_or_slug }}/{{ record.project_id_or_slug }}/teams/{{ record.team_id_or_slug }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id_or_slug",
+          "project_id_or_slug",
+          "team_id_or_slug"
+        ],
+        "properties": {
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "team_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        200
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "organization_id_or_slug",
+        "project_id_or_slug",
+        "team_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_sentry_app_installations_uuid_external_issues_external_issue_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/sentry-app-installations/{{ record.uuid }}/external-issues/{{ record.external_issue_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "external_issue_id",
+          "uuid"
+        ],
+        "properties": {
+          "external_issue_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "uuid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "external_issue_id",
+        "uuid"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_sentry_apps_sentry_app_id_or_slug",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/sentry-apps/{{ record.sentry_app_id_or_slug }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sentry_app_id_or_slug"
+        ],
+        "properties": {
+          "sentry_app_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/sentry-apps/{sentry_app_id_or_slug}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "sentry_app_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_teams_organization_id_or_slug_team_id_or_slug",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/teams/{{ record.organization_id_or_slug }}/{{ record.team_id_or_slug }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id_or_slug",
+          "team_id_or_slug"
+        ],
+        "properties": {
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "team_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "organization_id_or_slug",
+        "team_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_delete_api_0_teams_organization_id_or_slug_team_id_or_slug_external_teams_external_team_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/0/teams/{{ record.organization_id_or_slug }}/{{ record.team_id_or_slug }}/external-teams/{{ record.external_team_id }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "external_team_id",
+          "organization_id_or_slug",
+          "team_id_or_slug"
+        ],
+        "properties": {
+          "external_team_id": {
+            "type": "integer"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "team_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry DELETE on /api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        204
+      ],
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "path_fields": [
+        "external_team_id",
+        "organization_id_or_slug",
+        "team_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_post_api_0_organizations_organization_id_or_slug_members_member_id_teams_team_id_or_slug",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/0/organizations/{{ record.organization_id_or_slug }}/members/{{ record.member_id }}/teams/{{ record.team_id_or_slug }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "member_id",
+          "organization_id_or_slug",
+          "team_id_or_slug"
+        ],
+        "properties": {
+          "member_id": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "team_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry POST on /api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        201,
+        202,
+        204
+      ],
+      "path_fields": [
+        "member_id",
+        "organization_id_or_slug",
+        "team_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_post_api_0_projects_organization_id_or_slug_project_id_or_slug_preprodartifacts_snapshots",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/0/projects/{{ record.organization_id_or_slug }}/{{ record.project_id_or_slug }}/preprodartifacts/snapshots/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id_or_slug",
+          "project_id_or_slug"
+        ],
+        "properties": {
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry POST on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        200
+      ],
+      "path_fields": [
+        "organization_id_or_slug",
+        "project_id_or_slug"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "sentry_post_api_0_projects_organization_id_or_slug_project_id_or_slug_teams_team_id_or_slug",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/0/projects/{{ record.organization_id_or_slug }}/{{ record.project_id_or_slug }}/teams/{{ record.team_id_or_slug }}/",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id_or_slug",
+          "project_id_or_slug",
+          "team_id_or_slug"
+        ],
+        "properties": {
+          "organization_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "project_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "team_id_or_slug": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Sentry POST on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/; changes Sentry data.",
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "success_statuses": [
+        201
+      ],
+      "path_fields": [
+        "organization_id_or_slug",
+        "project_id_or_slug",
+        "team_id_or_slug"
+      ],
+      "body_type": "none"
+    }
+  ]
+}

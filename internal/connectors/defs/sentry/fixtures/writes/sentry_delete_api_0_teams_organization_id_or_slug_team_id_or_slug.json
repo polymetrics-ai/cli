@@ -1,0 +1,13 @@
+{
+  "record": {
+    "organization_id_or_slug": "fixture-organization-id-or-slug",
+    "team_id_or_slug": "fixture-team-id-or-slug"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/0/teams/fixture-organization-id-or-slug/fixture-team-id-or-slug/"
+  },
+  "response": {
+    "status": 204
+  }
+}

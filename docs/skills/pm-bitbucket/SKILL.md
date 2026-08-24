@@ -490,59 +490,60 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
 
 - delete_repositories_workspace_repo_slug:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}
-  - required fields: workspace, repo_slug
+  - required fields: repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - create_repositories_workspace_repo_slug:
   - endpoint: POST /repositories/{{ record.workspace }}/{{ record.repo_slug }}
-  - required fields: workspace, repo_slug, scm
+  - required fields: repo_slug, workspace, scm
+  - optional fields: is_private
   - risk: POST /repositories/{workspace}/{repo_slug} Bitbucket Cloud mutation; execute only through reverse ETL plan, preview, explicit approval, and connector redaction.
 - delete_repositories_workspace_repo_slug_branch_restrictions_id:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/branch-restrictions/{{ record.id }}
-  - required fields: workspace, repo_slug, id
+  - required fields: id, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/branch-restrictions/{id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_commit_commit_approve:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/approve
-  - required fields: workspace, repo_slug, commit
+  - required fields: commit, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/approve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_commit_commit_comments_comment_id:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/comments/{{ record.comment_id }}
-  - required fields: workspace, repo_slug, commit, comment_id
+  - required fields: comment_id, commit, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/properties/{{ record.app_key }}/{{ record.property_name }}
-  - required fields: workspace, repo_slug, commit, app_key, property_name
+  - required fields: app_key, commit, property_name, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_commit_commit_reports_reportid:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/reports/{{ record.reportId }}
-  - required fields: workspace, repo_slug, commit, reportId
+  - required fields: commit, repo_slug, reportId, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/commit/{{ record.commit }}/reports/{{ record.reportId }}/annotations/{{ record.annotationId }}
-  - required fields: workspace, repo_slug, commit, reportId, annotationId
+  - required fields: annotationId, commit, repo_slug, reportId, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_default_reviewers_target_username:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/default-reviewers/{{ record.target_username }}
-  - required fields: workspace, repo_slug, target_username
+  - required fields: repo_slug, target_username, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_deploy_keys_key_id:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/deploy-keys/{{ record.key_id }}
-  - required fields: workspace, repo_slug, key_id
+  - required fields: key_id, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_deployments_config_environments_environment_uui_171d7214:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/deployments_config/environments/{{ record.environment_uuid }}/variables/{{ record.variable_uuid }}
-  - required fields: workspace, repo_slug, environment_uuid, variable_uuid
+  - required fields: environment_uuid, repo_slug, variable_uuid, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_downloads_filename:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/downloads/{{ record.filename }}
-  - required fields: workspace, repo_slug, filename
+  - required fields: filename, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/downloads/{filename}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_environments_environment_uuid:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/environments/{{ record.environment_uuid }}
-  - required fields: workspace, repo_slug, environment_uuid
+  - required fields: environment_uuid, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/environments/{environment_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_hooks_uid:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/hooks/{{ record.uid }}
-  - required fields: workspace, repo_slug, uid
+  - required fields: repo_slug, uid, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/hooks/{uid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_issues_issue_id:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/issues/{{ record.issue_id }}
@@ -566,91 +567,91 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_permissions_config_groups_group_slug:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/permissions-config/groups/{{ record.group_slug }}
-  - required fields: workspace, repo_slug, group_slug
+  - required fields: group_slug, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_permissions_config_users_selected_user_id:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/permissions-config/users/{{ record.selected_user_id }}
-  - required fields: workspace, repo_slug, selected_user_id
+  - required fields: repo_slug, selected_user_id, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pipelines_config_caches:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines-config/caches
-  - required fields: workspace, repo_slug
+  - required fields: repo_slug, workspace, name
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines-config/caches/{{ record.cache_uuid }}
-  - required fields: workspace, repo_slug, cache_uuid
+  - required fields: cache_uuid, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines-config/runners/{{ record.runner_uuid }}
-  - required fields: workspace, repo_slug, runner_uuid
+  - required fields: repo_slug, runner_uuid, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines_config/schedules/{{ record.schedule_uuid }}
-  - required fields: workspace, repo_slug, schedule_uuid
+  - required fields: repo_slug, schedule_uuid, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines_config/ssh/key_pair
-  - required fields: workspace, repo_slug
+  - required fields: repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines_config/ssh/known_hosts/{{ record.known_host_uuid }}
-  - required fields: workspace, repo_slug, known_host_uuid
+  - required fields: known_host_uuid, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pipelines_config/variables/{{ record.variable_uuid }}
-  - required fields: workspace, repo_slug, variable_uuid
+  - required fields: repo_slug, variable_uuid, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_properties_app_key_property_name:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/properties/{{ record.app_key }}/{{ record.property_name }}
-  - required fields: workspace, repo_slug, app_key, property_name
+  - required fields: app_key, property_name, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/approve
-  - required fields: workspace, repo_slug, pull_request_id
+  - required fields: pull_request_id, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/comments/{{ record.comment_id }}
-  - required fields: workspace, repo_slug, pull_request_id, comment_id
+  - required fields: comment_id, pull_request_id, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/comments/{{ record.comment_id }}/resolve
-  - required fields: workspace, repo_slug, pull_request_id, comment_id
+  - required fields: comment_id, pull_request_id, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/request-changes
-  - required fields: workspace, repo_slug, pull_request_id
+  - required fields: pull_request_id, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pull_request_id }}/tasks/{{ record.task_id }}
-  - required fields: workspace, repo_slug, pull_request_id, task_id
+  - required fields: pull_request_id, repo_slug, task_id, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_629f4f2b:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/pullrequests/{{ record.pullrequest_id }}/properties/{{ record.app_key }}/{{ record.property_name }}
-  - required fields: workspace, repo_slug, pullrequest_id, app_key, property_name
+  - required fields: app_key, property_name, pullrequest_id, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_refs_branches_name:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/refs/branches/{{ record.name }}
-  - required fields: workspace, repo_slug, name
+  - required fields: name, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/branches/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_repositories_workspace_repo_slug_refs_tags_name:
   - endpoint: DELETE /repositories/{{ record.workspace }}/{{ record.repo_slug }}/refs/tags/{{ record.name }}
-  - required fields: workspace, repo_slug, name
+  - required fields: name, repo_slug, workspace
   - risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/tags/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_snippets_workspace_encoded_id:
   - endpoint: DELETE /snippets/{{ record.workspace }}/{{ record.encoded_id }}
-  - required fields: workspace, encoded_id
+  - required fields: encoded_id, workspace
   - risk: Destructive DELETE /snippets/{workspace}/{encoded_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_snippets_workspace_encoded_id_comments_comment_id:
   - endpoint: DELETE /snippets/{{ record.workspace }}/{{ record.encoded_id }}/comments/{{ record.comment_id }}
-  - required fields: workspace, encoded_id, comment_id
+  - required fields: comment_id, encoded_id, workspace
   - risk: Destructive DELETE /snippets/{workspace}/{encoded_id}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_snippets_workspace_encoded_id_watch:
   - endpoint: DELETE /snippets/{{ record.workspace }}/{{ record.encoded_id }}/watch
-  - required fields: workspace, encoded_id
+  - required fields: encoded_id, workspace
   - risk: Destructive DELETE /snippets/{workspace}/{encoded_id}/watch; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_snippets_workspace_encoded_id_node_id:
   - endpoint: DELETE /snippets/{{ record.workspace }}/{{ record.encoded_id }}/{{ record.node_id }}
-  - required fields: workspace, encoded_id, node_id
+  - required fields: encoded_id, node_id, workspace
   - risk: Destructive DELETE /snippets/{workspace}/{encoded_id}/{node_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_teams_username_pipelines_config_variables_variable_uuid:
   - endpoint: DELETE /teams/{{ record.username }}/pipelines_config/variables/{{ record.variable_uuid }}
@@ -658,7 +659,7 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
   - risk: Destructive DELETE /teams/{username}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_users_selected_user_gpg_keys_fingerprint:
   - endpoint: DELETE /users/{{ record.selected_user }}/gpg-keys/{{ record.fingerprint }}
-  - required fields: selected_user, fingerprint
+  - required fields: fingerprint, selected_user
   - risk: Destructive DELETE /users/{selected_user}/gpg-keys/{fingerprint}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_users_selected_user_pipelines_config_variables_variable_uuid:
   - endpoint: DELETE /users/{{ record.selected_user }}/pipelines_config/variables/{{ record.variable_uuid }}
@@ -666,43 +667,43 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
   - risk: Destructive DELETE /users/{selected_user}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_users_selected_user_properties_app_key_property_name:
   - endpoint: DELETE /users/{{ record.selected_user }}/properties/{{ record.app_key }}/{{ record.property_name }}
-  - required fields: selected_user, app_key, property_name
+  - required fields: app_key, property_name, selected_user
   - risk: Destructive DELETE /users/{selected_user}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_users_selected_user_ssh_keys_key_id:
   - endpoint: DELETE /users/{{ record.selected_user }}/ssh-keys/{{ record.key_id }}
-  - required fields: selected_user, key_id
+  - required fields: key_id, selected_user
   - risk: Destructive DELETE /users/{selected_user}/ssh-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_workspaces_workspace_hooks_uid:
   - endpoint: DELETE /workspaces/{{ record.workspace }}/hooks/{{ record.uid }}
-  - required fields: workspace, uid
+  - required fields: uid, workspace
   - risk: Destructive DELETE /workspaces/{workspace}/hooks/{uid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_workspaces_workspace_pipelines_config_runners_runner_uuid:
   - endpoint: DELETE /workspaces/{{ record.workspace }}/pipelines-config/runners/{{ record.runner_uuid }}
-  - required fields: workspace, runner_uuid
+  - required fields: runner_uuid, workspace
   - risk: Destructive DELETE /workspaces/{workspace}/pipelines-config/runners/{runner_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_workspaces_workspace_pipelines_config_variables_variable_uuid:
   - endpoint: DELETE /workspaces/{{ record.workspace }}/pipelines-config/variables/{{ record.variable_uuid }}
-  - required fields: workspace, variable_uuid
+  - required fields: variable_uuid, workspace
   - risk: Destructive DELETE /workspaces/{workspace}/pipelines-config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_workspaces_workspace_projects_project_key:
   - endpoint: DELETE /workspaces/{{ record.workspace }}/projects/{{ record.project_key }}
-  - required fields: workspace, project_key
+  - required fields: project_key, workspace
   - risk: Destructive DELETE /workspaces/{workspace}/projects/{project_key}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_workspaces_workspace_projects_project_key_default_reviewers_selected_user:
   - endpoint: DELETE /workspaces/{{ record.workspace }}/projects/{{ record.project_key }}/default-reviewers/{{ record.selected_user }}
-  - required fields: workspace, project_key, selected_user
+  - required fields: project_key, selected_user, workspace
   - risk: Destructive DELETE /workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_workspaces_workspace_projects_project_key_deploy_keys_key_id:
   - endpoint: DELETE /workspaces/{{ record.workspace }}/projects/{{ record.project_key }}/deploy-keys/{{ record.key_id }}
-  - required fields: workspace, project_key, key_id
+  - required fields: key_id, project_key, workspace
   - risk: Destructive DELETE /workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug:
   - endpoint: DELETE /workspaces/{{ record.workspace }}/projects/{{ record.project_key }}/permissions-config/groups/{{ record.group_slug }}
-  - required fields: workspace, project_key, group_slug
+  - required fields: group_slug, project_key, workspace
   - risk: Destructive DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 - delete_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id:
   - endpoint: DELETE /workspaces/{{ record.workspace }}/projects/{{ record.project_key }}/permissions-config/users/{{ record.selected_user_id }}
-  - required fields: workspace, project_key, selected_user_id
+  - required fields: project_key, selected_user_id, workspace
   - risk: Destructive DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.
 
 ## Security
@@ -717,6 +718,7 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
 - Read Bitbucket Cloud resources and plan typed repository mutations safely.
 - Usage: pm bitbucket <command> [flags]
 - Source CLI: Bitbucket Cloud REST API (OpenAPI 3.0 Bitbucket API 2.0)
+- PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
 - Global flags:
   - --credential (string): Credential name to use for Bitbucket requests.
   - --config (string_array): Connector config override as key=value.
@@ -727,17 +729,71 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
   - --confirm (string): Typed confirmation for destructive reverse-ETL writes.
 - Repositories
   - repositories list - List public Bitbucket repositories as paginated ETL records. [intent=etl availability=implemented stream=repositories]
-  - repositories create - Create or initialize a Bitbucket repository through typed reverse ETL. [intent=reverse_etl availability=implemented write=create_repositories_workspace_repo_slug]; approval: Requires reverse ETL plan -> preview -> explicit approval -> execute.; risk: Creates a Bitbucket repository; reverse ETL plan, preview, explicit approval, execute are required.; flags: --workspace, --repo-slug, --scm, --private
-  - repositories delete - Delete a Bitbucket repository through a destructive typed reverse-ETL action. [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug]; approval: Requires reverse ETL plan -> preview -> explicit approval -> execute plus typed destructive confirmation.; risk: Permanently deletes a Bitbucket repository; action has confirm: destructive.; flags: --workspace, --repo-slug
+  - repositories create - Create or initialize a Bitbucket repository through typed reverse ETL. [intent=reverse_etl availability=implemented write=create_repositories_workspace_repo_slug]; approval: Requires reverse ETL plan -> preview -> explicit approval -> execute.; risk: Creates a Bitbucket repository; reverse ETL plan, preview, explicit approval, execute are required.; flags: --is-private, --repo-slug (required, max 32768 bytes), --scm (required), --workspace (required, max 32768 bytes)
+  - repositories delete - Delete a Bitbucket repository through a destructive typed reverse-ETL action. [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug]; approval: Requires reverse ETL plan -> preview -> explicit approval -> execute plus typed destructive confirmation.; risk: Permanently deletes a Bitbucket repository; action has confirm: destructive.; flags: --redirect-to (max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
 - Reverse ETL writes
 - Planned bounded direct/binary operations
 - Other Commands
   - search code - Planned bounded Bitbucket provider search/query command; blocked pending shared provider-query foundation #2985. [intent=direct_read availability=planned operation=get_teams_username_search_code]; approval: blocked pending #2985; risk: planned bounded provider query; no raw query escape hatch is exposed; notes: Connector-local operation metadata is present, but shared execution foundation is not claimed.; flags: --page, --page-cursor
   - downloads get - Planned bounded Bitbucket binary download command; blocked pending binary transfer foundation. [intent=direct_read availability=planned operation=get_repositories_workspace_repo_slug_downloads_filename]; approval: blocked pending bounded binary executor; risk: planned bounded binary transfer; no generic byte-stream command is exposed; notes: Connector-local operation metadata is present, but shared execution foundation is not claimed.; flags: --page, --page-cursor
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f6272616e63682d7265737472696374696f6e732f7b69647d - DELETE /repositories/{workspace}/{repo_slug}/branch-restrictions/{id} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_branch_restrictions_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/branch-restrictions/{id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --id (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f636f6d6d69742f7b636f6d6d69747d2f617070726f7665 - DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/approve [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_commit_commit_approve]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/approve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --commit (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f636f6d6d69742f7b636f6d6d69747d2f636f6d6d656e74732f7b636f6d6d656e745f69647d - DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_commit_commit_comments_comment_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --comment-id (required), --commit (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteCommitHostedPropertyValue - DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --app-key (required, max 32768 bytes), --commit (required, max 32768 bytes), --property-name (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteReport - DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_commit_commit_reports_reportid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --commit (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --reportId (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteAnnotation - DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --annotationId (required, max 32768 bytes), --commit (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --reportId (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f64656661756c742d7265766965776572732f7b7461726765745f757365726e616d657d - DELETE /repositories/{workspace}/{repo_slug}/default-reviewers/{target_username} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_default_reviewers_target_username]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --repo-slug (required, max 32768 bytes), --target-username (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f6465706c6f792d6b6579732f7b6b65795f69647d - DELETE /repositories/{workspace}/{repo_slug}/deploy-keys/{key_id} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_deploy_keys_key_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --key-id (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteDeploymentVariable - DELETE /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_deployments_config_environments_environment_uui_171d7214]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --environment-uuid (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --variable-uuid (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f646f776e6c6f6164732f7b66696c656e616d657d - DELETE /repositories/{workspace}/{repo_slug}/downloads/{filename} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_downloads_filename]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/downloads/{filename}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --filename (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteEnvironmentForRepository - DELETE /repositories/{workspace}/{repo_slug}/environments/{environment_uuid} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_environments_environment_uuid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/environments/{environment_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --environment-uuid (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f686f6f6b732f7b7569647d - DELETE /repositories/{workspace}/{repo_slug}/hooks/{uid} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_hooks_uid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/hooks/{uid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --repo-slug (required, max 32768 bytes), --uid (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f7065726d697373696f6e732d636f6e6669672f67726f7570732f7b67726f75705f736c75677d - DELETE /repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_permissions_config_groups_group_slug]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --group-slug (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f7065726d697373696f6e732d636f6e6669672f75736572732f7b73656c65637465645f757365725f69647d - DELETE /repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_permissions_config_users_selected_user_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --repo-slug (required, max 32768 bytes), --selected-user-id (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteRepositoryPipelineCaches - DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pipelines_config_caches]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --name (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteRepositoryPipelineCache - DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --cache-uuid (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteRepositoryRunner - DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --repo-slug (required, max 32768 bytes), --runner-uuid (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteRepositoryPipelineSchedule - DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --repo-slug (required, max 32768 bytes), --schedule-uuid (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteRepositoryPipelineKeyPair - DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteRepositoryPipelineKnownHost - DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --known-host-uuid (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteRepositoryPipelineVariable - DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --repo-slug (required, max 32768 bytes), --variable-uuid (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteRepositoryHostedPropertyValue - DELETE /repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_properties_app_key_property_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --app-key (required, max 32768 bytes), --property-name (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f70756c6c72657175657374732f7b70756c6c5f726571756573745f69647d2f617070726f7665 - DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --pull-request-id (required), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f70756c6c72657175657374732f7b70756c6c5f726571756573745f69647d2f636f6d6d656e74732f7b636f6d6d656e745f69647d - DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --comment-id (required), --pull-request-id (required), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f70756c6c72657175657374732f7b70756c6c5f726571756573745f69647d2f636f6d6d656e74732f7b636f6d6d656e745f69647d2f7265736f6c7665 - DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --comment-id (required), --pull-request-id (required), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f70756c6c72657175657374732f7b70756c6c5f726571756573745f69647d2f726571756573742d6368616e676573 - DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --pull-request-id (required), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f70756c6c72657175657374732f7b70756c6c5f726571756573745f69647d2f7461736b732f7b7461736b5f69647d - DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --pull-request-id (required), --repo-slug (required, max 32768 bytes), --task-id (required), --workspace (required, max 32768 bytes)
+  - api deletePullRequestHostedPropertyValue - DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_629f4f2b]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --app-key (required, max 32768 bytes), --property-name (required, max 32768 bytes), --pullrequest-id (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f726566732f6272616e636865732f7b6e616d657d - DELETE /repositories/{workspace}/{repo_slug}/refs/branches/{name} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_refs_branches_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/branches/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --name (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f726566732f746167732f7b6e616d657d - DELETE /repositories/{workspace}/{repo_slug}/refs/tags/{name} [intent=reverse_etl availability=implemented write=delete_repositories_workspace_repo_slug_refs_tags_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /repositories/{workspace}/{repo_slug}/refs/tags/{name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --name (required, max 32768 bytes), --repo-slug (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f736e6970706574732f7b776f726b73706163657d2f7b656e636f6465645f69647d - DELETE /snippets/{workspace}/{encoded_id} [intent=reverse_etl availability=implemented write=delete_snippets_workspace_encoded_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /snippets/{workspace}/{encoded_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --encoded-id (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f736e6970706574732f7b776f726b73706163657d2f7b656e636f6465645f69647d2f636f6d6d656e74732f7b636f6d6d656e745f69647d - DELETE /snippets/{workspace}/{encoded_id}/comments/{comment_id} [intent=reverse_etl availability=implemented write=delete_snippets_workspace_encoded_id_comments_comment_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /snippets/{workspace}/{encoded_id}/comments/{comment_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --comment-id (required), --encoded-id (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f736e6970706574732f7b776f726b73706163657d2f7b656e636f6465645f69647d2f7761746368 - DELETE /snippets/{workspace}/{encoded_id}/watch [intent=reverse_etl availability=implemented write=delete_snippets_workspace_encoded_id_watch]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /snippets/{workspace}/{encoded_id}/watch; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --encoded-id (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f736e6970706574732f7b776f726b73706163657d2f7b656e636f6465645f69647d2f7b6e6f64655f69647d - DELETE /snippets/{workspace}/{encoded_id}/{node_id} [intent=reverse_etl availability=implemented write=delete_snippets_workspace_encoded_id_node_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /snippets/{workspace}/{encoded_id}/{node_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --encoded-id (required, max 32768 bytes), --node-id (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deletePipelineVariableForTeam - DELETE /teams/{username}/pipelines_config/variables/{variable_uuid} [intent=reverse_etl availability=implemented write=delete_teams_username_pipelines_config_variables_variable_uuid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /teams/{username}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --username (required, max 32768 bytes), --variable-uuid (required, max 32768 bytes)
+  - api op-44454c455445202f75736572732f7b73656c65637465645f757365727d2f6770672d6b6579732f7b66696e6765727072696e747d - DELETE /users/{selected_user}/gpg-keys/{fingerprint} [intent=reverse_etl availability=implemented write=delete_users_selected_user_gpg_keys_fingerprint]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /users/{selected_user}/gpg-keys/{fingerprint}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --fingerprint (required, max 32768 bytes), --selected-user (required, max 32768 bytes)
+  - api deletePipelineVariableForUser - DELETE /users/{selected_user}/pipelines_config/variables/{variable_uuid} [intent=reverse_etl availability=implemented write=delete_users_selected_user_pipelines_config_variables_variable_uuid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /users/{selected_user}/pipelines_config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --selected-user (required, max 32768 bytes), --variable-uuid (required, max 32768 bytes)
+  - api deleteUserHostedPropertyValue - DELETE /users/{selected_user}/properties/{app_key}/{property_name} [intent=reverse_etl availability=implemented write=delete_users_selected_user_properties_app_key_property_name]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /users/{selected_user}/properties/{app_key}/{property_name}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --app-key (required, max 32768 bytes), --property-name (required, max 32768 bytes), --selected-user (required, max 32768 bytes)
+  - api op-44454c455445202f75736572732f7b73656c65637465645f757365727d2f7373682d6b6579732f7b6b65795f69647d - DELETE /users/{selected_user}/ssh-keys/{key_id} [intent=reverse_etl availability=implemented write=delete_users_selected_user_ssh_keys_key_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /users/{selected_user}/ssh-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --key-id (required, max 32768 bytes), --selected-user (required, max 32768 bytes)
+  - api op-44454c455445202f776f726b7370616365732f7b776f726b73706163657d2f686f6f6b732f7b7569647d - DELETE /workspaces/{workspace}/hooks/{uid} [intent=reverse_etl availability=implemented write=delete_workspaces_workspace_hooks_uid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /workspaces/{workspace}/hooks/{uid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --uid (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deleteWorkspaceRunner - DELETE /workspaces/{workspace}/pipelines-config/runners/{runner_uuid} [intent=reverse_etl availability=implemented write=delete_workspaces_workspace_pipelines_config_runners_runner_uuid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /workspaces/{workspace}/pipelines-config/runners/{runner_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --runner-uuid (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api deletePipelineVariableForWorkspace - DELETE /workspaces/{workspace}/pipelines-config/variables/{variable_uuid} [intent=reverse_etl availability=implemented write=delete_workspaces_workspace_pipelines_config_variables_variable_uuid]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /workspaces/{workspace}/pipelines-config/variables/{variable_uuid}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --variable-uuid (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f776f726b7370616365732f7b776f726b73706163657d2f70726f6a656374732f7b70726f6a6563745f6b65797d - DELETE /workspaces/{workspace}/projects/{project_key} [intent=reverse_etl availability=implemented write=delete_workspaces_workspace_projects_project_key]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /workspaces/{workspace}/projects/{project_key}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --project-key (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f776f726b7370616365732f7b776f726b73706163657d2f70726f6a656374732f7b70726f6a6563745f6b65797d2f64656661756c742d7265766965776572732f7b73656c65637465645f757365727d - DELETE /workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user} [intent=reverse_etl availability=implemented write=delete_workspaces_workspace_projects_project_key_default_reviewers_selected_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --project-key (required, max 32768 bytes), --selected-user (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f776f726b7370616365732f7b776f726b73706163657d2f70726f6a656374732f7b70726f6a6563745f6b65797d2f6465706c6f792d6b6579732f7b6b65795f69647d - DELETE /workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id} [intent=reverse_etl availability=implemented write=delete_workspaces_workspace_projects_project_key_deploy_keys_key_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --key-id (required, max 32768 bytes), --project-key (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f776f726b7370616365732f7b776f726b73706163657d2f70726f6a656374732f7b70726f6a6563745f6b65797d2f7065726d697373696f6e732d636f6e6669672f67726f7570732f7b67726f75705f736c75677d - DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug} [intent=reverse_etl availability=implemented write=delete_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --group-slug (required, max 32768 bytes), --project-key (required, max 32768 bytes), --workspace (required, max 32768 bytes)
+  - api op-44454c455445202f776f726b7370616365732f7b776f726b73706163657d2f70726f6a656374732f7b70726f6a6563745f6b65797d2f7065726d697373696f6e732d636f6e6669672f75736572732f7b73656c65637465645f757365725f69647d - DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id} [intent=reverse_etl availability=implemented write=delete_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Destructive DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}; requires typed destructive confirmation plus reverse ETL plan, preview, explicit approval, execute.; flags: --project-key (required, max 32768 bytes), --selected-user-id (required, max 32768 bytes), --workspace (required, max 32768 bytes)
 - Help topics:
   - bitbucket-auth - Use OAuth access tokens or username/app-password credentials from the credential store; never pass secrets in command text.
   - bitbucket-writes - Implemented Bitbucket writes are closed-schema repository creation and path-only DELETE reverse-ETL actions; untyped JSON-body mutations remain blocked.
   - bitbucket-binary-direct - Binary and provider-search operation ledger rows are present but command execution is blocked until the shared bounded-command foundations land.
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
 
 ## Commands
 

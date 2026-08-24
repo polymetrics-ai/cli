@@ -1,0 +1,13 @@
+{
+  "record": {
+    "organization_id_or_slug": "fixture-organization-id-or-slug",
+    "team_id_or_slug": "fixture-team-id-or-slug"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/0/organizations/fixture-organization-id-or-slug/scim/v2/Groups/fixture-team-id-or-slug"
+  },
+  "response": {
+    "status": 204
+  }
+}

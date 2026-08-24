@@ -1,10 +1,12 @@
 # Overview
 
-Reads Sentry projects, issues, error events, and releases through the Sentry REST API (read-only).
+Reads Sentry projects, issues, error events, and releases through the Sentry REST API, with a
+bounded set of source-cited reverse-ETL mutations.
 
 Readable streams: `projects`, `issues`, `events`, `releases`.
 
-This connector is read-only; no write actions are declared.
+The connector also declares 32 approval-gated no-body REST mutations whose required path fields are
+typed from the pinned provider source.
 
 Service API documentation: https://docs.sentry.io/api/.
 
@@ -49,14 +51,20 @@ Default pagination: single request; no pagination.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Sentry API read of project, issue, event, and
-release data.
+The connector declares 32 typed write actions: 3 POST creates and 29 DELETE removals. Every action
+is fixed to its provider method and path, exposes only its provider-required path fields, and follows
+reverse ETL plan -> preview -> explicit approval -> execute. All 32 actions require destructive
+confirmation; DELETE actions additionally accept a documented 404 as an idempotent no-op.
+
+The connector does not expose arbitrary request bodies, raw query strings, generic method/path/body,
+file bytes, shell commands, or passthrough HTTP tools. Read behavior remains external Sentry API
+read of project, issue, event, and release data.
 
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 4 stream-backed endpoint group(s).
+- API coverage includes 4 stream-backed endpoint group(s) and 32 source-cited write actions.
 - The current public OpenAPI document is pinned in `sources/sentry-operation-source-lock.json`
-  (223 documented operations, retrieved 2026-08-19). The 220 unpromoted operations are explicitly
-  disabled in `api_surface.json`; the batch rejection ledger records each exact reason and recovery
-  condition.
+  (223 documented operations, retrieved 2026-08-19). Operations outside the declared streams and
+  32 bounded actions remain explicitly blocked in `api_surface.json`; the batch rejection ledger
+  records each exact reason and recovery condition.

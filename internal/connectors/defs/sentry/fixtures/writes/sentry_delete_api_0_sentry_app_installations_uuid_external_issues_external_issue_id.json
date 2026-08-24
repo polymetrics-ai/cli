@@ -1,0 +1,13 @@
+{
+  "record": {
+    "external_issue_id": "fixture-external-issue-id",
+    "uuid": "00000000-0000-4000-8000-000000000001"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/0/sentry-app-installations/00000000-0000-4000-8000-000000000001/external-issues/fixture-external-issue-id/"
+  },
+  "response": {
+    "status": 204
+  }
+}

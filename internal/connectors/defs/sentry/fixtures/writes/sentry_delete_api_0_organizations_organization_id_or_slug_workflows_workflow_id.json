@@ -1,0 +1,13 @@
+{
+  "record": {
+    "organization_id_or_slug": "fixture-organization-id-or-slug",
+    "workflow_id": 1
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/0/organizations/fixture-organization-id-or-slug/workflows/1/"
+  },
+  "response": {
+    "status": 204
+  }
+}

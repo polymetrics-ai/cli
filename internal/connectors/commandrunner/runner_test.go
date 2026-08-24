@@ -4091,6 +4091,108 @@ func TestJiraAvatarImageCommandsPassRuntimePreflight(t *testing.T) {
 	}
 }
 
+func TestSentryCitedMutationCommandsPassRuntimePreflight(t *testing.T) {
+	registry := bundleregistry.New()
+	connector, ok := registry.Get("sentry")
+	if !ok {
+		t.Fatal("Sentry connector is not registered")
+	}
+
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		t.Fatal("Sentry connector has no command surface")
+	}
+
+	var commands []connectors.CommandSurfaceCommand
+	for _, command := range provider.CommandSurface().Commands {
+		if command.Intent == "reverse_etl" && command.Availability == "implemented" {
+			commands = append(commands, command)
+		}
+	}
+	if got, want := len(commands), 32; got != want {
+		t.Fatalf("implemented Sentry reverse-ETL commands = %d, want %d source-cited mutation actions", got, want)
+	}
+
+	for _, command := range commands {
+		if err := Preflight(connector, strings.Fields(command.Path)); err != nil {
+			t.Fatalf("Preflight(%q): %v", command.Path, err)
+		}
+	}
+}
+
+func TestSentryCitedMutationActionsRequireEveryProviderPathField(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "sentry")
+	if err != nil {
+		t.Fatalf("load Sentry bundle: %v", err)
+	}
+	if got, want := len(bundle.Writes), 32; got != want {
+		t.Fatalf("Sentry write actions = %d, want %d source-cited mutations", got, want)
+	}
+
+	for _, action := range bundle.Writes {
+		t.Run(action.Name, func(t *testing.T) {
+			var schema struct {
+				AdditionalProperties bool     `json:"additionalProperties"`
+				Required             []string `json:"required"`
+				Properties           map[string]struct {
+					Type    string `json:"type"`
+					Pattern string `json:"pattern"`
+				} `json:"properties"`
+			}
+			if err := json.Unmarshal(action.RecordSchema, &schema); err != nil {
+				t.Fatalf("unmarshal record schema: %v", err)
+			}
+			if schema.AdditionalProperties {
+				t.Fatal("record schema must be closed")
+			}
+			if action.BodyType != "none" || len(action.BodyFields) != 0 {
+				t.Fatalf("write body = type %q fields %v, want no provider request body", action.BodyType, action.BodyFields)
+			}
+			if len(action.PathFields) == 0 {
+				t.Fatal("source-cited mutation has no declared provider path fields")
+			}
+			required := make(map[string]bool, len(schema.Required))
+			for _, field := range schema.Required {
+				required[field] = true
+			}
+			for _, field := range action.PathFields {
+				if !required[field] {
+					t.Fatalf("provider path field %q is not required by the record schema", field)
+				}
+			}
+
+			record := connectors.Record{}
+			for _, field := range schema.Required {
+				property := schema.Properties[field]
+				switch {
+				case property.Type == "integer":
+					record[field] = 1
+				case property.Pattern == "^[0-9a-f]{32}$":
+					record[field] = "00000000000000000000000000000001"
+				case field == "uuid":
+					record[field] = "00000000-0000-4000-8000-000000000001"
+				default:
+					record[field] = "fixture-" + strings.ReplaceAll(field, "_", "-")
+				}
+			}
+
+			for _, missing := range schema.Required {
+				missing := missing
+				t.Run("missing-"+missing, func(t *testing.T) {
+					invalid := connectors.Record{}
+					for field, value := range record {
+						invalid[field] = value
+					}
+					delete(invalid, missing)
+					if err := engine.ValidateWrite(context.Background(), bundle, connectors.WriteRequest{Action: action.Name}, []connectors.Record{invalid}); err == nil {
+						t.Fatalf("ValidateWrite accepted a record missing required provider field %q", missing)
+					}
+				})
+			}
+		})
+	}
+}
+
 func TestRunStatusCheckPreservesFinalNon2xxMetadata(t *testing.T) {
 	connector := &fakeConnector{
 		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{

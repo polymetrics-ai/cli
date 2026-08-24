@@ -1,0 +1,14 @@
+{
+  "record": {
+    "external_team_id": 1,
+    "organization_id_or_slug": "fixture-organization-id-or-slug",
+    "team_id_or_slug": "fixture-team-id-or-slug"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/0/teams/fixture-organization-id-or-slug/fixture-team-id-or-slug/external-teams/1/"
+  },
+  "response": {
+    "status": 204
+  }
+}

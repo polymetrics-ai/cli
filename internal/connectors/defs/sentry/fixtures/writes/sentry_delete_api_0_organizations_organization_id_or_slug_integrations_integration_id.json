@@ -1,0 +1,13 @@
+{
+  "record": {
+    "integration_id": "fixture-integration-id",
+    "organization_id_or_slug": "fixture-organization-id-or-slug"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/0/organizations/fixture-organization-id-or-slug/integrations/fixture-integration-id/"
+  },
+  "response": {
+    "status": 204
+  }
+}

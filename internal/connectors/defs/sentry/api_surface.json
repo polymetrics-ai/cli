@@ -21,11 +21,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizations has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizations"
       }
     },
     {
@@ -36,11 +37,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganization has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganization"
       }
     },
     {
@@ -66,11 +68,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationConfigIntegrations has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationConfigIntegrations"
       }
     },
     {
@@ -81,11 +84,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationDashboards has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationDashboards"
       }
     },
     {
@@ -111,11 +115,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationDashboard has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationDashboard"
       }
     },
     {
@@ -130,7 +135,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+        "reason": "Source request body remains unbounded with dynamic additionalProperties; pending cli-request-schema-foundation-r1."
       }
     },
     {
@@ -140,12 +145,8 @@
         "artifact": "sentry-artifact-2026-08-23",
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_dashboards_dashboard_id"
       }
     },
     {
@@ -156,11 +157,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationDetectors has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationDetectors"
       }
     },
     {
@@ -201,11 +203,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationDetector has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationDetector"
       }
     },
     {
@@ -224,20 +227,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_detectors_detector_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/discover/saved/",
@@ -246,11 +245,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationDiscoverSavedQueries has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationDiscoverSavedQueries"
       }
     },
     {
@@ -276,11 +276,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationDiscoverSavedQuery has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationDiscoverSavedQuery"
       }
     },
     {
@@ -299,20 +300,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_discover_saved_query_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/environments/",
@@ -321,11 +318,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationEnvironments has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationEnvironments"
       }
     },
     {
@@ -336,11 +334,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation resolveOrganizationEventId has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=resolveOrganizationEventId"
       }
     },
     {
@@ -351,11 +350,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationEventsTimeseries has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationEventsTimeseries"
       }
     },
     {
@@ -366,11 +366,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationEvents has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationEvents"
       }
     },
     {
@@ -404,20 +405,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_external_users_external_user_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/forwarding/",
@@ -426,11 +423,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationForwarding has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationForwarding"
       }
     },
     {
@@ -464,20 +462,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_forwarding_data_forwarder_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/integrations/",
@@ -486,11 +480,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationIntegrations has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationIntegrations"
       }
     },
     {
@@ -501,28 +496,25 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationIntegration has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationIntegration"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_integrations_integration_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/issues/",
@@ -531,11 +523,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationIssues has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationIssues"
       }
     },
     {
@@ -576,11 +569,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationIssue has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationIssue"
       }
     },
     {
@@ -599,20 +593,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_issues_issue_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/autofix/",
@@ -621,11 +611,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationIssueAutofixState has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationIssueAutofixState"
       }
     },
     {
@@ -651,11 +642,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationIssueEvents has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationIssueEvents"
       }
     },
     {
@@ -666,11 +658,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationIssueEvent has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationIssueEvent"
       }
     },
     {
@@ -681,11 +674,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationIssueExternalIssues has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationIssueExternalIssues"
       }
     },
     {
@@ -696,11 +690,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationIssueHashes has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationIssueHashes"
       }
     },
     {
@@ -711,11 +706,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation Retrieve an Integration's Issue Config for an Issue has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=Retrieve an Integration's Issue Config for an Issue"
       }
     },
     {
@@ -749,20 +745,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_issues_issue_id_integrations_integration_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/tags/{key}/",
@@ -771,11 +763,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+        "reason": "Locked source operation getOrganizationIssueTag has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationIssueTag"
       }
     },
     {
@@ -786,11 +779,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+        "reason": "Locked source operation listOrganizationIssueTagValues has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationIssueTagValues"
       }
     },
     {
@@ -801,11 +795,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationMembers has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationMembers"
       }
     },
     {
@@ -831,11 +826,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationMember has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationMember"
       }
     },
     {
@@ -854,20 +850,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_members_member_id"
       }
-    },
+   },
     {
       "method": "POST",
       "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/",
@@ -875,12 +867,8 @@
         "artifact": "sentry-artifact-2026-08-23",
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+      "covered_by": {
+        "write": "sentry_post_api_0_organizations_organization_id_or_slug_members_member_id_teams_team_id_or_slug"
       }
     },
     {
@@ -899,20 +887,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_members_member_id_teams_team_id_or_slug"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/monitors/",
@@ -921,11 +905,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationMonitors has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationMonitors"
       }
     },
     {
@@ -951,11 +936,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationMonitor has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationMonitor"
       }
     },
     {
@@ -996,11 +982,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationMonitorCheckins has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationMonitorCheckins"
       }
     },
     {
@@ -1011,11 +998,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationNotificationsActions has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationNotificationsActions"
       }
     },
     {
@@ -1041,11 +1029,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationNotificationsAction has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationNotificationsAction"
       }
     },
     {
@@ -1064,20 +1053,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_notifications_actions_action_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/latest-base/",
@@ -1086,11 +1071,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation getOrganizationPreprodArtifactSnapshotLatestBase has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationPreprodArtifactSnapshotLatestBase"
       }
     },
     {
@@ -1101,28 +1087,25 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation getOrganizationPreprodArtifactSnapshot has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationPreprodArtifactSnapshot"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_preprodartifacts_snapshots_snapshot_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/images/{image_identifier}/",
@@ -1131,11 +1114,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation getOrganizationPreprodArtifactSnapshotImage has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationPreprodArtifactSnapshotImage"
       }
     },
     {
@@ -1146,11 +1130,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation getOrganizationPreprodArtifactInstallDetails has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationPreprodArtifactInstallDetails"
       }
     },
     {
@@ -1161,11 +1146,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation getOrganizationPreprodArtifactSizeAnalysis has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationPreprodArtifactSizeAnalysis"
       }
     },
     {
@@ -1176,11 +1162,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation listOrganizationProfilingChunks has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationProfilingChunks"
       }
     },
     {
@@ -1191,11 +1178,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationProfilingFlamegraph has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationProfilingFlamegraph"
       }
     },
     {
@@ -1206,11 +1194,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+        "reason": "Locked source operation listOrganizationProjectKeys has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationProjectKeys"
       }
     },
     {
@@ -1262,11 +1251,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationRelayUsage has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationRelayUsage"
       }
     },
     {
@@ -1277,11 +1267,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationReleaseThresholdStatuses has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationReleaseThresholdStatuses"
       }
     },
     {
@@ -1318,11 +1309,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationRelease has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationRelease"
       }
     },
     {
@@ -1341,20 +1333,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_releases_version"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/commitfiles/",
@@ -1363,11 +1351,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation Retrieve Files Changed in a Release's Commits has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=Retrieve Files Changed in a Release's Commits"
       }
     },
     {
@@ -1378,11 +1367,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationReleaseCommits has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationReleaseCommits"
       }
     },
     {
@@ -1393,11 +1383,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationReleaseDeploys has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationReleaseDeploys"
       }
     },
     {
@@ -1423,11 +1414,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation listOrganizationReleaseFiles has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationReleaseFiles"
       }
     },
     {
@@ -1453,11 +1445,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation getOrganizationReleaseFile has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationReleaseFile"
       }
     },
     {
@@ -1476,20 +1469,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_releases_version_files_file_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/replay-count/",
@@ -1498,11 +1487,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationReplayCount has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationReplayCount"
       }
     },
     {
@@ -1513,11 +1503,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationReplaySelectors has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationReplaySelectors"
       }
     },
     {
@@ -1528,11 +1519,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationReplays has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationReplays"
       }
     },
     {
@@ -1543,11 +1535,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationReplay has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationReplay"
       }
     },
     {
@@ -1558,11 +1551,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationRepos has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationRepos"
       }
     },
     {
@@ -1573,11 +1567,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationRepoCommits has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationRepoCommits"
       }
     },
     {
@@ -1588,11 +1583,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationScimV2Groups has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationScimV2Groups"
       }
     },
     {
@@ -1618,11 +1614,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationScimV2Group has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationScimV2Group"
       }
     },
     {
@@ -1641,20 +1638,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_scim_v2_groups_team_id_or_slug"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users",
@@ -1663,11 +1656,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationScimV2Users has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationScimV2Users"
       }
     },
     {
@@ -1693,11 +1687,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationScimV2User has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationScimV2User"
       }
     },
     {
@@ -1716,20 +1711,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_scim_v2_users_member_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/organizations/{organization_id_or_slug}/sentry-app-installations/",
@@ -1738,11 +1729,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation List an Organization's Integration Platform Installations has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=List an Organization's Integration Platform Installations"
       }
     },
     {
@@ -1753,11 +1745,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationSentryApps has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationSentryApps"
       }
     },
     {
@@ -1768,11 +1761,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationSessions has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationSessions"
       }
     },
     {
@@ -1783,11 +1777,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation resolveOrganizationShortId has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=resolveOrganizationShortId"
       }
     },
     {
@@ -1828,11 +1823,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationStatsSummary has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationStatsSummary"
       }
     },
     {
@@ -1843,11 +1839,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationStatsV2 has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationStatsV2"
       }
     },
     {
@@ -1858,11 +1855,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationTags has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationTags"
       }
     },
     {
@@ -1873,11 +1871,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationTeams has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationTeams"
       }
     },
     {
@@ -1903,11 +1902,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationTraceItemAttributes has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationTraceItemAttributes"
       }
     },
     {
@@ -1918,11 +1918,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Pinned public API description exposes this operation, but this bundle has no bounded, schema-backed executor declaration for it; disabled pending a connector-local contract and foundation proof."
+        "reason": "Locked source operation Retrieve Trace Item Statistics has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=Retrieve Trace Item Statistics"
       }
     },
     {
@@ -1933,11 +1934,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationTraceMeta has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationTraceMeta"
       }
     },
     {
@@ -1948,11 +1950,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationTrace has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationTrace"
       }
     },
     {
@@ -1963,11 +1966,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationUserTeams has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationUserTeams"
       }
     },
     {
@@ -1978,11 +1982,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listOrganizationWorkflows has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listOrganizationWorkflows"
       }
     },
     {
@@ -2038,11 +2043,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getOrganizationWorkflow has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationWorkflow"
       }
     },
     {
@@ -2061,20 +2067,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_organizations_organization_id_or_slug_workflows_workflow_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/",
@@ -2083,11 +2085,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getProject has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProject"
       }
     },
     {
@@ -2106,20 +2109,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/environments/",
@@ -2128,11 +2127,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectEnvironments has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectEnvironments"
       }
     },
     {
@@ -2158,11 +2158,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getProjectEnvironment has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectEnvironment"
       }
     },
     {
@@ -2199,11 +2200,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getProjectEvent has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectEvent"
       }
     },
     {
@@ -2214,11 +2216,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation listProjectEventAttachments has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectEventAttachments"
       }
     },
     {
@@ -2229,11 +2232,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation getProjectEventAttachment has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectEventAttachment"
       }
     },
     {
@@ -2244,11 +2248,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getProjectEventSourceMapDebug has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectEventSourceMapDebug"
       }
     },
     {
@@ -2259,11 +2264,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation listProjectDebugFiles has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectDebugFiles"
       }
     },
     {
@@ -2274,11 +2280,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectFilters has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectFilters"
       }
     },
     {
@@ -2304,11 +2311,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation List a Project's Service Hooks has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=List a Project's Service Hooks"
       }
     },
     {
@@ -2334,11 +2342,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation Retrieve a Service Hook has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=Retrieve a Service Hook"
       }
     },
     {
@@ -2357,20 +2366,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_hooks_hook_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/",
@@ -2398,20 +2403,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_issues"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/",
@@ -2420,11 +2421,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+        "reason": "Locked source operation listProjectKeys has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectKeys"
       }
     },
     {
@@ -2450,11 +2452,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+        "reason": "Locked source operation getProjectKey has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectKey"
       }
     },
     {
@@ -2473,20 +2476,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+     "method": "DELETE",
+     "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_keys_key_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/members/",
@@ -2495,11 +2494,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectMembers has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectMembers"
       }
     },
     {
@@ -2510,11 +2510,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getProjectMonitor has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectMonitor"
       }
     },
     {
@@ -2555,11 +2556,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectMonitorCheckins has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectMonitorCheckins"
       }
     },
     {
@@ -2570,11 +2572,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getProjectOwnership has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectOwnership"
       }
     },
     {
@@ -2600,11 +2603,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getProjectPreprodSizeAnalysisStatusCheckRules has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectPreprodSizeAnalysisStatusCheckRules"
       }
     },
     {
@@ -2630,11 +2634,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getProjectPreprodSnapshotStatusCheckRules has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectPreprodSnapshotStatusCheckRules"
       }
     },
     {
@@ -2660,28 +2665,25 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation getProjectInstallableBuildLatest has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectInstallableBuildLatest"
       }
     },
     {
-      "method": "POST",
-      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+     "method": "POST",
+     "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_post_api_0_projects_organization_id_or_slug_project_id_or_slug_preprodartifacts_snapshots"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/profiling/profiles/{profile_id}/",
@@ -2690,11 +2692,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation getProjectProfilingProfile has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectProfilingProfile"
       }
     },
     {
@@ -2705,11 +2708,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectReleases has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectReleases"
       }
     },
     {
@@ -2720,11 +2724,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectReleaseCommits has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectReleaseCommits"
       }
     },
     {
@@ -2735,11 +2740,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation listProjectReleaseFiles has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectReleaseFiles"
       }
     },
     {
@@ -2765,11 +2771,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+        "reason": "Locked source operation getProjectReleaseFile has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectReleaseFile"
       }
     },
     {
@@ -2788,20 +2795,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Endpoint transfers file, image, debug artifact, or attachment payloads; the current declarative bundle only preserves legacy JSON streams."
+     "method": "DELETE",
+     "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_releases_version_files_file_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/jobs/delete/",
@@ -2810,11 +2813,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectReplayDeletionJobs has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectReplayDeletionJobs"
       }
     },
     {
@@ -2840,28 +2844,25 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getProjectReplayDeletionJob has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectReplayDeletionJob"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_replays_replay_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/clicks/",
@@ -2870,11 +2871,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectReplayClicks has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectReplayClicks"
       }
     },
     {
@@ -2885,11 +2887,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectReplayRecordingSegments has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectReplayRecordingSegments"
       }
     },
     {
@@ -2900,11 +2903,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getProjectReplayRecordingSegment has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectReplayRecordingSegment"
       }
     },
     {
@@ -2915,11 +2919,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectReplayViewedBy has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectReplayViewedBy"
       }
     },
     {
@@ -2945,11 +2950,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectStats has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectStats"
       }
     },
     {
@@ -2960,11 +2966,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+        "reason": "Locked source operation listProjectSymbolSources has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectSymbolSources"
       }
     },
     {
@@ -2998,20 +3005,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+     "method": "DELETE",
+     "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_symbol_sources"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/tags/{key}/values/",
@@ -3020,11 +3023,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Endpoint returns or mutates credential-bearing project configuration; connector records must not expose Sentry keys, DSNs, passwords, or source credentials."
+        "reason": "Locked source operation List a Tag's Values has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=List a Tag's Values"
       }
     },
     {
@@ -3035,43 +3039,36 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectTeams has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectTeams"
       }
     },
     {
-      "method": "POST",
-      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "POST",
+     "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_post_api_0_projects_organization_id_or_slug_project_id_or_slug_teams_team_id_or_slug"
       }
-    },
+   },
     {
-      "method": "DELETE",
-      "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_teams_team_id_or_slug"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/user-feedback/",
@@ -3080,11 +3077,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation List a Project's User Feedback has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=List a Project's User Feedback"
       }
     },
     {
@@ -3110,11 +3108,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listProjectUsers has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listProjectUsers"
       }
     },
     {
@@ -3125,11 +3124,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listSeerModels has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listSeerModels"
       }
     },
     {
@@ -3148,20 +3148,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_sentry_app_installations_uuid_external_issues_external_issue_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/sentry-apps/{sentry_app_id_or_slug}/",
@@ -3170,11 +3166,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getSentryApp has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getSentryApp"
       }
     },
     {
@@ -3193,20 +3190,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/sentry-apps/{sentry_app_id_or_slug}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/sentry-apps/{sentry_app_id_or_slug}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_sentry_apps_sentry_app_id_or_slug"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/",
@@ -3215,11 +3208,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation getTeam has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTeam"
       }
     },
     {
@@ -3238,20 +3232,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_teams_organization_id_or_slug_team_id_or_slug"
       }
-    },
+   },
     {
       "method": "POST",
       "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/",
@@ -3283,20 +3273,16 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/",
-      "provenance": {
-        "artifact": "sentry-artifact-2026-08-23",
-        "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
-      },
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: Sentry legacy is read-only and full write expansion cannot be completed safely while the connector is already blocked on hook-backed read routing; many writes also need destructive/admin/query-body review."
+     "method": "DELETE",
+     "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/",
+     "provenance": {
+       "artifact": "sentry-artifact-2026-08-23",
+       "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
+     },
+      "covered_by": {
+        "write": "sentry_delete_api_0_teams_organization_id_or_slug_team_id_or_slug_external_teams_external_team_id"
       }
-    },
+   },
     {
       "method": "GET",
       "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/members/",
@@ -3305,11 +3291,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listTeamMembers has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listTeamMembers"
       }
     },
     {
@@ -3320,11 +3307,12 @@
         "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json"
       },
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "Blocked in this defs-only shard: adding non-legacy Sentry streams requires extending internal/connectors/hooks/sentry routing because the existing StreamHook intercepts Sentry reads and only knows the four legacy streams."
+        "reason": "Locked source operation listTeamProjects has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=listTeamProjects"
       }
     },
     {

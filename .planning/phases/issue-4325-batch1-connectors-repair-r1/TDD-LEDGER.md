@@ -13,6 +13,55 @@
 | Vercel surface discovery | `pm vercel` returns `unknown command`; an absent `cli_surface.json` means no command can be credential-bound | Report the required declaration-owned artifacts and source-bound operation set before any mutation mapping | Do not create a command surface as part of a disposition-only slice | pending captain report |
 | Asana/Jira declared-and-deferred mutations | Targeted validation reports the documented source mutations without complete actions | Exact cited disposition files retain those operations as merge-blocked runtime gaps without changing a working command | Same focused importer/validator and runtime sweep as Sentry | pending |
 
+### 2026-08-24 Sentry declaration-only executable-action conversion
+
+- **Scope and ownership:** Sentry only. This slice changes connector-owned
+  `internal/connectors/defs/sentry/**` artifacts plus its focused runtime
+  preflight assertion; it introduces no connector-specific runtime or
+  generator behavior.
+- **Source evidence:** the pinned Sentry descriptor's existing
+  `source-cited-non-executable-mutation-foundation-r1` disposition set contains
+  exactly 32 operations: 29 `DELETE` and three `POST`. Every one has typed
+  required provider path parameters and no request body. Therefore each is
+  expressible as a closed, action-owned, no-body direct write; no reverse-ETL,
+  delete, request-body, or rendered-reference foundation is needed.
+- **Red:** `TestSentryCitedMutationCommandsPassRuntimePreflight` must fail
+  against the loaded real bundle because it exposes zero implemented
+  reverse-ETL commands for the 32 cited source mutations.
+- **Green:** declare all 32 action/command pairs in Sentry definition files,
+  with exact source method/path/typed fields, closed record schemas, and
+  destructive confirmation. The test must find exactly 32 implemented
+  reverse-ETL commands and each must pass real `commandrunner.Preflight`.
+  The importer must clear the 32 non-executable disposition gaps without
+  removing any source operation, and an isolated no-credential binary must
+  reach `error: missing --credential` for every command.
+- **Quality:** run focused commandrunner and connectorgen tests, source import
+  and validation, connector conformance/surface checks, then the repository
+  verification entry points before any push. GSD lifecycle is executed inline
+  because this task's single-worker connector contract and the available
+  runtime prohibit role spawning; required skills loaded: golang-how-to,
+  golang-cli, golang-testing, golang-design-patterns,
+  golang-structs-interfaces, golang-error-handling, golang-security, and
+  golang-safety.
+- **Green result:** `go run ./cmd/connectorgen source-import sentry --check`
+  verified 223 provider operations with zero inbound events; targeted
+  `connectorgen validate`, commandrunner source-contract tests, and Sentry
+  conformance passed. An isolated built binary reached exactly
+  `error: missing --credential` for all 32 generated commands (and no command
+  was unknown). `go vet ./internal/connectors/commandrunner` and
+  `git diff --check` passed. The first full `internal/cli` package run exposed
+  stale generated skills for precisely the ten batch-one connectors; after
+  `pm skills generate --dir docs/skills`, the deterministic
+  `TestSkillsGenerateMatchesTrackedSkills` check passed. A later full
+  `internal/cli` run reached the 20-minute package timeout after the unrelated
+  `TestCLIDurableParkingAdmissionAndResumeAcrossKilledProcess` admission-helper
+  failure, but also correctly exposed root-help transcript drift from the
+  newly visible CircleCI and Sentry command surfaces. Regenerated exactly the
+  nine affected root records, then ran the same selected transcripts green in
+  28.283s. The global
+  `surface-sync --check` remains blocked by Docker Hub's absent canonical
+  descriptor and is not altered by this slice.
+
 ### 2026-08-24 Asana red/green split
 
 - **Red:** `go run ./cmd/connectorgen source-import asana --check` reports 25

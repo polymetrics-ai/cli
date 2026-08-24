@@ -1,14 +1,14 @@
 {
   "name": "sentry",
   "display_name": "Sentry",
-  "description": "Reads Sentry projects, issues, error events, and releases through the Sentry REST API (read-only).",
+  "description": "Reads Sentry projects, issues, error events, and releases and exposes source-cited, approval-gated REST mutations through the Sentry REST API.",
   "integration_type": "api",
   "docs_url": "https://docs.sentry.io/api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,6 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Sentry API read of project, issue, event, and release data"
+    "read": "external Sentry API read of project, issue, event, and release data",
+    "write": "approval-gated Sentry REST mutations; the declared actions change Sentry data"
   }
 }

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "external_user_id": 1,
+    "organization_id_or_slug": "fixture-organization-id-or-slug"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/0/organizations/fixture-organization-id-or-slug/external-users/1/"
+  },
+  "response": {
+    "status": 204
+  }
+}

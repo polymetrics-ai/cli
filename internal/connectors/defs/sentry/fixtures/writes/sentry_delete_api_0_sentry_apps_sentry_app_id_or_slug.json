@@ -1,0 +1,12 @@
+{
+  "record": {
+    "sentry_app_id_or_slug": "fixture-sentry-app-id-or-slug"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/0/sentry-apps/fixture-sentry-app-id-or-slug/"
+  },
+  "response": {
+    "status": 204
+  }
+}

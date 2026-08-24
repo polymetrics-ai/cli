@@ -1,0 +1,13 @@
+{
+  "record": {
+    "issue_id": "fixture-issue-id",
+    "organization_id_or_slug": "fixture-organization-id-or-slug"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/0/organizations/fixture-organization-id-or-slug/issues/fixture-issue-id/"
+  },
+  "response": {
+    "status": 202
+  }
+}

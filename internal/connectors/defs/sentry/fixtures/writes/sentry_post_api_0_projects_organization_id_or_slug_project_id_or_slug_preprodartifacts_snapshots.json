@@ -1,0 +1,13 @@
+{
+  "record": {
+    "organization_id_or_slug": "fixture-organization-id-or-slug",
+    "project_id_or_slug": "fixture-project-id-or-slug"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/0/projects/fixture-organization-id-or-slug/fixture-project-id-or-slug/preprodartifacts/snapshots/"
+  },
+  "response": {
+    "status": 200
+  }
+}

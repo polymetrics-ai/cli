@@ -6,6 +6,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationDashboard",
       "operation_id": "deleteOrganizationDashboard",
+      "summary": "Delete an Organization's Custom Dashboard",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -120,22 +121,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationDashboard at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationDashboard",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -143,6 +129,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationDetectors",
       "operation_id": "deleteOrganizationDetectors",
+      "summary": "Bulk Delete Monitors",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -341,6 +328,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationDetector",
       "operation_id": "deleteOrganizationDetector",
+      "summary": "Delete a Monitor",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -456,22 +444,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationDetector at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationDetector",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -479,6 +452,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationDiscoverSavedQuery",
       "operation_id": "deleteOrganizationDiscoverSavedQuery",
+      "summary": "Delete an Organization's Discover Saved Query",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -593,22 +567,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationDiscoverSavedQuery at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationDiscoverSavedQuery",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -616,6 +575,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationExternalUser",
       "operation_id": "deleteOrganizationExternalUser",
+      "summary": "Delete an External User",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -729,22 +689,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationExternalUser at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationExternalUser",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -752,6 +697,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationForwarding",
       "operation_id": "deleteOrganizationForwarding",
+      "summary": "Delete a Data Forwarder for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -857,22 +803,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationForwarding at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationForwarding",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -880,6 +811,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationIntegration",
       "operation_id": "deleteOrganizationIntegration",
+      "summary": "Delete an Integration for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -986,22 +918,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationIntegration at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationIntegration",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -1009,6 +926,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationIssues",
       "operation_id": "deleteOrganizationIssues",
+      "summary": "Bulk Remove an Organization's Issues",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -1237,6 +1155,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationIssue",
       "operation_id": "deleteOrganizationIssue",
+      "summary": "Remove an Issue",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -1356,22 +1275,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationIssue at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationIssue",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -1515,22 +1419,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation Unlink an External Issue from an Issue at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "Unlink an External Issue from an Issue",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -1538,6 +1427,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationMember",
       "operation_id": "deleteOrganizationMember",
+      "summary": "Delete an Organization Member",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -1659,22 +1549,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationMember at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationMember",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -1682,6 +1557,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationMemberTeam",
       "operation_id": "deleteOrganizationMemberTeam",
+      "summary": "Delete an Organization Member from a Team",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -1934,22 +1810,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationMemberTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationMemberTeam",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -1957,6 +1818,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationMonitor",
       "operation_id": "deleteOrganizationMonitor",
+      "summary": "Delete a Monitor or Monitor Environments",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -2105,6 +1967,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationNotificationsAction",
       "operation_id": "deleteOrganizationNotificationsAction",
+      "summary": "Delete a Spike Protection Notification Action",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -2205,22 +2068,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationNotificationsAction at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationNotificationsAction",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -2228,6 +2076,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationPreprodArtifactSnapshot",
       "operation_id": "deleteOrganizationPreprodArtifactSnapshot",
+      "summary": "Delete a Snapshot",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -2341,22 +2190,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationPreprodArtifactSnapshot at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationPreprodArtifactSnapshot",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -2364,6 +2198,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationRelease",
       "operation_id": "deleteOrganizationRelease",
+      "summary": "Delete an Organization's Release",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -2484,22 +2319,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationRelease at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/releases/{version}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationRelease",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -2507,6 +2327,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationReleaseFile",
       "operation_id": "deleteOrganizationReleaseFile",
+      "summary": "Delete an Organization Release's File",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -2635,22 +2456,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationReleaseFile at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationReleaseFile",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -2658,6 +2464,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationScimV2Group",
       "operation_id": "deleteOrganizationScimV2Group",
+      "summary": "Delete an Individual Team",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -2777,22 +2584,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationScimV2Group at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationScimV2Group",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -2800,6 +2592,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationScimV2User",
       "operation_id": "deleteOrganizationScimV2User",
+      "summary": "Delete an Organization Member via SCIM",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -2919,22 +2712,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationScimV2User at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationScimV2User",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -3083,6 +2861,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationWorkflows",
       "operation_id": "deleteOrganizationWorkflows",
+      "summary": "Bulk Delete Alerts",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -3272,6 +3051,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganizationWorkflow",
       "operation_id": "deleteOrganizationWorkflow",
+      "summary": "Delete an Alert",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -3400,22 +3180,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOrganizationWorkflow at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOrganizationWorkflow",
-            "method": "DELETE",
-            "path": "/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -3423,6 +3188,7 @@
       "protocol": "rest",
       "source_id": "deleteProject",
       "operation_id": "deleteProject",
+      "summary": "Delete a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -3535,22 +3301,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteProject at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteProject",
-            "method": "DELETE",
-            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -3678,22 +3429,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation Remove a Service Hook at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "Remove a Service Hook",
-            "method": "DELETE",
-            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -3822,22 +3558,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation Bulk Remove a List of Issues at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "Bulk Remove a List of Issues",
-            "method": "DELETE",
-            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -3845,6 +3566,7 @@
       "protocol": "rest",
       "source_id": "deleteProjectKey",
       "operation_id": "deleteProjectKey",
+      "summary": "Delete a Client Key",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -3965,22 +3687,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteProjectKey at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteProjectKey",
-            "method": "DELETE",
-            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -3988,6 +3695,7 @@
       "protocol": "rest",
       "source_id": "deleteProjectMonitor",
       "operation_id": "deleteProjectMonitor",
+      "summary": "Delete a Monitor or Monitor Environments for a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -4144,6 +3852,7 @@
       "protocol": "rest",
       "source_id": "deleteProjectReleaseFile",
       "operation_id": "deleteProjectReleaseFile",
+      "summary": "Delete a Project Release's File",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -4280,22 +3989,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteProjectReleaseFile at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteProjectReleaseFile",
-            "method": "DELETE",
-            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -4303,6 +3997,7 @@
       "protocol": "rest",
       "source_id": "deleteProjectReplay",
       "operation_id": "deleteProjectReplay",
+      "summary": "Delete a Replay Instance",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -4418,22 +4113,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteProjectReplay at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteProjectReplay",
-            "method": "DELETE",
-            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -4441,6 +4121,7 @@
       "protocol": "rest",
       "source_id": "deleteProjectSymbolSource",
       "operation_id": "deleteProjectSymbolSource",
+      "summary": "Delete a Symbol Source from a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -4562,22 +4243,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteProjectSymbolSource at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteProjectSymbolSource",
-            "method": "DELETE",
-            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -4585,6 +4251,7 @@
       "protocol": "rest",
       "source_id": "deleteProjectTeam",
       "operation_id": "deleteProjectTeam",
+      "summary": "Delete a Team from a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -5028,22 +4695,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteProjectTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteProjectTeam",
-            "method": "DELETE",
-            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -5163,22 +4815,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation Delete an External Issue at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "Delete an External Issue",
-            "method": "DELETE",
-            "path": "/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -5186,6 +4823,7 @@
       "protocol": "rest",
       "source_id": "deleteSentryApp",
       "operation_id": "deleteSentryApp",
+      "summary": "Delete a custom integration.",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -5283,22 +4921,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteSentryApp at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/sentry-apps/{sentry_app_id_or_slug}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteSentryApp",
-            "method": "DELETE",
-            "path": "/api/0/sentry-apps/{sentry_app_id_or_slug}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -5306,6 +4929,7 @@
       "protocol": "rest",
       "source_id": "deleteTeam",
       "operation_id": "deleteTeam",
+      "summary": "Delete a Team",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -5418,22 +5042,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteTeam",
-            "method": "DELETE",
-            "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -5441,6 +5050,7 @@
       "protocol": "rest",
       "source_id": "deleteTeamExternalTeam",
       "operation_id": "deleteTeamExternalTeam",
+      "summary": "Delete an External Team",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -5561,22 +5171,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteTeamExternalTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteTeamExternalTeam",
-            "method": "DELETE",
-            "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -5584,6 +5179,7 @@
       "protocol": "rest",
       "source_id": "listOrganizations",
       "operation_id": "listOrganizations",
+      "summary": "List Your Organizations",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -5947,6 +5543,7 @@
       "protocol": "rest",
       "source_id": "getOrganization",
       "operation_id": "getOrganization",
+      "summary": "Retrieve an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -6274,6 +5871,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationConfigIntegrations",
       "operation_id": "getOrganizationConfigIntegrations",
+      "summary": "Get Integration Provider Information",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -7030,6 +6628,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationDashboards",
       "operation_id": "listOrganizationDashboards",
+      "summary": "List an Organization's Custom Dashboards",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -7599,6 +7198,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationDashboard",
       "operation_id": "getOrganizationDashboard",
+      "summary": "Retrieve an Organization's Custom Dashboard",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -8412,6 +8012,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationDetectors",
       "operation_id": "listOrganizationDetectors",
+      "summary": "Fetch an Organization's Monitors",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -8913,6 +8514,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationDetector",
       "operation_id": "getOrganizationDetector",
+      "summary": "Fetch a Monitor",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -9274,6 +8876,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationDiscoverSavedQueries",
       "operation_id": "listOrganizationDiscoverSavedQueries",
+      "summary": "List an Organization's Discover Saved Queries",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -9867,6 +9470,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationDiscoverSavedQuery",
       "operation_id": "getOrganizationDiscoverSavedQuery",
+      "summary": "Retrieve an Organization's Discover Saved Query",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -10368,6 +9972,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationEnvironments",
       "operation_id": "listOrganizationEnvironments",
+      "summary": "List an Organization's Environments",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -10549,6 +10154,7 @@
       "protocol": "rest",
       "source_id": "resolveOrganizationEventId",
       "operation_id": "resolveOrganizationEventId",
+      "summary": "Resolve an Event ID",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -11246,6 +10852,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationEventsTimeseries",
       "operation_id": "listOrganizationEventsTimeseries",
+      "summary": "Query Explore Events in Timeseries Format",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -11787,6 +11394,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationEvents",
       "operation_id": "listOrganizationEvents",
+      "summary": "Query Explore Events in Table Format",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -12141,6 +11749,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationForwarding",
       "operation_id": "listOrganizationForwarding",
+      "summary": "Retrieve Data Forwarders for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -12528,6 +12137,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationIntegrations",
       "operation_id": "listOrganizationIntegrations",
+      "summary": "List an Organization's Available Integrations",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -12809,6 +12419,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationIntegration",
       "operation_id": "getOrganizationIntegration",
+      "summary": "Retrieve an Integration for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -13056,6 +12667,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationIssues",
       "operation_id": "listOrganizationIssues",
+      "summary": "List an Organization's Issues",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -14278,6 +13890,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationIssue",
       "operation_id": "getOrganizationIssue",
+      "summary": "Retrieve an Issue",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -15312,6 +14925,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationIssueAutofixState",
       "operation_id": "getOrganizationIssueAutofixState",
+      "summary": "Retrieve Seer Issue Fix State",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -15680,6 +15294,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationIssueEvents",
       "operation_id": "listOrganizationIssueEvents",
+      "summary": "List an Issue's Events",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -16107,6 +15722,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationIssueEvent",
       "operation_id": "getOrganizationIssueEvent",
+      "summary": "Retrieve an Issue Event",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -17486,6 +17102,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationIssueExternalIssues",
       "operation_id": "listOrganizationIssueExternalIssues",
+      "summary": "Retrieve custom integration issue links for the given Sentry issue",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -17658,6 +17275,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationIssueHashes",
       "operation_id": "listOrganizationIssueHashes",
+      "summary": "List an Issue's Hashes",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -18978,6 +18596,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationIssueTag",
       "operation_id": "getOrganizationIssueTag",
+      "summary": "Retrieve Tag Details",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -19249,6 +18868,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationIssueTagValues",
       "operation_id": "listOrganizationIssueTagValues",
+      "summary": "List a Tag's Values for an Issue",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -19520,6 +19140,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationMembers",
       "operation_id": "listOrganizationMembers",
+      "summary": "List an Organization's Members",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -20047,6 +19668,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationMember",
       "operation_id": "getOrganizationMember",
+      "summary": "Retrieve an Organization Member",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -20902,6 +20524,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationMonitors",
       "operation_id": "listOrganizationMonitors",
+      "summary": "Retrieve Monitors for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -21509,6 +21132,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationMonitor",
       "operation_id": "getOrganizationMonitor",
+      "summary": "Retrieve a Monitor",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -22087,6 +21711,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationMonitorCheckins",
       "operation_id": "listOrganizationMonitorCheckins",
+      "summary": "Retrieve Check-Ins for a Monitor",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -22374,6 +21999,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationNotificationsActions",
       "operation_id": "listOrganizationNotificationsActions",
+      "summary": "List Spike Protection Notifications",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -22621,6 +22247,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationNotificationsAction",
       "operation_id": "getOrganizationNotificationsAction",
+      "summary": "Retrieve a Spike Protection Notification Action",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -22824,6 +22451,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationPreprodArtifactSnapshotLatestBase",
       "operation_id": "getOrganizationPreprodArtifactSnapshotLatestBase",
+      "summary": "Retrieve latest base Snapshot",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -23139,6 +22767,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationPreprodArtifactSnapshot",
       "operation_id": "getOrganizationPreprodArtifactSnapshot",
+      "summary": "Retrieve Snapshot details",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -23998,6 +23627,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationPreprodArtifactSnapshotImage",
       "operation_id": "getOrganizationPreprodArtifactSnapshotImage",
+      "summary": "Retrieve Snapshot image detail",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -24345,6 +23975,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationPreprodArtifactInstallDetails",
       "operation_id": "getOrganizationPreprodArtifactInstallDetails",
+      "summary": "Retrieve install info for a given artifact",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -24770,6 +24401,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationPreprodArtifactSizeAnalysis",
       "operation_id": "getOrganizationPreprodArtifactSizeAnalysis",
+      "summary": "Retrieve Size Analysis results for a given artifact",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -25569,6 +25201,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationProfilingChunks",
       "operation_id": "listOrganizationProfilingChunks",
+      "summary": "Retrieve Profile Chunks for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -25813,6 +25446,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationProfilingFlamegraph",
       "operation_id": "getOrganizationProfilingFlamegraph",
+      "summary": "Retrieve a Flamegraph for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -26194,6 +25828,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationProjectKeys",
       "operation_id": "listOrganizationProjectKeys",
+      "summary": "List an Organization's Client Keys",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -26646,6 +26281,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationProjects",
       "operation_id": "listOrganizationProjects",
+      "summary": "List an Organization's Projects",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -27114,6 +26750,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationRelayUsage",
       "operation_id": "listOrganizationRelayUsage",
+      "summary": "List an Organization's trusted Relays",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -27288,6 +26925,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationReleaseThresholdStatuses",
       "operation_id": "listOrganizationReleaseThresholdStatuses",
+      "summary": "Retrieve Statuses of Release Thresholds (Alpha)",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -27681,6 +27319,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationReleases",
       "operation_id": "listOrganizationReleases",
+      "summary": "List an Organization's Releases",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -28439,6 +28078,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationRelease",
       "operation_id": "getOrganizationRelease",
+      "summary": "Retrieve an Organization's Release",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -29635,6 +29275,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationReleaseCommits",
       "operation_id": "listOrganizationReleaseCommits",
+      "summary": "List an Organization Release's Commits",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -30479,6 +30120,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationReleaseDeploys",
       "operation_id": "listOrganizationReleaseDeploys",
+      "summary": "List a Release's Deploys",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -30666,6 +30308,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationReleaseFiles",
       "operation_id": "listOrganizationReleaseFiles",
+      "summary": "List an Organization's Release Files",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -30890,6 +30533,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationReleaseFile",
       "operation_id": "getOrganizationReleaseFile",
+      "summary": "Retrieve an Organization Release's File",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -31096,6 +30740,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationReplayCount",
       "operation_id": "getOrganizationReplayCount",
+      "summary": "Retrieve a Count of Replays for a Given Issue or Transaction",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -31344,6 +30989,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationReplaySelectors",
       "operation_id": "listOrganizationReplaySelectors",
+      "summary": "List an Organization's Selectors",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -31701,6 +31347,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationReplays",
       "operation_id": "listOrganizationReplays",
+      "summary": "List an Organization's Replays",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -32337,6 +31984,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationReplay",
       "operation_id": "getOrganizationReplay",
+      "summary": "Retrieve a Replay Instance",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -32984,6 +32632,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationRepos",
       "operation_id": "listOrganizationRepos",
+      "summary": "List an Organization's Repositories",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -33255,6 +32904,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationRepoCommits",
       "operation_id": "listOrganizationRepoCommits",
+      "summary": "List a Repository's Commits",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -34054,6 +33704,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationScimV2Groups",
       "operation_id": "listOrganizationScimV2Groups",
+      "summary": "List an Organization's Paginated Teams",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -34344,6 +33995,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationScimV2Group",
       "operation_id": "getOrganizationScimV2Group",
+      "summary": "Query an Individual Team",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -34561,6 +34213,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationScimV2Users",
       "operation_id": "listOrganizationScimV2Users",
+      "summary": "List an Organization's SCIM Members",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -34892,6 +34545,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationScimV2User",
       "operation_id": "getOrganizationScimV2User",
+      "summary": "Query an Individual Organization Member",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -35356,6 +35010,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationSentryApps",
       "operation_id": "listOrganizationSentryApps",
+      "summary": "Retrieve the custom integrations created by an organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -35735,6 +35390,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationSessions",
       "operation_id": "getOrganizationSessions",
+      "summary": "Retrieve Release Health Session Statistics",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -36120,6 +35776,7 @@
       "protocol": "rest",
       "source_id": "resolveOrganizationShortId",
       "operation_id": "resolveOrganizationShortId",
+      "summary": "Resolve a Short ID",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -36931,6 +36588,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationStatsSummary",
       "operation_id": "getOrganizationStatsSummary",
+      "summary": "Retrieve an Organization's Events Count by Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -37266,6 +36924,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationStatsV2",
       "operation_id": "listOrganizationStatsV2",
+      "summary": "Retrieve Event Counts for an Organization (v2)",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -37600,6 +37259,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationTags",
       "operation_id": "listOrganizationTags",
+      "summary": "List an Organization's Tags",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -37941,6 +37601,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationTeams",
       "operation_id": "listOrganizationTeams",
+      "summary": "List an Organization's Teams",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -38748,6 +38409,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationTraceItemAttributes",
       "operation_id": "listOrganizationTraceItemAttributes",
+      "summary": "List Trace Item Attributes",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -39404,6 +39066,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationTraceMeta",
       "operation_id": "getOrganizationTraceMeta",
+      "summary": "Retrieve Trace Metadata",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -39668,6 +39331,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationTrace",
       "operation_id": "getOrganizationTrace",
+      "summary": "Retrieve a Trace",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -40526,6 +40190,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationUserTeams",
       "operation_id": "listOrganizationUserTeams",
+      "summary": "List a User's Teams for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -41299,6 +40964,7 @@
       "protocol": "rest",
       "source_id": "listOrganizationWorkflows",
       "operation_id": "listOrganizationWorkflows",
+      "summary": "Fetch Alerts",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -41943,6 +41609,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationWorkflow",
       "operation_id": "getOrganizationWorkflow",
+      "summary": "Fetch an Alert",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -42446,6 +42113,7 @@
       "protocol": "rest",
       "source_id": "getProject",
       "operation_id": "getProject",
+      "summary": "Retrieve a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -43444,6 +43112,7 @@
       "protocol": "rest",
       "source_id": "listProjectEnvironments",
       "operation_id": "listProjectEnvironments",
+      "summary": "List a Project's Environments",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -43653,6 +43322,7 @@
       "protocol": "rest",
       "source_id": "getProjectEnvironment",
       "operation_id": "getProjectEnvironment",
+      "summary": "Retrieve a Project Environment",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -43839,6 +43509,7 @@
       "protocol": "rest",
       "source_id": "listProjectEvents",
       "operation_id": "listProjectEvents",
+      "summary": "List a Project's Error Events",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -44232,6 +43903,7 @@
       "protocol": "rest",
       "source_id": "getProjectEvent",
       "operation_id": "getProjectEvent",
+      "summary": "Retrieve an Event for a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -45568,6 +45240,7 @@
       "protocol": "rest",
       "source_id": "listProjectEventAttachments",
       "operation_id": "listProjectEventAttachments",
+      "summary": "List an Event's Attachments",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -45830,6 +45503,7 @@
       "protocol": "rest",
       "source_id": "getProjectEventAttachment",
       "operation_id": "getProjectEventAttachment",
+      "summary": "Retrieve an Event Attachment",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -46073,6 +45747,7 @@
       "protocol": "rest",
       "source_id": "getProjectEventSourceMapDebug",
       "operation_id": "getProjectEventSourceMapDebug",
+      "summary": "Get Debug Information Related to Source Maps for a Given Event",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -46599,6 +46274,7 @@
       "protocol": "rest",
       "source_id": "listProjectDebugFiles",
       "operation_id": "listProjectDebugFiles",
+      "summary": "List a Project's Debug Information Files",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -46907,6 +46583,7 @@
       "protocol": "rest",
       "source_id": "listProjectFilters",
       "operation_id": "listProjectFilters",
+      "summary": "List a Project's Data Filters",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -48005,6 +47682,7 @@
       "protocol": "rest",
       "source_id": "listProjectKeys",
       "operation_id": "listProjectKeys",
+      "summary": "List a Project's Client Keys",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -48444,6 +48122,7 @@
       "protocol": "rest",
       "source_id": "getProjectKey",
       "operation_id": "getProjectKey",
+      "summary": "Retrieve a Client Key",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -48822,6 +48501,7 @@
       "protocol": "rest",
       "source_id": "listProjectMembers",
       "operation_id": "listProjectMembers",
+      "summary": "List a Project's Organization Members",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -49340,6 +49020,7 @@
       "protocol": "rest",
       "source_id": "getProjectMonitor",
       "operation_id": "getProjectMonitor",
+      "summary": "Retrieve a Monitor for a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -49914,6 +49595,7 @@
       "protocol": "rest",
       "source_id": "listProjectMonitorCheckins",
       "operation_id": "listProjectMonitorCheckins",
+      "summary": "Retrieve Check-Ins for a Monitor by Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -50199,6 +49881,7 @@
       "protocol": "rest",
       "source_id": "getProjectOwnership",
       "operation_id": "getProjectOwnership",
+      "summary": "Retrieve Ownership Configuration for a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -50484,6 +50167,7 @@
       "protocol": "rest",
       "source_id": "getProjectPreprodSizeAnalysisStatusCheckRules",
       "operation_id": "getProjectPreprodSizeAnalysisStatusCheckRules",
+      "summary": "Retrieve Size Analysis status check rules for a project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -50799,6 +50483,7 @@
       "protocol": "rest",
       "source_id": "getProjectPreprodSnapshotStatusCheckRules",
       "operation_id": "getProjectPreprodSnapshotStatusCheckRules",
+      "summary": "Retrieve Snapshot status check rules for a project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -50990,6 +50675,7 @@
       "protocol": "rest",
       "source_id": "getProjectInstallableBuildLatest",
       "operation_id": "getProjectInstallableBuildLatest",
+      "summary": "Get the latest installable build for a project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -51769,6 +51455,7 @@
       "protocol": "rest",
       "source_id": "getProjectProfilingProfile",
       "operation_id": "getProjectProfilingProfile",
+      "summary": "Retrieve a Profile",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -52033,6 +51720,7 @@
       "protocol": "rest",
       "source_id": "listProjectReleases",
       "operation_id": "listProjectReleases",
+      "summary": "List a Project's Releases",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -52781,6 +52469,7 @@
       "protocol": "rest",
       "source_id": "listProjectReleaseCommits",
       "operation_id": "listProjectReleaseCommits",
+      "summary": "List a Project Release's Commits",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -53633,6 +53322,7 @@
       "protocol": "rest",
       "source_id": "listProjectReleaseFiles",
       "operation_id": "listProjectReleaseFiles",
+      "summary": "List a Project's Release Files",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -53865,6 +53555,7 @@
       "protocol": "rest",
       "source_id": "getProjectReleaseFile",
       "operation_id": "getProjectReleaseFile",
+      "summary": "Retrieve a Project Release's File",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -54079,6 +53770,7 @@
       "protocol": "rest",
       "source_id": "listProjectReplayDeletionJobs",
       "operation_id": "listProjectReplayDeletionJobs",
+      "summary": "List Replay Batch-Deletion Jobs",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -54292,6 +53984,7 @@
       "protocol": "rest",
       "source_id": "getProjectReplayDeletionJob",
       "operation_id": "getProjectReplayDeletionJob",
+      "summary": "Retrieve a Replay Batch-Deletion Job",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -54515,6 +54208,7 @@
       "protocol": "rest",
       "source_id": "listProjectReplayClicks",
       "operation_id": "listProjectReplayClicks",
+      "summary": "List Clicked Nodes",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -54750,6 +54444,7 @@
       "protocol": "rest",
       "source_id": "listProjectReplayRecordingSegments",
       "operation_id": "listProjectReplayRecordingSegments",
+      "summary": "List Recording Segments",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -54984,6 +54679,7 @@
       "protocol": "rest",
       "source_id": "getProjectReplayRecordingSegment",
       "operation_id": "getProjectReplayRecordingSegment",
+      "summary": "Retrieve a Recording Segment",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -55195,6 +54891,7 @@
       "protocol": "rest",
       "source_id": "listProjectReplayViewedBy",
       "operation_id": "listProjectReplayViewedBy",
+      "summary": "List Users Who Have Viewed a Replay",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -55417,6 +55114,7 @@
       "protocol": "rest",
       "source_id": "listProjectStats",
       "operation_id": "listProjectStats",
+      "summary": "Retrieve Event Counts for a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -55726,6 +55424,7 @@
       "protocol": "rest",
       "source_id": "listProjectSymbolSources",
       "operation_id": "listProjectSymbolSources",
+      "summary": "Retrieve a Project's Symbol Sources",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -56522,6 +56221,7 @@
       "protocol": "rest",
       "source_id": "listProjectTeams",
       "operation_id": "listProjectTeams",
+      "summary": "List a Project's Teams",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -57039,6 +56739,7 @@
       "protocol": "rest",
       "source_id": "listProjectUsers",
       "operation_id": "listProjectUsers",
+      "summary": "List a Project's Users",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -57278,6 +56979,7 @@
       "protocol": "rest",
       "source_id": "listSeerModels",
       "operation_id": "listSeerModels",
+      "summary": "List Seer AI Models",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -57412,6 +57114,7 @@
       "protocol": "rest",
       "source_id": "getSentryApp",
       "operation_id": "getSentryApp",
+      "summary": "Retrieve a custom integration by ID or slug.",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -57753,6 +57456,7 @@
       "protocol": "rest",
       "source_id": "getTeam",
       "operation_id": "getTeam",
+      "summary": "Retrieve a Team",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -58423,6 +58127,7 @@
       "protocol": "rest",
       "source_id": "listTeamMembers",
       "operation_id": "listTeamMembers",
+      "summary": "List a Team's Members",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -58947,6 +58652,7 @@
       "protocol": "rest",
       "source_id": "listTeamProjects",
       "operation_id": "listTeamProjects",
+      "summary": "List a Team's Projects",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -59424,6 +59130,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationScimV2Group",
       "operation_id": "updateOrganizationScimV2Group",
+      "summary": "Update a Team's Attributes",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -59593,6 +59300,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationScimV2User",
       "operation_id": "updateOrganizationScimV2User",
+      "summary": "Update an Organization Member's Attributes",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -59761,6 +59469,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationDashboard",
       "operation_id": "createOrganizationDashboard",
+      "summary": "Create a New Dashboard for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -60900,6 +60609,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationDiscoverSavedQuery",
       "operation_id": "createOrganizationDiscoverSavedQuery",
+      "summary": "Create a New Saved Query",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -61502,6 +61212,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationExternalUser",
       "operation_id": "createOrganizationExternalUser",
+      "summary": "Create an External User",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -61798,6 +61509,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationForwarding",
       "operation_id": "createOrganizationForwarding",
+      "summary": "Create a Data Forwarder for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -62117,6 +61829,7 @@
       "protocol": "rest",
       "source_id": "startOrganizationIssueAutofix",
       "operation_id": "startOrganizationIssueAutofix",
+      "summary": "Start Seer Issue Fix",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -62585,6 +62298,7 @@
       "protocol": "rest",
       "source_id": "addOrganizationMember",
       "operation_id": "addOrganizationMember",
+      "summary": "Add a Member to an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -63126,6 +62840,7 @@
       "protocol": "rest",
       "source_id": "addOrganizationMemberTeam",
       "operation_id": "addOrganizationMemberTeam",
+      "summary": "Add an Organization Member to a Team",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -63398,22 +63113,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation addOrganizationMemberTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/\"].post",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "addOrganizationMemberTeam",
-            "method": "POST",
-            "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -63421,6 +63121,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationMonitor",
       "operation_id": "createOrganizationMonitor",
+      "summary": "Create a Monitor",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -64690,6 +64391,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationNotificationsAction",
       "operation_id": "createOrganizationNotificationsAction",
+      "summary": "Create a Spike Protection Notification Action",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -64940,6 +64642,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationProject",
       "operation_id": "createOrganizationProject",
+      "summary": "Create a Project for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -65448,6 +65151,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationProjectDetector",
       "operation_id": "createOrganizationProjectDetector",
+      "summary": "Create a Monitor for a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -65868,6 +65572,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationRelease",
       "operation_id": "createOrganizationRelease",
+      "summary": "Create a New Release for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -66736,6 +66441,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationReleaseDeploy",
       "operation_id": "createOrganizationReleaseDeploy",
+      "summary": "Create a Deploy",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -66964,6 +66670,7 @@
       "protocol": "rest",
       "source_id": "uploadOrganizationReleaseFile",
       "operation_id": "uploadOrganizationReleaseFile",
+      "summary": "Upload a New Organization Release File",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -67204,6 +66911,7 @@
       "protocol": "rest",
       "source_id": "provisionOrganizationScimV2Group",
       "operation_id": "provisionOrganizationScimV2Group",
+      "summary": "Provision a New Team",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -67428,6 +67136,7 @@
       "protocol": "rest",
       "source_id": "provisionOrganizationScimV2User",
       "operation_id": "provisionOrganizationScimV2User",
+      "summary": "Provision a New Organization Member",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -67845,6 +67554,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationTeam",
       "operation_id": "createOrganizationTeam",
+      "summary": "Create a New Team",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -68492,6 +68202,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationWorkflow",
       "operation_id": "createOrganizationWorkflow",
+      "summary": "Create an Alert for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -69285,6 +68996,7 @@
       "protocol": "rest",
       "source_id": "createProjectKey",
       "operation_id": "createProjectKey",
+      "summary": "Create a New Client Key",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -69697,6 +69409,7 @@
       "protocol": "rest",
       "source_id": "createProjectPreprodSizeAnalysisSkippedStatusCheck",
       "operation_id": "createProjectPreprodSizeAnalysisSkippedStatusCheck",
+      "summary": "Create a skipped Size Analysis status check",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -69881,6 +69594,7 @@
       "protocol": "rest",
       "source_id": "createProjectPreprodSnapshotSkippedStatusCheck",
       "operation_id": "createProjectPreprodSnapshotSkippedStatusCheck",
+      "summary": "Create a skipped Snapshot status check",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -70065,6 +69779,7 @@
       "protocol": "rest",
       "source_id": "uploadProjectPreprodArtifactSnapshot",
       "operation_id": "uploadProjectPreprodArtifactSnapshot",
+      "summary": "Upload a Snapshot",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -70227,22 +69942,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation uploadProjectPreprodArtifactSnapshot at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/\"].post",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "uploadProjectPreprodArtifactSnapshot",
-            "method": "POST",
-            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -70250,6 +69950,7 @@
       "protocol": "rest",
       "source_id": "uploadProjectReleaseFile",
       "operation_id": "uploadProjectReleaseFile",
+      "summary": "Upload a New Project Release File",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -70498,6 +70199,7 @@
       "protocol": "rest",
       "source_id": "createProjectReplayDeletionJob",
       "operation_id": "createProjectReplayDeletionJob",
+      "summary": "Create Replay Batch Deletion Job",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -70754,6 +70456,7 @@
       "protocol": "rest",
       "source_id": "linkProjectRepository",
       "operation_id": "linkProjectRepository",
+      "summary": "Link a Repository to a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -70938,6 +70641,7 @@
       "protocol": "rest",
       "source_id": "addProjectSymbolSource",
       "operation_id": "addProjectSymbolSource",
+      "summary": "Add a Symbol Source to a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -71705,6 +71409,7 @@
       "protocol": "rest",
       "source_id": "addProjectTeam",
       "operation_id": "addProjectTeam",
+      "summary": "Add a Team to a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -72153,22 +71858,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation addProjectTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/\"].post",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "addProjectTeam",
-            "method": "POST",
-            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -72634,6 +72324,7 @@
       "protocol": "rest",
       "source_id": "createTeamExternalTeam",
       "operation_id": "createTeamExternalTeam",
+      "summary": "Create an External Team",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -72929,6 +72620,7 @@
       "protocol": "rest",
       "source_id": "createTeamProject",
       "operation_id": "createTeamProject",
+      "summary": "Create a New Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -73437,6 +73129,7 @@
       "protocol": "rest",
       "source_id": "updateOrganization",
       "operation_id": "updateOrganization",
+      "summary": "Update an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -75324,6 +75017,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationDashboard",
       "operation_id": "updateOrganizationDashboard",
+      "summary": "Edit an Organization's Custom Dashboard",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -76456,6 +76150,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationDetectors",
       "operation_id": "updateOrganizationDetectors",
+      "summary": "Mutate an Organization's Monitors",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -76975,6 +76670,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationDetector",
       "operation_id": "updateOrganizationDetector",
+      "summary": "Update a Monitor by ID",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -77421,6 +77117,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationDiscoverSavedQuery",
       "operation_id": "updateOrganizationDiscoverSavedQuery",
+      "summary": "Edit an Organization's Discover Saved Query",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -78031,6 +77728,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationExternalUser",
       "operation_id": "updateOrganizationExternalUser",
+      "summary": "Update an External User",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -78270,6 +77968,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationForwarding",
       "operation_id": "updateOrganizationForwarding",
+      "summary": "Update a Data Forwarder for an Organization",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -78621,6 +78320,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationIssues",
       "operation_id": "updateOrganizationIssues",
+      "summary": "Bulk Mutate an Organization's Issues",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -79218,6 +78918,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationIssue",
       "operation_id": "updateOrganizationIssue",
+      "summary": "Update an Issue",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -80298,6 +79999,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationMember",
       "operation_id": "updateOrganizationMember",
+      "summary": "Update an Organization Member's Roles",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -81182,6 +80884,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationMemberTeam",
       "operation_id": "updateOrganizationMemberTeam",
+      "summary": "Update an Organization Member's Team Role",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -81383,6 +81086,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationMonitor",
       "operation_id": "updateOrganizationMonitor",
+      "summary": "Update a Monitor",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -82659,6 +82363,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationNotificationsAction",
       "operation_id": "updateOrganizationNotificationsAction",
+      "summary": "Update a Spike Protection Notification Action",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -82910,6 +82615,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationRelease",
       "operation_id": "updateOrganizationRelease",
+      "summary": "Update an Organization's Release",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -83978,6 +83684,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationReleaseFile",
       "operation_id": "updateOrganizationReleaseFile",
+      "summary": "Update an Organization Release File",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -84198,6 +83905,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationWorkflows",
       "operation_id": "updateOrganizationWorkflows",
+      "summary": "Mutate an Organization's Alerts",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -84859,6 +84567,7 @@
       "protocol": "rest",
       "source_id": "updateOrganizationWorkflow",
       "operation_id": "updateOrganizationWorkflow",
+      "summary": "Update an Alert by ID",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -85449,6 +85158,7 @@
       "protocol": "rest",
       "source_id": "updateProject",
       "operation_id": "updateProject",
+      "summary": "Update a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -86730,6 +86440,7 @@
       "protocol": "rest",
       "source_id": "updateProjectEnvironment",
       "operation_id": "updateProjectEnvironment",
+      "summary": "Update a Project Environment",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -86938,6 +86649,7 @@
       "protocol": "rest",
       "source_id": "updateProjectFilter",
       "operation_id": "updateProjectFilter",
+      "summary": "Update an Inbound Data Filter",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -87605,6 +87317,7 @@
       "protocol": "rest",
       "source_id": "updateProjectKey",
       "operation_id": "updateProjectKey",
+      "summary": "Update a Client Key",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -88052,6 +87765,7 @@
       "protocol": "rest",
       "source_id": "updateProjectMonitor",
       "operation_id": "updateProjectMonitor",
+      "summary": "Update a Monitor for a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -89336,6 +89050,7 @@
       "protocol": "rest",
       "source_id": "updateProjectOwnership",
       "operation_id": "updateProjectOwnership",
+      "summary": "Update Ownership Configuration for a Project",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -89654,6 +89369,7 @@
       "protocol": "rest",
       "source_id": "updateProjectReleaseFile",
       "operation_id": "updateProjectReleaseFile",
+      "summary": "Update a Project Release File",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -89882,6 +89598,7 @@
       "protocol": "rest",
       "source_id": "updateProjectSymbolSource",
       "operation_id": "updateProjectSymbolSource",
+      "summary": "Update a Project's Symbol Source",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -90665,6 +90382,7 @@
       "protocol": "rest",
       "source_id": "updateSentryApp",
       "operation_id": "updateSentryApp",
+      "summary": "Update an existing custom integration.",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -91106,6 +90824,7 @@
       "protocol": "rest",
       "source_id": "updateTeam",
       "operation_id": "updateTeam",
+      "summary": "Update a Team",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -91754,6 +91473,7 @@
       "protocol": "rest",
       "source_id": "updateTeamExternalTeam",
       "operation_id": "updateTeamExternalTeam",
+      "summary": "Update an External Team",
       "source": {
         "url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
         "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
@@ -93008,166 +92728,6 @@
       "foundation": "closed-source-operation-execution-foundation-r1",
       "location": "source operation resolveOrganizationShortId",
       "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation Bulk Remove a List of Issues at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation Delete an External Issue at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation Remove a Service Hook at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation Unlink an External Issue from an Issue at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation addOrganizationMemberTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/\"].post",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation addProjectTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/\"].post",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationDashboard at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationDetector at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationDiscoverSavedQuery at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationExternalUser at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationForwarding at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationIntegration at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationIssue at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationMember at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationMemberTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationNotificationsAction at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationPreprodArtifactSnapshot at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationRelease at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/releases/{version}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationReleaseFile at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationScimV2Group at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationScimV2User at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOrganizationWorkflow at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteProject at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteProjectKey at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteProjectReleaseFile at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteProjectReplay at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteProjectSymbolSource at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteProjectTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteSentryApp at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/sentry-apps/{sentry_app_id_or_slug}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteTeamExternalTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation uploadProjectPreprodArtifactSnapshot at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/\"].post",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
     }
   ]
 }

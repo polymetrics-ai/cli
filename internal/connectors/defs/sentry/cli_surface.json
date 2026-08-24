@@ -1,6 +1,6 @@
 {
   "tagline": "Run Sentry's declared streams and reverse-ETL actions.",
-  "usage": "pm sentry \u003ccommand\u003e [flags]",
+  "usage": "pm sentry <command> [flags]",
   "groups": [
     {
       "id": "read",
@@ -79,6 +79,1117 @@
         {
           "method": "GET",
           "path": "/api/0/organizations/{organization_id_or_slug}/releases/"
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f64617368626f617264732f7b64617368626f6172645f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_dashboards_dashboard_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "dashboard-id",
+          "type": "integer",
+          "maps_to": "record.dashboard_id",
+          "required": true
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6465746563746f72732f7b6465746563746f725f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_detectors_detector_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "detector-id",
+          "type": "integer",
+          "maps_to": "record.detector_id",
+          "required": true
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f646973636f7665722f73617665642f7b71756572795f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_discover_saved_query_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "query-id",
+          "type": "integer",
+          "maps_to": "record.query_id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f65787465726e616c2d75736572732f7b65787465726e616c5f757365725f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_external_users_external_user_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "external-user-id",
+          "type": "integer",
+          "maps_to": "record.external_user_id",
+          "required": true
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f666f7277617264696e672f7b646174615f666f727761726465725f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_forwarding_data_forwarder_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "data-forwarder-id",
+          "type": "integer",
+          "maps_to": "record.data_forwarder_id",
+          "required": true
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f696e746567726174696f6e732f7b696e746567726174696f6e5f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_integrations_integration_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "integration-id",
+          "type": "string",
+          "maps_to": "record.integration_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6973737565732f7b69737375655f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_issues_issue_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "issue-id",
+          "type": "string",
+          "maps_to": "record.issue_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6973737565732f7b69737375655f69647d2f696e746567726174696f6e732f7b696e746567726174696f6e5f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_issues_issue_id_integrations_integration_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "externalIssue",
+          "type": "integer",
+          "maps_to": "record.externalIssue",
+          "required": true
+        },
+        {
+          "name": "integration-id",
+          "type": "string",
+          "maps_to": "record.integration_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "issue-id",
+          "type": "string",
+          "maps_to": "record.issue_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6d656d626572732f7b6d656d6265725f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/members/{member_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_members_member_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/members/{member_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "member-id",
+          "type": "string",
+          "maps_to": "record.member_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6d656d626572732f7b6d656d6265725f69647d2f7465616d732f7b7465616d5f69645f6f725f736c75677d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_members_member_id_teams_team_id_or_slug",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "member-id",
+          "type": "string",
+          "maps_to": "record.member_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "team-id-or-slug",
+          "type": "string",
+          "maps_to": "record.team_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6e6f74696669636174696f6e732f616374696f6e732f7b616374696f6e5f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_notifications_actions_action_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "action-id",
+          "type": "integer",
+          "maps_to": "record.action_id",
+          "required": true
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f70726570726f646172746966616374732f736e617073686f74732f7b736e617073686f745f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_preprodartifacts_snapshots_snapshot_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "snapshot-id",
+          "type": "string",
+          "maps_to": "record.snapshot_id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f72656c65617365732f7b76657273696f6e7d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/releases/{version}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_releases_version",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/releases/{version}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "maps_to": "record.version",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f72656c65617365732f7b76657273696f6e7d2f66696c65732f7b66696c655f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_releases_version_files_file_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "file-id",
+          "type": "string",
+          "maps_to": "record.file_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "maps_to": "record.version",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7363696d2f76322f47726f7570732f7b7465616d5f69645f6f725f736c75677d",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_scim_v2_groups_team_id_or_slug",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "team-id-or-slug",
+          "type": "string",
+          "maps_to": "record.team_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7363696d2f76322f55736572732f7b6d656d6265725f69647d",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_scim_v2_users_member_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "member-id",
+          "type": "string",
+          "maps_to": "record.member_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f776f726b666c6f77732f7b776f726b666c6f775f69647d2f",
+      "summary": "DELETE /api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_organizations_organization_id_or_slug_workflows_workflow_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "workflow-id",
+          "type": "integer",
+          "maps_to": "record.workflow_id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f",
+      "summary": "DELETE /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-id-or-slug",
+          "type": "string",
+          "maps_to": "record.project_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f686f6f6b732f7b686f6f6b5f69647d2f",
+      "summary": "DELETE /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_hooks_hook_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "hook-id",
+          "type": "string",
+          "maps_to": "record.hook_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-id-or-slug",
+          "type": "string",
+          "maps_to": "record.project_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f6973737565732f",
+      "summary": "DELETE /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_issues",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-id-or-slug",
+          "type": "string",
+          "maps_to": "record.project_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f6b6579732f7b6b65795f69647d2f",
+      "summary": "DELETE /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_keys_key_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "key-id",
+          "type": "string",
+          "maps_to": "record.key_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-id-or-slug",
+          "type": "string",
+          "maps_to": "record.project_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f72656c65617365732f7b76657273696f6e7d2f66696c65732f7b66696c655f69647d2f",
+      "summary": "DELETE /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_releases_version_files_file_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "file-id",
+          "type": "string",
+          "maps_to": "record.file_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-id-or-slug",
+          "type": "string",
+          "maps_to": "record.project_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "maps_to": "record.version",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f7265706c6179732f7b7265706c61795f69647d2f",
+      "summary": "DELETE /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_replays_replay_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-id-or-slug",
+          "type": "string",
+          "maps_to": "record.project_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "replay-id",
+          "type": "string",
+          "maps_to": "record.replay_id",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f73796d626f6c2d736f75726365732f",
+      "summary": "DELETE /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_symbol_sources",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "maps_to": "record.id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-id-or-slug",
+          "type": "string",
+          "maps_to": "record.project_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f7465616d732f7b7465616d5f69645f6f725f736c75677d2f",
+      "summary": "DELETE /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_projects_organization_id_or_slug_project_id_or_slug_teams_team_id_or_slug",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-id-or-slug",
+          "type": "string",
+          "maps_to": "record.project_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "team-id-or-slug",
+          "type": "string",
+          "maps_to": "record.team_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f73656e7472792d6170702d696e7374616c6c6174696f6e732f7b757569647d2f65787465726e616c2d6973737565732f7b65787465726e616c5f69737375655f69647d2f",
+      "summary": "DELETE /api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_sentry_app_installations_uuid_external_issues_external_issue_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "external-issue-id",
+          "type": "string",
+          "maps_to": "record.external_issue_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "uuid",
+          "type": "string",
+          "maps_to": "record.uuid",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f73656e7472792d617070732f7b73656e7472795f6170705f69645f6f725f736c75677d2f",
+      "summary": "DELETE /api/0/sentry-apps/{sentry_app_id_or_slug}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_sentry_apps_sentry_app_id_or_slug",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/sentry-apps/{sentry_app_id_or_slug}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/sentry-apps/{sentry_app_id_or_slug}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "sentry-app-id-or-slug",
+          "type": "string",
+          "maps_to": "record.sentry_app_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f7465616d732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b7465616d5f69645f6f725f736c75677d2f",
+      "summary": "DELETE /api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_teams_organization_id_or_slug_team_id_or_slug",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "team-id-or-slug",
+          "type": "string",
+          "maps_to": "record.team_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-44454c455445202f6170692f302f7465616d732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b7465616d5f69645f6f725f736c75677d2f65787465726e616c2d7465616d732f7b65787465726e616c5f7465616d5f69647d2f",
+      "summary": "DELETE /api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_delete_api_0_teams_organization_id_or_slug_team_id_or_slug_external_teams_external_team_id",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry DELETE on /api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "external-team-id",
+          "type": "integer",
+          "maps_to": "record.external_team_id",
+          "required": true
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "team-id-or-slug",
+          "type": "string",
+          "maps_to": "record.team_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-504f5354202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6d656d626572732f7b6d656d6265725f69647d2f7465616d732f7b7465616d5f69645f6f725f736c75677d2f",
+      "summary": "POST /api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_post_api_0_organizations_organization_id_or_slug_members_member_id_teams_team_id_or_slug",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry POST on /api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "member-id",
+          "type": "string",
+          "maps_to": "record.member_id",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "team-id-or-slug",
+          "type": "string",
+          "maps_to": "record.team_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-504f5354202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f70726570726f646172746966616374732f736e617073686f74732f",
+      "summary": "POST /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_post_api_0_projects_organization_id_or_slug_project_id_or_slug_preprodartifacts_snapshots",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry POST on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-id-or-slug",
+          "type": "string",
+          "maps_to": "record.project_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
+      "path": "api op-504f5354202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f7465616d732f7b7465616d5f69645f6f725f736c75677d2f",
+      "summary": "POST /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sentry_post_api_0_projects_organization_id_or_slug_project_id_or_slug_teams_team_id_or_slug",
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "risk": "Sentry POST on /api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/; changes Sentry data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id-or-slug",
+          "type": "string",
+          "maps_to": "record.organization_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "project-id-or-slug",
+          "type": "string",
+          "maps_to": "record.project_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "team-id-or-slug",
+          "type": "string",
+          "maps_to": "record.team_id_or_slug",
+          "required": true,
+          "max_bytes": 32768
         }
       ]
     }

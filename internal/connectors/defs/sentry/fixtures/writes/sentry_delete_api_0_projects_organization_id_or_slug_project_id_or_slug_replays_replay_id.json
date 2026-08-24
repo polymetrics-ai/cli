@@ -1,0 +1,14 @@
+{
+  "record": {
+    "organization_id_or_slug": "fixture-organization-id-or-slug",
+    "project_id_or_slug": "fixture-project-id-or-slug",
+    "replay_id": "00000000000000000000000000000001"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/0/projects/fixture-organization-id-or-slug/fixture-project-id-or-slug/replays/00000000000000000000000000000001/"
+  },
+  "response": {
+    "status": 204
+  }
+}

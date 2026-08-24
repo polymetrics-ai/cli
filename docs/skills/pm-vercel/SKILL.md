@@ -156,6 +156,13 @@ Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and 
 - approval: read: none; write: required for every action
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual
