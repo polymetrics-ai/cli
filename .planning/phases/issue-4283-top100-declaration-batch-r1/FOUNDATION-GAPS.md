@@ -81,21 +81,29 @@ dispositions and recoverability remain in `REJECTION-LIST.json`.
   the closed source importer needs a cycle-safe representation that preserves
   the source contract rather than truncating or inventing that schema.
 
-## Docker Hub SCIM body-schema dialect validation (separate)
+## Docker Hub SCIM open-object structured-body capability
 
-- This is not the YAML mapping-key importer failure. `connectorgen validate`
-  reaches the retained Docker Hub declarations and independently refuses the
-  OpenAPI-only `example` keyword inside the SCIM request body schema.
-- Exact non-credentialed evidence: command 43, `scim user create`, operation
-  `dockerhub.post__v2_scim_2.0_users`, fails at
-  `properties.name.properties.familyName`; command 44, `scim user update`,
-  operation `dockerhub.put__v2_scim_2.0_users__id_`, fails at
-  `properties.name.properties.familyName`, `properties.name.properties.givenName`,
-  and `properties.schemas.items`, each with `unknown keyword "example"`.
-- Status: genuine body-schema dialect/projection incompatibility, to be
-  reconciled from the canonical descriptor after Docker Hub source import
-  succeeds. Do not hand-edit derived body contracts or treat this as a source
-  rewrite workaround.
+- ID: `open-object-structured-rest-body`
+- Affected operations: `POST /v2/scim/2.0/Users`
+  (`dockerhub.post__v2_scim_2.0_users`) and
+  `PUT /v2/scim/2.0/Users/{id}`
+  (`dockerhub.put__v2_scim_2.0_users__id_`).
+- The former OpenAPI `example` rejection is resolved by current main. After
+  merge `f528b806d`, the no-credential runtime preflight reaches the actual
+  request-body guard.
+- Source evidence: Docker Hub's pinned public artifact remains SHA-256
+  `99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756`.
+  Its `scim_user_name` and `scim_user` definitions at `latest.yaml:3921-3959`
+  declare object properties without `additionalProperties: false`.
+- Engine evidence: `internal/connectors/engine/structured_rest_body.go:1436-1444`
+  refuses any object without that keyword before provider I/O.
+- Recovery: add a typed, bounded representation for source-declared open object
+  request bodies. It must not expose raw JSON or a generic HTTP writer.
+
+The commands, pinned operation contracts, and API-surface entries remain
+declared. A partial candidate was rejected by immutable fixed-100 execution
+evidence, and adding `additionalProperties: false` in the connector would
+fabricate a provider restriction, so neither is an eligible repair.
 
 ## e338cd301 source-lock refresh results
 

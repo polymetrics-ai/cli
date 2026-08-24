@@ -11905,6 +11905,36 @@
           "source_lock": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json"
         }
       ]
+    },
+    {
+      "foundation_gap_id": "open-object-structured-rest-body",
+      "reason": "Docker Hub's pinned SCIM request object schemas are open: the exact public source declares properties but omits additionalProperties:false. The typed structured REST body executor refuses that source-faithful shape before provider I/O, and closing it in a connector declaration would invent a provider restriction.",
+      "evidence": [
+        "https://docs.docker.com/reference/api/hub/latest.yaml pinned as SHA-256 99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756: latest.yaml lines 3921-3959 define scim_user_name and scim_user without additionalProperties:false.",
+        "internal/connectors/engine/structured_rest_body.go:1436-1444: requireClosedBoundedStructuredRESTBody rejects each object without explicit additionalProperties:false before sending a request."
+      ],
+      "minimal_change": "Add a typed, bounded representation for source-declared open object request bodies, without caller-selected raw JSON or a generic HTTP writer.",
+      "recoverability": "Shared structured-body capability required. A partial candidate was rejected by the immutable fixed-100 execution-evidence gate, so the two source bindings are restored unchanged; no source lock or derived body schema is rewritten.",
+      "operations": [
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "POST",
+            "path": "/v2/scim/2.0/Users",
+            "source_operation_id": "dockerhub.rest.post_/v2/scim/2.0/Users"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        },
+        {
+          "connector": "dockerhub",
+          "operation": {
+            "method": "PUT",
+            "path": "/v2/scim/2.0/Users/{id}",
+            "source_operation_id": "dockerhub.rest.put_/v2/scim/2.0/Users/{id}"
+          },
+          "source_lock": "internal/connectors/defs/dockerhub/sources/dockerhub-operation-source-lock.json"
+        }
+      ]
     }
   ],
   "complete_map_foundation_gaps": [

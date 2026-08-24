@@ -466,7 +466,28 @@
   '^TestEveryImplementedCommandPassesRuntimePreflight$'
   ./internal/connectors/commandrunner` passes from a clean
   `origin/main` `3c394a0e` tree and fails from this branch for only Docker Hub
-  `scim user create` and `scim user update`, each on the unsupported
-  source-derived `example` schema keyword. The failure is therefore branch
-  specific and must be repaired by the required current-main merge, not marked
-  pre-existing.
+`scim user create` and `scim user update`, each on the unsupported
+source-derived `example` schema keyword. The failure is therefore branch
+specific and must be repaired by the required current-main merge, not marked
+pre-existing.
+
+## Post-main Docker Hub SCIM open-object disposition — 2026-08-24
+
+- [x] Merge commit `f528b806d` contains current `origin/main` and removes the
+  obsolete `example` keyword rejection. The exact no-credential preflight now
+  identifies the next guard: both SCIM operations fail only because
+  `requireClosedBoundedStructuredRESTBody` refuses a source-declared object
+  without explicit `additionalProperties:false` at
+  `internal/connectors/engine/structured_rest_body.go:1436-1444`.
+- [x] Public-source confirmation: the locked Docker Hub artifact hashes to
+  `99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756`, and
+  its `scim_user_name`/`scim_user` object declarations at latest.yaml
+  lines 3921-3959 have properties but no close-the-object keyword. No provider
+  request or credential was used.
+- [x] The source-faithful partial candidate was deliberately rejected, not
+  shipped: it makes the structural preflight pass, but
+  `connectorgen operation-evidence --check` then refuses immutable fixed-100
+  execution evidence with `dockerhub.rest.post_/v2/scim/2.0/Users execution
+  evidence regressed`. The unchanged implemented declarations still fail the
+  structural preflight; this is an unresolved foundation, not a passing local
+  repair.

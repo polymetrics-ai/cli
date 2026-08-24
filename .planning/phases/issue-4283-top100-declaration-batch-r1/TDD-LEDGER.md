@@ -802,3 +802,21 @@ comparison at `origin/main` `3c394a0e` passes
 fails for exactly Docker Hub `scim user create` and `scim user update` on the
 unsupported `example` keyword. This is a branch regression and requires the
 non-rewriting current-main merge before re-verification.
+
+### Post-merge Docker Hub open-object body boundary
+
+**Red:** after merge commit `f528b806d`, the two same source-backed commands
+reach `requireClosedBoundedStructuredRESTBody` and fail because their pinned
+SCIM request schemas have object `properties` but no
+`additionalProperties:false`.
+
+**Candidate green rejected:** retaining the command/operation/API-surface
+bindings as `availability: partial` makes runtime preflight pass, but the
+immutable fixed-100 check rejects it as an execution-evidence regression for
+`dockerhub.rest.post_/v2/scim/2.0/Users`. Restore the prior declarations: a
+partial placeholder is not a full-parity correction.
+
+**Refactor:** no source lock, source-derived `operations.json` body schema, or
+shared engine code changes. The public document SHA-256 remains
+`99d9d53c...53d0756`; the unresolved recovery is a typed bounded open-object
+body capability.

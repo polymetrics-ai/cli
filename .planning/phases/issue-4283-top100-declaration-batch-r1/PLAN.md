@@ -596,8 +596,12 @@ source-derived request-schema `example` keywords.
 ### Refactor boundary
 
 Do not regenerate source locks, reselect the fixed cohort, change shared
-runtime behavior, use credentials, or mask a command as partial to obtain a
-green preflight result.
+runtime behavior, or use credentials. A working command must not be moved to
+partial merely to obtain a green preflight result. If the pinned source
+faithfully describes a request body the installed executor refuses, record the
+source-traced engine gap and test any candidate disposition against immutable
+execution evidence; never invent a closed body schema to preserve an
+implemented claim.
 
 ### Green result / required branch repair
 
@@ -617,3 +621,24 @@ branch 2e860dfe3:  FAIL  dockerhub scim user create/update
 The branch must therefore merge current `origin/main` (never rebase) and then
 rerun the preflight. The temporary clean-main archive was moved to Trash after
 the check; no provider request or credential was used.
+
+### Post-merge red and source-faithful correction
+
+The non-rewriting merge at `f528b806d` removes the `example` keyword refusal,
+but the same structural preflight then rejects the two SCIM operations because
+the pinned source has open object schemas. The public artifact hashes to the
+locked `99d9d53c...53d0756`; lines 3921-3959 define `scim_user_name` and
+`scim_user` with `properties` and no `additionalProperties: false`. The
+executor refuses that exact source form at
+`internal/connectors/engine/structured_rest_body.go:1436-1444` before any
+request can occur. Adding the missing keyword to `operations.json` would
+invent a provider constraint.
+
+An attempted source-faithful `partial` disposition was rejected by the
+immutable fixed-100 evidence gate: `connectorgen operation-evidence --check`
+reports `dockerhub.rest.post_/v2/scim/2.0/Users execution evidence regressed`.
+The current command declarations are restored unchanged, because a partial
+placeholder would violate the complete-reachability contract just as surely as
+an invented closure would violate the pinned-source contract. The exact
+recovery is a typed bounded representation for source-declared open objects
+without a raw/generic HTTP writer.
