@@ -194,6 +194,66 @@ func TestSourceProjection_MissingOperationOrFieldFailsValidateAndSurfaceCheck(t 
 	}
 }
 
+func TestSourceProjectionRequiresExplicitReadOnlyNonMutationDeclaration(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha",
+		SourceID:  "alpha.widgets.get",
+		Method:    "GET",
+		Path:      "/widgets",
+	}
+	file := "sources/alpha-operation-descriptor.json"
+	undeclared := engine.Bundle{Name: "alpha", CLISurface: &engine.CLISurface{}}
+	if findings := validateSourceExecutableCoverage(undeclared, file, sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "no reachable executable operation") {
+		t.Fatalf("undeclared read-only operation findings = %+v", findings)
+	}
+
+	declared := engine.Bundle{
+		Name: "alpha",
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: "GET",
+			Path:   "/widgets",
+			Operation: &engine.SurfaceOperation{
+				Model:            "read_only",
+				Status:           "blocked",
+				Risk:             "low",
+				BlockedByDefault: true,
+				Reason:           "The connector intentionally does not implement this source-cited read.",
+				Notes:            "Named policy: source-cited-read-only-operations-r1",
+			},
+		}}},
+		CLISurface: &engine.CLISurface{},
+	}
+	if findings := validateSourceExecutableCoverage(declared, file, sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 0 {
+		t.Fatalf("declared read-only operation findings = %+v", findings)
+	}
+
+	declared.Operations = []engine.OperationSpec{{
+		ID:   "alpha.widgets.get",
+		Kind: "rest_read",
+		REST: &engine.RESTOperationSpec{Method: "GET", Path: "/widgets", MaxBytes: 1024},
+	}}
+	declared.CLISurface.Commands = []engine.CLICommand{{
+		Path:         "widgets get",
+		Summary:      "get widget",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "alpha.widgets.get",
+	}}
+	if findings := validateSourceExecutableCoverage(declared, file, sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "read-only declaration conflicts with executable operation") {
+		t.Fatalf("read-only executable contradiction findings = %+v", findings)
+	}
+
+	mutation := source
+	mutation.SourceID = "alpha.widgets.create"
+	mutation.Method = "POST"
+	mutationSurface := *declared.Surface
+	mutationSurface.Endpoints = append([]engine.SurfaceEndpoint(nil), declared.Surface.Endpoints...)
+	mutationSurface.Endpoints[0].Method = "POST"
+	if findings := validateSourceExecutableCoverage(engine.Bundle{Name: "alpha", Surface: &mutationSurface, CLISurface: &engine.CLISurface{}}, file, sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{mutation}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "read-only declaration cannot cover a mutating source operation") {
+		t.Fatalf("mutating read-only declaration findings = %+v", findings)
+	}
+}
+
 func TestSourceProjectionRequiresReachableRESTReadOrConcreteGap(t *testing.T) {
 	source := sourceOperationDescriptor{
 		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/widgets",
