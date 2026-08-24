@@ -8800,6 +8800,9 @@ func (fetcher sourceImportRetainedArtifactFetcher) FetchArtifact(ctx context.Con
 	}
 	rawDigest := sha256.Sum256(raw)
 	if !strings.EqualFold(hex.EncodeToString(rawDigest[:]), sourceRetainedArtifactRecordRawSHA256(*foundRecord)) || int64(len(raw)) != sourceRetainedArtifactRecordRawBytes(*foundRecord) {
+		if sourceArtifactIdentity(artifact) == sourceArtifactIdentityBytes {
+			return nil, fmt.Errorf("retained source artifact does not match locked bytes and SHA-256")
+		}
 		return nil, fmt.Errorf("retained source artifact does not match its recorded fetched bytes and SHA-256")
 	}
 	if err := validateSourceImportArtifactBytes(raw, artifact); err != nil {

@@ -18,6 +18,11 @@ once the main-targeted PR opens.
   automation blocking, not source absence. `BOT-BLOCK` now directs the reader
   to a browser capture or provider-owned repository, with red/green coverage
   in `TestSourceRetainReportsBotBlockBeforeWrongSourceOrDrift`.
+- **Accepted CI root fix:** CI's
+  `TestSourceImportRetainedArtifactRejectsMissingAndMismatchedCopies` passes
+  unchanged on clean `060bb7864`, proving the failure was branch-owned. Byte
+  identity now retains its legacy `locked bytes and SHA-256` diagnostic, while
+  canonical identity retains the distinct fetched-byte provenance diagnostic.
 - **No remaining actionable findings:** lock loading stays connector-owned;
   redirects, denial, and drastic source collapse are classified before drift;
   canonical identity preserves fetched-byte provenance; no source lock is

@@ -2,6 +2,7 @@
 
 - [x] Focused red tests recorded for missing form pin, canonical reserialisation, 403, and undersize.
 - [x] Focused red/green test recorded for the distinct 403/TLS `BOT-BLOCK` verdict.
+- [x] CI failure verdict: clean `060bb7864` passes `go test -timeout 10m ./cmd/connectorgen -run '^TestSourceImportRetainedArtifactRejectsMissingAndMismatchedCopies$'`; the branch-owned root fix passes that test plus `TestSourceRetainReportsBotBlockBeforeWrongSourceOrDrift`.
 - [x] `go test -timeout 10m ./cmd/connectorgen -run '^TestSourceRetain'` passes after implementation. The broader `go test -timeout 20m ./cmd/connectorgen` was stopped locally after its unrelated `TestCertificationMatrix...` fixture started `certification-matrix --all` with a fresh `GOCACHE`; it produced no source-lock failure. CI carries that broader package path.
 - [x] `go vet ./cmd/connectorgen` passes.
 - [x] Built `connectorgen` and ran `source-retain` sequentially for fastly, github, hubspot, pipedrive, shipstation, squarespace, woocommerce, and zendesk-support; all commands exit 0 and pre/post SHA-256 values prove their locks were unchanged.
