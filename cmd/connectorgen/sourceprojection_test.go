@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -90,6 +91,154 @@ func TestSourceProjection_AddChangeDeletePropagatesToEverySurface(t *testing.T) 
 	if strings.Contains(writes, `"body_fields"`) || !strings.Contains(writes, `"body_type": "none"`) || strings.Count(cli, `"maps_to": "record.owner"`) != 2 {
 		t.Fatalf("deleted source fields survived projection:\nwrites=%s\ncli=%s", writes, cli)
 	}
+}
+
+func TestSourceProjectionGeneratedParameterizedCommandIsRuntimeValidAndStable(t *testing.T) {
+	bundleDir := t.TempDir()
+	writesPath := filepath.Join(bundleDir, "writes.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	writeProjectionFixture(t, writesPath, `{
+  "schema_version": 1,
+  "actions": [{
+    "name": "delete_branch_restriction", "kind": "delete", "method": "DELETE",
+    "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/branch-restrictions/{{ record.id }}",
+    "path_fields": ["workspace", "repo_slug", "id"],
+    "record_schema": {"type":"object","additionalProperties":false,"properties":{}},
+    "risk": "high", "confirm": "destructive"
+  }]
+}`)
+	writeProjectionFixture(t, cliPath, `{"schema_version":1,"commands":[]}`)
+
+	operation := sourceOperationDescriptor{
+		Connector: "bitbucket",
+		// This is intentionally the source form that used to reach the command
+		// path verbatim. The command identity must instead come from Method/Path.
+		SourceID: "bitbucket.rest.delete-/repositories/{workspace}/{repo-slug}/branch-restrictions/{id}",
+		Method:   "DELETE",
+		Path:     "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{
+			{Name: "workspace", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "repo_slug", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "id", Required: true, Schema: map[string]any{"type": "string"}},
+		}},
+	}
+
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, false)
+	if err != nil {
+		t.Fatalf("project parameterized source operation: %v", err)
+	}
+	if stats.CLI != 1 {
+		t.Fatalf("projected CLI updates = %d, want 1", stats.CLI)
+	}
+
+	var surface engine.CLISurface
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, cliPath)), &surface); err != nil {
+		t.Fatalf("decode projected CLI surface: %v", err)
+	}
+	if len(surface.Commands) != 1 {
+		t.Fatalf("projected commands = %d, want 1", len(surface.Commands))
+	}
+	command := surface.Commands[0]
+	if strings.ContainsAny(command.Path, "{}") {
+		t.Fatalf("generated command path retained a raw source parameter: %q", command.Path)
+	}
+	if command.Path != sourceProjectionGeneratedCommandPath(operation) {
+		t.Fatalf("generated command path = %q, want operation-derived %q", command.Path, sourceProjectionGeneratedCommandPath(operation))
+	}
+	for _, field := range []string{"workspace", "repo_slug", "id"} {
+		found := false
+		for _, flag := range command.Flags {
+			if flag.MapsTo == "record."+field {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Fatalf("generated command lost path binding record.%s: %+v", field, command.Flags)
+		}
+	}
+
+	var writes struct {
+		Actions []engine.WriteAction `json:"actions"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, writesPath)), &writes); err != nil {
+		t.Fatalf("decode projected writes: %v", err)
+	}
+	connector := engine.New(engine.Bundle{
+		Name:       "bitbucket",
+		Metadata:   engine.Metadata{Name: "bitbucket"},
+		Writes:     writes.Actions,
+		CLISurface: &surface,
+	}, nil)
+	if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
+		t.Fatalf("real commandrunner rejected generated path %q before the credential boundary: %v", command.Path, err)
+	}
+	planned, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{
+		Path: strings.Fields(command.Path),
+		Flags: map[string][]string{
+			"workspace": {"acme"},
+			"repo-slug": {"docs"},
+			"id":        {"42"},
+		},
+	})
+	if err != nil {
+		t.Fatalf("real commandrunner lost path parameter flags: %v", err)
+	}
+	if got, want := map[string]any(planned.Record), map[string]any{"workspace": "acme", "repo_slug": "docs", "id": "42"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("planned path parameter bindings = %#v, want %#v", got, want)
+	}
+
+	before := readProjectionFixture(t, cliPath)
+	stats, err = projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, false)
+	if err != nil {
+		t.Fatalf("repeat projection: %v", err)
+	}
+	if stats.Changed() || readProjectionFixture(t, cliPath) != before {
+		t.Fatalf("repeat projection changed stable generated command: stats=%+v", stats)
+	}
+
+	parameterA := operation
+	parameterA.SourceID = "same-source-id"
+	parameterA.Path = "/repositories/{workspace}/{repo_slug}/branch-restrictions/{a}"
+	parameterB := parameterA
+	parameterB.Path = "/repositories/{workspace}/{repo_slug}/branch-restrictions/{b}"
+	literal := parameterA
+	literal.Path = "/repositories/{workspace}/{repo_slug}/branch-restrictions/a"
+	paths := map[string]struct{}{
+		sourceProjectionGeneratedCommandPath(parameterA): {},
+		sourceProjectionGeneratedCommandPath(parameterB): {},
+		sourceProjectionGeneratedCommandPath(literal):    {},
+	}
+	if len(paths) != 3 {
+		t.Fatalf("operation-derived command identities collided: a=%q b=%q literal=%q",
+			sourceProjectionGeneratedCommandPath(parameterA),
+			sourceProjectionGeneratedCommandPath(parameterB),
+			sourceProjectionGeneratedCommandPath(literal))
+	}
+
+	validLegacyOperation := sourceOperationDescriptor{SourceID: "github.repos.create", Method: "POST", Path: "/repos/{owner}/{repo}"}
+	validLegacy := newOrderedObject()
+	validLegacy.set("path", sourceProjectionTestLegacyGeneratedCommandPath(validLegacyOperation))
+	validLegacy.set("approval", sourceProjectionApproval(newOrderedObject()))
+	if sourceProjectionRefreshGeneratedCommandMetadata(validLegacy, validLegacyOperation, newOrderedObject()) {
+		t.Fatalf("reachable legacy command was renamed or modified: %q", stringField(validLegacy, "path"))
+	}
+	invalidLegacy := newOrderedObject()
+	invalidLegacy.set("path", sourceProjectionTestLegacyGeneratedCommandPath(operation))
+	if !sourceProjectionRefreshGeneratedCommandMetadata(invalidLegacy, operation, newOrderedObject()) {
+		t.Fatal("invalid legacy generated command was not migrated")
+	}
+	if got, want := stringField(invalidLegacy, "path"), sourceProjectionGeneratedCommandPath(operation); got != want {
+		t.Fatalf("invalid legacy command path = %q, want %q", got, want)
+	}
+	if got, want := stringField(invalidLegacy, "approval"), sourceProjectionApproval(newOrderedObject()); got != want {
+		t.Fatalf("invalid legacy command approval = %q, want refreshed %q", got, want)
+	}
+}
+
+func sourceProjectionTestLegacyGeneratedCommandPath(operation sourceOperationDescriptor) string {
+	path := strings.NewReplacer("/", " ", "_", "-").Replace(operation.SourceID)
+	return "api " + path
 }
 
 func TestSourceProjectionMarksDeclaredCircleCIWebhookSecretsEnvOnly(t *testing.T) {
@@ -191,6 +340,66 @@ func TestSourceProjection_MissingOperationOrFieldFailsValidateAndSurfaceCheck(t 
 	}
 	if !stats.Changed() || stats.Writes != 1 || stats.CLI != 1 {
 		t.Fatalf("missing field was not reported as source projection drift: %+v", stats)
+	}
+}
+
+func TestSourceProjectionRequiresExplicitReadOnlyNonMutationDeclaration(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha",
+		SourceID:  "alpha.widgets.get",
+		Method:    "GET",
+		Path:      "/widgets",
+	}
+	file := "sources/alpha-operation-descriptor.json"
+	undeclared := engine.Bundle{Name: "alpha", CLISurface: &engine.CLISurface{}}
+	if findings := validateSourceExecutableCoverage(undeclared, file, sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "no reachable executable operation") {
+		t.Fatalf("undeclared read-only operation findings = %+v", findings)
+	}
+
+	declared := engine.Bundle{
+		Name: "alpha",
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: "GET",
+			Path:   "/widgets",
+			Operation: &engine.SurfaceOperation{
+				Model:            "read_only",
+				Status:           "blocked",
+				Risk:             "low",
+				BlockedByDefault: true,
+				Reason:           "The connector intentionally does not implement this source-cited read.",
+				Notes:            "Named policy: source-cited-read-only-operations-r1",
+			},
+		}}},
+		CLISurface: &engine.CLISurface{},
+	}
+	if findings := validateSourceExecutableCoverage(declared, file, sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 0 {
+		t.Fatalf("declared read-only operation findings = %+v", findings)
+	}
+
+	declared.Operations = []engine.OperationSpec{{
+		ID:   "alpha.widgets.get",
+		Kind: "rest_read",
+		REST: &engine.RESTOperationSpec{Method: "GET", Path: "/widgets", MaxBytes: 1024},
+	}}
+	declared.CLISurface.Commands = []engine.CLICommand{{
+		Path:         "widgets get",
+		Summary:      "get widget",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "alpha.widgets.get",
+	}}
+	if findings := validateSourceExecutableCoverage(declared, file, sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{source}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "read-only declaration conflicts with executable operation") {
+		t.Fatalf("read-only executable contradiction findings = %+v", findings)
+	}
+
+	mutation := source
+	mutation.SourceID = "alpha.widgets.create"
+	mutation.Method = "POST"
+	mutationSurface := *declared.Surface
+	mutationSurface.Endpoints = append([]engine.SurfaceEndpoint(nil), declared.Surface.Endpoints...)
+	mutationSurface.Endpoints[0].Method = "POST"
+	if findings := validateSourceExecutableCoverage(engine.Bundle{Name: "alpha", Surface: &mutationSurface, CLISurface: &engine.CLISurface{}}, file, sourceImportDescriptorDocument{Operations: []sourceOperationDescriptor{mutation}}); len(findings) != 1 || !strings.Contains(findings[0].Message, "read-only declaration cannot cover a mutating source operation") {
+		t.Fatalf("mutating read-only declaration findings = %+v", findings)
 	}
 }
 
@@ -323,6 +532,31 @@ func TestSourceProjectionDoesNotBlockReadForUnusedOptionalAmbiguousParameter(t *
 	}
 	if reachable := sourceProjectionReachableReadSources(result); reachable[source.SourceID].SourceID != source.SourceID {
 		t.Fatalf("read with only an unused optional ambiguous parameter was not reachable: %+v", reachable)
+	}
+}
+
+func TestSourceProjectionDoesNotBlockReadForUnusedOptionalNonScalarParameter(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/orgs/{org}/widgets",
+		Request: sourceRequestDescriptor{
+			Path: []sourceParameterDescriptor{{Name: "org", Required: true, Schema: map[string]any{"type": "string"}}},
+			Query: []sourceParameterDescriptor{{Name: "has", Required: false, Schema: map[string]any{"oneOf": []any{
+				map[string]any{"type": "string"},
+				map[string]any{"type": "array", "items": map[string]any{"type": "string"}},
+			}}}},
+		},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+			Foundation: "cli-request-schema-foundation-r1",
+			Location:   "parameter has",
+			Reason:     "query parameter requires non-scalar serialization support",
+		}}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{source}}
+	if blocked := sourceProjectionBlockedReadSources(result); len(blocked) != 0 {
+		t.Fatalf("unused optional non-scalar query parameter blocked executable read: %+v", blocked)
+	}
+	if reachable := sourceProjectionReachableReadSources(result); reachable[source.SourceID].SourceID != source.SourceID {
+		t.Fatalf("read with only an unused optional non-scalar parameter was not reachable: %+v", reachable)
 	}
 }
 

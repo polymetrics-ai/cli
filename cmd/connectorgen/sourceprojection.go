@@ -2,7 +2,9 @@ package main
 
 import (
 	"bytes"
+	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/fs"
 	"math"
@@ -18,6 +20,7 @@ import (
 	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/safety"
 )
 
 const (
@@ -30,11 +33,18 @@ const (
 	// mutation disposition. A read-only declaration can never satisfy mutation
 	// coverage, even when its endpoint currently lacks an executable action.
 	sourceReadOnlyOperationFoundation = "source-read-only-operation-foundation-r1"
+	sourceReadOnlyOperationModel      = "read_only"
+	sourceReadOnlyPolicy              = "source-cited-read-only-operations-r1"
 	// JSON-valued command flags carry a complete named field through the
 	// declaration-owned body path. They are not an unbounded replacement for a
 	// request body, so keep their encoded input explicitly bounded.
 	sourceProjectionDefaultJSONBytes = 1 << 20
 )
+
+type sourceReadOnlyDeclaration struct {
+	Policy string
+	Reason string
+}
 
 var (
 	sourceProjectionTemplateRE       = regexp.MustCompile(`\{\{\s*(?:config|record)\.([-A-Za-z0-9_]+)\s*\}\}`)
@@ -69,6 +79,9 @@ type sourceActionContract struct {
 // method/path union: semantic aliases remain narrow, while the broad action
 // proves the provider contract is reachable without double-counting aliases.
 func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult, check bool) (sourceProjectionStats, error) {
+	if err := validateSourceProjectionExecutionEnvelopes(result); err != nil {
+		return sourceProjectionStats{}, err
+	}
 	writesPath := filepath.Join(bundleDir, "writes.json")
 	cliPath := filepath.Join(bundleDir, "cli_surface.json")
 	writesRaw, err := os.ReadFile(writesPath)
@@ -102,6 +115,21 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 		if err := json.Unmarshal(apiRaw, &api); err != nil {
 			return sourceProjectionStats{}, fmt.Errorf("api_surface.json: %w", err)
 		}
+	}
+	declarationBundle := engine.Bundle{}
+	if len(result.Operations) > 0 {
+		declarationBundle.Name = result.Operations[0].Connector
+	}
+	if api.root != nil {
+		raw, marshalErr := marshalNoEscapeHTML(api.root)
+		if marshalErr != nil {
+			return sourceProjectionStats{}, fmt.Errorf("encode api_surface.json: %w", marshalErr)
+		}
+		var surface engine.APISurface
+		if unmarshalErr := json.Unmarshal(raw, &surface); unmarshalErr != nil {
+			return sourceProjectionStats{}, fmt.Errorf("parse api_surface.json: %w", unmarshalErr)
+		}
+		declarationBundle.Surface = &surface
 	}
 	spec, err := sourceProjectionBundleSpec(bundleDir)
 	if err != nil {
@@ -148,7 +176,14 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 	}
 
 	for _, operation := range result.Operations {
+		_, readOnly, readOnlyErr := sourceProjectionReadOnlyDeclaration(declarationBundle, operation)
+		if readOnlyErr != nil {
+			return stats, fmt.Errorf("source operation %s: %w", operation.SourceID, readOnlyErr)
+		}
 		if sourceProjectionOperationMutates(operation) {
+			if readOnly {
+				return stats, fmt.Errorf("source operation %s: read-only declaration cannot cover a mutating source operation", operation.SourceID)
+			}
 			if sourceProjectionHasReadOnlyDisposition(operation) {
 				stats.Missing++
 				continue
@@ -165,6 +200,9 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 				}
 				continue
 			}
+		}
+		if readOnly {
+			continue
 		}
 		if operation.Protocol == "graphql" || !sourceProjectionMutationMethod(operation.Method) {
 			continue
@@ -265,6 +303,46 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 		}
 	}
 	return stats, nil
+}
+
+func validateSourceProjectionExecutionEnvelopes(result sourceImportResult) error {
+	if result.DescriptorSchemaVersion < 3 {
+		return nil
+	}
+	limits := sourceImportLimits{UseExecutionEnvelopes: true}
+	for _, operation := range result.Operations {
+		if operation.Protocol == "graphql" {
+			continue
+		}
+		for _, group := range []struct {
+			location   string
+			parameters []sourceParameterDescriptor
+		}{
+			{location: "path", parameters: operation.Request.Path},
+			{location: "query", parameters: operation.Request.Query},
+			{location: "header", parameters: operation.Request.Header},
+		} {
+			for _, parameter := range group.parameters {
+				if err := validateSourceParameterExecutionEnvelope(parameter, group.location, limits); err != nil {
+					return fmt.Errorf("source operation %q parameter %q: %w", operation.SourceID, parameter.Name, err)
+				}
+				if group.location == "header" && sourceScalarWireSchema(parameter.Schema) && sourceBoundedHeaderMaxBytes(parameter.Schema) == 0 && parameter.ExecutionEnvelope == nil && !operation.Runtime.MergeBlocked {
+					return fmt.Errorf("source operation %q unbounded header parameter %q is neither enveloped nor merge-blocked", operation.SourceID, parameter.Name)
+				}
+			}
+		}
+		if operation.Request.Body != nil {
+			if err := validateSourceRequestBodyExecutionEnvelope(operation.Request.Body.ExecutionEnvelope, operation.Request.MediaType, limits); err != nil {
+				return fmt.Errorf("source operation %q: %w", operation.SourceID, err)
+			}
+		}
+		for _, media := range operation.Request.Media {
+			if err := validateSourceRequestBodyExecutionEnvelope(media.ExecutionEnvelope, media.MediaType, limits); err != nil {
+				return fmt.Errorf("source operation %q media %q: %w", operation.SourceID, media.MediaType, err)
+			}
+		}
+	}
+	return nil
 }
 
 func sourceProjectionBundleSpec(bundleDir string) (*engine.Schema, error) {
@@ -514,7 +592,7 @@ func sourceProjectionReachableReadSources(result sourceImportResult) map[string]
 // caller values. Required inputs and all other source gaps remain blocking.
 func sourceProjectionReadHasBlockingGap(operation sourceOperationDescriptor) bool {
 	for _, gap := range operation.Runtime.Gaps {
-		if sourceProjectionOptionalAmbiguousParameterGap(operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(operation, gap) {
+		if sourceProjectionOptionalParameterSchemaGap(operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(operation, gap) {
 			continue
 		}
 		if sourceProjectionHasBlockingGap([]sourceContractGap{gap}) {
@@ -539,7 +617,7 @@ func sourceProjectionNormalizeNonBlockingReadGaps(result *sourceImportResult) {
 		}
 		gaps := operation.Runtime.Gaps[:0]
 		for _, gap := range operation.Runtime.Gaps {
-			if sourceProjectionOptionalAmbiguousParameterGap(*operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(*operation, gap) {
+			if sourceProjectionOptionalParameterSchemaGap(*operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(*operation, gap) {
 				continue
 			}
 			gaps = append(gaps, gap)
@@ -556,8 +634,8 @@ func sourceProjectionOmittedOptionalRequestBodySchemaGap(operation sourceOperati
 		!operation.Request.Body.Required
 }
 
-func sourceProjectionOptionalAmbiguousParameterGap(operation sourceOperationDescriptor, gap sourceContractGap) bool {
-	if gap.Foundation != "cli-request-schema-foundation-r1" || !strings.HasPrefix(gap.Location, "parameter ") || !strings.Contains(gap.Reason, "ambiguous request schema uses ") {
+func sourceProjectionOptionalParameterSchemaGap(operation sourceOperationDescriptor, gap sourceContractGap) bool {
+	if gap.Foundation != "cli-request-schema-foundation-r1" || !strings.HasPrefix(gap.Location, "parameter ") {
 		return false
 	}
 	name := strings.TrimPrefix(gap.Location, "parameter ")
@@ -984,6 +1062,55 @@ func sourceProjectionMutationMethod(method string) bool {
 	default:
 		return false
 	}
+}
+
+func sourceReadOnlyOperationDeclaration(operation *engine.SurfaceOperation) (sourceReadOnlyDeclaration, bool, error) {
+	if operation == nil || operation.Model != sourceReadOnlyOperationModel {
+		return sourceReadOnlyDeclaration{}, false, nil
+	}
+	if operation.Status != "blocked" || !operation.BlockedByDefault {
+		return sourceReadOnlyDeclaration{}, true, errors.New("read-only declaration must be blocked by default")
+	}
+	if strings.TrimSpace(operation.Reason) == "" {
+		return sourceReadOnlyDeclaration{}, true, errors.New("read-only declaration lacks a reason")
+	}
+	wantNotes := "Named policy: " + sourceReadOnlyPolicy
+	if operation.Notes != wantNotes {
+		return sourceReadOnlyDeclaration{}, true, fmt.Errorf("read-only declaration notes = %q, want %q", operation.Notes, wantNotes)
+	}
+	return sourceReadOnlyDeclaration{Policy: sourceReadOnlyPolicy, Reason: operation.Reason}, true, nil
+}
+
+func sourceProjectionReadOnlyDeclaration(bundle engine.Bundle, source sourceOperationDescriptor) (sourceReadOnlyDeclaration, bool, error) {
+	endpoint := sourceProjectionSurfaceEndpoint(bundle, source)
+	declaration, declared, err := sourceReadOnlyOperationDeclaration(operationForSurfaceEndpoint(endpoint))
+	if err != nil || !declared {
+		return declaration, declared, err
+	}
+	if sourceProjectionMutationMethod(source.Method) {
+		return sourceReadOnlyDeclaration{}, true, errors.New("read-only declaration cannot cover a mutating source operation")
+	}
+	return declaration, true, nil
+}
+
+func sourceProjectionSurfaceEndpoint(bundle engine.Bundle, source sourceOperationDescriptor) *engine.SurfaceEndpoint {
+	if bundle.Surface == nil {
+		return nil
+	}
+	for index := range bundle.Surface.Endpoints {
+		endpoint := &bundle.Surface.Endpoints[index]
+		if strings.EqualFold(endpoint.Method, source.Method) && endpoint.Path == source.Path {
+			return endpoint
+		}
+	}
+	return nil
+}
+
+func operationForSurfaceEndpoint(endpoint *engine.SurfaceEndpoint) *engine.SurfaceOperation {
+	if endpoint == nil {
+		return nil
+	}
+	return endpoint.Operation
 }
 
 func sourceProjectionOperationMutates(operation sourceOperationDescriptor) bool {
@@ -1869,8 +1996,27 @@ func sourceProjectionNewCommand(operation sourceOperationDescriptor, action *ord
 }
 
 func sourceProjectionGeneratedCommandPath(operation sourceOperationDescriptor) string {
+	// Source IDs are provider-owned provenance, not a command grammar: several
+	// OpenAPI importers use the raw method/path as their ID, including `{name}`
+	// parameter syntax that commandrunner rejects. Encode the normalized endpoint
+	// instead. Hex is injective over the complete endpoint key, so a literal and
+	// a path parameter (or two parameter names) cannot collapse to one command.
+	endpoint := sourceProjectionEndpointKey(operation.Method, operation.Path)
+	return "api op-" + hex.EncodeToString([]byte(endpoint))
+}
+
+func sourceProjectionLegacyGeneratedCommandPath(operation sourceOperationDescriptor) string {
 	path := strings.NewReplacer("/", " ", "_", "-").Replace(operation.SourceID)
 	return "api " + path
+}
+
+func sourceProjectionCommandPathIsRuntimeValid(path string) bool {
+	for index, segment := range strings.Fields(path) {
+		if err := safety.ValidateIdentifier(segment, fmt.Sprintf("command path segment %d", index+1)); err != nil {
+			return false
+		}
+	}
+	return strings.TrimSpace(path) != ""
 }
 
 // sourceProjectionRefreshGeneratedCommandMetadata refreshes only the command
@@ -1878,10 +2024,20 @@ func sourceProjectionGeneratedCommandPath(operation sourceOperationDescriptor) s
 // keep their own prose, while the generated command must continue to publish
 // the declaration's actual approval lifecycle after a later projection pass.
 func sourceProjectionRefreshGeneratedCommandMetadata(command *orderedObject, operation sourceOperationDescriptor, action *orderedObject) bool {
-	if stringField(command, "path") != sourceProjectionGeneratedCommandPath(operation) {
+	currentPath := stringField(command, "path")
+	generatedPath := sourceProjectionGeneratedCommandPath(operation)
+	if currentPath == generatedPath {
+		return setOrderedIfDifferent(command, "approval", sourceProjectionApproval(action))
+	}
+	if currentPath != sourceProjectionLegacyGeneratedCommandPath(operation) {
 		return false
 	}
-	return setOrderedIfDifferent(command, "approval", sourceProjectionApproval(action))
+	if sourceProjectionCommandPathIsRuntimeValid(currentPath) {
+		return setOrderedIfDifferent(command, "approval", sourceProjectionApproval(action))
+	}
+	command.set("path", generatedPath)
+	setOrderedIfDifferent(command, "approval", sourceProjectionApproval(action))
+	return true
 }
 
 // sourceProjectionApproval publishes the same plan lifecycle the declaration
@@ -2273,6 +2429,21 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 			continue
 		}
 		if !sourceProjectionMutationMethod(operation.Method) {
+			_, readOnly, readOnlyErr := sourceProjectionReadOnlyDeclaration(bundle, operation)
+			if readOnlyErr != nil {
+				findings = append(findings, sourceProjectionFinding(bundle.Name, file, readOnlyErr.Error()+": "+operation.SourceID))
+				continue
+			}
+			if readOnly {
+				if sourceProjectionReadHasBlockingGap(operation) {
+					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "read-only declaration conflicts with source-bound foundation gap: "+operation.SourceID))
+					continue
+				}
+				if sourceRESTOperationIsReachable(bundle, operation) {
+					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "read-only declaration conflicts with executable operation: "+operation.SourceID))
+				}
+				continue
+			}
 			if sourceProjectionReadHasBlockingGap(operation) {
 				if sourceGapDirectOperationIsImplementedIncompletely(bundle, operation) {
 					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "implemented source operation retains an unresolved source-bound gap: "+operation.SourceID))
@@ -2282,6 +2453,11 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 			if !sourceRESTOperationIsReachable(bundle, operation) {
 				findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source operation has no reachable executable operation: "+operation.SourceID))
 			}
+			continue
+		}
+		_, _, readOnlyErr := sourceProjectionReadOnlyDeclaration(bundle, operation)
+		if readOnlyErr != nil {
+			findings = append(findings, sourceProjectionFinding(bundle.Name, file, readOnlyErr.Error()+": "+operation.SourceID))
 			continue
 		}
 		candidates := actions[sourceProjectionEndpointKey(operation.Method, operation.Path)]
@@ -2753,6 +2929,14 @@ func sourceProjectionExecutionSurface(bundleDir, connector string) (engine.Bundl
 				return err
 			}
 			bundle.CLISurface = &value
+			return nil
+		}},
+		{path: "api_surface.json", decode: func(raw []byte) error {
+			var value engine.APISurface
+			if err := json.Unmarshal(raw, &value); err != nil {
+				return err
+			}
+			bundle.Surface = &value
 			return nil
 		}},
 		{path: "certification.json", decode: func(raw []byte) error {

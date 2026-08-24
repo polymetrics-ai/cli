@@ -5,7 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"strings"
 )
+
+// RequestContractExecutionPolicyVersion identifies the provider-neutral PM
+// resource envelope applied to generated request inputs.
+const RequestContractExecutionPolicyVersion = "pm-request-contract-bounds-v1"
 
 // ExactNumber preserves a declaration-owned JSON number as its source lexeme.
 // CLI values and bounds must never pass through float64: provider IDs and
@@ -108,6 +113,23 @@ type CommandSurfaceFlag struct {
 	// It is projected from the source operation parameter or from the engine's
 	// conservative fallback and enforced again by the executor.
 	MaxBytes int
+	// MaxBytesOrigin and MaxBytesPolicyVersion identify MaxBytes as a PM
+	// execution limit. They prevent generated help and inspection output from
+	// misreporting an implementation resource ceiling as provider semantics.
+	MaxBytesOrigin        string
+	MaxBytesPolicyVersion string
+}
+
+// RequestExecutionLimit is the safe inspection projection of one generated
+// command input's finite PM byte envelope.
+type RequestExecutionLimit struct {
+	Command       string `json:"command,omitempty"`
+	Flag          string `json:"flag"`
+	MapsTo        string `json:"maps_to,omitempty"`
+	PolicyVersion string `json:"policy_version"`
+	Origin        string `json:"origin"`
+	Unit          string `json:"unit"`
+	Effective     int    `json:"effective"`
 }
 
 type CommandSurfaceConstraint struct {
@@ -165,4 +187,51 @@ type CommandSurfaceHelpTopic struct {
 
 type CommandSurfaceProvider interface {
 	CommandSurface() *CommandSurface
+}
+
+// RequestExecutionLimitsOf returns finite command input byte limits without
+// reading connector credentials. The command surface has already computed the
+// effective runtime cap, including the engine fallback for source-silent
+// path/query parameters.
+func RequestExecutionLimitsOf(c Connector) []RequestExecutionLimit {
+	provider, ok := c.(CommandSurfaceProvider)
+	if !ok {
+		return nil
+	}
+	surface := provider.CommandSurface()
+	if surface == nil {
+		return nil
+	}
+	limits := make([]RequestExecutionLimit, 0)
+	appendLimit := func(command string, flag CommandSurfaceFlag) {
+		if flag.MaxBytes <= 0 || flag.MaxBytesOrigin == "" || flag.MaxBytesPolicyVersion == "" {
+			return
+		}
+		limits = append(limits, RequestExecutionLimit{
+			Command:       command,
+			Flag:          flag.Name,
+			MapsTo:        flag.MapsTo,
+			PolicyVersion: flag.MaxBytesPolicyVersion,
+			Origin:        flag.MaxBytesOrigin,
+			Unit:          commandSurfaceMaxBytesUnit(flag),
+			Effective:     flag.MaxBytes,
+		})
+	}
+	for _, flag := range surface.GlobalFlags {
+		appendLimit("", flag)
+	}
+	for _, command := range surface.Commands {
+		for _, flag := range command.Flags {
+			appendLimit(command.Path, flag)
+		}
+	}
+	return limits
+}
+
+func commandSurfaceMaxBytesUnit(flag CommandSurfaceFlag) string {
+	location, _, ok := strings.Cut(strings.TrimSpace(flag.MapsTo), ".")
+	if ok && (location == "path" || location == "query") {
+		return "encoded_bytes"
+	}
+	return "bytes"
 }

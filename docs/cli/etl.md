@@ -164,8 +164,9 @@ DECLARATIVE TYPED DESTINATION TRANSPORT
   result in run.destination_results: record accounting plus every ordinary
   successful provider response field (status, headers, and body). Fields are
   not removed because they are rare, destructive, paid-tier-specific, or
-  unfamiliar. Concrete configured credential material is masked wherever it
-  occurs; provider-owned field names and ordinary values remain available.
+  unfamiliar. Provider-returned fields, keys, and values are preserved verbatim,
+  even when they equal configured credential bytes. System-generated plans,
+  logs, request diagnostics, and synthetic errors remain secret-taint-safe.
   If a later local receipt, acknowledgement, composition, or output step fails
   before checkpoint, the failed uncheckpointed run still retains ordered
   sanitized provider evidence. System-generated plans, logs, request

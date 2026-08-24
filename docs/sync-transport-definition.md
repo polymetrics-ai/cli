@@ -172,9 +172,8 @@ never omitted because they are rare, destructive, paid-tier-specific,
 unfamiliar, or outside a summary list. JSON bodies retain their original
 structure; text and binary bodies retain an explicit encoding.
 
-Concrete configured credential material is masked wherever it occurs in the
-public/persisted provider result; provider-owned field names and ordinary
-values are otherwise preserved. System-generated plans, logs, request
+Provider-returned fields, keys, and values are preserved verbatim, even when
+they equal configured credential bytes. System-generated plans, logs, request
 diagnostics, and synthetic errors remain secret-taint-safe. If a later local
 receipt, acknowledgement, composition, or output step fails before checkpoint,
 the failed uncheckpointed run still retains the ordered sanitized provider

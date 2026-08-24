@@ -137,6 +137,7 @@ Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-
 - Inspect, read, and safely plan typed Bahmni clinical operations.
 - Usage: pm bahmni <command> [flags]
 - Source CLI: Bahmni / OpenMRS REST + FHIR2 (OpenMRS REST v1, Bahmni-core REST, OpenMRS FHIR2 R4)
+- PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
 - Global flags:
   - --credential (string): Credential name to use for the Bahmni request.
   - --connection (string): Alias for --credential.
