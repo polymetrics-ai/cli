@@ -73,3 +73,27 @@ change creates a new review SHA.
 - **Green:** the retained-reader comparison now uses `strings.EqualFold` for the already validated hexadecimal lock digest. The red command, `go test -timeout 10m ./cmd/connectorgen -run '^(TestSourceRetain|TestSourceImportRetainedArtifactRejectsMissingAndMismatchedCopies)$'`, `go vet ./cmd/connectorgen`, and `go run ./cmd/connectorgen surface-sync --check` passed.
 - **Final code SHA:** `d73b2c69287bc5a2db9c2855448cf3ffbaad3dad`.
 - **Fresh-context verdict:** `ZERO-BLOCKER`. A separate, non-authoring reviewer inspected that exact SHA read-only, re-ran `go test -count=1 -timeout 10m ./cmd/connectorgen -run '^(TestSourceRetain.*|TestSourceImportRetainedArtifactRejectsMissingAndMismatchedCopies)$'` and `go vet ./cmd/connectorgen`, and reported both passing. It confirmed case-insensitive validated digest matching preserves normalized manifest records, byte/canonical identity checks, and the wrong-source/BOT-BLOCK boundary.
+
+## Post-review provenance reconciliation
+
+The certified source code remains SHA `d73b2c69287bc5a2db9c2855448cf3ffbaad3dad`.
+The three subsequent commits were independently inspected and do not change any
+reviewed runtime behavior:
+
+| Commit | Scope | Reconciliation |
+| --- | --- | --- |
+| `7ac6e7ad7a79c36d0acd9d2fca5707be4879a254` | `REVIEW-CONVERGENCE.md` only | Records the fresh-context verdict; it changes no source, test, generated runtime artifact, or fixed-100 baseline. |
+| `fb8e4a730ffa69c0c2f5fcd99ab8cb1620e3b1da` | `current-subject.json` only | Refreshes generated certification provenance; its fields identify the tracked source projection and do not alter a connector declaration, artifact lock, executable path, or proof cohort. |
+| `054ed0babd74a8853e188be554aca45ca03900c5` | `operation-evidence.json` only | Refreshes its generated source-projection provenance; the diff contains no evidence-row or fixed-100 baseline change. |
+
+The initial provenance refresh was run in a worktree containing seven preserved,
+untracked `defs/*/sources/*-retained-artifacts.json` manifests. The subject
+generator hashes source JSON beneath that directory, while CI sees only tracked
+files; this explains the locally current but CI-stale digest. A clean checkout
+at `054ed0babd74a8853e188be554aca45ca03900c5` regenerated subject then
+operation evidence twice without `--write-fixed-100`: both artifacts stabilized
+at `source_projection_sha256 = a1e7263b771ac8ce91c1f01b5e74dc863c8c0218fecccfbb874a5a986de7ff3c`,
+both checks passed, and `operation-evidence-fixed-100.json` retained SHA-256
+`c0d600d323e7effb15c1e092dce6fb590193f23613b17a51917af79e0d74812f`.
+This is a generated-provenance correction only; the exact-SHA code review
+remains applicable.
