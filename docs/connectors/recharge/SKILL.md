@@ -55,6 +55,18 @@ Reads Recharge customers, subscriptions, and orders through the Recharge REST AP
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Recharge's declared typed write actions.
+- Usage: pm recharge <command> [flags]
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual

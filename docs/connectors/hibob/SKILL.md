@@ -54,6 +54,18 @@ Reads HiBob HR data: employee profiles, company named lists, and people field de
 - approval: none; read-only, no obviously-safe reverse-ETL writes
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run HiBob's declared typed write actions.
+- Usage: pm hibob <command> [flags]
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual

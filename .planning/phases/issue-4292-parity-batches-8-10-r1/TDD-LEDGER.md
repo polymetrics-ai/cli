@@ -370,6 +370,18 @@
   forms) using the in-repository golden writer. The selected test now passes;
   no command implementation or runtime parsing changed.
 
+### Connector manual catalog parity after Batch 8–10 command publication — 2026-08-25
+
+- **Red:** CI job `32766058702` passed all Go tests, including the repaired
+  root transcripts, then failed `./pm docs validate --connectors-dir
+  docs/connectors` because `docs/connectors/catalog/all-connectors.json` and
+  the affected connector manuals did not yet reflect the Batch 8–10 command
+  namespaces. The validation failure reproduced locally.
+- **Green:** regenerated `docs/cli` and `docs/connectors` with
+  `pm docs generate --dir docs/cli --connectors-dir docs/connectors`, then
+  reran `pm docs validate --connectors-dir docs/connectors` successfully.
+  This is generated documentation parity only; command behavior is unchanged.
+
 - The source lock carries `counts.total`, per-method and per-kind counts,
   source-document pins, and coverage basis. Dispositions use
   `operations_found`; no generated summary has `declared_percent`.

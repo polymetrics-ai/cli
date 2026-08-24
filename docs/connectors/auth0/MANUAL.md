@@ -100,6 +100,28 @@ SECURITY
   write risk: creates/updates Auth0 users (including credentials), applications (clients), RBAC roles, and organizations; approval required for every action
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Auth0's declared typed write actions.
+  Usage: pm auth0 <command> [flags]
+  Global flags:
+    --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+  Reverse ETL writes
+  Other Commands
+    create client apply - POST /api/v2/clients (create_client) [intent=reverse_etl availability=implemented write=create_client]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: external mutation; registers a new Auth0 application (client), which can obtain its own OAuth2 credentials; approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --name (required)
+    create organization apply - POST /api/v2/organizations (create_organization) [intent=reverse_etl availability=implemented write=create_organization]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: external mutation; creates a new Auth0 organization (multi-tenant scoping unit); approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --name (required)
+    create role apply - POST /api/v2/roles (create_role) [intent=reverse_etl availability=implemented write=create_role]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: external mutation; creates a new RBAC role (no permissions attached by default); approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --name (required)
+    create user apply - POST /api/v2/users (create_user) [intent=reverse_etl availability=implemented write=create_user]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: external mutation; creates a new Auth0 user account (and, when password is set, a live credential); approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --connection (required)
+    update client apply - Typed action update_client [intent=reverse_etl availability=partial write=update_client]; approval: Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v2/clients/{client_id} disagrees with covered api_surface path /api/v2/clients/{id}.; risk: external mutation; updates an existing Auth0 application's configuration; approval required; notes: Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v2/clients/{client_id} disagrees with covered api_surface path /api/v2/clients/{id}.; flags: --client-id (required)
+    update organization apply - PATCH /api/v2/organizations/{id} (update_organization) [intent=reverse_etl availability=implemented write=update_organization]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: external mutation; updates an existing Auth0 organization's name/display_name; approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --id (required)
+    update role apply - PATCH /api/v2/roles/{id} (update_role) [intent=reverse_etl availability=implemented write=update_role]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: external mutation; updates an existing RBAC role's name/description; approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --id (required)
+    update user apply - Typed action update_user [intent=reverse_etl availability=partial write=update_user]; approval: Blocked pending a faithful CLI record binding: declaration-pending: canonical typed action path /api/v2/users/{user_id} disagrees with covered api_surface path /api/v2/users/{id}.; risk: external mutation; updates an existing Auth0 user's profile/credential/blocked state; approval required; notes: Generated from the connector-owned typed action; declaration-pending: canonical typed action path /api/v2/users/{user_id} disagrees with covered api_surface path /api/v2/users/{id}.; flags: --user-id (required)
+
+SYNC TRANSPORT
+  Source transport: declared
+  Destination transport: unsupported
+  A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+  Source executor: declarative_api/declarative_stream_source
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect auth0

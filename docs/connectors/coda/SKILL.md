@@ -104,6 +104,30 @@ Reads Coda docs and doc-scoped tables, rows, columns, pages, formulas, and contr
 - approval: row/page create+update: none; delete_row/delete_rows/delete_page: approval required (irreversible); push_button: approval required (arbitrary doc-defined side effects)
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Coda's declared typed write actions.
+- Usage: pm coda <command> [flags]
+- Global flags:
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+- Reverse ETL writes
+- Other Commands
+  - create page apply - Typed action create_page [intent=reverse_etl availability=partial write=create_page]; approval: Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}.; risk: creates a new page in the configured doc; requires Doc Maker access in the workspace, queued for async processing (202); notes: Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}.
+  - delete page apply - Typed action delete_page [intent=reverse_etl availability=partial write=delete_page]; approval: Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}.; risk: permanently removes a page (and its subpages/content) from the doc; irreversible, queued for async processing (202); notes: Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}.; flags: --page-id (required)
+  - delete row apply - Typed action delete_row [intent=reverse_etl availability=partial write=delete_row]; approval: Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}.; risk: permanently removes a row from a Coda table; irreversible, queued for async processing (202); notes: Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}.; flags: --row-id (required), --table-id (required)
+  - delete rows apply - Typed action delete_rows [intent=reverse_etl availability=partial write=delete_rows]; approval: Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}.; risk: permanently removes multiple rows from a Coda table in one request; irreversible, queued for async processing (202); notes: Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}.; flags: --row-ids (required), --table-id (required)
+  - push button apply - Typed action push_button [intent=reverse_etl availability=partial write=push_button]; approval: Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}.; risk: pushes a button on a row; the underlying button can perform ANY action the doc's formulas define, including writes to other tables and Pack actions outside this connector's declared surface — high blast-radius, approval required; notes: Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}.; flags: --column-id (required), --row-id (required), --table-id (required)
+  - update page apply - Typed action update_page [intent=reverse_etl availability=partial write=update_page]; approval: Blocked pending a faithful CLI record binding: declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}.; risk: renames, hides, or restyles an existing page; renaming/re-iconing requires Doc Maker access in the workspace, queued for async processing (202); notes: Generated from the connector-owned typed action; declaration-pending: typed action path uses unrecognized placeholder {{ config.doc_id }}.; flags: --page-id (required)
+  - update row apply - Typed action update_row [intent=reverse_etl availability=partial write=update_row]; approval: Blocked pending a faithful CLI record binding: declaration-pending: the closed CLI flag set cannot faithfully represent required record field row.cells.0.value.; risk: overwrites cell values on an existing row; queued for async processing (202) and generally applied within seconds; notes: Generated from the connector-owned typed action; declaration-pending: the closed CLI flag set cannot faithfully represent required record field row.cells.0.value.
+  - upsert rows apply - Typed action upsert_rows [intent=reverse_etl availability=partial write=upsert_rows]; approval: Blocked pending a faithful CLI record binding: declaration-pending: the closed CLI flag set cannot faithfully represent required record field rows.0.cells.0.value.; risk: inserts new rows, or upserts existing ones when keyColumns is set, into a Coda table; queued for async processing (202) and generally applied within seconds; notes: Generated from the connector-owned typed action; declaration-pending: the closed CLI flag set cannot faithfully represent required record field rows.0.cells.0.value.
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual

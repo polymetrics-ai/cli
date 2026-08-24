@@ -164,6 +164,36 @@ Reads and writes Brex transactions, users, expenses, vendors, budgets, cards, ac
 - approval: required for all write actions; each action's per-record risk string in writes.json is the authoritative summary
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Brex's declared typed write actions.
+- Usage: pm brex <command> [flags]
+- Global flags:
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+- Reverse ETL writes
+- Other Commands
+  - create department apply - POST /v2/departments (create_department) [intent=reverse_etl availability=implemented write=create_department]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: creates a new organizational department; low-risk external mutation, no approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --name (required)
+  - create location apply - POST /v2/locations (create_location) [intent=reverse_etl availability=implemented write=create_location]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: creates a new organizational location; low-risk external mutation, no approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --name (required)
+  - create title apply - POST /v2/titles (create_title) [intent=reverse_etl availability=implemented write=create_title]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: creates a new job title; low-risk external mutation, no approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --name (required)
+  - create user apply - POST /v2/users (create_user) [intent=reverse_etl availability=implemented write=create_user]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: invites a new user to the Brex account; sends a real invitation email to the target address; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --email (required), --first-name (required), --last-name (required)
+  - delete vendor apply - DELETE /v1/vendors/{id} (delete_vendor) [intent=reverse_etl availability=implemented write=delete_vendor]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: permanently removes a vendor record; any transfer still referencing it as counterparty will fail to resolve; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --id (required)
+  - delete webhook apply - DELETE /v1/webhooks/{id} (delete_webhook) [intent=reverse_etl availability=implemented write=delete_webhook]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: permanently removes a webhook subscription; irreversible; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --id (required)
+  - lock card apply - POST /v2/cards/{id}/lock (lock_card) [intent=reverse_etl availability=implemented write=lock_card]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: immediately blocks all new transactions on the card until unlocked; does not affect already-authorized/pending transactions; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --id (required)
+  - terminate card apply - POST /v2/cards/{id}/terminate (terminate_card) [intent=reverse_etl availability=implemented write=terminate_card]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: permanently deactivates a card; irreversible, the card can never be unlocked or reused after termination; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --id (required)
+  - unlock card apply - POST /v2/cards/{id}/unlock (unlock_card) [intent=reverse_etl availability=implemented write=unlock_card]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: immediately re-enables new transactions on a previously locked card; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --id (required)
+  - update card apply - PUT /v2/cards/{id} (update_card) [intent=reverse_etl availability=implemented write=update_card]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: mutates an existing card's spend controls (limit amount/category/merchant restrictions); takes effect on the physical/virtual card immediately; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --id (required)
+  - update expense apply - PUT /v1/expenses/card/{expense_id} (update_expense) [intent=reverse_etl availability=implemented write=update_expense]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: mutates an existing card expense's memo; low-risk metadata-only external mutation; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --expense-id (required)
+  - update user apply - PUT /v2/users/{id} (update_user) [intent=reverse_etl availability=implemented write=update_user]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: mutates an existing user's status, manager, department, location, or title; setting status to a terminated/suspended state revokes account access; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --id (required)
+  - update vendor apply - PUT /v1/vendors/{id} (update_vendor) [intent=reverse_etl availability=implemented write=update_vendor]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: mutates an existing vendor's name, contact details, or payment accounts; affects future transfer counterparty resolution; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --id (required)
+  - update webhook apply - PUT /v1/webhooks/{id} (update_webhook) [intent=reverse_etl availability=implemented write=update_webhook]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: re-points an already-registered webhook's delivery URL, event set, or active status; redirects live event delivery immediately; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --event-types (required), --id (required), --status (required), --url (required)
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual
