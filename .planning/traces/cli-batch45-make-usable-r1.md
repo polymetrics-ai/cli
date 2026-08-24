@@ -15,7 +15,7 @@
 | The gap map reflects the current declarative and runtime state | live | Bundle inventories and the built binary demonstrate the count and credential-boundary result for each claimed command. |
 | Every `not_applicable` lane has provider-source support | live | The connector's pinned source citation states the provider capability or its absence. |
 | Schedule and flow are not invented as CLI intents | live | The checked schema enumeration excludes both intents. |
-| Binary upload is reported as pending rather than missing | live | Open PR #4343 provides the unmerged declaration-only intent and is not treated as main-branch capability. |
+| Binary upload is not accidentally claimed for this batch | live | Current `main` has the #4343 binary-upload intent and one GitHub command; none of these twenty connectors has an implemented binary-upload command. |
 
 ## Phase 1 Method
 
@@ -85,7 +85,11 @@ Notation below: `I` means declared `implemented`, `P` means declared `partial`, 
 | WooCommerce | 140 [source](https://woocommerce.github.io/woocommerce-rest-api-docs/) | P4/S4 | —/W73 | P63/S63 | P73/S73 | 0; none classified | pending; none classified | system | system |
 | Zendesk Support | 629 [source](https://developer.zendesk.com/zendesk/oas.yaml) | I33/S33 | I62+P28/W294 | P308/S308 | P204/W294 | 0/S1 `binary_read` | pending; six binary/multipart-tagged rows, direction not preserved | system | system |
 
-`binary_upload` is pending globally: its intent is not on `main` and is supplied only by unmerged PR #4343. No row above asserts that it is currently implemented. The source tags identify potential later work; they do not invent a bounded input policy, media allow-list, size cap, or provider request shape.
+Historical correction: this initial map predated the #4343 merge. `binary_upload` is now an intent
+on `main`, with one implemented GitHub command, but none of these twenty connectors implements it.
+The table's `pending` cells now mean only that the pinned provider source may identify future
+connector-local work; they do not claim a missing global engine feature, a bounded input policy,
+media allow-list, size cap, or provider request shape.
 
 `†` Firstmate's two-fetch source research (`data/cli-top100-source-research-r1/report.md`, rows
 31, 34, 36, 39, and 43) proved that the old URL was not the provider specification and supplied
@@ -573,3 +577,73 @@ The repository's aggregate `go test -timeout 20m ./...` and `make verify` are de
 to CI for this planning/provenance-only checkpoint: repository guidance warns that the full
 550-plus-connector suite exceeds the per-command memory/time window. The focused affected-package
 checks above use the required explicit timeout.
+
+## Captain correction: full operation map and declaration basis — 2026-08-24
+
+### Re-measurement and binary proof
+
+After merging current `origin/main` commit `060bb7864e` (the binary-upload surface merge), the
+independent whole-tree command inventory is: **2,191 reverse-ETL commands across 27 connectors**,
+**2,002 direct reads across 21**, **645 ETL commands across 34**, **283 direct writes on GitHub
+only**, **27 binary downloads across six**, and **one binary upload**. The changing reverse-ETL
+total is branch-local conversion progress; it is not a missing engine capability. No connector
+specific engine or shared-code change is authorized for this batch.
+
+The 390 Batch 4/5 runnable operations were remeasured rather than inferred from their manifest:
+
+- built the binary with `go build -o pm ./cmd/pm`;
+- enumerated every `availability: implemented` command from the two actual surfaces (Mailchimp
+  295, Zendesk Support 95);
+- split the list into 5-command shards, each using a fresh `mktemp -d` project initialized with
+  `pm init --root <project> --json` and no configured credential;
+- invoked `pm <connector> <command path>` for every command and required exit status 1 and the
+  complete combined output `error: missing --credential` exactly.
+
+The final corrected sweep passed **295/295 Mailchimp** and **95/95 Zendesk Support** on the binary
+built after the `060bb7864e` merge. Two early scratch harness attempts are explicitly discarded:
+one used an invalid jq range selector and processed no command; one shifted away the first argument
+in each shard. Neither contributes to the count. The corrected `pipefail`-protected sweep emitted
+only 5-command pass shards, totalling 390, with no provider request or credential. Thus the first
+category below is an observed binary result, not a declaration count.
+
+### Three-way source operation split — report before conversion
+
+| Category | Source operations | Meaning |
+| --- | ---: | --- |
+| **Already runnable** | **390** | The built-binary credential-boundary result above (Mailchimp 295; Zendesk Support 95). |
+| **Declarable now** | **5,543** | The operation has a retained, connector-owned provider artifact and no known explicitly open request map. It can be expressed entirely in that connector's existing definition files as a typed action/stream/command; no shared runtime change is permitted or needed. |
+| **Genuinely blocked** | **1,488** | 1,439 lack a current retained provider contract for field derivation; 49 have a provider-declared open request map and cannot honestly be represented by bounded flags. |
+| **Total** | **7,421** | Every legacy mapped source operation is in exactly one category. |
+
+The conversion-ready count is per connector: BambooHR 345, Fastly 732, HubSpot 3,082, LaunchDarkly
+399, Pipedrive 218, ShipStation 47, Squarespace 53, WooCommerce 140, and Zendesk Support 527.
+Those totals are the retained source inventories, less the 95 already runnable Zendesk operations
+and the known open request maps described below. This is a large declaration wave, not an engine
+foundation task.
+
+Blocked evidence is explicit rather than a catch-all:
+
+| Block reason | Operations | Connector evidence |
+| --- | ---: | --- |
+| Source artifact has no retained current bytes | 678 | Airtable 105, Buildkite 132, Pinterest 284, SonarCloud 157. Each operation retains its historical provider URL/location in its declaration-disposition ledger, but the current dynamic rendered reference was not retained as an immutable source contract. |
+| Wrong/transition source identity | 743 | Google Analytics Data API 28, Linear 543, Mailchimp 28, QuickBooks 134, Salesforce 10. Their provider replacement URLs and fetched byte counts are evidenced in the source-research report rows 31, 34, 36, 39, and 43; a replacement connector-owned SHA-256 and operation-location projection is not yet present, so they are not promoted as cited executable contracts. |
+| Provider source retrieval failed | 18 | eBay Fulfillment 11 (provider OpenAPI URL returned HTTP 403, 1,831-byte non-source) and TikTok Marketing 7 (provider documentation TLS failure, no body), as recorded by source-research rows 49 and 42. A failed fetch is evidence of the retrieval block, not a claim the provider has no documentation. |
+| Provider explicitly permits open request fields | 49 | HubSpot 36 and Zendesk Support 13 existing `rest_write` body schemas contain an open object (`additionalProperties` not `false`). No bounded flags or invented closed schema may be authored for these operations. |
+
+For every source row, the authoritative citation remains its connector's
+`sources/<connector>-declaration-disposition.json`: `ledger_dispositions[*].source` supplies the
+provider URL and operation location, while `source_basis` supplies the lock URL, SHA-256, and byte
+count. The nine conversion-ready connectors additionally retain the exact artifact and provenance
+manifest under `sources/artifacts/` and `sources/<connector>-retained-artifacts.json`. The
+transition and retrieval-block rows above are deliberately **not** called source-cited executable
+contracts; their cited research evidence explains precisely why they cannot be declared yet.
+
+The 5,543 declarations require connector-local `writes.json`/`streams.json`/`cli_surface.json`
+and existing companion declaration updates only. Where a source request shape resolves to another
+open map during conversion, it moves from the second category to the fourth-row open-map reason
+with its per-operation source citation; it is never forced through a JSON catch-all or a shared
+connector special case.
+
+Post-merge report checks passed: `go build -o pm ./cmd/pm`; the 390-command current-binary sweep
+above; `go test -timeout 20m ./internal/connectors/defs`; `make docs-check`; and
+`go run ./cmd/agentcontractgen check`.
