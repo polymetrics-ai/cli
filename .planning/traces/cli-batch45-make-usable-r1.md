@@ -738,3 +738,92 @@ this connector-only wave. The safe next authority is either (1) a separately sco
 issue for artifact-corpus/source-contract extraction followed by connector conversion waves, or
 (2) an explicitly narrowed connector-local wave with a named set of provider operations and
 individually retained typed contracts. No availability value has been changed pending that choice.
+
+## Captain-directed individually-sourced split — pre-conversion report — 2026-08-24
+
+The delivery owner selected the individually-sourced route: do **not** add a shared
+source-contract extraction foundation and do **not** rewrite a source lock. This replaces the
+foundation decision point above. The figures below classify the corrected **5,504 provider REST
+operation identities**, not the 39 local execution bindings and not the 390 commands already
+proven at the credential boundary.
+
+| Connector | A — retained source contains field-level machine contract | B — retained source is identity/examples; provider docs must be captured per operation | C — neither source form is available | Total |
+| --- | ---: | ---: | ---: | ---: |
+| BambooHR | 319 | 0 | 0 | 319 |
+| Fastly | 0 | 732 | 0 | 732 |
+| HubSpot | 3,082 | 0 | 0 | 3,082 |
+| LaunchDarkly | 397 | 0 | 0 | 397 |
+| Pipedrive | 213 | 0 | 0 | 213 |
+| ShipStation | 47 | 0 | 0 | 47 |
+| Squarespace | 53 | 0 | 0 | 53 |
+| WooCommerce | 0 | 140 | 0 | 140 |
+| Zendesk Support | 521 | 0 | 0 | 521 |
+| **Total** | **4,632** | **872** | **0** | **5,504** |
+
+### Category A — individually declarable from the retained provider contract (4,632)
+
+This category means that the **retained bytes themselves** contain provider request/response
+field definitions. It is not a claim that toggling `availability` is valid: every operation still
+needs its own connector-local stream/action/operation and CLI declaration, source location,
+bounded body/input mapping, and built-binary credential-boundary proof.
+
+- BambooHR's retained rendered reference embeds an OpenAPI 3.1 document (`"openapi":"3.1.0"`)
+  and records exact `paths.<path>.<method>` locations for all 319 provider operations in
+  `sources/bamboo-hr-declaration-disposition.json`.
+- HubSpot's retained gzip corpus, LaunchDarkly's OpenAPI 3.0.3, Pipedrive's OpenAPI 3.0.1,
+  ShipStation's OpenAPI 3.1.0, Squarespace's OpenAPI 3.1.1, and Zendesk Support's OpenAPI 3.0.3
+  are provider-published machine contracts. Their immutable byte identities and public source URLs
+  are in each connector's `sources/<connector>-retained-artifacts.json`; each operation's
+  provider location is in its `sources/<connector>-declaration-disposition.json` ledger.
+- The count excludes the 36 already-known HubSpot and 13 already-known Zendesk operations whose
+  provider request contract is an open object, as well as the 95 already-runnable Zendesk
+  operations. Those 144 deductions are retained exactly as in the corrected count table above;
+  no operation gains a fabricated `additionalProperties: false` declaration.
+
+An exploratory read of the existing generic importer against LaunchDarkly stops at an OpenAPI
+3.0 reference with an `example` sibling. That is a current importer limitation, not evidence that
+the provider omitted fields. It confirms the captain's direction: this wave must author an
+individual static declaration from the cited provider contract or leave that operation blocked;
+it must not change the importer or silently discard the sibling.
+
+### Category B — provider documentation required before each declaration (872)
+
+Fastly's retained Postman collection has request/response **examples**, not an authoritative
+complete field contract for every operation; WooCommerce's retained HTML indexes operations but
+does not provide an immutable per-operation typed capture in this bundle. Both providers publish
+their own API references:
+
+- Fastly: <https://www.fastly.com/documentation/reference/api/> (732 retained operation
+  identities; current retained collection digest
+  `c6ae5b0fd118fe2d87e7d0ef431f67cda703d1487d27b5f02725d82219386677`, 2,341,028 bytes).
+- WooCommerce: <https://developer.woocommerce.com/docs/apis/rest-api/v3/> (140 retained
+  operation identities; current retained rendered reference digest
+  `a02e504ae56786d94f6a859e55b5c7e3229749ea3d43147424cfd987b2ec550e`, 4,400,931 bytes).
+
+Before a Category-B operation is converted, the specific official reference page that defines its
+request and response fields must be captured as connector-owned evidence with its public URL,
+SHA-256, byte count, and page/section location. That evidence is additive; it does **not** alter
+either existing lock. Until then, all 872 remain partial rather than being promoted from a request
+example or an operation name.
+
+### Category C — no source contract (0 of the 5,504 candidates)
+
+There are no Category-C rows among the corrected candidate set: each candidate has either a
+retained field-level provider contract (A) or a provider documentation route identified above
+(B). This does not erase the earlier 1,439 source-unavailable/wrong-identity/retrieval-blocked
+operations: they are outside the corrected 5,504 candidate set and remain blocked with the
+citations already recorded in this trace.
+
+### Manual GSD/TDD checkpoint
+
+- **Red:** the legacy partial commands are endpoint declarations, not executable contracts; the
+  5,504 total cannot be promoted by metadata alone.
+- **Green condition for A:** a connector-local source-derived contract is authored for a named
+  operation and the built `pm` binary exits at exactly `error: missing --credential` in its own
+  no-credential project.
+- **Green condition for B:** first add the additive official-document evidence (URL, SHA-256,
+  bytes, and source location), then meet the same contract and binary proof.
+- **Guard:** no source-lock rewrite, no shared engine/importer change, no generic JSON body, no
+  invented closed object, and no availability-only promotion.
+
+No conversion has begun. This is the required count report before any bulk declaration change.
