@@ -13,9 +13,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getaccessrequests",
-        "notes": "official_operation_id=getAccessRequests; lane=etl_read"
+        "reason": "Locked source operation getAccessRequests has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAccessRequests"
       }
     },
     {
@@ -65,9 +64,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getagentsforworkspace",
-        "notes": "official_operation_id=getAgentsForWorkspace; lane=etl_read"
+        "reason": "Locked source operation getAgentsForWorkspace has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAgentsForWorkspace"
       }
     },
     {
@@ -78,9 +76,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getagent",
-        "notes": "official_operation_id=getAgent; lane=etl_read"
+        "reason": "Locked source operation getAgent has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAgent"
       }
     },
     {
@@ -91,9 +88,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getaistudioruns",
-        "notes": "official_operation_id=getAiStudioRuns; lane=etl_read"
+        "reason": "Locked source operation getAiStudioRuns has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAiStudioRuns"
       }
     },
     {
@@ -104,9 +100,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getaistudioseats",
-        "notes": "official_operation_id=getAiStudioSeats; lane=etl_read"
+        "reason": "Locked source operation getAiStudioSeats has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAiStudioSeats"
       }
     },
     {
@@ -117,9 +112,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getallocation",
-        "notes": "official_operation_id=getAllocation; lane=etl_read"
+        "reason": "Locked source operation getAllocation has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAllocation"
       }
     },
     {
@@ -156,9 +150,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getallocations",
-        "notes": "official_operation_id=getAllocations; lane=etl_read"
+        "reason": "Locked source operation getAllocations has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAllocations"
       }
     },
     {
@@ -180,11 +173,10 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned bounded attachment metadata read; blocked until connector-local JSON schema, response bounds, redaction policy, and sanitized fixture evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getattachment",
-        "notes": "official_operation_id=getAttachment; lane=etl_read"
+        "reason": "Locked source operation getAttachment has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAttachment"
       }
     },
     {
@@ -206,11 +198,10 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned bounded attachment metadata read; blocked until connector-local JSON schema, response bounds, redaction policy, and sanitized fixture evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getattachmentsforobject",
-        "notes": "official_operation_id=getAttachmentsForObject; lane=etl_read"
+        "reason": "Locked source operation getAttachmentsForObject has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAttachmentsForObject"
       }
     },
     {
@@ -232,11 +223,10 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
-        "source_url": "https://developers.asana.com/reference/getauditlogevents",
-        "notes": "official_operation_id=getAuditLogEvents; lane=cdc_changefeed"
+        "reason": "Locked source operation getAuditLogEvents has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAuditLogEvents"
       }
     },
     {
@@ -260,9 +250,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getbudgets",
-        "notes": "official_operation_id=getBudgets; lane=etl_read"
+        "reason": "Locked source operation getBudgets has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getBudgets"
       }
     },
     {
@@ -286,9 +275,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getbudget",
-        "notes": "official_operation_id=getBudget; lane=etl_read"
+        "reason": "Locked source operation getBudget has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getBudget"
       }
     },
     {
@@ -325,9 +313,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforproject",
-        "notes": "official_operation_id=getCustomFieldSettingsForProject; lane=etl_read"
+        "reason": "Locked source operation getCustomFieldSettingsForProject has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getCustomFieldSettingsForProject"
       }
     },
     {
@@ -338,9 +325,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforportfolio",
-        "notes": "official_operation_id=getCustomFieldSettingsForPortfolio; lane=etl_read"
+        "reason": "Locked source operation getCustomFieldSettingsForPortfolio has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getCustomFieldSettingsForPortfolio"
       }
     },
     {
@@ -351,9 +337,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforgoal",
-        "notes": "official_operation_id=getCustomFieldSettingsForGoal; lane=etl_read"
+        "reason": "Locked source operation getCustomFieldSettingsForGoal has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getCustomFieldSettingsForGoal"
       }
     },
     {
@@ -364,9 +349,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomfieldsettingsforteam",
-        "notes": "official_operation_id=getCustomFieldSettingsForTeam; lane=etl_read"
+        "reason": "Locked source operation getCustomFieldSettingsForTeam has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getCustomFieldSettingsForTeam"
       }
     },
     {
@@ -384,9 +368,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomfield",
-        "notes": "official_operation_id=getCustomField; lane=etl_read"
+        "reason": "Locked source operation getCustomField has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getCustomField"
       }
     },
     {
@@ -445,9 +428,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomtypes",
-        "notes": "official_operation_id=getCustomTypes; lane=etl_read"
+        "reason": "Locked source operation getCustomTypes has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getCustomTypes"
       }
     },
     {
@@ -458,9 +440,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getcustomtype",
-        "notes": "official_operation_id=getCustomType; lane=etl_read"
+        "reason": "Locked source operation getCustomType has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getCustomType"
       }
     },
     {
@@ -469,11 +450,10 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
-        "source_url": "https://developers.asana.com/reference/getevents",
-        "notes": "official_operation_id=getEvents; lane=cdc_changefeed"
+        "reason": "Locked source operation getEvents has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getEvents"
       }
     },
     {
@@ -498,9 +478,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getgoalrelationship",
-        "notes": "official_operation_id=getGoalRelationship; lane=etl_read"
+        "reason": "Locked source operation getGoalRelationship has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getGoalRelationship"
       }
     },
     {
@@ -518,9 +497,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getgoalrelationships",
-        "notes": "official_operation_id=getGoalRelationships; lane=etl_read"
+        "reason": "Locked source operation getGoalRelationships has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getGoalRelationships"
       }
     },
     {
@@ -551,9 +529,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getgoal",
-        "notes": "official_operation_id=getGoal; lane=etl_read"
+        "reason": "Locked source operation getGoal has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getGoal"
       }
     },
     {
@@ -584,9 +561,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getgoals",
-        "notes": "official_operation_id=getGoals; lane=etl_read"
+        "reason": "Locked source operation getGoals has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getGoals"
       }
     },
     {
@@ -638,9 +614,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getparentgoalsforgoal",
-        "notes": "official_operation_id=getParentGoalsForGoal; lane=etl_read"
+        "reason": "Locked source operation getParentGoalsForGoal has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getParentGoalsForGoal"
       }
     },
     {
@@ -669,11 +644,10 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
-        "source_url": "https://developers.asana.com/reference/getjob",
-        "notes": "official_operation_id=getJob; lane=cdc_changefeed"
+        "reason": "Locked source operation getJob has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getJob"
       }
     },
     {
@@ -684,9 +658,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getmemberships",
-        "notes": "official_operation_id=getMemberships; lane=etl_read"
+        "reason": "Locked source operation getMemberships has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getMemberships"
       }
     },
     {
@@ -710,9 +683,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getmembership",
-        "notes": "official_operation_id=getMembership; lane=etl_read"
+        "reason": "Locked source operation getMembership has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getMembership"
       }
     },
     {
@@ -749,9 +721,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getoooentry",
-        "notes": "official_operation_id=getOooEntry; lane=etl_read"
+        "reason": "Locked source operation getOooEntry has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOooEntry"
       }
     },
     {
@@ -782,9 +753,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getoooentries",
-        "notes": "official_operation_id=getOooEntries; lane=etl_read"
+        "reason": "Locked source operation getOooEntries has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOooEntries"
       }
     },
     {
@@ -815,9 +785,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getorganizationexport",
-        "notes": "official_operation_id=getOrganizationExport; lane=etl_read"
+        "reason": "Locked source operation getOrganizationExport has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getOrganizationExport"
       }
     },
     {
@@ -828,9 +797,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getportfoliomemberships",
-        "notes": "official_operation_id=getPortfolioMemberships; lane=etl_read"
+        "reason": "Locked source operation getPortfolioMemberships has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getPortfolioMemberships"
       }
     },
     {
@@ -841,9 +809,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getportfoliomembership",
-        "notes": "official_operation_id=getPortfolioMembership; lane=etl_read"
+        "reason": "Locked source operation getPortfolioMembership has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getPortfolioMembership"
       }
     },
     {
@@ -854,9 +821,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getportfoliomembershipsforportfolio",
-        "notes": "official_operation_id=getPortfolioMembershipsForPortfolio; lane=etl_read"
+        "reason": "Locked source operation getPortfolioMembershipsForPortfolio has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getPortfolioMembershipsForPortfolio"
       }
     },
     {
@@ -867,9 +833,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getportfolios",
-        "notes": "official_operation_id=getPortfolios; lane=etl_read"
+        "reason": "Locked source operation getPortfolios has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getPortfolios"
       }
     },
     {
@@ -887,9 +852,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getportfolio",
-        "notes": "official_operation_id=getPortfolio; lane=etl_read"
+        "reason": "Locked source operation getPortfolio has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getPortfolio"
       }
     },
     {
@@ -920,9 +884,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getitemsforportfolio",
-        "notes": "official_operation_id=getItemsForPortfolio; lane=etl_read"
+        "reason": "Locked source operation getItemsForPortfolio has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getItemsForPortfolio"
       }
     },
     {
@@ -1000,9 +963,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectbrief",
-        "notes": "official_operation_id=getProjectBrief; lane=etl_read"
+        "reason": "Locked source operation getProjectBrief has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectBrief"
       }
     },
     {
@@ -1040,9 +1002,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectmembership",
-        "notes": "official_operation_id=getProjectMembership; lane=etl_read"
+        "reason": "Locked source operation getProjectMembership has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectMembership"
       }
     },
     {
@@ -1053,9 +1014,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectmembershipsforproject",
-        "notes": "official_operation_id=getProjectMembershipsForProject; lane=etl_read"
+        "reason": "Locked source operation getProjectMembershipsForProject has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectMembershipsForProject"
       }
     },
     {
@@ -1066,9 +1026,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectportfoliosetting",
-        "notes": "official_operation_id=getProjectPortfolioSetting; lane=etl_read"
+        "reason": "Locked source operation getProjectPortfolioSetting has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectPortfolioSetting"
       }
     },
     {
@@ -1086,9 +1045,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectportfoliosettingsforproject",
-        "notes": "official_operation_id=getProjectPortfolioSettingsForProject; lane=etl_read"
+        "reason": "Locked source operation getProjectPortfolioSettingsForProject has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectPortfolioSettingsForProject"
       }
     },
     {
@@ -1099,9 +1057,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectportfoliosettingsforportfolio",
-        "notes": "official_operation_id=getProjectPortfolioSettingsForPortfolio; lane=etl_read"
+        "reason": "Locked source operation getProjectPortfolioSettingsForPortfolio has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectPortfolioSettingsForPortfolio"
       }
     },
     {
@@ -1112,9 +1069,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectstatus",
-        "notes": "official_operation_id=getProjectStatus; lane=etl_read"
+        "reason": "Locked source operation getProjectStatus has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectStatus"
       }
     },
     {
@@ -1152,9 +1108,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojecttemplate",
-        "notes": "official_operation_id=getProjectTemplate; lane=etl_read"
+        "reason": "Locked source operation getProjectTemplate has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectTemplate"
       }
     },
     {
@@ -1178,9 +1133,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojecttemplates",
-        "notes": "official_operation_id=getProjectTemplates; lane=etl_read"
+        "reason": "Locked source operation getProjectTemplates has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectTemplates"
       }
     },
     {
@@ -1191,9 +1145,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojecttemplatesforteam",
-        "notes": "official_operation_id=getProjectTemplatesForTeam; lane=etl_read"
+        "reason": "Locked source operation getProjectTemplatesForTeam has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectTemplatesForTeam"
       }
     },
     {
@@ -1225,9 +1178,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getproject",
-        "notes": "official_operation_id=getProject; lane=etl_read"
+        "reason": "Locked source operation getProject has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProject"
       }
     },
     {
@@ -1259,9 +1211,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectsfortask",
-        "notes": "official_operation_id=getProjectsForTask; lane=etl_read"
+        "reason": "Locked source operation getProjectsForTask has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectsForTask"
       }
     },
     {
@@ -1272,9 +1223,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectsforteam",
-        "notes": "official_operation_id=getProjectsForTeam; lane=etl_read"
+        "reason": "Locked source operation getProjectsForTeam has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectsForTeam"
       }
     },
     {
@@ -1292,9 +1242,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getprojectsforworkspace",
-        "notes": "official_operation_id=getProjectsForWorkspace; lane=etl_read"
+        "reason": "Locked source operation getProjectsForWorkspace has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectsForWorkspace"
       }
     },
     {
@@ -1310,11 +1259,10 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned bounded provider-search/direct-read command; blocked until provider search/query foundation #2985 supplies fixed-target query flags, response bounds, and redaction policy.",
-        "source_url": "https://developers.asana.com/reference/searchprojectsforworkspace",
-        "notes": "official_operation_id=searchProjectsForWorkspace; lane=direct_read_query_search"
+        "reason": "Locked source operation searchProjectsForWorkspace has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=searchProjectsForWorkspace"
       }
     },
     {
@@ -1345,9 +1293,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettaskcountsforproject",
-        "notes": "official_operation_id=getTaskCountsForProject; lane=etl_read"
+        "reason": "Locked source operation getTaskCountsForProject has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTaskCountsForProject"
       }
     },
     {
@@ -1405,9 +1352,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getrates",
-        "notes": "official_operation_id=getRates; lane=etl_read"
+        "reason": "Locked source operation getRates has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getRates"
       }
     },
     {
@@ -1431,9 +1377,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getrate",
-        "notes": "official_operation_id=getRate; lane=etl_read"
+        "reason": "Locked source operation getRate has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getRate"
       }
     },
     {
@@ -1470,9 +1415,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getreactionsonobject",
-        "notes": "official_operation_id=getReactionsOnObject; lane=etl_read"
+        "reason": "Locked source operation getReactionsOnObject has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getReactionsOnObject"
       }
     },
     {
@@ -1483,9 +1427,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getroles",
-        "notes": "official_operation_id=getRoles; lane=etl_read"
+        "reason": "Locked source operation getRoles has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getRoles"
       }
     },
     {
@@ -1509,9 +1452,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getrole",
-        "notes": "official_operation_id=getRole; lane=etl_read"
+        "reason": "Locked source operation getRole has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getRole"
       }
     },
     {
@@ -1555,9 +1497,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getsection",
-        "notes": "official_operation_id=getSection; lane=etl_read"
+        "reason": "Locked source operation getSection has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getSection"
       }
     },
     {
@@ -1610,9 +1551,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getstatus",
-        "notes": "official_operation_id=getStatus; lane=etl_read"
+        "reason": "Locked source operation getStatus has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getStatus"
       }
     },
     {
@@ -1636,9 +1576,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getstatusesforobject",
-        "notes": "official_operation_id=getStatusesForObject; lane=etl_read"
+        "reason": "Locked source operation getStatusesForObject has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getStatusesForObject"
       }
     },
     {
@@ -1656,9 +1595,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getstory",
-        "notes": "official_operation_id=getStory; lane=etl_read"
+        "reason": "Locked source operation getStory has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getStory"
       }
     },
     {
@@ -1703,9 +1641,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getstoriesforgoal",
-        "notes": "official_operation_id=getStoriesForGoal; lane=etl_read"
+        "reason": "Locked source operation getStoriesForGoal has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getStoriesForGoal"
       }
     },
     {
@@ -1737,9 +1674,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettag",
-        "notes": "official_operation_id=getTag; lane=etl_read"
+        "reason": "Locked source operation getTag has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTag"
       }
     },
     {
@@ -1764,9 +1700,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettagsfortask",
-        "notes": "official_operation_id=getTagsForTask; lane=etl_read"
+        "reason": "Locked source operation getTagsForTask has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTagsForTask"
       }
     },
     {
@@ -1777,9 +1712,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettagsforworkspace",
-        "notes": "official_operation_id=getTagsForWorkspace; lane=etl_read"
+        "reason": "Locked source operation getTagsForWorkspace has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTagsForWorkspace"
       }
     },
     {
@@ -1797,9 +1731,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettasktemplates",
-        "notes": "official_operation_id=getTaskTemplates; lane=etl_read"
+        "reason": "Locked source operation getTaskTemplates has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTaskTemplates"
       }
     },
     {
@@ -1810,9 +1743,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettasktemplate",
-        "notes": "official_operation_id=getTaskTemplate; lane=etl_read"
+        "reason": "Locked source operation getTaskTemplate has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTaskTemplate"
       }
     },
     {
@@ -1857,9 +1789,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettask",
-        "notes": "official_operation_id=getTask; lane=etl_read"
+        "reason": "Locked source operation getTask has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTask"
       }
     },
     {
@@ -1891,9 +1822,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettasksforproject",
-        "notes": "official_operation_id=getTasksForProject; lane=etl_read"
+        "reason": "Locked source operation getTasksForProject has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTasksForProject"
       }
     },
     {
@@ -1904,9 +1834,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettasksforsection",
-        "notes": "official_operation_id=getTasksForSection; lane=etl_read"
+        "reason": "Locked source operation getTasksForSection has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTasksForSection"
       }
     },
     {
@@ -1917,9 +1846,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettasksfortag",
-        "notes": "official_operation_id=getTasksForTag; lane=etl_read"
+        "reason": "Locked source operation getTasksForTag has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTasksForTag"
       }
     },
     {
@@ -1930,9 +1858,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettasksforusertasklist",
-        "notes": "official_operation_id=getTasksForUserTaskList; lane=etl_read"
+        "reason": "Locked source operation getTasksForUserTaskList has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTasksForUserTaskList"
       }
     },
     {
@@ -1943,9 +1870,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getsubtasksfortask",
-        "notes": "official_operation_id=getSubtasksForTask; lane=etl_read"
+        "reason": "Locked source operation getSubtasksForTask has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getSubtasksForTask"
       }
     },
     {
@@ -1970,9 +1896,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getdependenciesfortask",
-        "notes": "official_operation_id=getDependenciesForTask; lane=etl_read"
+        "reason": "Locked source operation getDependenciesForTask has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getDependenciesForTask"
       }
     },
     {
@@ -2003,9 +1928,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getdependentsfortask",
-        "notes": "official_operation_id=getDependentsForTask; lane=etl_read"
+        "reason": "Locked source operation getDependentsForTask has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getDependentsForTask"
       }
     },
     {
@@ -2096,9 +2020,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettaskforcustomid",
-        "notes": "official_operation_id=getTaskForCustomID; lane=etl_read"
+        "reason": "Locked source operation getTaskForCustomID has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTaskForCustomID"
       }
     },
     {
@@ -2107,11 +2030,10 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned bounded provider-search/direct-read command; blocked until provider search/query foundation #2985 supplies fixed-target query flags, response bounds, and redaction policy.",
-        "source_url": "https://developers.asana.com/reference/searchtasksforworkspace",
-        "notes": "official_operation_id=searchTasksForWorkspace; lane=direct_read_query_search"
+        "reason": "Locked source operation searchTasksForWorkspace has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=searchTasksForWorkspace"
       }
     },
     {
@@ -2122,9 +2044,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getteammembership",
-        "notes": "official_operation_id=getTeamMembership; lane=etl_read"
+        "reason": "Locked source operation getTeamMembership has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTeamMembership"
       }
     },
     {
@@ -2142,9 +2063,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getteammembershipsforteam",
-        "notes": "official_operation_id=getTeamMembershipsForTeam; lane=etl_read"
+        "reason": "Locked source operation getTeamMembershipsForTeam has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTeamMembershipsForTeam"
       }
     },
     {
@@ -2155,9 +2075,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getteammembershipsforuser",
-        "notes": "official_operation_id=getTeamMembershipsForUser; lane=etl_read"
+        "reason": "Locked source operation getTeamMembershipsForUser has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTeamMembershipsForUser"
       }
     },
     {
@@ -2175,9 +2094,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getteam",
-        "notes": "official_operation_id=getTeam; lane=etl_read"
+        "reason": "Locked source operation getTeam has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTeam"
       }
     },
     {
@@ -2202,9 +2120,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getteamsforuser",
-        "notes": "official_operation_id=getTeamsForUser; lane=etl_read"
+        "reason": "Locked source operation getTeamsForUser has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTeamsForUser"
       }
     },
     {
@@ -2235,9 +2152,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimeperiod",
-        "notes": "official_operation_id=getTimePeriod; lane=etl_read"
+        "reason": "Locked source operation getTimePeriod has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTimePeriod"
       }
     },
     {
@@ -2248,9 +2164,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimeperiods",
-        "notes": "official_operation_id=getTimePeriods; lane=etl_read"
+        "reason": "Locked source operation getTimePeriods has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTimePeriods"
       }
     },
     {
@@ -2261,9 +2176,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimetrackingcategory",
-        "notes": "official_operation_id=getTimeTrackingCategory; lane=etl_read"
+        "reason": "Locked source operation getTimeTrackingCategory has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTimeTrackingCategory"
       }
     },
     {
@@ -2300,9 +2214,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimetrackingentriesfortimetrackingcategory",
-        "notes": "official_operation_id=getTimeTrackingEntriesForTimeTrackingCategory; lane=etl_read"
+        "reason": "Locked source operation getTimeTrackingEntriesForTimeTrackingCategory has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTimeTrackingEntriesForTimeTrackingCategory"
       }
     },
     {
@@ -2313,9 +2226,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimetrackingcategories",
-        "notes": "official_operation_id=getTimeTrackingCategories; lane=etl_read"
+        "reason": "Locked source operation getTimeTrackingCategories has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTimeTrackingCategories"
       }
     },
     {
@@ -2339,9 +2251,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimetrackingentriesfortask",
-        "notes": "official_operation_id=getTimeTrackingEntriesForTask; lane=etl_read"
+        "reason": "Locked source operation getTimeTrackingEntriesForTask has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTimeTrackingEntriesForTask"
       }
     },
     {
@@ -2359,9 +2270,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimetrackingentry",
-        "notes": "official_operation_id=getTimeTrackingEntry; lane=etl_read"
+        "reason": "Locked source operation getTimeTrackingEntry has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTimeTrackingEntry"
       }
     },
     {
@@ -2392,9 +2302,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimetrackingentries",
-        "notes": "official_operation_id=getTimeTrackingEntries; lane=etl_read"
+        "reason": "Locked source operation getTimeTrackingEntries has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTimeTrackingEntries"
       }
     },
     {
@@ -2405,9 +2314,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimesheetapprovalstatus",
-        "notes": "official_operation_id=getTimesheetApprovalStatus; lane=etl_read"
+        "reason": "Locked source operation getTimesheetApprovalStatus has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTimesheetApprovalStatus"
       }
     },
     {
@@ -2431,9 +2339,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/gettimesheetapprovalstatuses",
-        "notes": "official_operation_id=getTimesheetApprovalStatuses; lane=etl_read"
+        "reason": "Locked source operation getTimesheetApprovalStatuses has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getTimesheetApprovalStatuses"
       }
     },
     {
@@ -2455,11 +2362,10 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned bounded provider-search/direct-read command; blocked until provider search/query foundation #2985 supplies fixed-target query flags, response bounds, and redaction policy.",
-        "source_url": "https://developers.asana.com/reference/typeaheadforworkspace",
-        "notes": "official_operation_id=typeaheadForWorkspace; lane=direct_read_query_search"
+        "reason": "Locked source operation typeaheadForWorkspace has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=typeaheadForWorkspace"
       }
     },
     {
@@ -2470,9 +2376,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getusertasklist",
-        "notes": "official_operation_id=getUserTaskList; lane=etl_read"
+        "reason": "Locked source operation getUserTaskList has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getUserTaskList"
       }
     },
     {
@@ -2483,9 +2388,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getusertasklistforuser",
-        "notes": "official_operation_id=getUserTaskListForUser; lane=etl_read"
+        "reason": "Locked source operation getUserTaskListForUser has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getUserTaskListForUser"
       }
     },
     {
@@ -2503,9 +2407,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getuser",
-        "notes": "official_operation_id=getUser; lane=etl_read"
+        "reason": "Locked source operation getUser has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getUser"
       }
     },
     {
@@ -2523,9 +2426,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getfavoritesforuser",
-        "notes": "official_operation_id=getFavoritesForUser; lane=etl_read"
+        "reason": "Locked source operation getFavoritesForUser has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getFavoritesForUser"
       }
     },
     {
@@ -2536,9 +2438,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getusersforteam",
-        "notes": "official_operation_id=getUsersForTeam; lane=etl_read"
+        "reason": "Locked source operation getUsersForTeam has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getUsersForTeam"
       }
     },
     {
@@ -2549,9 +2450,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getusersforworkspace",
-        "notes": "official_operation_id=getUsersForWorkspace; lane=etl_read"
+        "reason": "Locked source operation getUsersForWorkspace has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getUsersForWorkspace"
       }
     },
     {
@@ -2562,9 +2462,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getuserforworkspace",
-        "notes": "official_operation_id=getUserForWorkspace; lane=etl_read"
+        "reason": "Locked source operation getUserForWorkspace has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getUserForWorkspace"
       }
     },
     {
@@ -2580,11 +2479,10 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
-        "source_url": "https://developers.asana.com/reference/getwebhooks",
-        "notes": "official_operation_id=getWebhooks; lane=cdc_changefeed"
+        "reason": "Locked source operation getWebhooks has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getWebhooks"
       }
     },
     {
@@ -2606,11 +2504,10 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned Asana event/webhook/audit/job changefeed surface; blocked until CDC truthfulness/lab foundations #2986/#2988 and connector-local cursor/webhook lifecycle evidence exist.",
-        "source_url": "https://developers.asana.com/reference/getwebhook",
-        "notes": "official_operation_id=getWebhook; lane=cdc_changefeed"
+        "reason": "Locked source operation getWebhook has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getWebhook"
       }
     },
     {
@@ -2647,9 +2544,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getworkspacemembership",
-        "notes": "official_operation_id=getWorkspaceMembership; lane=etl_read"
+        "reason": "Locked source operation getWorkspaceMembership has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getWorkspaceMembership"
       }
     },
     {
@@ -2660,9 +2556,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getworkspacemembershipsforuser",
-        "notes": "official_operation_id=getWorkspaceMembershipsForUser; lane=etl_read"
+        "reason": "Locked source operation getWorkspaceMembershipsForUser has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getWorkspaceMembershipsForUser"
       }
     },
     {
@@ -2687,9 +2582,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getworkspace",
-        "notes": "official_operation_id=getWorkspace; lane=etl_read"
+        "reason": "Locked source operation getWorkspace has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getWorkspace"
       }
     },
     {
@@ -2727,9 +2621,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned ETL/read stream; blocked until a bounded stream schema, pagination/cursor semantics, sanitized fixtures, and conformance evidence are authored.",
-        "source_url": "https://developers.asana.com/reference/getworkspaceevents",
-        "notes": "official_operation_id=getWorkspaceEvents; lane=etl_read"
+        "reason": "Locked source operation getWorkspaceEvents has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getWorkspaceEvents"
       }
     }
   ]

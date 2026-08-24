@@ -13,6 +13,57 @@
 | Vercel surface discovery | `pm vercel` returns `unknown command`; an absent `cli_surface.json` means no command can be credential-bound | Report the required declaration-owned artifacts and source-bound operation set before any mutation mapping | Do not create a command surface as part of a disposition-only slice | pending captain report |
 | Asana/Jira declared-and-deferred mutations | Targeted validation reports the documented source mutations without complete actions | Exact cited disposition files retain those operations as merge-blocked runtime gaps without changing a working command | Same focused importer/validator and runtime sweep as Sentry | pending |
 
+### 2026-08-24 Asana red/green split
+
+- **Red:** `go run ./cmd/connectorgen source-import asana --check` reports 25
+  source operations without complete executable actions; targeted validation
+  reports the same 25 plus 65 separately unresolved source-bound gaps.
+- **Classified actionless set:** 21 of the 25 have neither a matching write
+  action nor an implemented command. Every one is `direct_write` in the
+  existing source-cited declaration-disposition ledger and is eligible for the
+  non-executable mutation foundation.
+- **Protected executable set:** `deleteProject`, `deleteSection`,
+  `deleteTag`, and `deleteTask` each have an implemented reverse-ETL command
+  and a matching action. In a fresh credential-free project,
+  `pm asana projects|sections|tags|tasks delete` each returned exactly
+  `error: missing --credential`. Their actions use a historical `gid` field
+  while the pinned provider source requires respectively `project_gid`,
+  `section_gid`, `tag_gid`, and `task_gid` (plus optional `opt_pretty`). A
+  non-executable disposition would be refused and would be dishonest.
+- **Green assertion:** retain those four commands as implemented, update their
+  action and command contracts to the exact provider path/query names, and
+  defer only the other 21 cited mutations. Source import must pass without
+  reducing an executable claim; validation must retain any independently
+  source-cited runtime contract gap rather than hiding it.
+
+### 2026-08-24 Asana declared-and-deferred result
+
+- Green mapping: `go run ./cmd/connectorgen source-import asana` updated 69
+  declaration-owned write/CLI contracts; its `--check` rerun verified all 249
+  provider operations. The 21 actionless `direct_write` rows are each retained
+  as a cited `source-cited-non-executable-mutation-foundation-r1` gap. The
+  descriptor owns the provider URL, SHA-256
+  `cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56`,
+  byte count `3066750`, and precise OpenAPI location for every disposition.
+- Green executable boundary: after rebuilding `pm`, each of `pm asana projects
+  delete`, `sections delete`, `tags delete`, and `tasks delete` returned exit
+  1 with exactly `error: missing --credential` from the isolated no-credential
+  project. Their paths, schemas, and flags now use the provider names
+  `project_gid`, `section_gid`, `tag_gid`, and `task_gid`, plus optional
+  `opt_pretty`; none was deferred.
+- Focused green: `go test -timeout 20m ./cmd/connectorgen -run
+  'TestSourceProjectionSourceCitedNonExecutableMutationDisposition' -count=1`
+  passed.
+- Honest remaining validation: `connectorgen validate
+  internal/connectors/defs/asana` now reports 28 rows, not missing actions:
+  24 implemented source operations retain cited
+  `cli-request-schema-foundation-r1` gaps for non-scalar `opt_fields` and
+  unbounded request bodies, emitted by
+  `sourceProjectionOperationParameterGap` / `sourceProjectionSchemaGap` in
+  `cmd/connectorgen/sourceimport.go:6826-6900`; four older implemented
+  commands retain engine-incompatible backreference regexes. These working
+  commands are neither downgraded nor tagged as non-executable.
+
 ## Jira red/green evidence
 
 - Red: `go run ./cmd/connectorgen source-import jira --check` exited 1 because

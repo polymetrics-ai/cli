@@ -1192,177 +1192,11 @@
       "source_url": "https://developers.asana.com/reference/createcustomfield",
       "flags": [
         {
-          "name": "currency-code",
-          "type": "string",
-          "summary": "Optional request field data.currency_code.",
-          "maps_to": "record.data.currency_code",
-          "allow_empty": false
-        },
-        {
-          "name": "custom-label",
-          "type": "string",
-          "summary": "Optional request field data.custom_label.",
-          "maps_to": "record.data.custom_label",
-          "allow_empty": false
-        },
-        {
-          "name": "custom-label-position",
-          "type": "string",
-          "summary": "Optional request field data.custom_label_position.",
-          "maps_to": "record.data.custom_label_position",
-          "allow_empty": false
-        },
-        {
-          "name": "date",
-          "type": "string",
-          "summary": "Optional request field data.date_value.date.",
-          "maps_to": "record.data.date_value.date",
-          "allow_empty": false
-        },
-        {
-          "name": "date-time",
-          "type": "string",
-          "summary": "Optional request field data.date_value.date_time.",
-          "maps_to": "record.data.date_value.date_time",
-          "allow_empty": false
-        },
-        {
-          "name": "description",
-          "type": "string",
-          "summary": "Optional request field data.description.",
-          "maps_to": "record.data.description",
-          "allow_empty": false
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "summary": "Optional request field data.enum_options.0.color.",
-          "maps_to": "record.data.enum_options.0.color",
-          "allow_empty": false
-        },
-        {
-          "name": "enabled",
-          "type": "boolean",
-          "summary": "Optional request field data.enum_options.0.enabled.",
-          "maps_to": "record.data.enum_options.0.enabled"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.enum_options.0.name.",
-          "maps_to": "record.data.enum_options.0.name",
-          "allow_empty": false
-        },
-        {
-          "name": "data-enum-value-color",
-          "type": "string",
-          "summary": "Optional request field data.enum_value.color.",
-          "maps_to": "record.data.enum_value.color",
-          "allow_empty": false
-        },
-        {
-          "name": "data-enum-value-enabled",
-          "type": "boolean",
-          "summary": "Optional request field data.enum_value.enabled.",
-          "maps_to": "record.data.enum_value.enabled"
-        },
-        {
-          "name": "data-enum-value-name",
-          "type": "string",
-          "summary": "Optional request field data.enum_value.name.",
-          "maps_to": "record.data.enum_value.name",
-          "allow_empty": false
-        },
-        {
-          "name": "format",
-          "type": "string",
-          "summary": "Optional request field data.format.",
-          "maps_to": "record.data.format",
-          "allow_empty": false
-        },
-        {
-          "name": "has-notifications-enabled",
-          "type": "boolean",
-          "summary": "Optional request field data.has_notifications_enabled.",
-          "maps_to": "record.data.has_notifications_enabled"
-        },
-        {
-          "name": "id-prefix",
-          "type": "string",
-          "summary": "Optional request field data.id_prefix.",
-          "maps_to": "record.data.id_prefix",
-          "allow_empty": false
-        },
-        {
-          "name": "input-restrictions",
-          "type": "string_array",
-          "summary": "Optional request field data.input_restrictions.",
-          "maps_to": "record.data.input_restrictions"
-        },
-        {
-          "name": "is-formula-field",
-          "type": "boolean",
-          "summary": "Optional request field data.is_formula_field.",
-          "maps_to": "record.data.is_formula_field"
-        },
-        {
-          "name": "data-multi-enum-values-0-color",
-          "type": "string",
-          "summary": "Optional request field data.multi_enum_values.0.color.",
-          "maps_to": "record.data.multi_enum_values.0.color",
-          "allow_empty": false
-        },
-        {
-          "name": "data-multi-enum-values-0-enabled",
-          "type": "boolean",
-          "summary": "Optional request field data.multi_enum_values.0.enabled.",
-          "maps_to": "record.data.multi_enum_values.0.enabled"
-        },
-        {
-          "name": "data-multi-enum-values-0-name",
-          "type": "string",
-          "summary": "Optional request field data.multi_enum_values.0.name.",
-          "maps_to": "record.data.multi_enum_values.0.name",
-          "allow_empty": false
-        },
-        {
-          "name": "data-name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "number-value",
-          "type": "integer",
-          "summary": "Optional request field data.number_value.",
-          "maps_to": "record.data.number_value"
-        },
-        {
-          "name": "owned-by-app",
-          "type": "boolean",
-          "summary": "Optional request field data.owned_by_app.",
-          "maps_to": "record.data.owned_by_app"
-        },
-        {
-          "name": "people-value",
-          "type": "string_array",
-          "summary": "Optional request field data.people_value.",
-          "maps_to": "record.data.people_value"
-        },
-        {
-          "name": "resource-subtype",
-          "type": "string",
-          "summary": "Required request field data.resource_subtype.",
-          "maps_to": "record.data.resource_subtype",
-          "allow_empty": false
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Required request field data.workspace.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -1411,177 +1245,18 @@
       "flags": [
         {
           "name": "custom-field-gid",
-          "type": "string",
           "summary": "Path parameter custom_field_gid for PUT /custom_fields/{custom_field_gid}.",
+          "type": "string",
           "maps_to": "record.custom_field_gid",
           "required": true,
-          "allow_empty": false
+          "max_bytes": 32768
         },
         {
-          "name": "currency-code",
-          "type": "string",
-          "summary": "Optional request field data.currency_code.",
-          "maps_to": "record.data.currency_code",
-          "allow_empty": false
-        },
-        {
-          "name": "custom-label",
-          "type": "string",
-          "summary": "Optional request field data.custom_label.",
-          "maps_to": "record.data.custom_label",
-          "allow_empty": false
-        },
-        {
-          "name": "custom-label-position",
-          "type": "string",
-          "summary": "Optional request field data.custom_label_position.",
-          "maps_to": "record.data.custom_label_position",
-          "allow_empty": false
-        },
-        {
-          "name": "date",
-          "type": "string",
-          "summary": "Optional request field data.date_value.date.",
-          "maps_to": "record.data.date_value.date",
-          "allow_empty": false
-        },
-        {
-          "name": "date-time",
-          "type": "string",
-          "summary": "Optional request field data.date_value.date_time.",
-          "maps_to": "record.data.date_value.date_time",
-          "allow_empty": false
-        },
-        {
-          "name": "description",
-          "type": "string",
-          "summary": "Optional request field data.description.",
-          "maps_to": "record.data.description",
-          "allow_empty": false
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "summary": "Optional request field data.enum_options.0.color.",
-          "maps_to": "record.data.enum_options.0.color",
-          "allow_empty": false
-        },
-        {
-          "name": "enabled",
-          "type": "boolean",
-          "summary": "Optional request field data.enum_options.0.enabled.",
-          "maps_to": "record.data.enum_options.0.enabled"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.enum_options.0.name.",
-          "maps_to": "record.data.enum_options.0.name",
-          "allow_empty": false
-        },
-        {
-          "name": "data-enum-value-color",
-          "type": "string",
-          "summary": "Optional request field data.enum_value.color.",
-          "maps_to": "record.data.enum_value.color",
-          "allow_empty": false
-        },
-        {
-          "name": "data-enum-value-enabled",
-          "type": "boolean",
-          "summary": "Optional request field data.enum_value.enabled.",
-          "maps_to": "record.data.enum_value.enabled"
-        },
-        {
-          "name": "data-enum-value-name",
-          "type": "string",
-          "summary": "Optional request field data.enum_value.name.",
-          "maps_to": "record.data.enum_value.name",
-          "allow_empty": false
-        },
-        {
-          "name": "format",
-          "type": "string",
-          "summary": "Optional request field data.format.",
-          "maps_to": "record.data.format",
-          "allow_empty": false
-        },
-        {
-          "name": "has-notifications-enabled",
-          "type": "boolean",
-          "summary": "Optional request field data.has_notifications_enabled.",
-          "maps_to": "record.data.has_notifications_enabled"
-        },
-        {
-          "name": "id-prefix",
-          "type": "string",
-          "summary": "Optional request field data.id_prefix.",
-          "maps_to": "record.data.id_prefix",
-          "allow_empty": false
-        },
-        {
-          "name": "input-restrictions",
-          "type": "string_array",
-          "summary": "Optional request field data.input_restrictions.",
-          "maps_to": "record.data.input_restrictions"
-        },
-        {
-          "name": "is-formula-field",
-          "type": "boolean",
-          "summary": "Optional request field data.is_formula_field.",
-          "maps_to": "record.data.is_formula_field"
-        },
-        {
-          "name": "data-multi-enum-values-0-color",
-          "type": "string",
-          "summary": "Optional request field data.multi_enum_values.0.color.",
-          "maps_to": "record.data.multi_enum_values.0.color",
-          "allow_empty": false
-        },
-        {
-          "name": "data-multi-enum-values-0-enabled",
-          "type": "boolean",
-          "summary": "Optional request field data.multi_enum_values.0.enabled.",
-          "maps_to": "record.data.multi_enum_values.0.enabled"
-        },
-        {
-          "name": "data-multi-enum-values-0-name",
-          "type": "string",
-          "summary": "Optional request field data.multi_enum_values.0.name.",
-          "maps_to": "record.data.multi_enum_values.0.name",
-          "allow_empty": false
-        },
-        {
-          "name": "data-name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "number-value",
-          "type": "integer",
-          "summary": "Optional request field data.number_value.",
-          "maps_to": "record.data.number_value"
-        },
-        {
-          "name": "owned-by-app",
-          "type": "boolean",
-          "summary": "Optional request field data.owned_by_app.",
-          "maps_to": "record.data.owned_by_app"
-        },
-        {
-          "name": "people-value",
-          "type": "string_array",
-          "summary": "Optional request field data.people_value.",
-          "maps_to": "record.data.people_value"
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Required request field data.workspace.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -1654,45 +1329,18 @@
       "flags": [
         {
           "name": "custom-field-gid",
-          "type": "string",
           "summary": "Path parameter custom_field_gid for POST /custom_fields/{custom_field_gid}/enum_options.",
+          "type": "string",
           "maps_to": "record.custom_field_gid",
           "required": true,
-          "allow_empty": false
+          "max_bytes": 32768
         },
         {
-          "name": "color",
-          "type": "string",
-          "summary": "Optional request field data.color.",
-          "maps_to": "record.data.color",
-          "allow_empty": false
-        },
-        {
-          "name": "enabled",
-          "type": "boolean",
-          "summary": "Optional request field data.enabled.",
-          "maps_to": "record.data.enabled"
-        },
-        {
-          "name": "insert-after",
-          "type": "string",
-          "summary": "Optional request field data.insert_after.",
-          "maps_to": "record.data.insert_after",
-          "allow_empty": false
-        },
-        {
-          "name": "insert-before",
-          "type": "string",
-          "summary": "Optional request field data.insert_before.",
-          "maps_to": "record.data.insert_before",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -1716,32 +1364,28 @@
       "flags": [
         {
           "name": "custom-field-gid",
-          "type": "string",
           "summary": "Path parameter custom_field_gid for POST /custom_fields/{custom_field_gid}/enum_options/insert.",
+          "type": "string",
           "maps_to": "record.custom_field_gid",
           "required": true,
-          "allow_empty": false
+          "max_bytes": 32768
         },
         {
-          "name": "after-enum-option",
-          "type": "string",
-          "summary": "Optional request field data.after_enum_option.",
-          "maps_to": "record.data.after_enum_option",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "before-enum-option",
-          "type": "string",
-          "summary": "Optional request field data.before_enum_option.",
-          "maps_to": "record.data.before_enum_option",
-          "allow_empty": false
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
         },
         {
-          "name": "enum-option",
-          "type": "string",
-          "summary": "Optional request field data.enum_option.",
-          "maps_to": "record.data.enum_option",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -1764,32 +1408,29 @@
       "source_url": "https://developers.asana.com/reference/updateenumoption",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
           "name": "enum-option-gid",
-          "type": "string",
           "summary": "Path parameter enum_option_gid for PUT /enum_options/{enum_option_gid}.",
+          "type": "string",
           "maps_to": "record.enum_option_gid",
           "required": true,
-          "allow_empty": false
+          "max_bytes": 32768
         },
         {
-          "name": "color",
-          "type": "string",
-          "summary": "Optional request field data.color.",
-          "maps_to": "record.data.color",
-          "allow_empty": false
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
         },
         {
-          "name": "enabled",
+          "name": "opt-pretty",
           "type": "boolean",
-          "summary": "Optional request field data.enabled.",
-          "maps_to": "record.data.enabled"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -1869,11 +1510,10 @@
       "source_url": "https://developers.asana.com/reference/creategraphexport",
       "flags": [
         {
-          "name": "parent",
-          "type": "string",
-          "summary": "Optional request field data.parent.",
-          "maps_to": "record.data.parent",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -1896,24 +1536,10 @@
       "source_url": "https://developers.asana.com/reference/createresourceexport",
       "flags": [
         {
-          "name": "fields",
-          "type": "string_array",
-          "summary": "Optional request field data.export_request_parameters.0.fields.",
-          "maps_to": "record.data.export_request_parameters.0.fields"
-        },
-        {
-          "name": "resource-type",
-          "type": "string",
-          "summary": "Optional request field data.export_request_parameters.0.resource_type.",
-          "maps_to": "record.data.export_request_parameters.0.resource_type",
-          "allow_empty": false
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Optional request field data.workspace.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -1961,32 +1587,19 @@
       "source_url": "https://developers.asana.com/reference/updategoalrelationship",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
           "name": "goal-relationship-gid",
-          "type": "string",
           "summary": "Path parameter goal_relationship_gid for PUT /goal_relationships/{goal_relationship_gid}.",
+          "type": "string",
           "maps_to": "record.goal_relationship_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "contribution-weight",
-          "type": "integer",
-          "summary": "Optional request field data.contribution_weight.",
-          "maps_to": "record.data.contribution_weight"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.supported_goal.name.",
-          "maps_to": "record.data.supported_goal.name",
-          "allow_empty": false
-        },
-        {
-          "name": "data-supporting-resource-name",
-          "type": "string",
-          "summary": "Optional request field data.supporting_resource.name.",
-          "maps_to": "record.data.supporting_resource.name",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -2025,39 +1638,29 @@
       "source_url": "https://developers.asana.com/reference/addsupportingrelationship",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
           "name": "goal-gid",
-          "type": "string",
           "summary": "Path parameter goal_gid for POST /goals/{goal_gid}/addSupportingRelationship.",
+          "type": "string",
           "maps_to": "record.goal_gid",
           "required": true,
-          "allow_empty": false
+          "max_bytes": 32768
         },
         {
-          "name": "contribution-weight",
-          "type": "integer",
-          "summary": "Optional request field data.contribution_weight.",
-          "maps_to": "record.data.contribution_weight"
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
         },
         {
-          "name": "insert-after",
-          "type": "string",
-          "summary": "Optional request field data.insert_after.",
-          "maps_to": "record.data.insert_after",
-          "allow_empty": false
-        },
-        {
-          "name": "insert-before",
-          "type": "string",
-          "summary": "Optional request field data.insert_before.",
-          "maps_to": "record.data.insert_before",
-          "allow_empty": false
-        },
-        {
-          "name": "supporting-resource",
-          "type": "string",
-          "summary": "Optional request field data.supporting_resource.",
-          "maps_to": "record.data.supporting_resource",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -2146,94 +1749,19 @@
       "source_url": "https://developers.asana.com/reference/updategoal",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
           "name": "goal-gid",
-          "type": "string",
           "summary": "Path parameter goal_gid for PUT /goals/{goal_gid}.",
+          "type": "string",
           "maps_to": "record.goal_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "due-on",
-          "type": "string",
-          "summary": "Optional request field data.due_on.",
-          "maps_to": "record.data.due_on",
-          "allow_empty": false
-        },
-        {
-          "name": "html-notes",
-          "type": "string",
-          "summary": "Optional request field data.html_notes.",
-          "maps_to": "record.data.html_notes",
-          "allow_empty": false
-        },
-        {
-          "name": "is-workspace-level",
-          "type": "boolean",
-          "summary": "Optional request field data.is_workspace_level.",
-          "maps_to": "record.data.is_workspace_level"
-        },
-        {
-          "name": "liked",
-          "type": "boolean",
-          "summary": "Optional request field data.liked.",
-          "maps_to": "record.data.liked"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "notes",
-          "type": "string",
-          "summary": "Optional request field data.notes.",
-          "maps_to": "record.data.notes",
-          "allow_empty": false
-        },
-        {
-          "name": "owner",
-          "type": "string",
-          "summary": "Optional request field data.owner.",
-          "maps_to": "record.data.owner",
-          "allow_empty": false
-        },
-        {
-          "name": "start-on",
-          "type": "string",
-          "summary": "Optional request field data.start_on.",
-          "maps_to": "record.data.start_on",
-          "allow_empty": false
-        },
-        {
-          "name": "status",
-          "type": "string",
-          "summary": "Optional request field data.status.",
-          "maps_to": "record.data.status",
-          "allow_empty": false
-        },
-        {
-          "name": "team",
-          "type": "string",
-          "summary": "Optional request field data.team.",
-          "maps_to": "record.data.team",
-          "allow_empty": false
-        },
-        {
-          "name": "time-period",
-          "type": "string",
-          "summary": "Optional request field data.time_period.",
-          "maps_to": "record.data.time_period",
-          "allow_empty": false
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Optional request field data.workspace.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -2306,85 +1834,11 @@
       "source_url": "https://developers.asana.com/reference/creategoal",
       "flags": [
         {
-          "name": "due-on",
-          "type": "string",
-          "summary": "Optional request field data.due_on.",
-          "maps_to": "record.data.due_on",
-          "allow_empty": false
-        },
-        {
-          "name": "followers",
-          "type": "string_array",
-          "summary": "Optional request field data.followers.",
-          "maps_to": "record.data.followers"
-        },
-        {
-          "name": "html-notes",
-          "type": "string",
-          "summary": "Optional request field data.html_notes.",
-          "maps_to": "record.data.html_notes",
-          "allow_empty": false
-        },
-        {
-          "name": "is-workspace-level",
-          "type": "boolean",
-          "summary": "Optional request field data.is_workspace_level.",
-          "maps_to": "record.data.is_workspace_level"
-        },
-        {
-          "name": "liked",
-          "type": "boolean",
-          "summary": "Optional request field data.liked.",
-          "maps_to": "record.data.liked"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "notes",
-          "type": "string",
-          "summary": "Optional request field data.notes.",
-          "maps_to": "record.data.notes",
-          "allow_empty": false
-        },
-        {
-          "name": "owner",
-          "type": "string",
-          "summary": "Optional request field data.owner.",
-          "maps_to": "record.data.owner",
-          "allow_empty": false
-        },
-        {
-          "name": "start-on",
-          "type": "string",
-          "summary": "Optional request field data.start_on.",
-          "maps_to": "record.data.start_on",
-          "allow_empty": false
-        },
-        {
-          "name": "team",
-          "type": "string",
-          "summary": "Optional request field data.team.",
-          "maps_to": "record.data.team",
-          "allow_empty": false
-        },
-        {
-          "name": "time-period",
-          "type": "string",
-          "summary": "Optional request field data.time_period.",
-          "maps_to": "record.data.time_period",
-          "allow_empty": false
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Optional request field data.workspace.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -2407,63 +1861,29 @@
       "source_url": "https://developers.asana.com/reference/creategoalmetric",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
           "name": "goal-gid",
-          "type": "string",
           "summary": "Path parameter goal_gid for POST /goals/{goal_gid}/setMetric.",
+          "type": "string",
           "maps_to": "record.goal_gid",
           "required": true,
-          "allow_empty": false
+          "max_bytes": 32768
         },
         {
-          "name": "currency-code",
-          "type": "string",
-          "summary": "Optional request field data.currency_code.",
-          "maps_to": "record.data.currency_code",
-          "allow_empty": false
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
         },
         {
-          "name": "current-number-value",
-          "type": "integer",
-          "summary": "Optional request field data.current_number_value.",
-          "maps_to": "record.data.current_number_value"
-        },
-        {
-          "name": "initial-number-value",
-          "type": "integer",
-          "summary": "Optional request field data.initial_number_value.",
-          "maps_to": "record.data.initial_number_value"
-        },
-        {
-          "name": "is-custom-weight",
+          "name": "opt-pretty",
           "type": "boolean",
-          "summary": "Optional request field data.is_custom_weight.",
-          "maps_to": "record.data.is_custom_weight"
-        },
-        {
-          "name": "precision",
-          "type": "integer",
-          "summary": "Optional request field data.precision.",
-          "maps_to": "record.data.precision"
-        },
-        {
-          "name": "progress-source",
-          "type": "string",
-          "summary": "Optional request field data.progress_source.",
-          "maps_to": "record.data.progress_source",
-          "allow_empty": false
-        },
-        {
-          "name": "target-number-value",
-          "type": "integer",
-          "summary": "Optional request field data.target_number_value.",
-          "maps_to": "record.data.target_number_value"
-        },
-        {
-          "name": "unit",
-          "type": "string",
-          "summary": "Optional request field data.unit.",
-          "maps_to": "record.data.unit",
-          "allow_empty": false
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -2486,18 +1906,29 @@
       "source_url": "https://developers.asana.com/reference/updategoalmetric",
       "flags": [
         {
-          "name": "goal-gid",
-          "type": "string",
-          "summary": "Path parameter goal_gid for POST /goals/{goal_gid}/setMetricCurrentValue.",
-          "maps_to": "record.goal_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "current-number-value",
-          "type": "integer",
-          "summary": "Optional request field data.current_number_value.",
-          "maps_to": "record.data.current_number_value"
+          "name": "goal-gid",
+          "summary": "Path parameter goal_gid for POST /goals/{goal_gid}/setMetricCurrentValue.",
+          "type": "string",
+          "maps_to": "record.goal_gid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -2520,18 +1951,29 @@
       "source_url": "https://developers.asana.com/reference/addfollowers",
       "flags": [
         {
-          "name": "goal-gid",
-          "type": "string",
-          "summary": "Path parameter goal_gid for POST /goals/{goal_gid}/addFollowers.",
-          "maps_to": "record.goal_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "followers",
-          "type": "string_array",
-          "summary": "Optional request field data.followers.",
-          "maps_to": "record.data.followers"
+          "name": "goal-gid",
+          "summary": "Path parameter goal_gid for POST /goals/{goal_gid}/addFollowers.",
+          "type": "string",
+          "maps_to": "record.goal_gid",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -2620,32 +2062,23 @@
       "source_url": "https://developers.asana.com/reference/addcustomfieldsettingforgoal",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
           "name": "goal-gid",
-          "type": "string",
           "summary": "Path parameter goal_gid for POST /goals/{goal_gid}/addCustomFieldSetting.",
+          "type": "string",
           "maps_to": "record.goal_gid",
           "required": true,
-          "allow_empty": false
+          "max_bytes": 32768
         },
         {
-          "name": "insert-after",
-          "type": "string",
-          "summary": "Optional request field data.insert_after.",
-          "maps_to": "record.data.insert_after",
-          "allow_empty": false
-        },
-        {
-          "name": "insert-before",
-          "type": "string",
-          "summary": "Optional request field data.insert_before.",
-          "maps_to": "record.data.insert_before",
-          "allow_empty": false
-        },
-        {
-          "name": "is-important",
+          "name": "opt-pretty",
           "type": "boolean",
-          "summary": "Optional request field data.is_important.",
-          "maps_to": "record.data.is_important"
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -2909,26 +2342,29 @@
       "source_url": "https://developers.asana.com/reference/updateoooentry",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
           "name": "ooo-entry-gid",
-          "type": "string",
           "summary": "Path parameter ooo_entry_gid for PUT /ooo_entries/{ooo_entry_gid}.",
+          "type": "string",
           "maps_to": "record.ooo_entry_gid",
           "required": true,
-          "allow_empty": false
+          "max_bytes": 32768
         },
         {
-          "name": "end-date",
-          "type": "string",
-          "summary": "Optional request field data.end_date.",
-          "maps_to": "record.data.end_date",
-          "allow_empty": false
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
         },
         {
-          "name": "start-date",
-          "type": "string",
-          "summary": "Optional request field data.start_date.",
-          "maps_to": "record.data.start_date",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -3001,32 +2437,11 @@
       "source_url": "https://developers.asana.com/reference/createoooentry",
       "flags": [
         {
-          "name": "end-date",
-          "type": "string",
-          "summary": "Optional request field data.end_date.",
-          "maps_to": "record.data.end_date",
-          "allow_empty": false
-        },
-        {
-          "name": "start-date",
-          "type": "string",
-          "summary": "Optional request field data.start_date.",
-          "maps_to": "record.data.start_date",
-          "allow_empty": false
-        },
-        {
-          "name": "user",
-          "type": "string",
-          "summary": "Optional request field data.user.",
-          "maps_to": "record.data.user",
-          "allow_empty": false
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Optional request field data.workspace.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -3190,58 +2605,11 @@
       "source_url": "https://developers.asana.com/reference/createportfolio",
       "flags": [
         {
-          "name": "archived",
-          "type": "boolean",
-          "summary": "Optional request field data.archived.",
-          "maps_to": "record.data.archived"
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "summary": "Optional request field data.color.",
-          "maps_to": "record.data.color",
-          "allow_empty": false
-        },
-        {
-          "name": "default-access-level",
-          "type": "string",
-          "summary": "Optional request field data.default_access_level.",
-          "maps_to": "record.data.default_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "due-on",
-          "type": "string",
-          "summary": "Optional request field data.due_on.",
-          "maps_to": "record.data.due_on",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "public",
-          "type": "boolean",
-          "summary": "Optional request field data.public.",
-          "maps_to": "record.data.public"
-        },
-        {
-          "name": "start-on",
-          "type": "string",
-          "summary": "Optional request field data.start_on.",
-          "maps_to": "record.data.start_on",
-          "allow_empty": false
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Optional request field data.workspace.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -3289,53 +2657,19 @@
       "source_url": "https://developers.asana.com/reference/updateportfolio",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
           "name": "portfolio-gid",
-          "type": "string",
           "summary": "Path parameter portfolio_gid for PUT /portfolios/{portfolio_gid}.",
+          "type": "string",
           "maps_to": "record.portfolio_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "archived",
-          "type": "boolean",
-          "summary": "Optional request field data.archived.",
-          "maps_to": "record.data.archived"
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "summary": "Optional request field data.color.",
-          "maps_to": "record.data.color",
-          "allow_empty": false
-        },
-        {
-          "name": "default-access-level",
-          "type": "string",
-          "summary": "Optional request field data.default_access_level.",
-          "maps_to": "record.data.default_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "due-on",
-          "type": "string",
-          "summary": "Optional request field data.due_on.",
-          "maps_to": "record.data.due_on",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "start-on",
-          "type": "string",
-          "summary": "Optional request field data.start_on.",
-          "maps_to": "record.data.start_on",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -3417,33 +2751,23 @@
       "source_url": "https://developers.asana.com/reference/additemforportfolio",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "portfolio-gid",
-          "type": "string",
           "summary": "Path parameter portfolio_gid for POST /portfolios/{portfolio_gid}/addItem.",
+          "type": "string",
           "maps_to": "record.portfolio_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "insert-after",
-          "type": "string",
-          "summary": "Optional request field data.insert_after.",
-          "maps_to": "record.data.insert_after",
-          "allow_empty": false
-        },
-        {
-          "name": "insert-before",
-          "type": "string",
-          "summary": "Optional request field data.insert_before.",
-          "maps_to": "record.data.insert_before",
-          "allow_empty": false
-        },
-        {
-          "name": "item",
-          "type": "string",
-          "summary": "Optional request field data.item.",
-          "maps_to": "record.data.item",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -3507,32 +2831,23 @@
       "source_url": "https://developers.asana.com/reference/addcustomfieldsettingforportfolio",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "portfolio-gid",
-          "type": "string",
           "summary": "Path parameter portfolio_gid for POST /portfolios/{portfolio_gid}/addCustomFieldSetting.",
+          "type": "string",
           "maps_to": "record.portfolio_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "insert-after",
-          "type": "string",
-          "summary": "Optional request field data.insert_after.",
-          "maps_to": "record.data.insert_after",
-          "allow_empty": false
-        },
-        {
-          "name": "insert-before",
-          "type": "string",
-          "summary": "Optional request field data.insert_before.",
-          "maps_to": "record.data.insert_before",
-          "allow_empty": false
-        },
-        {
-          "name": "is-important",
-          "type": "boolean",
-          "summary": "Optional request field data.is_important.",
-          "maps_to": "record.data.is_important"
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -3596,19 +2911,29 @@
       "source_url": "https://developers.asana.com/reference/addmembersforportfolio",
       "flags": [
         {
-          "name": "portfolio-gid",
-          "type": "string",
-          "summary": "Path parameter portfolio_gid for POST /portfolios/{portfolio_gid}/addMembers.",
-          "maps_to": "record.portfolio_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "members",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "portfolio-gid",
+          "summary": "Path parameter portfolio_gid for POST /portfolios/{portfolio_gid}/addMembers.",
           "type": "string",
-          "summary": "Optional request field data.members.",
-          "maps_to": "record.data.members",
-          "allow_empty": false
+          "maps_to": "record.portfolio_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -3672,26 +2997,29 @@
       "source_url": "https://developers.asana.com/reference/duplicateportfolio",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "portfolio-gid",
-          "type": "string",
           "summary": "Path parameter portfolio_gid for POST /portfolios/{portfolio_gid}/duplicate.",
+          "type": "string",
           "maps_to": "record.portfolio_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "include",
-          "type": "string",
-          "summary": "Optional request field data.include.",
-          "maps_to": "record.data.include",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -3739,33 +3067,19 @@
       "source_url": "https://developers.asana.com/reference/updateprojectbrief",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
           "name": "project-brief-gid",
-          "type": "string",
           "summary": "Path parameter project_brief_gid for PUT /project_briefs/{project_brief_gid}.",
+          "type": "string",
           "maps_to": "record.project_brief_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "html-text",
-          "type": "string",
-          "summary": "Optional request field data.html_text.",
-          "maps_to": "record.data.html_text",
-          "allow_empty": false
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Optional request field data.text.",
-          "maps_to": "record.data.text",
-          "allow_empty": false
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "summary": "Optional request field data.title.",
-          "maps_to": "record.data.title",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -3822,33 +3136,19 @@
       "source_url": "https://developers.asana.com/reference/createprojectbrief",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
           "name": "project-gid",
-          "type": "string",
           "summary": "Path parameter project_gid for POST /projects/{project_gid}/project_briefs.",
+          "type": "string",
           "maps_to": "record.project_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "html-text",
-          "type": "string",
-          "summary": "Optional request field data.html_text.",
-          "maps_to": "record.data.html_text",
-          "allow_empty": false
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Optional request field data.text.",
-          "maps_to": "record.data.text",
-          "allow_empty": false
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "summary": "Optional request field data.title.",
-          "maps_to": "record.data.title",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -3946,18 +3246,29 @@
       "source_url": "https://developers.asana.com/reference/updateprojectportfoliosetting",
       "flags": [
         {
-          "name": "project-portfolio-setting-gid",
-          "type": "string",
-          "summary": "Path parameter project_portfolio_setting_gid for PUT /project_portfolio_settings/{project_portfolio_setting_gid}.",
-          "maps_to": "record.project_portfolio_setting_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "is-access-control-inherited",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
           "type": "boolean",
-          "summary": "Optional request field data.is_access_control_inherited.",
-          "maps_to": "record.data.is_access_control_inherited"
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "project-portfolio-setting-gid",
+          "summary": "Path parameter project_portfolio_setting_gid for PUT /project_portfolio_settings/{project_portfolio_setting_gid}.",
+          "type": "string",
+          "maps_to": "record.project_portfolio_setting_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -4114,40 +3425,19 @@
       "source_url": "https://developers.asana.com/reference/createprojectstatusforproject",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
           "name": "project-gid",
-          "type": "string",
           "summary": "Path parameter project_gid for POST /projects/{project_gid}/project_statuses.",
+          "type": "string",
           "maps_to": "record.project_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "summary": "Optional request field data.color.",
-          "maps_to": "record.data.color",
-          "allow_empty": false
-        },
-        {
-          "name": "html-text",
-          "type": "string",
-          "summary": "Optional request field data.html_text.",
-          "maps_to": "record.data.html_text",
-          "allow_empty": false
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Optional request field data.text.",
-          "maps_to": "record.data.text",
-          "allow_empty": false
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "summary": "Optional request field data.title.",
-          "maps_to": "record.data.title",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -4270,73 +3560,29 @@
       "source_url": "https://developers.asana.com/reference/instantiateproject",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "project-template-gid",
-          "type": "string",
           "summary": "Path parameter project_template_gid for POST /project_templates/{project_template_gid}/instantiateProject.",
+          "type": "string",
           "maps_to": "record.project_template_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "is-strict",
-          "type": "boolean",
-          "summary": "Optional request field data.is_strict.",
-          "maps_to": "record.data.is_strict"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "privacy-setting",
-          "type": "string",
-          "summary": "Optional request field data.privacy_setting.",
-          "maps_to": "record.data.privacy_setting",
-          "allow_empty": false
-        },
-        {
-          "name": "public",
-          "type": "boolean",
-          "summary": "Optional request field data.public.",
-          "maps_to": "record.data.public"
-        },
-        {
-          "name": "gid",
-          "type": "string",
-          "summary": "Optional request field data.requested_dates.0.gid.",
-          "maps_to": "record.data.requested_dates.0.gid",
-          "allow_empty": false
-        },
-        {
-          "name": "value",
-          "type": "string",
-          "summary": "Optional request field data.requested_dates.0.value.",
-          "maps_to": "record.data.requested_dates.0.value",
-          "allow_empty": false
-        },
-        {
-          "name": "data-requested-roles-0-gid",
-          "type": "string",
-          "summary": "Optional request field data.requested_roles.0.gid.",
-          "maps_to": "record.data.requested_roles.0.gid",
-          "allow_empty": false
-        },
-        {
-          "name": "data-requested-roles-0-value",
-          "type": "string",
-          "summary": "Optional request field data.requested_roles.0.value.",
-          "maps_to": "record.data.requested_roles.0.value",
-          "allow_empty": false
-        },
-        {
-          "name": "team",
-          "type": "string",
-          "summary": "Optional request field data.team.",
-          "maps_to": "record.data.team",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -4374,18 +3620,11 @@
       "write": "create_project",
       "flags": [
         {
-          "name": "name",
-          "type": "string",
-          "summary": "Project name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Workspace gid.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -4467,15 +3706,21 @@
       "write": "delete_project",
       "flags": [
         {
-          "name": "gid",
-          "type": "string",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "project-gid",
           "summary": "Project gid to delete.",
-          "maps_to": "record.gid",
-          "allow_empty": false
+          "type": "string",
+          "maps_to": "record.project_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "redact_fields": [
-        "gid"
+        "project_gid"
       ],
       "api_surface": [
         {
@@ -4496,46 +3741,29 @@
       "source_url": "https://developers.asana.com/reference/duplicateproject",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "project-gid",
-          "type": "string",
           "summary": "Path parameter project_gid for POST /projects/{project_gid}/duplicate.",
+          "type": "string",
           "maps_to": "record.project_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "include",
-          "type": "string",
-          "summary": "Optional request field data.include.",
-          "maps_to": "record.data.include",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "due-on",
-          "type": "string",
-          "summary": "Optional request field data.schedule_dates.due_on.",
-          "maps_to": "record.data.schedule_dates.due_on",
-          "allow_empty": false
-        },
-        {
-          "name": "should-skip-weekends",
-          "type": "boolean",
-          "summary": "Optional request field data.schedule_dates.should_skip_weekends.",
-          "maps_to": "record.data.schedule_dates.should_skip_weekends"
-        },
-        {
-          "name": "start-on",
-          "type": "string",
-          "summary": "Optional request field data.schedule_dates.start_on.",
-          "maps_to": "record.data.schedule_dates.start_on",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -4608,178 +3836,19 @@
       "source_url": "https://developers.asana.com/reference/createprojectforteam",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
           "name": "team-gid",
-          "type": "string",
           "summary": "Path parameter team_gid for POST /teams/{team_gid}/projects.",
+          "type": "string",
           "maps_to": "record.team_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "archived",
-          "type": "boolean",
-          "summary": "Optional request field data.archived.",
-          "maps_to": "record.data.archived"
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "summary": "Optional request field data.color.",
-          "maps_to": "record.data.color",
-          "allow_empty": false
-        },
-        {
-          "name": "data-current-status-color",
-          "type": "string",
-          "summary": "Optional request field data.current_status.color.",
-          "maps_to": "record.data.current_status.color",
-          "allow_empty": false
-        },
-        {
-          "name": "html-text",
-          "type": "string",
-          "summary": "Optional request field data.current_status.html_text.",
-          "maps_to": "record.data.current_status.html_text",
-          "allow_empty": false
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Optional request field data.current_status.text.",
-          "maps_to": "record.data.current_status.text",
-          "allow_empty": false
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "summary": "Optional request field data.current_status.title.",
-          "maps_to": "record.data.current_status.title",
-          "allow_empty": false
-        },
-        {
-          "name": "data-current-status-update-title",
-          "type": "string",
-          "summary": "Optional request field data.current_status_update.title.",
-          "maps_to": "record.data.current_status_update.title",
-          "allow_empty": false
-        },
-        {
-          "name": "default-access-level",
-          "type": "string",
-          "summary": "Optional request field data.default_access_level.",
-          "maps_to": "record.data.default_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "default-view",
-          "type": "string",
-          "summary": "Optional request field data.default_view.",
-          "maps_to": "record.data.default_view",
-          "allow_empty": false
-        },
-        {
-          "name": "due-date",
-          "type": "string",
-          "summary": "Optional request field data.due_date.",
-          "maps_to": "record.data.due_date",
-          "allow_empty": false
-        },
-        {
-          "name": "due-on",
-          "type": "string",
-          "summary": "Optional request field data.due_on.",
-          "maps_to": "record.data.due_on",
-          "allow_empty": false
-        },
-        {
-          "name": "followers",
-          "type": "string",
-          "summary": "Optional request field data.followers.",
-          "maps_to": "record.data.followers",
-          "allow_empty": false
-        },
-        {
-          "name": "html-notes",
-          "type": "string",
-          "summary": "Optional request field data.html_notes.",
-          "maps_to": "record.data.html_notes",
-          "allow_empty": false
-        },
-        {
-          "name": "icon",
-          "type": "string",
-          "summary": "Optional request field data.icon.",
-          "maps_to": "record.data.icon",
-          "allow_empty": false
-        },
-        {
-          "name": "minimum-access-level-for-customization",
-          "type": "string",
-          "summary": "Optional request field data.minimum_access_level_for_customization.",
-          "maps_to": "record.data.minimum_access_level_for_customization",
-          "allow_empty": false
-        },
-        {
-          "name": "minimum-access-level-for-sharing",
-          "type": "string",
-          "summary": "Optional request field data.minimum_access_level_for_sharing.",
-          "maps_to": "record.data.minimum_access_level_for_sharing",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "notes",
-          "type": "string",
-          "summary": "Optional request field data.notes.",
-          "maps_to": "record.data.notes",
-          "allow_empty": false
-        },
-        {
-          "name": "owner",
-          "type": "string",
-          "summary": "Optional request field data.owner.",
-          "maps_to": "record.data.owner",
-          "allow_empty": false
-        },
-        {
-          "name": "privacy-setting",
-          "type": "string",
-          "summary": "Optional request field data.privacy_setting.",
-          "maps_to": "record.data.privacy_setting",
-          "allow_empty": false
-        },
-        {
-          "name": "public",
-          "type": "boolean",
-          "summary": "Optional request field data.public.",
-          "maps_to": "record.data.public"
-        },
-        {
-          "name": "start-on",
-          "type": "string",
-          "summary": "Optional request field data.start_on.",
-          "maps_to": "record.data.start_on",
-          "allow_empty": false
-        },
-        {
-          "name": "team",
-          "type": "string",
-          "summary": "Optional request field data.team.",
-          "maps_to": "record.data.team",
-          "allow_empty": false
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Optional request field data.workspace.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -4827,178 +3896,19 @@
       "source_url": "https://developers.asana.com/reference/createprojectforworkspace",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
           "name": "workspace-gid",
-          "type": "string",
           "summary": "Path parameter workspace_gid for POST /workspaces/{workspace_gid}/projects.",
+          "type": "string",
           "maps_to": "record.workspace_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "archived",
-          "type": "boolean",
-          "summary": "Optional request field data.archived.",
-          "maps_to": "record.data.archived"
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "summary": "Optional request field data.color.",
-          "maps_to": "record.data.color",
-          "allow_empty": false
-        },
-        {
-          "name": "data-current-status-color",
-          "type": "string",
-          "summary": "Optional request field data.current_status.color.",
-          "maps_to": "record.data.current_status.color",
-          "allow_empty": false
-        },
-        {
-          "name": "html-text",
-          "type": "string",
-          "summary": "Optional request field data.current_status.html_text.",
-          "maps_to": "record.data.current_status.html_text",
-          "allow_empty": false
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Optional request field data.current_status.text.",
-          "maps_to": "record.data.current_status.text",
-          "allow_empty": false
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "summary": "Optional request field data.current_status.title.",
-          "maps_to": "record.data.current_status.title",
-          "allow_empty": false
-        },
-        {
-          "name": "data-current-status-update-title",
-          "type": "string",
-          "summary": "Optional request field data.current_status_update.title.",
-          "maps_to": "record.data.current_status_update.title",
-          "allow_empty": false
-        },
-        {
-          "name": "default-access-level",
-          "type": "string",
-          "summary": "Optional request field data.default_access_level.",
-          "maps_to": "record.data.default_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "default-view",
-          "type": "string",
-          "summary": "Optional request field data.default_view.",
-          "maps_to": "record.data.default_view",
-          "allow_empty": false
-        },
-        {
-          "name": "due-date",
-          "type": "string",
-          "summary": "Optional request field data.due_date.",
-          "maps_to": "record.data.due_date",
-          "allow_empty": false
-        },
-        {
-          "name": "due-on",
-          "type": "string",
-          "summary": "Optional request field data.due_on.",
-          "maps_to": "record.data.due_on",
-          "allow_empty": false
-        },
-        {
-          "name": "followers",
-          "type": "string",
-          "summary": "Optional request field data.followers.",
-          "maps_to": "record.data.followers",
-          "allow_empty": false
-        },
-        {
-          "name": "html-notes",
-          "type": "string",
-          "summary": "Optional request field data.html_notes.",
-          "maps_to": "record.data.html_notes",
-          "allow_empty": false
-        },
-        {
-          "name": "icon",
-          "type": "string",
-          "summary": "Optional request field data.icon.",
-          "maps_to": "record.data.icon",
-          "allow_empty": false
-        },
-        {
-          "name": "minimum-access-level-for-customization",
-          "type": "string",
-          "summary": "Optional request field data.minimum_access_level_for_customization.",
-          "maps_to": "record.data.minimum_access_level_for_customization",
-          "allow_empty": false
-        },
-        {
-          "name": "minimum-access-level-for-sharing",
-          "type": "string",
-          "summary": "Optional request field data.minimum_access_level_for_sharing.",
-          "maps_to": "record.data.minimum_access_level_for_sharing",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "notes",
-          "type": "string",
-          "summary": "Optional request field data.notes.",
-          "maps_to": "record.data.notes",
-          "allow_empty": false
-        },
-        {
-          "name": "owner",
-          "type": "string",
-          "summary": "Optional request field data.owner.",
-          "maps_to": "record.data.owner",
-          "allow_empty": false
-        },
-        {
-          "name": "privacy-setting",
-          "type": "string",
-          "summary": "Optional request field data.privacy_setting.",
-          "maps_to": "record.data.privacy_setting",
-          "allow_empty": false
-        },
-        {
-          "name": "public",
-          "type": "boolean",
-          "summary": "Optional request field data.public.",
-          "maps_to": "record.data.public"
-        },
-        {
-          "name": "start-on",
-          "type": "string",
-          "summary": "Optional request field data.start_on.",
-          "maps_to": "record.data.start_on",
-          "allow_empty": false
-        },
-        {
-          "name": "team",
-          "type": "string",
-          "summary": "Optional request field data.team.",
-          "maps_to": "record.data.team",
-          "allow_empty": false
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Optional request field data.workspace.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -5054,32 +3964,29 @@
       "source_url": "https://developers.asana.com/reference/addcustomfieldsettingforproject",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "project-gid",
-          "type": "string",
           "summary": "Path parameter project_gid for POST /projects/{project_gid}/addCustomFieldSetting.",
+          "type": "string",
           "maps_to": "record.project_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "insert-after",
-          "type": "string",
-          "summary": "Optional request field data.insert_after.",
-          "maps_to": "record.data.insert_after",
-          "allow_empty": false
-        },
-        {
-          "name": "insert-before",
-          "type": "string",
-          "summary": "Optional request field data.insert_before.",
-          "maps_to": "record.data.insert_before",
-          "allow_empty": false
-        },
-        {
-          "name": "is-important",
-          "type": "boolean",
-          "summary": "Optional request field data.is_important.",
-          "maps_to": "record.data.is_important"
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -5168,19 +4075,29 @@
       "source_url": "https://developers.asana.com/reference/addmembersforproject",
       "flags": [
         {
-          "name": "project-gid",
-          "type": "string",
-          "summary": "Path parameter project_gid for POST /projects/{project_gid}/addMembers.",
-          "maps_to": "record.project_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "members",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "project-gid",
+          "summary": "Path parameter project_gid for POST /projects/{project_gid}/addMembers.",
           "type": "string",
-          "summary": "Optional request field data.members.",
-          "maps_to": "record.data.members",
-          "allow_empty": false
+          "maps_to": "record.project_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -5244,19 +4161,29 @@
       "source_url": "https://developers.asana.com/reference/addfollowersforproject",
       "flags": [
         {
-          "name": "project-gid",
-          "type": "string",
-          "summary": "Path parameter project_gid for POST /projects/{project_gid}/addFollowers.",
-          "maps_to": "record.project_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "followers",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "project-gid",
+          "summary": "Path parameter project_gid for POST /projects/{project_gid}/addFollowers.",
           "type": "string",
-          "summary": "Optional request field data.followers.",
-          "maps_to": "record.data.followers",
-          "allow_empty": false
+          "maps_to": "record.project_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -5320,39 +4247,29 @@
       "source_url": "https://developers.asana.com/reference/projectsaveastemplate",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "project-gid",
-          "type": "string",
           "summary": "Path parameter project_gid for POST /projects/{project_gid}/saveAsTemplate.",
+          "type": "string",
           "maps_to": "record.project_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "public",
-          "type": "boolean",
-          "summary": "Optional request field data.public.",
-          "maps_to": "record.data.public"
-        },
-        {
-          "name": "team",
-          "type": "string",
-          "summary": "Optional request field data.team.",
-          "maps_to": "record.data.team",
-          "allow_empty": false
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Optional request field data.workspace.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -5691,19 +4608,18 @@
       "source_url": "https://developers.asana.com/reference/triggerrule",
       "flags": [
         {
-          "name": "rule-trigger-gid",
-          "type": "string",
-          "summary": "Path parameter rule_trigger_gid for POST /rule_triggers/{rule_trigger_gid}/run.",
-          "maps_to": "record.rule_trigger_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "resource",
+          "name": "rule-trigger-gid",
+          "summary": "Path parameter rule_trigger_gid for POST /rule_triggers/{rule_trigger_gid}/run.",
           "type": "string",
-          "summary": "Optional request field data.resource.",
-          "maps_to": "record.data.resource",
-          "allow_empty": false
+          "maps_to": "record.rule_trigger_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -5787,15 +4703,21 @@
       "write": "delete_section",
       "flags": [
         {
-          "name": "gid",
-          "type": "string",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "section-gid",
           "summary": "Section gid to delete.",
-          "maps_to": "record.gid",
-          "allow_empty": false
+          "type": "string",
+          "maps_to": "record.section_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "redact_fields": [
-        "gid"
+        "section_gid"
       ],
       "api_surface": [
         {
@@ -5841,18 +4763,29 @@
       "write": "create_section",
       "flags": [
         {
-          "name": "project-gid",
-          "type": "string",
-          "summary": "Project gid that will own the section.",
-          "maps_to": "record.project_gid",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "name",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "project-gid",
+          "summary": "Project gid that will own the section.",
           "type": "string",
-          "summary": "Section name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
+          "maps_to": "record.project_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "redact_fields": [
@@ -5877,33 +4810,23 @@
       "source_url": "https://developers.asana.com/reference/addtaskforsection",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "section-gid",
-          "type": "string",
           "summary": "Path parameter section_gid for POST /sections/{section_gid}/addTask.",
+          "type": "string",
           "maps_to": "record.section_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "insert-after",
-          "type": "string",
-          "summary": "Optional request field data.insert_after.",
-          "maps_to": "record.data.insert_after",
-          "allow_empty": false
-        },
-        {
-          "name": "insert-before",
-          "type": "string",
-          "summary": "Optional request field data.insert_before.",
-          "maps_to": "record.data.insert_before",
-          "allow_empty": false
-        },
-        {
-          "name": "task",
-          "type": "string",
-          "summary": "Optional request field data.task.",
-          "maps_to": "record.data.task",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -5926,33 +4849,23 @@
       "source_url": "https://developers.asana.com/reference/insertsectionforproject",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "project-gid",
-          "type": "string",
           "summary": "Path parameter project_gid for POST /projects/{project_gid}/sections/insert.",
+          "type": "string",
           "maps_to": "record.project_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "after-section",
-          "type": "string",
-          "summary": "Optional request field data.after_section.",
-          "maps_to": "record.data.after_section",
-          "allow_empty": false
-        },
-        {
-          "name": "before-section",
-          "type": "string",
-          "summary": "Optional request field data.before_section.",
-          "maps_to": "record.data.before_section",
-          "allow_empty": false
-        },
-        {
-          "name": "section",
-          "type": "string",
-          "summary": "Optional request field data.section.",
-          "maps_to": "record.data.section",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -6050,32 +4963,11 @@
       "source_url": "https://developers.asana.com/reference/createstatusforobject",
       "flags": [
         {
-          "name": "html-text",
-          "type": "string",
-          "summary": "Optional request field data.html_text.",
-          "maps_to": "record.data.html_text",
-          "allow_empty": false
-        },
-        {
-          "name": "status-type",
-          "type": "string",
-          "summary": "Optional request field data.status_type.",
-          "maps_to": "record.data.status_type",
-          "allow_empty": false
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Optional request field data.text.",
-          "maps_to": "record.data.text",
-          "allow_empty": false
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "summary": "Optional request field data.title.",
-          "maps_to": "record.data.title",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -6123,39 +5015,29 @@
       "source_url": "https://developers.asana.com/reference/updatestory",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "story-gid",
-          "type": "string",
           "summary": "Path parameter story_gid for PUT /stories/{story_gid}.",
+          "type": "string",
           "maps_to": "record.story_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "html-text",
-          "type": "string",
-          "summary": "Optional request field data.html_text.",
-          "maps_to": "record.data.html_text",
-          "allow_empty": false
-        },
-        {
-          "name": "is-pinned",
-          "type": "boolean",
-          "summary": "Optional request field data.is_pinned.",
-          "maps_to": "record.data.is_pinned"
-        },
-        {
-          "name": "sticker-name",
-          "type": "string",
-          "summary": "Optional request field data.sticker_name.",
-          "maps_to": "record.data.sticker_name",
-          "allow_empty": false
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Optional request field data.text.",
-          "maps_to": "record.data.text",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -6237,18 +5119,29 @@
       "write": "add_comment",
       "flags": [
         {
-          "name": "task-gid",
-          "type": "string",
-          "summary": "Task gid to comment on.",
-          "maps_to": "record.task_gid",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "text",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "task-gid",
+          "summary": "Task gid to comment on.",
           "type": "string",
-          "summary": "Comment text.",
-          "maps_to": "record.data.text",
-          "allow_empty": false
+          "maps_to": "record.task_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "redact_fields": [
@@ -6298,39 +5191,29 @@
       "source_url": "https://developers.asana.com/reference/createstoryforgoal",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
           "name": "goal-gid",
-          "type": "string",
           "summary": "Path parameter goal_gid for POST /goals/{goal_gid}/stories.",
+          "type": "string",
           "maps_to": "record.goal_gid",
           "required": true,
-          "allow_empty": false
+          "max_bytes": 32768
         },
         {
-          "name": "html-text",
-          "type": "string",
-          "summary": "Optional request field data.html_text.",
-          "maps_to": "record.data.html_text",
-          "allow_empty": false
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
         },
         {
-          "name": "is-pinned",
+          "name": "opt-pretty",
           "type": "boolean",
-          "summary": "Optional request field data.is_pinned.",
-          "maps_to": "record.data.is_pinned"
-        },
-        {
-          "name": "sticker-name",
-          "type": "string",
-          "summary": "Optional request field data.sticker_name.",
-          "maps_to": "record.data.sticker_name",
-          "allow_empty": false
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Optional request field data.text.",
-          "maps_to": "record.data.text",
-          "allow_empty": false
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -6368,18 +5251,11 @@
       "write": "create_tag",
       "flags": [
         {
-          "name": "name",
-          "type": "string",
-          "summary": "Tag name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Workspace gid.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -6476,15 +5352,21 @@
       "write": "delete_tag",
       "flags": [
         {
-          "name": "gid",
-          "type": "string",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "tag-gid",
           "summary": "Tag gid to delete.",
-          "maps_to": "record.gid",
-          "allow_empty": false
+          "type": "string",
+          "maps_to": "record.tag_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "redact_fields": [
-        "gid"
+        "tag_gid"
       ],
       "api_surface": [
         {
@@ -6555,39 +5437,19 @@
       "source_url": "https://developers.asana.com/reference/createtagforworkspace",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
           "name": "workspace-gid",
-          "type": "string",
           "summary": "Path parameter workspace_gid for POST /workspaces/{workspace_gid}/tags.",
+          "type": "string",
           "maps_to": "record.workspace_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "color",
-          "type": "string",
-          "summary": "Optional request field data.color.",
-          "maps_to": "record.data.color",
-          "allow_empty": false
-        },
-        {
-          "name": "followers",
-          "type": "string_array",
-          "summary": "Optional request field data.followers.",
-          "maps_to": "record.data.followers"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "notes",
-          "type": "string",
-          "summary": "Optional request field data.notes.",
-          "maps_to": "record.data.notes",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -6685,19 +5547,29 @@
       "source_url": "https://developers.asana.com/reference/instantiatetask",
       "flags": [
         {
-          "name": "task-template-gid",
-          "type": "string",
-          "summary": "Path parameter task_template_gid for POST /task_templates/{task_template_gid}/instantiateTask.",
-          "maps_to": "record.task_template_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "name",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "task-template-gid",
+          "summary": "Path parameter task_template_gid for POST /task_templates/{task_template_gid}/instantiateTask.",
           "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
+          "maps_to": "record.task_template_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -6735,18 +5607,11 @@
       "write": "create_task",
       "flags": [
         {
-          "name": "name",
-          "type": "string",
-          "summary": "Task name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Workspace gid.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -6828,15 +5693,21 @@
       "write": "delete_task",
       "flags": [
         {
-          "name": "gid",
-          "type": "string",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "task-gid",
           "summary": "Task gid to delete.",
-          "maps_to": "record.gid",
-          "allow_empty": false
+          "type": "string",
+          "maps_to": "record.task_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "redact_fields": [
-        "gid"
+        "task_gid"
       ],
       "api_surface": [
         {
@@ -6857,26 +5728,29 @@
       "source_url": "https://developers.asana.com/reference/duplicatetask",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "task-gid",
-          "type": "string",
           "summary": "Path parameter task_gid for POST /tasks/{task_gid}/duplicate.",
+          "type": "string",
           "maps_to": "record.task_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "include",
-          "type": "string",
-          "summary": "Optional request field data.include.",
-          "maps_to": "record.data.include",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -7024,168 +5898,19 @@
       "source_url": "https://developers.asana.com/reference/createsubtaskfortask",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
           "name": "task-gid",
-          "type": "string",
           "summary": "Path parameter task_gid for POST /tasks/{task_gid}/subtasks.",
+          "type": "string",
           "maps_to": "record.task_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "approval-status",
-          "type": "string",
-          "summary": "Optional request field data.approval_status.",
-          "maps_to": "record.data.approval_status",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.assigned_by.name.",
-          "maps_to": "record.data.assigned_by.name",
-          "allow_empty": false
-        },
-        {
-          "name": "assignee",
-          "type": "string",
-          "summary": "Optional request field data.assignee.",
-          "maps_to": "record.data.assignee",
-          "allow_empty": false
-        },
-        {
-          "name": "assignee-section",
-          "type": "string",
-          "summary": "Optional request field data.assignee_section.",
-          "maps_to": "record.data.assignee_section",
-          "allow_empty": false
-        },
-        {
-          "name": "assignee-status",
-          "type": "string",
-          "summary": "Optional request field data.assignee_status.",
-          "maps_to": "record.data.assignee_status",
-          "allow_empty": false
-        },
-        {
-          "name": "completed",
-          "type": "boolean",
-          "summary": "Optional request field data.completed.",
-          "maps_to": "record.data.completed"
-        },
-        {
-          "name": "data-completed-by-name",
-          "type": "string",
-          "summary": "Optional request field data.completed_by.name.",
-          "maps_to": "record.data.completed_by.name",
-          "allow_empty": false
-        },
-        {
-          "name": "due-at",
-          "type": "string",
-          "summary": "Optional request field data.due_at.",
-          "maps_to": "record.data.due_at",
-          "allow_empty": false
-        },
-        {
-          "name": "due-on",
-          "type": "string",
-          "summary": "Optional request field data.due_on.",
-          "maps_to": "record.data.due_on",
-          "allow_empty": false
-        },
-        {
-          "name": "data",
-          "type": "string",
-          "summary": "Optional request field data.external.data.",
-          "maps_to": "record.data.external.data",
-          "allow_empty": false
-        },
-        {
-          "name": "gid",
-          "type": "string",
-          "summary": "Optional request field data.external.gid.",
-          "maps_to": "record.data.external.gid",
-          "allow_empty": false
-        },
-        {
-          "name": "followers",
-          "type": "string_array",
-          "summary": "Optional request field data.followers.",
-          "maps_to": "record.data.followers"
-        },
-        {
-          "name": "html-notes",
-          "type": "string",
-          "summary": "Optional request field data.html_notes.",
-          "maps_to": "record.data.html_notes",
-          "allow_empty": false
-        },
-        {
-          "name": "liked",
-          "type": "boolean",
-          "summary": "Optional request field data.liked.",
-          "maps_to": "record.data.liked"
-        },
-        {
-          "name": "data-name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "notes",
-          "type": "string",
-          "summary": "Optional request field data.notes.",
-          "maps_to": "record.data.notes",
-          "allow_empty": false
-        },
-        {
-          "name": "parent",
-          "type": "string",
-          "summary": "Optional request field data.parent.",
-          "maps_to": "record.data.parent",
-          "allow_empty": false
-        },
-        {
-          "name": "projects",
-          "type": "string_array",
-          "summary": "Optional request field data.projects.",
-          "maps_to": "record.data.projects"
-        },
-        {
-          "name": "resource-subtype",
-          "type": "string",
-          "summary": "Optional request field data.resource_subtype.",
-          "maps_to": "record.data.resource_subtype",
-          "allow_empty": false
-        },
-        {
-          "name": "start-at",
-          "type": "string",
-          "summary": "Optional request field data.start_at.",
-          "maps_to": "record.data.start_at",
-          "allow_empty": false
-        },
-        {
-          "name": "start-on",
-          "type": "string",
-          "summary": "Optional request field data.start_on.",
-          "maps_to": "record.data.start_on",
-          "allow_empty": false
-        },
-        {
-          "name": "tags",
-          "type": "string_array",
-          "summary": "Optional request field data.tags.",
-          "maps_to": "record.data.tags"
-        },
-        {
-          "name": "workspace",
-          "type": "string",
-          "summary": "Optional request field data.workspace.",
-          "maps_to": "record.data.workspace",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -7208,33 +5933,29 @@
       "source_url": "https://developers.asana.com/reference/setparentfortask",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "task-gid",
-          "type": "string",
           "summary": "Path parameter task_gid for POST /tasks/{task_gid}/setParent.",
+          "type": "string",
           "maps_to": "record.task_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "insert-after",
-          "type": "string",
-          "summary": "Optional request field data.insert_after.",
-          "maps_to": "record.data.insert_after",
-          "allow_empty": false
-        },
-        {
-          "name": "insert-before",
-          "type": "string",
-          "summary": "Optional request field data.insert_before.",
-          "maps_to": "record.data.insert_before",
-          "allow_empty": false
-        },
-        {
-          "name": "parent",
-          "type": "string",
-          "summary": "Optional request field data.parent.",
-          "maps_to": "record.data.parent",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -7282,18 +6003,23 @@
       "source_url": "https://developers.asana.com/reference/adddependenciesfortask",
       "flags": [
         {
-          "name": "task-gid",
-          "type": "string",
-          "summary": "Path parameter task_gid for POST /tasks/{task_gid}/addDependencies.",
-          "maps_to": "record.task_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "dependencies",
-          "type": "string_array",
-          "summary": "Optional request field data.dependencies.",
-          "maps_to": "record.data.dependencies"
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "task-gid",
+          "summary": "Path parameter task_gid for POST /tasks/{task_gid}/addDependencies.",
+          "type": "string",
+          "maps_to": "record.task_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -7382,18 +6108,23 @@
       "source_url": "https://developers.asana.com/reference/adddependentsfortask",
       "flags": [
         {
-          "name": "task-gid",
-          "type": "string",
-          "summary": "Path parameter task_gid for POST /tasks/{task_gid}/addDependents.",
-          "maps_to": "record.task_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "dependents",
-          "type": "string_array",
-          "summary": "Optional request field data.dependents.",
-          "maps_to": "record.data.dependents"
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "task-gid",
+          "summary": "Path parameter task_gid for POST /tasks/{task_gid}/addDependents.",
+          "type": "string",
+          "maps_to": "record.task_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -7457,40 +6188,23 @@
       "source_url": "https://developers.asana.com/reference/addprojectfortask",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "task-gid",
-          "type": "string",
           "summary": "Path parameter task_gid for POST /tasks/{task_gid}/addProject.",
+          "type": "string",
           "maps_to": "record.task_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "insert-after",
-          "type": "string",
-          "summary": "Optional request field data.insert_after.",
-          "maps_to": "record.data.insert_after",
-          "allow_empty": false
-        },
-        {
-          "name": "insert-before",
-          "type": "string",
-          "summary": "Optional request field data.insert_before.",
-          "maps_to": "record.data.insert_before",
-          "allow_empty": false
-        },
-        {
-          "name": "project",
-          "type": "string",
-          "summary": "Optional request field data.project.",
-          "maps_to": "record.data.project",
-          "allow_empty": false
-        },
-        {
-          "name": "section",
-          "type": "string",
-          "summary": "Optional request field data.section.",
-          "maps_to": "record.data.section",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -7554,19 +6268,23 @@
       "source_url": "https://developers.asana.com/reference/addtagfortask",
       "flags": [
         {
-          "name": "task-gid",
-          "type": "string",
-          "summary": "Path parameter task_gid for POST /tasks/{task_gid}/addTag.",
-          "maps_to": "record.task_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "tag",
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "task-gid",
+          "summary": "Path parameter task_gid for POST /tasks/{task_gid}/addTag.",
           "type": "string",
-          "summary": "Optional request field data.tag.",
-          "maps_to": "record.data.tag",
-          "allow_empty": false
+          "maps_to": "record.task_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -7630,18 +6348,29 @@
       "source_url": "https://developers.asana.com/reference/addfollowersfortask",
       "flags": [
         {
-          "name": "task-gid",
-          "type": "string",
-          "summary": "Path parameter task_gid for POST /tasks/{task_gid}/addFollowers.",
-          "maps_to": "record.task_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "followers",
-          "type": "string_array",
-          "summary": "Optional request field data.followers.",
-          "maps_to": "record.data.followers"
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "task-gid",
+          "summary": "Path parameter task_gid for POST /tasks/{task_gid}/addFollowers.",
+          "type": "string",
+          "maps_to": "record.task_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -7860,94 +6589,11 @@
       "source_url": "https://developers.asana.com/reference/createteam",
       "flags": [
         {
-          "name": "description",
-          "type": "string",
-          "summary": "Optional request field data.description.",
-          "maps_to": "record.data.description",
-          "allow_empty": false
-        },
-        {
-          "name": "edit-team-name-or-description-access-level",
-          "type": "string",
-          "summary": "Optional request field data.edit_team_name_or_description_access_level.",
-          "maps_to": "record.data.edit_team_name_or_description_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "edit-team-visibility-or-trash-team-access-level",
-          "type": "string",
-          "summary": "Optional request field data.edit_team_visibility_or_trash_team_access_level.",
-          "maps_to": "record.data.edit_team_visibility_or_trash_team_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "endorsed",
-          "type": "boolean",
-          "summary": "Optional request field data.endorsed.",
-          "maps_to": "record.data.endorsed"
-        },
-        {
-          "name": "guest-invite-management-access-level",
-          "type": "string",
-          "summary": "Optional request field data.guest_invite_management_access_level.",
-          "maps_to": "record.data.guest_invite_management_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "html-description",
-          "type": "string",
-          "summary": "Optional request field data.html_description.",
-          "maps_to": "record.data.html_description",
-          "allow_empty": false
-        },
-        {
-          "name": "join-request-management-access-level",
-          "type": "string",
-          "summary": "Optional request field data.join_request_management_access_level.",
-          "maps_to": "record.data.join_request_management_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "member-invite-management-access-level",
-          "type": "string",
-          "summary": "Optional request field data.member_invite_management_access_level.",
-          "maps_to": "record.data.member_invite_management_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "organization",
-          "type": "string",
-          "summary": "Optional request field data.organization.",
-          "maps_to": "record.data.organization",
-          "allow_empty": false
-        },
-        {
-          "name": "team-content-management-access-level",
-          "type": "string",
-          "summary": "Optional request field data.team_content_management_access_level.",
-          "maps_to": "record.data.team_content_management_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "team-member-removal-access-level",
-          "type": "string",
-          "summary": "Optional request field data.team_member_removal_access_level.",
-          "maps_to": "record.data.team_member_removal_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "visibility",
-          "type": "string",
-          "summary": "Optional request field data.visibility.",
-          "maps_to": "record.data.visibility",
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
         }
       ],
       "api_surface": [
@@ -7995,102 +6641,19 @@
       "source_url": "https://developers.asana.com/reference/updateteam",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "required": true,
+          "max_bytes": 1048576
+        },
+        {
           "name": "team-gid",
-          "type": "string",
           "summary": "Path parameter team_gid for PUT /teams/{team_gid}.",
+          "type": "string",
           "maps_to": "record.team_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "description",
-          "type": "string",
-          "summary": "Optional request field data.description.",
-          "maps_to": "record.data.description",
-          "allow_empty": false
-        },
-        {
-          "name": "edit-team-name-or-description-access-level",
-          "type": "string",
-          "summary": "Optional request field data.edit_team_name_or_description_access_level.",
-          "maps_to": "record.data.edit_team_name_or_description_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "edit-team-visibility-or-trash-team-access-level",
-          "type": "string",
-          "summary": "Optional request field data.edit_team_visibility_or_trash_team_access_level.",
-          "maps_to": "record.data.edit_team_visibility_or_trash_team_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "endorsed",
-          "type": "boolean",
-          "summary": "Optional request field data.endorsed.",
-          "maps_to": "record.data.endorsed"
-        },
-        {
-          "name": "guest-invite-management-access-level",
-          "type": "string",
-          "summary": "Optional request field data.guest_invite_management_access_level.",
-          "maps_to": "record.data.guest_invite_management_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "html-description",
-          "type": "string",
-          "summary": "Optional request field data.html_description.",
-          "maps_to": "record.data.html_description",
-          "allow_empty": false
-        },
-        {
-          "name": "join-request-management-access-level",
-          "type": "string",
-          "summary": "Optional request field data.join_request_management_access_level.",
-          "maps_to": "record.data.join_request_management_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "member-invite-management-access-level",
-          "type": "string",
-          "summary": "Optional request field data.member_invite_management_access_level.",
-          "maps_to": "record.data.member_invite_management_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
-        },
-        {
-          "name": "organization",
-          "type": "string",
-          "summary": "Optional request field data.organization.",
-          "maps_to": "record.data.organization",
-          "allow_empty": false
-        },
-        {
-          "name": "team-content-management-access-level",
-          "type": "string",
-          "summary": "Optional request field data.team_content_management_access_level.",
-          "maps_to": "record.data.team_content_management_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "team-member-removal-access-level",
-          "type": "string",
-          "summary": "Optional request field data.team_member_removal_access_level.",
-          "maps_to": "record.data.team_member_removal_access_level",
-          "allow_empty": false
-        },
-        {
-          "name": "visibility",
-          "type": "string",
-          "summary": "Optional request field data.visibility.",
-          "maps_to": "record.data.visibility",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -8153,19 +6716,29 @@
       "source_url": "https://developers.asana.com/reference/adduserforteam",
       "flags": [
         {
-          "name": "team-gid",
-          "type": "string",
-          "summary": "Path parameter team_gid for POST /teams/{team_gid}/addUser.",
-          "maps_to": "record.team_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "user",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "team-gid",
+          "summary": "Path parameter team_gid for POST /teams/{team_gid}/addUser.",
           "type": "string",
-          "summary": "Optional request field data.user.",
-          "maps_to": "record.data.user",
-          "allow_empty": false
+          "maps_to": "record.team_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -8470,52 +7043,29 @@
       "source_url": "https://developers.asana.com/reference/createtimetrackingentry",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "task-gid",
-          "type": "string",
           "summary": "Path parameter task_gid for POST /tasks/{task_gid}/time_tracking_entries.",
+          "type": "string",
           "maps_to": "record.task_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "attributable-to",
-          "type": "string",
-          "summary": "Optional request field data.attributable_to.",
-          "maps_to": "record.data.attributable_to",
-          "allow_empty": false
-        },
-        {
-          "name": "billable-status",
-          "type": "string",
-          "summary": "Optional request field data.billable_status.",
-          "maps_to": "record.data.billable_status",
-          "allow_empty": false
-        },
-        {
-          "name": "categories",
-          "type": "string_array",
-          "summary": "Optional request field data.categories.",
-          "maps_to": "record.data.categories"
-        },
-        {
-          "name": "description",
-          "type": "string",
-          "summary": "Optional request field data.description.",
-          "maps_to": "record.data.description",
-          "allow_empty": false
-        },
-        {
-          "name": "duration-minutes",
-          "type": "integer",
-          "summary": "Optional request field data.duration_minutes.",
-          "maps_to": "record.data.duration_minutes"
-        },
-        {
-          "name": "entered-on",
-          "type": "string",
-          "summary": "Optional request field data.entered_on.",
-          "maps_to": "record.data.entered_on",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -8563,52 +7113,29 @@
       "source_url": "https://developers.asana.com/reference/updatetimetrackingentry",
       "flags": [
         {
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
           "name": "time-tracking-entry-gid",
-          "type": "string",
           "summary": "Path parameter time_tracking_entry_gid for PUT /time_tracking_entries/{time_tracking_entry_gid}.",
+          "type": "string",
           "maps_to": "record.time_tracking_entry_gid",
           "required": true,
-          "allow_empty": false
-        },
-        {
-          "name": "attributable-to",
-          "type": "string",
-          "summary": "Optional request field data.attributable_to.",
-          "maps_to": "record.data.attributable_to",
-          "allow_empty": false
-        },
-        {
-          "name": "billable-status",
-          "type": "string",
-          "summary": "Optional request field data.billable_status.",
-          "maps_to": "record.data.billable_status",
-          "allow_empty": false
-        },
-        {
-          "name": "categories",
-          "type": "string_array",
-          "summary": "Optional request field data.categories.",
-          "maps_to": "record.data.categories"
-        },
-        {
-          "name": "description",
-          "type": "string",
-          "summary": "Optional request field data.description.",
-          "maps_to": "record.data.description",
-          "allow_empty": false
-        },
-        {
-          "name": "duration-minutes",
-          "type": "integer",
-          "summary": "Optional request field data.duration_minutes.",
-          "maps_to": "record.data.duration_minutes"
-        },
-        {
-          "name": "entered-on",
-          "type": "string",
-          "summary": "Optional request field data.entered_on.",
-          "maps_to": "record.data.entered_on",
-          "allow_empty": false
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -8920,19 +7447,19 @@
       "source_url": "https://developers.asana.com/reference/updateuser",
       "flags": [
         {
-          "name": "user-gid",
-          "type": "string",
-          "summary": "Path parameter user_gid for PUT /users/{user_gid}.",
-          "maps_to": "record.user_gid",
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
           "required": true,
-          "allow_empty": false
+          "max_bytes": 1048576
         },
         {
-          "name": "name",
+          "name": "user-gid",
+          "summary": "Path parameter user_gid for PUT /users/{user_gid}.",
           "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
+          "maps_to": "record.user_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -9062,27 +7589,27 @@
       "source_url": "https://developers.asana.com/reference/updateuserforworkspace",
       "flags": [
         {
-          "name": "workspace-gid",
-          "type": "string",
-          "summary": "Path parameter workspace_gid for PUT /workspaces/{workspace_gid}/users/{user_gid}.",
-          "maps_to": "record.workspace_gid",
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
           "required": true,
-          "allow_empty": false
+          "max_bytes": 1048576
         },
         {
           "name": "user-gid",
-          "type": "string",
           "summary": "Path parameter user_gid for PUT /workspaces/{workspace_gid}/users/{user_gid}.",
+          "type": "string",
           "maps_to": "record.user_gid",
           "required": true,
-          "allow_empty": false
+          "max_bytes": 32768
         },
         {
-          "name": "name",
+          "name": "workspace-gid",
+          "summary": "Path parameter workspace_gid for PUT /workspaces/{workspace_gid}/users/{user_gid}.",
           "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
+          "maps_to": "record.workspace_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -9346,19 +7873,29 @@
       "source_url": "https://developers.asana.com/reference/updateworkspace",
       "flags": [
         {
-          "name": "workspace-gid",
-          "type": "string",
-          "summary": "Path parameter workspace_gid for PUT /workspaces/{workspace_gid}.",
-          "maps_to": "record.workspace_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "name",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "workspace-gid",
+          "summary": "Path parameter workspace_gid for PUT /workspaces/{workspace_gid}.",
           "type": "string",
-          "summary": "Optional request field data.name.",
-          "maps_to": "record.data.name",
-          "allow_empty": false
+          "maps_to": "record.workspace_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -9381,19 +7918,29 @@
       "source_url": "https://developers.asana.com/reference/adduserforworkspace",
       "flags": [
         {
-          "name": "workspace-gid",
-          "type": "string",
-          "summary": "Path parameter workspace_gid for POST /workspaces/{workspace_gid}/addUser.",
-          "maps_to": "record.workspace_gid",
-          "required": true,
-          "allow_empty": false
+          "name": "data",
+          "type": "json",
+          "maps_to": "record.data",
+          "max_bytes": 1048576
         },
         {
-          "name": "user",
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
+        },
+        {
+          "name": "workspace-gid",
+          "summary": "Path parameter workspace_gid for POST /workspaces/{workspace_gid}/addUser.",
           "type": "string",
-          "summary": "Optional request field data.user.",
-          "maps_to": "record.data.user",
-          "allow_empty": false
+          "maps_to": "record.workspace_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [

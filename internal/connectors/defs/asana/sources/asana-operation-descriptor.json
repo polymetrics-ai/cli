@@ -415,7 +415,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteAllocation at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/allocations/{allocation_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteAllocation",
+            "method": "DELETE",
+            "path": "/allocations/{allocation_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -786,7 +801,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteAttachment at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/attachments/{attachment_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteAttachment",
+            "method": "DELETE",
+            "path": "/attachments/{attachment_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -1203,7 +1233,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteBudget at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/budgets/{budget_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteBudget",
+            "method": "DELETE",
+            "path": "/budgets/{budget_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -1572,7 +1617,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteCustomField at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/custom_fields/{custom_field_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteCustomField",
+            "method": "DELETE",
+            "path": "/custom_fields/{custom_field_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -1989,7 +2049,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteGoal at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/goals/{goal_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteGoal",
+            "method": "DELETE",
+            "path": "/goals/{goal_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -2358,7 +2433,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteMembership at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/memberships/{membership_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteMembership",
+            "method": "DELETE",
+            "path": "/memberships/{membership_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -2729,7 +2819,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOooEntry at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/ooo_entries/{ooo_entry_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOooEntry",
+            "method": "DELETE",
+            "path": "/ooo_entries/{ooo_entry_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -3098,7 +3203,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deletePortfolio at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/portfolios/{portfolio_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deletePortfolio",
+            "method": "DELETE",
+            "path": "/portfolios/{portfolio_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -3467,7 +3587,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteProjectBrief at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_briefs/{project_brief_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteProjectBrief",
+            "method": "DELETE",
+            "path": "/project_briefs/{project_brief_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -3836,7 +3971,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteProjectStatus at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_statuses/{project_status_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteProjectStatus",
+            "method": "DELETE",
+            "path": "/project_statuses/{project_status_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -4253,7 +4403,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteProjectTemplate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_templates/{project_template_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteProjectTemplate",
+            "method": "DELETE",
+            "path": "/project_templates/{project_template_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -5041,7 +5206,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteRate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/rates/{rate_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteRate",
+            "method": "DELETE",
+            "path": "/rates/{rate_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -5412,7 +5592,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteRole at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/roles/{role_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteRole",
+            "method": "DELETE",
+            "path": "/roles/{role_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -6150,7 +6345,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteStatus at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/status_updates/{status_update_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteStatus",
+            "method": "DELETE",
+            "path": "/status_updates/{status_update_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -6521,7 +6731,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteStory at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/stories/{story_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteStory",
+            "method": "DELETE",
+            "path": "/stories/{story_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -7307,7 +7532,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteTaskTemplate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/task_templates/{task_template_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteTaskTemplate",
+            "method": "DELETE",
+            "path": "/task_templates/{task_template_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -8049,7 +8289,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteTimeTrackingCategory at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/time_tracking_categories/{time_tracking_category_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteTimeTrackingCategory",
+            "method": "DELETE",
+            "path": "/time_tracking_categories/{time_tracking_category_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -8466,7 +8721,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteTimeTrackingEntry at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/time_tracking_entries/{time_tracking_entry_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteTimeTrackingEntry",
+            "method": "DELETE",
+            "path": "/time_tracking_entries/{time_tracking_entry_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -8837,7 +9107,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteWebhook at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/webhooks/{webhook_gid}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteWebhook",
+            "method": "DELETE",
+            "path": "/webhooks/{webhook_gid}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -92501,7 +92786,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation approveAccessRequest at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/access_requests/{access_request_gid}/approve\"].post",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "approveAccessRequest",
+            "method": "POST",
+            "path": "/access_requests/{access_request_gid}/approve"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -92858,7 +93158,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation rejectAccessRequest at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/access_requests/{access_request_gid}/reject\"].post",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "rejectAccessRequest",
+            "method": "POST",
+            "path": "/access_requests/{access_request_gid}/reject"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -93541,6 +93856,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -94141,6 +94461,11 @@
           },
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -94645,6 +94970,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -97076,6 +97406,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -97567,6 +97902,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -98025,6 +98365,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -101220,6 +101565,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -105117,6 +105467,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -105700,6 +106055,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -108213,6 +108573,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -110795,6 +111160,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -112914,6 +113284,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -114989,6 +115364,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -116806,6 +117186,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -117280,6 +117665,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -119244,6 +119634,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -123314,6 +123709,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -124009,6 +124409,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -126687,6 +127092,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -127441,6 +127851,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -130961,6 +131376,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -132808,6 +133228,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -135080,6 +135505,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -137350,6 +137780,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -138069,6 +138504,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -138665,6 +139105,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -139253,6 +139698,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -141925,6 +142375,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -144195,6 +144650,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -144899,6 +145359,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -145419,6 +145884,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -146427,6 +146897,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -147350,6 +147825,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -149058,6 +149538,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -149690,6 +150175,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -150375,6 +150865,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -152948,6 +153443,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -155890,6 +156390,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -157401,6 +157906,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -160343,6 +160853,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -163180,6 +163695,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -165253,6 +165773,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -167837,6 +168362,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -168585,6 +169115,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -170118,6 +170653,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -170617,6 +171157,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -174146,6 +174691,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -175048,6 +175598,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -175639,6 +176194,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -176279,6 +176839,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -176781,6 +177346,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -180310,6 +180880,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -181343,6 +181918,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -181975,6 +182555,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -182756,6 +183341,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -184431,6 +185021,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -184901,6 +185496,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -185610,6 +186210,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -187774,6 +188379,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -189545,6 +190155,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -191521,6 +192136,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -192069,6 +192689,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -192587,6 +193212,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -196111,6 +196741,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -196701,6 +197336,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -197621,6 +198261,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -198141,6 +198786,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -200218,6 +200868,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -200833,6 +201488,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -203393,6 +204053,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -204933,6 +205598,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -205442,6 +206112,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -206194,6 +206869,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -206785,6 +207465,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -207652,6 +208337,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -208279,6 +208969,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -208752,6 +209447,11 @@
       "runtime": {
         "merge_blocked": true,
         "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
@@ -209619,6 +210319,11 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter opt_fields",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
             "reason": "unbounded request schema object has dynamic additionalProperties"
           }
@@ -209642,6 +210347,396 @@
       "foundation": "cli-request-encoding-foundation-r1",
       "location": "request body encoding",
       "reason": "provider form request media requires runtime encoding support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter opt_fields",
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -210727,6 +211822,111 @@
       "foundation": "closed-source-operation-execution-foundation-r1",
       "location": "source operation typeaheadForWorkspace",
       "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation approveAccessRequest at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/access_requests/{access_request_gid}/approve\"].post",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteAllocation at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/allocations/{allocation_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteAttachment at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/attachments/{attachment_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteBudget at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/budgets/{budget_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteCustomField at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/custom_fields/{custom_field_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteGoal at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/goals/{goal_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteMembership at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/memberships/{membership_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOooEntry at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/ooo_entries/{ooo_entry_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deletePortfolio at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/portfolios/{portfolio_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteProjectBrief at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_briefs/{project_brief_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteProjectStatus at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_statuses/{project_status_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteProjectTemplate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_templates/{project_template_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteRate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/rates/{rate_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteRole at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/roles/{role_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteStatus at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/status_updates/{status_update_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteStory at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/stories/{story_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteTaskTemplate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/task_templates/{task_template_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteTimeTrackingCategory at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/time_tracking_categories/{time_tracking_category_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteTimeTrackingEntry at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/time_tracking_entries/{time_tracking_entry_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteWebhook at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/webhooks/{webhook_gid}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation rejectAccessRequest at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/access_requests/{access_request_gid}/reject\"].post",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
     }
   ]
 }
