@@ -231,6 +231,51 @@
       "auth_scopes": ["manage"],
       "mutation_class": "none",
       "rest": {"method": "GET", "path": "/_migration/system_features", "max_bytes": 1048576}
+    },
+    {
+      "id": "elasticsearch.ml.info.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch machine learning information.",
+      "description": "Bounded direct read of the source-pinned ml-info operation. The provider declares no path-item or operation parameters and returns JSON machine learning configuration information.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium", "approval": "none", "output_policy": "json_redacted", "auth_scopes": ["monitor_ml"], "mutation_class": "none",
+      "rest": {"method": "GET", "path": "/_ml/info", "max_bytes": 1048576}
+    },
+    {
+      "id": "elasticsearch.security.authenticate.get",
+      "kind": "rest_read",
+      "summary": "Get the authenticated Elasticsearch user.",
+      "description": "Bounded direct read of the source-pinned security-authenticate operation. The provider declares no path-item or operation parameters and returns redacted JSON about the authenticated user.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium", "approval": "none", "output_policy": "json_redacted", "mutation_class": "none",
+      "rest": {"method": "GET", "path": "/_security/_authenticate", "max_bytes": 1048576}
+    },
+    {
+      "id": "elasticsearch.security.builtin_privileges.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch built-in privileges.",
+      "description": "Bounded direct read of the source-pinned security-get-builtin-privileges operation. The provider declares no path-item or operation parameters and returns JSON privilege metadata.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium", "approval": "none", "output_policy": "json_redacted", "auth_scopes": ["manage_security"], "mutation_class": "none",
+      "rest": {"method": "GET", "path": "/_security/privilege/_builtin", "max_bytes": 1048576}
+    },
+    {
+      "id": "elasticsearch.security.stats.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch security statistics.",
+      "description": "Bounded direct read of the source-pinned security-get-stats operation. The provider declares no path-item or operation parameters and returns JSON security statistics.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium", "approval": "none", "output_policy": "json_redacted", "auth_scopes": ["monitor"], "mutation_class": "none",
+      "rest": {"method": "GET", "path": "/_security/stats", "max_bytes": 1048576}
+    },
+    {
+      "id": "elasticsearch.security.user_privileges.get",
+      "kind": "rest_read",
+      "summary": "Get the authenticated Elasticsearch user's privileges.",
+      "description": "Bounded direct read of the source-pinned security-get-user-privileges operation. The provider declares no path-item or operation parameters and returns redacted JSON for the authenticated user.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium", "approval": "none", "output_policy": "json_redacted", "mutation_class": "none",
+      "rest": {"method": "GET", "path": "/_security/user/_privileges", "max_bytes": 1048576}
     }
   ]
 }

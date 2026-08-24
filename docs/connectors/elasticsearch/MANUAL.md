@@ -65,6 +65,7 @@ COMMAND SURFACE
   Elasticsearch lifecycle and license direct reads
   Elasticsearch administrative metadata direct reads
   Elasticsearch lifecycle and platform metadata direct reads
+  Elasticsearch security and machine-learning observation reads
   Other Commands
     cluster info get - Get Elasticsearch cluster information. [intent=direct_read availability=implemented operation=elasticsearch.cluster.info.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
     cluster remote info get - Get Elasticsearch remote-cluster information. [intent=direct_read availability=implemented operation=elasticsearch.cluster.remote.info.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
@@ -81,6 +82,11 @@ COMMAND SURFACE
     ingest geoip stats get - Get Elasticsearch GeoIP statistics. [intent=direct_read availability=implemented operation=elasticsearch.ingest.geoip.stats.get]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
     ingest processor grok get - Get Elasticsearch grok processor metadata. [intent=direct_read availability=implemented operation=elasticsearch.ingest.processor.grok.get]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
     migration system features get - Get Elasticsearch system feature migration status. [intent=direct_read availability=implemented operation=elasticsearch.migration.system_features.get]; approval: none; risk: bounded read; requires the Elasticsearch manage cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    ml info get - Get Elasticsearch machine learning information. [intent=direct_read availability=implemented operation=elasticsearch.ml.info.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor_ml cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    security authenticate get - Get the authenticated Elasticsearch user. [intent=direct_read availability=implemented operation=elasticsearch.security.authenticate.get]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    security builtin privileges get - Get Elasticsearch built-in privileges. [intent=direct_read availability=implemented operation=elasticsearch.security.builtin_privileges.get]; approval: none; risk: bounded read; requires the Elasticsearch manage_security cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    security stats get - Get Elasticsearch security statistics. [intent=direct_read availability=implemented operation=elasticsearch.security.stats.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    security user privileges get - Get the authenticated Elasticsearch user's privileges. [intent=direct_read availability=implemented operation=elasticsearch.security.user_privileges.get]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
 
 EXAMPLES
   # Inspect as a manual

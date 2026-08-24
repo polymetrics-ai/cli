@@ -272,3 +272,25 @@ validation, and help checks pass. A fresh binary in five isolated projects with
 no credential exits 1 with zero stdout and exactly `error: missing
 --credential` for every command. Evidence:
 `evidence/elasticsearch-platform-direct-read-command-proof-20260825.json`.
+
+## Elasticsearch Security and ML Observation Reads — Red
+
+**Red:** five parameterless JSON GETs in the pinned source—`ml-info`,
+`security-authenticate`, `security-get-builtin-privileges`,
+`security-get-stats`, and `security-get-user-privileges`—are
+declaration-pending. The absence is connector-local authoring, not a privilege
+or safety incapability. The slice explicitly excludes `/_security/enroll/*`,
+whose token-generation semantics require their own action classification.
+
+**Planned Green:** expose only the five bounded redacted direct reads, keeping
+the provider-stated `monitor_ml`, `manage_security`, and `monitor` scopes in
+`auth_scopes`, then prove every command reaches exactly the no-credential
+boundary from a new project without making a provider request.
+
+**Green:** the five direct reads now bind exact source/API routes; applicable
+privileges remain runtime metadata and the user-information output remains
+`json_redacted`. Commandrunner preflight, Elasticsearch conformance, generated
+docs validation, and help checks pass. A fresh no-credential binary run from
+five separate projects exits 1 with zero stdout and exactly `error: missing
+--credential` for each command. Evidence:
+`evidence/elasticsearch-security-observation-direct-read-command-proof-20260825.json`.

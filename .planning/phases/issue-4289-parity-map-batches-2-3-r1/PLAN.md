@@ -246,6 +246,16 @@ at `/_migration/system_features`. The source declares `monitor`,
 metadata. This connector-local slice adds only the exact bounded direct-read
 contracts and commands, without inventing inputs, schemas, or response shapes.
 
+### Elasticsearch Security and ML Observation Direct-Read Slice
+
+The pinned source declares parameterless JSON GETs for ML configuration
+information, the authenticated user's identity and privileges, available
+built-in privileges, and security statistics. They are direct observations,
+not the token-generating security enrollment endpoints. `monitor_ml`,
+`manage_security`, and `monitor` remain operation metadata; identity and
+privilege responses use the standard redacted JSON policy. This adds only
+source-bound, bounded direct reads with no inferred request contract.
+
 ## Captain Delivery Discipline — 2026-08-24
 
 The 4,535-operation declarable-now inventory is planning input, not delivered

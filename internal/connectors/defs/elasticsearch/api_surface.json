@@ -6184,14 +6184,8 @@
     {
       "method": "GET",
       "path": "/_ml/info",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.ml-info; source_location=paths[\"/_ml/info\"].get"
+      "covered_by": {
+        "direct_read": "ml info get"
       }
     },
     {
@@ -7822,14 +7816,8 @@
     {
       "method": "GET",
       "path": "/_security/_authenticate",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.security-authenticate; source_location=paths[\"/_security/_authenticate\"].get"
+      "covered_by": {
+        "direct_read": "security authenticate get"
       }
     },
     {
@@ -8472,14 +8460,8 @@
     {
       "method": "GET",
       "path": "/_security/privilege/_builtin",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.security-get-builtin-privileges; source_location=paths[\"/_security/privilege/_builtin\"].get"
+      "covered_by": {
+        "direct_read": "security builtin privileges get"
       }
     },
     {
@@ -8628,14 +8610,8 @@
     {
       "method": "GET",
       "path": "/_security/stats",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.security-get-stats; source_location=paths[\"/_security/stats\"].get"
+      "covered_by": {
+        "direct_read": "security stats get"
       }
     },
     {
@@ -8680,14 +8656,8 @@
     {
       "method": "GET",
       "path": "/_security/user/_privileges",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.security-get-user-privileges; source_location=paths[\"/_security/user/_privileges\"].get"
+      "covered_by": {
+        "direct_read": "security user privileges get"
       }
     },
     {

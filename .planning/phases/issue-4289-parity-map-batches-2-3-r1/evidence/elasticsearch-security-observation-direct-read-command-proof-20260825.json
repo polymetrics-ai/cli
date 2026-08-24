@@ -1,0 +1,33 @@
+{
+  "issue": 4289,
+  "connector": "elasticsearch",
+  "source": {
+    "lock": "internal/connectors/defs/elasticsearch/sources/elasticsearch-operation-source-lock.json",
+    "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+    "sha256": "aace81c4c46fa503895ea524d30313856597975f67115fc9cde9c61c7f76b952",
+    "bytes": 6458837,
+    "operations": [
+      "elasticsearch.rest.ml-info", "elasticsearch.rest.security-authenticate", "elasticsearch.rest.security-get-builtin-privileges", "elasticsearch.rest.security-get-stats", "elasticsearch.rest.security-get-user-privileges"
+    ]
+  },
+  "binary": {
+    "path": ".fm-elasticsearch-security-proof.ZMAHUf/pm",
+    "sha256": "24e259a265ba5250b98e372112e49c2b421654bff6a1d3200366706864773128",
+    "build_command": "go build -o .fm-elasticsearch-security-proof.ZMAHUf/pm ./cmd/pm"
+  },
+  "proof": {
+    "credential_configuration": "none; each command ran from its own project initialized with pm init --root <project> --json",
+    "provider_requests": 0,
+    "expected_stderr": "error: missing --credential",
+    "commands": [
+      {"path": "ml info get", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "security authenticate get", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "security builtin privileges get", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "security stats get", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"},
+      {"path": "security user privileges get", "exit_code": 1, "stdout_bytes": 0, "stderr": "error: missing --credential"}
+    ],
+    "help_checks": [
+      "pm help elasticsearch", "pm elasticsearch", "pm elasticsearch ml info get --help", "pm elasticsearch security authenticate get --help", "pm elasticsearch security builtin privileges get --help", "pm elasticsearch security stats get --help", "pm elasticsearch security user privileges get --help"
+    ]
+  }
+}

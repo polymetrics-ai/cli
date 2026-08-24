@@ -46,6 +46,13 @@
         "ingest processor grok get",
         "migration system features get"
       ]
+    },
+    {
+      "id": "security-and-machine-learning",
+      "title": "Elasticsearch security and machine-learning observation reads",
+      "commands": [
+        "ml info get", "security authenticate get", "security builtin privileges get", "security stats get", "security user privileges get"
+      ]
     }
   ],
   "global_flags": [
@@ -215,6 +222,26 @@
     {
       "path": "migration system features get", "summary": "Get Elasticsearch system feature migration status.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.migration.system_features.get",
       "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_migration/system_features"}], "output_policy": "json_redacted", "risk": "bounded read; requires the Elasticsearch manage cluster privilege; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch migration system features get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "ml info get", "summary": "Get Elasticsearch machine learning information.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.ml.info.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_ml/info"}], "output_policy": "json_redacted", "risk": "bounded read; requires the Elasticsearch monitor_ml cluster privilege; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch ml info get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "security authenticate get", "summary": "Get the authenticated Elasticsearch user.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.security.authenticate.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_security/_authenticate"}], "output_policy": "json_redacted", "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch security authenticate get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "security builtin privileges get", "summary": "Get Elasticsearch built-in privileges.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.security.builtin_privileges.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_security/privilege/_builtin"}], "output_policy": "json_redacted", "risk": "bounded read; requires the Elasticsearch manage_security cluster privilege; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch security builtin privileges get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "security stats get", "summary": "Get Elasticsearch security statistics.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.security.stats.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_security/stats"}], "output_policy": "json_redacted", "risk": "bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch security stats get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "security user privileges get", "summary": "Get the authenticated Elasticsearch user's privileges.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.security.user_privileges.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_security/user/_privileges"}], "output_policy": "json_redacted", "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch security user privileges get --credential elasticsearch-local --json"]
     }
   ]
 }
