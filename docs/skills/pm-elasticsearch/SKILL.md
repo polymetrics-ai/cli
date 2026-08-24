@@ -71,6 +71,7 @@ Reads Elasticsearch index metadata and documents through the REST API. Read-only
 - Elasticsearch administrative metadata direct reads
 - Elasticsearch lifecycle and platform metadata direct reads
 - Elasticsearch security and machine-learning observation reads
+- Elasticsearch SSL and transform metadata direct reads
 - Other Commands
   - cluster info get - Get Elasticsearch cluster information. [intent=direct_read availability=implemented operation=elasticsearch.cluster.info.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
   - cluster remote info get - Get Elasticsearch remote-cluster information. [intent=direct_read availability=implemented operation=elasticsearch.cluster.remote.info.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
@@ -92,6 +93,8 @@ Reads Elasticsearch index metadata and documents through the REST API. Read-only
   - security builtin privileges get - Get Elasticsearch built-in privileges. [intent=direct_read availability=implemented operation=elasticsearch.security.builtin_privileges.get]; approval: none; risk: bounded read; requires the Elasticsearch manage_security cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
   - security stats get - Get Elasticsearch security statistics. [intent=direct_read availability=implemented operation=elasticsearch.security.stats.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
   - security user privileges get - Get the authenticated Elasticsearch user's privileges. [intent=direct_read availability=implemented operation=elasticsearch.security.user_privileges.get]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+  - ssl certificates list - List Elasticsearch SSL certificates. [intent=direct_read availability=implemented operation=elasticsearch.ssl.certificates.list]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+  - transform node stats get - Get Elasticsearch transform node statistics. [intent=direct_read availability=implemented operation=elasticsearch.transform.node_stats.get]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
 
 ## Commands
 

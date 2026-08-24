@@ -276,6 +276,24 @@
       "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
       "risk": "medium", "approval": "none", "output_policy": "json_redacted", "mutation_class": "none",
       "rest": {"method": "GET", "path": "/_security/user/_privileges", "max_bytes": 1048576}
+    },
+    {
+      "id": "elasticsearch.ssl.certificates.list",
+      "kind": "rest_read",
+      "summary": "List Elasticsearch SSL certificates.",
+      "description": "Bounded direct read of the source-pinned ssl-certificates operation. The provider declares no path-item or operation parameters and returns redacted JSON TLS certificate metadata.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium", "approval": "none", "output_policy": "json_redacted", "auth_scopes": ["monitor"], "mutation_class": "none",
+      "rest": {"method": "GET", "path": "/_ssl/certificates", "max_bytes": 1048576}
+    },
+    {
+      "id": "elasticsearch.transform.node_stats.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch transform node statistics.",
+      "description": "Bounded direct read of the source-pinned transform-get-node-stats operation. The provider declares no path-item or operation parameters and returns JSON transform node statistics.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium", "approval": "none", "output_policy": "json_redacted", "mutation_class": "none",
+      "rest": {"method": "GET", "path": "/_transform/_node_stats", "max_bytes": 1048576}
     }
   ]
 }

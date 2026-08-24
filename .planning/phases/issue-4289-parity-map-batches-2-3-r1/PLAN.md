@@ -256,6 +256,14 @@ not the token-generating security enrollment endpoints. `monitor_ml`,
 privilege responses use the standard redacted JSON policy. This adds only
 source-bound, bounded direct reads with no inferred request contract.
 
+### Elasticsearch SSL and Transform Metadata Direct Reads
+
+The last two eligible zero-input JSON GETs in the retained Elasticsearch source
+are SSL certificate metadata and transform node statistics. They have no body,
+path, query, pagination, or request schema. The `monitor` requirement for
+certificate metadata is runtime scope metadata, not a reachability exclusion;
+both response surfaces use bounded redacted JSON output.
+
 ## Captain Delivery Discipline — 2026-08-24
 
 The 4,535-operation declarable-now inventory is planning input, not delivered

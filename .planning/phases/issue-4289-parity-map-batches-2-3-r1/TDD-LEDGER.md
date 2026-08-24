@@ -294,3 +294,22 @@ docs validation, and help checks pass. A fresh no-credential binary run from
 five separate projects exits 1 with zero stdout and exactly `error: missing
 --credential` for each command. Evidence:
 `evidence/elasticsearch-security-observation-direct-read-command-proof-20260825.json`.
+
+## Elasticsearch SSL and Transform Metadata Reads — Red
+
+**Red:** `ssl-certificates` and `transform-get-node-stats` are parameterless
+JSON GET source operations with declaration-pending rows and no executable
+contract. The former's `monitor` privilege is required runtime metadata, not a
+reason to suppress the command.
+
+**Planned Green:** add only exact bounded, redacted source-bound direct reads
+and prove the installed commands stop exactly at `error: missing --credential`
+in credential-free projects without contacting the provider.
+
+**Green:** both operations now bind their exact source/API routes, retain the
+certificate route's `monitor` scope as operation metadata, and use bounded
+redacted JSON output. Commandrunner preflight, Elasticsearch conformance,
+generated docs validation, and help checks pass. A fresh no-credential binary
+run in each project exits 1 with zero stdout and exactly `error: missing
+--credential`. Evidence:
+`evidence/elasticsearch-ssl-transform-direct-read-command-proof-20260825.json`.

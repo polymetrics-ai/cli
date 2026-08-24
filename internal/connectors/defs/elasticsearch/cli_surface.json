@@ -53,6 +53,11 @@
       "commands": [
         "ml info get", "security authenticate get", "security builtin privileges get", "security stats get", "security user privileges get"
       ]
+    },
+    {
+      "id": "ssl-and-transform-metadata",
+      "title": "Elasticsearch SSL and transform metadata direct reads",
+      "commands": ["ssl certificates list", "transform node stats get"]
     }
   ],
   "global_flags": [
@@ -242,6 +247,14 @@
     {
       "path": "security user privileges get", "summary": "Get the authenticated Elasticsearch user's privileges.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.security.user_privileges.get",
       "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_security/user/_privileges"}], "output_policy": "json_redacted", "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch security user privileges get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "ssl certificates list", "summary": "List Elasticsearch SSL certificates.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.ssl.certificates.list",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_ssl/certificates"}], "output_policy": "json_redacted", "risk": "bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch ssl certificates list --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "transform node stats get", "summary": "Get Elasticsearch transform node statistics.", "intent": "direct_read", "availability": "implemented", "operation": "elasticsearch.transform.node_stats.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json", "api_surface": [{"method": "GET", "path": "/_transform/_node_stats"}], "output_policy": "json_redacted", "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output", "approval": "none", "examples": ["pm elasticsearch transform node stats get --credential elasticsearch-local --json"]
     }
   ]
 }

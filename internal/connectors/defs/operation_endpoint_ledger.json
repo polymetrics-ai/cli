@@ -1217,6 +1217,18 @@
       "path": "/_security/user/_privileges",
       "kind": "rest_read",
       "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_ssl/certificates",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_transform/_node_stats",
+      "kind": "rest_read",
+      "max_bytes": 1048576
     }
   ],
   "emailoctopus": [],

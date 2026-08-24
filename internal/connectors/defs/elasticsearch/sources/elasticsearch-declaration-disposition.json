@@ -21,9 +21,9 @@
       "level": "complete",
       "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
     },
-    "enabled_operations": 20,
-    "enabled_percent": 2.37,
-    "disabled_operations": 825,
+    "enabled_operations": 22,
+    "enabled_percent": 2.6,
+    "disabled_operations": 823,
     "documented_deletes": 72,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -54,7 +54,7 @@
     ],
     "stream_bindings": 2,
     "writes_actions": 0,
-    "terminal_commands": 20,
+    "terminal_commands": 22,
     "live_certification": "pending",
     "gap_ids": [
       "generic-typed-destination-app-dispatch",
@@ -75,7 +75,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 825
+        "count": 823
       }
     ],
     "reverse_etl_eligibility": {
@@ -115,7 +115,7 @@
     "declaration_pending": [
       {
         "id": "typed-operation-contract-elasticsearch",
-        "count": 823
+        "count": 821
       },
       {
         "id": "sync-transport-source-definition-elasticsearch",
@@ -36093,15 +36093,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/_ssl/certificates",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-          "notes": "classification=declaration-pending; source_id=elasticsearch.rest.ssl-certificates; source_location=paths[\"/_ssl/certificates\"].get"
+        "covered_by": {
+          "direct_read": "ssl certificates list"
         }
       },
       "source": {
@@ -36112,25 +36105,15 @@
         "operation_id": "ssl-certificates",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-elasticsearch",
-          "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_ssl/certificates is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/elasticsearch/operations.json: elasticsearch.ssl.certificates.list binds the source-pinned parameterless GET /_ssl/certificates operation to the connector-local rest_read executor."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_ssl/certificates is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-elasticsearch",
-        "contract": null
+        "status": "enabled; source-bound bounded rest_read contract and runnable command",
+        "contract": {"operation": "elasticsearch.ssl.certificates.list", "command": "ssl certificates list"}
       }
     },
     {
@@ -37503,15 +37486,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/_transform/_node_stats",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-          "notes": "classification=declaration-pending; source_id=elasticsearch.rest.transform-get-node-stats; source_location=paths[\"/_transform/_node_stats\"].get"
+        "covered_by": {
+          "direct_read": "transform node stats get"
         }
       },
       "source": {
@@ -37522,25 +37498,15 @@
         "operation_id": "transform-get-node-stats",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-elasticsearch",
-          "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_transform/_node_stats is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/elasticsearch/operations.json: elasticsearch.transform.node_stats.get binds the source-pinned parameterless GET /_transform/_node_stats operation to the connector-local rest_read executor."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/elasticsearch/api_surface.json: GET /_transform/_node_stats is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-elasticsearch",
-        "contract": null
+        "status": "enabled; source-bound bounded rest_read contract and runnable command",
+        "contract": {"operation": "elasticsearch.transform.node_stats.get", "command": "transform node stats get"}
       }
     },
     {
