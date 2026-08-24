@@ -34,3 +34,8 @@ The later #4346 main integration overlapped `sourceprojection.go` but merged
 without conflict. Full generator tests plus source-derived surface and skill
 checks passed on the combined tree; no hand resolution or projection rewrite
 was necessary.
+
+Verify subsequently found the corresponding tracked Twenty connector manual
+and connector-local skill stale. The whole Go tree passed; individual later
+gates isolated `docs-check`. Canonical docs regeneration changed only that
+manual/skill pair, was byte-stable, and passed exact generated-surface tests.

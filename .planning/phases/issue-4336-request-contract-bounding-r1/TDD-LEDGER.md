@@ -94,3 +94,26 @@ ok polymetrics.ai/internal/cli 4.376s
 
 A second generator pass preserved the exact diff SHA-256
 `57b542f0a61b9b6daa9e609fb2ec1ca1573422f08161bda928191a4e7c2a40e9`.
+
+The later merge of main `60f85ae94` exposed the companion connector-doc
+projection in Verify run `32682986491`. A filtered `go test ./...` reproduction
+passed with exit 0; executing the remaining `make verify` gates individually
+then named the next deterministic red:
+
+```text
+GOFLAGS=-p=2 make docs-check
+error: connector twenty manual is stale; run pm docs generate
+```
+
+Canonical docs generation changed only
+`docs/connectors/twenty/{MANUAL,SKILL}.md`. A second pass preserved diff SHA-256
+`49789359e37335d1a58260e6e7dedf1ec3cec1b1e2cc98798f3023e3eb4f3caf`, and
+the exact green proof was:
+
+```text
+GOFLAGS=-p=2 make docs-check
+Validated connector docs in docs/connectors
+GOFLAGS=-p=2 go test -timeout 20m -count=1 ./internal/cli \
+  -run '^(TestDocsGenerateAndValidateConnectorDocs|TestGoldenDocsGenerateMatchesTrackedCLIManuals|TestSkillsGenerateMatchesTrackedSkills)$'
+ok polymetrics.ai/internal/cli 12.758s
+```

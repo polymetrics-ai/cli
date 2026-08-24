@@ -35,6 +35,11 @@
       tracked-skills test passed in 4.942s, `surface-sync --check` reported zero
       drift across 553 connectors, and full `cmd/connectorgen` passed in
       183.024s with `GOFLAGS=-p=2`.
+- [x] Reproduced the remaining latest-main Verify failure after a green
+      `go test ./...`: `docs-check` named the stale Twenty connector manual.
+      Canonical docs generation changed only the Twenty manual/skill pair; a
+      second pass was byte-stable, `docs-check` passed, and focused connector
+      docs/skills equality tests passed in 12.758s.
 - [x] Applicable individual `make verify` gates from AGENTS.md.
 - [x] `git diff --check origin/main...HEAD`.
 

@@ -99,3 +99,11 @@ Canonical `surface-sync --check` found zero drift across 553 connectors, the
 tracked-skills equality test remained green in 4.942s, and the complete
 `cmd/connectorgen` package passed in 183.024s under `-p 2`. GitHub checks must
 settle again on the resulting merge head before the final rollup is reported.
+
+That head's Verify run then reached a second deterministic generated-artifact
+gap: the tracked Twenty connector manual/skill pair lacked the same policy line.
+The full Go tree passed locally, and individual post-test verify gates named
+`docs-check` as the failure. Canonical docs regeneration changed only those two
+Twenty files, was byte-stable on a second pass, and passed both docs validation
+and the focused generated docs/skills equality tests. CI must settle once more
+on this complete projection closure.
