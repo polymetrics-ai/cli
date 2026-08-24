@@ -514,8 +514,19 @@ pre-existing.
 
 ## Authorized shipped-baseline restoration — 2026-08-24
 
-- [ ] Restore `operation-evidence-fixed-100.json` byte-for-byte from
-  `origin/main`; prove zero byte difference and exactly 100 GitHub rows.
-- [ ] Regenerate only `operation-evidence.json` without `--write-fixed-100`,
-  then require the normal `operation-evidence --check` and fixed-100 tests to
-  pass under the corrected selector.
+- [x] Firstmate inbox `012.msg` restored
+  `operation-evidence-fixed-100.json` byte-for-byte from `origin/main` in
+  `4ad21d771`. Both bytes hash to
+  `c0d600d323e7effb15c1e092dce6fb590193f23613b17a51917af79e0d74812f`;
+  `git diff --exit-code origin/main -- internal/connectors/operation-evidence-fixed-100.json`
+  is clean.
+- [x] Current main was merged without rebase in `8b6abbf7b`; its binary-upload
+  classification correction is retained alongside the local runtime-preflight
+  selector correction.
+- [x] Regenerated only `operation-evidence.json` with the ordinary projector,
+  never `--write-fixed-100`. `go test -timeout 20m -count=1 -run
+  '^TestOperationEvidence(Fixed100|ClassForCommand)' ./cmd/connectorgen`
+  passes (28.264s), as do `go run ./cmd/connectorgen operation-evidence --check
+  .`, `go vet ./cmd/connectorgen`, and `git diff --check`.
+- [ ] A broader fixed cohort remains an additive, separately reviewed proposal;
+  it must not replace the shipped all-GitHub evidence reference.

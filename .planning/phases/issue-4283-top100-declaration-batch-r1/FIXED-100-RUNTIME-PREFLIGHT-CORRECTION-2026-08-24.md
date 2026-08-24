@@ -40,9 +40,10 @@ After the correction the same test passes. It proves both source IDs have
 disabled runtime and `runtime_reachability`, then builds an in-memory
 prospective fixed cohort and requires neither ID appears.
 
-## Prospective cohort only
+## Historical prospective cohort only
 
-The corrected deterministic selector would produce exactly 100 rows:
+Before the later current-main merge, the corrected deterministic selector
+produced this 100-row diagnostic snapshot:
 
 | Connector | Rows |
 | --- | ---: |
@@ -58,16 +59,27 @@ The two Docker Hub SCIM writes fall out by normal eligibility, not a
 hand-authored exclusion. Their two direct-write slots are filled by the next
 eligible sorted GitHub rows.
 
-## Deliberate hold
+The post-merge regression projects the full source-locked corpus and asserts
+the invariant that matters here—both SCIM rows are absent—without treating this
+historical composition as a replacement baseline.
 
-The checked-in branch fixed reference still contains the two SCIM rows. Thus:
+## Superseded hold and restoration
+
+The earlier branch-only reference was not the shipped baseline. Firstmate inbox
+item `012.msg` directed its restoration, not a replacement. Commit `4ad21d771`
+restored current `origin/main` bytes exactly; the source and restored file both
+have SHA-256
+`c0d600d323e7effb15c1e092dce6fb590193f23613b17a51917af79e0d74812f`.
+
+After non-rewriting current-main merge `8b6abbf7b`, the normal gate passes:
 
 ```sh
 go test -timeout 20m -count=1 -run '^TestOperationEvidenceFixed100' ./cmd/connectorgen
+go run ./cmd/connectorgen operation-evidence --check .
 ```
 
-correctly fails with
-`dockerhub.rest.post_/v2/scim/2.0/Users execution evidence regressed`. This is
-expected evidence that the old unmerged selection was unsound. Per the decision,
-no regenerated cohort is written or committed; the captain decides whether to
-restore the shipped all-GitHub baseline or approve another baseline change.
+The focused Docker Hub test now projects the full local source-locked corpus,
+not a fixture inferred from the restored GitHub-only fixed reference. It still
+proves that neither SCIM row is eligible under real preflight. No
+`--write-fixed-100` operation was run. Any broader cohort is additive evidence
+requiring separate review, never a replacement for the accepted baseline.

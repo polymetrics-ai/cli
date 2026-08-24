@@ -877,3 +877,13 @@ all-GitHub reference is expected to pass because the read-only audit proves
 **Boundary:** no source lock, connector declaration, engine rule, or manual
 cohort selection changes. Broader mixed evidence remains a future additive
 proposal requiring separate review.
+
+**Restoration outcome (supersedes the held-gate note above):** Firstmate inbox
+item `012.msg` authorized restoration, not replacement. Commit `4ad21d771`
+restored the reference from current `origin/main`; both the source and working
+file hash to `c0d600d323e7effb15c1e092dce6fb590193f23613b17a51917af79e0d74812f`.
+After non-rewriting current-main merge `8b6abbf7b`, the focused test projects
+the full local source-locked corpus (rather than deriving its fixture from the
+now GitHub-only reference), still proves both SCIM rows are preflight-refused,
+and passes. `operation-evidence --check` also passes its restored fixed-100
+gate. No `--write-fixed-100` invocation occurred.

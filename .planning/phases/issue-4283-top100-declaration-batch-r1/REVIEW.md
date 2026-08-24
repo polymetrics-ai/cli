@@ -28,9 +28,16 @@ go test -timeout 20m -count=1 -run '^TestOperationEvidenceFixed100UsesRuntimePre
 go vet ./cmd/connectorgen
 ```
 
-The known `^TestOperationEvidenceFixed100` failure is a desired stale-baseline
-signal, not a suppressed test failure; its exact evidence is in
-`FIXED-100-RUNTIME-PREFLIGHT-CORRECTION-2026-08-24.md`.
+## Fixed-100 restoration review — 2026-08-24
+
+Firstmate inbox `012.msg` authorized restoring the accepted baseline rather
+than replacing it. `4ad21d771` restores byte-identical `origin/main` content
+(SHA-256 `c0d600d323e7effb15c1e092dce6fb590193f23613b17a51917af79e0d74812f`),
+and `8b6abbf7b` merges current main without rebase. Review found no issue with
+the conflict resolution: main owns the binary-upload classification and
+generated artifacts, while this lane retains only the runtime-preflight
+selector and its full-corpus regression assertion. The focused test and normal
+fixed-100 check pass. Broader evidence is intentionally additive-only.
 
 ## Scope reviewed
 
