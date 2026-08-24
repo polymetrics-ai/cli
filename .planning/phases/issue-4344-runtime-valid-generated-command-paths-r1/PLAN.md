@@ -21,9 +21,9 @@
 
 | Acceptance criterion | Evidence | Observable assertion or fake reason |
 | --- | --- | --- |
-| New generated paths are parser-valid and operation-derived | live | A projected parameterized mutation is preflighted through the real commandrunner and stops at `missing --credential`; raw braces would instead be rejected before that boundary. |
+| New generated paths are parser-valid and operation-derived | live | A projected parameterized mutation is accepted by the real commandrunner preflight; deliberately restoring the raw ID makes the behavioral test fail on retained `{parameter}` text. |
 | Operation identity is collision-free and stable | live | Operations differing only in a parameter name or literal/path shape yield distinct valid command paths, and a second projection has no changes. |
-| Path bindings are retained | live | The projected command retains the required `record.<field>` path flag and the real preflight accepts it before the credential boundary. |
+| Path bindings are retained | live | The projected command retains the required `record.<field>` path flags, and the real commandrunner builds the expected bound record from those flags. |
 | Existing reachable surface is not renamed | live | A valid legacy generated path remains byte-for-byte unchanged after projection; an invalid legacy generated path is changed to the new valid identity. |
 | Bitbucket generated surface is reachable | live | Once the source-import descriptor is present on the reviewed batch-1 input branch, a built binary in an isolated project reaches `missing --credential` for all 50 implemented Bitbucket commands, including the 28 formerly rejected paths. This branch must not copy unrelated connector work merely to manufacture the fixture. |
 

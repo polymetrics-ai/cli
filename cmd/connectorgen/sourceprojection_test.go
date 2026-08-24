@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -90,6 +91,154 @@ func TestSourceProjection_AddChangeDeletePropagatesToEverySurface(t *testing.T) 
 	if strings.Contains(writes, `"body_fields"`) || !strings.Contains(writes, `"body_type": "none"`) || strings.Count(cli, `"maps_to": "record.owner"`) != 2 {
 		t.Fatalf("deleted source fields survived projection:\nwrites=%s\ncli=%s", writes, cli)
 	}
+}
+
+func TestSourceProjectionGeneratedParameterizedCommandIsRuntimeValidAndStable(t *testing.T) {
+	bundleDir := t.TempDir()
+	writesPath := filepath.Join(bundleDir, "writes.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	writeProjectionFixture(t, writesPath, `{
+  "schema_version": 1,
+  "actions": [{
+    "name": "delete_branch_restriction", "kind": "delete", "method": "DELETE",
+    "path": "/repositories/{{ record.workspace }}/{{ record.repo_slug }}/branch-restrictions/{{ record.id }}",
+    "path_fields": ["workspace", "repo_slug", "id"],
+    "record_schema": {"type":"object","additionalProperties":false,"properties":{}},
+    "risk": "high", "confirm": "destructive"
+  }]
+}`)
+	writeProjectionFixture(t, cliPath, `{"schema_version":1,"commands":[]}`)
+
+	operation := sourceOperationDescriptor{
+		Connector: "bitbucket",
+		// This is intentionally the source form that used to reach the command
+		// path verbatim. The command identity must instead come from Method/Path.
+		SourceID: "bitbucket.rest.delete-/repositories/{workspace}/{repo-slug}/branch-restrictions/{id}",
+		Method:   "DELETE",
+		Path:     "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+		Request: sourceRequestDescriptor{Path: []sourceParameterDescriptor{
+			{Name: "workspace", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "repo_slug", Required: true, Schema: map[string]any{"type": "string"}},
+			{Name: "id", Required: true, Schema: map[string]any{"type": "string"}},
+		}},
+	}
+
+	stats, err := projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, false)
+	if err != nil {
+		t.Fatalf("project parameterized source operation: %v", err)
+	}
+	if stats.CLI != 1 {
+		t.Fatalf("projected CLI updates = %d, want 1", stats.CLI)
+	}
+
+	var surface engine.CLISurface
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, cliPath)), &surface); err != nil {
+		t.Fatalf("decode projected CLI surface: %v", err)
+	}
+	if len(surface.Commands) != 1 {
+		t.Fatalf("projected commands = %d, want 1", len(surface.Commands))
+	}
+	command := surface.Commands[0]
+	if strings.ContainsAny(command.Path, "{}") {
+		t.Fatalf("generated command path retained a raw source parameter: %q", command.Path)
+	}
+	if command.Path != sourceProjectionGeneratedCommandPath(operation) {
+		t.Fatalf("generated command path = %q, want operation-derived %q", command.Path, sourceProjectionGeneratedCommandPath(operation))
+	}
+	for _, field := range []string{"workspace", "repo_slug", "id"} {
+		found := false
+		for _, flag := range command.Flags {
+			if flag.MapsTo == "record."+field {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Fatalf("generated command lost path binding record.%s: %+v", field, command.Flags)
+		}
+	}
+
+	var writes struct {
+		Actions []engine.WriteAction `json:"actions"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, writesPath)), &writes); err != nil {
+		t.Fatalf("decode projected writes: %v", err)
+	}
+	connector := engine.New(engine.Bundle{
+		Name:       "bitbucket",
+		Metadata:   engine.Metadata{Name: "bitbucket"},
+		Writes:     writes.Actions,
+		CLISurface: &surface,
+	}, nil)
+	if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
+		t.Fatalf("real commandrunner rejected generated path %q before the credential boundary: %v", command.Path, err)
+	}
+	planned, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{
+		Path: strings.Fields(command.Path),
+		Flags: map[string][]string{
+			"workspace": {"acme"},
+			"repo-slug": {"docs"},
+			"id":        {"42"},
+		},
+	})
+	if err != nil {
+		t.Fatalf("real commandrunner lost path parameter flags: %v", err)
+	}
+	if got, want := map[string]any(planned.Record), map[string]any{"workspace": "acme", "repo_slug": "docs", "id": "42"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("planned path parameter bindings = %#v, want %#v", got, want)
+	}
+
+	before := readProjectionFixture(t, cliPath)
+	stats, err = projectSourceDescriptorToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{operation}}, false)
+	if err != nil {
+		t.Fatalf("repeat projection: %v", err)
+	}
+	if stats.Changed() || readProjectionFixture(t, cliPath) != before {
+		t.Fatalf("repeat projection changed stable generated command: stats=%+v", stats)
+	}
+
+	parameterA := operation
+	parameterA.SourceID = "same-source-id"
+	parameterA.Path = "/repositories/{workspace}/{repo_slug}/branch-restrictions/{a}"
+	parameterB := parameterA
+	parameterB.Path = "/repositories/{workspace}/{repo_slug}/branch-restrictions/{b}"
+	literal := parameterA
+	literal.Path = "/repositories/{workspace}/{repo_slug}/branch-restrictions/a"
+	paths := map[string]struct{}{
+		sourceProjectionGeneratedCommandPath(parameterA): {},
+		sourceProjectionGeneratedCommandPath(parameterB): {},
+		sourceProjectionGeneratedCommandPath(literal):    {},
+	}
+	if len(paths) != 3 {
+		t.Fatalf("operation-derived command identities collided: a=%q b=%q literal=%q",
+			sourceProjectionGeneratedCommandPath(parameterA),
+			sourceProjectionGeneratedCommandPath(parameterB),
+			sourceProjectionGeneratedCommandPath(literal))
+	}
+
+	validLegacyOperation := sourceOperationDescriptor{SourceID: "github.repos.create", Method: "POST", Path: "/repos/{owner}/{repo}"}
+	validLegacy := newOrderedObject()
+	validLegacy.set("path", sourceProjectionTestLegacyGeneratedCommandPath(validLegacyOperation))
+	validLegacy.set("approval", sourceProjectionApproval(newOrderedObject()))
+	if sourceProjectionRefreshGeneratedCommandMetadata(validLegacy, validLegacyOperation, newOrderedObject()) {
+		t.Fatalf("reachable legacy command was renamed or modified: %q", stringField(validLegacy, "path"))
+	}
+	invalidLegacy := newOrderedObject()
+	invalidLegacy.set("path", sourceProjectionTestLegacyGeneratedCommandPath(operation))
+	if !sourceProjectionRefreshGeneratedCommandMetadata(invalidLegacy, operation, newOrderedObject()) {
+		t.Fatal("invalid legacy generated command was not migrated")
+	}
+	if got, want := stringField(invalidLegacy, "path"), sourceProjectionGeneratedCommandPath(operation); got != want {
+		t.Fatalf("invalid legacy command path = %q, want %q", got, want)
+	}
+	if got, want := stringField(invalidLegacy, "approval"), sourceProjectionApproval(newOrderedObject()); got != want {
+		t.Fatalf("invalid legacy command approval = %q, want refreshed %q", got, want)
+	}
+}
+
+func sourceProjectionTestLegacyGeneratedCommandPath(operation sourceOperationDescriptor) string {
+	path := strings.NewReplacer("/", " ", "_", "-").Replace(operation.SourceID)
+	return "api " + path
 }
 
 func TestSourceProjectionMarksDeclaredCircleCIWebhookSecretsEnvOnly(t *testing.T) {

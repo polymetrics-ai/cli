@@ -1,9 +1,20 @@
 # Run state — #4344
 
-- State: planning complete; production edits have not started.
-- GSD: prompts resolved inline on 2026-08-24; no role spawning.
-- Baseline: `sourceProjectionGeneratedCommandPath` transforms raw `SourceID`
-  only by replacing `/` and `_`, while commandrunner rejects `{`/`}`.
-- Dependency boundary: current `main` does not carry Bitbucket/GitLab
-  operation descriptors. Their regeneration and 50-command sweep must use the
-  reviewed batch-1 input artifact without importing unrelated connector changes.
+- State: implementation, inline verification, and code review complete; PR
+  handoff pending.
+- GSD: `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`,
+  and `code-review` prompts resolved inline on 2026-08-24; no role spawning.
+- Red: restoring the raw `SourceID` command identity made
+  `TestSourceProjectionGeneratedParameterizedCommandIsRuntimeValidAndStable`
+  fail with `generated command path retained a raw source parameter`.
+- Green: new commands encode the normalized `METHOD path` endpoint in hex;
+  only legacy generated paths rejected by runtime identifier validation migrate.
+  Valid legacy generated paths remain unchanged.
+- Generated artifacts: no checked-in surface changed. `surface-sync --check`
+  scanned 552 connectors and found zero drift. The current Bitbucket definition
+  has only three implemented commands and no `sources/` directory.
+- Dependency boundary: `GOFLAGS='-p=3' go run ./cmd/connectorgen source-import
+  bitbucket --check` cannot run here because
+  `internal/connectors/defs/bitbucket/sources` does not exist. The reviewed
+  batch-1 source descriptor is required for the requested 50-command/28-path
+  binary sweep; this foundation branch must not copy unrelated connector work.
