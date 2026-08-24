@@ -880,3 +880,21 @@ error: missing --credential
   operation and stops the wave. Do not compensate by loosening a schema, suppressing a flag, or
   changing shared code.
 - Category B (Fastly and WooCommerce) remains untouched until this entire Wave 1 report is green.
+
+### Wave-1 write-lane exception — 2026-08-24
+
+The planned three HubSpot `direct_write` probes cannot be promoted honestly. Each selected
+operation is retained as typed metadata, but its connector-owned `operations.json` explicitly
+says it “is not executable until a future connector-local implementation covers it.” The runtime
+also requires a connector to implement `OperationDirectWriter`, direct-write metadata,
+declaration binding, and body-materialization interfaces before an `implemented` direct-write
+command may enter the plan lifecycle (`commandrunner.validateOperationDirectWriteCommand`).
+Neither condition is met by changing `cli_surface.json`, and constructing either missing contract
+would violate the Wave-1 no-foundation/no-invented-body constraint.
+
+The reverse-ETL exception remains unchanged: none of the 20 target connectors owns a
+`sync_transport.json`. Therefore the exact 100-operation, four-intent sample approved for Wave 1
+cannot proceed as specified. This is a pre-conversion evidence finding, not a failed conversion;
+all connector declarations remain unchanged. Await a delivery-owner choice between a 97-command
+read/ETL-only first wave, explicit authorization for a connector-local write/transport foundation,
+or a different source-backed write candidate.
