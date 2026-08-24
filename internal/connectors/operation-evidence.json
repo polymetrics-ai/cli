@@ -62352,7 +62352,7 @@
         "path": "/v2/scim/2.0/Users"
       },
       "runtime": {
-        "enabled": true,
+        "enabled": false,
         "targets": [
           "operation:dockerhub.post__v2_scim_2.0_users"
         ]
@@ -62403,7 +62403,12 @@
         }
       },
       "foundations": null,
-      "gaps": [],
+      "gaps": [
+        {
+          "kind": "runtime_reachability",
+          "evidence": "canonical operation has no enabled declaration-owned runtime command: command \"scim user create\": connector command \"scim user create\" is blocked: intent=direct_write: availability=implemented: direct_write operation metadata is not executable: operation \"dockerhub.post__v2_scim_2.0_users\" body_schema is an object and must declare additionalProperties: false"
+        }
+      ],
       "absence": null
     },
     {
@@ -62668,7 +62673,7 @@
         "path": "/v2/scim/2.0/Users/{id}"
       },
       "runtime": {
-        "enabled": true,
+        "enabled": false,
         "targets": [
           "operation:dockerhub.put__v2_scim_2.0_users__id_"
         ]
@@ -62719,7 +62724,12 @@
         }
       },
       "foundations": null,
-      "gaps": [],
+      "gaps": [
+        {
+          "kind": "runtime_reachability",
+          "evidence": "canonical operation has no enabled declaration-owned runtime command: command \"scim user update\": connector command \"scim user update\" is blocked: intent=direct_write: availability=implemented: direct_write operation metadata is not executable: operation \"dockerhub.put__v2_scim_2.0_users__id_\" body_schema is an object and must declare additionalProperties: false"
+        }
+      ],
       "absence": null
     },
     {
@@ -500542,6 +500552,8 @@
         "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
         "dockerhub.rest.post_/v2/access-tokens",
         "dockerhub.rest.post_/v2/orgs/{name}/access-tokens",
+        "dockerhub.rest.post_/v2/scim/2.0/Users",
+        "dockerhub.rest.put_/v2/scim/2.0/Users/{id}",
         "github.rest.actions/get-actions-cache-retention-limit-for-enterprise",
         "github.rest.actions/get-actions-cache-retention-limit-for-organization",
         "github.rest.actions/get-actions-cache-storage-limit-for-enterprise",
