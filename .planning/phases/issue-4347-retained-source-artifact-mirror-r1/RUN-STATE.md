@@ -33,3 +33,7 @@ to non-scalar serialization. Projection now decides whether a zero-filter read
 is executable from the source declaration's requiredness, restoring the 18
 valid GitHub direct reads. The complete local 633-route fresh-binary fixture,
 source inventory, and generator package suite are green.
+
+The full CI run caught one final frozen embed snapshot of the same GitHub lock;
+its expected SHA-256 now matches the documented retained/re-pinned lock. No
+lock bytes were changed during this correction.

@@ -56,3 +56,8 @@ in `VERIFICATION.md`.
   reads. Requiredness is the actual safety boundary, so the implementation now
   keys on the declaration and the new red/green test proves it. The complete
   fresh-binary 633-route fixture and source inventory are green.
+- **Resolved after CI snapshot check — production embed source-lock identity:**
+  the retained GitHub GraphQL re-pin changed the immutable lock file, but the
+  production embed test still named its old digest. The test retains its
+  embedded-versus-disk byte comparison and now pins the documented committed
+  lock SHA-256; the targeted test is green.
