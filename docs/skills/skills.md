@@ -499,6 +499,7 @@
 - [pm-trustpilot](pm-trustpilot/SKILL.md): Trustpilot connector knowledge and safe action guide.
 - [pm-tvmaze-schedule](pm-tvmaze-schedule/SKILL.md): TVmaze Schedule connector knowledge and safe action guide.
 - [pm-twelve-data](pm-twelve-data/SKILL.md): Twelve Data connector knowledge and safe action guide.
+- [pm-twenty](pm-twenty/SKILL.md): Twenty CRM connector knowledge and safe action guide.
 - [pm-twilio](pm-twilio/SKILL.md): Twilio connector knowledge and safe action guide.
 - [pm-twilio-taskrouter](pm-twilio-taskrouter/SKILL.md): Twilio TaskRouter connector knowledge and safe action guide.
 - [pm-twitter](pm-twitter/SKILL.md): Twitter connector knowledge and safe action guide.

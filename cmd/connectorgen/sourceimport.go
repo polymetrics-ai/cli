@@ -12,7 +12,6 @@ import (
 	"math"
 	"math/big"
 	"mime"
-	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -23,33 +22,33 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 
 	"gopkg.in/yaml.v3"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // source-import turns a verified, connector-owned provider source into a
 // canonical intermediate descriptor. It intentionally owns no execution
 // controls: a connector name selects its checked-in lock, and that lock alone
 // supplies the artifact URL, byte count, and digest.
-const sourceImportUsage = `connectorgen source-import <connector> [--out <path>] [--defs <dir>] [--cache-dir <dir>] [--check]
+const sourceImportUsage = `connectorgen source-import <connector> [--out <path>] [--defs <dir>] [--check]
 
-Verifies the connector-owned source lock, retrieves only its fixed public
-artifact URL or document artifact URLs, and writes canonical provider
-operation descriptors for later declaration generators.
+Verifies the connector-owned source lock against its tracked retained artifact
+copy and writes canonical provider operation descriptors for later declaration
+generators. It never contacts a provider or a local cache.
 
   <connector>     connector whose sources/<connector>-operation-source-lock.json is used
   --out <path>    descriptor output path (default: connector-owned canonical descriptor)
   --defs <dir>    connector defs root (default internal/connectors/defs)
-  --cache-dir <dir> existing isolated verified-artifact cache root (default: platform cache)
   --check         compare generated descriptors with --out; do not write
 
 The source lock is authoritative. A byte or SHA-256 mismatch requires a
 source-lock refresh; this command never accepts a replacement URL, method,
 path, header, body, credential, or generic request input. Version 3 locks may
 cite provider URLs with bounded queries, but the importer never fetches those
-citations: it retrieves only their stable queryless document artifacts. A cold
-fetch is bounded to three minutes; later checks re-verify a content-addressed
-cache before using it.`
+citations: it reads only the retained content-addressed document artifacts.`
 
 const (
 	defaultSourceImportArtifactBytes = int64(16 << 20)
@@ -91,6 +90,11 @@ type sourceImportLimits struct {
 	MaxDocuments               int
 	MaxTotalArtifactBytes      int64
 	AllowSourceContractGaps    bool
+	// UseExecutionEnvelopes is enabled only for v3 immutable source
+	// descriptors. Legacy v1/v2 descriptors retain their byte identity until
+	// their locks are deliberately migrated rather than silently rewriting the
+	// 41 MiB checked-in GitHub descriptor.
+	UseExecutionEnvelopes bool
 }
 
 type sourceDocumentForm struct {
@@ -371,11 +375,27 @@ type sourceImportSource struct {
 }
 
 type sourceParameterDescriptor struct {
-	Name     string                        `json:"name"`
-	Required bool                          `json:"required"`
-	Schema   any                           `json:"schema,omitempty"`
-	Content  any                           `json:"content,omitempty"`
-	Wire     sourceParameterWireDescriptor `json:"wire"`
+	Name              string                        `json:"name"`
+	Required          bool                          `json:"required"`
+	Schema            any                           `json:"schema,omitempty"`
+	Content           any                           `json:"content,omitempty"`
+	Wire              sourceParameterWireDescriptor `json:"wire"`
+	ExecutionEnvelope *sourceExecutionEnvelope      `json:"execution_envelope,omitempty"`
+}
+
+type sourceExecutionEnvelope struct {
+	PolicyVersion  string                 `json:"policy_version"`
+	Origin         string                 `json:"origin"`
+	SourceLocation string                 `json:"source_location"`
+	Limits         []sourceExecutionLimit `json:"limits"`
+}
+
+type sourceExecutionLimit struct {
+	Kind        string `json:"kind"`
+	Unit        string `json:"unit"`
+	Default     int    `json:"default,omitempty"`
+	HardCeiling int    `json:"hard_ceiling"`
+	Effective   int    `json:"effective"`
 }
 
 type sourceContractGap struct {
@@ -416,16 +436,18 @@ type sourceParameterWireDescriptor struct {
 }
 
 type sourceRequestBodyDescriptor struct {
-	Required bool `json:"required"`
-	Schema   any  `json:"schema"`
-	Encoding any  `json:"encoding,omitempty"`
+	Required          bool                     `json:"required"`
+	Schema            any                      `json:"schema"`
+	Encoding          any                      `json:"encoding,omitempty"`
+	ExecutionEnvelope *sourceExecutionEnvelope `json:"execution_envelope,omitempty"`
 }
 
 type sourceRequestMediaDescriptor struct {
-	MediaType string `json:"media_type"`
-	Required  bool   `json:"required"`
-	Schema    any    `json:"schema"`
-	Encoding  any    `json:"encoding,omitempty"`
+	MediaType         string                   `json:"media_type"`
+	Required          bool                     `json:"required"`
+	Schema            any                      `json:"schema"`
+	Encoding          any                      `json:"encoding,omitempty"`
+	ExecutionEnvelope *sourceExecutionEnvelope `json:"execution_envelope,omitempty"`
 }
 
 type sourceRequestDescriptor struct {
@@ -1329,6 +1351,10 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 	if err != nil {
 		return sourceImportResult{}, err
 	}
+	// Version 3 is the immutable document-owned contract and therefore the
+	// first descriptor version that can make PM execution policy explicit
+	// without rewriting legacy canonical descriptor bytes.
+	limits.UseExecutionEnvelopes = true
 	result := sourceImportResult{DescriptorSchemaVersion: 3, Operations: []sourceOperationDescriptor{}}
 	for _, document := range lock.Rest.SourceDocuments {
 		raw := rawDocuments[document.ID]
@@ -1616,21 +1642,20 @@ func appendLockedGraphQLProjection(ctx context.Context, lock sourceImportLock, f
 			return fmt.Errorf("GraphQL projection drift: embedded type-system bytes do not match projection_bytes/projection_sha256")
 		}
 	}
-	// Version 2 embeds the complete, normalized GraphQL field and type-system
-	// projection in the strict checked-in lock. Import from those reviewed bytes
-	// instead of requiring an unversioned public URL to continue serving the
-	// historical capture. Legacy locks still verify their external artifact.
-	if lock.SchemaVersion < 2 {
-		raw, err := fetchSourceImportArtifact(ctx, fetcher, lock.GraphQL.sourceImportArtifact)
-		if err != nil {
-			return fmt.Errorf("fetch locked GraphQL source artifact: %w", err)
-		}
-		if int64(len(raw)) > limits.MaxArtifactBytes {
-			return fmt.Errorf("GraphQL artifact byte limit exceeded")
-		}
-		if err := validateSourceImportArtifactBytes(raw, lock.GraphQL.sourceImportArtifact); err != nil {
-			return fmt.Errorf("locked GraphQL source artifact: %w", err)
-		}
+	// Version 2 embeds the normalized GraphQL field/type-system projection, but
+	// its provider schema remains an independently pinned source artifact.
+	// Verify that retained raw copy even though descriptor generation uses the
+	// reviewed projection: otherwise source-import could claim full lock
+	// verification while a schema pin had no retained bytes at all.
+	raw, err := fetchSourceImportArtifact(ctx, fetcher, lock.GraphQL.sourceImportArtifact)
+	if err != nil {
+		return fmt.Errorf("fetch locked GraphQL source artifact: %w", err)
+	}
+	if int64(len(raw)) > limits.MaxArtifactBytes {
+		return fmt.Errorf("GraphQL artifact byte limit exceeded")
+	}
+	if err := validateSourceImportArtifactBytes(raw, lock.GraphQL.sourceImportArtifact); err != nil {
+		return fmt.Errorf("locked GraphQL source artifact: %w", err)
 	}
 	countBudget, err := budget.countBudget(limits)
 	if err != nil {
@@ -6268,7 +6293,17 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 		} else if err := validateBoundedParameterContent(parameter.Name, parameter.Content, form, limits); err != nil {
 			return sourceRequestDescriptor{}, err
 		}
-		descriptor := sourceParameterDescriptor{Name: parameter.Name, Required: parameter.Required, Schema: parameter.Schema, Content: parameter.Content, Wire: parameter.Wire}
+		descriptor := sourceParameterDescriptor{
+			Name:              parameter.Name,
+			Required:          parameter.Required,
+			Schema:            parameter.Schema,
+			Content:           parameter.Content,
+			Wire:              parameter.Wire,
+			ExecutionEnvelope: sourceParameterExecutionEnvelopeFor(parameter, limits),
+		}
+		if err := validateSourceParameterExecutionEnvelope(descriptor, parameter.In, limits); err != nil {
+			return sourceRequestDescriptor{}, fmt.Errorf("parameter %q: %w", parameter.Name, err)
+		}
 		switch parameter.In {
 		case "path":
 			request.Path = append(request.Path, descriptor)
@@ -6298,7 +6333,14 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 		if err != nil {
 			return sourceRequestDescriptor{}, err
 		}
-		request.Body = &sourceRequestBodyDescriptor{Required: body.Required, Schema: body.Schema}
+		request.Body = &sourceRequestBodyDescriptor{
+			Required:          body.Required,
+			Schema:            body.Schema,
+			ExecutionEnvelope: sourceRequestBodyExecutionEnvelope(mediaType, limits, "request.body"),
+		}
+		if err := validateSourceRequestBodyExecutionEnvelope(request.Body.ExecutionEnvelope, mediaType, limits); err != nil {
+			return sourceRequestDescriptor{}, err
+		}
 		request.MediaType = mediaType
 		return sourceCompleteRequestDescriptor(path, parameters, request)
 	}
@@ -6344,16 +6386,21 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 				return sourceRequestDescriptor{}, fmt.Errorf("request media %q: %w", mediaType, err)
 			}
 		}
-		request.Media = append(request.Media, sourceRequestMediaDescriptor{
-			MediaType: mediaType,
-			Required:  sourceBool(body["required"]),
-			Schema:    schema,
-			Encoding:  encoding,
-		})
+		descriptor := sourceRequestMediaDescriptor{
+			MediaType:         mediaType,
+			Required:          sourceBool(body["required"]),
+			Schema:            schema,
+			Encoding:          encoding,
+			ExecutionEnvelope: sourceRequestBodyExecutionEnvelope(mediaType, limits, "request.media["+strconv.Quote(mediaType)+"]"),
+		}
+		if err := validateSourceRequestBodyExecutionEnvelope(descriptor.ExecutionEnvelope, mediaType, limits); err != nil {
+			return sourceRequestDescriptor{}, fmt.Errorf("request media %q: %w", mediaType, err)
+		}
+		request.Media = append(request.Media, descriptor)
 	}
 	if len(request.Media) == 1 {
 		media := request.Media[0]
-		request.Body = &sourceRequestBodyDescriptor{Required: media.Required, Schema: media.Schema, Encoding: media.Encoding}
+		request.Body = &sourceRequestBodyDescriptor{Required: media.Required, Schema: media.Schema, Encoding: media.Encoding, ExecutionEnvelope: media.ExecutionEnvelope}
 		request.MediaType = media.MediaType
 		request.Media = nil
 	}
@@ -6365,6 +6412,159 @@ func sourceCompleteRequestDescriptor(path string, parameters []sourceParameterVa
 		return request, err
 	}
 	return request, nil
+}
+
+func sourceParameterExecutionEnvelopeFor(parameter sourceParameterValue, limits sourceImportLimits) *sourceExecutionEnvelope {
+	if !limits.UseExecutionEnvelopes || parameter.Content != nil || !sourceScalarWireSchema(parameter.Schema) {
+		return nil
+	}
+	if parameter.In == "header" {
+		effective := sourceBoundedHeaderMaxBytes(parameter.Schema)
+		if effective <= 0 {
+			return nil
+		}
+		return &sourceExecutionEnvelope{
+			PolicyVersion:  engine.OperationParameterExecutionPolicyVersion,
+			Origin:         "provider_and_pm_policy",
+			SourceLocation: fmt.Sprintf("request.%s[%q]", parameter.In, parameter.Name),
+			Limits: []sourceExecutionLimit{{
+				Kind:        "wire_value",
+				Unit:        "bytes",
+				HardCeiling: engine.MaxOperationHeaderBytes,
+				Effective:   effective,
+			}},
+		}
+	}
+	if parameter.In != "path" && parameter.In != "query" {
+		return nil
+	}
+	effective, origin := sourcePathQueryExecutionBound(parameter.Schema)
+	return &sourceExecutionEnvelope{
+		PolicyVersion:  engine.OperationParameterExecutionPolicyVersion,
+		Origin:         origin,
+		SourceLocation: fmt.Sprintf("request.%s[%q]", parameter.In, parameter.Name),
+		Limits: []sourceExecutionLimit{{
+			Kind:        "wire_value",
+			Unit:        "encoded_bytes",
+			Default:     engine.DefaultOperationParameterMaxBytes,
+			HardCeiling: engine.MaxOperationParameterMaxBytes,
+			Effective:   effective,
+		}},
+	}
+}
+
+func sourcePathQueryExecutionBound(schema any) (int, string) {
+	effective := engine.DefaultOperationParameterMaxBytes
+	origin := "pm_policy"
+	if providerBytes := sourceProjectionFlagMaxBytes(schema, "string"); providerBytes > 0 {
+		origin = "provider_and_pm_policy"
+		if providerBytes < int64(effective) {
+			effective = int(providerBytes)
+		}
+	}
+	return effective, origin
+}
+
+func sourceBoundedHeaderMaxBytes(schema any) int {
+	object, ok := schema.(map[string]any)
+	if !ok {
+		return 0
+	}
+	if object["type"] == "boolean" {
+		return len("false")
+	}
+	if object["type"] != "string" {
+		return 0
+	}
+	maxBytes := 0
+	if maxRunes := sourceProjectionSchemaMaxBytes(schema); maxRunes > 0 && maxRunes <= int64(engine.MaxOperationHeaderBytes/utf8.UTFMax) {
+		maxBytes = int(maxRunes) * utf8.UTFMax
+	}
+	for _, raw := range sourceAnySlice(object["enum"]) {
+		value, ok := raw.(string)
+		if !ok {
+			return 0
+		}
+		if len(value) > maxBytes {
+			maxBytes = len(value)
+		}
+	}
+	if maxBytes <= 0 || maxBytes > engine.MaxOperationHeaderBytes {
+		return 0
+	}
+	return maxBytes
+}
+
+func sourceRequestBodyExecutionEnvelope(mediaType string, limits sourceImportLimits, sourceLocation string) *sourceExecutionEnvelope {
+	if !limits.UseExecutionEnvelopes || !sourceJSONMediaType(sourceNormalizedMediaType(mediaType)) {
+		return nil
+	}
+	return &sourceExecutionEnvelope{
+		PolicyVersion:  engine.OperationParameterExecutionPolicyVersion,
+		Origin:         "pm_policy",
+		SourceLocation: sourceLocation,
+		Limits: []sourceExecutionLimit{
+			{Kind: "body", Unit: "encoded_bytes", Default: engine.DefaultOperationDirectWriteMaxBytes, HardCeiling: engine.MaxOperationDirectWriteBytes, Effective: engine.DefaultOperationDirectWriteMaxBytes},
+			{Kind: "array", Unit: "items", Default: sourceProjectionDefaultArrayItems, HardCeiling: engine.MaxStructuredRESTBodyItems, Effective: sourceProjectionDefaultArrayItems},
+			{Kind: "object", Unit: "properties", Default: sourceProjectionDefaultObjectProperties, HardCeiling: engine.MaxStructuredRESTBodyFields, Effective: sourceProjectionDefaultObjectProperties},
+			{Kind: "structure", Unit: "depth", Default: engine.MaxStructuredRESTBodyDepth, HardCeiling: engine.MaxStructuredRESTBodyDepth, Effective: engine.MaxStructuredRESTBodyDepth},
+			{Kind: "structure", Unit: "nodes", Default: engine.MaxStructuredRESTBodyNodes, HardCeiling: engine.MaxStructuredRESTBodyNodes, Effective: engine.MaxStructuredRESTBodyNodes},
+		},
+	}
+}
+
+func validateSourceRequestBodyExecutionEnvelope(envelope *sourceExecutionEnvelope, mediaType string, limits sourceImportLimits) error {
+	if !limits.UseExecutionEnvelopes || !sourceJSONMediaType(sourceNormalizedMediaType(mediaType)) {
+		return nil
+	}
+	if envelope == nil {
+		return fmt.Errorf("JSON request body requires a valid PM execution envelope")
+	}
+	mediaLocation := "request.media[" + strconv.Quote(mediaType) + "]"
+	if envelope.SourceLocation != "request.body" && envelope.SourceLocation != mediaLocation {
+		return fmt.Errorf("JSON request body requires a valid PM execution envelope")
+	}
+	expected := sourceRequestBodyExecutionEnvelope(mediaType, limits, envelope.SourceLocation)
+	if !reflect.DeepEqual(envelope, expected) {
+		return fmt.Errorf("JSON request body requires a valid PM execution envelope")
+	}
+	return nil
+}
+
+func validateSourceParameterExecutionEnvelope(parameter sourceParameterDescriptor, location string, limits sourceImportLimits) error {
+	if !limits.UseExecutionEnvelopes || !sourceScalarWireSchema(parameter.Schema) {
+		return nil
+	}
+	envelope := parameter.ExecutionEnvelope
+	if location == "header" {
+		effective := sourceBoundedHeaderMaxBytes(parameter.Schema)
+		if effective == 0 {
+			return nil
+		}
+		if envelope == nil || envelope.PolicyVersion != engine.OperationParameterExecutionPolicyVersion || envelope.Origin != "provider_and_pm_policy" || envelope.SourceLocation != fmt.Sprintf("request.%s[%q]", location, parameter.Name) || len(envelope.Limits) != 1 {
+			return fmt.Errorf("executable source header has an invalid PM execution envelope")
+		}
+		limit := envelope.Limits[0]
+		if limit.Kind != "wire_value" || limit.Unit != "bytes" || limit.Default != 0 || limit.HardCeiling != engine.MaxOperationHeaderBytes || limit.Effective != effective {
+			return fmt.Errorf("executable source header has an invalid byte execution limit")
+		}
+		return nil
+	}
+	if location != "path" && location != "query" {
+		return nil
+	}
+	if envelope == nil {
+		return fmt.Errorf("executable source input requires a PM execution envelope")
+	}
+	effective, origin := sourcePathQueryExecutionBound(parameter.Schema)
+	if envelope.PolicyVersion != engine.OperationParameterExecutionPolicyVersion || envelope.Origin != origin || envelope.SourceLocation != fmt.Sprintf("request.%s[%q]", location, parameter.Name) || len(envelope.Limits) != 1 {
+		return fmt.Errorf("executable source input has an invalid PM execution envelope")
+	}
+	limit := envelope.Limits[0]
+	if limit.Kind != "wire_value" || limit.Unit != "encoded_bytes" || limit.Default != engine.DefaultOperationParameterMaxBytes || limit.HardCeiling != engine.MaxOperationParameterMaxBytes || limit.Effective != effective {
+		return fmt.Errorf("executable source input has an invalid encoded-byte execution limit")
+	}
+	return nil
 }
 
 func validateBoundedParameterContent(name string, content any, form sourceDocumentForm, limits sourceImportLimits) error {
@@ -6627,7 +6827,30 @@ func sourceProjectionOperationParameterGap(schema any, form sourceDocumentForm, 
 	if !sourceProjectionMutationMethod(method) && (location == "path" || location == "query") && sourceStringScalarWireUnion(schema) {
 		return nil
 	}
+	if (location == "path" || location == "query") && !sourceScalarWireSchema(schema) {
+		return fmt.Errorf("%s parameter requires non-scalar serialization support", location)
+	}
+	if location == "header" && sourceScalarWireSchema(schema) && !sourceStringScalarWireUnion(schema) && sourceBoundedHeaderMaxBytes(schema) == 0 {
+		return fmt.Errorf("unbounded request header requires a compatibility-censused PM byte envelope")
+	}
 	return sourceProjectionSchemaGap(schema, form, limits)
+}
+
+func sourceScalarWireSchema(schema any) bool {
+	if sourceStringScalarWireUnion(schema) {
+		return true
+	}
+	object, ok := schema.(map[string]any)
+	if !ok {
+		return false
+	}
+	typeName, _ := object["type"].(string)
+	switch typeName {
+	case "string", "integer", "number", "boolean":
+		return true
+	default:
+		return false
+	}
 }
 
 // sourceStringScalarWireUnion admits only a source union with an
@@ -6672,34 +6895,15 @@ func sourceStringScalarWireUnion(schema any) bool {
 func sourceProjectionSchemaGap(schema any, form sourceDocumentForm, limits sourceImportLimits) error {
 	strict := limits
 	strict.AllowSourceContractGaps = false
-	err := validateBoundedRequestSchema(schema, form, strict, 0)
-	if err != nil && !sourceCommonInputBoundaryHandles(err) {
+	strict.UseExecutionEnvelopes = true
+	if err := validateBoundedRequestSchema(schema, form, strict, 0); err != nil {
 		return err
 	}
-	// The runtime supplies common scalar and collection caps, but source
-	// contracts with structural ambiguity still need an explicit typed gap.
-	// Checking projection after a handled boundary prevents an early missing
-	// maxLength from hiding a later union or dynamic object in the same body.
+	// The policy-aware semantic pass still validates the entire schema after a
+	// missing optional maximum. Projection then classifies representation
+	// blockers such as unions and dynamic objects without error-string matching.
 	_, projectionErr := sourceProjectionSchema(schema)
 	return projectionErr
-}
-
-func sourceCommonInputBoundaryHandles(err error) bool {
-	if err == nil {
-		return false
-	}
-	message := err.Error()
-	for _, suffix := range []string{
-		"unbounded request schema string has no maxLength",
-		"unbounded request schema number has no minimum",
-		"unbounded request schema number has no maximum",
-		"unbounded request schema array has no maxItems",
-	} {
-		if strings.Contains(message, suffix) {
-			return true
-		}
-	}
-	return false
 }
 
 func sourceServerLayerHasFixedOrigin(layer sourceServerLayer) bool {
@@ -6893,6 +7097,38 @@ func sourceSortedGaps(gaps []sourceContractGap) []sourceContractGap {
 	return out
 }
 
+type sourceRequestSchemaDisposition string
+
+const (
+	sourceRequestRepresented                sourceRequestSchemaDisposition = "represented"
+	sourceRequestRepresentedWithPolicyBound sourceRequestSchemaDisposition = "represented_with_policy_bound"
+	sourceRequestSourceGap                  sourceRequestSchemaDisposition = "source_gap"
+	sourceRequestFiniteBudgetGap            sourceRequestSchemaDisposition = "finite_budget_gap"
+	sourceRequestMalformedSourceGap         sourceRequestSchemaDisposition = "malformed_source_gap"
+)
+
+type sourceRequestSchemaError struct {
+	Disposition sourceRequestSchemaDisposition
+	Reason      string
+}
+
+func (e *sourceRequestSchemaError) Error() string { return e.Reason }
+
+func sourceRequestPolicyBoundError(reason string) error {
+	return &sourceRequestSchemaError{Disposition: sourceRequestRepresentedWithPolicyBound, Reason: reason}
+}
+
+func sourceRequestSchemaDispositionOf(err error) sourceRequestSchemaDisposition {
+	if err == nil {
+		return sourceRequestRepresented
+	}
+	var typed *sourceRequestSchemaError
+	if errors.As(err, &typed) {
+		return typed.Disposition
+	}
+	return sourceRequestMalformedSourceGap
+}
+
 func validateBoundedRequestSchema(schema any, form sourceDocumentForm, limits sourceImportLimits, depth int) error {
 	strict := limits
 	strict.AllowSourceContractGaps = false
@@ -6983,11 +7219,11 @@ func validateBoundedRequestSchemaType(object map[string]any, typeName string, fo
 	case "boolean", "null":
 		return nil
 	case "string":
-		if err := sourceValidateLengthBounds(object, bounded); err != nil {
+		if err := sourceValidateLengthBounds(object, bounded, limits.UseExecutionEnvelopes); err != nil {
 			return err
 		}
 	case "integer", "number":
-		if err := sourceValidateNumericBounds(object, form, !bounded); err != nil {
+		if err := sourceValidateNumericBounds(object, form, !bounded, limits.UseExecutionEnvelopes); err != nil {
 			return err
 		}
 	case "array":
@@ -7023,7 +7259,7 @@ func validateBoundedRequestSchemaType(object map[string]any, typeName string, fo
 			limit := int64(prefixCount)
 			closedTupleLimit = &limit
 		}
-		if err := sourceValidateArrayBounds(object, bounded, closedTupleLimit); err != nil {
+		if err := sourceValidateArrayBounds(object, bounded, closedTupleLimit, limits.UseExecutionEnvelopes); err != nil {
 			return err
 		}
 		if !exists && !bounded && closedTupleLimit == nil {
@@ -7217,7 +7453,7 @@ func sourceFiniteSchemaLiteral(value any) bool {
 	return true
 }
 
-func sourceValidateLengthBounds(object map[string]any, finiteEnum bool) error {
+func sourceValidateLengthBounds(object map[string]any, finiteEnum, policyBounded bool) error {
 	minimum, hasMinimum, err := sourceOptionalNonNegativeInteger(object, "minLength")
 	if err != nil {
 		return err
@@ -7229,13 +7465,13 @@ func sourceValidateLengthBounds(object map[string]any, finiteEnum bool) error {
 	if hasMinimum && hasMaximum && minimum > maximum {
 		return fmt.Errorf("contradictory request schema string length bounds")
 	}
-	if !finiteEnum && !hasMaximum {
-		return fmt.Errorf("unbounded request schema string has no maxLength")
+	if !finiteEnum && !hasMaximum && !policyBounded {
+		return sourceRequestPolicyBoundError("unbounded request schema string has no maxLength")
 	}
 	return nil
 }
 
-func sourceValidateArrayBounds(object map[string]any, finiteEnum bool, closedTupleLimit *int64) error {
+func sourceValidateArrayBounds(object map[string]any, finiteEnum bool, closedTupleLimit *int64, policyBounded bool) error {
 	minimum, hasMinimum, err := sourceOptionalNonNegativeInteger(object, "minItems")
 	if err != nil {
 		return err
@@ -7253,8 +7489,8 @@ func sourceValidateArrayBounds(object map[string]any, finiteEnum bool, closedTup
 		}
 		return nil
 	}
-	if !finiteEnum && !hasMaximum {
-		return fmt.Errorf("unbounded request schema array has no maxItems")
+	if !finiteEnum && !hasMaximum && !policyBounded {
+		return sourceRequestPolicyBoundError("unbounded request schema array has no maxItems")
 	}
 	return nil
 }
@@ -7265,7 +7501,7 @@ type sourceNumericBound struct {
 	present   bool
 }
 
-func sourceValidateNumericBounds(object map[string]any, form sourceDocumentForm, requireBoth bool) error {
+func sourceValidateNumericBounds(object map[string]any, form sourceDocumentForm, requireBoth, policyBounded bool) error {
 	lower, err := sourceNumericBoundFor(object, form, "minimum", "exclusiveMinimum", true)
 	if err != nil {
 		return err
@@ -7274,11 +7510,11 @@ func sourceValidateNumericBounds(object map[string]any, form sourceDocumentForm,
 	if err != nil {
 		return err
 	}
-	if requireBoth && !lower.present {
-		return fmt.Errorf("unbounded request schema number has no minimum")
+	if requireBoth && !lower.present && !policyBounded {
+		return sourceRequestPolicyBoundError("unbounded request schema number has no minimum")
 	}
-	if requireBoth && !upper.present {
-		return fmt.Errorf("unbounded request schema number has no maximum")
+	if requireBoth && !upper.present && !policyBounded {
+		return sourceRequestPolicyBoundError("unbounded request schema number has no maximum")
 	}
 	if lower.present && upper.present && (lower.value.Cmp(upper.value) > 0 || (lower.value.Cmp(upper.value) == 0 && (!lower.inclusive || !upper.inclusive))) {
 		return fmt.Errorf("contradictory request schema numeric bounds")
@@ -8087,7 +8323,7 @@ type sourceImportOptions struct {
 }
 
 func runSourceImport(args []string, stdout, stderr io.Writer) int {
-	return runSourceImportWithFetcher(args, stdout, stderr, newHTTPSourceImportFetcher(defaultSourceImportLimits()))
+	return runSourceImportWithFetcher(args, stdout, stderr, nil)
 }
 
 func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher sourceImportFetcher) int {
@@ -8104,17 +8340,29 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		return 2
 	}
 	if opts.CacheDir != "" {
-		cacheDir, cacheErr := sourceImportArtifactCacheDir(opts.CacheDir)
-		if cacheErr != nil {
-			logln(stderr, "connectorgen source-import: resolve explicit artifact cache:", cacheErr)
-			return 1
-		}
-		fetcher = newSourceImportArtifactCacheFetcher(fetcher, cacheDir, defaultSourceImportLimits())
+		logln(stderr, "connectorgen source-import: --cache-dir is no longer supported; retain the locked artifact under the connector-owned sources/artifacts directory")
+		return 2
 	}
 	lock, err := loadConnectorSourceImportLock(opts.DefsDir, opts.Connector)
 	if err != nil {
 		logln(stderr, "connectorgen source-import:", err)
 		return 1
+	}
+	if fetcher == nil && sourceImportLockRequiresRetainedArtifact(lock) {
+		fetcher, err = newConnectorSourceImportRetainedArtifactFetcher(opts.DefsDir, opts.Connector, defaultSourceImportLimits())
+		if err != nil {
+			logln(stderr, "connectorgen source-import:", err)
+			return 1
+		}
+	}
+	if fetcher == nil {
+		// A v3 lock made entirely of explicitly unavailable documents has no
+		// provider bytes to retain. importSourceLockResult reports that terminal
+		// provenance state before it can call this defensive fetcher; installing
+		// it preserves the no-network invariant if that ordering ever changes.
+		fetcher = sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+			return nil, fmt.Errorf("source import reached a lock with no retainable artifact")
+		})
 	}
 	result, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
 	if err != nil {
@@ -8170,6 +8418,22 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 	return 0
 }
 
+// sourceImportLockRequiresRetainedArtifact distinguishes a terminal,
+// explicitly unavailable v3 source inventory from an artifact-bearing lock.
+// Every actual artifact remains mandatory and is therefore served only by the
+// connector-owned retained reader during normal source-import execution.
+func sourceImportLockRequiresRetainedArtifact(lock sourceImportLock) bool {
+	if lock.SchemaVersion < 3 {
+		return true
+	}
+	for _, document := range lock.Rest.SourceDocuments {
+		if !document.isUnavailable() {
+			return true
+		}
+	}
+	return len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) > 0
+}
+
 func parseSourceImportOptions(args []string) (sourceImportOptions, error) {
 	opts := sourceImportOptions{DefsDir: filepath.Join("internal", "connectors", "defs")}
 	for i := 0; i < len(args); i++ {
@@ -8212,39 +8476,16 @@ func parseSourceImportOptions(args []string) (sourceImportOptions, error) {
 }
 
 func loadConnectorSourceImportLock(defsDir, connector string) (sourceImportLock, error) {
-	if err := validateSourceImportConnector(connector); err != nil {
+	sourcesDir, err := sourceImportConnectorSourcesDir(defsDir, connector)
+	if err != nil {
 		return sourceImportLock{}, err
 	}
-	absDefsDir, err := filepath.Abs(defsDir)
-	if err != nil {
-		return sourceImportLock{}, fmt.Errorf("resolve connector definitions directory: %w", err)
-	}
-	resolvedDefsDir, err := filepath.EvalSymlinks(absDefsDir)
-	if err != nil {
-		return sourceImportLock{}, fmt.Errorf("resolve connector definitions directory: %w", err)
-	}
-	bundleDir := filepath.Join(absDefsDir, connector)
-	sourcesDir := filepath.Join(bundleDir, "sources")
 	path := filepath.Join(sourcesDir, connector+"-operation-source-lock.json")
-	resolvedBundleDir, err := filepath.EvalSymlinks(bundleDir)
-	if err != nil {
-		return sourceImportLock{}, fmt.Errorf("resolve connector bundle directory: %w", err)
-	}
-	if !sourceImportPathWithin(resolvedDefsDir, resolvedBundleDir) {
-		return sourceImportLock{}, fmt.Errorf("connector bundle is outside definitions directory")
-	}
-	resolvedSourcesDir, err := filepath.EvalSymlinks(sourcesDir)
-	if err != nil {
-		return sourceImportLock{}, fmt.Errorf("resolve connector-owned source directory: %w", err)
-	}
-	if !sourceImportPathWithin(resolvedBundleDir, resolvedSourcesDir) {
-		return sourceImportLock{}, fmt.Errorf("source directory is outside connector-owned bundle")
-	}
 	resolvedPath, err := filepath.EvalSymlinks(path)
 	if err != nil {
 		return sourceImportLock{}, fmt.Errorf("resolve connector-owned source lock: %w", err)
 	}
-	if !sourceImportPathWithin(resolvedSourcesDir, resolvedPath) {
+	if !sourceImportPathWithin(sourcesDir, resolvedPath) {
 		return sourceImportLock{}, fmt.Errorf("source lock is outside connector-owned sources directory")
 	}
 	raw, err := os.ReadFile(resolvedPath)
@@ -8254,202 +8495,232 @@ func loadConnectorSourceImportLock(defsDir, connector string) (sourceImportLock,
 	return parseSourceImportLock(raw, connector)
 }
 
+func sourceImportConnectorSourcesDir(defsDir, connector string) (string, error) {
+	if err := validateSourceImportConnector(connector); err != nil {
+		return "", err
+	}
+	absDefsDir, err := filepath.Abs(defsDir)
+	if err != nil {
+		return "", fmt.Errorf("resolve connector definitions directory: %w", err)
+	}
+	resolvedDefsDir, err := filepath.EvalSymlinks(absDefsDir)
+	if err != nil {
+		return "", fmt.Errorf("resolve connector definitions directory: %w", err)
+	}
+	bundleDir := filepath.Join(absDefsDir, connector)
+	resolvedBundleDir, err := filepath.EvalSymlinks(bundleDir)
+	if err != nil {
+		return "", fmt.Errorf("resolve connector bundle directory: %w", err)
+	}
+	if !sourceImportPathWithin(resolvedDefsDir, resolvedBundleDir) {
+		return "", fmt.Errorf("connector bundle is outside definitions directory")
+	}
+	sourcesDir := filepath.Join(bundleDir, "sources")
+	sourcesInfo, err := os.Lstat(sourcesDir)
+	if err != nil {
+		return "", fmt.Errorf("inspect connector-owned source directory: %w", err)
+	}
+	if !sourcesInfo.IsDir() || sourcesInfo.Mode()&os.ModeSymlink != 0 {
+		return "", fmt.Errorf("source directory must not be a symlink and must be a directory")
+	}
+	resolvedSourcesDir, err := filepath.EvalSymlinks(sourcesDir)
+	if err != nil {
+		return "", fmt.Errorf("resolve connector-owned source directory: %w", err)
+	}
+	if !sourceImportPathWithin(resolvedBundleDir, resolvedSourcesDir) {
+		return "", fmt.Errorf("source directory is outside connector-owned bundle")
+	}
+	return resolvedSourcesDir, nil
+}
+
 func sourceImportPathWithin(root, path string) bool {
 	relativePath, err := filepath.Rel(root, path)
 	return err == nil && relativePath != ".." && !strings.HasPrefix(relativePath, ".."+string(filepath.Separator)) && !filepath.IsAbs(relativePath)
+}
+
+const (
+	sourceImportRetainedArtifactDirectory = "artifacts"
+	sourceImportRetainedArtifactExtension = ".artifact"
+	sourceImportRetainedArtifactManifest  = "-retained-artifacts.json"
+)
+
+// sourceImportRetainedArtifactManifestDocument is provenance for bytes that
+// are already identified by the immutable source lock. It deliberately does
+// not replace, update, or weaken the lock's URL, byte count, or digest.
+type sourceImportRetainedArtifactManifestDocument struct {
+	SchemaVersion int                                  `json:"schema_version"`
+	Connector     string                               `json:"connector"`
+	Artifacts     []sourceImportRetainedArtifactRecord `json:"artifacts"`
+}
+
+type sourceImportRetainedArtifactRecord struct {
+	SHA256        string `json:"sha256"`
+	Bytes         int64  `json:"bytes"`
+	SourceURL     string `json:"source_url"`
+	IdentityQuery bool   `json:"identity_query,omitempty"`
+	RetrievedAt   string `json:"retrieved_at"`
+	License       string `json:"license"`
+	Terms         string `json:"terms"`
+}
+
+// sourceImportRetainedArtifactFetcher is the sole production source-import
+// fetcher. Its content-addressed path is derived from the preexisting lock;
+// no provider URL, cache entry, or manifest value can choose another file.
+type sourceImportRetainedArtifactFetcher struct {
+	sourcesDir string
+	records    map[string][]sourceImportRetainedArtifactRecord
+	limits     sourceImportLimits
+}
+
+func newConnectorSourceImportRetainedArtifactFetcher(defsDir, connector string, limits sourceImportLimits) (sourceImportRetainedArtifactFetcher, error) {
+	sourcesDir, err := sourceImportConnectorSourcesDir(defsDir, connector)
+	if err != nil {
+		return sourceImportRetainedArtifactFetcher{}, err
+	}
+	return newSourceImportRetainedArtifactFetcher(sourcesDir, connector, limits)
+}
+
+func newSourceImportRetainedArtifactFetcher(sourcesDir, connector string, limits sourceImportLimits) (sourceImportRetainedArtifactFetcher, error) {
+	if err := validateSourceImportLimits(limits); err != nil {
+		return sourceImportRetainedArtifactFetcher{}, err
+	}
+	if err := validateSourceImportConnector(connector); err != nil {
+		return sourceImportRetainedArtifactFetcher{}, err
+	}
+	absoluteSourcesDir, err := filepath.Abs(sourcesDir)
+	if err != nil {
+		return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("resolve retained source directory: %w", err)
+	}
+	sourcesInfo, err := os.Lstat(absoluteSourcesDir)
+	if err != nil {
+		return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("inspect retained source directory: %w", err)
+	}
+	if sourcesInfo.Mode()&os.ModeSymlink != 0 || !sourcesInfo.IsDir() {
+		return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained source directory must be an existing non-symlink directory")
+	}
+	manifestPath := filepath.Join(absoluteSourcesDir, connector+sourceImportRetainedArtifactManifest)
+	manifestInfo, err := os.Lstat(manifestPath)
+	if err != nil {
+		return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("read retained artifact manifest: %w", err)
+	}
+	if manifestInfo.Mode()&os.ModeSymlink != 0 || !manifestInfo.Mode().IsRegular() {
+		return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest must be a regular non-symlink file")
+	}
+	manifestRaw, err := os.ReadFile(manifestPath)
+	if err != nil {
+		return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("read retained artifact manifest: %w", err)
+	}
+	var manifest sourceImportRetainedArtifactManifestDocument
+	if err := decodeSourceStrictJSON(manifestRaw, &manifest); err != nil {
+		return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("parse retained artifact manifest: %w", err)
+	}
+	if manifest.SchemaVersion != 1 {
+		return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest has unsupported schema version %d", manifest.SchemaVersion)
+	}
+	if manifest.Connector != connector {
+		return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest connector %q does not match requested connector %q", manifest.Connector, connector)
+	}
+	if len(manifest.Artifacts) == 0 {
+		return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest has no artifacts")
+	}
+	records := make(map[string][]sourceImportRetainedArtifactRecord, len(manifest.Artifacts))
+	for _, record := range manifest.Artifacts {
+		artifact := sourceImportArtifact{SourceURL: record.SourceURL, SHA256: record.SHA256, Bytes: record.Bytes, IdentityQuery: record.IdentityQuery}
+		if err := validateSourceImportArtifact(artifact); err != nil {
+			return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest record: %w", err)
+		}
+		if _, err := time.Parse(time.RFC3339, record.RetrievedAt); err != nil {
+			return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest record has invalid retrieval timestamp: %w", err)
+		}
+		if strings.TrimSpace(record.License) == "" || strings.TrimSpace(record.Terms) == "" {
+			return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest record must state license and terms as data")
+		}
+		key := strings.ToLower(record.SHA256)
+		for _, existing := range records[key] {
+			if existing.SourceURL == record.SourceURL {
+				return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest duplicates source URL for SHA-256 %q", record.SHA256)
+			}
+		}
+		records[key] = append(records[key], record)
+	}
+	return sourceImportRetainedArtifactFetcher{sourcesDir: absoluteSourcesDir, records: records, limits: limits}, nil
+}
+
+func (fetcher sourceImportRetainedArtifactFetcher) Fetch(context.Context, string) ([]byte, error) {
+	return nil, fmt.Errorf("source import requires a retained source artifact")
+}
+
+func (fetcher sourceImportRetainedArtifactFetcher) FetchArtifact(ctx context.Context, artifact sourceImportArtifact) ([]byte, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	if err := validateSourceImportLimits(fetcher.limits); err != nil {
+		return nil, err
+	}
+	if err := validateSourceImportArtifact(artifact); err != nil {
+		return nil, err
+	}
+	if artifact.Bytes > fetcher.limits.MaxArtifactBytes {
+		return nil, fmt.Errorf("artifact byte limit exceeded by source lock")
+	}
+	key := strings.ToLower(artifact.SHA256)
+	foundRecord := false
+	for _, record := range fetcher.records[key] {
+		if record.Bytes == artifact.Bytes && record.SourceURL == artifact.SourceURL && record.IdentityQuery == artifact.IdentityQuery {
+			foundRecord = true
+			break
+		}
+	}
+	if !foundRecord {
+		return nil, fmt.Errorf("retained source artifact provenance does not match source lock")
+	}
+	artifactDir := filepath.Join(fetcher.sourcesDir, sourceImportRetainedArtifactDirectory)
+	artifactPath := filepath.Join(artifactDir, key+sourceImportRetainedArtifactExtension)
+	dirInfo, err := os.Lstat(artifactDir)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, fmt.Errorf("retained source artifact is missing at %s", artifactPath)
+		}
+		return nil, fmt.Errorf("inspect retained source artifact directory: %w", err)
+	}
+	if dirInfo.Mode()&os.ModeSymlink != 0 || !dirInfo.IsDir() {
+		return nil, fmt.Errorf("retained source artifact directory must be a non-symlink directory")
+	}
+	artifactInfo, err := os.Lstat(artifactPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, fmt.Errorf("retained source artifact is missing at %s", artifactPath)
+		}
+		return nil, fmt.Errorf("inspect retained source artifact: %w", err)
+	}
+	if artifactInfo.Mode()&os.ModeSymlink != 0 || !artifactInfo.Mode().IsRegular() {
+		return nil, fmt.Errorf("retained source artifact must be a regular non-symlink file")
+	}
+	file, err := os.Open(artifactPath)
+	if err != nil {
+		return nil, fmt.Errorf("open retained source artifact: %w", err)
+	}
+	raw, readErr := io.ReadAll(io.LimitReader(file, fetcher.limits.MaxArtifactBytes+1))
+	closeErr := file.Close()
+	if readErr != nil {
+		return nil, fmt.Errorf("read retained source artifact: %w", readErr)
+	}
+	if closeErr != nil {
+		return nil, fmt.Errorf("close retained source artifact: %w", closeErr)
+	}
+	if int64(len(raw)) > fetcher.limits.MaxArtifactBytes {
+		return nil, fmt.Errorf("retained source artifact exceeds byte limit")
+	}
+	if err := validateSourceImportArtifactBytes(raw, artifact); err != nil {
+		return nil, fmt.Errorf("retained source artifact does not match locked bytes and SHA-256")
+	}
+	return raw, nil
 }
 
 type httpSourceImportFetcher struct {
 	limits sourceImportLimits
 	lookup batchArtifactLookupIPAddr
 	client *http.Client
-}
-
-func newHTTPSourceImportFetcher(limits sourceImportLimits) sourceImportFetcher {
-	cacheDir, cacheErr := sourceImportArtifactCacheDir("")
-	return newSourceImportArtifactCacheFetcher(
-		httpSourceImportFetcher{limits: limits, lookup: batchArtifactLookupIPAddr(net.DefaultResolver.LookupIPAddr)},
-		cacheDir,
-		limits,
-		cacheErr,
-	)
-}
-
-type sourceImportArtifactCacheFetcher struct {
-	source   sourceImportFetcher
-	cacheDir string
-	limits   sourceImportLimits
-	cacheErr error
-}
-
-func newSourceImportArtifactCacheFetcher(source sourceImportFetcher, cacheDir string, limits sourceImportLimits, cacheErr ...error) sourceImportArtifactCacheFetcher {
-	fetcher := sourceImportArtifactCacheFetcher{source: source, cacheDir: cacheDir, limits: limits}
-	if len(cacheErr) > 0 {
-		fetcher.cacheErr = cacheErr[0]
-	}
-	return fetcher
-}
-
-func (fetcher sourceImportArtifactCacheFetcher) Fetch(ctx context.Context, sourceURL string) ([]byte, error) {
-	if fetcher.source == nil {
-		return nil, fmt.Errorf("source importer has no fetcher")
-	}
-	return fetcher.source.Fetch(ctx, sourceURL)
-}
-
-// FetchArtifact returns only bytes whose size and digest match the immutable
-// lock. A missing, stale, or corrupt cache is never returned; it is replaced
-// only by a fresh response that passes the same verification.
-func (fetcher sourceImportArtifactCacheFetcher) FetchArtifact(ctx context.Context, artifact sourceImportArtifact) ([]byte, error) {
-	if err := validateSourceImportLimits(fetcher.limits); err != nil {
-		return nil, err
-	}
-	if fetcher.source == nil {
-		return nil, fmt.Errorf("source importer has no fetcher")
-	}
-	if fetcher.cacheErr != nil {
-		return nil, fmt.Errorf("resolve source-import artifact cache: %w", fetcher.cacheErr)
-	}
-	cachePath, err := sourceImportArtifactCachePath(fetcher.cacheDir, artifact)
-	if err != nil {
-		return nil, err
-	}
-	if cached, present, cacheErr := readSourceImportArtifactCache(cachePath, fetcher.limits.MaxArtifactBytes); cacheErr == nil && present {
-		if err := validateSourceImportArtifactBytes(cached, artifact); err == nil {
-			return cached, nil
-		}
-		if err := removeSourceImportArtifactCache(cachePath); err != nil {
-			return nil, err
-		}
-	} else if cacheErr != nil {
-		if err := removeSourceImportArtifactCache(cachePath); err != nil {
-			return nil, err
-		}
-	}
-
-	raw, err := fetchSourceImportArtifact(ctx, fetcher.source, artifact)
-	if err != nil {
-		return nil, err
-	}
-	if int64(len(raw)) > fetcher.limits.MaxArtifactBytes {
-		return nil, fmt.Errorf("artifact byte limit exceeded")
-	}
-	if err := validateSourceImportArtifactBytes(raw, artifact); err != nil {
-		return nil, err
-	}
-	if err := writeSourceImportArtifactCache(cachePath, raw); err != nil {
-		return nil, err
-	}
-	return raw, nil
-}
-
-func sourceImportArtifactCacheDir(explicitRoot string) (string, error) {
-	if explicitRoot != "" {
-		absoluteRoot, err := filepath.Abs(explicitRoot)
-		if err != nil {
-			return "", fmt.Errorf("resolve explicit source-import artifact cache directory: %w", err)
-		}
-		info, err := os.Lstat(absoluteRoot)
-		if err != nil {
-			return "", fmt.Errorf("explicit source-import artifact cache directory must exist: %w", err)
-		}
-		if info.Mode()&os.ModeSymlink != 0 || !info.IsDir() {
-			return "", fmt.Errorf("explicit source-import artifact cache directory must be an existing non-symlink directory")
-		}
-		return absoluteRoot, nil
-	}
-	root, err := os.UserCacheDir()
-	if err != nil {
-		return "", err
-	}
-	if root == "" {
-		return "", fmt.Errorf("user cache directory is empty")
-	}
-	return filepath.Join(root, "polymetrics", "source-import"), nil
-}
-
-func sourceImportArtifactCachePath(cacheDir string, artifact sourceImportArtifact) (string, error) {
-	if cacheDir == "" {
-		return "", fmt.Errorf("source-import artifact cache directory is empty")
-	}
-	if err := validateSourceImportArtifact(artifact); err != nil {
-		return "", err
-	}
-	return filepath.Join(cacheDir, strings.ToLower(artifact.SHA256)+".artifact"), nil
-}
-
-func readSourceImportArtifactCache(path string, maxBytes int64) ([]byte, bool, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return nil, false, nil
-		}
-		return nil, true, fmt.Errorf("open source-import artifact cache: %w", err)
-	}
-	raw, readErr := io.ReadAll(io.LimitReader(file, maxBytes+1))
-	closeErr := file.Close()
-	if readErr != nil {
-		return nil, true, fmt.Errorf("read source-import artifact cache: %w", readErr)
-	}
-	if closeErr != nil {
-		return nil, true, fmt.Errorf("close source-import artifact cache: %w", closeErr)
-	}
-	if int64(len(raw)) > maxBytes {
-		return nil, true, fmt.Errorf("source-import artifact cache exceeds byte limit")
-	}
-	return raw, true, nil
-}
-
-func removeSourceImportArtifactCache(path string) error {
-	if err := os.Remove(path); err != nil && !os.IsNotExist(err) {
-		return fmt.Errorf("remove invalid source-import artifact cache: %w", err)
-	}
-	return nil
-}
-
-func writeSourceImportArtifactCache(path string, raw []byte) error {
-	dir := filepath.Dir(path)
-	if err := os.MkdirAll(dir, 0o700); err != nil {
-		return fmt.Errorf("create source-import artifact cache directory: %w", err)
-	}
-	temporary, err := os.CreateTemp(dir, ".source-import-artifact-")
-	if err != nil {
-		return fmt.Errorf("create source-import artifact cache file: %w", err)
-	}
-	temporaryPath := temporary.Name()
-	if err := temporary.Chmod(0o600); err != nil {
-		return sourceImportArtifactCacheTemporaryFailure("set source-import artifact cache permissions", err, temporary, temporaryPath)
-	}
-	if _, err := temporary.Write(raw); err != nil {
-		return sourceImportArtifactCacheTemporaryFailure("write source-import artifact cache", err, temporary, temporaryPath)
-	}
-	if err := temporary.Sync(); err != nil {
-		return sourceImportArtifactCacheTemporaryFailure("sync source-import artifact cache", err, temporary, temporaryPath)
-	}
-	if err := temporary.Close(); err != nil {
-		return sourceImportArtifactCacheTemporaryFailure("close source-import artifact cache", err, temporary, temporaryPath)
-	}
-	if err := os.Rename(temporaryPath, path); err != nil {
-		if cleanupErr := removeSourceImportArtifactCache(temporaryPath); cleanupErr != nil {
-			return fmt.Errorf("publish source-import artifact cache: %w", errors.Join(err, cleanupErr))
-		}
-		return fmt.Errorf("publish source-import artifact cache: %w", err)
-	}
-	return nil
-}
-
-func sourceImportArtifactCacheTemporaryFailure(operation string, cause error, temporary *os.File, temporaryPath string) error {
-	var cleanupErrs []error
-	if err := temporary.Close(); err != nil && !errors.Is(err, os.ErrClosed) {
-		cleanupErrs = append(cleanupErrs, fmt.Errorf("close source-import artifact cache: %w", err))
-	}
-	if err := removeSourceImportArtifactCache(temporaryPath); err != nil {
-		cleanupErrs = append(cleanupErrs, err)
-	}
-	if len(cleanupErrs) > 0 {
-		return fmt.Errorf("%s: %w", operation, errors.Join(append([]error{cause}, cleanupErrs...)...))
-	}
-	return fmt.Errorf("%s: %w", operation, cause)
 }
 
 func validateSourceImportArtifactBytes(raw []byte, artifact sourceImportArtifact) error {

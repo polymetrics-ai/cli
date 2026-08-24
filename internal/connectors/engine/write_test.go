@@ -2543,6 +2543,7 @@ func githubReleaseAssetUploadAction(t *testing.T, serverURL string) Bundle {
 	// only the origin so the real installed path/query/body contract can be
 	// exercised without live credentials or provider I/O.
 	installed.BaseURL = serverURL
+	installed.AllowedBaseURLOrigins = []string{serverURL}
 	bundle.HTTP.URL = serverURL
 	bundle.HTTP.Auth = nil
 	bundle.HTTP.Headers = nil
@@ -2724,4 +2725,96 @@ func TestGitHubReleaseAssetUpload_EmptyFileAndTerminalFailures(t *testing.T) {
 			t.Fatalf("X-Request-Id = %#v", got)
 		}
 	})
+}
+
+// TestGitHubReleaseAssetUpload_RejectsEnterpriseCrossOriginBeforeIO proves an
+// Enterprise credential cannot be replayed to GitHub's public upload host.
+// Both servers are armed: a passing error alone would be insufficient if the
+// request had already disclosed the Authorization header to either host.
+func TestGitHubReleaseAssetUpload_RejectsEnterpriseCrossOriginBeforeIO(t *testing.T) {
+	var enterpriseCalls, uploadCalls int
+	var enterpriseAuthorization, uploadAuthorization string
+	enterprise := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		enterpriseCalls++
+		enterpriseAuthorization = r.Header.Get("Authorization")
+		w.WriteHeader(http.StatusCreated)
+	}))
+	defer enterprise.Close()
+	upload := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		uploadCalls++
+		uploadAuthorization = r.Header.Get("Authorization")
+		w.WriteHeader(http.StatusCreated)
+	}))
+	defer upload.Close()
+
+	dir, relative := writeTempPayload(t, "enterprise-asset.bin", []byte("enterprise-safe"))
+	bundle := githubReleaseAssetUploadAction(t, upload.URL)
+	bundle.HTTP.URL = enterprise.URL
+	bundle.HTTP.Auth = []AuthSpec{{Mode: "bearer", Token: "{{ secrets.token }}", When: "{{ secrets.token }}"}}
+	_, err := Write(context.Background(), bundle, connectors.WriteRequest{
+		Action: "releases_release_id_assets2",
+		Config: connectors.RuntimeConfig{
+			ProjectDir: dir,
+			Config:     map[string]string{"owner": "octo", "repo": "enterprise"},
+			Secrets:    map[string]string{"token": "NONSECRET-TEST-TOKEN"},
+		},
+	}, []connectors.Record{{"release_id": int64(42), "name": "enterprise-asset.bin", "file_path": relative}}, nil)
+	if err == nil || !strings.Contains(strings.ToLower(err.Error()), "origin") {
+		t.Fatalf("Write enterprise upload error = %v, want alternate-origin refusal", err)
+	}
+	if enterpriseCalls != 0 || uploadCalls != 0 || enterpriseAuthorization != "" || uploadAuthorization != "" {
+		t.Fatalf("enterprise/upload calls and authorization = %d/%d %q/%q, want no provider I/O", enterpriseCalls, uploadCalls, enterpriseAuthorization, uploadAuthorization)
+	}
+}
+
+// TestGitHubReleaseAssetUpload_RequiresCreatedResponse keeps the provider's
+// receipt but refuses every other successful-looking HTTP status. GitHub's
+// upload contract is 201, not generic 2xx.
+func TestGitHubReleaseAssetUpload_RequiresCreatedResponse(t *testing.T) {
+	for _, status := range []int{http.StatusOK, http.StatusAccepted, http.StatusNoContent} {
+		t.Run(http.StatusText(status), func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				calls++
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(status)
+				_, _ = w.Write([]byte(`{"id":"wrong-success"}`))
+			}))
+			defer server.Close()
+			dir, relative := writeTempPayload(t, "wrong-success.bin", []byte("receipt"))
+			result, err := Write(context.Background(), githubReleaseAssetUploadAction(t, server.URL), connectors.WriteRequest{
+				Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{ProjectDir: dir, Config: map[string]string{"owner": "o", "repo": "r"}},
+			}, []connectors.Record{{"release_id": int64(42), "name": "wrong-success.bin", "file_path": relative}}, nil)
+			if err == nil {
+				t.Fatalf("Write status %d = nil error, want declared-201 refusal", status)
+			}
+			if calls != 1 || len(result.ProviderResponses) != 1 || result.ProviderResponses[0].Status != status || result.RecordsWritten != 0 || result.RecordsFailed != 1 {
+				t.Fatalf("status %d result = %#v calls=%d, want retained failed receipt", status, result, calls)
+			}
+		})
+	}
+}
+
+// TestGitHubReleaseAssetUpload_EnforcesDeclaredMediaPolicy is deliberately a
+// runtime assertion. Merely parsing allowed_media_types would still allow a
+// binary executor to send bytes under a media contract it cannot honour.
+func TestGitHubReleaseAssetUpload_EnforcesDeclaredMediaPolicy(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.WriteHeader(http.StatusCreated)
+	}))
+	defer server.Close()
+	dir, relative := writeTempPayload(t, "policy.bin", []byte("policy"))
+	bundle := githubReleaseAssetUploadAction(t, server.URL)
+	bundle.Writes[0].BinaryUpload.AllowedMediaTypes = []string{"image/png"}
+	_, err := Write(context.Background(), bundle, connectors.WriteRequest{
+		Action: "releases_release_id_assets2", Config: connectors.RuntimeConfig{ProjectDir: dir, Config: map[string]string{"owner": "o", "repo": "r"}},
+	}, []connectors.Record{{"release_id": int64(42), "name": "policy.bin", "file_path": relative}}, nil)
+	if err == nil || !strings.Contains(strings.ToLower(err.Error()), "media") {
+		t.Fatalf("Write media-policy error = %v, want refusal", err)
+	}
+	if calls != 0 {
+		t.Fatalf("unenforceable media policy reached provider %d time(s)", calls)
+	}
 }

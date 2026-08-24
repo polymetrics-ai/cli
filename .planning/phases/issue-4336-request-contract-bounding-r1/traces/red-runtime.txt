@@ -1,0 +1,10 @@
+$ GOFLAGS=-p=3 go test -timeout 20m ./internal/connectors/engine -run '^(TestOperationParametersReportPMExecutionCapBeforeIO|TestOperationParametersPreserveExactFiniteNumericLexemes)$' -count=1
+--- FAIL: TestOperationParametersReportPMExecutionCapBeforeIO
+    operation_direct_read_bindings_test.go:113: over-cap error = operation "acme.search" query parameter "workspaceId" encoded value exceeds byte cap 6, want PM execution limit, encoded_bytes, and effective cap
+--- FAIL: TestOperationParametersPreserveExactFiniteNumericLexemes
+    operation_direct_read_bindings_test.go:148: exact finite numerics: operation "acme.numeric" query parameter "integer" must be an integer
+FAIL
+FAIL polymetrics.ai/internal/connectors/engine
+
+The old runtime enforces the bytes before I/O, but does not identify PM policy
+provenance and rejects a finite integer solely because it exceeds int64.

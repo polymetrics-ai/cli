@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_calendar_events_fixture_id",
+    "callRecorderPreference": "Fixture callRecorderPreference 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/calendarEvents/update_calendar_events_fixture_id",
+    "body": {
+      "callRecorderPreference": "Fixture callRecorderPreference 1"
+    }
+  }
+}

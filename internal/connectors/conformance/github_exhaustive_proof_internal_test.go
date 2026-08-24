@@ -139,6 +139,13 @@ func githubProviderDoubleBundle(b engine.Bundle, baseURL string) engine.Bundle {
 		if b.Writes[index].BaseURL != "" {
 			b.Writes[index].BaseURL = baseURL
 		}
+		if len(b.Writes[index].AllowedBaseURLOrigins) > 0 {
+			// The double replaces both the connector and action endpoints with its
+			// local origin. Preserve the installed action's origin-bound security
+			// path by replacing its declared source origin with that same local
+			// origin; production declarations retain their real allow-list.
+			b.Writes[index].AllowedBaseURLOrigins = []string{baseURL}
+		}
 	}
 	// The provider double deliberately exercises transport and engine request
 	// construction, not GitHub authentication. Removing the bundle's auth
@@ -324,6 +331,12 @@ func runGitHubWriteProviderDouble(t *testing.T, b engine.Bundle, action engine.W
 				contentType = fixture.Response.Headers["Content-Type"][0]
 			}
 			return status, contentType, fixture.Response.Body
+		}
+		if len(action.SuccessStatuses) > 0 {
+			// An unfixtured action can still declare an exact successful provider
+			// receipt. The double must return that receipt instead of assuming
+			// generic 200 success, so narrowed write-status policies stay tested.
+			return action.SuccessStatuses[0], "application/json", []byte(`{}`)
 		}
 		return http.StatusOK, "application/json", []byte(`{}`)
 	})
