@@ -4900,6 +4900,16 @@
     "implemented": true
   },
   {
+    "connector": "twenty",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics",
+    "review_url": "https://github.com/polymetrics-ai/cli",
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
+  },
+  {
     "connector": "twilio",
     "id": "twilio",
     "path": "icons/twilio.svg",

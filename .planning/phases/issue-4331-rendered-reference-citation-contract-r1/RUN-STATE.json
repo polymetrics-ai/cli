@@ -1,0 +1,14 @@
+{
+  "issue": 4331,
+  "workflow": "discuss-phase -> plan-phase --tdd -> execute-phase -> verify-work -> code-review",
+  "execution": "inline/manual fallback: compatible Pi isolated runtime is unavailable",
+  "state": "verified-and-reviewed-on-merged-main",
+  "branch": "fm/cli-rendered-reference-citation-contract-r1",
+  "base": "main",
+  "required_base_ancestor": "486b92b42",
+  "red_green_refactor": {
+    "red": "batch 6/7 source_projection parse failure and focused rendered-reference behavior test failure reproduced",
+    "green": "focused rendered-reference, standalone-vs-fragment, gzip-bundle, unavailable, coverage-confidence, legacy, and OpenAPI-byte-stability tests pass",
+    "refactor": "manual source-contract and source-projection review completed; no blocking findings"
+  }
+}

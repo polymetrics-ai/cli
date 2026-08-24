@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_call_recordings_fixture_id",
+    "applicationId": "applicationId_fixture_1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/callRecordings/update_call_recordings_fixture_id",
+    "body": {
+      "applicationId": "applicationId_fixture_1"
+    }
+  }
+}

@@ -1,0 +1,362 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Company",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt",
+  "properties": {
+    "accountOwner": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "address": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "addressStreet1": {},
+        "addressStreet2": {},
+        "addressCity": {},
+        "addressState": {},
+        "addressCountry": {},
+        "addressPostcode": {},
+        "addressLat": {},
+        "addressLng": {}
+      }
+    },
+    "annualRevenue": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "amountMicros": {},
+        "currencyCode": {}
+      }
+    },
+    "attachments": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    },
+    "deletedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "domainName": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "primaryLinkLabel": {},
+        "primaryLinkUrl": {},
+        "secondaryLinks": {}
+      }
+    },
+    "id": {
+      "type": "string"
+    },
+    "lastContactAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "lastContactItemCalendarEvent": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastContactItemMessage": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "linkedinLink": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "primaryLinkLabel": {},
+        "primaryLinkUrl": {},
+        "secondaryLinks": {}
+      }
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "noteTargets": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "opportunities": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "pdlAffiliatedProfiles": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "pdlAlternativeDomains": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "pdlAlternativeNames": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "pdlCompanyType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlEmployeeCount": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "pdlEmployeeCountByCountry": {},
+    "pdlEnrichmentStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlFacebookUrl": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "primaryLinkLabel": {},
+        "primaryLinkUrl": {},
+        "secondaryLinks": {}
+      }
+    },
+    "pdlFoundedYear": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "pdlFundingStages": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "pdlHeadline": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlIndustry": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlIndustryDetail": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlLastEnrichedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "pdlLastFundingDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "pdlLatestFundingStage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlLegalName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlLinkedinId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlLocationContinent": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlLocationMetro": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlMicExchange": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlNaics": {},
+    "pdlNumberFundingRounds": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "pdlRawPayload": {},
+    "pdlSic": {},
+    "pdlSizeRange": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlSummary": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlTags": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "pdlTicker": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlTotalFunding": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "amountMicros": {},
+        "currencyCode": {}
+      }
+    },
+    "pdlTwitterUrl": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "primaryLinkLabel": {},
+        "primaryLinkUrl": {},
+        "secondaryLinks": {}
+      }
+    },
+    "people": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "position": {
+      "type": "number"
+    },
+    "searchVector": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "taskTargets": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "timelineActivities": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    }
+  }
+}

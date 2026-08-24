@@ -1,0 +1,12 @@
+{
+  "record": {
+    "callRecorderPreference": "Fixture callRecorderPreference 1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/calendarEvents",
+    "body": {
+      "callRecorderPreference": "Fixture callRecorderPreference 1"
+    }
+  }
+}
