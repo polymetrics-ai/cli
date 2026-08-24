@@ -358,6 +358,18 @@
   it is primary or an additional declaration-owned evidence reference. No
   connector name branch, engine behavior, or source declaration was changed.
 
+### Root help transcript parity after Batch 8–10 command publication — 2026-08-25
+
+- **Red:** CI job `32763389058` failed all nine root manual/help transcript
+  variants because the root command correctly listed the newly published Batch
+  8–10 connector command namespaces while
+  `internal/cli/testdata/golden_transcripts.json` still described the older
+  catalog. The same selected transcript test reproduced locally.
+- **Green:** regenerated exactly the nine affected root transcript fixtures
+  (`root_bare_manual`, all help/manual variants, and their JSON/equal/space
+  forms) using the in-repository golden writer. The selected test now passes;
+  no command implementation or runtime parsing changed.
+
 - The source lock carries `counts.total`, per-method and per-kind counts,
   source-document pins, and coverage basis. Dispositions use
   `operations_found`; no generated summary has `declared_percent`.
