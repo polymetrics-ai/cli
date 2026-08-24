@@ -954,3 +954,30 @@ connectors, so they remain partial rather than becoming an availability-only cla
 recorded destination-transport foundation gap: zero source-declared idempotency headers and zero
 action-owned provider read-back contracts. No write or reverse-ETL command was promoted or
 retested in this wave.
+
+### Next bounded increment — remaining exact BambooHR ETL bindings
+
+- **Red:** 22 source-cited BambooHR `GET` operation rows still have a partial ETL command despite
+  an exact `api_surface.json` `covered_by.stream` match; they are the remaining rows after Wave 1
+  selected the first 62 of 84 exact BambooHR endpoint-to-stream bindings. The earlier 83 count was
+  a selection-query undercount; the pre-wave bundle confirms 84 exact partial candidates and zero
+  already implemented candidates.
+- **Green condition:** bind only the exact existing stream, validate the bundle and generated
+  surface, then run all 22 built-binary credential-free probes sequentially. Any result other than
+  terminal `error: missing --credential` stops this increment; direct reads and writes remain out
+  of scope.
+
+### Next bounded increment — green report
+
+**Correctly mapped and proven: 22 BambooHR ETL commands.** Each command already cited its pinned
+provider operation. The same exact connector-local mapping criterion used in Wave 1 applied: its
+`Declared etl: GET <path>.` summary matched a `GET <path>` endpoint in `api_surface.json`, and that
+endpoint's `covered_by.stream` named the existing stream. Only the named stream, implemented
+availability, and a binding note changed.
+
+The rebuilt binary ran the 22 commands from fresh initialized, credential-free projects in three
+bounded sequential batches (8, 8, and 6). All 22 exited `1` with exactly the terminal line
+`error: missing --credential`; none printed `unknown command` or contacted a provider. BambooHR
+now has 84 source-cited, endpoint-to-existing-stream ETL bindings. Together with Wave 1, the
+honest exact-binding total is 122 commands: BambooHR 84, LaunchDarkly 5, Pipedrive 21, ShipStation
+4, and Squarespace 8. Direct reads and write lanes remain unchanged.
