@@ -553,3 +553,23 @@ artifact or provider source (Airtable, Buildkite, Google Analytics Data API, Lin
 Pinterest, SonarCloud drift/volatile; eBay Fulfillment and TikTok Marketing no public source;
 Salesforce tenant-dynamic), so a batch-wide v3 migration would require separate source-transition
 work, not the still-pending transport-admission foundation. No such migration is attempted here.
+
+### Green verification
+
+- `go test -timeout 20m ./cmd/connectorgen -run 'TestSourceRetain|TestSourceProjectionSourceCitedNonExecutableMutationDispositionsCoverAbsentAndIncompleteActions'`
+  passed.
+- `go test -timeout 20m ./internal/connectors/defs` passed.
+- `go build ./cmd/pm` passed before the credential-boundary sweep; each of the 390 invocations was
+  run against that built binary, partitioned into isolated initialized temporary projects with no
+  credential configured.
+- `go run ./cmd/connectorgen validate internal/connectors/defs/bamboo-hr` and
+  `go run ./cmd/connectorgen validate internal/connectors/defs/launchdarkly` both passed.
+- An exact byte-count/SHA-256 audit passed for the ten retained connector artifacts and their
+  corresponding disposition-ledger `source_basis` records; the two corrected bases now equal the
+  retained lock identities.
+- `go run ./cmd/agentcontractgen check`, `make docs-check`, and `git diff --check` passed.
+
+The repository's aggregate `go test -timeout 20m ./...` and `make verify` are deliberately left
+to CI for this planning/provenance-only checkpoint: repository guidance warns that the full
+550-plus-connector suite exceeds the per-command memory/time window. The focused affected-package
+checks above use the required explicit timeout.
