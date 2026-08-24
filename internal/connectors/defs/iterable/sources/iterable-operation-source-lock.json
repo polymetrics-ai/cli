@@ -1,1493 +1,1362 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "connector": "iterable",
   "captured_at": "2026-08-19T00:00:00Z",
   "rest": {
-    "source_url": "https://api.iterable.com/api-docs",
-    "sha256": "0b1ae1058635c09386aba007807aa08d54f89969ad48e8e7717d279ef0cab431",
-    "bytes": 284471,
-    "openapi": "2.0",
-    "info_version": "1.8",
-    "operations": [
-      {
-        "id": "iterable.rest.delete.deleteCatalog",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/catalogs/{catalogName}",
-        "operation_id": "deleteCatalog",
-        "deprecated": false,
-        "source_location": "paths[\"/api/catalogs/{catalogName}\"].delete",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.delete.bulkDeleteCatalogItems",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/catalogs/{catalogName}/items",
-        "operation_id": "bulkDeleteCatalogItems",
-        "deprecated": false,
-        "source_location": "paths[\"/api/catalogs/{catalogName}/items\"].delete",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.delete.deleteCatalogItem",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/catalogs/{catalogName}/items/{itemId}",
-        "operation_id": "deleteCatalogItem",
-        "deprecated": false,
-        "source_location": "paths[\"/api/catalogs/{catalogName}/items/{itemId}\"].delete",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.delete.cancelExport",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/export/{jobId}",
-        "operation_id": "cancelExport",
-        "deprecated": false,
-        "source_location": "paths[\"/api/export/{jobId}\"].delete",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.delete.delete.lists-listid",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/lists/{listId}",
-        "operation_id": "delete",
-        "deprecated": false,
-        "source_location": "paths[\"/api/lists/{listId}\"].delete",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.delete.delete.metadata-table",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/metadata/{table}",
-        "operation_id": "delete",
-        "deprecated": false,
-        "source_location": "paths[\"/api/metadata/{table}\"].delete",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.delete.delete.metadata-table-key",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/metadata/{table}/{key}",
-        "operation_id": "delete",
-        "deprecated": false,
-        "source_location": "paths[\"/api/metadata/{table}/{key}\"].delete",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.delete.deleteSnippet",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/snippets/{identifier}",
-        "operation_id": "deleteSnippet",
-        "deprecated": false,
-        "source_location": "paths[\"/api/snippets/{identifier}\"].delete",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.delete.unsubscribeSingleUserByUserId",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}",
-        "operation_id": "unsubscribeSingleUserByUserId",
-        "deprecated": false,
-        "source_location": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}\"].delete",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.delete.unsubscribeSingleUser",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}",
-        "operation_id": "unsubscribeSingleUser",
-        "deprecated": false,
-        "source_location": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}\"].delete",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.delete.delete.users-email",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/users/{email}",
-        "operation_id": "delete",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/{email}\"].delete",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.delete.delete.users-byuserid-userid",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/users/byUserId/{userId}",
-        "operation_id": "delete",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/byUserId/{userId}\"].delete",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.campaigns",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/campaigns",
-        "operation_id": "campaigns",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getCampaign",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/campaigns/{id}",
-        "operation_id": "getCampaign",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns/{id}\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.metrics.campaigns-metrics",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/campaigns/metrics",
-        "operation_id": "metrics",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns/metrics\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.child_campaigns",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/campaigns/recurring/{id}/childCampaigns",
-        "operation_id": "child campaigns",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns/recurring/{id}/childCampaigns\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.listCatalogs",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/catalogs",
-        "operation_id": "listCatalogs",
-        "deprecated": false,
-        "source_location": "paths[\"/api/catalogs\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getFieldMappings",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/catalogs/{catalogName}/fieldMappings",
-        "operation_id": "getFieldMappings",
-        "deprecated": false,
-        "source_location": "paths[\"/api/catalogs/{catalogName}/fieldMappings\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.listCatalogItems",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/catalogs/{catalogName}/items",
-        "operation_id": "listCatalogItems",
-        "deprecated": false,
-        "source_location": "paths[\"/api/catalogs/{catalogName}/items\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getCatalogItem",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/catalogs/{catalogName}/items/{itemId}",
-        "operation_id": "getCatalogItem",
-        "deprecated": false,
-        "source_location": "paths[\"/api/catalogs/{catalogName}/items/{itemId}\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.channels",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/channels",
-        "operation_id": "channels",
-        "deprecated": false,
-        "source_location": "paths[\"/api/channels\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.viewInBrowser",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/email/viewInBrowser",
-        "operation_id": "viewInBrowser",
-        "deprecated": false,
-        "source_location": "paths[\"/api/email/viewInBrowser\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.messages",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/embedded-messaging/messages",
-        "operation_id": "messages",
-        "deprecated": false,
-        "source_location": "paths[\"/api/embedded-messaging/messages\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.User_events",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/events/{email}",
-        "operation_id": "User events",
-        "deprecated": false,
-        "source_location": "paths[\"/api/events/{email}\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.User_events_by_userId",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/events/byUserId/{userId}",
-        "operation_id": "User events by userId",
-        "deprecated": false,
-        "source_location": "paths[\"/api/events/byUserId/{userId}\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.list.experiments",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/experiments",
-        "operation_id": "list",
-        "deprecated": false,
-        "source_location": "paths[\"/api/experiments\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.get.experiments-experimentid",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/experiments/{experimentId}",
-        "operation_id": "get",
-        "deprecated": false,
-        "source_location": "paths[\"/api/experiments/{experimentId}\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.variants",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/experiments/{experimentId}/variants",
-        "operation_id": "variants",
-        "deprecated": false,
-        "source_location": "paths[\"/api/experiments/{experimentId}/variants\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.metrics.experiments-metrics",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/experiments/metrics",
-        "operation_id": "metrics",
-        "deprecated": false,
-        "source_location": "paths[\"/api/experiments/metrics\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getExportFiles",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/export/{jobId}/files",
-        "operation_id": "getExportFiles",
-        "deprecated": false,
-        "source_location": "paths[\"/api/export/{jobId}/files\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.exportDataCsv",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/export/data.csv",
-        "operation_id": "exportDataCsv",
-        "deprecated": false,
-        "source_location": "paths[\"/api/export/data.csv\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.exportDataJson",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/export/data.json",
-        "operation_id": "exportDataJson",
-        "deprecated": false,
-        "source_location": "paths[\"/api/export/data.json\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getExportJobs",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/export/jobs",
-        "operation_id": "getExportJobs",
-        "deprecated": false,
-        "source_location": "paths[\"/api/export/jobs\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.exportUserEvents",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/export/userEvents",
-        "operation_id": "exportUserEvents",
-        "deprecated": false,
-        "source_location": "paths[\"/api/export/userEvents\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getMessages.inapp-getmessages",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/inApp/getMessages",
-        "operation_id": "getMessages",
-        "deprecated": false,
-        "source_location": "paths[\"/api/inApp/getMessages\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getPriorityMessage",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/inApp/getPriorityMessage",
-        "operation_id": "getPriorityMessage",
-        "deprecated": false,
-        "source_location": "paths[\"/api/inApp/getPriorityMessage\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getMessages.inapp-web-getmessages",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/inApp/web/getMessages",
-        "operation_id": "getMessages",
-        "deprecated": false,
-        "source_location": "paths[\"/api/inApp/web/getMessages\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getJourneys",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/journeys",
-        "operation_id": "getJourneys",
-        "deprecated": false,
-        "source_location": "paths[\"/api/journeys\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getLists",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/lists",
-        "operation_id": "getLists",
-        "deprecated": false,
-        "source_location": "paths[\"/api/lists\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getListCount",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/lists/{listId}/size",
-        "operation_id": "getListCount",
-        "deprecated": false,
-        "source_location": "paths[\"/api/lists/{listId}/size\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getUsers",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/lists/getUsers",
-        "operation_id": "getUsers",
-        "deprecated": false,
-        "source_location": "paths[\"/api/lists/getUsers\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getUsersPreview",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/lists/previewUsers",
-        "operation_id": "getUsersPreview",
-        "deprecated": false,
-        "source_location": "paths[\"/api/lists/previewUsers\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.messageTypes",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/messageTypes",
-        "operation_id": "messageTypes",
-        "deprecated": false,
-        "source_location": "paths[\"/api/messageTypes\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.list_tables",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/metadata",
-        "operation_id": "list tables",
-        "deprecated": false,
-        "source_location": "paths[\"/api/metadata\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.list.metadata-table",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/metadata/{table}",
-        "operation_id": "list",
-        "deprecated": false,
-        "source_location": "paths[\"/api/metadata/{table}\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.get.metadata-table-key",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/metadata/{table}/{key}",
-        "operation_id": "get",
-        "deprecated": false,
-        "source_location": "paths[\"/api/metadata/{table}/{key}\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getSnippets",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/snippets",
-        "operation_id": "getSnippets",
-        "deprecated": false,
-        "source_location": "paths[\"/api/snippets\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getSnippet",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/snippets/{identifier}",
-        "operation_id": "getSnippet",
-        "deprecated": false,
-        "source_location": "paths[\"/api/snippets/{identifier}\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getTemplates",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/templates",
-        "operation_id": "getTemplates",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getEmailTemplate",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/templates/email/get",
-        "operation_id": "getEmailTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/email/get\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getEmbeddedTemplate",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/templates/embedded/get",
-        "operation_id": "getEmbeddedTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/embedded/get\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getByClientTemplateId",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/templates/getByClientTemplateId",
-        "operation_id": "getByClientTemplateId",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/getByClientTemplateId\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getInAppTemplate",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/templates/inapp/get",
-        "operation_id": "getInAppTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/inapp/get\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getPushTemplate",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/templates/push/get",
-        "operation_id": "getPushTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/push/get\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getSMSTemplate",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/templates/sms/get",
-        "operation_id": "getSMSTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/sms/get\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getUser.users-email",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/users/{email}",
-        "operation_id": "getUser",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/{email}\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getUserById.users-byuserid",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/users/byUserId",
-        "operation_id": "getUserById",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/byUserId\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getUserById.users-byuserid-userid",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/users/byUserId/{userId}",
-        "operation_id": "getUserById",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/byUserId/{userId}\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.exportProjectForgottenUsers",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/users/forgotten",
-        "operation_id": "exportProjectForgottenUsers",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/forgotten\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.exportProjectForgottenUserIds",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/users/forgottenUserIds",
-        "operation_id": "exportProjectForgottenUserIds",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/forgottenUserIds\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getUser.users-getbyemail",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/users/getByEmail",
-        "operation_id": "getUser",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/getByEmail\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getUserFields",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/users/getFields",
-        "operation_id": "getUserFields",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/getFields\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getSentMessages",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/users/getSentMessages",
-        "operation_id": "getSentMessages",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/getSentMessages\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.get.getWebhooks",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/webhooks",
-        "operation_id": "getWebhooks",
-        "deprecated": false,
-        "source_location": "paths[\"/api/webhooks\"].get",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.patch.partialUpdateCatalogItem",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/catalogs/{catalogName}/items/{itemId}",
-        "operation_id": "partialUpdateCatalogItem",
-        "deprecated": false,
-        "source_location": "paths[\"/api/catalogs/{catalogName}/items/{itemId}\"].patch",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.patch.subscribeSingleUserByUserId",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}",
-        "operation_id": "subscribeSingleUserByUserId",
-        "deprecated": false,
-        "source_location": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}\"].patch",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.patch.subscribeSingleUser",
-        "protocol": "rest",
-        "method": "PATCH",
-        "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}",
-        "operation_id": "subscribeSingleUser",
-        "deprecated": false,
-        "source_location": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}\"].patch",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.Invalidate_JWT",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/auth/jwts/invalidate",
-        "operation_id": "Invalidate JWT",
-        "deprecated": false,
-        "source_location": "paths[\"/api/auth/jwts/invalidate\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.schedule_campaign",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/campaigns/{campaignId}/schedule",
-        "operation_id": "schedule campaign",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns/{campaignId}/schedule\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.send_campaign",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/campaigns/{campaignId}/send",
-        "operation_id": "send campaign",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns/{campaignId}/send\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.abort_campaign",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/campaigns/abort",
-        "operation_id": "abort campaign",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns/abort\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.activate_triggered_campaign",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/campaigns/activateTriggered",
-        "operation_id": "activate triggered campaign",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns/activateTriggered\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.archive_campaigns",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/campaigns/archive",
-        "operation_id": "archive campaigns",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns/archive\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.cancel_campaign",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/campaigns/cancel",
-        "operation_id": "cancel campaign",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns/cancel\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.create_campaign",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/campaigns/create",
-        "operation_id": "create campaign",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns/create\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.Deactivate_triggered_campaign",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/campaigns/deactivateTriggered",
-        "operation_id": "Deactivate triggered campaign",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns/deactivateTriggered\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.trigger_campaign",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/campaigns/trigger",
-        "operation_id": "trigger campaign",
-        "deprecated": false,
-        "source_location": "paths[\"/api/campaigns/trigger\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.createCatalog",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/catalogs/{catalogName}",
-        "operation_id": "createCatalog",
-        "deprecated": false,
-        "source_location": "paths[\"/api/catalogs/{catalogName}\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.bulkUpdateCatalogItems",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/catalogs/{catalogName}/items",
-        "operation_id": "bulkUpdateCatalogItems",
-        "deprecated": false,
-        "source_location": "paths[\"/api/catalogs/{catalogName}/items\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.trackPurchase",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/commerce/trackPurchase",
-        "operation_id": "trackPurchase",
-        "deprecated": false,
-        "source_location": "paths[\"/api/commerce/trackPurchase\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.updateCart",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/commerce/updateCart",
-        "operation_id": "updateCart",
-        "deprecated": false,
-        "source_location": "paths[\"/api/commerce/updateCart\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.cancel.email-cancel",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/email/cancel",
-        "operation_id": "cancel",
-        "deprecated": false,
-        "source_location": "paths[\"/api/email/cancel\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.target.email-target",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/email/target",
-        "operation_id": "target",
-        "deprecated": false,
-        "source_location": "paths[\"/api/email/target\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.embedded_track_click",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/embedded-messaging/events/click",
-        "operation_id": "embedded-track-click",
-        "deprecated": false,
-        "source_location": "paths[\"/api/embedded-messaging/events/click\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.embedded_track_received",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/embedded-messaging/events/received",
-        "operation_id": "embedded-track-received",
-        "deprecated": false,
-        "source_location": "paths[\"/api/embedded-messaging/events/received\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.embedded_track_impression",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/embedded-messaging/events/session",
-        "operation_id": "embedded-track-impression",
-        "deprecated": false,
-        "source_location": "paths[\"/api/embedded-messaging/events/session\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.inAppConsume",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/events/inAppConsume",
-        "operation_id": "inAppConsume",
-        "deprecated": false,
-        "source_location": "paths[\"/api/events/inAppConsume\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.track",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/events/track",
-        "operation_id": "track",
-        "deprecated": false,
-        "source_location": "paths[\"/api/events/track\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.trackBulk",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/events/trackBulk",
-        "operation_id": "trackBulk",
-        "deprecated": false,
-        "source_location": "paths[\"/api/events/trackBulk\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.trackInAppClick",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/events/trackInAppClick",
-        "operation_id": "trackInAppClick",
-        "deprecated": false,
-        "source_location": "paths[\"/api/events/trackInAppClick\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.trackInAppClose",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/events/trackInAppClose",
-        "operation_id": "trackInAppClose",
-        "deprecated": false,
-        "source_location": "paths[\"/api/events/trackInAppClose\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.trackInAppDelivery",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/events/trackInAppDelivery",
-        "operation_id": "trackInAppDelivery",
-        "deprecated": false,
-        "source_location": "paths[\"/api/events/trackInAppDelivery\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.trackInAppOpen",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/events/trackInAppOpen",
-        "operation_id": "trackInAppOpen",
-        "deprecated": false,
-        "source_location": "paths[\"/api/events/trackInAppOpen\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.trackPushOpen",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/events/trackPushOpen",
-        "operation_id": "trackPushOpen",
-        "deprecated": false,
-        "source_location": "paths[\"/api/events/trackPushOpen\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.trackWebPushClick",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/events/trackWebPushClick",
-        "operation_id": "trackWebPushClick",
-        "deprecated": false,
-        "source_location": "paths[\"/api/events/trackWebPushClick\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.startExport",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/export/start",
-        "operation_id": "startExport",
-        "deprecated": false,
-        "source_location": "paths[\"/api/export/start\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.cancel.inapp-cancel",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/inApp/cancel",
-        "operation_id": "cancel",
-        "deprecated": false,
-        "source_location": "paths[\"/api/inApp/cancel\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.target.inapp-target",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/inApp/target",
-        "operation_id": "target",
-        "deprecated": false,
-        "source_location": "paths[\"/api/inApp/target\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.create",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/lists",
-        "operation_id": "create",
-        "deprecated": false,
-        "source_location": "paths[\"/api/lists\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.subscribe",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/lists/subscribe",
-        "operation_id": "subscribe",
-        "deprecated": false,
-        "source_location": "paths[\"/api/lists/subscribe\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.unsubscribe",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/lists/unsubscribe",
-        "operation_id": "unsubscribe",
-        "deprecated": false,
-        "source_location": "paths[\"/api/lists/unsubscribe\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.cancel.push-cancel",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/push/cancel",
-        "operation_id": "cancel",
-        "deprecated": false,
-        "source_location": "paths[\"/api/push/cancel\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.target.push-target",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/push/target",
-        "operation_id": "target",
-        "deprecated": false,
-        "source_location": "paths[\"/api/push/target\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.cancel.sms-cancel",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/sms/cancel",
-        "operation_id": "cancel",
-        "deprecated": false,
-        "source_location": "paths[\"/api/sms/cancel\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.target.sms-target",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/sms/target",
-        "operation_id": "target",
-        "deprecated": false,
-        "source_location": "paths[\"/api/sms/target\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.createSnippet",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/snippets",
-        "operation_id": "createSnippet",
-        "deprecated": false,
-        "source_location": "paths[\"/api/snippets\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.subscribeSingleUserToDoubleOptIn",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/subscriptions/subscribeToDoubleOptIn",
-        "operation_id": "subscribeSingleUserToDoubleOptIn",
-        "deprecated": false,
-        "source_location": "paths[\"/api/subscriptions/subscribeToDoubleOptIn\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.bulk_delete_templates",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/bulkDelete",
-        "operation_id": "bulk delete templates",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/bulkDelete\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.previewEmailTemplate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/email/preview",
-        "operation_id": "previewEmailTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/email/preview\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.emailProof",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/email/proof",
-        "operation_id": "emailProof",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/email/proof\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.updateEmailTemplate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/email/update",
-        "operation_id": "updateEmailTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/email/update\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.upsertEmailTemplate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/email/upsert",
-        "operation_id": "upsertEmailTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/email/upsert\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.updateEmbeddedTemplate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/embedded/update",
-        "operation_id": "updateEmbeddedTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/embedded/update\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.upsertEmbeddedTemplate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/embedded/upsert",
-        "operation_id": "upsertEmbeddedTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/embedded/upsert\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.previewInAppTemplate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/inapp/preview",
-        "operation_id": "previewInAppTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/inapp/preview\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.inappProof",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/inapp/proof",
-        "operation_id": "inappProof",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/inapp/proof\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.updateInAppTemplate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/inapp/update",
-        "operation_id": "updateInAppTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/inapp/update\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.upsertInAppTemplate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/inapp/upsert",
-        "operation_id": "upsertInAppTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/inapp/upsert\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.pushProof",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/push/proof",
-        "operation_id": "pushProof",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/push/proof\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.updatePushTemplate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/push/update",
-        "operation_id": "updatePushTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/push/update\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.upsertPushTemplate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/push/upsert",
-        "operation_id": "upsertPushTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/push/upsert\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.smsProof",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/sms/proof",
-        "operation_id": "smsProof",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/sms/proof\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.updateSMSTemplate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/sms/update",
-        "operation_id": "updateSMSTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/sms/update\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.upsertSMSTemplate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/sms/upsert",
-        "operation_id": "upsertSMSTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/api/templates/sms/upsert\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.bulkUpdateUser",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/bulkUpdate",
-        "operation_id": "bulkUpdateUser",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/bulkUpdate\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.bulkUpdateSubscriptions",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/bulkUpdateSubscriptions",
-        "operation_id": "bulkUpdateSubscriptions",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/bulkUpdateSubscriptions\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.disableDevice",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/disableDevice",
-        "operation_id": "disableDevice",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/disableDevice\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.forget",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/forget",
-        "operation_id": "forget",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/forget\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.mergeUsers",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/merge",
-        "operation_id": "mergeUsers",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/merge\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.registerBrowserToken",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/registerBrowserToken",
-        "operation_id": "registerBrowserToken",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/registerBrowserToken\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.registerDeviceToken",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/registerDeviceToken",
-        "operation_id": "registerDeviceToken",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/registerDeviceToken\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.unforget",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/unforget",
-        "operation_id": "unforget",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/unforget\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.updateUser",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/update",
-        "operation_id": "updateUser",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/update\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.updateEmail",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/updateEmail",
-        "operation_id": "updateEmail",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/updateEmail\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.updateSubscriptions",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/updateSubscriptions",
-        "operation_id": "updateSubscriptions",
-        "deprecated": false,
-        "source_location": "paths[\"/api/users/updateSubscriptions\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.beginSmsVerification",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/verify/sms/begin",
-        "operation_id": "beginSmsVerification",
-        "deprecated": false,
-        "source_location": "paths[\"/api/verify/sms/begin\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.checkSmsVerification",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/verify/sms/check",
-        "operation_id": "checkSmsVerification",
-        "deprecated": false,
-        "source_location": "paths[\"/api/verify/sms/check\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.updateWebhook",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/webhooks",
-        "operation_id": "updateWebhook",
-        "deprecated": false,
-        "source_location": "paths[\"/api/webhooks\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.cancel.webpush-cancel",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/webPush/cancel",
-        "operation_id": "cancel",
-        "deprecated": false,
-        "source_location": "paths[\"/api/webPush/cancel\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.target.webpush-target",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/webPush/target",
-        "operation_id": "target",
-        "deprecated": false,
-        "source_location": "paths[\"/api/webPush/target\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.cancel.whatsapp-cancel",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/whatsApp/cancel",
-        "operation_id": "cancel",
-        "deprecated": false,
-        "source_location": "paths[\"/api/whatsApp/cancel\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.target.whatsapp-target",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/whatsApp/target",
-        "operation_id": "target",
-        "deprecated": false,
-        "source_location": "paths[\"/api/whatsApp/target\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.post.triggerWorkflow",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/workflows/triggerWorkflow",
-        "operation_id": "triggerWorkflow",
-        "deprecated": false,
-        "source_location": "paths[\"/api/workflows/triggerWorkflow\"].post",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.put.updateFieldTypes",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/catalogs/{catalogName}/fieldMappings",
-        "operation_id": "updateFieldTypes",
-        "deprecated": false,
-        "source_location": "paths[\"/api/catalogs/{catalogName}/fieldMappings\"].put",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.put.indexCatalogItem",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/catalogs/{catalogName}/items/{itemId}",
-        "operation_id": "indexCatalogItem",
-        "deprecated": false,
-        "source_location": "paths[\"/api/catalogs/{catalogName}/items/{itemId}\"].put",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.put.put",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/metadata/{table}/{key}",
-        "operation_id": "put",
-        "deprecated": false,
-        "source_location": "paths[\"/api/metadata/{table}/{key}\"].put",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.put.updateSnippet",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/snippets/{identifier}",
-        "operation_id": "updateSnippet",
-        "deprecated": false,
-        "source_location": "paths[\"/api/snippets/{identifier}\"].put",
-        "source_url": "https://api.iterable.com/api-docs"
-      },
-      {
-        "id": "iterable.rest.put.Bulk_subscription_action",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}",
-        "operation_id": "Bulk subscription action",
-        "deprecated": false,
-        "source_location": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}\"].put",
-        "source_url": "https://api.iterable.com/api-docs"
+    "retrieval": "Migrated schema-version 2 provider-documentation source-lock capture.",
+    "openapi": [],
+    "source_documents": [
+      {
+        "id": "primary",
+        "kind": "openapi",
+        "artifact": {
+          "source_url": "https://api.iterable.com/api-docs",
+          "sha256": "0b1ae1058635c09386aba007807aa08d54f89969ad48e8e7717d279ef0cab431",
+          "bytes": 284471,
+          "swagger": "2.0"
+        },
+        "published_source": {
+          "source_url": "https://api.iterable.com/api-docs",
+          "capture_url": "https://api.iterable.com/api-docs",
+          "sha256": "0b1ae1058635c09386aba007807aa08d54f89969ad48e8e7717d279ef0cab431",
+          "bytes": 284471,
+          "adapter": "schema-v2-source-lock-migration"
+        },
+        "info_version": "1.8",
+        "operations": [
+          {
+            "id": "iterable.rest.delete.deleteCatalog",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/catalogs/{catalogName}",
+            "operation_id": "deleteCatalog",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalogs/{catalogName}\"].delete"
+          },
+          {
+            "id": "iterable.rest.delete.bulkDeleteCatalogItems",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/catalogs/{catalogName}/items",
+            "operation_id": "bulkDeleteCatalogItems",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalogs/{catalogName}/items\"].delete"
+          },
+          {
+            "id": "iterable.rest.delete.deleteCatalogItem",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/catalogs/{catalogName}/items/{itemId}",
+            "operation_id": "deleteCatalogItem",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalogs/{catalogName}/items/{itemId}\"].delete"
+          },
+          {
+            "id": "iterable.rest.delete.cancelExport",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/export/{jobId}",
+            "operation_id": "cancelExport",
+            "deprecated": false,
+            "source_location": "paths[\"/api/export/{jobId}\"].delete"
+          },
+          {
+            "id": "iterable.rest.delete.delete.lists-listid",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/lists/{listId}",
+            "operation_id": "delete",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{listId}\"].delete"
+          },
+          {
+            "id": "iterable.rest.delete.delete.metadata-table",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/metadata/{table}",
+            "operation_id": "delete",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metadata/{table}\"].delete"
+          },
+          {
+            "id": "iterable.rest.delete.delete.metadata-table-key",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/metadata/{table}/{key}",
+            "operation_id": "delete",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metadata/{table}/{key}\"].delete"
+          },
+          {
+            "id": "iterable.rest.delete.deleteSnippet",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/snippets/{identifier}",
+            "operation_id": "deleteSnippet",
+            "deprecated": false,
+            "source_location": "paths[\"/api/snippets/{identifier}\"].delete"
+          },
+          {
+            "id": "iterable.rest.delete.unsubscribeSingleUserByUserId",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}",
+            "operation_id": "unsubscribeSingleUserByUserId",
+            "deprecated": false,
+            "source_location": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}\"].delete"
+          },
+          {
+            "id": "iterable.rest.delete.unsubscribeSingleUser",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}",
+            "operation_id": "unsubscribeSingleUser",
+            "deprecated": false,
+            "source_location": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}\"].delete"
+          },
+          {
+            "id": "iterable.rest.delete.delete.users-email",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users/{email}",
+            "operation_id": "delete",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/{email}\"].delete"
+          },
+          {
+            "id": "iterable.rest.delete.delete.users-byuserid-userid",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/users/byUserId/{userId}",
+            "operation_id": "delete",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/byUserId/{userId}\"].delete"
+          },
+          {
+            "id": "iterable.rest.get.campaigns",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/campaigns",
+            "operation_id": "campaigns",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getCampaign",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/campaigns/{id}",
+            "operation_id": "getCampaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/{id}\"].get"
+          },
+          {
+            "id": "iterable.rest.get.metrics.campaigns-metrics",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/campaigns/metrics",
+            "operation_id": "metrics",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/metrics\"].get"
+          },
+          {
+            "id": "iterable.rest.get.child_campaigns",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/campaigns/recurring/{id}/childCampaigns",
+            "operation_id": "child campaigns",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/recurring/{id}/childCampaigns\"].get"
+          },
+          {
+            "id": "iterable.rest.get.listCatalogs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalogs",
+            "operation_id": "listCatalogs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalogs\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getFieldMappings",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalogs/{catalogName}/fieldMappings",
+            "operation_id": "getFieldMappings",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalogs/{catalogName}/fieldMappings\"].get"
+          },
+          {
+            "id": "iterable.rest.get.listCatalogItems",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalogs/{catalogName}/items",
+            "operation_id": "listCatalogItems",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalogs/{catalogName}/items\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getCatalogItem",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/catalogs/{catalogName}/items/{itemId}",
+            "operation_id": "getCatalogItem",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalogs/{catalogName}/items/{itemId}\"].get"
+          },
+          {
+            "id": "iterable.rest.get.channels",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/channels",
+            "operation_id": "channels",
+            "deprecated": false,
+            "source_location": "paths[\"/api/channels\"].get"
+          },
+          {
+            "id": "iterable.rest.get.viewInBrowser",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/email/viewInBrowser",
+            "operation_id": "viewInBrowser",
+            "deprecated": false,
+            "source_location": "paths[\"/api/email/viewInBrowser\"].get"
+          },
+          {
+            "id": "iterable.rest.get.messages",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/embedded-messaging/messages",
+            "operation_id": "messages",
+            "deprecated": false,
+            "source_location": "paths[\"/api/embedded-messaging/messages\"].get"
+          },
+          {
+            "id": "iterable.rest.get.User_events",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/events/{email}",
+            "operation_id": "User events",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/{email}\"].get"
+          },
+          {
+            "id": "iterable.rest.get.User_events_by_userId",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/events/byUserId/{userId}",
+            "operation_id": "User events by userId",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/byUserId/{userId}\"].get"
+          },
+          {
+            "id": "iterable.rest.get.list.experiments",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/experiments",
+            "operation_id": "list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/experiments\"].get"
+          },
+          {
+            "id": "iterable.rest.get.get.experiments-experimentid",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/experiments/{experimentId}",
+            "operation_id": "get",
+            "deprecated": false,
+            "source_location": "paths[\"/api/experiments/{experimentId}\"].get"
+          },
+          {
+            "id": "iterable.rest.get.variants",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/experiments/{experimentId}/variants",
+            "operation_id": "variants",
+            "deprecated": false,
+            "source_location": "paths[\"/api/experiments/{experimentId}/variants\"].get"
+          },
+          {
+            "id": "iterable.rest.get.metrics.experiments-metrics",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/experiments/metrics",
+            "operation_id": "metrics",
+            "deprecated": false,
+            "source_location": "paths[\"/api/experiments/metrics\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getExportFiles",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/{jobId}/files",
+            "operation_id": "getExportFiles",
+            "deprecated": false,
+            "source_location": "paths[\"/api/export/{jobId}/files\"].get"
+          },
+          {
+            "id": "iterable.rest.get.exportDataCsv",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/data.csv",
+            "operation_id": "exportDataCsv",
+            "deprecated": false,
+            "source_location": "paths[\"/api/export/data.csv\"].get"
+          },
+          {
+            "id": "iterable.rest.get.exportDataJson",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/data.json",
+            "operation_id": "exportDataJson",
+            "deprecated": false,
+            "source_location": "paths[\"/api/export/data.json\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getExportJobs",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/jobs",
+            "operation_id": "getExportJobs",
+            "deprecated": false,
+            "source_location": "paths[\"/api/export/jobs\"].get"
+          },
+          {
+            "id": "iterable.rest.get.exportUserEvents",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/export/userEvents",
+            "operation_id": "exportUserEvents",
+            "deprecated": false,
+            "source_location": "paths[\"/api/export/userEvents\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getMessages.inapp-getmessages",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inApp/getMessages",
+            "operation_id": "getMessages",
+            "deprecated": false,
+            "source_location": "paths[\"/api/inApp/getMessages\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getPriorityMessage",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inApp/getPriorityMessage",
+            "operation_id": "getPriorityMessage",
+            "deprecated": false,
+            "source_location": "paths[\"/api/inApp/getPriorityMessage\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getMessages.inapp-web-getmessages",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/inApp/web/getMessages",
+            "operation_id": "getMessages",
+            "deprecated": false,
+            "source_location": "paths[\"/api/inApp/web/getMessages\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getJourneys",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/journeys",
+            "operation_id": "getJourneys",
+            "deprecated": false,
+            "source_location": "paths[\"/api/journeys\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getLists",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/lists",
+            "operation_id": "getLists",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getListCount",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/lists/{listId}/size",
+            "operation_id": "getListCount",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/{listId}/size\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getUsers",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/lists/getUsers",
+            "operation_id": "getUsers",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/getUsers\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getUsersPreview",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/lists/previewUsers",
+            "operation_id": "getUsersPreview",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/previewUsers\"].get"
+          },
+          {
+            "id": "iterable.rest.get.messageTypes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/messageTypes",
+            "operation_id": "messageTypes",
+            "deprecated": false,
+            "source_location": "paths[\"/api/messageTypes\"].get"
+          },
+          {
+            "id": "iterable.rest.get.list_tables",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/metadata",
+            "operation_id": "list tables",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metadata\"].get"
+          },
+          {
+            "id": "iterable.rest.get.list.metadata-table",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/metadata/{table}",
+            "operation_id": "list",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metadata/{table}\"].get"
+          },
+          {
+            "id": "iterable.rest.get.get.metadata-table-key",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/metadata/{table}/{key}",
+            "operation_id": "get",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metadata/{table}/{key}\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getSnippets",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/snippets",
+            "operation_id": "getSnippets",
+            "deprecated": false,
+            "source_location": "paths[\"/api/snippets\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getSnippet",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/snippets/{identifier}",
+            "operation_id": "getSnippet",
+            "deprecated": false,
+            "source_location": "paths[\"/api/snippets/{identifier}\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getTemplates",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/templates",
+            "operation_id": "getTemplates",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getEmailTemplate",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/templates/email/get",
+            "operation_id": "getEmailTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/email/get\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getEmbeddedTemplate",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/templates/embedded/get",
+            "operation_id": "getEmbeddedTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/embedded/get\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getByClientTemplateId",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/templates/getByClientTemplateId",
+            "operation_id": "getByClientTemplateId",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/getByClientTemplateId\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getInAppTemplate",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/templates/inapp/get",
+            "operation_id": "getInAppTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/inapp/get\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getPushTemplate",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/templates/push/get",
+            "operation_id": "getPushTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/push/get\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getSMSTemplate",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/templates/sms/get",
+            "operation_id": "getSMSTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/sms/get\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getUser.users-email",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{email}",
+            "operation_id": "getUser",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/{email}\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getUserById.users-byuserid",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/byUserId",
+            "operation_id": "getUserById",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/byUserId\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getUserById.users-byuserid-userid",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/byUserId/{userId}",
+            "operation_id": "getUserById",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/byUserId/{userId}\"].get"
+          },
+          {
+            "id": "iterable.rest.get.exportProjectForgottenUsers",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/forgotten",
+            "operation_id": "exportProjectForgottenUsers",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/forgotten\"].get"
+          },
+          {
+            "id": "iterable.rest.get.exportProjectForgottenUserIds",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/forgottenUserIds",
+            "operation_id": "exportProjectForgottenUserIds",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/forgottenUserIds\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getUser.users-getbyemail",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/getByEmail",
+            "operation_id": "getUser",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/getByEmail\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getUserFields",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/getFields",
+            "operation_id": "getUserFields",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/getFields\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getSentMessages",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/getSentMessages",
+            "operation_id": "getSentMessages",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/getSentMessages\"].get"
+          },
+          {
+            "id": "iterable.rest.get.getWebhooks",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/webhooks",
+            "operation_id": "getWebhooks",
+            "deprecated": false,
+            "source_location": "paths[\"/api/webhooks\"].get"
+          },
+          {
+            "id": "iterable.rest.patch.partialUpdateCatalogItem",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/catalogs/{catalogName}/items/{itemId}",
+            "operation_id": "partialUpdateCatalogItem",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalogs/{catalogName}/items/{itemId}\"].patch"
+          },
+          {
+            "id": "iterable.rest.patch.subscribeSingleUserByUserId",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}",
+            "operation_id": "subscribeSingleUserByUserId",
+            "deprecated": false,
+            "source_location": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/byUserId/{userId}\"].patch"
+          },
+          {
+            "id": "iterable.rest.patch.subscribeSingleUser",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}",
+            "operation_id": "subscribeSingleUser",
+            "deprecated": false,
+            "source_location": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}/user/{userEmail}\"].patch"
+          },
+          {
+            "id": "iterable.rest.post.Invalidate_JWT",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/auth/jwts/invalidate",
+            "operation_id": "Invalidate JWT",
+            "deprecated": false,
+            "source_location": "paths[\"/api/auth/jwts/invalidate\"].post"
+          },
+          {
+            "id": "iterable.rest.post.schedule_campaign",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/campaigns/{campaignId}/schedule",
+            "operation_id": "schedule campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/{campaignId}/schedule\"].post"
+          },
+          {
+            "id": "iterable.rest.post.send_campaign",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/campaigns/{campaignId}/send",
+            "operation_id": "send campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/{campaignId}/send\"].post"
+          },
+          {
+            "id": "iterable.rest.post.abort_campaign",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/campaigns/abort",
+            "operation_id": "abort campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/abort\"].post"
+          },
+          {
+            "id": "iterable.rest.post.activate_triggered_campaign",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/campaigns/activateTriggered",
+            "operation_id": "activate triggered campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/activateTriggered\"].post"
+          },
+          {
+            "id": "iterable.rest.post.archive_campaigns",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/campaigns/archive",
+            "operation_id": "archive campaigns",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/archive\"].post"
+          },
+          {
+            "id": "iterable.rest.post.cancel_campaign",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/campaigns/cancel",
+            "operation_id": "cancel campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/cancel\"].post"
+          },
+          {
+            "id": "iterable.rest.post.create_campaign",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/campaigns/create",
+            "operation_id": "create campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/create\"].post"
+          },
+          {
+            "id": "iterable.rest.post.Deactivate_triggered_campaign",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/campaigns/deactivateTriggered",
+            "operation_id": "Deactivate triggered campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/deactivateTriggered\"].post"
+          },
+          {
+            "id": "iterable.rest.post.trigger_campaign",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/campaigns/trigger",
+            "operation_id": "trigger campaign",
+            "deprecated": false,
+            "source_location": "paths[\"/api/campaigns/trigger\"].post"
+          },
+          {
+            "id": "iterable.rest.post.createCatalog",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/catalogs/{catalogName}",
+            "operation_id": "createCatalog",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalogs/{catalogName}\"].post"
+          },
+          {
+            "id": "iterable.rest.post.bulkUpdateCatalogItems",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/catalogs/{catalogName}/items",
+            "operation_id": "bulkUpdateCatalogItems",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalogs/{catalogName}/items\"].post"
+          },
+          {
+            "id": "iterable.rest.post.trackPurchase",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/commerce/trackPurchase",
+            "operation_id": "trackPurchase",
+            "deprecated": false,
+            "source_location": "paths[\"/api/commerce/trackPurchase\"].post"
+          },
+          {
+            "id": "iterable.rest.post.updateCart",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/commerce/updateCart",
+            "operation_id": "updateCart",
+            "deprecated": false,
+            "source_location": "paths[\"/api/commerce/updateCart\"].post"
+          },
+          {
+            "id": "iterable.rest.post.cancel.email-cancel",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/email/cancel",
+            "operation_id": "cancel",
+            "deprecated": false,
+            "source_location": "paths[\"/api/email/cancel\"].post"
+          },
+          {
+            "id": "iterable.rest.post.target.email-target",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/email/target",
+            "operation_id": "target",
+            "deprecated": false,
+            "source_location": "paths[\"/api/email/target\"].post"
+          },
+          {
+            "id": "iterable.rest.post.embedded_track_click",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/embedded-messaging/events/click",
+            "operation_id": "embedded-track-click",
+            "deprecated": false,
+            "source_location": "paths[\"/api/embedded-messaging/events/click\"].post"
+          },
+          {
+            "id": "iterable.rest.post.embedded_track_received",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/embedded-messaging/events/received",
+            "operation_id": "embedded-track-received",
+            "deprecated": false,
+            "source_location": "paths[\"/api/embedded-messaging/events/received\"].post"
+          },
+          {
+            "id": "iterable.rest.post.embedded_track_impression",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/embedded-messaging/events/session",
+            "operation_id": "embedded-track-impression",
+            "deprecated": false,
+            "source_location": "paths[\"/api/embedded-messaging/events/session\"].post"
+          },
+          {
+            "id": "iterable.rest.post.inAppConsume",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/events/inAppConsume",
+            "operation_id": "inAppConsume",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/inAppConsume\"].post"
+          },
+          {
+            "id": "iterable.rest.post.track",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/events/track",
+            "operation_id": "track",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/track\"].post"
+          },
+          {
+            "id": "iterable.rest.post.trackBulk",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/events/trackBulk",
+            "operation_id": "trackBulk",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/trackBulk\"].post"
+          },
+          {
+            "id": "iterable.rest.post.trackInAppClick",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/events/trackInAppClick",
+            "operation_id": "trackInAppClick",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/trackInAppClick\"].post"
+          },
+          {
+            "id": "iterable.rest.post.trackInAppClose",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/events/trackInAppClose",
+            "operation_id": "trackInAppClose",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/trackInAppClose\"].post"
+          },
+          {
+            "id": "iterable.rest.post.trackInAppDelivery",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/events/trackInAppDelivery",
+            "operation_id": "trackInAppDelivery",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/trackInAppDelivery\"].post"
+          },
+          {
+            "id": "iterable.rest.post.trackInAppOpen",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/events/trackInAppOpen",
+            "operation_id": "trackInAppOpen",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/trackInAppOpen\"].post"
+          },
+          {
+            "id": "iterable.rest.post.trackPushOpen",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/events/trackPushOpen",
+            "operation_id": "trackPushOpen",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/trackPushOpen\"].post"
+          },
+          {
+            "id": "iterable.rest.post.trackWebPushClick",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/events/trackWebPushClick",
+            "operation_id": "trackWebPushClick",
+            "deprecated": false,
+            "source_location": "paths[\"/api/events/trackWebPushClick\"].post"
+          },
+          {
+            "id": "iterable.rest.post.startExport",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/export/start",
+            "operation_id": "startExport",
+            "deprecated": false,
+            "source_location": "paths[\"/api/export/start\"].post"
+          },
+          {
+            "id": "iterable.rest.post.cancel.inapp-cancel",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inApp/cancel",
+            "operation_id": "cancel",
+            "deprecated": false,
+            "source_location": "paths[\"/api/inApp/cancel\"].post"
+          },
+          {
+            "id": "iterable.rest.post.target.inapp-target",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/inApp/target",
+            "operation_id": "target",
+            "deprecated": false,
+            "source_location": "paths[\"/api/inApp/target\"].post"
+          },
+          {
+            "id": "iterable.rest.post.create",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/lists",
+            "operation_id": "create",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists\"].post"
+          },
+          {
+            "id": "iterable.rest.post.subscribe",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/lists/subscribe",
+            "operation_id": "subscribe",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/subscribe\"].post"
+          },
+          {
+            "id": "iterable.rest.post.unsubscribe",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/lists/unsubscribe",
+            "operation_id": "unsubscribe",
+            "deprecated": false,
+            "source_location": "paths[\"/api/lists/unsubscribe\"].post"
+          },
+          {
+            "id": "iterable.rest.post.cancel.push-cancel",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/push/cancel",
+            "operation_id": "cancel",
+            "deprecated": false,
+            "source_location": "paths[\"/api/push/cancel\"].post"
+          },
+          {
+            "id": "iterable.rest.post.target.push-target",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/push/target",
+            "operation_id": "target",
+            "deprecated": false,
+            "source_location": "paths[\"/api/push/target\"].post"
+          },
+          {
+            "id": "iterable.rest.post.cancel.sms-cancel",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/sms/cancel",
+            "operation_id": "cancel",
+            "deprecated": false,
+            "source_location": "paths[\"/api/sms/cancel\"].post"
+          },
+          {
+            "id": "iterable.rest.post.target.sms-target",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/sms/target",
+            "operation_id": "target",
+            "deprecated": false,
+            "source_location": "paths[\"/api/sms/target\"].post"
+          },
+          {
+            "id": "iterable.rest.post.createSnippet",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/snippets",
+            "operation_id": "createSnippet",
+            "deprecated": false,
+            "source_location": "paths[\"/api/snippets\"].post"
+          },
+          {
+            "id": "iterable.rest.post.subscribeSingleUserToDoubleOptIn",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/subscriptions/subscribeToDoubleOptIn",
+            "operation_id": "subscribeSingleUserToDoubleOptIn",
+            "deprecated": false,
+            "source_location": "paths[\"/api/subscriptions/subscribeToDoubleOptIn\"].post"
+          },
+          {
+            "id": "iterable.rest.post.bulk_delete_templates",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/bulkDelete",
+            "operation_id": "bulk delete templates",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/bulkDelete\"].post"
+          },
+          {
+            "id": "iterable.rest.post.previewEmailTemplate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/email/preview",
+            "operation_id": "previewEmailTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/email/preview\"].post"
+          },
+          {
+            "id": "iterable.rest.post.emailProof",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/email/proof",
+            "operation_id": "emailProof",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/email/proof\"].post"
+          },
+          {
+            "id": "iterable.rest.post.updateEmailTemplate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/email/update",
+            "operation_id": "updateEmailTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/email/update\"].post"
+          },
+          {
+            "id": "iterable.rest.post.upsertEmailTemplate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/email/upsert",
+            "operation_id": "upsertEmailTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/email/upsert\"].post"
+          },
+          {
+            "id": "iterable.rest.post.updateEmbeddedTemplate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/embedded/update",
+            "operation_id": "updateEmbeddedTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/embedded/update\"].post"
+          },
+          {
+            "id": "iterable.rest.post.upsertEmbeddedTemplate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/embedded/upsert",
+            "operation_id": "upsertEmbeddedTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/embedded/upsert\"].post"
+          },
+          {
+            "id": "iterable.rest.post.previewInAppTemplate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/inapp/preview",
+            "operation_id": "previewInAppTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/inapp/preview\"].post"
+          },
+          {
+            "id": "iterable.rest.post.inappProof",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/inapp/proof",
+            "operation_id": "inappProof",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/inapp/proof\"].post"
+          },
+          {
+            "id": "iterable.rest.post.updateInAppTemplate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/inapp/update",
+            "operation_id": "updateInAppTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/inapp/update\"].post"
+          },
+          {
+            "id": "iterable.rest.post.upsertInAppTemplate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/inapp/upsert",
+            "operation_id": "upsertInAppTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/inapp/upsert\"].post"
+          },
+          {
+            "id": "iterable.rest.post.pushProof",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/push/proof",
+            "operation_id": "pushProof",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/push/proof\"].post"
+          },
+          {
+            "id": "iterable.rest.post.updatePushTemplate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/push/update",
+            "operation_id": "updatePushTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/push/update\"].post"
+          },
+          {
+            "id": "iterable.rest.post.upsertPushTemplate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/push/upsert",
+            "operation_id": "upsertPushTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/push/upsert\"].post"
+          },
+          {
+            "id": "iterable.rest.post.smsProof",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/sms/proof",
+            "operation_id": "smsProof",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/sms/proof\"].post"
+          },
+          {
+            "id": "iterable.rest.post.updateSMSTemplate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/sms/update",
+            "operation_id": "updateSMSTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/sms/update\"].post"
+          },
+          {
+            "id": "iterable.rest.post.upsertSMSTemplate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/sms/upsert",
+            "operation_id": "upsertSMSTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/api/templates/sms/upsert\"].post"
+          },
+          {
+            "id": "iterable.rest.post.bulkUpdateUser",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/bulkUpdate",
+            "operation_id": "bulkUpdateUser",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/bulkUpdate\"].post"
+          },
+          {
+            "id": "iterable.rest.post.bulkUpdateSubscriptions",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/bulkUpdateSubscriptions",
+            "operation_id": "bulkUpdateSubscriptions",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/bulkUpdateSubscriptions\"].post"
+          },
+          {
+            "id": "iterable.rest.post.disableDevice",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/disableDevice",
+            "operation_id": "disableDevice",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/disableDevice\"].post"
+          },
+          {
+            "id": "iterable.rest.post.forget",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/forget",
+            "operation_id": "forget",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/forget\"].post"
+          },
+          {
+            "id": "iterable.rest.post.mergeUsers",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/merge",
+            "operation_id": "mergeUsers",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/merge\"].post"
+          },
+          {
+            "id": "iterable.rest.post.registerBrowserToken",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/registerBrowserToken",
+            "operation_id": "registerBrowserToken",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/registerBrowserToken\"].post"
+          },
+          {
+            "id": "iterable.rest.post.registerDeviceToken",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/registerDeviceToken",
+            "operation_id": "registerDeviceToken",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/registerDeviceToken\"].post"
+          },
+          {
+            "id": "iterable.rest.post.unforget",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/unforget",
+            "operation_id": "unforget",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/unforget\"].post"
+          },
+          {
+            "id": "iterable.rest.post.updateUser",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/update",
+            "operation_id": "updateUser",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/update\"].post"
+          },
+          {
+            "id": "iterable.rest.post.updateEmail",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/updateEmail",
+            "operation_id": "updateEmail",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/updateEmail\"].post"
+          },
+          {
+            "id": "iterable.rest.post.updateSubscriptions",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/updateSubscriptions",
+            "operation_id": "updateSubscriptions",
+            "deprecated": false,
+            "source_location": "paths[\"/api/users/updateSubscriptions\"].post"
+          },
+          {
+            "id": "iterable.rest.post.beginSmsVerification",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/verify/sms/begin",
+            "operation_id": "beginSmsVerification",
+            "deprecated": false,
+            "source_location": "paths[\"/api/verify/sms/begin\"].post"
+          },
+          {
+            "id": "iterable.rest.post.checkSmsVerification",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/verify/sms/check",
+            "operation_id": "checkSmsVerification",
+            "deprecated": false,
+            "source_location": "paths[\"/api/verify/sms/check\"].post"
+          },
+          {
+            "id": "iterable.rest.post.updateWebhook",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/webhooks",
+            "operation_id": "updateWebhook",
+            "deprecated": false,
+            "source_location": "paths[\"/api/webhooks\"].post"
+          },
+          {
+            "id": "iterable.rest.post.cancel.webpush-cancel",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/webPush/cancel",
+            "operation_id": "cancel",
+            "deprecated": false,
+            "source_location": "paths[\"/api/webPush/cancel\"].post"
+          },
+          {
+            "id": "iterable.rest.post.target.webpush-target",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/webPush/target",
+            "operation_id": "target",
+            "deprecated": false,
+            "source_location": "paths[\"/api/webPush/target\"].post"
+          },
+          {
+            "id": "iterable.rest.post.cancel.whatsapp-cancel",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/whatsApp/cancel",
+            "operation_id": "cancel",
+            "deprecated": false,
+            "source_location": "paths[\"/api/whatsApp/cancel\"].post"
+          },
+          {
+            "id": "iterable.rest.post.target.whatsapp-target",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/whatsApp/target",
+            "operation_id": "target",
+            "deprecated": false,
+            "source_location": "paths[\"/api/whatsApp/target\"].post"
+          },
+          {
+            "id": "iterable.rest.post.triggerWorkflow",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/workflows/triggerWorkflow",
+            "operation_id": "triggerWorkflow",
+            "deprecated": false,
+            "source_location": "paths[\"/api/workflows/triggerWorkflow\"].post"
+          },
+          {
+            "id": "iterable.rest.put.updateFieldTypes",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/catalogs/{catalogName}/fieldMappings",
+            "operation_id": "updateFieldTypes",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalogs/{catalogName}/fieldMappings\"].put"
+          },
+          {
+            "id": "iterable.rest.put.indexCatalogItem",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/catalogs/{catalogName}/items/{itemId}",
+            "operation_id": "indexCatalogItem",
+            "deprecated": false,
+            "source_location": "paths[\"/api/catalogs/{catalogName}/items/{itemId}\"].put"
+          },
+          {
+            "id": "iterable.rest.put.put",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/metadata/{table}/{key}",
+            "operation_id": "put",
+            "deprecated": false,
+            "source_location": "paths[\"/api/metadata/{table}/{key}\"].put"
+          },
+          {
+            "id": "iterable.rest.put.updateSnippet",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/snippets/{identifier}",
+            "operation_id": "updateSnippet",
+            "deprecated": false,
+            "source_location": "paths[\"/api/snippets/{identifier}\"].put"
+          },
+          {
+            "id": "iterable.rest.put.Bulk_subscription_action",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/subscriptions/{subscriptionGroup}/{subscriptionGroupId}",
+            "operation_id": "Bulk subscription action",
+            "deprecated": false,
+            "source_location": "paths[\"/api/subscriptions/{subscriptionGroup}/{subscriptionGroupId}\"].put"
+          }
+        ]
       }
     ]
   },

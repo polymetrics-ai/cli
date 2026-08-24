@@ -141,6 +141,14 @@ or byte count was rewritten.
 
 The machine-readable state is [`SOURCE-LOCK-MIGRATION-READINESS.json`](SOURCE-LOCK-MIGRATION-READINESS.json).
 
+The next retained-source imports found two more genuine shared contract refusals. Iterable's
+`POST /api/auth/jwts/invalidate` parameter 0 and Gorgias's `POST /api/account/settings`
+`application/json` body both use documented objects with dynamic `additionalProperties`.
+`validateBoundedRequestSchemaWithinEnum` refuses them before either descriptor can be emitted.
+The smallest safe foundation is a per-operation non-executable source-contract disposition for
+open request shapes, preserving every other operation in the descriptor; a connector-local
+closed object would invent a provider contract.
+
 ## Relaunch baseline and CI repair — 2026-08-20
 
 - **RED:** PR run `32283259925` failed `TestGorgiasAPISurfaceOperationLedger`: the recovered v2
