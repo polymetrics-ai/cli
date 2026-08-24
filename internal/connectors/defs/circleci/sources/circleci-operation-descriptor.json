@@ -6,6 +6,7 @@
       "protocol": "rest",
       "source_id": "deleteContext",
       "operation_id": "deleteContext",
+      "summary": "Delete a context",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -301,6 +302,7 @@
       "protocol": "rest",
       "source_id": "deleteEnvironmentVariableFromContext",
       "operation_id": "deleteEnvironmentVariableFromContext",
+      "summary": "Remove an environment variable",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -604,6 +606,7 @@
       "protocol": "rest",
       "source_id": "deleteContextRestriction",
       "operation_id": "deleteContextRestriction",
+      "summary": "Delete context restriction",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -934,6 +937,7 @@
       "protocol": "rest",
       "source_id": "DeleteOrgClaims",
       "operation_id": "DeleteOrgClaims",
+      "summary": "Delete org-level claims",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -1185,6 +1189,7 @@
       "protocol": "rest",
       "source_id": "DeleteProjectClaims",
       "operation_id": "DeleteProjectClaims",
+      "summary": "Delete project-level claims",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -1445,6 +1450,7 @@
       "protocol": "rest",
       "source_id": "deleteOrganization",
       "operation_id": "deleteOrganization",
+      "summary": "Delete an organization",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -1606,6 +1612,7 @@
       "protocol": "rest",
       "source_id": "removeURLOrbAllowListEntry",
       "operation_id": "removeURLOrbAllowListEntry",
+      "summary": "Remove an entry from the org's URL orb allow-list",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -1780,6 +1787,7 @@
       "protocol": "rest",
       "source_id": "deleteGroup",
       "operation_id": "deleteGroup",
+      "summary": "Delete a group",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -2077,6 +2085,7 @@
       "protocol": "rest",
       "source_id": "deleteOtelExporter",
       "operation_id": "deleteOtelExporter",
+      "summary": "🧪 Delete an OTLP exporter",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -2344,6 +2353,7 @@
       "protocol": "rest",
       "source_id": "deleteProjectBySlug",
       "operation_id": "deleteProjectBySlug",
+      "summary": "Delete a project",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -2507,6 +2517,7 @@
       "protocol": "rest",
       "source_id": "deleteCheckoutKey",
       "operation_id": "deleteCheckoutKey",
+      "summary": "Delete a checkout key",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -2678,6 +2689,7 @@
       "protocol": "rest",
       "source_id": "deleteEnvVar",
       "operation_id": "deleteEnvVar",
+      "summary": "Delete an environment variable",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -2849,6 +2861,7 @@
       "protocol": "rest",
       "source_id": "deletePipelineDefinition",
       "operation_id": "deletePipelineDefinition",
+      "summary": "Delete pipeline definition",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -3145,6 +3158,7 @@
       "protocol": "rest",
       "source_id": "deleteTrigger",
       "operation_id": "deleteTrigger",
+      "summary": "Delete trigger",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -3441,6 +3455,7 @@
       "protocol": "rest",
       "source_id": "deleteScheduleById",
       "operation_id": "deleteScheduleById",
+      "summary": "Delete a schedule",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -3603,6 +3618,7 @@
       "protocol": "rest",
       "source_id": "deleteWebhook",
       "operation_id": "deleteWebhook",
+      "summary": "Delete an outbound webhook",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -3895,6 +3911,7 @@
       "protocol": "rest",
       "source_id": "listContexts",
       "operation_id": "listContexts",
+      "summary": "List contexts",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -4249,6 +4266,7 @@
       "protocol": "rest",
       "source_id": "getContext",
       "operation_id": "getContext",
+      "summary": "Get a context",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -4563,6 +4581,7 @@
       "protocol": "rest",
       "source_id": "listEnvironmentVariablesFromContext",
       "operation_id": "listEnvironmentVariablesFromContext",
+      "summary": "List environment variables",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -4911,6 +4930,7 @@
       "protocol": "rest",
       "source_id": "getContextRestrictions",
       "operation_id": "getContextRestrictions",
+      "summary": "Get context restrictions",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -5275,6 +5295,7 @@
       "protocol": "rest",
       "source_id": "listComponents",
       "operation_id": "listComponents",
+      "summary": "List Components",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -5626,6 +5647,7 @@
       "protocol": "rest",
       "source_id": "getComponent",
       "operation_id": "getComponent",
+      "summary": "Get Component",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -5935,6 +5957,7 @@
       "protocol": "rest",
       "source_id": "listComponentVersions",
       "operation_id": "listComponentVersions",
+      "summary": "List Component Versions",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -6267,6 +6290,7 @@
       "protocol": "rest",
       "source_id": "listEnvironments",
       "operation_id": "listEnvironments",
+      "summary": "List Environments",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -6602,6 +6626,7 @@
       "protocol": "rest",
       "source_id": "getEnvironment",
       "operation_id": "getEnvironment",
+      "summary": "Get Environment",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -6905,6 +6930,7 @@
       "protocol": "rest",
       "source_id": "getProjectWorkflowsPageData",
       "operation_id": "getProjectWorkflowsPageData",
+      "summary": "Get summary metrics and trends for a project across it's workflows and branches",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -7384,6 +7410,7 @@
       "protocol": "rest",
       "source_id": "getJobTimeseries",
       "operation_id": "getJobTimeseries",
+      "summary": "Job timeseries data",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -7736,6 +7763,7 @@
       "protocol": "rest",
       "source_id": "getOrgSummaryData",
       "operation_id": "getOrgSummaryData",
+      "summary": "Get summary metrics with trends for the entire org, and for each project.",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -8106,6 +8134,7 @@
       "protocol": "rest",
       "source_id": "getAllInsightsBranches",
       "operation_id": "getAllInsightsBranches",
+      "summary": "Get all branches for a project",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -8297,6 +8326,7 @@
       "protocol": "rest",
       "source_id": "getFlakyTests",
       "operation_id": "getFlakyTests",
+      "summary": "Get flaky tests for a project",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -8572,6 +8602,7 @@
       "protocol": "rest",
       "source_id": "getProjectWorkflowMetrics",
       "operation_id": "getProjectWorkflowMetrics",
+      "summary": "Get summary metrics for a project's workflows",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -8939,6 +8970,7 @@
       "protocol": "rest",
       "source_id": "getProjectWorkflowRuns",
       "operation_id": "getProjectWorkflowRuns",
+      "summary": "Get recent runs of a workflow",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -9233,6 +9265,7 @@
       "protocol": "rest",
       "source_id": "getProjectWorkflowJobMetrics",
       "operation_id": "getProjectWorkflowJobMetrics",
+      "summary": "Get summary metrics for a project workflow's jobs.",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -9594,6 +9627,7 @@
       "protocol": "rest",
       "source_id": "getWorkflowSummary",
       "operation_id": "getWorkflowSummary",
+      "summary": "Get metrics and trends for workflows",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -9981,6 +10015,7 @@
       "protocol": "rest",
       "source_id": "getProjectWorkflowTestMetrics",
       "operation_id": "getProjectWorkflowTestMetrics",
+      "summary": "Get test metrics for a project's workflows",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -10403,6 +10438,7 @@
       "protocol": "rest",
       "source_id": "getJob",
       "operation_id": "getJob",
+      "summary": "Get a job",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -10768,6 +10804,7 @@
       "protocol": "rest",
       "source_id": "getCurrentUser",
       "operation_id": "getCurrentUser",
+      "summary": "User Information",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -10944,6 +10981,7 @@
       "protocol": "rest",
       "source_id": "getCollaborations",
       "operation_id": "getCollaborations",
+      "summary": "Collaborations",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -11127,6 +11165,7 @@
       "protocol": "rest",
       "source_id": "GetOrgClaims",
       "operation_id": "GetOrgClaims",
+      "summary": "Get org-level claims",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -11376,6 +11415,7 @@
       "protocol": "rest",
       "source_id": "GetProjectClaims",
       "operation_id": "GetProjectClaims",
+      "summary": "Get project-level claims",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -11634,6 +11674,7 @@
       "protocol": "rest",
       "source_id": "getOrganization",
       "operation_id": "getOrganization",
+      "summary": "Get an organization",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -11821,6 +11862,7 @@
       "protocol": "rest",
       "source_id": "listURLOrbAllowListEntries",
       "operation_id": "listURLOrbAllowListEntries",
+      "summary": "List the entries in the org's URL Orb allow-list",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -12022,6 +12064,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationGroups",
       "operation_id": "getOrganizationGroups",
+      "summary": "Groups in an organization",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -12336,6 +12379,7 @@
       "protocol": "rest",
       "source_id": "getGroup",
       "operation_id": "getGroup",
+      "summary": "A group in an organization",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -12616,6 +12660,7 @@
       "protocol": "rest",
       "source_id": "getUsageExport",
       "operation_id": "getUsageExport",
+      "summary": "Get a usage export",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -12972,6 +13017,7 @@
       "protocol": "rest",
       "source_id": "listOtelExporters",
       "operation_id": "listOtelExporters",
+      "summary": "🧪 List OTLP exporters",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -13320,6 +13366,7 @@
       "protocol": "rest",
       "source_id": "GetDecisionLogs",
       "operation_id": "GetDecisionLogs",
+      "summary": "Retrieves the owner's decision audit logs.",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -13749,6 +13796,7 @@
       "protocol": "rest",
       "source_id": "GetDecisionSettings",
       "operation_id": "GetDecisionSettings",
+      "summary": "Get the decision settings",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -14007,6 +14055,7 @@
       "protocol": "rest",
       "source_id": "GetDecisionLog",
       "operation_id": "GetDecisionLog",
+      "summary": "Retrieves the owner's decision audit log by given decisionID",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -14410,6 +14459,7 @@
       "protocol": "rest",
       "source_id": "GetDecisionLogPolicyBundle",
       "operation_id": "GetDecisionLogPolicyBundle",
+      "summary": "Retrieves Policy Bundle for a given decision log ID",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -14719,6 +14769,7 @@
       "protocol": "rest",
       "source_id": "GetPolicyBundle",
       "operation_id": "GetPolicyBundle",
+      "summary": "Retrieves Policy Bundle",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -14992,6 +15043,7 @@
       "protocol": "rest",
       "source_id": "GetPolicyDocument",
       "operation_id": "GetPolicyDocument",
+      "summary": "Retrieves a policy document",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -15296,6 +15348,7 @@
       "protocol": "rest",
       "source_id": "listPipelines",
       "operation_id": "listPipelines",
+      "summary": "Get a list of pipelines",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -15746,6 +15799,7 @@
       "protocol": "rest",
       "source_id": "getPipelineById",
       "operation_id": "getPipelineById",
+      "summary": "Get a pipeline by ID",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -16160,6 +16214,7 @@
       "protocol": "rest",
       "source_id": "getPipelineConfigById",
       "operation_id": "getPipelineConfigById",
+      "summary": "Get a pipeline's configuration",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -16342,6 +16397,7 @@
       "protocol": "rest",
       "source_id": "listWorkflowsByPipelineId",
       "operation_id": "listWorkflowsByPipelineId",
+      "summary": "Get a pipeline's workflows",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -16644,6 +16700,7 @@
       "protocol": "rest",
       "source_id": "getPipelineValuesById",
       "operation_id": "getPipelineValuesById",
+      "summary": "Get pipeline values for a pipeline",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -16940,6 +16997,7 @@
       "protocol": "rest",
       "source_id": "getProjectBySlug",
       "operation_id": "getProjectBySlug",
+      "summary": "Get a project",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -17171,6 +17229,7 @@
       "protocol": "rest",
       "source_id": "listCheckoutKeys",
       "operation_id": "listCheckoutKeys",
+      "summary": "Get all checkout keys",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -17403,6 +17462,7 @@
       "protocol": "rest",
       "source_id": "getCheckoutKey",
       "operation_id": "getCheckoutKey",
+      "summary": "Get a checkout key",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -17612,6 +17672,7 @@
       "protocol": "rest",
       "source_id": "listEnvVars",
       "operation_id": "listEnvVars",
+      "summary": "List all environment variables",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -17812,6 +17873,7 @@
       "protocol": "rest",
       "source_id": "getEnvVar",
       "operation_id": "getEnvVar",
+      "summary": "Get a masked environment variable",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -18002,6 +18064,7 @@
       "protocol": "rest",
       "source_id": "listPipelinesForProject",
       "operation_id": "listPipelinesForProject",
+      "summary": "Get all pipelines",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -18458,6 +18521,7 @@
       "protocol": "rest",
       "source_id": "listMyPipelines",
       "operation_id": "listMyPipelines",
+      "summary": "Get your pipelines",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -18904,6 +18968,7 @@
       "protocol": "rest",
       "source_id": "getPipelineByNumber",
       "operation_id": "getPipelineByNumber",
+      "summary": "Get a pipeline by pipeline number",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -19325,6 +19390,7 @@
       "protocol": "rest",
       "source_id": "listSchedulesForProject",
       "operation_id": "listSchedulesForProject",
+      "summary": "List schedule triggers",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -19759,6 +19825,7 @@
       "protocol": "rest",
       "source_id": "getProjectSettings",
       "operation_id": "getProjectSettings",
+      "summary": "Get project settings",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -20111,6 +20178,7 @@
       "protocol": "rest",
       "source_id": "listPipelineDefinitions",
       "operation_id": "listPipelineDefinitions",
+      "summary": "List pipeline definitions",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -20493,6 +20561,7 @@
       "protocol": "rest",
       "source_id": "getPipelineDefinition",
       "operation_id": "getPipelineDefinition",
+      "summary": "Get pipeline definition",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -20874,6 +20943,7 @@
       "protocol": "rest",
       "source_id": "listPipelineDefinitionTriggers",
       "operation_id": "listPipelineDefinitionTriggers",
+      "summary": "List pipeline definition triggers",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -21306,6 +21376,7 @@
       "protocol": "rest",
       "source_id": "getTrigger",
       "operation_id": "getTrigger",
+      "summary": "Get trigger",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -21729,6 +21800,7 @@
       "protocol": "rest",
       "source_id": "getScheduleById",
       "operation_id": "getScheduleById",
+      "summary": "Get a schedule by ID. Available only on schedules associated with GitHub OAuth or Bitbucket Cloud pipeline definitions.",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -22133,6 +22205,7 @@
       "protocol": "rest",
       "source_id": "getUser",
       "operation_id": "getUser",
+      "summary": "User Information",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -22319,6 +22392,7 @@
       "protocol": "rest",
       "source_id": "getWebhooks",
       "operation_id": "getWebhooks",
+      "summary": "List webhooks",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -22695,6 +22769,7 @@
       "protocol": "rest",
       "source_id": "getWebhookById",
       "operation_id": "getWebhookById",
+      "summary": "Get a webhook",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -23084,6 +23159,7 @@
       "protocol": "rest",
       "source_id": "getWorkflowById",
       "operation_id": "getWorkflowById",
+      "summary": "Get a workflow",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -23524,6 +23600,7 @@
       "protocol": "rest",
       "source_id": "listWorkflowJobs",
       "operation_id": "listWorkflowJobs",
+      "summary": "Get a workflow's jobs",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -23837,6 +23914,7 @@
       "protocol": "rest",
       "source_id": "PatchOrgClaims",
       "operation_id": "PatchOrgClaims",
+      "summary": "Patch org-level claims",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -24105,6 +24183,7 @@
       "protocol": "rest",
       "source_id": "PatchProjectClaims",
       "operation_id": "PatchProjectClaims",
+      "summary": "Patch project-level claims",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -24382,6 +24461,7 @@
       "protocol": "rest",
       "source_id": "SetDecisionSettings",
       "operation_id": "SetDecisionSettings",
+      "summary": "Set the decision settings",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -24652,6 +24732,7 @@
       "protocol": "rest",
       "source_id": "patchProjectSettings",
       "operation_id": "patchProjectSettings",
+      "summary": "Update project settings",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -25124,6 +25205,7 @@
       "protocol": "rest",
       "source_id": "updatePipelineDefinition",
       "operation_id": "updatePipelineDefinition",
+      "summary": "Update pipeline definition",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -25553,6 +25635,7 @@
       "protocol": "rest",
       "source_id": "updateTrigger",
       "operation_id": "updateTrigger",
+      "summary": "Update trigger",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -26072,6 +26155,7 @@
       "protocol": "rest",
       "source_id": "updateSchedule",
       "operation_id": "updateSchedule",
+      "summary": "Update a schedule",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -26594,6 +26678,7 @@
       "protocol": "rest",
       "source_id": "createContext",
       "operation_id": "createContext",
+      "summary": "Create a new context",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -26964,6 +27049,7 @@
       "protocol": "rest",
       "source_id": "createContextRestriction",
       "operation_id": "createContextRestriction",
+      "summary": "Create context restriction",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -27399,6 +27485,7 @@
       "protocol": "rest",
       "source_id": "cancelJobByJobID",
       "operation_id": "cancelJobByJobID",
+      "summary": "Cancel job by job ID",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -27681,6 +27768,7 @@
       "protocol": "rest",
       "source_id": "createOrganization",
       "operation_id": "createOrganization",
+      "summary": "Create a new organization",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -27886,6 +27974,7 @@
       "protocol": "rest",
       "source_id": "createProject",
       "operation_id": "createProject",
+      "summary": "Create a new project",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -28132,6 +28221,7 @@
       "protocol": "rest",
       "source_id": "createURLOrbAllowListEntry",
       "operation_id": "createURLOrbAllowListEntry",
+      "summary": "Create a new URL Orb allow-list entry",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -28339,6 +28429,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationGroup",
       "operation_id": "createOrganizationGroup",
+      "summary": "Create Groups",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -28731,6 +28822,7 @@
       "protocol": "rest",
       "source_id": "createUsageExport",
       "operation_id": "createUsageExport",
+      "summary": "Create a usage export",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -29110,6 +29202,7 @@
       "protocol": "rest",
       "source_id": "createOtelExporter",
       "operation_id": "createOtelExporter",
+      "summary": "🧪 Create an OTLP exporter",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -29516,6 +29609,7 @@
       "protocol": "rest",
       "source_id": "MakeDecision",
       "operation_id": "MakeDecision",
+      "summary": "Makes a decision",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -29812,6 +29906,7 @@
       "protocol": "rest",
       "source_id": "CreatePolicyBundle",
       "operation_id": "CreatePolicyBundle",
+      "summary": "Creates policy bundle for the context",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -30188,6 +30283,7 @@
       "protocol": "rest",
       "source_id": "continuePipeline",
       "operation_id": "continuePipeline",
+      "summary": "Continue a pipeline",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -30389,6 +30485,7 @@
       "protocol": "rest",
       "source_id": "createCheckoutKey",
       "operation_id": "createCheckoutKey",
+      "summary": "Create a new checkout key",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -30613,6 +30710,7 @@
       "protocol": "rest",
       "source_id": "createEnvVar",
       "operation_id": "createEnvVar",
+      "summary": "Create an environment variable",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -30820,6 +30918,7 @@
       "protocol": "rest",
       "source_id": "cancelJobByJobNumber",
       "operation_id": "cancelJobByJobNumber",
+      "summary": "Cancel job by job number",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -30996,6 +31095,7 @@
       "protocol": "rest",
       "source_id": "triggerPipeline",
       "operation_id": "triggerPipeline",
+      "summary": "Trigger a new pipeline",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -31235,6 +31335,7 @@
       "protocol": "rest",
       "source_id": "createSchedule",
       "operation_id": "createSchedule",
+      "summary": "Create a schedule",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -31845,6 +31946,7 @@
       "protocol": "rest",
       "source_id": "triggerPipelineRun",
       "operation_id": "triggerPipelineRun",
+      "summary": "[Recommended] Trigger a new pipeline",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -32253,6 +32355,7 @@
       "protocol": "rest",
       "source_id": "createPipelineDefinition",
       "operation_id": "createPipelineDefinition",
+      "summary": "Create pipeline definition",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -32752,6 +32855,7 @@
       "protocol": "rest",
       "source_id": "createTrigger",
       "operation_id": "createTrigger",
+      "summary": "Create trigger",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -33397,6 +33501,7 @@
       "protocol": "rest",
       "source_id": "rollbackProject",
       "operation_id": "rollbackProject",
+      "summary": "Rollback a project",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -33743,6 +33848,7 @@
       "protocol": "rest",
       "source_id": "createWebhook",
       "operation_id": "createWebhook",
+      "summary": "Create an outbound webhook",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -34157,6 +34263,7 @@
       "protocol": "rest",
       "source_id": "approvePendingApprovalJobById",
       "operation_id": "approvePendingApprovalJobById",
+      "summary": "Approve a job",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -34328,6 +34435,7 @@
       "protocol": "rest",
       "source_id": "cancelWorkflow",
       "operation_id": "cancelWorkflow",
+      "summary": "Cancel a workflow",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -34490,6 +34598,7 @@
       "protocol": "rest",
       "source_id": "rerunWorkflow",
       "operation_id": "rerunWorkflow",
+      "summary": "Rerun a workflow",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -34699,6 +34808,7 @@
       "protocol": "rest",
       "source_id": "addEnvironmentVariableToContext",
       "operation_id": "addEnvironmentVariableToContext",
+      "summary": "Add or update an environment variable",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
@@ -35059,6 +35169,7 @@
       "protocol": "rest",
       "source_id": "updateWebhook",
       "operation_id": "updateWebhook",
+      "summary": "Update an outbound webhook",
       "source": {
         "url": "https://circleci.com/api/v2/openapi.json",
         "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",

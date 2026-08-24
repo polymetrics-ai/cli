@@ -62,6 +62,36 @@
   `surface-sync --check` remains blocked by Docker Hub's absent canonical
   descriptor and is not altered by this slice.
 
+### 2026-08-25 CircleCI source-descriptor refresh
+
+- **Red:** `go run ./cmd/connectorgen source-import circleci --check` reports
+  descriptor projection drift while `connectorgen validate` is clean. A
+  temporary, source-lock-derived descriptor has the same 111 operations and
+  retained source artifact identity; its only semantic addition is each
+  provider operation summary.
+- **Green:** re-run source import against the pinned CircleCI artifact without
+  changing the lock, command surface, or actions. The descriptor check and
+  targeted validation must pass, and the pre-existing executable commands must
+  remain executable at the credential boundary. Do not fabricate additional
+  actions for the 83 source-cited merge-blocked operations.
+- **Green result:** the refresh added exactly 111 source-provider summaries to
+  the descriptor. `source-import circleci --check` verified all 111 operations
+  and `connectorgen validate internal/connectors/defs/circleci` found zero
+  findings. A fresh built binary, isolated project, and sequential 43-command
+  sweep produced exactly `error: missing --credential` for every implemented
+  CircleCI command; none was unknown and no field values or credentials were
+  supplied.
+- **Recorded foundation gap, not a wait:** CircleCI's provider schema describes
+  `signing-secret` as a secret in the `createWebhook` and `updateWebhook`
+  descriptions (`sources/circleci-operation-descriptor.json:33921-33925` and
+  `:35226-35230`) but omits the machine-readable `x-secret` marker. The two
+  existing actions redact it, while source projection makes an `env_only` flag
+  only when `sourceProjectionDeclaredSecret` sees `x-secret`
+  (`cmd/connectorgen/sourceprojection.go:2162-2177`), so a connector-local
+  flag edit would be regenerated away. Both commands remain credential-bound
+  and working; source-aware secret classification is a shared foundation gap,
+  not a reason to downgrade or remove them.
+
 ### 2026-08-24 Asana red/green split
 
 - **Red:** `go run ./cmd/connectorgen source-import asana --check` reports 25
