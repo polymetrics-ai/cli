@@ -30,6 +30,27 @@ error response remains irrecoverable and is never re-pinned.
 - Zoom accounts: the historic dated URL returned HTTP 404 / 8,329 bytes. Elasticsearch: the historic URL returned HTTP 200 / 6,458,837 bytes versus the lock's 6,458,869 bytes. An exact SHA-256/length scan across every reachable Git blob found no matching historical copy for either artifact.
 - The engine tests prove a correct retained copy would permit both cases to import without contacting the provider. They cannot truthfully claim recovery of the real historic Zoom bytes, because those bytes are not present. Elasticsearch is eligible only for Firstmate's documented re-pin path after real-document classification. `LANE-ADOPTION.md` gives each lane's next exact step; this branch does not import their unmerged connector files under Firstmate inbox 004.
 
+## Post-PR main rollups and unavailable-source regression
+
+- Merged `origin/main` at `1b893f348` and then `72fe0ba88` into this branch.
+  The first merge had one `sourceimport_test.go` documentation-contract conflict;
+  the resolved assertion preserves both retained-artifact and request-bound
+  documentation requirements. No generated projection conflicted.
+- Red: `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportReportsUnavailableSourceBeforeRequiringRetainedManifest$' -count=1` failed because an all-unavailable v3 Zoom lock stopped at a missing retained-artifact manifest instead of its immutable unavailable reason.
+- Green: the same command passed in 1.282s after `source-import` bypassed the
+  retained-reader constructor only for a lock with no actual provider artifact;
+  the defensive fetcher cannot make a network request. Any lock with an
+  artifact still requires the retained reader.
+- `go test -timeout 20m ./cmd/connectorgen -count=1` — passed in 338.364s on
+  the `72fe0ba88` rollup base.
+- The first post-rollup `go run ./cmd/connectorgen source-import github --check`
+  correctly found 18 derived CLI projection changes. Ran the canonical
+  `go run ./cmd/connectorgen source-import github` generator (writes=0,
+  cli=18), then re-ran `source-import github --check`,
+  `make connectorgen-surface-sync`, and `make connectorgen-validate`; all
+  passed (553 connectors, zero validation findings).
+- `go vet ./...` and `make lint` — passed after the rollups and regeneration.
+
 ## Inline GSD lifecycle
 
 - Resolved and applied inline due to the task's no-role-spawning contract: `scripts/gsd doctor`; `scripts/gsd sources discuss-phase`, `plan-phase`, `execute-phase`, `verify-work`, and `code-review`; `scripts/gsd prompt discuss-phase 4347`, `plan-phase 4347 --tdd`, `execute-phase 4347`, `verify-work 4347`, and `code-review 4347`.

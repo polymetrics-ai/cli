@@ -44,3 +44,8 @@ in `VERIFICATION.md`.
 - **Lane handoff, not a foundation blocker:** Elasticsearch must perform its
   own Firstmate-authorized re-pin/retain; Zoom must record the accounts source
   as irrecoverable rather than pin its 404 body. See `LANE-ADOPTION.md`.
+- **Resolved after main rollup — unavailable source terminal order:** a v3
+  all-unavailable lock no longer reports a missing retained manifest before its
+  immutable unavailable reason. The new red/green regression proves that no
+  retained-reader or provider path runs first; artifact-bearing locks retain
+  the mandatory reader path.

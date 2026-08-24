@@ -1326,8 +1326,13 @@
     {
       "method": "GET",
       "path": "/advisories",
-      "covered_by": {
-        "direct_read": "security-advisories list-global-advisories"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation security-advisories/list-global-advisories has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=security-advisories/list-global-advisories"
       }
     },
     {
@@ -1340,8 +1345,13 @@
     {
       "method": "GET",
       "path": "/agents/repos/{owner}/{repo}/tasks",
-      "covered_by": {
-        "direct_read": "agent-tasks list-tasks-for-repo"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation agent-tasks/list-tasks-for-repo has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=agent-tasks/list-tasks-for-repo"
       }
     },
     {
@@ -1581,8 +1591,13 @@
     {
       "method": "GET",
       "path": "/enterprises/{enterprise}/dependabot/alerts",
-      "covered_by": {
-        "direct_read": "dependabot list-alerts-for-enterprise"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation dependabot/list-alerts-for-enterprise has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=dependabot/list-alerts-for-enterprise"
       }
     },
     {
@@ -2506,8 +2521,13 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/dependabot/alerts",
-      "covered_by": {
-        "direct_read": "dependabot list-alerts-for-org"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation dependabot/list-alerts-for-org has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=dependabot/list-alerts-for-org"
       }
     },
     {
@@ -2604,15 +2624,25 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/insights/api/route-stats/{actor_type}/{actor_id}",
-      "covered_by": {
-        "direct_read": "api-insights get-route-stats-by-actor"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation api-insights/get-route-stats-by-actor has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=api-insights/get-route-stats-by-actor"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/insights/api/subject-stats",
-      "covered_by": {
-        "direct_read": "api-insights get-subject-stats"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation api-insights/get-subject-stats has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=api-insights/get-subject-stats"
       }
     },
     {
@@ -2660,8 +2690,13 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/insights/api/user-stats/{user_id}",
-      "covered_by": {
-        "direct_read": "api-insights get-user-stats"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation api-insights/get-user-stats has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=api-insights/get-user-stats"
       }
     },
     {
@@ -2767,15 +2802,25 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/migrations",
-      "covered_by": {
-        "direct_read": "migrations list-for-org"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation migrations/list-for-org has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=migrations/list-for-org"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/migrations/{migration_id}",
-      "covered_by": {
-        "direct_read": "migrations get-status-for-org"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation migrations/get-status-for-org has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=migrations/get-status-for-org"
       }
     },
     {
@@ -2858,8 +2903,13 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/personal-access-token-requests",
-      "covered_by": {
-        "direct_read": "orgs list-pat-grant-requests"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation orgs/list-pat-grant-requests has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=orgs/list-pat-grant-requests"
       }
     },
     {
@@ -2872,8 +2922,13 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/personal-access-tokens",
-      "covered_by": {
-        "direct_read": "orgs list-pat-grants"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation orgs/list-pat-grants has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=orgs/list-pat-grants"
       }
     },
     {
@@ -2935,22 +2990,37 @@
     {
       "method": "GET",
       "path": "/orgs/{org}/projectsV2/{project_number}/items",
-      "covered_by": {
-        "direct_read": "projects list-items-for-org"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation projects/list-items-for-org has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=projects/list-items-for-org"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/projectsV2/{project_number}/items/{item_id}",
-      "covered_by": {
-        "direct_read": "projects get-org-item"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation projects/get-org-item has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=projects/get-org-item"
       }
     },
     {
       "method": "GET",
       "path": "/orgs/{org}/projectsV2/{project_number}/views/{view_number}/items",
-      "covered_by": {
-        "direct_read": "projects list-view-items-for-org"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation projects/list-view-items-for-org has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=projects/list-view-items-for-org"
       }
     },
     {
@@ -5841,8 +5911,13 @@
     {
       "method": "GET",
       "path": "/user/migrations/{migration_id}",
-      "covered_by": {
-        "direct_read": "migrations get-status-for-authenticated-user"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation migrations/get-status-for-authenticated-user has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=migrations/get-status-for-authenticated-user"
       }
     },
     {
@@ -6177,22 +6252,37 @@
     {
       "method": "GET",
       "path": "/users/{username}/projectsV2/{project_number}/items",
-      "covered_by": {
-        "direct_read": "projects list-items-for-user"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation projects/list-items-for-user has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=projects/list-items-for-user"
       }
     },
     {
       "method": "GET",
       "path": "/users/{username}/projectsV2/{project_number}/items/{item_id}",
-      "covered_by": {
-        "direct_read": "projects get-user-item"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation projects/get-user-item has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=projects/get-user-item"
       }
     },
     {
       "method": "GET",
       "path": "/users/{username}/projectsV2/{project_number}/views/{view_number}/items",
-      "covered_by": {
-        "direct_read": "projects list-view-items-for-user"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation projects/list-view-items-for-user has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=projects/list-view-items-for-user"
       }
     },
     {

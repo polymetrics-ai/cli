@@ -8348,12 +8348,21 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import:", err)
 		return 1
 	}
-	if fetcher == nil {
+	if fetcher == nil && sourceImportLockRequiresRetainedArtifact(lock) {
 		fetcher, err = newConnectorSourceImportRetainedArtifactFetcher(opts.DefsDir, opts.Connector, defaultSourceImportLimits())
 		if err != nil {
 			logln(stderr, "connectorgen source-import:", err)
 			return 1
 		}
+	}
+	if fetcher == nil {
+		// A v3 lock made entirely of explicitly unavailable documents has no
+		// provider bytes to retain. importSourceLockResult reports that terminal
+		// provenance state before it can call this defensive fetcher; installing
+		// it preserves the no-network invariant if that ordering ever changes.
+		fetcher = sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+			return nil, fmt.Errorf("source import reached a lock with no retainable artifact")
+		})
 	}
 	result, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
 	if err != nil {
@@ -8407,6 +8416,22 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 	}
 	logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) imported; source projection updated writes=%d cli=%d", opts.Connector, len(result.Operations), len(result.InboundEvents), projection.Writes, projection.CLI))
 	return 0
+}
+
+// sourceImportLockRequiresRetainedArtifact distinguishes a terminal,
+// explicitly unavailable v3 source inventory from an artifact-bearing lock.
+// Every actual artifact remains mandatory and is therefore served only by the
+// connector-owned retained reader during normal source-import execution.
+func sourceImportLockRequiresRetainedArtifact(lock sourceImportLock) bool {
+	if lock.SchemaVersion < 3 {
+		return true
+	}
+	for _, document := range lock.Rest.SourceDocuments {
+		if !document.isUnavailable() {
+			return true
+		}
+	}
+	return len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) > 0
 }
 
 func parseSourceImportOptions(args []string) (sourceImportOptions, error) {

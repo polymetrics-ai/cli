@@ -5,6 +5,9 @@
 Implemented and locally verified for the current-main GitHub lock. The branch
 retains 14,471,636 raw bytes (12,920,264 REST + 1,551,372 GraphQL) under the
 connector-owned tracked mirror; `source-import github --check` is hermetic.
+It now includes `origin/main` through `72fe0ba88`; canonical source-import
+regenerated the 18 resulting GitHub CLI projection changes, and the check is
+green again.
 
 ## Blocking data requirement
 
@@ -15,3 +18,10 @@ separate connector lane and must do the same in its own PR. Zoom accounts is an
 HTTP-404 error response, not re-pin material, and is irrecoverable unless its
 historic raw bytes turn up elsewhere. Firstmate inbox 004 prohibits importing
 those lane files here; `LANE-ADOPTION.md` records the precise adoption work.
+
+## Explicit unavailable state
+
+An all-unavailable v3 source lock now reaches its declared terminal cause
+without requiring a nonexistent retained-artifact manifest. This keeps Zoom
+accounts honestly irrecoverable (HTTP 404/no verified historic copy) while
+preserving mandatory retained copies for every actual source artifact.

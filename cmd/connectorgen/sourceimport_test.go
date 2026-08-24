@@ -1205,6 +1205,45 @@ func TestSourceImportCommandReadsConnectorOwnedRetainedArtifact(t *testing.T) {
 	}
 }
 
+func TestSourceImportReportsUnavailableSourceBeforeRequiringRetainedManifest(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	sourcesDir := filepath.Join(defsRoot, "zoom", "sources")
+	if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+		t.Fatalf("create Zoom sources directory: %v", err)
+	}
+	lock := map[string]any{
+		"schema_version": 3,
+		"connector":      "zoom",
+		"rest": map[string]any{
+			"retrieval": "Zoom accounts historical source unavailable",
+			"openapi":   []any{},
+			"coverage_confidence": map[string]any{
+				"level": "unavailable-public-source",
+				"basis": "accounts source returned HTTP 404; no verified historic copy exists",
+			},
+			"source_documents": []any{map[string]any{
+				"id":                 "accounts",
+				"kind":               "unavailable",
+				"unavailable_reason": "accounts source returned HTTP 404; no verified historic copy exists",
+				"operations":         []any{},
+			}},
+		},
+		"counts": map[string]any{"rest": 0, "graphql_query": 0, "graphql_mutation": 0, "total": 0},
+	}
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatalf("marshal unavailable Zoom lock: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(sourcesDir, "zoom-operation-source-lock.json"), raw, 0o644); err != nil {
+		t.Fatalf("write unavailable Zoom lock: %v", err)
+	}
+	var stdout, stderr bytes.Buffer
+	if exit := runSourceImportWithFetcher([]string{"source-import", "zoom", "--defs", defsRoot}, &stdout, &stderr, nil); exit != 1 || !strings.Contains(stderr.String(), "source document \"accounts\" is unavailable") || strings.Contains(stderr.String(), "retained artifact manifest") {
+		t.Fatalf("unavailable source-import exit/stderr = %d/%q", exit, stderr.String())
+	}
+}
+
 func TestSourceImportCommandRejectsCacheDirWithoutCallingFetcher(t *testing.T) {
 	t.Parallel()
 	var stdout, stderr bytes.Buffer
