@@ -1,0 +1,648 @@
+{
+  "operations": [
+    {
+      "id": "twenty.attachments.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty attachments record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/attachments/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the attachment."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.blocklists.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty blocklists record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/blocklists/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the blocklist."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.calendar-channel-event-associations.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty calendar-channel-event-associations record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/calendarChannelEventAssociations/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the record."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.calendar-event-participants.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty calendar-event-participants record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/calendarEventParticipants/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the record."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.calendar-events.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty calendar-events record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/calendarEvents/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the calendar event."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.call-recordings.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty call-recordings record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/callRecordings/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the call recording."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.companies.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty companies record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/companies/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the company."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.dashboards.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty dashboards record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/dashboards/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the dashboard."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.message-campaigns.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty message-campaigns record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/messageCampaigns/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the message campaign."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.message-channel-message-association-message-folders.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty message-channel-message-association-message-folders record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/messageChannelMessageAssociationMessageFolders/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the record."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.message-channel-message-associations.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty message-channel-message-associations record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/messageChannelMessageAssociations/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the record."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.message-list-members.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty message-list-members record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/messageListMembers/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the record."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.message-lists.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty message-lists record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/messageLists/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the message list."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.message-participants.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty message-participants record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/messageParticipants/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the record."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.message-threads.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty message-threads record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/messageThreads/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the message thread."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.messages.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty messages record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/messages/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the message."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.note-targets.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty note-targets record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/noteTargets/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the record."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.notes.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty notes record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/notes/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the note."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.opportunities.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty opportunities record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/opportunities/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the opportunity."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.people.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty people record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/people/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the person."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.task-targets.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty task-targets record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/taskTargets/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the record."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.tasks.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty tasks record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/tasks/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the task."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.timeline-activities.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty timeline-activities record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/timelineActivities/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the timeline activity."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.workflow-automated-triggers.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty workflow-automated-triggers record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/workflowAutomatedTriggers/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the workflow automated trigger."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.workflow-runs.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty workflow-runs record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/workflowRuns/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the workflow run."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.workflow-versions.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty workflow-versions record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/workflowVersions/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the workflow version."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.workflows.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty workflows record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/workflows/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the workflow."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twenty.workspace-members.get",
+      "kind": "rest_read",
+      "summary": "Get one Twenty workspace-members record",
+      "source_url": "https://docs.twenty.com/developers/extend/api",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rest/workspaceMembers/{id}",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The UUID that identifies the workspace member."
+          }
+        ]
+      }
+    }
+  ]
+}
