@@ -103,3 +103,75 @@ A faithful future `destination_transport` for any row must use the closed `decla
 - Built `pm` in isolated initialized projects without credentials: 36 distinct Mailchimp commands and Zendesk Support `streams tickets list` each returned `missing --credential`; no provider credential or live provider call was used.
 - `go test -timeout 20m ./internal/connectors/commandrunner -run '^TestEveryImplementedCommandPassesRuntimePreflight$'` — passed from cache after compilation; it confirms all 390 `implemented` declarations resolve in the real commandrunner but does not replace binary-boundary evidence.
 - The pre-commit hook's unbounded `go test ./internal/connectors ./internal/cli ./cmd/iconregistrygen` exceeded Go's ten-minute default twice. Its exact checks were run directly with the required explicit bound before a disclosed `--no-verify` commit: `gofmt -w cmd internal` (no diff), `go test -timeout 20m ./internal/connectors` (passed), `go test -timeout 20m ./internal/cli` (passed), `go test -timeout 20m ./cmd/iconregistrygen` (passed), `go build ./cmd/pm` (passed), and `./pm docs validate --connectors-dir docs/connectors` (passed).
+
+## Phase 2 approved scope and foundation check — 2026-08-24
+
+### Scope and delivery decision
+
+Captain approval narrowed Phase 2 to one `sync_transport.json` candidate for each of Airtable,
+BambooHR, Buildkite, Mailchimp, Pipedrive, SonarCloud, Squarespace, and Zendesk Support. HubSpot
+was excluded because it has no named `writes.json` actions. No other connector is in this wave.
+
+The intended executor was the existing closed
+`declarative_api/declarative_typed_destination`, not a new generic HTTP or SQL surface. A real
+transport must select exact target action(s), mode strategy(ies), source executor/stream allowlists,
+bounded field mappings and batch size, provider receipt read-back, and delivery/idempotency/
+ordering/delete/acknowledgement semantics. It is not sufficient for the JSON schema merely to load.
+
+### Manual GSD/TDD fallback
+
+The compatible isolated-worker runtime is unavailable and the single-worker contract forbids role
+spawning. I ran the GSD prompts inline and retain this trace as the plan, TDD ledger, and
+verification checklist.
+
+- `Red:` No target has `sync_transport.json`; no target `writes.json` action has an
+  `idempotency_key_header`. A transport declaration selecting any such action must be rejected
+  before credentials or provider I/O.
+- `Green condition:` Add a connector-local transport only after a selected, source-pinned write
+  action declares the provider-owned idempotency header and a connector-owned, bounded receipt
+  read-back policy. Then prove source/action/mapping preflight and the built binary's credential
+  boundary for every newly implemented CLI command.
+- `Refactor/guard:` Do not weaken the shared executor or claim an at-least-once delivery mode to
+  bypass idempotency/read-back proof. Any missing provider contract is a separate source-contract
+  or foundation decision, not decorative transport metadata.
+- Required skills retained for this Go/connector/CLI evaluation: `golang-how-to`, `golang-cli`,
+  `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`,
+  `golang-security`, `golang-safety`, and `golang-testing`.
+- CLI help/manual/website parity: no connector surface was changed during this failed-admission
+  check. If a transport is later admitted, inspect/help/manual/website applicability must be
+  reviewed before implementation.
+
+### Admission evidence
+
+The eight target `writes.json` files contain 395 named actions in total: Airtable 12, BambooHR
+101, Buildkite 17, Mailchimp 148, Pipedrive 17, SonarCloud 8, Squarespace 2, and Zendesk Support
+90. A `jq` inventory of their `idempotency_key_header` fields returned zero for every connector.
+Search of the full pinned bundle is likewise empty for the first seven; Zendesk's only matches are
+generic prose saying that idempotency notes may be required, not a provider-owned header in a
+write action. This does **not** claim that any provider lacks idempotency support; it establishes
+only that the pinned contracts do not currently prove one for an executable target action.
+
+The existing executor is intentionally stricter than the JSON descriptor schema:
+
+- `declarativeTypedDestinationContractFor` calls
+  `DeclarativeTypedDestinationIdempotencyHeader` for each selected action and fails when the
+  action has no independent provider proof (`internal/app/issue_label_warehouse_transport.go`).
+- `declarativeTypedDestinationIdempotencyHeader` reads only the compiled action's
+  `idempotency_key_header` and otherwise returns `action <name> has no provider idempotency key
+  header` (`internal/connectors/engine/connector.go`).
+- The same contract requires action-owned read-back and refuses `full_overwrite`; a receipt
+  policy supplied merely as a connector-wide convenience cannot satisfy it.
+
+Focused real-runtime checks:
+
+- `go test -timeout 20m ./internal/app -run '^(TestDeclarativeTypedDestinationRequiresActionOwnedReadBackPolicy|TestDeclarativeTypedDestinationPreflightRejectsIncompleteMappingAndFullOverwriteBeforeIO|TestDeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields)$'` — passed. These tests assert the closed runtime rejects incomplete mappings, missing action-owned receipt policy, and unsupported full-overwrite before provider I/O.
+- `go build ./cmd/pm` — passed before local inspection. No new command was marked `implemented`, so there is no new credential-boundary claim to make.
+
+### Result: cannot faithfully admit a Phase 2 transport
+
+All eight candidates fail the generic typed destination's idempotency admission before a source
+stream mapping or credential boundary can be reached. Adding `sync_transport.json` now would be a
+declaration-only claim that fails shared runtime preflight. The required next work is a distinct
+source-contract decision: retain provider-pinned evidence for one suitable action per connector,
+including its idempotency header and bounded receipt locator/read-back; only then author and test
+the transport descriptor. No production connector or engine files were changed by this check.
