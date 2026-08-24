@@ -94,8 +94,8 @@ func TestOperationClassificationsMatchAshbySemantics(t *testing.T) {
 		}
 		delete(wantBlocked, endpoint.Path)
 	}
-	if blockedCount != 34 || len(wantBlocked) != 0 {
-		t.Fatalf("blocked ledger count = %d, missing = %v; want 34 and both named blockers", blockedCount, wantBlocked)
+	if blockedCount != 15 || len(wantBlocked) != 0 {
+		t.Fatalf("blocked ledger count = %d, missing = %v; want 15 and both named blockers", blockedCount, wantBlocked)
 	}
 
 	commands := map[string]connectors.CommandSurfaceCommand{}

@@ -146,7 +146,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "reason": "Blocked pending ashby-application-form-typed-multipart-foundation: the documented request requires multipart form data and typed file parts, which the connector-owned declaration cannot yet model.",
         "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/applicationformsubmit?reduce=false"
       }
     },
@@ -1182,7 +1182,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Provider-published state-changing operation has no connector-owned typed direct-write action; it remains blocked until a bounded declaration, schema, fixtures, and command binding are added.",
+        "reason": "Blocked pending ashby-referral-form-info-side-effect-foundation: the documented operation may create a default referral form as a side effect.",
         "source_url": "https://developers.ashbyhq.com/ashby/api-next/v2/branches/1.0/reference/referralforminfo?reduce=false"
       }
     },

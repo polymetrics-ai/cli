@@ -19,7 +19,7 @@ Generated entirely from the pinned source ledgers and existing connector-owned s
 | 9 | calendly | 61 | 27 | 22 | 0/0 | 12 | — | 0 | 6/2/8 |
 | 9 | greenhouse | skipped | 0 | 0 | 0/0 | 69 | — | 0 | 127/0/127 |
 | 9 | lever-hiring | 104 | 30 | 51 | 0/0 | 25 | — | 0 | 60/0/60 |
-| 9 | ashby | 193 | 9 | 113 | 0/0 | 71 | — | 0 | 173/14/187 |
+| 9 | ashby | 193 | 9 | 113 | 0/0 | 71 | — | 0 | 169/18/187 |
 | 9 | workable | 84 | 45 | 39 | 0/0 | 42 | — | 0 | 0/38/38 |
 | 9 | recruitee | 938 | 370 | 563 | 0/0 | 5 | — | 0 | 0/0/0 |
 | 9 | hibob | 207 | 65 | 142 | 0/0 | 3 | — | 0 | 0/0/0 |

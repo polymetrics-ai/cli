@@ -328,6 +328,23 @@
 
 ## Refactor / review
 
+### Ashby declaration regression from generated command expansion — 2026-08-24
+
+- **Red:** CI's complete `make test` run and the focused
+  `TestOperationClassificationsMatchAshbySemantics` /
+  `TestCustomFieldValueCommandsArePartial` failed: the migrated definition
+  replaced the named multipart foundation with a generic missing-action reason
+  and emitted scalar `fieldValue` flags as implemented despite the provider's
+  documented boolean/number/string/array/object/null union. The prior fixed
+  blocked-row total (34) also became stale after 19 declaration-owned actions
+  replaced former generic blocked rows; the two true named foundations remain
+  mandatory.
+- **Green:** the connector definition again names the multipart and
+  side-effect foundations (`ashby-application-form-typed-multipart-foundation`
+  and `ashby-referral-form-info-side-effect-foundation`); each generated custom
+  field command remains CLI-declared but partial without a lossy scalar union
+  flag. No shared runtime branch or connector-name special case is used.
+
 ### Shared source-factory evidence integration regression — 2026-08-24
 
 - **Red:** `TestDefinitionTransportFactoriesSelectDeclaredEvidence` passed on

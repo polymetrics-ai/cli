@@ -13646,10 +13646,11 @@
                 },
                 {
                   "path": "set custom field value apply",
-                  "availability": "implemented"
+                  "availability": "partial",
+                  "block_reason": "This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
                 }
               ],
-              "direct_write_cli_status": "implemented",
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "the provider action has no documented idempotency_key_header, so the closed destination cannot prove replay-safe delivery"
@@ -13666,10 +13667,11 @@
                 },
                 {
                   "path": "set custom field values apply",
-                  "availability": "implemented"
+                  "availability": "partial",
+                  "block_reason": "This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
                 }
               ],
-              "direct_write_cli_status": "implemented",
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "the provider action has no documented idempotency_key_header, so the closed destination cannot prove replay-safe delivery"
@@ -13801,7 +13803,8 @@
               "direct_write_cli": [
                 {
                   "path": "set user custom field value apply",
-                  "availability": "implemented"
+                  "availability": "partial",
+                  "block_reason": "This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
                 },
                 {
                   "path": "user set-custom-field-value",
@@ -13809,7 +13812,7 @@
                   "block_reason": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
                 }
               ],
-              "direct_write_cli_status": "implemented",
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "the provider action has no documented idempotency_key_header, so the closed destination cannot prove replay-safe delivery"
@@ -13821,7 +13824,8 @@
               "direct_write_cli": [
                 {
                   "path": "set user custom field values apply",
-                  "availability": "implemented"
+                  "availability": "partial",
+                  "block_reason": "This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
                 },
                 {
                   "path": "user set-custom-field-values",
@@ -13829,7 +13833,7 @@
                   "block_reason": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
                 }
               ],
-              "direct_write_cli_status": "implemented",
+              "direct_write_cli_status": "partial-blocked",
               "reverse_etl_eligibility": {
                 "state": "semantic-exclusion",
                 "reason": "the provider action has no documented idempotency_key_header, so the closed destination cannot prove replay-safe delivery"
@@ -14151,8 +14155,8 @@
         },
         "cli": {
           "declared_commands": 187,
-          "implemented_commands": 173,
-          "partial_commands": 14
+          "implemented_commands": 169,
+          "partial_commands": 18
         }
       }
     },

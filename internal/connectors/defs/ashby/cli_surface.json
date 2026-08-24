@@ -6271,7 +6271,7 @@
       "path": "set custom field value apply",
       "summary": "POST /customField.setValue (set_custom_field_value)",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_custom_field_value",
       "flags": [
         {
@@ -6279,13 +6279,6 @@
           "type": "string",
           "summary": "Required fieldId record field.",
           "maps_to": "record.fieldId",
-          "required": true
-        },
-        {
-          "name": "field-value",
-          "type": "string",
-          "summary": "Required fieldValue record field.",
-          "maps_to": "record.fieldValue",
           "required": true
         },
         {
@@ -6305,7 +6298,7 @@
       ],
       "risk": "Executes Ashby customField.setValue through the documented POST /customField.setValue endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
-      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "notes": "This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.",
       "examples": [
         "pm ashby set custom field value apply --plan <plan-name>"
       ],
@@ -6320,7 +6313,7 @@
       "path": "set custom field values apply",
       "summary": "POST /customField.setValues (set_custom_field_values)",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_custom_field_values",
       "flags": [
         {
@@ -6343,18 +6336,11 @@
           "summary": "Required values.0.fieldId record field.",
           "maps_to": "record.values.0.fieldId",
           "required": true
-        },
-        {
-          "name": "values-0-field-value",
-          "type": "string",
-          "summary": "Required values.0.fieldValue record field.",
-          "maps_to": "record.values.0.fieldValue",
-          "required": true
         }
       ],
       "risk": "Executes Ashby customField.setValues through the documented POST /customField.setValues endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
-      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "notes": "This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.",
       "examples": [
         "pm ashby set custom field values apply --plan <plan-name>"
       ],
@@ -6369,7 +6355,7 @@
       "path": "set user custom field value apply",
       "summary": "POST /user.setCustomFieldValue (set_user_custom_field_value)",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_user_custom_field_value",
       "flags": [
         {
@@ -6377,13 +6363,6 @@
           "type": "string",
           "summary": "Required fieldId record field.",
           "maps_to": "record.fieldId",
-          "required": true
-        },
-        {
-          "name": "field-value",
-          "type": "string",
-          "summary": "Required fieldValue record field.",
-          "maps_to": "record.fieldValue",
           "required": true
         },
         {
@@ -6396,7 +6375,7 @@
       ],
       "risk": "Executes Ashby user.setCustomFieldValue through the documented POST /user.setCustomFieldValue endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
-      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "notes": "This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.",
       "examples": [
         "pm ashby set user custom field value apply --plan <plan-name>"
       ],
@@ -6411,7 +6390,7 @@
       "path": "set user custom field values apply",
       "summary": "POST /user.setCustomFieldValues (set_user_custom_field_values)",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_user_custom_field_values",
       "flags": [
         {
@@ -6427,18 +6406,11 @@
           "summary": "Required values.0.fieldId record field.",
           "maps_to": "record.values.0.fieldId",
           "required": true
-        },
-        {
-          "name": "values-0-field-value",
-          "type": "string",
-          "summary": "Required values.0.fieldValue record field.",
-          "maps_to": "record.values.0.fieldValue",
-          "required": true
         }
       ],
       "risk": "Executes Ashby user.setCustomFieldValues through the documented POST /user.setCustomFieldValues endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
-      "notes": "Generated from the connector-owned typed action; execution remains plan-gated.",
+      "notes": "This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.",
       "examples": [
         "pm ashby set user custom field values apply --plan <plan-name>"
       ],
