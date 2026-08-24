@@ -79118,7 +79118,8 @@
           "type": "string",
           "summary": "path parameter token",
           "maps_to": "path.token",
-          "allow_empty": false
+          "allow_empty": false,
+          "env_only": true
         }
       ],
       "output_policy": "json_redacted",
@@ -79160,14 +79161,16 @@
           "type": "string",
           "summary": "query parameter client_secret",
           "maps_to": "query.client_secret",
-          "allow_empty": false
+          "allow_empty": false,
+          "env_only": true
         },
         {
           "name": "refresh-token",
           "type": "string",
           "summary": "query parameter refresh_token",
           "maps_to": "query.refresh_token",
-          "allow_empty": false
+          "allow_empty": false,
+          "env_only": true
         }
       ],
       "output_policy": "json_redacted",

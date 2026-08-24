@@ -878,7 +878,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceValidationDeclarations(b, i, cmd)...)
-		findings = append(findings, checkCLISurfaceEnvOnlyFlags(b, i, cmd, operations)...)
+		findings = append(findings, checkCLISurfaceEnvOnlyFlags(b, i, cmd, operations, writes)...)
 		findings = append(findings, checkCLISurfaceStructuredJSONFlags(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceWriteFlags(b, i, cmd, writes)...)
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
@@ -886,49 +886,148 @@ func checkCLISurface(b engine.Bundle) []Finding {
 	return findings
 }
 
-// checkCLISurfaceEnvOnlyFlags keeps --from-env a narrow declaration-owned
-// secret-delivery channel rather than a second, untyped source of arbitrary
-// command values. Two closed forms are permitted: the complete JSON input of
-// a sensitive fixed GraphQL mutation, or a scalar source-declared variable of
-// a fixed GraphQL query whose operation itself declares env input and exact
-// redaction. The latter is needed for provider invitation tokens, but cannot
-// introduce a raw body/document or an arbitrary query parameter.
+// checkCLISurfaceEnvOnlyFlags requires every declaration-owned request secret
+// to use --from-env, regardless of protocol, intent, flag type, or mapping
+// depth. The existing x-secret schema marker and an operation's exact
+// sensitive-policy field declaration are the source of truth for field
+// sensitivity. A narrow GraphQL-query compatibility form remains accepted for
+// established source-declared invitation-token commands.
 func checkCLISurfaceEnvOnlyFlags(
 	b engine.Bundle,
 	i int,
 	cmd engine.CLICommand,
 	operations map[string]engine.OperationSpec,
+	writes map[string]engine.WriteAction,
 ) []Finding {
 	var findings []Finding
 	for _, flag := range cmd.Flags {
+		op, found := operations[cmd.Operation]
+		declaredSecret := cliSurfaceFlagDeclaredSecret(cmd, flag, op, found, writes)
+		if declaredSecret && !flag.EnvOnly {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) declared secret flag --%s must set env_only", i, cmd.Path, flag.Name),
+			})
+			continue
+		}
 		if !flag.EnvOnly {
 			continue
 		}
-		op, found := operations[cmd.Operation]
 		variable, mapsToBody := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "body.")
-		secretMutation := cmd.Availability == "implemented" &&
-			cmd.Intent == "direct_write" &&
-			flag.Type == "json" &&
-			flag.Required &&
-			mapsToBody && variable != "" && !strings.Contains(variable, ".") &&
-			found && op.Kind == "graphql_mutation" &&
-			strings.EqualFold(op.MutationClass, "secret") &&
-			op.SensitivePolicy != nil &&
-			strings.EqualFold(op.SensitivePolicy.InputMode, "env") &&
-			strings.EqualFold(op.SensitivePolicy.ApprovalMode, "typed_confirmation") &&
-			slices.Contains(op.SensitivePolicy.RedactFields, "body."+variable)
 		sourceQuery := validEnvOnlyGraphQLQueryVariable(cmd, flag, op, variable, mapsToBody)
-		if secretMutation || sourceQuery {
+		if declaredSecret || sourceQuery {
 			continue
 		}
 		findings = append(findings, Finding{
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("command %d (%q) env_only flag --%s must be a required top-level JSON input for an implemented secret GraphQL mutation with env redaction and typed confirmation, or a source-declared scalar GraphQL query variable with exact env redaction", i, cmd.Path, flag.Name),
+			Message:   fmt.Sprintf("command %d (%q) env_only flag --%s must map to a declaration-owned secret field", i, cmd.Path, flag.Name),
 		})
 	}
 	return findings
+}
+
+func cliSurfaceFlagDeclaredSecret(cmd engine.CLICommand, flag engine.CLIFlag, op engine.OperationSpec, operationFound bool, writes map[string]engine.WriteAction) bool {
+	if write, found := writes[cmd.Write]; found && cliSurfaceSchemaFieldDeclaredSecret(write.RecordSchema, flag.MapsTo, "record.") {
+		return true
+	}
+	if !operationFound {
+		return false
+	}
+	if cliSurfaceSensitivePolicyDeclaresFlag(op.SensitivePolicy, flag.MapsTo) {
+		return true
+	}
+	if op.REST != nil {
+		if cliSurfaceSchemaFieldDeclaredSecret(op.REST.BodySchema, flag.MapsTo, "body.") {
+			return true
+		}
+		for _, parameter := range op.REST.Parameters {
+			if flag.MapsTo == parameter.In+"."+parameter.Name && cliSurfaceSchemaFieldDeclaredSecret(parameter.Schema, "", "") {
+				return true
+			}
+		}
+	}
+	return op.GraphQL != nil && cliSurfaceSchemaFieldDeclaredSecret(op.GraphQL.VariablesSchema, flag.MapsTo, "body.")
+}
+
+func cliSurfaceSensitivePolicyDeclaresFlag(policy *engine.SensitivePolicySpec, mapsTo string) bool {
+	if policy == nil || strings.TrimSpace(policy.InputMode) == "" {
+		return false
+	}
+	mapsTo = strings.TrimSpace(mapsTo)
+	for _, rawField := range policy.RedactFields {
+		field := strings.TrimSpace(rawField)
+		if field == "" {
+			continue
+		}
+		if field == mapsTo {
+			return true
+		}
+		for _, prefix := range []string{"body.", "path.", "query.", "header."} {
+			if strings.TrimPrefix(mapsTo, prefix) == field {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func cliSurfaceSchemaFieldDeclaredSecret(raw json.RawMessage, mapsTo, prefix string) bool {
+	if len(raw) == 0 {
+		return false
+	}
+	var schema map[string]any
+	if err := json.Unmarshal(raw, &schema); err != nil {
+		return false
+	}
+	path := strings.TrimSpace(mapsTo)
+	if prefix != "" {
+		var found bool
+		path, found = strings.CutPrefix(path, prefix)
+		if !found {
+			return false
+		}
+	}
+	if path == "" {
+		return cliSurfaceSchemaContainsDeclaredSecret(schema)
+	}
+	for _, name := range strings.Split(path, ".") {
+		properties, _ := schema["properties"].(map[string]any)
+		next, found := properties[name]
+		if !found {
+			return false
+		}
+		var ok bool
+		schema, ok = next.(map[string]any)
+		if !ok {
+			return false
+		}
+	}
+	return cliSurfaceSchemaContainsDeclaredSecret(schema)
+}
+
+func cliSurfaceSchemaContainsDeclaredSecret(raw any) bool {
+	switch schema := raw.(type) {
+	case map[string]any:
+		if secret, _ := schema["x-secret"].(bool); secret {
+			return true
+		}
+		for _, value := range schema {
+			if cliSurfaceSchemaContainsDeclaredSecret(value) {
+				return true
+			}
+		}
+	case []any:
+		for _, value := range schema {
+			if cliSurfaceSchemaContainsDeclaredSecret(value) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func validEnvOnlyGraphQLQueryVariable(cmd engine.CLICommand, flag engine.CLIFlag, op engine.OperationSpec, variable string, mapsToBody bool) bool {
