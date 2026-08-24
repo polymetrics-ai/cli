@@ -50,6 +50,12 @@ error response remains irrecoverable and is never re-pinned.
   `make connectorgen-surface-sync`, and `make connectorgen-validate`; all
   passed (553 connectors, zero validation findings).
 - `go vet ./...` and `make lint` — passed after the rollups and regeneration.
+- The full `go test -timeout 20m ./internal/cli -count=1` then exposed only
+  tracked generated-skill drift caused by those 18 regenerated GitHub CLI
+  projections. Ran the canonical `go run ./cmd/pm skills generate --dir
+  docs/skills --json`; it changed only `docs/skills/pm-github/SKILL.md`.
+  `go test -timeout 20m ./internal/cli -run '^TestSkillsGenerateMatchesTrackedSkills$' -count=1`
+  then passed in 6.215s.
 
 ## Inline GSD lifecycle
 
