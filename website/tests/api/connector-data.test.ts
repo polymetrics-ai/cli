@@ -84,7 +84,7 @@ describe('connector data route', () => {
     });
   });
 
-  it('returns operation-backed CLI surface metadata for docs rendering', async () => {
+  it('returns source-bound partial CLI metadata for docs rendering', async () => {
     const { response, json } = await connectorData('zendesk-support');
 
     expect(response.status).toBe(200);
@@ -92,7 +92,10 @@ describe('connector data route', () => {
       commands: expect.arrayContaining([
         expect.objectContaining({
           path: 'operations get_sources_by_target',
-          operation: 'zendesk-support.get_sources_by_target',
+          intent: 'direct_read',
+          availability: 'partial',
+          sourceUrl: 'https://developer.zendesk.com/zendesk/oas.yaml',
+          notes: expect.stringContaining('locked source operation zendesk-support.provider.getsourcesbytarget-1'),
         }),
       ]),
     });
