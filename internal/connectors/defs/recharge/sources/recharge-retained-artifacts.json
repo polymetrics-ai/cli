@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "recharge",
+  "artifacts": [
+    {
+      "sha256": "260a361c67ebb47aed44ee7aae486d76aa4b3aa4e8993c5fdb02544b93698e8d",
+      "bytes": 5311263,
+      "source_url": "https://developer.getrecharge.com/2021-11",
+      "retrieved_at": "2026-08-24T12:15:00Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

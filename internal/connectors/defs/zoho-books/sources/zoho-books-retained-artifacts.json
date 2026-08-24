@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "zoho-books",
+  "artifacts": [
+    {
+      "sha256": "109a2ee32299d8fbc3a65b52475eb1fc9875961f087d115ff7cfcbb7d7039a45",
+      "bytes": 335591,
+      "source_url": "https://www.zoho.com/books/api/v3/openapi-all.zip",
+      "retrieved_at": "2026-08-24T12:15:00Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}
