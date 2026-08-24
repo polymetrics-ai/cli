@@ -827,3 +827,56 @@ citations already recorded in this trace.
   invented closed object, and no availability-only promotion.
 
 No conversion has begun. This is the required count report before any bulk declaration change.
+
+## Wave 1 — bounded, high-variance credential-boundary proof plan — 2026-08-24
+
+The delivery owner approved a **100-operation Category-A Wave 1**, rather than promotion of all
+4,632 source-contract candidates. This is an intentionally failure-seeking sample: a repeated
+contract/dispatch error is useful at 100 and must stop the wave before any larger conversion.
+
+| Intent | Count | Connector spread | Contract variety exercised |
+| --- | ---: | --- | --- |
+| `direct_read` | 85 | BambooHR 10; HubSpot 45; LaunchDarkly 10; Pipedrive 8; ShipStation 4; Squarespace 4; Zendesk Support 4 | Source-declared JSON reads with optional string/integer/boolean/date-time query inputs, string-array inputs, enum values, and both collection and fixed-resource paths. The selected non-HubSpot reads have no path placeholder, so the credential probe cannot be mistaken for an omitted identifier failure. |
+| `etl` | 12 | BambooHR 3; LaunchDarkly 3; ShipStation 3; Squarespace 3 | Existing connector-owned stream schemas, including nested/array-bearing record schemas, are rebound only to the provider operation with the same pinned GET path. |
+| `direct_write` | 3 | HubSpot 3 | The three pinned no-body, no-path `DELETE /appinstalls/{2026-03,2026-09,v3}/external-install` operations exercise the operation-backed mutation preflight without fabricating a request schema. |
+| **Total** | **100** | **7 connectors** | **No source lock or engine change.** |
+
+### Reverse-ETL exception recorded before conversion
+
+The requested intent spread cannot safely include a newly promoted `reverse_etl` command. None of
+the seven Wave-1 connectors has `sync_transport.json`; the existing partial Zendesk Support write
+rows also include the thirteen source-declared open request objects already excluded from Category
+A. Adding a connector-local transport solely to make one test command pass would invent a
+destination contract, and changing the shared transport model is out of scope. Wave 1 therefore
+records this as an intentional, source-cited exception rather than mislabelling a direct write as
+reverse ETL. It is not a downgrade of any of the 390 commands already proven on `main`.
+
+### Red evidence
+
+From a newly initialized, credential-free project, the freshly built current binary rejects the
+first selected HubSpot command before the credential boundary:
+
+```text
+pm hubspot direct get-account-info-2025-09-activity-audit-logs-account-info-2025-09-activity-audit-logs --root <fresh-root> --json
+exit 7
+error: connector command "direct get-account-info-2025-09-activity-audit-logs-account-info-2025-09-activity-audit-logs" is blocked: intent=direct_read: availability=partial: Blocked: locked source operation hubspot.provider.get-account-info-2025-09-activity-audit-logs-account-info-2025-09-activity-audit-logs-1 has no declaration-owned executable stream, direct-read, binary, or status route.
+```
+
+The source endpoint and each selected command's existing flags are already provider-derived in
+that connector's `cli_surface.json` and declaration-disposition ledger. Green work must add only
+the missing connector-owned executable binding (and an explicit JSON-redacted output policy when
+the OAS response is JSON), then prove the built binary's exact terminal result:
+
+```text
+error: missing --credential
+```
+
+### Green/stop rules
+
+- Build `pm` after the declaration edits and run every one of the 100 commands from a fresh,
+  credential-free initialized project. A command counts only if its combined output is exactly the
+  `missing --credential` terminal error; no provider request is permitted.
+- The first preflight, field-binding, output-policy, or dispatch failure is classified by source
+  operation and stops the wave. Do not compensate by loosening a schema, suppressing a flag, or
+  changing shared code.
+- Category B (Fastly and WooCommerce) remains untouched until this entire Wave 1 report is green.
