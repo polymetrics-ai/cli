@@ -3,1080 +3,1079 @@
   "connector": "lever-hiring",
   "captured_at": "2026-08-19T19:03:09.875Z",
   "rest": {
-    "source_url": "https://hire.lever.co/developer/documentation?output=1",
-    "representation": "complete-rendered-reference",
-    "documents": [
-      {
-        "source_url": "https://hire.lever.co/developer/documentation?output=1",
-        "sha256": "b3240d9b9e828f1f9051269f8bebea70531a97d91869204f1dd1eafd05a7af99",
-        "bytes": 1204169,
-        "content_type": "text/html; charset=utf-8",
-        "retrieval_method": "http",
-        "representation": "complete-rendered-reference"
-      }
-    ],
-    "source_bundle": {
-      "document_count": 1,
-      "sha256": "91141f4b3a8473f81e2aa8d0d84a473c5e02f7f09d680addaa9dbd3b9f1ebd33",
-      "bytes": 1204169
-    },
-    "counts": {
-      "total": 104,
-      "by_method": {
-        "DELETE": 11,
-        "GET": 53,
-        "POST": 26,
-        "PUT": 14
-      },
-      "by_kind": {
-        "rest": 104
-      }
-    },
+    "retrieval": "preserved issue-4292 public capture via http",
+    "openapi": [],
     "coverage_confidence": {
       "level": "complete-rendered-reference",
       "basis": "Lever publishes the complete Hiring API reference as one public rendered document; every formal METHOD /path declaration in that document is extracted and example query strings are not counted as distinct operations."
     },
-    "operations": [
-      {
-        "id": "lever-hiring.rendered.delete-feedback-templates-feedback-template",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/feedback_templates/{feedback_template}",
-        "operation_id": "delete-feedback-templates-feedback-template",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-726429",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.delete-form-templates-form-template",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/form_templates/{form_template}",
-        "operation_id": "delete-form-templates-form-template",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-926289",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.delete-opportunities-opportunity-feedback-feedback",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/opportunities/{opportunity}/feedback/{feedback}",
-        "operation_id": "delete-opportunities-opportunity-feedback-feedback",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-712761",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.delete-opportunities-opportunity-files-file",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/opportunities/{opportunity}/files/{file}",
-        "operation_id": "delete-opportunities-opportunity-files-file",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-733247",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.delete-opportunities-opportunity-interviews-interview",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/opportunities/{opportunity}/interviews/{interview}",
-        "operation_id": "delete-opportunities-opportunity-interviews-interview",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-766941",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.delete-opportunities-opportunity-notes-noteid",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/opportunities/{opportunity}/notes/{noteId}",
-        "operation_id": "delete-opportunities-opportunity-notes-noteid",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-775186",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.delete-opportunities-opportunity-panels-panel",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/opportunities/{opportunity}/panels/{panel}",
-        "operation_id": "delete-opportunities-opportunity-panels-panel",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-844215",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.delete-requisition-fields-requisition-field",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/requisition_fields/{requisition_field}",
-        "operation_id": "delete-requisition-fields-requisition-field",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-974424",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.delete-requisition-fields-requisition-field-options",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/requisition_fields/{requisition_field}/options",
-        "operation_id": "delete-requisition-fields-requisition-field-options",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-972551",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.delete-requisitions-requisition",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/requisitions/{requisition}",
-        "operation_id": "delete-requisitions-requisition",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-961905",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.delete-webhooks-webhookid",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/webhooks/{webhookId}",
-        "operation_id": "delete-webhooks-webhookid",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-1023554",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-applications-deleted",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/applications/deleted",
-        "operation_id": "get-applications-deleted",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-657311",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-archive-reasons",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/archive_reasons",
-        "operation_id": "get-archive-reasons",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-660366",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-archive-reasons-archive-reason",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/archive_reasons/{archive_reason}",
-        "operation_id": "get-archive-reasons-archive-reason",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-659985",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-audit-events",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/audit_events",
-        "operation_id": "get-audit-events",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-664498",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-contacts-contact",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/contacts/{contact}",
-        "operation_id": "get-contacts-contact",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-680300",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-disposition-stages",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/disposition_stages",
-        "operation_id": "get-disposition-stages",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-683257",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-feedback-templates",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/feedback_templates",
-        "operation_id": "get-feedback-templates",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-716913",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-feedback-templates-feedback-template",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/feedback_templates/{feedback_template}",
-        "operation_id": "get-feedback-templates-feedback-template",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-715738",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-form-templates",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/form_templates",
-        "operation_id": "get-form-templates",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-917884",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-form-templates-form-template",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/form_templates/{form_template}",
-        "operation_id": "get-form-templates-form-template",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-916734",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities",
-        "operation_id": "get-opportunities",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-802375",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}",
-        "operation_id": "get-opportunities-opportunity",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-800186",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-applications",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/applications",
-        "operation_id": "get-opportunities-opportunity-applications",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-650332",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-applications-application",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/applications/{application}",
-        "operation_id": "get-opportunities-opportunity-applications-application",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-646233",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-feedback",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/feedback",
-        "operation_id": "get-opportunities-opportunity-feedback",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-698133",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-feedback-feedback",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/feedback/{feedback}",
-        "operation_id": "get-opportunities-opportunity-feedback-feedback",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-694048",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-file-actions",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/file_actions",
-        "operation_id": "get-opportunities-opportunity-file-actions",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-814203",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-files",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/files",
-        "operation_id": "get-opportunities-opportunity-files",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-729746",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-files-file",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/files/{file}",
-        "operation_id": "get-opportunities-opportunity-files-file",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-728957",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-files-file-download",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/files/{file}/download",
-        "operation_id": "get-opportunities-opportunity-files-file-download",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-732619",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-forms",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/forms",
-        "operation_id": "get-opportunities-opportunity-forms",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-908414",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-forms-form",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/forms/{form}",
-        "operation_id": "get-opportunities-opportunity-forms-form",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-906305",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-interviews",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/interviews",
-        "operation_id": "get-opportunities-opportunity-interviews",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-754371",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-interviews-interview",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/interviews/{interview}",
-        "operation_id": "get-opportunities-opportunity-interviews-interview",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-752576",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-notes",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/notes",
-        "operation_id": "get-opportunities-opportunity-notes",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-770291",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-notes-note",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/notes/{note}",
-        "operation_id": "get-opportunities-opportunity-notes-note",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-768856",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-offers",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/offers",
-        "operation_id": "get-opportunities-opportunity-offers",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-782673",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-offers-offer-download",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/offers/{offer}/download",
-        "operation_id": "get-opportunities-opportunity-offers-offer-download",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-787920",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-panels",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/panels",
-        "operation_id": "get-opportunities-opportunity-panels",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-834546",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-panels-panel",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/panels/{panel}",
-        "operation_id": "get-opportunities-opportunity-panels-panel",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-832796",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-referrals",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/referrals",
-        "operation_id": "get-opportunities-opportunity-referrals",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-930822",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-referrals-referral",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/referrals/{referral}",
-        "operation_id": "get-opportunities-opportunity-referrals-referral",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-928819",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-resumes",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/resumes",
-        "operation_id": "get-opportunities-opportunity-resumes",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-981679",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-resumes-resume",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/resumes/{resume}",
-        "operation_id": "get-opportunities-opportunity-resumes-resume",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-977875",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-opportunities-opportunity-resumes-resume-download",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/opportunities/{opportunity}/resumes/{resume}/download",
-        "operation_id": "get-opportunities-opportunity-resumes-resume-download",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-990925",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-postings",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/postings",
-        "operation_id": "get-postings",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-856272",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-postings-posting",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/postings/{posting}",
-        "operation_id": "get-postings-posting",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-853328",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-postings-posting-apply",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/postings/{posting}/apply",
-        "operation_id": "get-postings-posting-apply",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-880356",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-postings-posting-users",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/postings/{posting}/users",
-        "operation_id": "get-postings-posting-users",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-890102",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-requisition-fields",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/requisition_fields",
-        "operation_id": "get-requisition-fields",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-965371",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-requisition-fields-requisition-field",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/requisition_fields/{requisition_field}",
-        "operation_id": "get-requisition-fields-requisition-field",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-964711",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-requisitions",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/requisitions",
-        "operation_id": "get-requisitions",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-946441",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-requisitions-requisition",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/requisitions/{requisition}",
-        "operation_id": "get-requisitions-requisition",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-943468",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-sources",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/sources",
-        "operation_id": "get-sources",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-992497",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-stages",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/stages",
-        "operation_id": "get-stages",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-993642",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-stages-stage",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/stages/{stage}",
-        "operation_id": "get-stages-stage",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-993348",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-surveys-diversity-posting",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/surveys/diversity/{posting}",
-        "operation_id": "get-surveys-diversity-posting",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-999659",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-tags",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/tags",
-        "operation_id": "get-tags",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-1002154",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-users",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/users",
-        "operation_id": "get-users",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-1006652",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-users-user",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/users/{user}",
-        "operation_id": "get-users-user",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-1005826",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-v1-eeo-responses",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/eeo/responses",
-        "operation_id": "get-v1-eeo-responses",
-        "deprecated": false,
-        "source_location": "rendered-document: EEO Responses declaration `GET v1/eeo/responses` (provider omits the leading slash)",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-v1-eeo-responses-pii",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/eeo/responses/pii",
-        "operation_id": "get-v1-eeo-responses-pii",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-688140",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.get-webhooks",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/webhooks",
-        "operation_id": "get-webhooks",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-1017640",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-feedback-templates",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/feedback_templates",
-        "operation_id": "post-feedback-templates",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-719842",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-form-templates",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/form_templates",
-        "operation_id": "post-form-templates",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-920845",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities",
-        "operation_id": "post-opportunities",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-818163",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities-opportunity-addlinks",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities/{opportunity}/addLinks",
-        "operation_id": "post-opportunities-opportunity-addlinks",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-829363",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities-opportunity-addsources",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities/{opportunity}/addSources",
-        "operation_id": "post-opportunities-opportunity-addsources",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-830360",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities-opportunity-addtags",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities/{opportunity}/addTags",
-        "operation_id": "post-opportunities-opportunity-addtags",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-829874",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities-opportunity-feedback",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities/{opportunity}/feedback",
-        "operation_id": "post-opportunities-opportunity-feedback",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-702737",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities-opportunity-files",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities/{opportunity}/files",
-        "operation_id": "post-opportunities-opportunity-files",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-727679",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities-opportunity-forms",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities/{opportunity}/forms",
-        "operation_id": "post-opportunities-opportunity-forms",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-911242",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities-opportunity-interviews",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities/{opportunity}/interviews",
-        "operation_id": "post-opportunities-opportunity-interviews",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-756642",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities-opportunity-notes",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities/{opportunity}/notes",
-        "operation_id": "post-opportunities-opportunity-notes",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-772243",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities-opportunity-panels",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities/{opportunity}/panels",
-        "operation_id": "post-opportunities-opportunity-panels",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-836584",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities-opportunity-removelinks",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities/{opportunity}/removeLinks",
-        "operation_id": "post-opportunities-opportunity-removelinks",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-829456",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities-opportunity-removesources",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities/{opportunity}/removeSources",
-        "operation_id": "post-opportunities-opportunity-removesources",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-830444",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-opportunities-opportunity-removetags",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/opportunities/{opportunity}/removeTags",
-        "operation_id": "post-opportunities-opportunity-removetags",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-829952",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-postings",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/postings",
-        "operation_id": "post-postings",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-865328",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-postings-posting",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/postings/{posting}",
-        "operation_id": "post-postings-posting",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-873088",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-postings-postingid-apply",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/postings/{postingId}/apply",
-        "operation_id": "post-postings-postingid-apply",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-853413",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-requisition-fields",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/requisition_fields",
-        "operation_id": "post-requisition-fields",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-967525",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-requisition-fields-requisition-field-options",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/requisition_fields/{requisition_field}/options",
-        "operation_id": "post-requisition-fields-requisition-field-options",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-972442",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-requisitions",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/requisitions",
-        "operation_id": "post-requisitions",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-952986",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-uploads",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/uploads",
-        "operation_id": "post-uploads",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-1002648",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-users",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users",
-        "operation_id": "post-users",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-1010690",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-users-user-deactivate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/{user}/deactivate",
-        "operation_id": "post-users-user-deactivate",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-1014269",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-users-user-reactivate",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/users/{user}/reactivate",
-        "operation_id": "post-users-user-reactivate",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-1015116",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.post-webhooks",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/webhooks",
-        "operation_id": "post-webhooks",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-1018329",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-contacts-contact",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/contacts/{contact}",
-        "operation_id": "put-contacts-contact",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-680893",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-feedback-templates-feedback-template",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/feedback_templates/{feedback_template}",
-        "operation_id": "put-feedback-templates-feedback-template",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-722990",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-form-templates-form-template",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/form_templates/{form_template}",
-        "operation_id": "put-form-templates-form-template",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-923467",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-opportunities-opportunity-archived",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/opportunities/{opportunity}/archived",
-        "operation_id": "put-opportunities-opportunity-archived",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-828468",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-opportunities-opportunity-feedback-feedback",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/opportunities/{opportunity}/feedback/{feedback}",
-        "operation_id": "put-opportunities-opportunity-feedback-feedback",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-709764",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-opportunities-opportunity-interviews-interview",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/opportunities/{opportunity}/interviews/{interview}",
-        "operation_id": "put-opportunities-opportunity-interviews-interview",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-763467",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-opportunities-opportunity-notes-note",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/opportunities/{opportunity}/notes/{note}",
-        "operation_id": "put-opportunities-opportunity-notes-note",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-775825",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-opportunities-opportunity-panels-panel",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/opportunities/{opportunity}/panels/{panel}",
-        "operation_id": "put-opportunities-opportunity-panels-panel",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-841085",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-opportunities-opportunity-stage",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/opportunities/{opportunity}/stage",
-        "operation_id": "put-opportunities-opportunity-stage",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-827193",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-requisition-fields-requisition-field",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/requisition_fields/{requisition_field}",
-        "operation_id": "put-requisition-fields-requisition-field",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-971781",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-requisition-fields-requisition-field-options",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/requisition_fields/{requisition_field}/options",
-        "operation_id": "put-requisition-fields-requisition-field-options",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-972497",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-requisitions-requisition",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/requisitions/{requisition}",
-        "operation_id": "put-requisitions-requisition",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-959759",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-users-user",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/users/{user}",
-        "operation_id": "put-users-user",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-1013246",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
-      },
-      {
-        "id": "lever-hiring.rendered.put-webhooks",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/webhooks",
-        "operation_id": "put-webhooks",
-        "deprecated": false,
-        "source_location": "rendered-document-byte-1020770",
-        "source_url": "https://hire.lever.co/developer/documentation?output=1"
+    "source_documents": [
+      {
+        "id": "document-0001",
+        "kind": "rendered_reference",
+        "content_type": "text/html",
+        "artifact": {
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "sha256": "b3240d9b9e828f1f9051269f8bebea70531a97d91869204f1dd1eafd05a7af99",
+          "bytes": 1204169,
+          "identity_query": true
+        },
+        "published_source": {
+          "source_url": "https://hire.lever.co/developer/documentation?output=1",
+          "capture_url": "https://hire.lever.co/developer/documentation",
+          "sha256": "b3240d9b9e828f1f9051269f8bebea70531a97d91869204f1dd1eafd05a7af99",
+          "bytes": 1204169,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "lever-hiring.rendered.delete-feedback-templates-feedback-template",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/feedback_templates/{feedback_template}",
+            "operation_id": "delete-feedback-templates-feedback-template",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-726429",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.delete-form-templates-form-template",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/form_templates/{form_template}",
+            "operation_id": "delete-form-templates-form-template",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-926289",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.delete-opportunities-opportunity-feedback-feedback",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/opportunities/{opportunity}/feedback/{feedback}",
+            "operation_id": "delete-opportunities-opportunity-feedback-feedback",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-712761",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.delete-opportunities-opportunity-files-file",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/opportunities/{opportunity}/files/{file}",
+            "operation_id": "delete-opportunities-opportunity-files-file",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-733247",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.delete-opportunities-opportunity-interviews-interview",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/opportunities/{opportunity}/interviews/{interview}",
+            "operation_id": "delete-opportunities-opportunity-interviews-interview",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-766941",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.delete-opportunities-opportunity-notes-noteid",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/opportunities/{opportunity}/notes/{noteId}",
+            "operation_id": "delete-opportunities-opportunity-notes-noteid",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-775186",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.delete-opportunities-opportunity-panels-panel",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/opportunities/{opportunity}/panels/{panel}",
+            "operation_id": "delete-opportunities-opportunity-panels-panel",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-844215",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.delete-requisition-fields-requisition-field",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/requisition_fields/{requisition_field}",
+            "operation_id": "delete-requisition-fields-requisition-field",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-974424",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.delete-requisition-fields-requisition-field-options",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/requisition_fields/{requisition_field}/options",
+            "operation_id": "delete-requisition-fields-requisition-field-options",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-972551",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.delete-requisitions-requisition",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/requisitions/{requisition}",
+            "operation_id": "delete-requisitions-requisition",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-961905",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.delete-webhooks-webhookid",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/webhooks/{webhookId}",
+            "operation_id": "delete-webhooks-webhookid",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1023554",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-applications-deleted",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/applications/deleted",
+            "operation_id": "get-applications-deleted",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-657311",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-archive-reasons",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/archive_reasons",
+            "operation_id": "get-archive-reasons",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-660366",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-archive-reasons-archive-reason",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/archive_reasons/{archive_reason}",
+            "operation_id": "get-archive-reasons-archive-reason",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-659985",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-audit-events",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/audit_events",
+            "operation_id": "get-audit-events",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-664498",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-contacts-contact",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/contacts/{contact}",
+            "operation_id": "get-contacts-contact",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-680300",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-disposition-stages",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/disposition_stages",
+            "operation_id": "get-disposition-stages",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-683257",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-feedback-templates",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/feedback_templates",
+            "operation_id": "get-feedback-templates",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-716913",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-feedback-templates-feedback-template",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/feedback_templates/{feedback_template}",
+            "operation_id": "get-feedback-templates-feedback-template",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-715738",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-form-templates",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/form_templates",
+            "operation_id": "get-form-templates",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-917884",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-form-templates-form-template",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/form_templates/{form_template}",
+            "operation_id": "get-form-templates-form-template",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-916734",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities",
+            "operation_id": "get-opportunities",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-802375",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}",
+            "operation_id": "get-opportunities-opportunity",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-800186",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-applications",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/applications",
+            "operation_id": "get-opportunities-opportunity-applications",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-650332",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-applications-application",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/applications/{application}",
+            "operation_id": "get-opportunities-opportunity-applications-application",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-646233",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-feedback",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/feedback",
+            "operation_id": "get-opportunities-opportunity-feedback",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-698133",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-feedback-feedback",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/feedback/{feedback}",
+            "operation_id": "get-opportunities-opportunity-feedback-feedback",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-694048",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-file-actions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/file_actions",
+            "operation_id": "get-opportunities-opportunity-file-actions",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-814203",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-files",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/files",
+            "operation_id": "get-opportunities-opportunity-files",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-729746",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-files-file",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/files/{file}",
+            "operation_id": "get-opportunities-opportunity-files-file",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-728957",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-files-file-download",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/files/{file}/download",
+            "operation_id": "get-opportunities-opportunity-files-file-download",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-732619",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-forms",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/forms",
+            "operation_id": "get-opportunities-opportunity-forms",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-908414",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-forms-form",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/forms/{form}",
+            "operation_id": "get-opportunities-opportunity-forms-form",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-906305",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-interviews",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/interviews",
+            "operation_id": "get-opportunities-opportunity-interviews",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-754371",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-interviews-interview",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/interviews/{interview}",
+            "operation_id": "get-opportunities-opportunity-interviews-interview",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-752576",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-notes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/notes",
+            "operation_id": "get-opportunities-opportunity-notes",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-770291",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-notes-note",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/notes/{note}",
+            "operation_id": "get-opportunities-opportunity-notes-note",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-768856",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-offers",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/offers",
+            "operation_id": "get-opportunities-opportunity-offers",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-782673",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-offers-offer-download",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/offers/{offer}/download",
+            "operation_id": "get-opportunities-opportunity-offers-offer-download",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-787920",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-panels",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/panels",
+            "operation_id": "get-opportunities-opportunity-panels",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-834546",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-panels-panel",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/panels/{panel}",
+            "operation_id": "get-opportunities-opportunity-panels-panel",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-832796",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-referrals",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/referrals",
+            "operation_id": "get-opportunities-opportunity-referrals",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-930822",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-referrals-referral",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/referrals/{referral}",
+            "operation_id": "get-opportunities-opportunity-referrals-referral",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-928819",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-resumes",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/resumes",
+            "operation_id": "get-opportunities-opportunity-resumes",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-981679",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-resumes-resume",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/resumes/{resume}",
+            "operation_id": "get-opportunities-opportunity-resumes-resume",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-977875",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-opportunities-opportunity-resumes-resume-download",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/opportunities/{opportunity}/resumes/{resume}/download",
+            "operation_id": "get-opportunities-opportunity-resumes-resume-download",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-990925",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-postings",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/postings",
+            "operation_id": "get-postings",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-856272",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-postings-posting",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/postings/{posting}",
+            "operation_id": "get-postings-posting",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-853328",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-postings-posting-apply",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/postings/{posting}/apply",
+            "operation_id": "get-postings-posting-apply",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-880356",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-postings-posting-users",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/postings/{posting}/users",
+            "operation_id": "get-postings-posting-users",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-890102",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-requisition-fields",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/requisition_fields",
+            "operation_id": "get-requisition-fields",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-965371",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-requisition-fields-requisition-field",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/requisition_fields/{requisition_field}",
+            "operation_id": "get-requisition-fields-requisition-field",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-964711",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-requisitions",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/requisitions",
+            "operation_id": "get-requisitions",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-946441",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-requisitions-requisition",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/requisitions/{requisition}",
+            "operation_id": "get-requisitions-requisition",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-943468",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-sources",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/sources",
+            "operation_id": "get-sources",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-992497",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-stages",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/stages",
+            "operation_id": "get-stages",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-993642",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-stages-stage",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/stages/{stage}",
+            "operation_id": "get-stages-stage",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-993348",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-surveys-diversity-posting",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/surveys/diversity/{posting}",
+            "operation_id": "get-surveys-diversity-posting",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-999659",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-tags",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/tags",
+            "operation_id": "get-tags",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1002154",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-users",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users",
+            "operation_id": "get-users",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1006652",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-users-user",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/users/{user}",
+            "operation_id": "get-users-user",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1005826",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-v1-eeo-responses",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/eeo/responses",
+            "operation_id": "get-v1-eeo-responses",
+            "deprecated": false,
+            "source_location": "rendered-document: EEO Responses declaration `GET v1/eeo/responses` (provider omits the leading slash)",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-v1-eeo-responses-pii",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/eeo/responses/pii",
+            "operation_id": "get-v1-eeo-responses-pii",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-688140",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.get-webhooks",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/webhooks",
+            "operation_id": "get-webhooks",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1017640",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-feedback-templates",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/feedback_templates",
+            "operation_id": "post-feedback-templates",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-719842",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-form-templates",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/form_templates",
+            "operation_id": "post-form-templates",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-920845",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities",
+            "operation_id": "post-opportunities",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-818163",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities-opportunity-addlinks",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities/{opportunity}/addLinks",
+            "operation_id": "post-opportunities-opportunity-addlinks",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-829363",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities-opportunity-addsources",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities/{opportunity}/addSources",
+            "operation_id": "post-opportunities-opportunity-addsources",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-830360",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities-opportunity-addtags",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities/{opportunity}/addTags",
+            "operation_id": "post-opportunities-opportunity-addtags",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-829874",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities-opportunity-feedback",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities/{opportunity}/feedback",
+            "operation_id": "post-opportunities-opportunity-feedback",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-702737",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities-opportunity-files",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities/{opportunity}/files",
+            "operation_id": "post-opportunities-opportunity-files",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-727679",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities-opportunity-forms",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities/{opportunity}/forms",
+            "operation_id": "post-opportunities-opportunity-forms",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-911242",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities-opportunity-interviews",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities/{opportunity}/interviews",
+            "operation_id": "post-opportunities-opportunity-interviews",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-756642",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities-opportunity-notes",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities/{opportunity}/notes",
+            "operation_id": "post-opportunities-opportunity-notes",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-772243",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities-opportunity-panels",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities/{opportunity}/panels",
+            "operation_id": "post-opportunities-opportunity-panels",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-836584",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities-opportunity-removelinks",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities/{opportunity}/removeLinks",
+            "operation_id": "post-opportunities-opportunity-removelinks",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-829456",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities-opportunity-removesources",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities/{opportunity}/removeSources",
+            "operation_id": "post-opportunities-opportunity-removesources",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-830444",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-opportunities-opportunity-removetags",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/opportunities/{opportunity}/removeTags",
+            "operation_id": "post-opportunities-opportunity-removetags",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-829952",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-postings",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/postings",
+            "operation_id": "post-postings",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-865328",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-postings-posting",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/postings/{posting}",
+            "operation_id": "post-postings-posting",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-873088",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-postings-postingid-apply",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/postings/{postingId}/apply",
+            "operation_id": "post-postings-postingid-apply",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-853413",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-requisition-fields",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/requisition_fields",
+            "operation_id": "post-requisition-fields",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-967525",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-requisition-fields-requisition-field-options",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/requisition_fields/{requisition_field}/options",
+            "operation_id": "post-requisition-fields-requisition-field-options",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-972442",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-requisitions",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/requisitions",
+            "operation_id": "post-requisitions",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-952986",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-uploads",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/uploads",
+            "operation_id": "post-uploads",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1002648",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-users",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users",
+            "operation_id": "post-users",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1010690",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-users-user-deactivate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{user}/deactivate",
+            "operation_id": "post-users-user-deactivate",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1014269",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-users-user-reactivate",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/users/{user}/reactivate",
+            "operation_id": "post-users-user-reactivate",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1015116",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.post-webhooks",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/webhooks",
+            "operation_id": "post-webhooks",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1018329",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-contacts-contact",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/contacts/{contact}",
+            "operation_id": "put-contacts-contact",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-680893",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-feedback-templates-feedback-template",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/feedback_templates/{feedback_template}",
+            "operation_id": "put-feedback-templates-feedback-template",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-722990",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-form-templates-form-template",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/form_templates/{form_template}",
+            "operation_id": "put-form-templates-form-template",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-923467",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-opportunities-opportunity-archived",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/opportunities/{opportunity}/archived",
+            "operation_id": "put-opportunities-opportunity-archived",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-828468",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-opportunities-opportunity-feedback-feedback",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/opportunities/{opportunity}/feedback/{feedback}",
+            "operation_id": "put-opportunities-opportunity-feedback-feedback",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-709764",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-opportunities-opportunity-interviews-interview",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/opportunities/{opportunity}/interviews/{interview}",
+            "operation_id": "put-opportunities-opportunity-interviews-interview",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-763467",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-opportunities-opportunity-notes-note",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/opportunities/{opportunity}/notes/{note}",
+            "operation_id": "put-opportunities-opportunity-notes-note",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-775825",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-opportunities-opportunity-panels-panel",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/opportunities/{opportunity}/panels/{panel}",
+            "operation_id": "put-opportunities-opportunity-panels-panel",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-841085",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-opportunities-opportunity-stage",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/opportunities/{opportunity}/stage",
+            "operation_id": "put-opportunities-opportunity-stage",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-827193",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-requisition-fields-requisition-field",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/requisition_fields/{requisition_field}",
+            "operation_id": "put-requisition-fields-requisition-field",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-971781",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-requisition-fields-requisition-field-options",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/requisition_fields/{requisition_field}/options",
+            "operation_id": "put-requisition-fields-requisition-field-options",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-972497",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-requisitions-requisition",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/requisitions/{requisition}",
+            "operation_id": "put-requisitions-requisition",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-959759",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-users-user",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/users/{user}",
+            "operation_id": "put-users-user",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1013246",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          },
+          {
+            "id": "lever-hiring.rendered.put-webhooks",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/webhooks",
+            "operation_id": "put-webhooks",
+            "deprecated": false,
+            "source_location": "rendered-document-byte-1020770",
+            "citation_url": "https://hire.lever.co/developer/documentation?output=1"
+          }
+        ]
       }
     ]
+  },
+  "counts": {
+    "rest": 104,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 104
   }
 }
