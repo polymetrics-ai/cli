@@ -6152,13 +6152,16 @@ func validateSourceRequestBodyExecutionEnvelope(envelope *sourceExecutionEnvelop
 	if !limits.UseExecutionEnvelopes || !sourceJSONMediaType(sourceNormalizedMediaType(mediaType)) {
 		return nil
 	}
-	if envelope == nil || envelope.PolicyVersion != engine.OperationParameterExecutionPolicyVersion || envelope.Origin != "pm_policy" || envelope.SourceLocation == "" || len(envelope.Limits) != 5 {
+	if envelope == nil {
 		return fmt.Errorf("JSON request body requires a valid PM execution envelope")
 	}
-	for _, limit := range envelope.Limits {
-		if limit.Kind == "" || limit.Unit == "" || limit.Default <= 0 || limit.HardCeiling <= 0 || limit.Effective <= 0 || limit.Effective > limit.HardCeiling {
-			return fmt.Errorf("JSON request body has an invalid PM execution limit")
-		}
+	mediaLocation := "request.media[" + strconv.Quote(mediaType) + "]"
+	if envelope.SourceLocation != "request.body" && envelope.SourceLocation != mediaLocation {
+		return fmt.Errorf("JSON request body requires a valid PM execution envelope")
+	}
+	expected := sourceRequestBodyExecutionEnvelope(mediaType, limits, envelope.SourceLocation)
+	if !reflect.DeepEqual(envelope, expected) {
+		return fmt.Errorf("JSON request body requires a valid PM execution envelope")
 	}
 	return nil
 }

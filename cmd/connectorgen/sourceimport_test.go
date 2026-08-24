@@ -357,6 +357,12 @@ func TestSourceImportVersion3RepresentsCommonBodyBoundsWithSeparateEnvelope(t *t
 	if envelope == nil || envelope.PolicyVersion != engine.OperationParameterExecutionPolicyVersion || len(envelope.Limits) != 5 {
 		t.Fatalf("body execution envelope = %+v", envelope)
 	}
+	envelope.Limits[0].Effective--
+	policy := defaultSourceImportLimits()
+	policy.UseExecutionEnvelopes = true
+	if err := validateSourceRequestBodyExecutionEnvelope(envelope, operation.Request.MediaType, policy); err == nil || !strings.Contains(err.Error(), "valid PM execution envelope") {
+		t.Fatalf("projection accepted altered body execution envelope: %v", err)
+	}
 }
 
 func TestSourceImportRetainsRecursiveSchemaReferencesAsSourceBoundGaps(t *testing.T) {
