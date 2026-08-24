@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "connector": "salesforce",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "browser-rendered",
+    "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+    "requested_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+    "sha256": "609709e1726e5ff221f8b86d9f7408c5acb0b00e72e99e3ecc4d6635ecadf474",
+    "bytes": 76875,
+    "content_type": "text/html; Chrome-rendered-public-resource-index",
+    "coverage_confidence": "dynamic-instance-surface",
+    "coverage_basis": "Salesforce REST object resources and actions vary by tenant configuration. The public resource index is a stable generic reference but cannot settle a tenant-independent total.",
+    "browser_evidence": "chrome-devtools-axi retrieved the public Salesforce REST resource index; the count remains null because the executable resource/action surface varies with tenant configuration."
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "4c408db5bf497bfc2c0db31209cd7a7ceb76dbe440b75bff78d49f2ba6278126",
+    "bytes": 3460,
+    "source_operation_count": null,
+    "old_api_surface_rows": 10,
+    "regenerated_api_surface_rows": 10,
+    "regeneration_basis": "dynamic, unavailable, or pending rendered-reference crawl; existing local execution inventory retained until a complete public source can be materialized"
+  },
+  "rest": {
+    "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+    "sha256": "609709e1726e5ff221f8b86d9f7408c5acb0b00e72e99e3ecc4d6635ecadf474",
+    "bytes": 76875,
+    "operation_counts": [],
+    "operations": []
+  },
+  "graphql": {
+    "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+    "sha256": "609709e1726e5ff221f8b86d9f7408c5acb0b00e72e99e3ecc4d6635ecadf474",
+    "bytes": 76875,
+    "operation_counts": [],
+    "operations": []
+  },
+  "local_execution_bindings": [
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/sobjects",
+      "api_surface_index": 0,
+      "source_location": "api_surface.json:endpoints[0]"
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/query (SELECT ... FROM Account)",
+      "api_surface_index": 1,
+      "source_location": "api_surface.json:endpoints[1]"
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/query (SELECT ... FROM Contact)",
+      "api_surface_index": 2,
+      "source_location": "api_surface.json:endpoints[2]"
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/query (SELECT ... FROM Lead)",
+      "api_surface_index": 3,
+      "source_location": "api_surface.json:endpoints[3]"
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/query (arbitrary SOQL)",
+      "api_surface_index": 4,
+      "source_location": "api_surface.json:endpoints[4]"
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/sobjects/{sObject}/describe",
+      "api_surface_index": 5,
+      "source_location": "api_surface.json:endpoints[5]"
+    },
+    {
+      "method": "POST",
+      "path": "/services/data/{version}/sobjects/{sObject}",
+      "api_surface_index": 6,
+      "source_location": "api_surface.json:endpoints[6]"
+    },
+    {
+      "method": "PATCH",
+      "path": "/services/data/{version}/sobjects/{sObject}/{id}",
+      "api_surface_index": 7,
+      "source_location": "api_surface.json:endpoints[7]"
+    },
+    {
+      "method": "DELETE",
+      "path": "/services/data/{version}/sobjects/{sObject}/{id}",
+      "api_surface_index": 8,
+      "source_location": "api_surface.json:endpoints[8]"
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/jobs/query (Bulk API)",
+      "api_surface_index": 9,
+      "source_location": "api_surface.json:endpoints[9]"
+    }
+  ],
+  "counts": {
+    "total": null,
+    "rest": null,
+    "graphql": null,
+    "local_execution_bindings": 10,
+    "mapped_api_surface_rows": 10
+  },
+  "coverage_confidence": {
+    "level": "dynamic-instance-surface",
+    "basis": "Salesforce REST object resources and actions vary by tenant configuration. The public resource index is a stable generic reference but cannot settle a tenant-independent total."
+  }
+}

@@ -1,0 +1,664 @@
+{
+  "schema_version": 1,
+  "connector": "squarespace",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+    "requested_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+    "sha256": "eff1274e6e87cfa998a5125c2ebf53ee459202d108598dacf6507b32b2b2debc",
+    "bytes": 345839,
+    "content_type": "application/json",
+    "artifacts": [
+      {
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "requested_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "sha256": "eff1274e6e87cfa998a5125c2ebf53ee459202d108598dacf6507b32b2b2debc",
+        "bytes": 345839,
+        "content_type": "application/json"
+      }
+    ],
+    "coverage_confidence": "machine-readable-spec",
+    "coverage_basis": "Official Squarespace Commerce OpenAPI document has 53 HTTP method/path operations."
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "635dc046a7a3411a1f01ba850e9fa66e793f2b06808c760d03546e78fdf7fedd",
+    "bytes": 40115,
+    "source_operation_count": 53,
+    "old_api_surface_rows": 47,
+    "regenerated_api_surface_rows": 53,
+    "regeneration_basis": "provider-source-derived with 0 explicit local execution binding(s) outside the provider source inventory"
+  },
+  "rest": {
+    "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+    "sha256": "eff1274e6e87cfa998a5125c2ebf53ee459202d108598dacf6507b32b2b2debc",
+    "bytes": 345839,
+    "operation_counts": [
+      {
+        "key": "DELETE",
+        "count": 7
+      },
+      {
+        "key": "GET",
+        "count": 23
+      },
+      {
+        "key": "PATCH",
+        "count": 1
+      },
+      {
+        "key": "POST",
+        "count": 20
+      },
+      {
+        "key": "PUT",
+        "count": 2
+      }
+    ],
+    "operations": [
+      {
+        "id": "squarespace.provider.getmemberprofile-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/authorization/member",
+        "operation_id": "getMemberProfile",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/authorization/member.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getwebsiteprofile-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/authorization/website",
+        "operation_id": "getWebsiteProfile",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/authorization/website.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getinventoryitems-3",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/inventory",
+        "operation_id": "getInventoryItems",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/inventory.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getspecificinventoryitems-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/inventory/{variantIdCsvs}",
+        "operation_id": "getSpecificInventoryItems",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/inventory/{variantIdCsvs}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.adjustinventorystocklevels-5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/commerce/inventory/adjustments",
+        "operation_id": "adjustInventoryStockLevels",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/inventory/adjustments.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getorders-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/orders",
+        "operation_id": "getOrders",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/orders.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.createorder-7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/commerce/orders",
+        "operation_id": "createOrder",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/orders.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getorder-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/orders/{id}",
+        "operation_id": "getOrder",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/orders/{id}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.fulfillorder-9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/commerce/orders/{id}/fulfillments",
+        "operation_id": "fulfillOrder",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/orders/{id}/fulfillments.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getstorepages-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/store_pages",
+        "operation_id": "getStorePages",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/store_pages.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getdocumentsbyupdatedon-11",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/transactions",
+        "operation_id": "getDocumentsByUpdatedOn",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/transactions.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getdocumentsbyid-12",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/commerce/transactions/{documentIds}",
+        "operation_id": "getDocumentsById",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/commerce/transactions/{documentIds}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getprofiles-13",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/profiles",
+        "operation_id": "getProfiles",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/profiles.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getspecificprofiles-14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/profiles/{profileIdCsvs}",
+        "operation_id": "getSpecificProfiles",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/profiles/{profileIdCsvs}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getwebhooksubscriptions-15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/webhook_subscriptions",
+        "operation_id": "getWebhookSubscriptions",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.createwebhooksubscription-16",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions",
+        "operation_id": "createWebhookSubscription",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.deletewebhooksubscription-17",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}",
+        "operation_id": "deleteWebhookSubscription",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getwebhooksubscription-18",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}",
+        "operation_id": "getWebhookSubscription",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.updatewebhooksubscription-19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}",
+        "operation_id": "updateWebhookSubscription",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.rotatesubscriptionsecret-20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret",
+        "operation_id": "rotateSubscriptionSecret",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.sendtestnotificationforwebhooksubscription-21",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/sendTestNotification",
+        "operation_id": "sendTestNotificationForWebhookSubscription",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./1.0/webhook_subscriptions/{subscriptionId}/actions/sendTestNotification.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.gettransactionssummaries-22",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/analytics/transaction-summaries",
+        "operation_id": "getTransactionsSummaries",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/analytics/transaction-summaries.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.listdiscounts-23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/commerce/discounts",
+        "operation_id": "listDiscounts",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/commerce/discounts.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.creatediscount-24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/commerce/discounts",
+        "operation_id": "createDiscount",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/commerce/discounts.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.deletediscount-25",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/commerce/discounts/{discountId}",
+        "operation_id": "deleteDiscount",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/commerce/discounts/{discountId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getdiscount-26",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/commerce/discounts/{discountId}",
+        "operation_id": "getDiscount",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/commerce/discounts/{discountId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.updatediscount-27",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/commerce/discounts/{discountId}",
+        "operation_id": "updateDiscount",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/commerce/discounts/{discountId}.put",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getcontacts-28",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/contacts",
+        "operation_id": "getContacts",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.createcontact-29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/contacts",
+        "operation_id": "createContact",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.deletecontact-30",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/contacts/{contactId}",
+        "operation_id": "deleteContact",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getcontact-31",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/contacts/{contactId}",
+        "operation_id": "getContact",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.patchcontact-32",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v1/contacts/{contactId}",
+        "operation_id": "patchContact",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getaddressbook-33",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/contacts/{contactId}/address-book",
+        "operation_id": "getAddressBook",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}/address-book.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.createaddressbookentry-34",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/contacts/{contactId}/address-book",
+        "operation_id": "createAddressBookEntry",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}/address-book.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.deleteaddressbookentry-35",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+        "operation_id": "deleteAddressBookEntry",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}/address-book/{addressBookEntryId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getaddressbookentry-36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+        "operation_id": "getAddressBookEntry",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}/address-book/{addressBookEntryId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.updateaddressbookentry-37",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}",
+        "operation_id": "updateAddressBookEntry",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/{contactId}/address-book/{addressBookEntryId}.put",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.querycontacts-38",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/contacts/query",
+        "operation_id": "queryContacts",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/contacts/query.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getfulfillmentoptions-39",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/fulfillments/fulfillment-options",
+        "operation_id": "getFulfillmentOptions",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v1/fulfillments/fulfillment-options.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getproducts-40",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/commerce/products",
+        "operation_id": "getProducts",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.createproduct-41",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products",
+        "operation_id": "createProduct",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.deleteproduct-42",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/commerce/products/{productId}",
+        "operation_id": "deleteProduct",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.updateproduct-43",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}",
+        "operation_id": "updateProduct",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.uploadproductimage-44",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/images",
+        "operation_id": "uploadProductImage",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/images.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.deleteproductimage-45",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}",
+        "operation_id": "deleteProductImage",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/images/{imageId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.updateproductimage-46",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}",
+        "operation_id": "updateProductImage",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/images/{imageId}.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.updateproductimageorder-47",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}/order",
+        "operation_id": "updateProductImageOrder",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/images/{imageId}/order.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getproductimageprocessingstatus-48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/commerce/products/{productId}/images/{imageId}/status",
+        "operation_id": "getProductImageProcessingStatus",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/images/{imageId}/status.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.createproductvariant-49",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/variants",
+        "operation_id": "createProductVariant",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/variants.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.deleteproductvariant-50",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v2/commerce/products/{productId}/variants/{variantId}",
+        "operation_id": "deleteProductVariant",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/variants/{variantId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.updateproductvariant-51",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/variants/{variantId}",
+        "operation_id": "updateProductVariant",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/variants/{variantId}.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.associateproductvariantimage-52",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v2/commerce/products/{productId}/variants/{variantId}/image",
+        "operation_id": "associateProductVariantImage",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productId}/variants/{variantId}/image.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "squarespace.provider.getspecificproducts-53",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v2/commerce/products/{productIdCsvs}",
+        "operation_id": "getSpecificProducts",
+        "deprecated": false,
+        "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+        "source_location": "paths./v2/commerce/products/{productIdCsvs}.get",
+        "artifact_index": 0
+      }
+    ]
+  },
+  "graphql": {
+    "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+    "sha256": "eff1274e6e87cfa998a5125c2ebf53ee459202d108598dacf6507b32b2b2debc",
+    "bytes": 345839,
+    "operation_counts": [],
+    "operations": []
+  },
+  "local_execution_bindings": [],
+  "counts": {
+    "total": 53,
+    "rest": 53,
+    "graphql": 0,
+    "local_execution_bindings": 0,
+    "mapped_api_surface_rows": 53
+  },
+  "coverage_confidence": {
+    "level": "machine-readable-spec",
+    "basis": "Official Squarespace Commerce OpenAPI document has 53 HTTP method/path operations."
+  }
+}
