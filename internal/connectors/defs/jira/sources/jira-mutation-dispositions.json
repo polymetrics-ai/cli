@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "dispositions": [
+    {
+      "source": {
+        "source_id": "removeGroup",
+        "method": "DELETE",
+        "path": "/rest/api/3/group"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "resetUserColumns",
+        "method": "DELETE",
+        "path": "/rest/api/3/user/columns"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "DynamicModulesResource.removeModules_delete",
+        "method": "DELETE",
+        "path": "/rest/atlassian-connect/1/app/module/dynamic"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "source": {
+        "source_id": "addWatcher",
+        "method": "POST",
+        "path": "/rest/api/3/issue/{issueIdOrKey}/watchers"
+      },
+      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    }
+  ]
+}

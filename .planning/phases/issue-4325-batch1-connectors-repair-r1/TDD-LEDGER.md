@@ -86,6 +86,50 @@
   cyclic-schema importer repair #4327; no local flattening or fabricated gap
   is valid.
 
+### 2026-08-24 Jira declared-and-deferred result
+
+- Red: current `go run ./cmd/connectorgen source-import jira --check` reported
+  14 incomplete source-action contracts; current targeted validation reported
+  16 source operations without an executable action, 86 unresolved source
+  gaps, and further source request-field findings.
+- Classified deferred writes: `removeGroup`, `resetUserColumns`,
+  `DynamicModulesResource.removeModules_delete`, and `addWatcher` have no
+  matching write or implemented CLI command. Each is `direct_write` in the
+  existing Jira declaration disposition ledger. The new four-row mutation
+  disposition file lets source import retain exact provider citations from the
+  current descriptor: URL
+  `https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json`,
+  SHA-256 `e7136af43bf72cd4ea5ada91ec665b318b60008814122461d4436a43b6c732bf`,
+  byte count `2456011`, and its individual OpenAPI location; all are
+  merge-blocking `source-cited-non-executable-mutation-foundation-r1` gaps.
+- Protected direct reads: 11 remaining source-action findings are semantically
+  `direct_read` POST endpoints, each with an implemented command. A rebuilt
+  no-credential binary reached exactly `error: missing --credential` (exit 1)
+  for `changelog get-bulk-changelogs`, `comment get-comments-by-ids`, `issue
+  get-change-logs-by-ids`, `jql get-auto-complete-post`, `jql
+  get-precomputations-by-id`, `jql match-issues`, `jql migrate-queries`, `jql
+  sanitise-jql-queries`, `search count-issues`, `workflow
+  list-workflow-history`, and `worklog get-worklogs-for-ids`. The related
+  `app get-custom-fields-configurations` direct-read command reached the same
+  boundary and is already excluded from the missing-action set.
+- Re-derived credential split: Jira declares 584 implemented commands (292
+  direct reads and 286 write commands among them). The real
+  `TestEveryImplementedCommandPassesRuntimePreflight` sweep reached 581
+  credential boundaries; its only three Jira failures are the universal-avatar
+  image-by-type, image-by-id, and image-by-owner binary-download operations,
+  each missing declared response `content_types`. The 26/5,284 global failure
+  result also includes the independently recorded Asana and Docker Hub debt;
+  no test was weakened or bypassed.
+- Foundation stop: `sourceProjectionOperationMutates` at
+  `cmd/connectorgen/sourceprojection.go:1116-1121` defines all REST POST
+  operations as mutations. It therefore makes those 11 working direct reads
+  enter the action-only projection path; `sourceProjectionReadOnlyDeclaration`
+  at `:1084-1096` cannot represent them because its only model is a blocked
+  read-only endpoint. Neither a non-executable mutation disposition nor a
+  connector-local action is truthful. After the four cited write dispositions,
+  `source-import jira` honestly remains at 11 source-action findings. This
+  requires a shared source-projection semantic-POST direct-read contract.
+
 Every red/green command and its result is appended when it executes. No test is
 weakened or skipped to advance a row.
 
