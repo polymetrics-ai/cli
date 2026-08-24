@@ -12,7 +12,7 @@
   },
   "connectors": [
     {"connector": "close-com", "source_lock": "v3", "retention": "verified", "descriptor": "blocked_nullable_anyof", "detail": "GET /activity/ optional id__in is anyOf(array<string>, null); sourceimport.go:7175-7178 rejects it."},
-    {"connector": "outreach", "source_lock": "v2", "retention": "not_attempted", "descriptor": "blocked_cross_origin_citation_capture", "detail": "Six custom-object citations require a separately captured developers.outreach.io document."},
+    {"connector": "outreach", "source_lock": "v2", "retention": "blocked_legacy_lock_reader", "descriptor": "blocked_cross_origin_citation_capture", "detail": "Current source-retain rejects legacy per-operation source_url before it can verify the OpenAPI artifact; six custom-object citations separately require a captured developers.outreach.io document."},
     {"connector": "salesloft", "source_lock": "v3", "retention": "refused_byte_sha_drift", "descriptor": "not_generated"},
     {"connector": "copper", "source_lock": "v3", "retention": "refused_byte_sha_drift", "descriptor": "not_generated"},
     {"connector": "zoho-bigin", "source_lock": "v3", "retention": "refused_byte_sha_drift", "descriptor": "not_generated"},

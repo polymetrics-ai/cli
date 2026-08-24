@@ -155,6 +155,13 @@ the fixed global source-reference index byte limit before source descriptors are
 shared closure is a bounded, operation-scoped reference index or equivalent streaming traversal;
 raising the package budget or discarding source positions would weaken the parser contract.
 
+Outreach remains intentionally at schema v2. Current `source-retain` stops at
+`parse source lock: json: unknown field "source_url"` before it can verify the existing OpenAPI
+artifact, while its six custom-object operations also cite `developers.outreach.io` rather than the
+captured `api.outreach.io` document. The queued retain-only reader in #4350 addresses only the
+former legacy-reader refusal; a second immutable developer-document capture remains mandatory
+before this lock can be migrated without false provenance.
+
 ## Relaunch baseline and CI repair — 2026-08-20
 
 - **RED:** PR run `32283259925` failed `TestGorgiasAPISurfaceOperationLedger`: the recovered v2
