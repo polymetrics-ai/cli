@@ -14,6 +14,54 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
+func TestSourceProjectionNormalizesLegacyDelimitedEnumerationPattern(t *testing.T) {
+	projected, err := sourceProjectionSchema(map[string]any{
+		"type":    "string",
+		"pattern": `([forms|members|task_dates])(,\1)*`,
+	})
+	if err != nil {
+		t.Fatalf("project source pattern: %v", err)
+	}
+	schema, ok := projected.(map[string]any)
+	if !ok {
+		t.Fatalf("projected schema type = %T, want object", projected)
+	}
+	const want = `^(?:forms|members|task_dates)(?:,(?:forms|members|task_dates))*$`
+	if got, _ := schema["pattern"].(string); got != want {
+		t.Fatalf("normalized pattern = %q, want %q", got, want)
+	}
+	raw, err := json.Marshal(schema)
+	if err != nil {
+		t.Fatalf("marshal normalized schema: %v", err)
+	}
+	compiled, err := engine.CompileSchema(raw)
+	if err != nil {
+		t.Fatalf("compile normalized schema: %v", err)
+	}
+	for _, value := range []string{"forms", "forms,members", "members,task_dates,forms"} {
+		if err := compiled.Validate(value); err != nil {
+			t.Errorf("validate documented value %q: %v", value, err)
+		}
+	}
+	for _, value := range []string{"form", "forms,unknown", "forms,"} {
+		if err := compiled.Validate(value); err == nil {
+			t.Errorf("validate malformed value %q succeeded", value)
+		}
+	}
+
+	unsupported, err := sourceProjectionSchema(map[string]any{
+		"type":    "string",
+		"pattern": `([a-z])(,\1)*`,
+	})
+	if err != nil {
+		t.Fatalf("project unrecognized pattern: %v", err)
+	}
+	unsupportedSchema := unsupported.(map[string]any)
+	if got := unsupportedSchema["pattern"]; got != `([a-z])(,\1)*` {
+		t.Fatalf("unrecognized source pattern = %q, want verbatim preservation", got)
+	}
+}
+
 func TestSourceProjection_AddChangeDeletePropagatesToEverySurface(t *testing.T) {
 	bundleDir := t.TempDir()
 	writesPath := filepath.Join(bundleDir, "writes.json")

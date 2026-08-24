@@ -94,6 +94,34 @@
   so a connector-local rewrite would be regenerated away. This needs a shared
   source-pattern dialect normalization (or provider-source correction), never
   a non-executable tag.
+- **Red:** add `TestSourceProjectionNormalizesLegacyDelimitedEnumerationPattern`
+  against the exact invalid provider spelling. Before implementation it must
+  fail because projection returns the raw `\\1` pattern and the engine schema
+  cannot compile it.
+- **Green:** a narrowly recognized provider delimited-enumeration form is
+  normalized into anchored RE2 alternation, compiles through the engine, accepts
+  the documented comma-separated values, and refuses malformed or unrecognized
+  source patterns unchanged.
+- **Green result:** the focused test first failed with raw
+  `([forms|members|task_dates])(,\\1)*`, then passed after shared normalization.
+  `source-import asana` regenerated exactly two write contracts and targeted
+  validation has zero unsafe-regex findings (24 source-schema gaps remain).
+
+### 2026-08-24 Asana required-body scope
+
+- The 22 required-body findings cover 22 distinct provider routes. Each has a
+  single source `data` wrapper, but none supplies a closed bounded schema. Nine
+  explicitly retain an open `custom_fields` map (`createProject`,
+  `createProjectForTeam`, `createProjectForWorkspace`, `createSubtaskForTask`,
+  `createTask`, `updateGoal`, `updatePortfolio`, `updateUser`, and
+  `updateUserForWorkspace`); the other 13 retain object schemas whose OAS
+  default is also open because they omit `additionalProperties: false`.
+- This is provider-source limitation, not a safe connector declaration task:
+  closing any of the 22 would omit provider-permitted fields, while retaining a
+  generic object would bypass the bounded-record contract. The source has no
+  bounded request schema to materialize. Required bodies stay visible failures
+  pending a shared, source-cited bounded-dynamic-body capability or a provider
+  schema correction; no local schema inference is authorized.
 
 ## Jira red/green evidence
 

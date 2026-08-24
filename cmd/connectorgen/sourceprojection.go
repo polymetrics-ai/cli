@@ -51,6 +51,12 @@ var (
 	sourceProjectionRecordTemplateRE = regexp.MustCompile(`\{\{\s*record\.([-A-Za-z0-9_]+)\s*\}\}`)
 	sourceProjectionConfigTemplateRE = regexp.MustCompile(`\{\{\s*config\.([-A-Za-z0-9_]+)\s*\}\}`)
 	sourceProjectionPathVariableRE   = regexp.MustCompile(`\{([-A-Za-z0-9_]+)\}`)
+	// Some OpenAPI generators emit a comma-list enum as a character class plus
+	// a backreference, for example `([forms|members])(,\1)*`. That spelling is
+	// both semantically wrong for multi-character values and unsupported by
+	// Go's RE2 engine. Only the deliberately narrow identifier-only form is
+	// normalized; every other provider pattern remains source-verbatim.
+	sourceProjectionLegacyDelimitedEnumerationPatternRE = regexp.MustCompile(`^\(\[([A-Za-z0-9_]+(?:\|[A-Za-z0-9_]+)+)\]\)\(,\\1\)\*$`)
 )
 
 type sourceProjectionStats struct {
@@ -1655,6 +1661,11 @@ func sourceProjectionSchema(raw any) (any, error) {
 	}
 	for _, key := range []string{"pattern", "minLength", "maxLength", "minItems", "maxItems", "minProperties", "maxProperties"} {
 		if value, exists := schema[key]; exists {
+			if key == "pattern" {
+				if pattern, ok := value.(string); ok {
+					value = sourceProjectionNormalizePattern(pattern)
+				}
+			}
 			out[key] = value
 		}
 	}
@@ -1696,6 +1707,15 @@ func sourceProjectionSchema(raw any) (any, error) {
 		}
 	}
 	return out, nil
+}
+
+func sourceProjectionNormalizePattern(pattern string) string {
+	match := sourceProjectionLegacyDelimitedEnumerationPatternRE.FindStringSubmatch(pattern)
+	if len(match) != 2 {
+		return pattern
+	}
+	values := match[1]
+	return "^(?:" + values + ")(?:,(?:" + values + "))*$"
 }
 
 // sourceProjectionBoundedNamedJSONSchema retains a source-owned value whose

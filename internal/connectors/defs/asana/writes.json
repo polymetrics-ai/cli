@@ -3480,7 +3480,7 @@
             "properties": {
               "include": {
                 "maxLength": 8192,
-                "pattern": "([allocations|forms|members|notes|permissions|task_assignee|task_attachments|task_dates|task_dependencies|task_followers|task_notes|task_projects|task_subtasks|task_tags|task_templates|task_type_default])(,\\1)*",
+                "pattern": "^(?:allocations|forms|members|notes|permissions|task_assignee|task_attachments|task_dates|task_dependencies|task_followers|task_notes|task_projects|task_subtasks|task_tags|task_templates|task_type_default)(?:,(?:allocations|forms|members|notes|permissions|task_assignee|task_attachments|task_dates|task_dependencies|task_followers|task_notes|task_projects|task_subtasks|task_tags|task_templates|task_type_default))*$",
                 "type": "string"
               },
               "name": {
@@ -5035,7 +5035,7 @@
             "properties": {
               "include": {
                 "maxLength": 8192,
-                "pattern": "([notes|assignee|subtasks|attachments|tags|followers|projects|dates|dependencies|parent])(,\\1)*",
+                "pattern": "^(?:notes|assignee|subtasks|attachments|tags|followers|projects|dates|dependencies|parent)(?:,(?:notes|assignee|subtasks|attachments|tags|followers|projects|dates|dependencies|parent))*$",
                 "type": "string"
               },
               "name": {
