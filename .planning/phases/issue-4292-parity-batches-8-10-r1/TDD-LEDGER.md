@@ -2,6 +2,37 @@
 
 ## Reconciliation red/green evidence — 2026-08-20
 
+### Declared transport batch regression — 2026-08-24
+
+- **Red:** `GOFLAGS=-p=3 go test -timeout 20m ./internal/connectors/certify`
+  fails `TestCertificationDeclaredTransportPairResolvesAndExecutes` before
+  provider I/O: the #4292 reconciliation generator emits a
+  `declarative_typed_destination` `source_bindings` entry without the newly
+  required sealed `batch` declaration. Clean `origin/main` passes the same
+  suite, proving this is branch-generated declaration drift rather than a
+  pre-existing certification failure.
+- **Green target:** regenerate every assigned connector transport through the
+  canonical reconciliation trace with a closed
+  `batch: {"disposition":"per_record","max_records":1}` for each exact
+  record-driven binding; retain the certification assertion unchanged and
+  prove the focused suite plus generator/surface checks.
+- **Second red:** after the batch repair, the unchanged certification test
+  reached the next closed-contract check: Adobe Commerce's `update_product`
+  has no provider-documented `idempotency_key_header`. The same inspection
+  found no such header on any action selected by these thirty generated
+  destination declarations. These actions remain direct-write CLI reachable;
+  they cannot be falsely declared as replay-safe reverse-ETL destinations.
+- **Second green target:** make the canonical candidate selector require the
+  provider-documented idempotency header before it emits a reusable typed
+  destination binding, then regenerate all assigned declarations and rerun
+  the unchanged certification suite.
+- **Green:** the canonical trace now seals `per_record`/`max_records: 1` on
+  every emitted binding and requires a documented `idempotency_key_header`
+  before it declares a reusable destination. Regeneration removed the
+  unsupported destination claims while preserving every generated direct-write
+  command. The unchanged `GOFLAGS=-p=3 go test -timeout 20m
+  ./internal/connectors/certify` suite passes in 38.273s.
+
 ### Red
 
 - Verify CI run `32281460555` failed in

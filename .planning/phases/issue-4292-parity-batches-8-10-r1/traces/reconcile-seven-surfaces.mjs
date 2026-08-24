@@ -73,6 +73,9 @@ function candidateFor(action, streams, schemas) {
   if (action.transport_binding) {
     return { state: "semantic-exclusion", reason: "action selects a different closed destination adapter through transport_binding" };
   }
+  if (typeof action.idempotency_key_header !== "string" || action.idempotency_key_header.trim() === "") {
+    return { state: "semantic-exclusion", reason: "the provider action has no documented idempotency_key_header, so the closed destination cannot prove replay-safe delivery" };
+  }
   if (action.record_schema?.type !== "object") {
     return { state: "semantic-exclusion", reason: "closed declarative destination accepts object records only" };
   }
@@ -80,19 +83,6 @@ function candidateFor(action, streams, schemas) {
   const fields = required.length > 0 ? required : actionFields(action);
   if (fields.length === 0) {
     return { state: "semantic-exclusion", reason: "action has no typed record field available for the required input_fields mapping" };
-  }
-  // The foundation validates names in the action-facing mapping as lowercase,
-  // underscore/dash identifiers. A provider's case-preserving action input
-  // cannot be changed here: the executor uses the input name to look up the
-  // action's actual typed property. Keep this as an explicit foundation gap
-  // rather than emitting a declaration the real loader rejects.
-  if (fields.some((field) => /[A-Z]/.test(field))) {
-    return {
-      state: "foundation-gap",
-      reason: `closed destination mapping rejects the provider's case-preserving input(s): ${fields.filter((field) => /[A-Z]/.test(field)).join(", ")}`,
-      refusing_location: "internal/connectors/sync_transport.go:673",
-      minimal_change: "allow case-preserving concrete input_fields identifiers so action property names remain exact",
-    };
   }
   for (const stream of streams) {
     const properties = sourceSchema(stream, schemas).properties ?? {};
@@ -122,21 +112,25 @@ function declaration(connector, streams, selected, candidates) {
   if (selected) {
     document.destination_transport = {
       executor: { family: "declarative_api", id: "declarative_typed_destination" },
-      // This admits every exact record-driven action. The current closed
-      // destination declaration has one selected action per mode; actions not
-      // selected below are recorded in the ledger as a foundation multiplicity
-      // dependency rather than silently treated as unavailable.
+      // This admits every exact record-driven action. Each action owns its
+      // full_append strategy and source binding, so no action can inherit a
+      // neighbor's field map or be listed without an executable selection.
       eligible_actions: candidates.map(({ action }) => action.name),
       modes: ["full_append"],
       delivery: { idempotency: "keyed", ordering: "source_ordered", deletes: "not_available" },
       conformance: { suite: "declarative_typed_destination_static", run_id: `${connector}_${selected.name}_full_append_v1` },
       acknowledgement: "durable_warehouse",
-      apply_strategies: [{ mode: "full_append", strategy: "append", action: selected.name }],
-      source_bindings: [{
+      apply_strategies: candidates.map(({ action }) => ({ mode: "full_append", strategy: "append", action: action.name })),
+      source_bindings: candidates.map(({ action, candidate }) => ({
+        action: action.name,
         executor: { family: "declarative_api", id: "declarative_stream_source" },
-        eligible_streams: [selected.candidate.stream],
-        record_mapping: { kind: "input_fields", inputs: selected.candidate.inputs },
-      }],
+        eligible_streams: [candidate.stream],
+        record_mapping: { kind: "input_fields", inputs: candidate.inputs },
+        // The reusable destination sends one typed request per record. Seal
+        // that acknowledgement unit in the connector declaration so callers
+        // cannot enlarge the provider-facing workset at runtime.
+        batch: { disposition: "per_record", max_records: 1 },
+      })),
     };
   }
   return document;
@@ -415,10 +409,10 @@ async function inspect(connector) {
       direct_write: parity.direct_write ?? 0,
       etl: { executable_streams: streams.map((stream) => stream.name), source_transport: sync?.source_transport ? "declared-static" : "declaration-pending" },
       reverse_etl: {
-        destination_transport: sync?.destination_transport ? "declared-static; application-dispatch-pending-foundation" : "declaration-pending",
+        destination_transport: sync?.destination_transport ? "declared-static; application-dispatch-installed" : "declaration-pending",
         selected_initial_proof: selected?.name ?? null,
         exact_record_driven_actions: candidates.map(({ action }) => action.name),
-        multiplicity_dependency: candidates.length > 1 ? "one apply_strategy action is selectable per mode; remaining exact actions await foundation multi-action selection" : null,
+        multiplicity_dependency: null,
         actions: actionsLedger,
       },
       cli: {
@@ -445,10 +439,20 @@ function verifyDeclaration(row, sync) {
   assert(destination.executor?.family === "declarative_api" && destination.executor?.id === "declarative_typed_destination", `${row.connector}: destination must select declarative_typed_destination`);
   assert(JSON.stringify(destination.eligible_actions) === JSON.stringify(representable), `${row.connector}: destination eligible actions must list every exact record-driven action`);
   assert(destination.acknowledgement === "durable_warehouse", `${row.connector}: destination acknowledgement must be durable_warehouse`);
-  assert(destination.apply_strategies?.length === 1 && destination.apply_strategies[0].mode === "full_append", `${row.connector}: initial proof must select one full_append action`);
-  assert(representable.includes(destination.apply_strategies[0].action), `${row.connector}: selected action is not exact-record-driven`);
-  const mapping = destination.source_bindings?.[0]?.record_mapping;
-  assert(mapping?.kind === "input_fields" && array(mapping.inputs).length > 0, `${row.connector}: destination requires exact input_fields mapping`);
+  const strategyActions = array(destination.apply_strategies)
+    .filter((strategy) => strategy.mode === "full_append" && strategy.strategy === "append")
+    .map((strategy) => strategy.action)
+    .sort();
+  assert(JSON.stringify(strategyActions) === JSON.stringify([...representable].sort()), `${row.connector}: every exact action requires its own full_append strategy`);
+  const bindings = array(destination.source_bindings);
+  assert(bindings.length === representable.length, `${row.connector}: every exact action requires its own source binding`);
+  const bindingActions = bindings.map((binding) => binding.action).sort();
+  assert(JSON.stringify(bindingActions) === JSON.stringify([...representable].sort()), `${row.connector}: source bindings must be action-owned`);
+  for (const binding of bindings) {
+    const mapping = binding.record_mapping;
+    assert(mapping?.kind === "input_fields" && array(mapping.inputs).length > 0, `${row.connector}: destination requires exact input_fields mapping`);
+    assert(binding.batch?.disposition === "per_record" && binding.batch?.max_records === 1, `${row.connector}: destination requires a sealed per-record declaration batch`);
+  }
 }
 
 function verifyWriteCLI(row) {
@@ -462,7 +466,7 @@ function summary(rows) {
   const lines = [
     "# Issue #4292 seven-surface reconciliation",
     "",
-    "Generated entirely from the pinned source ledgers and existing connector-owned stream/action schemas. `declared-static` means structural, credential-free contract validation only; application-level generic destination dispatch remains pending the latest #4304 foundation integration and its installed App/CLI proof.",
+    "Generated entirely from the pinned source ledgers and existing connector-owned stream/action schemas. `declared-static` means structural, credential-free contract validation only; definition-owned destination plan/preview and runtime dispatch are installed, while provider-live certification remains pending.",
     "",
     "| Batch | Connector | Provider operations | Direct reads | Direct writes | Binary R/W | Streams | Selected destination proof | Eligible typed actions | CLI implemented/partial/declared |",
     "| --- | --- | ---: | ---: | ---: | --- | ---: | --- | ---: | ---: |",
@@ -471,7 +475,7 @@ function summary(rows) {
     const s = row.surfaces;
     lines.push(`| ${row.batch} | ${row.connector} | ${row.provider_operations.operations ?? row.provider_operations.state} | ${s.direct_read} | ${s.direct_write} | ${s.binary_read}/${s.binary_write} | ${s.etl.executable_streams.length} | ${s.reverse_etl.selected_initial_proof ?? "—"} | ${s.reverse_etl.exact_record_driven_actions.length} | ${s.cli.implemented_commands}/${s.cli.partial_commands}/${s.cli.declared_commands} |`);
   }
-  lines.push("", "Each typed write action has a machine-readable `reverse_etl_eligibility` disposition and `direct_write_cli_status` in `SEVEN-SURFACE-LEDGER.json`. `partial-blocked` has a directly invokable CLI path plus an exact closed-contract blocker; `declaration-pending-cli-binding` is an unfinished reachability obligation, not a safety exclusion. When more than one action is structurally representable, the declaration lists every eligible action but the current closed destination multiplicity selects one action per mode; unselected actions are explicitly pending the foundation's multi-action selection capability. Semantic exclusions name the exact record-schema incompatibility and remain subject to direct CLI reachability.", "", "Captain pre-merge gate: **blocked-common-foundations**. This aggregate ledger is not yet an operation-level proof of enabled runtime reachability, generated website rows, and executable fixture/conformance evidence for every provider-defined operation. Those omissions are explicit and remain a hard pre-merge gate; scope, tier, destructive, and safety constraints remain runtime metadata/confirmations, not disablement.", "");
+  lines.push("", "Each typed write action has a machine-readable `reverse_etl_eligibility` disposition and `direct_write_cli_status` in `SEVEN-SURFACE-LEDGER.json`. `partial-blocked` has a directly invokable CLI path plus an exact closed-contract blocker; `declaration-pending-cli-binding` is an unfinished reachability obligation, not a safety exclusion. Every structurally representable action owns its full-append strategy and exact source-field binding. Semantic exclusions name the exact record-schema incompatibility and remain subject to direct CLI reachability.", "", "Captain pre-merge gate: **blocked-common-foundations**. This aggregate ledger is not yet an operation-level proof of enabled runtime reachability, generated website rows, and executable fixture/conformance evidence for every provider-defined operation. Those omissions are explicit and remain a hard pre-merge gate; scope, tier, destructive, and safety constraints remain runtime metadata/confirmations, not disablement.", "");
   return lines.join("\n");
 }
 
@@ -505,7 +509,7 @@ if (writeCLIIndex >= 0) {
   rows.length = 0;
   for (const connector of connectors) rows.push(await inspect(connector));
 }
-const document = { schema_version: 1, issue: 4292, application_dispatch: "pending-foundation-app-cli-integration", pre_merge_gate: preMergeGate, rows };
+const document = { schema_version: 1, issue: 4292, application_dispatch: "installed-definition-owned-plan-preview-and-runtime-dispatch", pre_merge_gate: preMergeGate, rows };
 if (checkIndex >= 0) {
   for (const row of rows.filter((row) => targets.includes(row.connector))) {
     verifyDeclaration(row, await readJSON(file(row.connector, "sync_transport.json"), null));
