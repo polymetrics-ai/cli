@@ -3,11 +3,11 @@
   "generated_command": "go run ./cmd/connectorgen certification-subject",
   "subject": {
     "schema_version": 2,
-    "fingerprint": "904efaf1885504574b6d2cb2656898de418d46ce10c69fa022e39007e9b482be",
-    "declarations_sha256": "699a5b92fd6a7d4902d4984e35052071e1cbb17fe280f29adc034397e7337a5d",
-    "source_projection_sha256": "cf90313d7a90ea5d93f98f29ebcc447b6ff704e1f92046ed7f6875ece481f58d",
-    "cli_command_mapping_sha256": "8acf7bd934040cc67f1623e3b4de1ab53f347f38a54437e4ddabffc5710d2a2a",
-    "relevant_config_sha256": "ff89c2c51482dbeeef8dfabfdd1bbdac970482328ab48a222ffba32a53f2b634",
+    "fingerprint": "b71e7669c6ccfdf51dad35009c050a7850b0c018d71cd1e8423a902329e1cd1a",
+    "declarations_sha256": "393d87aa52d214f19527ec0b1d9cb0f271081df456f52cc9f5bb0c1d1d7ef077",
+    "source_projection_sha256": "7fa8056b05e1f1aea758be5942c0240d7bba58f842c80c98bb00e0ec44d9adf9",
+    "cli_command_mapping_sha256": "23e5d2617bf4629465ace8f7235e663ef322794d0972f2b16590324f3a44881b",
+    "relevant_config_sha256": "9798c5711f9178aa709d9341e300213531d2d5892d7637c033a2cd0a5b511114",
     "proof_protocol": "foundation-certification-proof-v1"
   }
 }

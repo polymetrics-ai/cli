@@ -1,9 +1,9 @@
 {
   "api": "Mailchimp Marketing API v3.0",
   "docs": "https://api.mailchimp.com/schema/3.0/Swagger.json",
-  "reviewed_at": "2026-07-31",
+  "reviewed_at": "2026-08-19",
   "operation_ledger_version": 1,
-  "scope": "Current official Mailchimp Marketing Swagger 2.0 root plus all 181 provider-owned path refs. Count unit is HTTP method plus normalized path. Executable rows are definition-owned streams, typed direct reads, or named reverse-ETL actions. Blocked rows are exact safety/runtime blockers, not advertised executable work.",
+  "scope": "Provider-source inventory regenerated for issue #4290 from Official Swagger root plus all 181 provider-owned path-item JSON documents retrieved through Chrome; the current source has 295 unique HTTP method/path operations. The inherited 298-row bundle was not treated as the source total. It contains 295 documented provider operations plus 28 explicit local compatibility binding(s) retained solely because the current executor still dispatches them. The local bindings are not used to bound or count the provider source.",
   "endpoints": [
     {
       "method": "GET",
@@ -158,31 +158,27 @@
       }
     },
     {
-      "method": "GET",
+      "method": "POST",
       "path": "/automations/{workflow_id}/emails",
-      "covered_by": {
-        "stream": "automations_emails"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=postCampaignsIdActionsUnschedule"
       }
     },
     {
-      "method": "DELETE",
+      "method": "POST",
       "path": "/automations/{workflow_id}/emails/{workflow_email_id}",
-      "covered_by": {
-        "write": "delete_automations_emails"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/automations/{workflow_id}/emails/{workflow_email_id}",
-      "covered_by": {
-        "direct_read": "automations emails get"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/automations/{workflow_id}/emails/{workflow_email_id}",
-      "covered_by": {
-        "write": "patch_automations_emails"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=postCampaignsIdActionsTest"
       }
     },
     {
@@ -193,17 +189,27 @@
       }
     },
     {
-      "method": "POST",
+      "method": "GET",
       "path": "/automations/{workflow_id}/emails/{workflow_email_id}/actions/start",
-      "covered_by": {
-        "write": "start_emails"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=getCampaignsIdContent"
       }
     },
     {
-      "method": "GET",
-      "path": "/automations/{workflow_id}/emails/{workflow_email_id}/queue",
-      "covered_by": {
-        "stream": "automations_emails_queue"
+      "method": "PUT",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}/actions/start",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=putCampaignsIdContent"
       }
     },
     {
@@ -214,10 +220,15 @@
       }
     },
     {
-      "method": "GET",
+      "method": "POST",
       "path": "/automations/{workflow_id}/emails/{workflow_email_id}/queue/{subscriber_hash}",
-      "covered_by": {
-        "direct_read": "automations emails queue get"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=postCampaignsIdActionsResume"
       }
     },
     {
@@ -235,10 +246,46 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/automations/{workflow_id}/removed-subscribers/{subscriber_hash}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=deleteCampaignsIdFeedbackId"
+      }
+    },
+    {
       "method": "GET",
       "path": "/automations/{workflow_id}/removed-subscribers/{subscriber_hash}",
       "covered_by": {
         "direct_read": "automations removed-subscribers get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/automations/{workflow_id}/removed-subscribers/{subscriber_hash}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=patchCampaignsIdFeedbackId"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/batch-webhooks",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=deleteConnectedSitesId"
       }
     },
     {
@@ -250,30 +297,14 @@
     },
     {
       "method": "POST",
-      "path": "/batch-webhooks",
-      "covered_by": {
-        "write": "post_batch_webhooks"
-      }
-    },
-    {
-      "method": "DELETE",
       "path": "/batch-webhooks/{batch_webhook_id}",
-      "covered_by": {
-        "write": "delete_batch_webhooks"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/batch-webhooks/{batch_webhook_id}",
-      "covered_by": {
-        "direct_read": "batch-webhooks get"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/batch-webhooks/{batch_webhook_id}",
-      "covered_by": {
-        "write": "patch_batch_webhooks"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=postConnectedSitesIdActionsVerifyScriptInstallation"
       }
     },
     {
@@ -284,30 +315,22 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/batches",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Mailchimp batch creation accepts arbitrary method/path/body operations; exposing it would be a generic HTTP write passthrough, which AGENTS.md forbids.",
-        "source_url": "https://us22.api.mailchimp.com/schema/3.0/Paths/Batches/Collection.json",
-        "notes": "Use named stream, direct-read, or reverse-ETL actions instead of raw batch operation submission."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/batches/{batch_id}",
-      "covered_by": {
-        "write": "delete_batches"
-      }
-    },
-    {
       "method": "GET",
       "path": "/batches/{batch_id}",
       "covered_by": {
         "direct_read": "batches get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batches/{batch_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=postConnectedSites"
       }
     },
     {
@@ -318,31 +341,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/campaign-folders",
-      "covered_by": {
-        "write": "post_campaign_folders"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/campaign-folders/{folder_id}",
-      "covered_by": {
-        "write": "delete_campaign_folders"
-      }
-    },
-    {
       "method": "GET",
       "path": "/campaign-folders/{folder_id}",
       "covered_by": {
         "direct_read": "campaign-folders get"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/campaign-folders/{folder_id}",
-      "covered_by": {
-        "write": "patch_campaign_folders"
       }
     },
     {
@@ -353,31 +355,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/campaigns",
-      "covered_by": {
-        "write": "post_campaigns"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/campaigns/{campaign_id}",
-      "covered_by": {
-        "write": "delete_campaigns"
-      }
-    },
-    {
       "method": "GET",
       "path": "/campaigns/{campaign_id}",
       "covered_by": {
         "direct_read": "campaigns get"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/campaigns/{campaign_id}",
-      "covered_by": {
-        "write": "patch_campaigns"
       }
     },
     {
@@ -388,10 +369,27 @@
       }
     },
     {
-      "method": "POST",
+      "method": "GET",
       "path": "/campaigns/{campaign_id}/actions/create-resend",
-      "covered_by": {
-        "write": "create_resend_campaigns"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=getListsIdAbuseReports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns/{campaign_id}/actions/pause",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=getLists"
       }
     },
     {
@@ -402,10 +400,58 @@
       }
     },
     {
+      "method": "GET",
+      "path": "/campaigns/{campaign_id}/actions/replicate",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=getFileManagerFiles"
+      }
+    },
+    {
       "method": "POST",
       "path": "/campaigns/{campaign_id}/actions/replicate",
       "covered_by": {
         "write": "replicate_campaigns"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/campaigns/{campaign_id}/actions/resume",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=deleteListsId"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns/{campaign_id}/actions/resume",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=getListsId"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/campaigns/{campaign_id}/actions/resume",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=patchListsId"
       }
     },
     {
@@ -416,6 +462,18 @@
       }
     },
     {
+      "method": "GET",
+      "path": "/campaigns/{campaign_id}/actions/schedule",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=getFileManagerFolders"
+      }
+    },
+    {
       "method": "POST",
       "path": "/campaigns/{campaign_id}/actions/schedule",
       "covered_by": {
@@ -423,24 +481,87 @@
       }
     },
     {
-      "method": "POST",
+      "method": "DELETE",
       "path": "/campaigns/{campaign_id}/actions/send",
-      "covered_by": {
-        "write": "send_campaigns"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=deleteFileManagerFilesId"
       }
     },
     {
-      "method": "POST",
+      "method": "GET",
+      "path": "/campaigns/{campaign_id}/actions/send",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=getFileManagerFilesId"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/campaigns/{campaign_id}/actions/send",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=patchFileManagerFilesId"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/campaigns/{campaign_id}/actions/test",
-      "covered_by": {
-        "write": "test_campaigns"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=getFileManagerFoldersFiles"
       }
     },
     {
-      "method": "POST",
+      "method": "DELETE",
       "path": "/campaigns/{campaign_id}/actions/unschedule",
-      "covered_by": {
-        "write": "unschedule_campaigns"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=deleteFileManagerFoldersId"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/campaigns/{campaign_id}/actions/unschedule",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=getFileManagerFoldersId"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/campaigns/{campaign_id}/actions/unschedule",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=patchFileManagerFoldersId"
       }
     },
     {
@@ -451,24 +572,10 @@
       }
     },
     {
-      "method": "PUT",
-      "path": "/campaigns/{campaign_id}/content",
-      "covered_by": {
-        "write": "put_campaigns_content"
-      }
-    },
-    {
       "method": "GET",
       "path": "/campaigns/{campaign_id}/feedback",
       "covered_by": {
         "stream": "campaigns_feedback"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/campaigns/{campaign_id}/feedback",
-      "covered_by": {
-        "write": "post_campaigns_feedback"
       }
     },
     {
@@ -525,6 +632,18 @@
       "path": "/connected-sites/{connected_site_id}",
       "covered_by": {
         "direct_read": "connected-sites get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/connected-sites/{connected_site_id}/actions/disable-pixel",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=previewASegment"
       }
     },
     {
@@ -1996,13 +2115,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/template-folders",
-      "covered_by": {
-        "stream": "template_folders_folders"
-      }
-    },
-    {
       "method": "POST",
       "path": "/template-folders",
       "covered_by": {
@@ -2010,24 +2122,15 @@
       }
     },
     {
-      "method": "DELETE",
+      "method": "POST",
       "path": "/template-folders/{folder_id}",
-      "covered_by": {
-        "write": "delete_template_folders"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/template-folders/{folder_id}",
-      "covered_by": {
-        "direct_read": "template-folders get"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/template-folders/{folder_id}",
-      "covered_by": {
-        "write": "patch_template_folders"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=postConnectedSitesIdActionsDisablePixel"
       }
     },
     {
@@ -2105,6 +2208,202 @@
       "path": "/verified-domains/{domain_name}/actions/verify",
       "covered_by": {
         "write": "verify_verified_domains"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{workflow_id}/emails",
+      "covered_by": {
+        "stream": "automations_emails"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}",
+      "covered_by": {
+        "write": "delete_automations_emails"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}",
+      "covered_by": {
+        "direct_read": "automations emails get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}",
+      "covered_by": {
+        "write": "patch_automations_emails"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}/actions/start",
+      "covered_by": {
+        "write": "start_emails"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}/queue",
+      "covered_by": {
+        "stream": "automations_emails_queue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{workflow_id}/emails/{workflow_email_id}/queue/{subscriber_hash}",
+      "covered_by": {
+        "direct_read": "automations emails queue get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batch-webhooks",
+      "covered_by": {
+        "write": "post_batch_webhooks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/batch-webhooks/{batch_webhook_id}",
+      "covered_by": {
+        "write": "delete_batch_webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/batch-webhooks/{batch_webhook_id}",
+      "covered_by": {
+        "direct_read": "batch-webhooks get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/batch-webhooks/{batch_webhook_id}",
+      "covered_by": {
+        "write": "patch_batch_webhooks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/batches/{batch_id}",
+      "covered_by": {
+        "write": "delete_batches"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaign-folders",
+      "covered_by": {
+        "write": "post_campaign_folders"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/campaign-folders/{folder_id}",
+      "covered_by": {
+        "write": "delete_campaign_folders"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/campaign-folders/{folder_id}",
+      "covered_by": {
+        "write": "patch_campaign_folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns",
+      "covered_by": {
+        "write": "post_campaigns"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/campaigns/{campaign_id}",
+      "covered_by": {
+        "write": "delete_campaigns"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/campaigns/{campaign_id}",
+      "covered_by": {
+        "write": "patch_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/create-resend",
+      "covered_by": {
+        "write": "create_resend_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/send",
+      "covered_by": {
+        "write": "send_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/test",
+      "covered_by": {
+        "write": "test_campaigns"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/actions/unschedule",
+      "covered_by": {
+        "write": "unschedule_campaigns"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/campaigns/{campaign_id}/content",
+      "covered_by": {
+        "write": "put_campaigns_content"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{campaign_id}/feedback",
+      "covered_by": {
+        "write": "post_campaigns_feedback"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/template-folders",
+      "covered_by": {
+        "stream": "template_folders_folders"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/template-folders/{folder_id}",
+      "covered_by": {
+        "write": "delete_template_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/template-folders/{folder_id}",
+      "covered_by": {
+        "direct_read": "template-folders get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/template-folders/{folder_id}",
+      "covered_by": {
+        "write": "patch_template_folders"
       }
     }
   ]

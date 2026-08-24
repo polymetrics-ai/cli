@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_message_threads_fixture_id",
+    "subject": "Fixture subject 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/messageThreads/update_message_threads_fixture_id",
+    "body": {
+      "subject": "Fixture subject 1"
+    }
+  }
+}

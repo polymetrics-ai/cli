@@ -1,55 +1,169 @@
 {
   "api": "BambooHR REST API",
   "docs": "https://documentation.bamboohr.com/reference/getting-started",
-  "reviewed_at": "2026-07-04",
-  "scope": "All documented REST paths from the BambooHR ReadMe OpenAPI registries are represented. Basic-auth JSON GET endpoints are streams, Basic-auth JSON/path mutations are write actions, OAuth-only endpoints preserve the legacy API-key credential model as scoped exclusions, and binary/multipart/deprecated/read-like POST endpoints are explicitly excluded.",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 1,
+  "scope": "Provider-source inventory regenerated for issue #4290 from Official BambooHR rendered API reference embeds its complete 3.1 schema; 319 HTTP method/path operations are extracted from it. It contains 319 documented provider operations plus 26 explicit local compatibility binding(s) retained solely because the current executor still dispatches them. The local bindings are not used to bound or count the provider source.",
   "endpoints": [
     {
       "method": "GET",
+      "path": "/api/v1_1/employees/{employeeId}/time_off/policies",
+      "covered_by": {
+        "stream": "employee_time_off_policies_v1_1"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1_1/employees/{employeeId}/time_off/policies",
+      "covered_by": {
+        "write": "assign_time_off_policies_v1_1"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1_1/employees/{id}/tables/{table}",
+      "covered_by": {
+        "write": "create_table_row_v1_1"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1_1/employees/{id}/tables/{table}/{rowId}",
+      "covered_by": {
+        "write": "update_table_row_v1_1"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1_1/performance/employees/{employeeId}/goals/{goalId}",
+      "covered_by": {
+        "write": "update_goal_v1_1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1_1/performance/employees/{employeeId}/goals/aggregate",
+      "covered_by": {
+        "stream": "goals_aggregate_v1_1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1_1/performance/employees/{employeeId}/goals/filters",
+      "covered_by": {
+        "stream": "goals_filters_v1_1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1_2/datasets",
+      "covered_by": {
+        "stream": "datasets_v1_2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1_2/datasets/{datasetName}/field-options",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read-like POST endpoint requires request-body query execution; the current declarative read path does not send stream bodies and this must not be exposed as a write action.",
+        "notes": "operation_id=get-field-options-v1-2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1_2/datasets/{datasetName}/fields",
+      "covered_by": {
+        "stream": "fields_from_dataset_v1_2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1_2/performance/employees/{employeeId}/goals/aggregate",
+      "covered_by": {
+        "stream": "goals_aggregate_v1_2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1_2/performance/employees/{employeeId}/goals/filters",
+      "covered_by": {
+        "stream": "goals_filters_v1_2"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/alert-configurations",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=list-alert-configurations"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/alert-configurations",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=create-alert-configuration"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/alert-configurations/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-alert-configuration"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/alert-configurations/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=replace-alert-configuration"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/alerts",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=list-alert-templates"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/applicant_tracking/application",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=create-candidate"
       }
     },
     {
@@ -90,9 +204,13 @@
     {
       "method": "POST",
       "path": "/api/v1/applicant_tracking/job_opening",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=create-job-opening"
       }
     },
     {
@@ -124,52 +242,10 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/api/v1/benefit/company_benefit",
-      "covered_by": {
-        "write": "add_new_company_benefit"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/benefit/company_benefit/type",
-      "covered_by": {
-        "stream": "company_benefit_types"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/benefit/company_benefit/{id}",
-      "covered_by": {
-        "write": "delete_company_benefit"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/benefit/company_benefit/{id}",
-      "covered_by": {
-        "stream": "company_benefit"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/benefit/company_benefit/{id}",
-      "covered_by": {
-        "write": "update_company_benefit"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/v1/benefit/employee_benefit",
       "covered_by": {
         "stream": "employee_benefits"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/benefit/employee_benefit",
-      "covered_by": {
-        "write": "create_employee_benefit"
       }
     },
     {
@@ -188,61 +264,6 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/benefitgroupemployees",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/benefitgroupemployees",
-      "covered_by": {
-        "write": "add_benefit_group_employee"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/benefitgroupplancosts",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/benefitgroupplans",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/benefitgroups",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/benefitplancoverages",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/benefitplans",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "GET",
       "path": "/api/v1/benefits/member-benefits",
       "covered_by": {
         "stream": "member_benefits"
@@ -256,27 +277,46 @@
       }
     },
     {
+      "method": "GET",
+      "path": "/api/v1/company_information",
+      "covered_by": {
+        "stream": "company_information"
+      }
+    },
+    {
       "method": "PATCH",
       "path": "/api/v1/company-profile-data/company-information",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=patch-company-profile-company-information"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/company-profile-data/display-name",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=put-company-profile-display-name"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/company-profile-data/industry-codes",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=put-company-industry-codes"
       }
     },
     {
@@ -288,416 +328,602 @@
     },
     {
       "method": "GET",
-      "path": "/api/v1/company_eins",
-      "covered_by": {
-        "stream": "company_eins"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/company_information",
-      "covered_by": {
-        "stream": "company_information"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/api/v1/compensation/benchmarks",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=list-compensation-benchmarks"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/compensation/benchmarks",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=create-compensation-benchmark"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/compensation/benchmarks",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/compensation/benchmarks/details",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/compensation/benchmarks/details/export",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/compensation/benchmarks/import",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/compensation/benchmarks/sources",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/compensation/benchmarks/sources",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/compensation/benchmarks/sources",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/compensation/benchmarks/sources",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=update-compensation-benchmark"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/compensation/benchmarks/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=delete-compensation-benchmark"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/compensation/benchmarks/details",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-compensation-benchmark-details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/compensation/benchmarks/details/export",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=export-compensation-benchmark-details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/compensation/benchmarks/import",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=import-compensation-benchmarks"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/compensation/benchmarks/sources",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=delete-compensation-benchmark-source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/compensation/benchmarks/sources",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=list-compensation-benchmark-sources"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/compensation/benchmarks/sources",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=create-compensation-benchmark-source"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/compensation/benchmarks/sources",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=update-compensation-benchmark-sources"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/equity/settings",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=db49fb29f9f04d59afad7c01ce860418"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/compensation/equity/settings",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=c5880b509783cd9d7fce9ddf5d6af1be"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/planning_cycles",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=b65f246186b41a9783a9397c11c703b4"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/compensation/planning_cycles",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=e2ac4e1535f296cb8901f209e04caa83"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/compensation/planning_cycles/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=22ad75be25455279e2987c80851af5fc"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/planning_cycles/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=5c2b55158b0950b1e9211655666645b6"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/compensation/planning_cycles/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=100b0cf8c5207b35697ff10370fd5fe1"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/planning_cycles/{id}/admins",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=b3c51254de6918637a971fe4af382a53"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/compensation/planning_cycles/{id}/admins",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=c7c32ed5278ac67e2e518bf7484a75dc"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/compensation/planning_cycles/{id}/admins/{employeeId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=ef7619b0ee4c8dc079aaea870cfbe81b"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/planning_cycles/{id}/approvals",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/compensation/planning_cycles/{id}/approvals/employee/{employeeId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/compensation/planning_cycles/{id}/approvals/final_approver/{employeeId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=4e886b18264480611f380805301c49c4"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/compensation/planning_cycles/{id}/approvals/{templateId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=cf87b8e09a001b6fb81dfce6c20ab9e3"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/compensation/planning_cycles/{id}/approvals/employee/{employeeId}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=b1e467e0eef72350eec61fcfeaf4e19d"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/compensation/planning_cycles/{id}/approvals/final_approver/{employeeId}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=5c4aab35a34f5760ec044104b5232bf5"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/planning_cycles/{id}/budgets",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=7efceaee2c010f88244dd01ee81e6e7b"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/compensation/planning_cycles/{id}/budgets/breakdown",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=1d64402ee192568adbd5e3179a91e6e2"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/compensation/planning_cycles/{id}/budgets/guidelines",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=dacd313af2106213fc4696175941ce65"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/compensation/planning_cycles/{id}/budgets/import",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=1d1fc0f164cb51973a0206b8e2fb2d2d"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/planning_cycles/{id}/change_comm",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=d6987e300672a00c7cfe59afebb64156"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/compensation/planning_cycles/{id}/change_comm/template",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=c79f9c5950f983e59d2626faa30c00a1"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/compensation/planning_cycles/{id}/complete",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=f4b431363af6573af46750f32632e88b"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/compensation/planning_cycles/{id}/employees",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=89a5068111ec499135c7d6e9a53d5a30"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/planning_cycles/{id}/employees",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=a6b8da1348a3151fe95adc03aaf64447"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/compensation/planning_cycles/{id}/employees",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=3958585c861325ea7a2cd30a8c74f042"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/compensation/planning_cycles/{id}/launch",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=3a19f07aa737dc826ba43b9a1c1cd257"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/compensation/planning_cycles/{id}/recommendations",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=f3883a522dadbe9e11b34f8b656e3adb"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/compensation/planning_cycles/{id}/recommendations/send",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=a05b6d5f564f805d688ff2c1e37c3990"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/planning_cycles/{id}/summary",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=9bc279d788f6e86b4cd8b2e0d3de91b1"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/planning_cycles/{id}/worksheet",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=329acecaa6df729733d0752aa9f6b204"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/planning_cycles/{id}/worksheet/export",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=593d5bff120edf2a218a92022a682728"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/tools",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/compensation/total_rewards/custom_disclaimer",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/compensation/total_rewards/custom_disclaimer",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/compensation/total_rewards/employees",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/compensation/total_rewards/employees",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/compensation/total_rewards/onboarding/{stepName}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=9f398e2652ea47a6dc5121ce5184222a"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/total_rewards/{employeeId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=check-total-rewards-profile"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/total_rewards/{employeeId}/printable",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-total-rewards-printable-statement"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/compensation/total_rewards/{employeeId}/statement",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-total-rewards-statement"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/compensation/total_rewards/custom_disclaimer",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=remove-total-rewards-custom-disclaimer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/compensation/total_rewards/custom_disclaimer",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=set-total-rewards-custom-disclaimer"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/compensation/total_rewards/employees",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=remove-total-rewards-employees"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/compensation/total_rewards/employees",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=add-total-rewards-employees"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/compensation/total_rewards/onboarding/{stepName}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=set-total-rewards-onboarding-step"
       }
     },
     {
@@ -716,6 +942,30 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/custom-reports/legacy-field-map",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get-legacy-report-field-map"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/custom-reports/legacy-id-map",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get-legacy-report-id-map"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/datasets",
       "covered_by": {
         "stream": "datasets_v1"
@@ -724,17 +974,25 @@
     {
       "method": "POST",
       "path": "/api/v1/datasets/{datasetName}",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Deprecated ad-hoc report endpoint; BambooHR directs callers to dataset APIs instead."
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Deprecated ad-hoc report endpoint; BambooHR directs callers to dataset APIs instead.",
+        "notes": "operation_id=get-data-from-dataset-v1"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/datasets/{datasetName}/field-options",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Deprecated ad-hoc report endpoint; BambooHR directs callers to dataset APIs instead."
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Deprecated ad-hoc report endpoint; BambooHR directs callers to dataset APIs instead.",
+        "notes": "operation_id=get-field-options-v1"
       }
     },
     {
@@ -747,145 +1005,61 @@
     {
       "method": "GET",
       "path": "/api/v1/employee-verifications/employees/{employeeId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=list-employee-verifications-by-employee"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/employee-verifications/employees/{employeeId}/{verificationId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=update-employee-verification"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/employee-verifications/integration",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-employee-verification-integration"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/employee-verifications/integration",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=update-employee-verification-integration"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/employee-verifications/users/{userId}/send-email",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/employee/deductions/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/employee/plans/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/employee_direct_deposit_accounts/{id}",
-      "covered_by": {
-        "write": "clear_employee_deposit"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/employee_direct_deposit_accounts/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/employee_direct_deposit_accounts/{id}",
-      "covered_by": {
-        "write": "add_employee_deposit"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/employee_pay_stub",
-      "covered_by": {
-        "write": "add_employee_paystub"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/employee_pay_stub/{id}",
-      "covered_by": {
-        "write": "clear_employee_paystub"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/employee_pay_stub/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/employee_unpaid_pay_stubs",
-      "covered_by": {
-        "write": "add_employee_unpaid_paystubs"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/employee_unpaid_pay_stubs/{id}",
-      "covered_by": {
-        "write": "clear_employee_unpaid_paystubs"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/employee_unpaid_pay_stubs/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/employee_withholding/{id}",
-      "covered_by": {
-        "write": "clear_employee_withholding"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/employee_withholding/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/employee_withholding/{id}",
-      "covered_by": {
-        "write": "add_employee_withholding"
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=send-employee-verification-lifecycle-email-by-user"
       }
     },
     {
@@ -926,78 +1100,73 @@
     {
       "method": "POST",
       "path": "/api/v1/employees",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/employees/changed",
-      "covered_by": {
-        "stream": "changed_employee_ids"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/employees/changed/tables/{table}",
-      "covered_by": {
-        "stream": "changed_employee_table_data"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/employees/directory",
-      "covered_by": {
-        "stream": "employees"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/employees/files/categories",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=create-employee"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/employees/{employeeId}/onboarding-experiences",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=0158de7cde2a4c4cf577f0b25070d809"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/employees/{employeeId}/onboarding-experiences",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=288aa996aba16d7a495c62321ea999a9"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/employees/{employeeId}/onboarding-experiences/{onboardingExperienceId}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=847dd061d1d1859e7ce8cb3adfc9faf2"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/employees/{employeeId}/photo",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=upload-employee-photo"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/employees/{employeeId}/photo/{size}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=get-employee-photo"
       }
     },
     {
@@ -1045,65 +1214,97 @@
     {
       "method": "DELETE",
       "path": "/api/v1/employees/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=delete-employee"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/employees/{id}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=get-employee"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/employees/{id}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=update-employee"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/employees/{id}/files",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/employees/{id}/files/view",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=upload-employee-file"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/employees/{id}/files/{fileId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=delete-employee-file"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/employees/{id}/files/{fileId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=get-employee-file"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/employees/{id}/files/{fileId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=update-employee-file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/employees/{id}/files/view",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=list-employee-files"
       }
     },
     {
@@ -1135,139 +1336,336 @@
       }
     },
     {
+      "method": "GET",
+      "path": "/api/v1/employees/changed",
+      "covered_by": {
+        "stream": "changed_employee_ids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/employees/changed/tables/{table}",
+      "covered_by": {
+        "stream": "changed_employee_table_data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/employees/directory",
+      "covered_by": {
+        "stream": "employees"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employees/files/categories",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=create-employee-file-category"
+      }
+    },
+    {
       "method": "POST",
       "path": "/api/v1/files",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=upload-company-file"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/files/{fileId}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=delete-company-file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/files/{fileId}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=get-company-file"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/files/{fileId}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=update-company-file"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/files/categories",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=create-company-file-category"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/files/view",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/files/{fileId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect.",
+        "notes": "operation_id=list-company-files"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v1/files/{fileId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "path": "/api/v1/holidays",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=list-company-holidays"
       }
     },
     {
       "method": "POST",
-      "path": "/api/v1/files/{fileId}",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "File, photo, CSV/PDF, or multipart payload is outside the JSON record/write dialect."
+      "path": "/api/v1/holidays",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=create-company-holiday"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/holidays/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=delete-company-holiday"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/holidays/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get-company-holiday"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/holidays/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=update-company-holiday"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/holidays/bulk-insert",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=bulk-insert-company-holidays"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/holidays/catalog",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=list-catalog-holidays"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/holidays/catalog/{uuid}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get-catalog-holiday"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/hris/org/locations",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-locations"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/hris/org/locations",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=create-location"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/hris/org/locations/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=delete-location"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/hris/org/locations/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-location"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/hris/org/locations/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=update-location"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/login",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=login"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/meta/bank-holidays",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=list-bank-holidays"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/meta/company",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/meta/countries/options",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-meta-company"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/meta/countries/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-country-by-id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/countries/options",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect.",
+        "notes": "operation_id=get-countries-options"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/meta/currency-conversions",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-currency-conversions"
       }
     },
     {
@@ -1287,9 +1685,13 @@
     {
       "method": "GET",
       "path": "/api/v1/meta/industries",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=list-industries"
       }
     },
     {
@@ -1309,9 +1711,13 @@
     {
       "method": "GET",
       "path": "/api/v1/meta/provinces",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-all-provinces"
       }
     },
     {
@@ -1345,25 +1751,37 @@
     {
       "method": "GET",
       "path": "/api/v1/meta/timezones",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/meta/timezones/by-zip/{zip}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=5c5fb0f1211ae1c9451753f92f1053b6"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/meta/timezones/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=baa7162824294d030115568d1d8e6ca7"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/meta/timezones/by-zip/{zip}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=10d66d8561dd7dac50ff9c21ef63d83b"
       }
     },
     {
@@ -1376,193 +1794,277 @@
     {
       "method": "GET",
       "path": "/api/v1/new-hire-packets",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=f44b802c30cdea2b9076b3f82f99c74d"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/new-hire-packets",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=ec1ba8e76f33960b018d0d7518fe97b5"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/new-hire-packets/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=caa7fc488bcfaef14125398f2ebb987d"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/new-hire-packets/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=696f0a229cdde60b733568e3c4d043d9"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/new-hire-packets/{id}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=1ab0279d46023eb951a434f24df885f1"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/new-hire-packets/{id}/cancel",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=19c7e26a1347ae7eb22919e9b0595c19"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/new-hire-packets/{id}/question-visibility",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=update-new-hire-packet-gtky-answer-visibility"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/new-hire-packets/{id}/send",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=f49b0f1f2fb1ef2c408ba12916ee9baa"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/onboarding/new-hire-widget",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=044949386f2d655c6a627ef53f9434b7"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/pay-grades-and-bands",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-published-levels-and-bands"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/pay-grades-and-bands/import",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=upload-levels-and-bands-csv"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/pay-grades-and-bands/job-titles",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-job-title-level-assignments"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/pay-grades-and-bands/job-titles",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=replace-job-title-level-assignments"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/pay-grades-and-bands/job-titles-with-employees",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=list-job-titles-with-employees"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/pay-grades-and-bands/levels",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=list-compensation-level-groups-and-levels"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/pay-grades-and-bands/levels",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=update-compensation-level-groups-and-levels"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/pay-grades-and-bands/levels/{segment}",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=delete-compensation-level-groups-or-level"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/pay-grades-and-bands/pay-bands",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-pay-bands"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v1/pay-grades-and-bands/pay-bands",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=update-pay-bands"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/pay-grades-and-bands/publish",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=publish-draft-compensation-level-groups"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/pay-grades-and-bands/review",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-levels-and-bands-review"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/pay-grades-and-bands/status",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-levels-and-bands-status"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/pay-grades-and-bands/status-counts",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/payroll/deductions/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=get-compensation-level-group-status-counts"
       }
     },
     {
@@ -1577,41 +2079,6 @@
       "path": "/api/v1/performance/employees/{employeeId}/goals",
       "covered_by": {
         "write": "create_goal"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/performance/employees/{employeeId}/goals/aggregate",
-      "covered_by": {
-        "stream": "goals_aggregate_v1"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/performance/employees/{employeeId}/goals/alignmentOptions",
-      "covered_by": {
-        "stream": "alignable_goal_options"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/performance/employees/{employeeId}/goals/canCreateGoals",
-      "covered_by": {
-        "stream": "goal_creation_permission"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/performance/employees/{employeeId}/goals/filters",
-      "covered_by": {
-        "stream": "goals_filters_v1"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/performance/employees/{employeeId}/goals/shareOptions",
-      "covered_by": {
-        "stream": "goal_share_options"
       }
     },
     {
@@ -1699,11 +2166,38 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/api/v1/reports/custom",
-      "excluded": {
-        "category": "deprecated",
-        "reason": "Deprecated ad-hoc report endpoint; BambooHR directs callers to dataset APIs instead."
+      "method": "GET",
+      "path": "/api/v1/performance/employees/{employeeId}/goals/aggregate",
+      "covered_by": {
+        "stream": "goals_aggregate_v1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/performance/employees/{employeeId}/goals/alignmentOptions",
+      "covered_by": {
+        "stream": "alignable_goal_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/performance/employees/{employeeId}/goals/canCreateGoals",
+      "covered_by": {
+        "stream": "goal_creation_permission"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/performance/employees/{employeeId}/goals/filters",
+      "covered_by": {
+        "stream": "goals_filters_v1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/performance/employees/{employeeId}/goals/shareOptions",
+      "covered_by": {
+        "stream": "goal_share_options"
       }
     },
     {
@@ -1711,6 +2205,18 @@
       "path": "/api/v1/reports/{id}",
       "covered_by": {
         "stream": "company_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/reports/custom",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Deprecated ad-hoc report endpoint; BambooHR directs callers to dataset APIs instead.",
+        "notes": "operation_id=request-custom-report"
       }
     },
     {
@@ -1751,9 +2257,13 @@
     {
       "method": "GET",
       "path": "/api/v1/scheduling/schedules/{id}/pdf",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth-scoped public API operation; this bundle intentionally preserves the legacy BambooHR API-key Basic-auth credential model.",
+        "notes": "requires_elevated_scope; operation_id=scheduling-get-schedule-pdf"
       }
     },
     {
@@ -1778,13 +2288,6 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/api/v1/scheduling/shifts/publish",
-      "covered_by": {
-        "write": "create_scheduling_publish_shifts"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v1/scheduling/shifts/{id}",
       "covered_by": {
@@ -1806,10 +2309,94 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/api/v1/scheduling/shifts/publish",
+      "covered_by": {
+        "write": "create_scheduling_publish_shifts"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v1/scheduling/timezones",
       "covered_by": {
         "stream": "scheduling_list_timezones"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/time_off/requests",
+      "covered_by": {
+        "stream": "time_off_requests"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/time_off/requests/{requestId}/status",
+      "covered_by": {
+        "write": "update_time_off_request_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/time_off/whos_out",
+      "covered_by": {
+        "stream": "whos_out"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/clock_entries/delete",
+      "covered_by": {
+        "write": "delete_timesheet_clock_entries_via_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/clock_entries/store",
+      "covered_by": {
+        "write": "create_or_update_timesheet_clock_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/employees/{employeeId}/clock_in",
+      "covered_by": {
+        "write": "create_timesheet_clock_in_entry"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/employees/{employeeId}/clock_out",
+      "covered_by": {
+        "write": "create_timesheet_clock_out_entry"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/hour_entries/delete",
+      "covered_by": {
+        "write": "delete_timesheet_hour_entries_via_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/hour_entries/store",
+      "covered_by": {
+        "write": "create_or_update_timesheet_hour_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/projects",
+      "covered_by": {
+        "write": "create_time_tracking_project"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/time_tracking/timesheet_entries",
+      "covered_by": {
+        "stream": "timesheet_entries"
       }
     },
     {
@@ -1831,14 +2418,6 @@
       "path": "/api/v1/time-tracking/break-policies",
       "covered_by": {
         "write": "create_break_policy"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time-tracking/break-policies/suggestions",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Read-like POST endpoint requires request-body query execution; the current declarative read path does not send stream bodies and this must not be exposed as a write action."
       }
     },
     {
@@ -1919,6 +2498,18 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/api/v1/time-tracking/break-policies/suggestions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read-like POST endpoint requires request-body query execution; the current declarative read path does not send stream bodies and this must not be exposed as a write action.",
+        "notes": "operation_id=get-break-policy-suggestions"
+      }
+    },
+    {
       "method": "DELETE",
       "path": "/api/v1/time-tracking/breaks/{id}",
       "covered_by": {
@@ -1941,6 +2532,90 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/time-tracking/clock-entries",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=list-clock-entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time-tracking/clock-entries",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=create-clock-entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/time-tracking/clock-entries/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=delete-clock-entry"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/time-tracking/clock-entries/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get-clock-entry"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/time-tracking/clock-entries/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=update-clock-entry"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time-tracking/clock-ins",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=clock-in"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time-tracking/clock-outs",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=clock-out"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/time-tracking/employees/{id}/break-availabilities",
       "covered_by": {
         "stream": "employee_break_availabilities"
@@ -1951,6 +2626,66 @@
       "path": "/api/v1/time-tracking/employees/{id}/break-policies",
       "covered_by": {
         "stream": "employee_break_policies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/time-tracking/hour-entries",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=list-hour-entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time-tracking/hour-entries",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=create-hour-entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/time-tracking/hour-entries/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=delete-hour-entry"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/time-tracking/hour-entries/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get-hour-entry"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/time-tracking/hour-entries/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=update-hour-entry"
       }
     },
     {
@@ -2059,207 +2794,51 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v1/time_off/requests",
-      "covered_by": {
-        "stream": "time_off_requests"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v1/time_off/requests/{requestId}/status",
-      "covered_by": {
-        "write": "update_time_off_request_status"
+      "method": "POST",
+      "path": "/api/v1/time-tracking/timesheet-approvals",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=approve-timesheet"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v1/time_off/whos_out",
-      "covered_by": {
-        "stream": "whos_out"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v1/time_tracking/clock_entries",
-      "covered_by": {
-        "write": "delete_clock_entries"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/clock_entries",
-      "covered_by": {
-        "write": "store_clock_entries"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/clock_entries/delete",
-      "covered_by": {
-        "write": "delete_timesheet_clock_entries_via_post"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/clock_entries/store",
-      "covered_by": {
-        "write": "create_or_update_timesheet_clock_entries"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/clock_in/{employeeId}",
-      "covered_by": {
-        "write": "clock_in"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/clock_out/{employeeId}",
-      "covered_by": {
-        "write": "clock_out"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/daily_entries",
-      "covered_by": {
-        "write": "store_daily_entries"
+      "path": "/api/v1/time-tracking/timesheets",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=list-timesheets"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v1/time_tracking/employee/{employeeId}/clock_entries/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/employee/{employeeId}/clock_in/data",
-      "covered_by": {
-        "write": "clock_in_data"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/employee/{employeeId}/clock_out/datetime",
-      "covered_by": {
-        "write": "clock_out_employee_at_specific_time"
+      "path": "/api/v1/time-tracking/timesheets/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get-timesheet"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v1/time_tracking/employee/{employeeId}/daily_entries/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/time_tracking/employee/{employeeId}/is_clocked_in",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/time_tracking/employee/{employeeId}/projects",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/time_tracking/employee/{employeeId}/projects/{projectId}/tasks",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/time_tracking/employee/{employeeId}/timesheet/{timesheetId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/employees/{employeeId}/clock_in",
-      "covered_by": {
-        "write": "create_timesheet_clock_in_entry"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/employees/{employeeId}/clock_out",
-      "covered_by": {
-        "write": "create_timesheet_clock_out_entry"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/time_tracking/employees/{employeeId}/projects",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/hour_entries/delete",
-      "covered_by": {
-        "write": "delete_timesheet_hour_entries_via_post"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/hour_entries/store",
-      "covered_by": {
-        "write": "create_or_update_timesheet_hour_entries"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/projects",
-      "covered_by": {
-        "write": "create_time_tracking_project"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/time_tracking/timesheet_entries",
-      "covered_by": {
-        "stream": "timesheet_entries"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/time_tracking/timesheets",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/timesheets/approve",
-      "covered_by": {
-        "write": "approve_employee_timesheets"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/time_tracking/timesheets/clock_out_and_approve",
-      "covered_by": {
-        "write": "clock_out_and_approve_employee_timesheets"
+      "path": "/api/v1/time-tracking/timesheets/{id}/summary",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get-timesheet-summary"
       }
     },
     {
@@ -2326,21 +2905,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v1/training/record/employee/{employeeId}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/training/record/employee/{employeeId}",
-      "covered_by": {
-        "write": "create_employee_training_record"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v1/training/record/{employeeTrainingRecordId}",
       "covered_by": {
@@ -2352,6 +2916,25 @@
       "path": "/api/v1/training/record/{employeeTrainingRecordId}",
       "covered_by": {
         "write": "update_employee_training_record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/training/record/employee/{employeeId}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect.",
+        "notes": "operation_id=list-employee-trainings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/training/record/employee/{employeeId}",
+      "covered_by": {
+        "write": "create_employee_training_record"
       }
     },
     {
@@ -2397,20 +2980,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v1/webhooks/monitor_fields",
-      "covered_by": {
-        "stream": "monitor_fields"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/webhooks/post-fields",
-      "covered_by": {
-        "stream": "post_fields"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v1/webhooks/{id}",
       "covered_by": {
@@ -2434,58 +3003,214 @@
     {
       "method": "GET",
       "path": "/api/v1/webhooks/{id}/log",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect."
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented response is not a JSON object/array record shape expressible by the current JSON stream dialect.",
+        "notes": "operation_id=list-webhook-logs"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v1_1/employees/{employeeId}/time_off/policies",
+      "path": "/api/v1/webhooks/monitor_fields",
       "covered_by": {
-        "stream": "employee_time_off_policies_v1_1"
+        "stream": "monitor_fields"
       }
     },
     {
-      "method": "PUT",
-      "path": "/api/v1_1/employees/{employeeId}/time_off/policies",
+      "method": "GET",
+      "path": "/api/v1/webhooks/post-fields",
       "covered_by": {
-        "write": "assign_time_off_policies_v1_1"
+        "stream": "post_fields"
       }
     },
     {
       "method": "POST",
-      "path": "/api/v1_1/employees/{id}/tables/{table}",
-      "covered_by": {
-        "write": "create_table_row_v1_1"
+      "path": "/api/v2/datasets/{datasetName}/data",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read-like POST endpoint requires request-body query execution; the current declarative read path does not send stream bodies and this must not be exposed as a write action.",
+        "notes": "operation_id=get-data-from-dataset-v2"
       }
     },
     {
       "method": "POST",
-      "path": "/api/v1_1/employees/{id}/tables/{table}/{rowId}",
+      "path": "/api/v1/benefit/company_benefit",
       "covered_by": {
-        "write": "update_table_row_v1_1"
+        "write": "add_new_company_benefit"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v1_1/performance/employees/{employeeId}/goals/aggregate",
+      "path": "/api/v1/benefit/company_benefit/type",
       "covered_by": {
-        "stream": "goals_aggregate_v1_1"
+        "stream": "company_benefit_types"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/benefit/company_benefit/{id}",
+      "covered_by": {
+        "write": "delete_company_benefit"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v1_1/performance/employees/{employeeId}/goals/filters",
+      "path": "/api/v1/benefit/company_benefit/{id}",
       "covered_by": {
-        "stream": "goals_filters_v1_1"
+        "stream": "company_benefit"
       }
     },
     {
       "method": "PUT",
-      "path": "/api/v1_1/performance/employees/{employeeId}/goals/{goalId}",
+      "path": "/api/v1/benefit/company_benefit/{id}",
       "covered_by": {
-        "write": "update_goal_v1_1"
+        "write": "update_company_benefit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/benefit/employee_benefit",
+      "covered_by": {
+        "write": "create_employee_benefit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/benefitgroupemployees",
+      "covered_by": {
+        "write": "add_benefit_group_employee"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/company_eins",
+      "covered_by": {
+        "stream": "company_eins"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/employee_direct_deposit_accounts/{id}",
+      "covered_by": {
+        "write": "clear_employee_deposit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employee_direct_deposit_accounts/{id}",
+      "covered_by": {
+        "write": "add_employee_deposit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employee_pay_stub",
+      "covered_by": {
+        "write": "add_employee_paystub"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/employee_pay_stub/{id}",
+      "covered_by": {
+        "write": "clear_employee_paystub"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employee_unpaid_pay_stubs",
+      "covered_by": {
+        "write": "add_employee_unpaid_paystubs"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/employee_unpaid_pay_stubs/{id}",
+      "covered_by": {
+        "write": "clear_employee_unpaid_paystubs"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/employee_withholding/{id}",
+      "covered_by": {
+        "write": "clear_employee_withholding"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/employee_withholding/{id}",
+      "covered_by": {
+        "write": "add_employee_withholding"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/time_tracking/clock_entries",
+      "covered_by": {
+        "write": "delete_clock_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/clock_entries",
+      "covered_by": {
+        "write": "store_clock_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/clock_in/{employeeId}",
+      "covered_by": {
+        "write": "clock_in"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/clock_out/{employeeId}",
+      "covered_by": {
+        "write": "clock_out"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/daily_entries",
+      "covered_by": {
+        "write": "store_daily_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/employee/{employeeId}/clock_in/data",
+      "covered_by": {
+        "write": "clock_in_data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/employee/{employeeId}/clock_out/datetime",
+      "covered_by": {
+        "write": "clock_out_employee_at_specific_time"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/timesheets/approve",
+      "covered_by": {
+        "write": "approve_employee_timesheets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/time_tracking/timesheets/clock_out_and_approve",
+      "covered_by": {
+        "write": "clock_out_and_approve_employee_timesheets"
       }
     },
     {
@@ -2493,50 +3218,6 @@
       "path": "/api/v1_2/benefit/company_benefit/{id}",
       "covered_by": {
         "write": "update_company_benefit_properties"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1_2/datasets",
-      "covered_by": {
-        "stream": "datasets_v1_2"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1_2/datasets/{datasetName}/field-options",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Read-like POST endpoint requires request-body query execution; the current declarative read path does not send stream bodies and this must not be exposed as a write action."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1_2/datasets/{datasetName}/fields",
-      "covered_by": {
-        "stream": "fields_from_dataset_v1_2"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1_2/performance/employees/{employeeId}/goals/aggregate",
-      "covered_by": {
-        "stream": "goals_aggregate_v1_2"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1_2/performance/employees/{employeeId}/goals/filters",
-      "covered_by": {
-        "stream": "goals_filters_v1_2"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v2/datasets/{datasetName}/data",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Read-like POST endpoint requires request-body query execution; the current declarative read path does not send stream bodies and this must not be exposed as a write action."
       }
     }
   ]

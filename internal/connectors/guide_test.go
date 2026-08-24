@@ -59,6 +59,28 @@ func TestRenderCommandSurfaceCommandRendersSafetyConstraints(t *testing.T) {
 	}
 }
 
+func TestCommandSurfaceSectionNamesPMEncodedBytePolicy(t *testing.T) {
+	section := commandSurfaceSection(&CommandSurface{
+		Usage: "pm fixture records get",
+		Commands: []CommandSurfaceCommand{{
+			Path: "records get",
+			Flags: []CommandSurfaceFlag{{
+				Name:                  "workspace-id",
+				MapsTo:                "query.workspaceId",
+				MaxBytes:              4096,
+				MaxBytesOrigin:        "pm_policy",
+				MaxBytesPolicyVersion: "pm-request-contract-bounds-v1",
+			}},
+		}},
+	})
+	got := strings.Join(section.Lines, "\n")
+	for _, want := range []string{"max 4096 bytes", "PM execution policy pm-request-contract-bounds-v1", "after exact wire encoding", "not a provider schema assertion"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("command surface %q missing %q", got, want)
+		}
+	}
+}
+
 func TestConfigSectionRendersConditionalSecretRequirement(t *testing.T) {
 	section := configSection(Manifest{SecretFields: []SecretField{{
 		Name:         "password",

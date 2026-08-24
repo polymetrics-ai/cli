@@ -152,6 +152,30 @@ func TestParamsImportExcludesPagingAndConnectionParameters(t *testing.T) {
 	}
 }
 
+func TestParamsImportPreservesExactOneSidedNumericBounds(t *testing.T) {
+	defsDir, artifact := setupParamsFixture(t)
+	raw, err := os.ReadFile(artifact)
+	if err != nil {
+		t.Fatal(err)
+	}
+	bounded := strings.Replace(string(raw), `{ "type": "integer" }`, `{ "type": "integer", "minimum": 9007199254740993, "maximum": 99999999999999999999999999999999999999 }`, 1)
+	if err := os.WriteFile(artifact, []byte(bounded), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if _, _, err := importConnectorParameters(paramsImportOptions{connector: "acme", artifact: artifact, defsDir: defsDir}); err != nil {
+		t.Fatalf("import exact numeric bounds: %v", err)
+	}
+	operations, err := os.ReadFile(filepath.Join(defsDir, "acme", "operations.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, exact := range []string{`"minimum": 9007199254740993`, `"maximum": 99999999999999999999999999999999999999`} {
+		if !strings.Contains(string(operations), exact) {
+			t.Fatalf("imported operation lost exact provider bound %s:\n%s", exact, operations)
+		}
+	}
+}
+
 func TestParamsImportRetainsConfigPathParameterWithDeclaredCLIOverride(t *testing.T) {
 	defsDir, artifact := setupParamsFixture(t)
 	writeParamsFixture(t, filepath.Join(defsDir, "acme"), map[string]string{
@@ -460,7 +484,7 @@ func TestDeriveCommandParameterFlagsSynchronizesProviderSemantics(t *testing.T) 
 		t.Fatalf("parse cli fixture: %v", err)
 	}
 	var ops orderedJSON
-	if err := json.Unmarshal([]byte(`{"rest":{"parameters":[{"name":"state","in":"query","type":"string","values":["open","closed"]},{"name":"since","in":"query","type":"string","required":true}]}}`), &ops); err != nil {
+	if err := json.Unmarshal([]byte(`{"rest":{"parameters":[{"name":"state","in":"query","type":"string","values":["open","closed"]},{"name":"since","in":"query","type":"string","required":true},{"name":"count","in":"query","type":"integer","minimum":9007199254740993,"maximum":99999999999999999999999999999999999999}]}}`), &ops); err != nil {
 		t.Fatalf("parse ops fixture: %v", err)
 	}
 	cmd := arrayField(cli.root, "commands")[0].(*orderedObject)
@@ -468,12 +492,12 @@ func TestDeriveCommandParameterFlagsSynchronizesProviderSemantics(t *testing.T) 
 	rest := restRaw.(*orderedObject)
 
 	added := deriveCommandParameterFlags(cmd, rest)
-	if added != 2 {
-		t.Fatalf("changes = %d, want 2 (state synchronized and since added)", added)
+	if added != 3 {
+		t.Fatalf("changes = %d, want 3 (state synchronized, since and count added)", added)
 	}
 	flags := arrayField(cmd, "flags")
-	if len(flags) != 2 {
-		t.Fatalf("flags = %d, want 2", len(flags))
+	if len(flags) != 3 {
+		t.Fatalf("flags = %d, want 3", len(flags))
 	}
 	state := flags[0].(*orderedObject)
 	if stringField(state, "summary") != "authored" || stringField(state, "type") != "enum" || len(arrayField(state, "values")) != 2 {
@@ -485,6 +509,12 @@ func TestDeriveCommandParameterFlagsSynchronizesProviderSemantics(t *testing.T) 
 	}
 	if required, _ := since.get("required"); required != true {
 		t.Fatal("derived flag lost its requiredness")
+	}
+	count := flags[2].(*orderedObject)
+	minimum, _ := count.get("minimum")
+	maximum, _ := count.get("maximum")
+	if minimum != json.Number("9007199254740993") || maximum != json.Number("99999999999999999999999999999999999999") {
+		t.Fatalf("derived numeric bounds = %v..%v, want exact provider lexemes", minimum, maximum)
 	}
 }
 

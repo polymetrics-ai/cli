@@ -1,0 +1,2244 @@
+{
+  "schema_version": 1,
+  "connector": "shipstation",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/shipstation-parity-source-lock.json",
+    "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+    "source_sha256": "c71c20d26559b1d0dad5c3718889fc8d4063cfad3abeaf5f63cc1651bef32307",
+    "source_bytes": 186490,
+    "operations_found": 47,
+    "mapped_operations": 47,
+    "old_api_surface_rows": 9,
+    "regenerated_api_surface_rows": 47,
+    "api_surface_regeneration": "provider-source-derived",
+    "normalized_inventory_sha256": "b1b1317bb89393e6876d63fe6c1ae9edb66a4ca07a9160f0662ee758e6b40d71",
+    "source_retrieval": "fetched",
+    "coverage_confidence": {
+      "level": "machine-readable-spec",
+      "basis": "Official ShipStation V1 documentation download is an OpenAPI document with 47 HTTP method/path operations."
+    }
+  },
+  "summary": {
+    "old_api_surface_rows": 9,
+    "api_surface_rows": 47,
+    "exact_source_rows": 47,
+    "declared_operations": 47,
+    "operations_found": 47,
+    "coverage_confidence": {
+      "level": "machine-readable-spec",
+      "basis": "Official ShipStation V1 documentation download is an OpenAPI document with 47 HTTP method/path operations."
+    },
+    "enabled_operations": 0,
+    "declaration_pending_operations": 47,
+    "disabled_operations": 0,
+    "documented_deletes": 3,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 18
+      },
+      {
+        "key": "direct_write",
+        "count": 25
+      },
+      {
+        "key": "etl",
+        "count": 4
+      }
+    ],
+    "stream_bindings": 4,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [],
+    "foundation_gaps": [],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 47
+      }
+    ],
+    "transport": {
+      "source_transport": {
+        "state": "declaration-pending",
+        "evidence": "internal/connectors/defs/shipstation/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence."
+      },
+      "destination_transport": {
+        "state": "declaration-pending",
+        "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/shipstation/sync_transport.json is absent."
+      }
+    },
+    "foundation_gap_operations": 0,
+    "partial_commands": 47
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/accounts/listtags",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/accounts/listtags",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=list_account_tags; operation_id=list_account_tags; operation_id=list_account_tags; operation_id=list_account_tags; operation_id=list_account_tags"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-account-tags-1",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./accounts/listtags.get",
+        "operation_id": "list_account_tags",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[0]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-accounts-listtags\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-accounts-listtags",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carriers",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/carriers",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "/carriers is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+          "notes": "operation_id=list_carriers; operation_id=list_carriers; operation_id=list_carriers; operation_id=list_carriers; operation_id=list_carriers"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-carriers-2",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./carriers.get",
+        "operation_id": "list_carriers",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[1]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-carriers\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-carriers",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/carriers/addfunds",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/carriers/addfunds",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=add_funds_to_carrier; operation_id=add_funds_to_carrier; operation_id=add_funds_to_carrier; operation_id=add_funds_to_carrier; operation_id=add_funds_to_carrier"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.add-funds-to-carrier-3",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./carriers/addfunds.post",
+        "operation_id": "add_funds_to_carrier",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[2]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-carriers-addfunds\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-carriers-addfunds",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carriers/getcarrier",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/carriers/getcarrier",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=get_carrier; operation_id=get_carrier; operation_id=get_carrier; operation_id=get_carrier; operation_id=get_carrier"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.get-carrier-4",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./carriers/getcarrier.get",
+        "operation_id": "get_carrier",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[3]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-carriers-getcarrier\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-carriers-getcarrier",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carriers/listpackages",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/carriers/listpackages",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=list_packages; operation_id=list_packages; operation_id=list_packages; operation_id=list_packages; operation_id=list_packages"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-packages-5",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./carriers/listpackages.get",
+        "operation_id": "list_packages",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[4]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-carriers-listpackages\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-carriers-listpackages",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carriers/listservices",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/carriers/listservices",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=list_services; operation_id=list_services; operation_id=list_services; operation_id=list_services; operation_id=list_services"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-services-6",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./carriers/listservices.get",
+        "operation_id": "list_services",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[5]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-carriers-listservices\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-carriers-listservices",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/customers",
+        "operation": null,
+        "covered_by": {
+          "stream": "customers"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-customers-7",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./customers.get",
+        "operation_id": "list_customers",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[6]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-customers\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-customers",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/shipstation/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customerId}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/customers/{customerId}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=get_customer; operation_id=get_customer; operation_id=get_customer; operation_id=get_customer; operation_id=get_customer"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.get-customer-8",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./customers/{customerId}.get",
+        "operation_id": "get_customer",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[7]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-customers-customer-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-customers-customer-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fulfillments",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/fulfillments",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=list_fulfillments; operation_id=list_fulfillments; operation_id=list_fulfillments; operation_id=list_fulfillments; operation_id=list_fulfillments"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-fulfillments-9",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./fulfillments.get",
+        "operation_id": "list_fulfillments",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[8]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-fulfillments\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-fulfillments",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/orders",
+        "operation": null,
+        "covered_by": {
+          "stream": "orders"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-orders-10",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders.get",
+        "operation_id": "list_orders",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[9]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-orders\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-orders",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/shipstation/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/orders/{orderId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/orders/{orderId}",
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+          "notes": "operation_id=delete_order; operation_id=delete_order; operation_id=delete_order; operation_id=delete_order; operation_id=delete_order"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.delete-order-11",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/{orderId}.delete",
+        "operation_id": "delete_order",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[10]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations delete-orders-order-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-orders-order-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/{orderId}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/orders/{orderId}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=get_order; operation_id=get_order; operation_id=get_order; operation_id=get_order; operation_id=get_order"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.get-order-12",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/{orderId}.get",
+        "operation_id": "get_order",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[11]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-orders-order-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-orders-order-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/addtag",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/orders/addtag",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=add_tag_to_order; operation_id=add_tag_to_order; operation_id=add_tag_to_order; operation_id=add_tag_to_order; operation_id=add_tag_to_order"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.add-tag-to-order-13",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/addtag.post",
+        "operation_id": "add_tag_to_order",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[12]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-orders-addtag\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-orders-addtag",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/assignuser",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/orders/assignuser",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=assign_user_to_order; operation_id=assign_user_to_order; operation_id=assign_user_to_order; operation_id=assign_user_to_order; operation_id=assign_user_to_order"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.assign-user-to-order-14",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/assignuser.post",
+        "operation_id": "assign_user_to_order",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[13]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-orders-assignuser\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-orders-assignuser",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/createlabelfororder",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/orders/createlabelfororder",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=create_label_for_order; operation_id=create_label_for_order; operation_id=create_label_for_order; operation_id=create_label_for_order; operation_id=create_label_for_order"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.create-label-for-order-15",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/createlabelfororder.post",
+        "operation_id": "create_label_for_order",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[14]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-orders-createlabelfororder\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-orders-createlabelfororder",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/createorder",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/orders/createorder",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Legacy connector never implemented order creation",
+          "notes": "operation_id=create_update_order; operation_id=create_update_order; operation_id=create_update_order; operation_id=create_update_order; operation_id=create_update_order"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.create-update-order-16",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/createorder.post",
+        "operation_id": "create_update_order",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[15]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-orders-createorder\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-orders-createorder",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/createorders",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/orders/createorders",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=create_update_multiple_orders; operation_id=create_update_multiple_orders; operation_id=create_update_multiple_orders; operation_id=create_update_multiple_orders; operation_id=create_update_multiple_orders"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.create-update-multiple-orders-17",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/createorders.post",
+        "operation_id": "create_update_multiple_orders",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[16]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-orders-createorders\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-orders-createorders",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/holduntil",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/orders/holduntil",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=hold_order_until; operation_id=hold_order_until; operation_id=hold_order_until; operation_id=hold_order_until; operation_id=hold_order_until"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.hold-order-until-18",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/holduntil.post",
+        "operation_id": "hold_order_until",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[17]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-orders-holduntil\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-orders-holduntil",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/listbytag",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/orders/listbytag",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=list_orders_by_tag; operation_id=list_orders_by_tag; operation_id=list_orders_by_tag; operation_id=list_orders_by_tag; operation_id=list_orders_by_tag"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-orders-by-tag-19",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/listbytag.get",
+        "operation_id": "list_orders_by_tag",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[18]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-orders-listbytag\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-orders-listbytag",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/markasshipped",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/orders/markasshipped",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=mark_order_as_shipped; operation_id=mark_order_as_shipped; operation_id=mark_order_as_shipped; operation_id=mark_order_as_shipped; operation_id=mark_order_as_shipped"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.mark-order-as-shipped-20",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/markasshipped.post",
+        "operation_id": "mark_order_as_shipped",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[19]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-orders-markasshipped\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-orders-markasshipped",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/removetag",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/orders/removetag",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=remove_tag_from_order; operation_id=remove_tag_from_order; operation_id=remove_tag_from_order; operation_id=remove_tag_from_order; operation_id=remove_tag_from_order"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.remove-tag-from-order-21",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/removetag.post",
+        "operation_id": "remove_tag_from_order",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[20]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-orders-removetag\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-orders-removetag",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/restorefromhold",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/orders/restorefromhold",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=restore_order_from_hold; operation_id=restore_order_from_hold; operation_id=restore_order_from_hold; operation_id=restore_order_from_hold; operation_id=restore_order_from_hold"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.restore-order-from-hold-22",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/restorefromhold.post",
+        "operation_id": "restore_order_from_hold",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[21]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-orders-restorefromhold\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-orders-restorefromhold",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders/unassignuser",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/orders/unassignuser",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=unassign_user_from_order; operation_id=unassign_user_from_order; operation_id=unassign_user_from_order; operation_id=unassign_user_from_order; operation_id=unassign_user_from_order"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.unassign-user-from-order-23",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./orders/unassignuser.post",
+        "operation_id": "unassign_user_from_order",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[22]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-orders-unassignuser\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-orders-unassignuser",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/products",
+        "operation": null,
+        "covered_by": {
+          "stream": "products"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-products-24",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./products.get",
+        "operation_id": "list_products",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[23]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-products\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-products",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/shipstation/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{productId}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/products/{productId}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=get_product; operation_id=get_product; operation_id=get_product; operation_id=get_product; operation_id=get_product"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.get-product-25",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./products/{productId}.get",
+        "operation_id": "get_product",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[24]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-products-product-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-products-product-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/products/{productId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/products/{productId}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=update_product; operation_id=update_product; operation_id=update_product; operation_id=update_product; operation_id=update_product"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.update-product-26",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./products/{productId}.put",
+        "operation_id": "update_product",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[25]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations put-products-product-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-products-product-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipments",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/shipments",
+        "operation": null,
+        "covered_by": {
+          "stream": "shipments"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-shipments-27",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./shipments.get",
+        "operation_id": "list_shipments",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[26]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-shipments\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-shipments",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/shipstation/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipments/createlabel",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/shipments/createlabel",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "Legacy connector never implemented label purchasing",
+          "notes": "operation_id=create_shipment_label; operation_id=create_shipment_label; operation_id=create_shipment_label; operation_id=create_shipment_label; operation_id=create_shipment_label"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.create-shipment-label-28",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./shipments/createlabel.post",
+        "operation_id": "create_shipment_label",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[27]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-shipments-createlabel\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-shipments-createlabel",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipments/getrates",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/shipments/getrates",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=get_rates; operation_id=get_rates; operation_id=get_rates; operation_id=get_rates; operation_id=get_rates"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.get-rates-29",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./shipments/getrates.post",
+        "operation_id": "get_rates",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[28]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-shipments-getrates\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-shipments-getrates",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shipments/voidlabel",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/shipments/voidlabel",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=void_label; operation_id=void_label; operation_id=void_label; operation_id=void_label; operation_id=void_label"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.void-label-30",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./shipments/voidlabel.post",
+        "operation_id": "void_label",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[29]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-shipments-voidlabel\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-shipments-voidlabel",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stores",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/stores",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=list_stores; operation_id=list_stores; operation_id=list_stores; operation_id=list_stores; operation_id=list_stores"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-stores-31",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./stores.get",
+        "operation_id": "list_stores",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[30]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-stores\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-stores",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stores/{storeId}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/stores/{storeId}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=get_store; operation_id=get_store; operation_id=get_store; operation_id=get_store; operation_id=get_store"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.get-store-32",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./stores/{storeId}.get",
+        "operation_id": "get_store",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[31]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-stores-store-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-stores-store-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/stores/{storeId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/stores/{storeId}",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=update_store; operation_id=update_store; operation_id=update_store; operation_id=update_store; operation_id=update_store"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.update-store-33",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./stores/{storeId}.put",
+        "operation_id": "update_store",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[32]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations put-stores-store-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-stores-store-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stores/deactivate",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/stores/deactivate",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=deactivate_store; operation_id=deactivate_store; operation_id=deactivate_store; operation_id=deactivate_store; operation_id=deactivate_store"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.deactivate-store-34",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./stores/deactivate.post",
+        "operation_id": "deactivate_store",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[33]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-stores-deactivate\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-stores-deactivate",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stores/getrefreshstatus",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/stores/getrefreshstatus",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=get_store_refresh_status; operation_id=get_store_refresh_status; operation_id=get_store_refresh_status; operation_id=get_store_refresh_status; operation_id=get_store_refresh_status"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.get-store-refresh-status-35",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./stores/getrefreshstatus.get",
+        "operation_id": "get_store_refresh_status",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[34]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-stores-getrefreshstatus\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-stores-getrefreshstatus",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stores/marketplaces",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/stores/marketplaces",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=list_marketplaces; operation_id=list_marketplaces; operation_id=list_marketplaces; operation_id=list_marketplaces; operation_id=list_marketplaces"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-marketplaces-36",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./stores/marketplaces.get",
+        "operation_id": "list_marketplaces",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[35]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-stores-marketplaces\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-stores-marketplaces",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stores/reactivate",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/stores/reactivate",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=reactivate_store; operation_id=reactivate_store; operation_id=reactivate_store; operation_id=reactivate_store; operation_id=reactivate_store"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.reactivate-store-37",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./stores/reactivate.post",
+        "operation_id": "reactivate_store",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[36]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-stores-reactivate\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-stores-reactivate",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stores/refreshstore",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/stores/refreshstore",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=refresh_store; operation_id=refresh_store; operation_id=refresh_store; operation_id=refresh_store; operation_id=refresh_store"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.refresh-store-38",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./stores/refreshstore.post",
+        "operation_id": "refresh_store",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[37]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-stores-refreshstore\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-stores-refreshstore",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/users",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=list_users; operation_id=list_users; operation_id=list_users; operation_id=list_users; operation_id=list_users"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-users-39",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./users.get",
+        "operation_id": "list_users",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[38]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-users\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-users",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/warehouses",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "/warehouses is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+          "notes": "operation_id=list_warehouses; operation_id=list_warehouses; operation_id=list_warehouses; operation_id=list_warehouses; operation_id=list_warehouses"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-warehouses-40",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./warehouses.get",
+        "operation_id": "list_warehouses",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[39]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-warehouses\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-warehouses",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/warehouses/{warehouseId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/warehouses/{warehouseId}",
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+          "notes": "operation_id=delete_warehouse; operation_id=delete_warehouse; operation_id=delete_warehouse; operation_id=delete_warehouse; operation_id=delete_warehouse"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.delete-warehouse-41",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./warehouses/{warehouseId}.delete",
+        "operation_id": "delete_warehouse",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[40]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations delete-warehouses-warehouse-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-warehouses-warehouse-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{warehouseId}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/warehouses/{warehouseId}",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=get_warehouse; operation_id=get_warehouse; operation_id=get_warehouse; operation_id=get_warehouse; operation_id=get_warehouse"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.get-warehouse-42",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./warehouses/{warehouseId}.get",
+        "operation_id": "get_warehouse",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[41]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-warehouses-warehouse-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-warehouses-warehouse-id",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/warehouses/createwarehouse",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/warehouses/createwarehouse",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=create_warehouse; operation_id=create_warehouse; operation_id=create_warehouse; operation_id=create_warehouse; operation_id=create_warehouse"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.create-warehouse-43",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./warehouses/createwarehouse.post",
+        "operation_id": "create_warehouse",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[42]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-warehouses-createwarehouse\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-warehouses-createwarehouse",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/warehouses/updatewarehouse",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PUT",
+        "path": "/warehouses/updatewarehouse",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+          "notes": "operation_id=update_warehouse; operation_id=update_warehouse; operation_id=update_warehouse; operation_id=update_warehouse; operation_id=update_warehouse"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.update-warehouse-44",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./warehouses/updatewarehouse.put",
+        "operation_id": "update_warehouse",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[43]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations put-warehouses-updatewarehouse\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations put-warehouses-updatewarehouse",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/webhooks",
+        "operation": {
+          "model": "direct_read",
+          "status": "blocked",
+          "risk": "low",
+          "blocked_by_default": true,
+          "reason": "Documented provider read has no matching executable stream or operation contract.",
+          "notes": "operation_id=list_webhooks; operation_id=list_webhooks; operation_id=list_webhooks; operation_id=list_webhooks; operation_id=list_webhooks"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.list-webhooks-45",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./webhooks.get",
+        "operation_id": "list_webhooks",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[44]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-webhooks\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-webhooks",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{webhookId}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/webhooks/{webhookId}",
+        "operation": {
+          "model": "destructive_action",
+          "status": "blocked",
+          "risk": "high",
+          "blocked_by_default": true,
+          "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+          "notes": "operation_id=unsubscribe_webhook; operation_id=unsubscribe_webhook; operation_id=unsubscribe_webhook; operation_id=unsubscribe_webhook; operation_id=unsubscribe_webhook"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.unsubscribe-webhook-46",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./webhooks/{webhookId}.delete",
+        "operation_id": "unsubscribe_webhook",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[45]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations delete-webhooks-webhook-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-webhooks-webhook-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks/subscribe",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/webhooks/subscribe",
+        "operation": {
+          "model": "disallowed",
+          "status": "blocked",
+          "risk": "medium",
+          "blocked_by_default": true,
+          "reason": "/webhooks/subscribe is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+          "notes": "operation_id=subscribe_webhook; operation_id=subscribe_webhook; operation_id=subscribe_webhook; operation_id=subscribe_webhook; operation_id=subscribe_webhook"
+        },
+        "covered_by": null,
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/shipstation-parity-source-lock.json",
+        "source_id": "shipstation.provider.subscribe-webhook-47",
+        "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+        "source_location": "paths./webhooks/subscribe.post",
+        "operation_id": "subscribe_webhook",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[46]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-webhooks-subscribe\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-webhooks-subscribe",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    }
+  ]
+}

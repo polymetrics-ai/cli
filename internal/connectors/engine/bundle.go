@@ -478,6 +478,10 @@ type WriteAction struct {
 	// covers APIs such as GitHub release uploads whose mutation endpoint is
 	// intentionally hosted away from the connector's ordinary REST origin.
 	BaseURL string `json:"base_url,omitempty"`
+	// AllowedBaseURLOrigins declares the only ordinary connector API origins
+	// whose credential may be used with this alternate action origin. It closes
+	// a public upload host from receiving a private/Enterprise API credential.
+	AllowedBaseURLOrigins []string `json:"allowed_base_url_origins,omitempty"`
 	// Route selects one HTTPBase.Routes declaration. It is the preferred
 	// declaration-owned routing path for reverse ETL and binary uploads;
 	// BaseURL remains only for existing legacy write declarations.
@@ -501,6 +505,9 @@ type WriteAction struct {
 	// their resolved values.
 	RedactFields []string `json:"redact_fields,omitempty"`
 	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload | binary_upload
+	// SuccessStatuses optionally narrows generic 2xx success to the exact
+	// provider receipt statuses the action declares.
+	SuccessStatuses []int `json:"success_statuses,omitempty"`
 	// BodyRequired forces an empty JSON object onto the wire when body construction
 	// resolves no fields. It is valid only for the default json body type.
 	BodyRequired bool                `json:"body_required,omitempty"`
@@ -653,6 +660,11 @@ type Base64UploadSpec struct {
 	// APIs document the encoded limit — Airtable's attachment cap is 5 MB of
 	// base64, not 5 MB of file.
 	MaxEncodedBytes int64 `json:"max_encoded_bytes,omitempty"`
+
+	// AllowedMediaTypes is required when this action is exposed as a public
+	// binary_upload command. The action-level field stays optional so existing
+	// internal-only base64 actions retain their declared compatibility.
+	AllowedMediaTypes []string `json:"allowed_media_types,omitempty"`
 }
 
 // BinaryUploadSpec describes a declaration-owned application/octet-stream
@@ -660,8 +672,9 @@ type Base64UploadSpec struct {
 // Preview binds its normalized identity and approved SHA-256; execution
 // reopens, bounds, and hashes the file before sending the exact bytes once.
 type BinaryUploadSpec struct {
-	SourceField string `json:"source_field"`
-	MaxBytes    int64  `json:"max_bytes"`
+	SourceField       string   `json:"source_field"`
+	MaxBytes          int64    `json:"max_bytes"`
+	AllowedMediaTypes []string `json:"allowed_media_types,omitempty"`
 }
 
 type MultipartPartSpec struct {
@@ -842,12 +855,14 @@ type OperationParameter struct {
 	// CLIName is an optional declaration-owned spelling for a fixed path
 	// placeholder. It exists when the runtime's safe placeholder differs from
 	// the provider's public resource name; it never changes the wire mapping.
-	CLIName    string   `json:"cli_name,omitempty"`
-	Type       string   `json:"type,omitempty"`
-	Required   bool     `json:"required,omitempty"`
-	Repeatable bool     `json:"repeatable,omitempty"`
-	Values     []string `json:"values,omitempty"`
-	Summary    string   `json:"summary,omitempty"`
+	CLIName    string                  `json:"cli_name,omitempty"`
+	Type       string                  `json:"type,omitempty"`
+	Required   bool                    `json:"required,omitempty"`
+	Repeatable bool                    `json:"repeatable,omitempty"`
+	Values     []string                `json:"values,omitempty"`
+	Summary    string                  `json:"summary,omitempty"`
+	Minimum    *connectors.ExactNumber `json:"minimum,omitempty"`
+	Maximum    *connectors.ExactNumber `json:"maximum,omitempty"`
 	// Schema and MaxBytes are required for a caller-provided header. Headers
 	// are strings on the wire, so their schema is deliberately a bounded
 	// string schema rather than a second generic request-body dialect.
@@ -1171,11 +1186,16 @@ type CertificationSpec struct {
 	MutationCandidates   []CertificationMutationCandidate          `json:"mutation_candidates,omitempty"`
 	MutationGeneration   *CertificationMutationCandidateGeneration `json:"mutation_generation,omitempty"`
 	BinaryCandidates     []CertificationCommandCandidate           `json:"binary_candidates,omitempty"`
-	GraphQL              *CertificationGraphQLSpec                 `json:"graphql,omitempty"`
-	WritePairings        []CertificationWritePairing               `json:"write_pairings,omitempty"`
-	WriteInventory       CertificationWriteInventorySpec           `json:"write_inventory,omitempty"`
-	WriteWave            *CertificationWriteWaveSpec               `json:"write_wave,omitempty"`
-	EvidenceImport       *CertificationEvidenceImportSpec          `json:"evidence_import,omitempty"`
+	// BinaryUploadCandidates are intentionally independent from download
+	// candidates. A plan-only refusal never proves byte transfer, provider
+	// response, read-back, or cleanup, so the certify stage records it as
+	// blocked/not_live rather than borrowing the download cell.
+	BinaryUploadCandidates []CertificationCommandCandidate  `json:"binary_upload_candidates,omitempty"`
+	GraphQL                *CertificationGraphQLSpec        `json:"graphql,omitempty"`
+	WritePairings          []CertificationWritePairing      `json:"write_pairings,omitempty"`
+	WriteInventory         CertificationWriteInventorySpec  `json:"write_inventory,omitempty"`
+	WriteWave              *CertificationWriteWaveSpec      `json:"write_wave,omitempty"`
+	EvidenceImport         *CertificationEvidenceImportSpec `json:"evidence_import,omitempty"`
 }
 
 // CertificationEvidenceImportSpec is connector-owned acceptance metadata for
@@ -2122,6 +2142,9 @@ func validateWriteBodies(actions []WriteAction) error {
 		if err := validateWriteActionBaseURL(i, action); err != nil {
 			return err
 		}
+		if err := validateWriteActionSuccessStatuses(i, action); err != nil {
+			return err
+		}
 		if action.BodyRequired && bodyType != "json" {
 			return fmt.Errorf("action %d (%q) body_required requires body_type json, got %q", i, action.Name, bodyType)
 		}
@@ -2233,15 +2256,49 @@ func containsWriteField(fields []string, wanted string) bool {
 const maxBinaryUploadBytes = int64(64 << 20)
 
 func validateWriteActionBaseURL(i int, action WriteAction) error {
-	if strings.TrimSpace(action.BaseURL) == "" {
-		return nil
+	if strings.TrimSpace(action.BaseURL) == "" && len(action.AllowedBaseURLOrigins) > 0 {
+		return fmt.Errorf("action %d (%q) allowed_base_url_origins requires base_url", i, action.Name)
 	}
-	if action.BaseURL != strings.TrimSpace(action.BaseURL) || strings.Contains(action.BaseURL, "{{") {
-		return fmt.Errorf("action %d (%q) base_url must be one fixed absolute origin", i, action.Name)
+	if strings.TrimSpace(action.BaseURL) != "" {
+		if action.BaseURL != strings.TrimSpace(action.BaseURL) || strings.Contains(action.BaseURL, "{{") {
+			return fmt.Errorf("action %d (%q) base_url must be one fixed absolute origin", i, action.Name)
+		}
+		if _, err := fixedHTTPOrigin(action.BaseURL); err != nil {
+			return fmt.Errorf("action %d (%q) base_url must be one fixed absolute HTTP origin", i, action.Name)
+		}
 	}
-	parsed, err := url.Parse(action.BaseURL)
+	seen := make(map[string]struct{}, len(action.AllowedBaseURLOrigins))
+	for _, raw := range action.AllowedBaseURLOrigins {
+		origin, err := fixedHTTPOrigin(raw)
+		if err != nil || raw != strings.TrimSpace(raw) || strings.Contains(raw, "{{") {
+			return fmt.Errorf("action %d (%q) allowed_base_url_origins entries must be fixed absolute HTTP origins", i, action.Name)
+		}
+		if _, duplicate := seen[origin]; duplicate {
+			return fmt.Errorf("action %d (%q) allowed_base_url_origins must not repeat %q", i, action.Name, raw)
+		}
+		seen[origin] = struct{}{}
+	}
+	return nil
+}
+
+func fixedHTTPOrigin(raw string) (string, error) {
+	parsed, err := url.Parse(raw)
 	if err != nil || parsed.Host == "" || (parsed.Scheme != "https" && parsed.Scheme != "http") || parsed.User != nil || parsed.RawQuery != "" || parsed.Fragment != "" || (parsed.Path != "" && parsed.Path != "/") {
-		return fmt.Errorf("action %d (%q) base_url must be one fixed absolute HTTP origin", i, action.Name)
+		return "", fmt.Errorf("not a fixed HTTP origin")
+	}
+	return strings.ToLower(parsed.Scheme) + "://" + strings.ToLower(parsed.Host), nil
+}
+
+func validateWriteActionSuccessStatuses(i int, action WriteAction) error {
+	seen := make(map[int]struct{}, len(action.SuccessStatuses))
+	for _, status := range action.SuccessStatuses {
+		if status < http.StatusOK || status >= http.StatusMultipleChoices {
+			return fmt.Errorf("action %d (%q) success_statuses entry %d must be a 2xx status", i, action.Name, status)
+		}
+		if _, duplicate := seen[status]; duplicate {
+			return fmt.Errorf("action %d (%q) success_statuses repeats %d", i, action.Name, status)
+		}
+		seen[status] = struct{}{}
 	}
 	return nil
 }
@@ -2256,6 +2313,9 @@ func validateBinaryUploadSpec(i int, action WriteAction) error {
 	}
 	if spec.MaxBytes <= 0 || spec.MaxBytes > maxBinaryUploadBytes {
 		return fmt.Errorf("action %d (%q) binary_upload max_bytes must be between 1 and %d", i, action.Name, maxBinaryUploadBytes)
+	}
+	if err := validateOptionalUploadMediaTypes(spec.AllowedMediaTypes); err != nil {
+		return fmt.Errorf("action %d (%q) binary_upload %w", i, action.Name, err)
 	}
 	return nil
 }
@@ -2302,6 +2362,27 @@ func validateBase64UploadSpec(i int, action WriteAction) error {
 		needed := int64(base64.StdEncoding.EncodedLen(int(spec.MaxDecodedBytes)))
 		if spec.MaxEncodedBytes < needed {
 			return fmt.Errorf("action %d (%q) base64_upload max_encoded_bytes %d cannot hold max_decoded_bytes %d (needs %d)", i, action.Name, spec.MaxEncodedBytes, spec.MaxDecodedBytes, needed)
+		}
+	}
+	if err := validateOptionalUploadMediaTypes(spec.AllowedMediaTypes); err != nil {
+		return fmt.Errorf("action %d (%q) base64_upload %w", i, action.Name, err)
+	}
+	return nil
+}
+
+// validateOptionalUploadMediaTypes keeps the action declaration honest when
+// it elects a media policy. Public binary-upload promotion separately requires
+// a non-empty list; leaving it absent remains valid for internal-only writes.
+func validateOptionalUploadMediaTypes(mediaTypes []string) error {
+	if mediaTypes == nil {
+		return nil
+	}
+	if len(mediaTypes) == 0 {
+		return fmt.Errorf("allowed_media_types must not be empty; omit it to leave the action unconstrained")
+	}
+	for _, raw := range mediaTypes {
+		if _, _, err := mime.ParseMediaType(raw); err != nil {
+			return fmt.Errorf("allowed_media_types entry %q is not a valid media type: %w", raw, err)
 		}
 	}
 	return nil
@@ -3308,6 +3389,11 @@ func validateCertification(certification CertificationSpec, streams []StreamSpec
 			return err
 		}
 	}
+	for i, candidate := range certification.BinaryUploadCandidates {
+		if err := validateCertificationCommandCandidate("binary_upload_candidates", i, candidate); err != nil {
+			return err
+		}
+	}
 	if graphql := certification.GraphQL; graphql != nil {
 		if !fs.ValidPath(graphql.SourceLock) || !strings.HasPrefix(graphql.SourceLock, "sources/") {
 			return fmt.Errorf("graphql.source_lock must be a connector-owned file beneath sources/")
@@ -3417,6 +3503,10 @@ func validateCertificationEvidenceImportBinding(binding CertificationEvidenceImp
 			}
 		case "binary_candidates":
 			if len(certification.BinaryCandidates) == 0 {
+				return fmt.Errorf("stage_set %q has no declared candidates", set)
+			}
+		case "binary_upload_candidates":
+			if len(certification.BinaryUploadCandidates) == 0 {
 				return fmt.Errorf("stage_set %q has no declared candidates", set)
 			}
 		case "graphql_live_candidates":

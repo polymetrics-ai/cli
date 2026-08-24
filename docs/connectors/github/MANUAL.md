@@ -2800,6 +2800,7 @@ COMMAND SURFACE
   Work with GitHub repositories from the command line.
   Usage: pm github <command> <subcommand> [flags]
   Source CLI: gh (https://cli.github.com/manual/gh_help_reference)
+  PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
   Global flags:
     --json (boolean): Write machine-readable JSON output.
     --connection (string): Use a saved GitHub connector credential and repository scope.: maps_to=connection
@@ -2879,7 +2880,7 @@ COMMAND SURFACE
     release download - Download release assets [intent=binary_download availability=implemented operation=github.release.download_assets]; notes: Downloads one declared asset by ID with the bounded binary-download policy; archive extraction is disabled.; flags: --asset-id (required, max 4096 bytes), --dest-root (required), --file-name, --max-bytes
     release edit - Edit a release [intent=reverse_etl availability=implemented write=update_release]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: Mutates an existing release.; flags: --body (max 32768 bytes), --discussion-category-name (max 32768 bytes), --draft, --make-latest, --name (max 32768 bytes), --prerelease, --release-id (required), --tag-name (max 32768 bytes), --target-commitish (max 32768 bytes)
     release list - List releases [intent=etl availability=implemented stream=releases]
-    release upload - Upload release assets [intent=direct_write availability=unsupported_local unsupported local workflow]; notes: GitHub release assets use a separate upload host and raw request body; no bounded binary-upload executor exists.
+    release upload - Upload release assets [intent=direct_write availability=unsupported_local unsupported local workflow]; notes: The upstream gh release upload workflow can select multiple local files and clobber or label existing assets; those composite semantics remain unsupported. Use the one-file declaration-bound binary-upload command, releases assets upload, for bounded bytes, persisted preview, approval, and execute.
     release verify - Verify release assets [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Requires local cryptographic verification of downloaded release assets; no cryptographic verification executor exists.
     release view - View a release [intent=direct_read availability=implemented operation=github.releases_release_id]; flags: --release-id (required, max 4096 bytes), --page, --page-cursor
   GitHub Actions Commands
@@ -4257,7 +4258,7 @@ COMMAND SURFACE
     rate-limit get - Get rate limit status for the authenticated user [intent=direct_read availability=implemented]; flags: --page, --page-cursor
     readme view-2 - Read /repos/{owner}/{repo}/readme/{dir} [intent=direct_read availability=implemented operation=github.readme_dir]; flags: --dir (required, max 4096 bytes), --ref (max 4096 bytes), --page, --page-cursor
     readme view - Read /repos/{owner}/{repo}/readme [intent=direct_read availability=implemented operation=github.readme]; flags: --ref (max 4096 bytes), --page, --page-cursor
-    releases assets upload - Upload one release asset as exact binary bytes. [intent=reverse_etl availability=implemented write=releases_release_id_assets2]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: medium: uploads one root-confined local file to uploads.github.com without redirects or automatic retries; flags: --file-path (required, max 16384 bytes), --label (max 32768 bytes), --name (required, max 32768 bytes), --release-id (required)
+    releases assets upload - Upload one release asset as exact binary bytes. [intent=binary_upload availability=implemented write=releases_release_id_assets2]; approval: Binary uploads require plan, preview, approval, execute.; risk: medium: uploads one root-confined local file to uploads.github.com without redirects or automatic retries; flags: --file-path (required, max 16384 bytes), --label (max 32768 bytes), --name (required, max 32768 bytes), --release-id (required)
     releases assets view-2 - Read /repos/{owner}/{repo}/releases/{release_id}/assets [intent=direct_read availability=implemented operation=github.releases_release_id_assets]; flags: --release-id (required, max 4096 bytes), --page, --page-cursor
     releases assets view - Read /repos/{owner}/{repo}/releases/assets/{asset_id} [intent=direct_read availability=implemented operation=github.releases_assets_asset_id]; flags: --asset-id (required, max 4096 bytes), --page, --page-cursor
     releases generate-notes view - POST /repos/{owner}/{repo}/releases/generate-notes [intent=reverse_etl availability=implemented write=releases_generate_notes]; approval: reverse ETL writes require plan, approval, execute; preview is optional.; risk: low; flags: --configuration-file-path (max 32768 bytes), --previous-tag-name (max 32768 bytes), --tag-name (required, max 32768 bytes), --target-commitish (max 32768 bytes)

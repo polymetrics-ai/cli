@@ -1,20 +1,3392 @@
 {
   "api": "Pinterest API v5 (https://api.pinterest.com/v5)",
   "docs": "https://developers.pinterest.com/docs/api/v5/",
-  "reviewed_at": "2026-07-03",
-  "scope": "fresh migration: the 5 legacy-parity read streams only; legacy internal/connectors/pinterest is read-only (Capabilities.Write: false, no write.go), so there are no write endpoints in or out of scope. The full Pinterest v5 surface (pins, pin analytics, catalogs, conversion events, user account, media uploads, etc.) is out of scope until a capability-expansion pass.",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 1,
+  "scope": "Provider-source inventory regenerated for issue #4290 from Official Pinterest v5 rendered API reference embeds 297 navigation entries; 279 unique documented HTTP method/path requests remain after duplicate navigation entries are deduplicated. It contains 279 documented provider operations plus 5 explicit local compatibility binding(s) retained solely because the current executor still dispatches them. The local bindings are not used to bound or count the provider source.",
   "endpoints": [
-    { "method": "GET", "path": "/v5/ad_accounts", "covered_by": { "stream": "ad_accounts" } },
-    { "method": "GET", "path": "/v5/boards", "covered_by": { "stream": "boards" } },
-    { "method": "GET", "path": "/v5/ad_accounts/{ad_account_id}/campaigns", "covered_by": { "stream": "campaigns" } },
-    { "method": "GET", "path": "/v5/ad_accounts/{ad_account_id}/ad_groups", "covered_by": { "stream": "ad_groups" } },
-    { "method": "GET", "path": "/v5/ad_accounts/{ad_account_id}/audiences", "covered_by": { "stream": "audiences" } },
-    { "method": "POST", "path": "/v5/oauth/token", "excluded": { "category": "non_data_endpoint", "reason": "OAuth2 refresh-token exchange, consumed internally by the pinterest AuthHook, not a syncable object stream" } },
-    { "method": "GET", "path": "/v5/pins", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/pinterest; capability expansion" } },
-    { "method": "GET", "path": "/v5/ad_accounts/{ad_account_id}/ads", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/pinterest; capability expansion" } },
-    { "method": "GET", "path": "/v5/ad_accounts/{ad_account_id}/campaigns/analytics", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/pinterest; capability expansion" } },
-    { "method": "GET", "path": "/v5/catalogs", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/pinterest; capability expansion" } },
-    { "method": "POST", "path": "/v5/ad_accounts/{ad_account_id}/events", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/pinterest; capability expansion" } },
-    { "method": "GET", "path": "/v5/user_account", "excluded": { "category": "out_of_scope", "reason": "not implemented by legacy internal/connectors/pinterest; capability expansion" } }
+    {
+      "method": "GET",
+      "path": "/ad_accounts",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_accounts/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_accounts/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_accounts/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ad_groups",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_groups/list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/ad_groups",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_groups/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/ad_groups",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_groups/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_groups/get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/dynamic_titles",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_groups_dynamic_titles/process_csv"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/dynamic_titles/csv",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_groups_dynamic_titles/download_csv"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/dynamic_titles/status",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_groups_dynamic_titles/get_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/dynamic_titles/uploads",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_groups_dynamic_titles/get_upload_url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ad_groups/analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_groups/analytics"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/ad_groups/audience_sizing",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_groups/audience_sizing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ad_groups/targeting_analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_groups_targeting_analytics/get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/ad_previews",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_previews/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ads",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ads/list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/ads",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ads/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/ads",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ads/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ads_credit/discounts",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ads_credits_discounts/get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/ads_credit/redeem",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ads_credit/redeem"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ads/{ad_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ads/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ads/analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ads/analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ads/targeting_analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_targeting_analytics/get"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ad_accounts/{ad_account_id}/advertiser_defined_events",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=advertiser_defined_events/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/advertiser_defined_events",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=advertiser_defined_events/get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/advertiser_defined_events",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=advertiser_defined_events/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/advertiser_defined_events",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=advertiser_defined_events/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_account/analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/audience_insights",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=audience_insights/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/audiences",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=audiences/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/audiences",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=audiences/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/audiences/{audience_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=audiences/get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/audiences/{audience_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=audiences/update"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/audiences/ad_accounts/shared",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=update_ad_account_to_ad_account_shared_audience"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/audiences/businesses/shared",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=update_ad_account_to_business_shared_audience"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/audiences/shared/accounts",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_accounts_audiences_shared_accounts/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/bid_floor",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_groups_bid_floor/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/billing_invoice/{billing_invoice_id}/download",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=billing_invoice_download/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/billing_invoices",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=billing_invoices/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/billing_profiles",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=billing_profiles/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/bulk/{bulk_request_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=bulk_request/get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/bulk/download",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=bulk_download/create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/bulk/upsert",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=bulk_upsert/create"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ad_accounts/{ad_account_id}/campaign_ad_preview",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=campaign_ad_preview/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/campaign_ad_preview",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=campaign_ad_preview/read"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/campaign_ad_preview",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=campaign_ad_preview/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/campaigns",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=campaigns/list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/campaigns",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=campaigns/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/campaigns",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=campaigns/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/campaigns/{campaign_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=campaigns/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/campaigns/analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=campaigns/analytics"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/campaigns/delivery_estimates",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get_campaign_delivery_estimates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/campaigns/targeting_analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=campaign_targeting_analytics/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/conversion_deletion_requests",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=conversion_deletion_request/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/conversion_deletion_requests",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=conversion_deletion_request/create"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ad_accounts/{ad_account_id}/conversion_deletion_requests/{request_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=conversion_deletion_request/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/conversion_deletion_requests/{request_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=conversion_deletion_request/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/conversion_eqs",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=conversion_eqs/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/conversion_tags",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=conversion_tags/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/conversion_tags",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=conversion_tags/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/conversion_tags/{conversion_tag_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=conversion_tags/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/conversion_tags/ocpm_eligible",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ocpm_eligible_conversion_tags/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/conversion_tags/page_visit",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=page_visit_conversion_tags/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/customer_lists",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=customer_lists/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/customer_lists",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=customer_lists/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/customer_lists/{customer_list_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=customer_lists/get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/customer_lists/{customer_list_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=customer_lists/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/customer_lists/{customer_list_id}/uploads",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=customer_list_uploads/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/customer_lists/{customer_list_id}/uploads/{customer_list_upload_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=customer_list_uploads/get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/customer_lists/{customer_list_id}/uploads/{customer_list_upload_id}/run",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=customer_list_uploads/run"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/customer_segments",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=customer_segment/list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/customer_segments",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=customer_segment/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/customer_segments",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=customer_segment/create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/events",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=events/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/insights/audiences",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=audience_insights_scope_and_type/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/keywords",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=keywords/get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/keywords",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=keywords/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/keywords",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=keywords/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/keywords/metrics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=country_keywords_metrics/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/labels",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=labels/list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/labels",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=labels/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/labels",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=labels/create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/labels/{label_id}/apply",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=labels/apply"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/labels/{label_id}/remove",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=labels/remove"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/lead_forms",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=lead_forms/list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/lead_forms",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=lead_forms/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/lead_forms",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=lead_forms/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/lead_forms/{lead_form_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=lead_form/get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/lead_forms/{lead_form_id}/test",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=lead_form_test/create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/leads_export",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=leads_export/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/leads_export/{leads_export_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=leads_export/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/leads/subscriptions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_accounts_subscriptions/get_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/leads/subscriptions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_accounts_subscriptions/post"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ad_accounts/{ad_account_id}/leads/subscriptions/{subscription_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_accounts_subscriptions/del_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/leads/subscriptions/{subscription_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_accounts_subscriptions/get_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/mmm_reports",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=analytics/get_mmm_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/mmm_reports",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=analytics/create_mmm_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/msot/events",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=msot_events/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/order_lines",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=order_lines/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/order_lines/{order_line_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=order_lines/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/pins/analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_pins/analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/product_group_promotions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=product_group_promotions/list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/product_group_promotions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=product_group_promotions/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/product_group_promotions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=product_group_promotions/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/product_group_promotions/{product_group_promotion_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=product_group_promotions/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/product_groups/analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=product_groups/analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/promotion_applied_entities",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get_ad_groups_by_promotion_ids/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/promotions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=promotions/list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/promotions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=promotions/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/promotions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=promotions/create"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ad_accounts/{ad_account_id}/promotions/{promotion_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=promotions/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/promotions/{promotion_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=promotions/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/reports",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=analytics/get_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/reports",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=analytics/create_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/reports/brand_category_sku",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=analytics/get_conversion_product_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/reports/brand_category_sku",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=analytics/create_conversion_product_report"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ad_accounts/{ad_account_id}/sandbox",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=sandbox/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ssio/accounts",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ssio_accounts/get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/ssio/insertion_orders",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ssio_insertion_order/edit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/ssio/insertion_orders",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ssio_insertion_order/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ssio/insertion_orders/{pin_order_id}/status",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ssio_insertion_orders_status/get_by_pin_order_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ssio/insertion_orders/status",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ssio_insertion_orders_status/get_by_ad_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/ssio/order_lines",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ssio_order_lines/get_by_ad_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/targeting_analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_account_targeting_analytics/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/targeting_templates",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=targeting_template/list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/ad_accounts/{ad_account_id}/targeting_templates",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=targeting_template/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/targeting_templates",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=targeting_template/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/templates",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=templates/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ad_accounts/{ad_account_id}/templates/{template_id}/reports",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=analytics/create_template_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/{ad_account_id}/terms_of_service",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=terms_of_service/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ad_accounts/entity_history",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=entity_history/get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/advanced_auction/items/get",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=advanced_auction_items_get/post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/advanced_auction/items/submit",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=advanced_auction_items_submit/post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=boards/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=boards/create"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/boards/{board_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=boards/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{board_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=boards/get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/boards/{board_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=boards/update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{board_id}/pins",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=boards/list_pins"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{board_id}/sections",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=board_sections/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boards/{board_id}/sections",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=board_sections/create"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/boards/{board_id}/sections/{section_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=board_sections/delete"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/boards/{board_id}/sections/{section_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=board_sections/update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/boards/{board_id}/sections/{section_id}/pins",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=board_sections/list_pins"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/business_access/business_hierarchy/{business_hierarchy_id}/brand_accounts",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=brand_accounts/create"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/business_access/business_hierarchy/{business_hierarchy_id}/brand_accounts/{brand_account_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=brand_accounts/update"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/businesses/{business_id}/asset_groups",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=asset_group/delete"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/businesses/{business_id}/asset_groups",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=asset_group/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/businesses/{business_id}/asset_groups",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=asset_group/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/businesses/{business_id}/assets",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=business_assets/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/businesses/{business_id}/assets/{asset_id}/members",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=business_asset_members/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/businesses/{business_id}/assets/{asset_id}/partners",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=business_asset_partners/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/businesses/{business_id}/audiences",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=shared_audiences_for_business/list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/businesses/{business_id}/audiences/ad_accounts/shared",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=update_business_to_ad_account_shared_audience"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/businesses/{business_id}/audiences/businesses/shared",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=update_business_to_business_shared_audience"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/businesses/{business_id}/audiences/shared/accounts",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=business_account_audiences_shared_accounts/list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/businesses/{business_id}/invites",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=cancel_invites_or_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/businesses/{business_id}/invites",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get/invites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/businesses/{business_id}/invites",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=create_membership_or_partnership_invites"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/businesses/{business_id}/invites/assets/access",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=create_asset_invites"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/businesses/{business_id}/members",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=delete_business_membership"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/businesses/{business_id}/members",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get/business_members"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/businesses/{business_id}/members",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=update/business_memberships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/businesses/{business_id}/members/{member_id}/assets",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=business_member_assets/get"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/businesses/{business_id}/members/assets/access",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=business_members_asset_access/delete"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/businesses/{business_id}/members/assets/access",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=business_members_asset_access/update"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/businesses/{business_id}/partners",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=delete_business_partners"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/businesses/{business_id}/partners",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get/business_partners"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/businesses/{business_id}/partners/{partner_id}/assets",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=business_partner_asset_access/get"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/businesses/{business_id}/partners/assets",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=delete_partner_asset_access_handler_impl"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/businesses/{business_id}/partners/assets",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=update_partner_asset_access_handler_impl"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/businesses/{business_id}/requests/assets/access",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=asset_access_requests/create"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/businesses/{business_id}/system_users/{system_user_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=system_user/update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/businesses/employers",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=get/business_employers"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/businesses/invites",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=respond_business_access_invites"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs/create"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/catalogs/{catalog_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/{catalog_id}/auto_localization_configs",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_auto_localization_configs/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/{catalog_id}/auto_localization_configs/{auto_localization_config_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_auto_localization_configs/get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/catalogs/{catalog_id}/auto_localization_configs/{auto_localization_config_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_auto_localization_configs/update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/{catalog_id}/auto_localization_configs/{auto_localization_config_id}/translations",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_translations/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/{catalog_id}/auto_localization_configs/{auto_localization_config_id}/translations/review",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_translations/review"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalogs/{catalog_id}/country_locale_mapping",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_country_locale_mapping/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/{catalog_id}/country_locale_mapping",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_country_locale_mapping/get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/catalogs/{catalog_id}/country_locale_mapping",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_country_locale_mapping/replace"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/{catalog_id}/local_inventory_items/batch",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_local_inventory_items_batch/operate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/{catalog_id}/local_inventory_items/query",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_local_inventory_items/post"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalogs/{catalog_id}/local_stores",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_local_stores/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/{catalog_id}/local_stores",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_local_stores/list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/catalogs/{catalog_id}/local_stores",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_local_stores/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/{catalog_id}/local_stores",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_local_stores/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/{catalog_id}/supplemental_items/batch/{batch_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_supplemental_items_batch/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/available_filter_values",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs/available_filter_values"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/feeds",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=feeds/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/feeds",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=feeds/create"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalogs/feeds/{feed_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=feeds/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/feeds/{feed_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=feeds/get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/catalogs/feeds/{feed_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=feeds/update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/feeds/{feed_id}/ingest",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=feeds/ingest"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/feeds/{feed_id}/processing_results",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=feed_processing_results/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/items",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=items/post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/items/batch",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=items_batch/post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/items/batch/{batch_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=items_batch/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/processing_results/{processing_result_id}/item_issues",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=items_issues/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/product_groups",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_product_groups/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/product_groups",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_product_groups/create"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalogs/product_groups/{product_group_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_product_groups/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/product_groups/{product_group_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_product_groups/get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/catalogs/product_groups/{product_group_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_product_groups/update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/product_groups/{product_group_id}/product_counts",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_product_groups/product_counts_get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/product_groups/{product_group_id}/products",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_product_group_pins/list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalogs/product_groups/multiple",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_product_groups/delete_many"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/product_groups/multiple",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=catalogs_product_groups/create_many"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/products/get_by_product_group_filters",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=products_by_product_group_filter/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/reports",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=reports/get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/reports",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=reports/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/reports/stats",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=reports/stats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/supplemental_feeds",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=supplemental_feeds/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/catalogs/supplemental_feeds",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=supplemental_feeds/create"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/catalogs/supplemental_feeds/{feed_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=supplemental_feeds/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/catalogs/supplemental_feeds/{feed_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=supplemental_feeds/get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/catalogs/supplemental_feeds/{feed_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=supplemental_feeds/update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=integrations/get_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=integrations/get_by_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/commerce",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=integrations_commerce/post"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/commerce/{external_business_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=integrations_commerce/del"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/commerce/{external_business_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=integrations_commerce/get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/integrations/commerce/{external_business_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=integrations_commerce/patch"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/logs",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=integrations_logs/post"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/media",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=media/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/media",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=media/create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/media/{media_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=media/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/merchant/{merchant_id}/status",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=merchant_status/get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/notifications",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=notification/post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth/conversion_token",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=oauth/conversion_token"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth/token",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=oauth/token"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/oauth/token/revoke",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=token/revoke"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pins",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=pins/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pins",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=pins/create"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/pins/{pin_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=pins/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pins/{pin_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=pins/get"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/pins/{pin_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=pins/update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pins/{pin_id}/analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=pins/analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pins/{pin_id}/product_tags",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=product_tags/list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pins/{pin_id}/product_tags",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=product_tags/bulk_add"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pins/{pin_id}/product_tags/bulk-delete",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=product_tags/bulk_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pins/{pin_id}/save",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=pins/save"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/pins/analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=multi_pins/analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resources/ad_account_countries",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ad_account_countries/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resources/delivery_metrics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=delivery_metrics/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resources/lead_form_questions",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=lead_form_questions/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resources/metrics_ready_state",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=metrics_ready_state/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resources/targeting/{targeting_type}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=targeting_options/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resources/targeting/interests/{interest_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=interest_targeting_options/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/boards",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=search_user_boards/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/partner/pins",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=search_partner_pins"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/pins",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=search_user_pins/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/terms/related",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=terms_related/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/terms/suggested",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=terms_suggested/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trends/editorial_articles",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=trends_editorial_articles/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trends/keywords/{region}/top/{trend_type}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=trending_keywords/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trends/product_categories/details",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=trends_product_categories_details/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trends/product_categories/trending",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=trends_product_categories_trending/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trends/topics/featured",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=trends_featured_topics/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_account",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=user_account/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_account/analytics",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=user_account/analytics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_account/analytics/top_pins",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=user_account/analytics/top_pins"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_account/analytics/top_video_pins",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=user_account/analytics/top_video_pins"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_account/businesses",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=linked_business_accounts/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_account/followers",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=followers/list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_account/following",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=user_following/get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user_account/following/{username}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=follow_user/update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_account/following/boards",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=boards_user_follows/list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/user_account/websites",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=unverify_website/delete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_account/websites",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=user_websites/get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/user_account/websites",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=verify_website/update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user_account/websites/verification",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=website_verification/get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{username}/interests/follow",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=user_account/followed_interests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/ad_accounts",
+      "covered_by": {
+        "stream": "ad_accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/boards",
+      "covered_by": {
+        "stream": "boards"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/ad_accounts/{ad_account_id}/campaigns",
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/ad_accounts/{ad_account_id}/ad_groups",
+      "covered_by": {
+        "stream": "ad_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v5/ad_accounts/{ad_account_id}/audiences",
+      "covered_by": {
+        "stream": "audiences"
+      }
+    }
   ]
 }

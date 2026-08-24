@@ -34,6 +34,10 @@ const INTENT_RULES = [
     'Bounded GET downloads that require declared response status, media, and redirect policy before writing a file beneath a caller-supplied `--dest-root`; no response body is rendered.',
   ],
   [
+    'binary_upload',
+    'Declared, bounded local-file uploads follow plan → preview → approval → execute; the provider URL, byte cap, media policy, and request body remain connector-owned.',
+  ],
+  [
     'direct_write',
     'Fixed declared writes follow plan → preview → approval → execute; destructive operations also require typed confirmation.',
   ],

@@ -1,0 +1,1790 @@
+{
+  "tagline": "Declared sonar-cloud API commands.",
+  "usage": "pm sonar-cloud <command> [flags]",
+  "commands": [
+    {
+      "path": "operations post-api-authentication-logout",
+      "summary": "Declared direct write: POST /api/authentication/logout.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.logout-1 has no declaration-owned executable direct_write route.",
+      "risk": "ends the caller's own HTTP session; not a syncable record and actively counter-productive for a long-lived connector credential",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-authentication-validate",
+      "summary": "Declared direct read: GET /api/authentication/validate.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.validate-2 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/authentication/validate"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-ce-activity",
+      "summary": "Declared direct read: GET /api/ce/activity.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.activity-3 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/ce/activity"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-ce-activity-status",
+      "summary": "Declared direct read: GET /api/ce/activity_status.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.activity-status-4 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/ce/activity_status"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-ce-component",
+      "summary": "Declared direct read: GET /api/ce/component.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.component-5 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/ce/component"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-ce-task",
+      "summary": "Declared direct read: GET /api/ce/task.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.task-6 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/ce/task"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-components-search",
+      "summary": "Declared etl: GET /api/components/search.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-7 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations get-api-components-show",
+      "summary": "Declared direct read: GET /api/components/show.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.show-8 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/components/show"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-components-tree",
+      "summary": "Declared direct read: GET /api/components/tree.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.tree-9 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/components/tree"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-duplications-show",
+      "summary": "Declared direct read: GET /api/duplications/show.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.show-10 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/duplications/show"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-favorites-add",
+      "summary": "Declared direct write: POST /api/favorites/add.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.add-11 has no declaration-owned executable direct_write route.",
+      "risk": "per-user UI favorite-star bookmarking of a project; a personal UI preference, not organizational analysis data or a syncable record",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-favorites-remove",
+      "summary": "Declared direct write: POST /api/favorites/remove.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.remove-12 has no declaration-owned executable direct_write route.",
+      "risk": "per-user UI favorite-star bookmarking of a project; a personal UI preference, not organizational analysis data or a syncable record",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-favorites-search",
+      "summary": "Declared direct read: GET /api/favorites/search.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-13 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/favorites/search"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-favourites-index",
+      "summary": "Declared direct read: GET /api/favourites/index.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.index-14 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/favourites/index"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-hotspots-change-status",
+      "summary": "Declared direct write: POST /api/hotspots/change_status.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.change-status-15 has no declaration-owned executable direct_write route.",
+      "risk": "Security Hotspots are deprecated and being replaced by security issues/vulnerabilities per the api/hotspots service's own catalog description (deprecatedSince 16 June 2026); the read-side api/hotspots/search is still covered for continuity, but this mutation is not implemented against a deprecated model",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-hotspots-search",
+      "summary": "Declared etl: GET /api/hotspots/search.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-16 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations get-api-hotspots-show",
+      "summary": "Declared direct read: GET /api/hotspots/show.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.show-17 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/hotspots/show"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-issues-add-comment",
+      "summary": "Declared direct write: POST /api/issues/add_comment.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.add-comment-18 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /api/issues/add_comment.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-issues-assign",
+      "summary": "Declared direct write: POST /api/issues/assign.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.assign-19 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /api/issues/assign.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-issues-authors",
+      "summary": "Declared direct read: GET /api/issues/authors.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.authors-20 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/issues/authors"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-issues-bulk-change",
+      "summary": "Declared direct write: POST /api/issues/bulk_change.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.bulk-change-21 has no declaration-owned executable direct_write route.",
+      "risk": "multi-issue batch mutation (assign/transition/tag/comment across an issue-key list in one call); the single-issue mutations (assign_issue/set_issue_tags/do_issue_transition/add_issue_comment) already cover the same primitive operations this dialect's per-record write shape supports, applied one issue at a time",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-issues-changelog",
+      "summary": "Declared direct read: GET /api/issues/changelog.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.changelog-22 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/issues/changelog"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-issues-delete-comment",
+      "summary": "Declared direct write: POST /api/issues/delete_comment.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delete-comment-23 has no declaration-owned executable direct_write route.",
+      "risk": "deletes a specific issue comment by its own comment key; a rarely-needed cleanup action with no corresponding read stream of comment keys to source an id from",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-issues-do-transition",
+      "summary": "Declared direct write: POST /api/issues/do_transition.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.do-transition-24 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /api/issues/do_transition.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-issues-edit-comment",
+      "summary": "Declared direct write: POST /api/issues/edit_comment.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.edit-comment-25 has no declaration-owned executable direct_write route.",
+      "risk": "edits a specific issue comment by its own comment key; a rarely-needed cleanup action with no corresponding read stream of comment keys to source an id from",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-issues-search",
+      "summary": "Declared etl: GET /api/issues/search.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-26 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations post-api-issues-set-severity",
+      "summary": "Declared direct write: POST /api/issues/set_severity.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.set-severity-27 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated 25 Aug 2023 per the catalog; manual issue severity override has been superseded by the impacts/cleanCodeAttribute model",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-issues-set-tags",
+      "summary": "Declared direct write: POST /api/issues/set_tags.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.set-tags-28 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /api/issues/set_tags.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-issues-set-type",
+      "summary": "Declared direct write: POST /api/issues/set_type.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.set-type-29 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated 25 Aug 2023 per the catalog; manual issue type override has been superseded by the impacts/cleanCodeAttribute model",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-issues-tags",
+      "summary": "Declared direct read: GET /api/issues/tags.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.tags-30 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/issues/tags"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-languages-list",
+      "summary": "Declared etl: GET /api/languages/list.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.list-31 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations get-api-measures-component",
+      "summary": "Declared direct read: GET /api/measures/component.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.component-32 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/measures/component"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-measures-component-tree",
+      "summary": "Declared direct read: GET /api/measures/component_tree.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.component-tree-33 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/measures/component_tree"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-measures-search-history",
+      "summary": "Declared direct read: GET /api/measures/search_history.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-history-34 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/measures/search_history"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-metrics-domains",
+      "summary": "Declared direct read: GET /api/metrics/domains.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.domains-35 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/metrics/domains"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-metrics-search",
+      "summary": "Declared etl: GET /api/metrics/search.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-36 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations get-api-metrics-types",
+      "summary": "Declared direct read: GET /api/metrics/types.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.types-37 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/metrics/types"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-notifications-add",
+      "summary": "Declared direct write: POST /api/notifications/add.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.add-38 has no declaration-owned executable direct_write route.",
+      "risk": "per-user personal email-notification subscription preference, not organizational analysis data",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-notifications-list",
+      "summary": "Declared direct read: GET /api/notifications/list.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.list-39 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/notifications/list"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-notifications-remove",
+      "summary": "Declared direct write: POST /api/notifications/remove.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.remove-40 has no declaration-owned executable direct_write route.",
+      "risk": "per-user personal email-notification subscription preference, not organizational analysis data",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-add-group",
+      "summary": "Declared direct write: POST /api/permissions/add_group.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.add-group-41 has no declaration-owned executable direct_write route.",
+      "risk": "grants a permission to a group at global or project scope; account/access-control administration, out of remit for a data-sync connector",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-add-group-to-template",
+      "summary": "Declared direct write: POST /api/permissions/add_group_to_template.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.add-group-to-template-42 has no declaration-owned executable direct_write route.",
+      "risk": "permission-template administration; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-add-project-creator-to-template",
+      "summary": "Declared direct write: POST /api/permissions/add_project_creator_to_template.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.add-project-creator-to-template-43 has no declaration-owned executable direct_write route.",
+      "risk": "permission-template administration; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-add-user",
+      "summary": "Declared direct write: POST /api/permissions/add_user.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.add-user-44 has no declaration-owned executable direct_write route.",
+      "risk": "grants a permission to a user at global or project scope; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-add-user-to-template",
+      "summary": "Declared direct write: POST /api/permissions/add_user_to_template.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.add-user-to-template-45 has no declaration-owned executable direct_write route.",
+      "risk": "permission-template administration; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-apply-template",
+      "summary": "Declared direct write: POST /api/permissions/apply_template.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.apply-template-46 has no declaration-owned executable direct_write route.",
+      "risk": "applies a permission template to a project, overwriting its existing access grants; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-bulk-apply-template",
+      "summary": "Declared direct write: POST /api/permissions/bulk_apply_template.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.bulk-apply-template-47 has no declaration-owned executable direct_write route.",
+      "risk": "bulk permission-template application across many projects at once; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-create-template",
+      "summary": "Declared direct write: POST /api/permissions/create_template.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.create-template-48 has no declaration-owned executable direct_write route.",
+      "risk": "permission-template administration; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-delete-template",
+      "summary": "Declared direct write: POST /api/permissions/delete_template.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delete-template-49 has no declaration-owned executable direct_write route.",
+      "risk": "irreversibly deletes a permission template; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-remove-group",
+      "summary": "Declared direct write: POST /api/permissions/remove_group.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.remove-group-50 has no declaration-owned executable direct_write route.",
+      "risk": "revokes a permission from a group; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-remove-group-from-template",
+      "summary": "Declared direct write: POST /api/permissions/remove_group_from_template.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.remove-group-from-template-51 has no declaration-owned executable direct_write route.",
+      "risk": "permission-template administration; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-remove-project-creator-from-template",
+      "summary": "Declared direct write: POST /api/permissions/remove_project_creator_from_template.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.remove-project-creator-from-template-52 has no declaration-owned executable direct_write route.",
+      "risk": "permission-template administration; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-remove-user",
+      "summary": "Declared direct write: POST /api/permissions/remove_user.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.remove-user-53 has no declaration-owned executable direct_write route.",
+      "risk": "revokes a permission from a user; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-remove-user-from-template",
+      "summary": "Declared direct write: POST /api/permissions/remove_user_from_template.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.remove-user-from-template-54 has no declaration-owned executable direct_write route.",
+      "risk": "permission-template administration; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-permissions-search-templates",
+      "summary": "Declared direct read: GET /api/permissions/search_templates.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-templates-55 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/permissions/search_templates"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-permissions-set-default-template",
+      "summary": "Declared direct write: POST /api/permissions/set_default_template.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.set-default-template-56 has no declaration-owned executable direct_write route.",
+      "risk": "changes which permission template new projects get by default; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-permissions-update-template",
+      "summary": "Declared direct write: POST /api/permissions/update_template.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.update-template-57 has no declaration-owned executable direct_write route.",
+      "risk": "permission-template administration; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-project-analyses-create-event",
+      "summary": "Declared direct write: POST /api/project_analyses/create_event.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.create-event-58 has no declaration-owned executable direct_write route.",
+      "risk": "annotates a specific analysis with a custom marker event; a niche write with no corresponding common sync use case, and its target analysis key is only obtainable via the already-covered project_analyses read stream, adding a fan-out dependency not worth the complexity for this action alone",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-project-analyses-delete",
+      "summary": "Declared direct write: POST /api/project_analyses/delete.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delete-59 has no declaration-owned executable direct_write route.",
+      "risk": "irreversibly deletes a historical analysis snapshot and all its associated measures/issues-at-that-point-in-time; destructive project-data administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-project-analyses-delete-event",
+      "summary": "Declared direct write: POST /api/project_analyses/delete_event.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delete-event-60 has no declaration-owned executable direct_write route.",
+      "risk": "irreversibly deletes an analysis marker event; destructive project-data administration",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-project-analyses-search",
+      "summary": "Declared etl: GET /api/project_analyses/search.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-61 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations post-api-project-analyses-set-baseline",
+      "summary": "Declared direct write: POST /api/project_analyses/set_baseline.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.set-baseline-62 has no declaration-owned executable direct_write route.",
+      "risk": "changes which historical analysis the New Code Definition is measured against; project-administrator-scoped configuration, not a data-sync mutation",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-project-analyses-unset-baseline",
+      "summary": "Declared direct write: POST /api/project_analyses/unset_baseline.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.unset-baseline-63 has no declaration-owned executable direct_write route.",
+      "risk": "reverts the New Code Definition baseline; project-administrator-scoped configuration, not a data-sync mutation",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-project-analyses-update-event",
+      "summary": "Declared direct write: POST /api/project_analyses/update_event.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.update-event-64 has no declaration-owned executable direct_write route.",
+      "risk": "renames a specific analysis marker event; a niche write with no corresponding common sync use case, and its target event key is only obtainable via the already-covered project_analyses read stream's nested events[], adding a fan-out dependency not worth the complexity for this action alone",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-project-badges-ai-code-assurance",
+      "summary": "Declared direct read: GET /api/project_badges/ai_code_assurance.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.ai-code-assurance-65 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/project_badges/ai_code_assurance"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-project-badges-measure",
+      "summary": "Declared direct read: GET /api/project_badges/measure.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.measure-66 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/project_badges/measure"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-project-badges-quality-gate",
+      "summary": "Declared direct read: GET /api/project_badges/quality_gate.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.quality-gate-67 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/project_badges/quality_gate"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-project-branches-delete",
+      "summary": "Declared direct write: POST /api/project_branches/delete.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delete-68 has no declaration-owned executable direct_write route.",
+      "risk": "irreversibly deletes a project branch and its analysis history; destructive project-data administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-project-branches-list",
+      "summary": "Declared direct read: GET /api/project_branches/list.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.list-69 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/project_branches/list"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-project-branches-rename",
+      "summary": "Declared direct write: POST /api/project_branches/rename.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.rename-70 has no declaration-owned executable direct_write route.",
+      "risk": "renames a project's main branch; project-administrator-scoped configuration, not a data-sync mutation",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-project-links-create",
+      "summary": "Declared direct write: POST /api/project_links/create.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.create-71 has no declaration-owned executable direct_write route.",
+      "risk": "manages a project's auxiliary reference links (homepage/CI/issue-tracker URLs); a project-metadata convenience field, not core analysis data",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-project-links-delete",
+      "summary": "Declared direct write: POST /api/project_links/delete.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delete-72 has no declaration-owned executable direct_write route.",
+      "risk": "manages a project's auxiliary reference links; a project-metadata convenience field, not core analysis data",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-project-links-search",
+      "summary": "Declared direct read: GET /api/project_links/search.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-73 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/project_links/search"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-project-pull-requests-delete",
+      "summary": "Declared direct write: POST /api/project_pull_requests/delete.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delete-74 has no declaration-owned executable direct_write route.",
+      "risk": "irreversibly deletes a project pull-request analysis and its history; destructive project-data administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-project-pull-requests-list",
+      "summary": "Declared direct read: GET /api/project_pull_requests/list.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.list-75 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/project_pull_requests/list"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-project-tags-search",
+      "summary": "Declared direct read: GET /api/project_tags/search.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-76 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/project_tags/search"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-project-tags-set",
+      "summary": "Declared direct write: POST /api/project_tags/set.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.set-77 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /api/project_tags/set.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-projects-bulk-delete",
+      "summary": "Declared direct write: POST /api/projects/bulk_delete.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.bulk-delete-78 has no declaration-owned executable direct_write route.",
+      "risk": "irreversibly deletes multiple projects and all their analysis history in one call; destructive project-data administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-projects-bulk-update-key",
+      "summary": "Declared direct write: POST /api/projects/bulk_update_key.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.bulk-update-key-79 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated since 7.6 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-projects-create",
+      "summary": "Declared direct write: POST /api/projects/create.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.create-80 has no declaration-owned executable direct_write route.",
+      "risk": "requires the 'Create Projects' organization permission per the action's own description; project provisioning is an organization-administration action, not a typical data-sync mutation",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-projects-delete",
+      "summary": "Declared direct write: POST /api/projects/delete.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delete-81 has no declaration-owned executable direct_write route.",
+      "risk": "irreversibly deletes a project and all its analysis history; destructive project-data administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-projects-search",
+      "summary": "Declared etl: GET /api/projects/search.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-82 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations post-api-projects-update-key",
+      "summary": "Declared direct write: POST /api/projects/update_key.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.update-key-83 has no declaration-owned executable direct_write route.",
+      "risk": "renames a project's unique key, which is also its primary-key identifier for every other stream in this bundle; requires project-administrator rights and changing it would break cross-stream record correlation",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-projects-update-visibility",
+      "summary": "Declared direct write: POST /api/projects/update_visibility.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.update-visibility-84 has no declaration-owned executable direct_write route.",
+      "risk": "changes a project's public/private visibility; requires project-administrator rights, an access-control change rather than a data-sync mutation",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-properties-index",
+      "summary": "Declared direct read: GET /api/properties/index.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.index-85 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/properties/index"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-qualitygates-copy",
+      "summary": "Declared direct write: POST /api/qualitygates/copy.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.copy-86 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated 16 September 2025 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualitygates-create",
+      "summary": "Declared direct write: POST /api/qualitygates/create.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.create-87 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated 16 September 2025 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualitygates-create-condition",
+      "summary": "Declared direct write: POST /api/qualitygates/create_condition.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.create-condition-88 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated 16 September 2025 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualitygates-delete-condition",
+      "summary": "Declared direct write: POST /api/qualitygates/delete_condition.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delete-condition-89 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated 16 September 2025 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualitygates-deselect",
+      "summary": "Declared direct write: POST /api/qualitygates/deselect.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.deselect-90 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated 16 September 2025 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualitygates-destroy",
+      "summary": "Declared direct write: POST /api/qualitygates/destroy.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.destroy-91 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated 16 September 2025 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-qualitygates-get-by-project",
+      "summary": "Declared direct read: GET /api/qualitygates/get_by_project.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.get-by-project-92 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/qualitygates/get_by_project"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-qualitygates-list",
+      "summary": "Declared etl: GET /api/qualitygates/list.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.list-93 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations get-api-qualitygates-project-status",
+      "summary": "Declared direct read: GET /api/qualitygates/project_status.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.project-status-94 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/qualitygates/project_status"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-qualitygates-rename",
+      "summary": "Declared direct write: POST /api/qualitygates/rename.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.rename-95 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated 16 September 2025 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-qualitygates-search",
+      "summary": "Declared direct read: GET /api/qualitygates/search.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-96 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/qualitygates/search"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-qualitygates-select",
+      "summary": "Declared direct write: POST /api/qualitygates/select.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.select-97 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated 16 September 2025 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualitygates-set-as-default",
+      "summary": "Declared direct write: POST /api/qualitygates/set_as_default.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.set-as-default-98 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated 16 September 2025 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-qualitygates-show",
+      "summary": "Declared direct read: GET /api/qualitygates/show.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.show-99 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/qualitygates/show"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-qualitygates-unset-default",
+      "summary": "Declared direct write: POST /api/qualitygates/unset_default.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.unset-default-100 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated since 7.0 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualitygates-update-condition",
+      "summary": "Declared direct write: POST /api/qualitygates/update_condition.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.update-condition-101 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated 16 September 2025 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualityprofiles-activate-rule",
+      "summary": "Declared direct write: POST /api/qualityprofiles/activate_rule.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.activate-rule-102 has no declaration-owned executable direct_write route.",
+      "risk": "requires 'Administer Quality Profiles' organization permission per the underlying action; quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualityprofiles-activate-rules",
+      "summary": "Declared direct write: POST /api/qualityprofiles/activate_rules.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.activate-rules-103 has no declaration-owned executable direct_write route.",
+      "risk": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualityprofiles-add-project",
+      "summary": "Declared direct write: POST /api/qualityprofiles/add_project.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.add-project-104 has no declaration-owned executable direct_write route.",
+      "risk": "requires project-administrator rights; quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-qualityprofiles-backup",
+      "summary": "Declared direct read: GET /api/qualityprofiles/backup.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.backup-105 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/qualityprofiles/backup"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-qualityprofiles-change-parent",
+      "summary": "Declared direct write: POST /api/qualityprofiles/change_parent.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.change-parent-106 has no declaration-owned executable direct_write route.",
+      "risk": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-qualityprofiles-changelog",
+      "summary": "Declared direct read: GET /api/qualityprofiles/changelog.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.changelog-107 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/qualityprofiles/changelog"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-qualityprofiles-copy",
+      "summary": "Declared direct write: POST /api/qualityprofiles/copy.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.copy-108 has no declaration-owned executable direct_write route.",
+      "risk": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualityprofiles-create",
+      "summary": "Declared direct write: POST /api/qualityprofiles/create.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.create-109 has no declaration-owned executable direct_write route.",
+      "risk": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualityprofiles-deactivate-rule",
+      "summary": "Declared direct write: POST /api/qualityprofiles/deactivate_rule.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.deactivate-rule-110 has no declaration-owned executable direct_write route.",
+      "risk": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualityprofiles-deactivate-rules",
+      "summary": "Declared direct write: POST /api/qualityprofiles/deactivate_rules.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.deactivate-rules-111 has no declaration-owned executable direct_write route.",
+      "risk": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualityprofiles-delete",
+      "summary": "Declared direct write: POST /api/qualityprofiles/delete.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delete-112 has no declaration-owned executable direct_write route.",
+      "risk": "irreversibly deletes a quality profile; destructive quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-qualityprofiles-export",
+      "summary": "Declared direct read: GET /api/qualityprofiles/export.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.export-113 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/qualityprofiles/export"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-qualityprofiles-exporters",
+      "summary": "Declared direct read: GET /api/qualityprofiles/exporters.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.exporters-114 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/qualityprofiles/exporters"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-qualityprofiles-importers",
+      "summary": "Declared direct read: GET /api/qualityprofiles/importers.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.importers-115 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/qualityprofiles/importers"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-qualityprofiles-inheritance",
+      "summary": "Declared direct read: GET /api/qualityprofiles/inheritance.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.inheritance-116 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/qualityprofiles/inheritance"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-qualityprofiles-projects",
+      "summary": "Declared direct read: GET /api/qualityprofiles/projects.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.projects-117 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/qualityprofiles/projects"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-qualityprofiles-remove-project",
+      "summary": "Declared direct write: POST /api/qualityprofiles/remove_project.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.remove-project-118 has no declaration-owned executable direct_write route.",
+      "risk": "requires project-administrator rights; quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualityprofiles-rename",
+      "summary": "Declared direct write: POST /api/qualityprofiles/rename.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.rename-119 has no declaration-owned executable direct_write route.",
+      "risk": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualityprofiles-restore",
+      "summary": "Declared direct write: POST /api/qualityprofiles/restore.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.restore-120 has no declaration-owned executable direct_write route.",
+      "risk": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-qualityprofiles-restore-built-in",
+      "summary": "Declared direct write: POST /api/qualityprofiles/restore_built_in.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.restore-built-in-121 has no declaration-owned executable direct_write route.",
+      "risk": "deprecated since 6.4 per the catalog",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-qualityprofiles-search",
+      "summary": "Declared direct read: GET /api/qualityprofiles/search.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-122 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/qualityprofiles/search"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-qualityprofiles-set-default",
+      "summary": "Declared direct write: POST /api/qualityprofiles/set_default.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.set-default-123 has no declaration-owned executable direct_write route.",
+      "risk": "requires 'Administer Quality Profiles' organization permission; quality-profile administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-rules-repositories",
+      "summary": "Declared direct read: GET /api/rules/repositories.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.repositories-124 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/rules/repositories"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-rules-search",
+      "summary": "Declared etl: GET /api/rules/search.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-125 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations get-api-rules-show",
+      "summary": "Declared direct read: GET /api/rules/show.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.show-126 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/rules/show"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-rules-tags",
+      "summary": "Declared direct read: GET /api/rules/tags.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.tags-127 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/rules/tags"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-rules-update",
+      "summary": "Declared direct write: POST /api/rules/update.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.update-128 has no declaration-owned executable direct_write route.",
+      "risk": "requires 'Administer Quality Profiles' organization permission per the action's own description; custom-rule authoring/rule-metadata administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-settings-list-definitions",
+      "summary": "Declared direct read: GET /api/settings/list_definitions.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.list-definitions-129 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/settings/list_definitions"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-settings-reset",
+      "summary": "Declared direct write: POST /api/settings/reset.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.reset-130 has no declaration-owned executable direct_write route.",
+      "risk": "resets an instance/project setting to its default value; configuration administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-settings-set",
+      "summary": "Declared direct write: POST /api/settings/set.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.set-131 has no declaration-owned executable direct_write route.",
+      "risk": "changes an instance/project configuration setting; requires administrator rights, configuration administration rather than a data-sync mutation",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-settings-values",
+      "summary": "Declared direct read: GET /api/settings/values.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.values-132 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/settings/values"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-sources-raw",
+      "summary": "Declared direct read: GET /api/sources/raw.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.raw-133 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/sources/raw"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-sources-scm",
+      "summary": "Declared direct read: GET /api/sources/scm.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.scm-134 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/sources/scm"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-sources-show",
+      "summary": "Declared direct read: GET /api/sources/show.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.show-135 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/sources/show"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-timemachine-index",
+      "summary": "Declared direct read: GET /api/timemachine/index.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.index-136 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/timemachine/index"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-user-groups-add-user",
+      "summary": "Declared direct write: POST /api/user_groups/add_user.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.add-user-137 has no declaration-owned executable direct_write route.",
+      "risk": "adds a user to a group; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-user-groups-create",
+      "summary": "Declared direct write: POST /api/user_groups/create.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.create-138 has no declaration-owned executable direct_write route.",
+      "risk": "creates a user group; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-user-groups-delete",
+      "summary": "Declared direct write: POST /api/user_groups/delete.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delete-139 has no declaration-owned executable direct_write route.",
+      "risk": "irreversibly deletes a user group; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-user-groups-remove-user",
+      "summary": "Declared direct write: POST /api/user_groups/remove_user.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.remove-user-140 has no declaration-owned executable direct_write route.",
+      "risk": "removes a user from a group; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-user-groups-search",
+      "summary": "Declared direct read: GET /api/user_groups/search.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-141 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/user_groups/search"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-user-groups-update",
+      "summary": "Declared direct write: POST /api/user_groups/update.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.update-142 has no declaration-owned executable direct_write route.",
+      "risk": "renames/redescribes a user group; account/access-control administration, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-user-groups-users",
+      "summary": "Declared direct read: GET /api/user_groups/users.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.users-143 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/user_groups/users"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-user-properties-index",
+      "summary": "Declared direct read: GET /api/user_properties/index.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.index-144 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/user_properties/index"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-user-tokens-generate",
+      "summary": "Declared direct write: POST /api/user_tokens/generate.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.generate-145 has no declaration-owned executable direct_write route.",
+      "risk": "mints a new personal access token for a user; a credential-issuance action with security implications well outside a data-sync connector's remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-user-tokens-revoke",
+      "summary": "Declared direct write: POST /api/user_tokens/revoke.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.revoke-146 has no declaration-owned executable direct_write route.",
+      "risk": "irreversibly revokes a personal access token; a credential-lifecycle action with security implications, out of remit",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-user-tokens-search",
+      "summary": "Declared direct read: GET /api/user_tokens/search.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.search-147 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/user_tokens/search"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-users-groups",
+      "summary": "Declared direct read: GET /api/users/groups.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.groups-148 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/users/groups"
+        }
+      ]
+    },
+    {
+      "path": "operations post-api-webhooks-create",
+      "summary": "Declared direct write: POST /api/webhooks/create.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.create-149 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /api/webhooks/create.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-api-webhooks-delete",
+      "summary": "Declared direct write: POST /api/webhooks/delete.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delete-150 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /api/webhooks/delete.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-webhooks-deliveries",
+      "summary": "Declared direct read: GET /api/webhooks/deliveries.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.deliveries-151 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/webhooks/deliveries"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-webhooks-delivery",
+      "summary": "Declared direct read: GET /api/webhooks/delivery.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.delivery-152 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/webhooks/delivery"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-webhooks-list",
+      "summary": "Declared etl: GET /api/webhooks/list.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.list-153 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations post-api-webhooks-update",
+      "summary": "Declared direct write: POST /api/webhooks/update.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.update-154 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /api/webhooks/update.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-api-webservices-list",
+      "summary": "Declared direct read: GET /api/webservices/list.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.list-155 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/webservices/list"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-webservices-response-example",
+      "summary": "Declared direct read: GET /api/webservices/response_example.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.provider.response-example-156 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/webservices/response_example"
+        }
+      ]
+    },
+    {
+      "path": "operations get-api-measures-search",
+      "summary": "Declared etl: GET /api/measures/search.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://sonarcloud.io/api/webservices/list",
+      "notes": "Blocked: locked source operation sonar-cloud.local-api-surface.get-api-measures-search-157 has no declaration-owned executable etl route."
+    }
+  ]
+}

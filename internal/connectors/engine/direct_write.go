@@ -23,8 +23,11 @@ import (
 )
 
 const (
-	defaultOperationDirectWriteMaxBytes = 1 << 20
-	maxOperationDirectWriteBytes        = 16 << 20
+	DefaultOperationDirectWriteMaxBytes = 1 << 20
+	MaxOperationDirectWriteBytes        = 16 << 20
+
+	defaultOperationDirectWriteMaxBytes = DefaultOperationDirectWriteMaxBytes
+	maxOperationDirectWriteBytes        = MaxOperationDirectWriteBytes
 	defaultOperationDirectWriteTimeout  = 30 * time.Second
 
 	directWritePolicyNone                     = "none"

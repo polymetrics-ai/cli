@@ -1,6 +1,7 @@
 package main
 
 import (
+	"archive/zip"
 	"bytes"
 	"context"
 	"crypto/sha256"
@@ -18,6 +19,9 @@ import (
 	"sync"
 	"testing"
 	"time"
+	"unicode/utf8"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestSourceImportProducesClosedCanonicalDescriptors(t *testing.T) {
@@ -136,6 +140,246 @@ func TestSourceImportAcceptsStringScalarUnionPathWireContract(t *testing.T) {
 	}
 }
 
+func TestSourceImportVersion3RepresentsGongWorkspaceQueryWithPMExecutionEnvelope(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{
+  "openapi":"3.0.3",
+  "info":{"title":"Gong API","version":"V2"},
+  "paths":{
+    "/v2/all-permission-profiles":{
+      "get":{
+        "operationId":"shared",
+        "parameters":[{
+          "name":"workspaceId",
+          "in":"query",
+          "required":true,
+          "schema":{"type":"string"}
+        }],
+        "responses":{"200":{"description":"ok"}}
+      }
+    }
+  }
+}`)
+	document := sourceImportV3FixtureDocument{
+		ID:       "gong-v2",
+		Path:     "/v2/all-permission-profiles",
+		Artifact: artifact,
+	}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "gong", []sourceImportV3FixtureDocument{document}), "gong")
+	if err != nil {
+		t.Fatalf("parse Gong-shaped v3 source lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return artifact, nil
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import Gong-shaped source: %v", err)
+	}
+	if len(result.Operations) != 1 {
+		t.Fatalf("operations = %d, want 1", len(result.Operations))
+	}
+	operation := result.Operations[0]
+	if operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 0 {
+		t.Fatalf("ordinary unbounded Gong query must be represented, runtime = %+v", operation.Runtime)
+	}
+	if len(operation.Request.Query) != 1 || operation.Request.Query[0].Name != "workspaceId" || !operation.Request.Query[0].Required {
+		t.Fatalf("Gong query descriptor = %#v", operation.Request.Query)
+	}
+	parameterRaw, err := json.Marshal(operation.Request.Query[0])
+	if err != nil {
+		t.Fatalf("marshal Gong query descriptor: %v", err)
+	}
+	var parameter map[string]any
+	if err := json.Unmarshal(parameterRaw, &parameter); err != nil {
+		t.Fatalf("decode Gong query descriptor: %v", err)
+	}
+	schema, _ := parameter["schema"].(map[string]any)
+	if !reflect.DeepEqual(schema, map[string]any{"type": "string"}) {
+		t.Fatalf("provider schema = %#v, want exact source schema without synthetic maxLength", schema)
+	}
+	execution, _ := parameter["execution_envelope"].(map[string]any)
+	if execution["policy_version"] != "pm-request-contract-bounds-v1" || execution["origin"] != "pm_policy" || execution["source_location"] != `request.query["workspaceId"]` {
+		t.Fatalf("execution envelope provenance = %#v", execution)
+	}
+	limits, _ := execution["limits"].([]any)
+	if len(limits) != 1 {
+		t.Fatalf("execution limits = %#v, want one encoded-byte limit", limits)
+	}
+	encodedBytes, _ := limits[0].(map[string]any)
+	if encodedBytes["kind"] != "wire_value" || encodedBytes["unit"] != "encoded_bytes" || encodedBytes["default"] != float64(4096) || encodedBytes["hard_ceiling"] != float64(65536) || encodedBytes["effective"] != float64(4096) {
+		t.Fatalf("encoded-byte execution limit = %#v", encodedBytes)
+	}
+	result.Operations[0].Request.Query[0].ExecutionEnvelope = nil
+	if err := validateSourceProjectionExecutionEnvelopes(result); err == nil || !strings.Contains(err.Error(), "requires a PM execution envelope") {
+		t.Fatalf("projection accepted missing Gong execution envelope: %v", err)
+	}
+}
+
+func TestSourceRequestSchemaDispositionSeparatesPolicyBoundsFromMalformedInput(t *testing.T) {
+	t.Parallel()
+	form := sourceDocumentForm{Family: "openapi", Version: "3.0.3"}
+	for _, test := range []struct {
+		name   string
+		schema map[string]any
+	}{
+		{name: "string", schema: map[string]any{"type": "string"}},
+		{name: "number", schema: map[string]any{"type": "number"}},
+		{name: "array", schema: map[string]any{"type": "array", "items": map[string]any{"type": "boolean"}}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			strict := defaultSourceImportLimits()
+			err := validateBoundedRequestSchema(test.schema, form, strict, 0)
+			if got := sourceRequestSchemaDispositionOf(err); got != sourceRequestRepresentedWithPolicyBound {
+				t.Fatalf("strict disposition = %q, error %v; want %q", got, err, sourceRequestRepresentedWithPolicyBound)
+			}
+			policy := strict
+			policy.UseExecutionEnvelopes = true
+			if err := validateBoundedRequestSchema(test.schema, form, policy, 0); err != nil {
+				t.Fatalf("policy-bounded schema: %v", err)
+			}
+		})
+	}
+
+	policy := defaultSourceImportLimits()
+	policy.UseExecutionEnvelopes = true
+	err := validateBoundedRequestSchema(map[string]any{"type": "string", "minLength": json.Number("2"), "maxLength": json.Number("1")}, form, policy, 0)
+	if err == nil || sourceRequestSchemaDispositionOf(err) != sourceRequestMalformedSourceGap || !strings.Contains(err.Error(), "contradictory") {
+		t.Fatalf("contradictory schema disposition/error = %q/%v, want malformed source", sourceRequestSchemaDispositionOf(err), err)
+	}
+}
+
+func TestSourceParameterExecutionEnvelopeUsesTighterProviderDerivedByteCap(t *testing.T) {
+	limits := defaultSourceImportLimits()
+	limits.UseExecutionEnvelopes = true
+	parameter := sourceParameterValue{
+		Name: "slug",
+		In:   "path",
+		Schema: map[string]any{
+			"type":      "string",
+			"maxLength": json.Number("8"),
+		},
+	}
+	envelope := sourceParameterExecutionEnvelopeFor(parameter, limits)
+	if envelope == nil || envelope.Origin != "provider_and_pm_policy" || len(envelope.Limits) != 1 {
+		t.Fatalf("provider-bounded envelope = %+v", envelope)
+	}
+	limit := envelope.Limits[0]
+	if limit.Default != engine.DefaultOperationParameterMaxBytes || limit.Effective != 8*utf8.UTFMax || limit.HardCeiling != engine.MaxOperationParameterMaxBytes || limit.Unit != "encoded_bytes" {
+		t.Fatalf("provider-bounded execution limit = %+v", limit)
+	}
+	parameter.Schema.(map[string]any)["maxLength"] = json.Number("2000")
+	envelope = sourceParameterExecutionEnvelopeFor(parameter, limits)
+	if envelope.Limits[0].Effective != engine.DefaultOperationParameterMaxBytes {
+		t.Fatalf("PM default did not win over larger provider-derived cap: %+v", envelope.Limits[0])
+	}
+}
+
+func TestSourceImportVersion3KeepsUnboundedHeaderAsMergeBlockingGap(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{
+  "openapi":"3.0.3",
+  "info":{"title":"header fixture","version":"1"},
+  "paths":{"/headers":{"get":{
+    "operationId":"shared",
+    "parameters":[{"name":"X-Request-Context","in":"header","schema":{"type":"string"}}],
+    "responses":{"200":{"description":"ok"}}
+  }}}
+}`)
+	document := sourceImportV3FixtureDocument{ID: "header", Path: "/headers", Artifact: artifact}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture")
+	if err != nil {
+		t.Fatalf("parse v3 header lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return artifact, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import v3 header source: %v", err)
+	}
+	operation := result.Operations[0]
+	if !operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 1 || operation.Runtime.Gaps[0].Foundation != "cli-request-schema-foundation-r1" || !strings.Contains(operation.Runtime.Gaps[0].Reason, "compatibility-censused PM byte envelope") {
+		t.Fatalf("unbounded header runtime gap = %+v", operation.Runtime)
+	}
+	if operation.Request.Header[0].ExecutionEnvelope != nil {
+		t.Fatalf("uncensused header unexpectedly received an execution envelope: %+v", operation.Request.Header[0].ExecutionEnvelope)
+	}
+}
+
+func TestSourceProjectionKeepsNumericHeaderWithoutTextualByteBoundMergeBlocked(t *testing.T) {
+	limits := defaultSourceImportLimits()
+	limits.UseExecutionEnvelopes = true
+	schema := map[string]any{
+		"type":    "integer",
+		"minimum": json.Number("0"),
+		"maximum": json.Number("100"),
+	}
+	err := sourceProjectionOperationParameterGap(schema, sourceDocumentForm{Family: "openapi", Version: "3.0.3"}, limits, "header", http.MethodGet)
+	if err == nil || !strings.Contains(err.Error(), "compatibility-censused PM byte envelope") {
+		t.Fatalf("numeric header without a textual byte bound gap = %v", err)
+	}
+}
+
+func TestSourceImportVersion3RepresentsCommonBodyBoundsWithSeparateEnvelope(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{
+  "openapi":"3.0.3",
+  "info":{"title":"body fixture","version":"1"},
+  "paths":{"/records":{"post":{
+    "operationId":"createRecord",
+    "requestBody":{"required":true,"content":{"application/json":{"schema":{
+      "type":"object",
+      "additionalProperties":false,
+      "properties":{
+        "name":{"type":"string"},
+        "weight":{"type":"number"},
+        "enabled":{"type":"boolean"},
+        "tags":{"type":"array","items":{"type":"string"}}
+      },
+      "required":["name","weight","tags"]
+    }}}},
+    "responses":{"200":{"description":"ok"}}
+  }}}
+}`)
+	document := sourceImportV3FixtureDocument{ID: "body", Path: "/records", Method: "POST", OperationID: "createRecord", Artifact: artifact}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture")
+	if err != nil {
+		t.Fatalf("parse v3 body lock: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return artifact, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import v3 body source: %v", err)
+	}
+	operation := result.Operations[0]
+	if operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 0 || operation.Request.Body == nil {
+		t.Fatalf("common body bounds were not represented: request/runtime = %+v/%+v", operation.Request, operation.Runtime)
+	}
+	body, _ := operation.Request.Body.Schema.(map[string]any)
+	properties, _ := body["properties"].(map[string]any)
+	name, _ := properties["name"].(map[string]any)
+	weight, _ := properties["weight"].(map[string]any)
+	tags, _ := properties["tags"].(map[string]any)
+	if _, exists := name["maxLength"]; exists {
+		t.Fatalf("source name schema received synthetic maxLength: %#v", name)
+	}
+	if _, exists := weight["minimum"]; exists {
+		t.Fatalf("source number schema received synthetic minimum: %#v", weight)
+	}
+	if _, exists := weight["maximum"]; exists {
+		t.Fatalf("source number schema received synthetic maximum: %#v", weight)
+	}
+	if _, exists := tags["maxItems"]; exists {
+		t.Fatalf("source array schema received synthetic maxItems: %#v", tags)
+	}
+	envelope := operation.Request.Body.ExecutionEnvelope
+	if envelope == nil || envelope.PolicyVersion != engine.OperationParameterExecutionPolicyVersion || len(envelope.Limits) != 5 {
+		t.Fatalf("body execution envelope = %+v", envelope)
+	}
+	envelope.Limits[0].Effective--
+	policy := defaultSourceImportLimits()
+	policy.UseExecutionEnvelopes = true
+	if err := validateSourceRequestBodyExecutionEnvelope(envelope, operation.Request.MediaType, policy); err == nil || !strings.Contains(err.Error(), "valid PM execution envelope") {
+		t.Fatalf("projection accepted altered body execution envelope: %v", err)
+	}
+}
+
 func TestSourceImportRetainsRecursiveSchemaReferencesAsSourceBoundGaps(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
@@ -246,7 +490,7 @@ func TestSourceImport_CheckedInGitHubLockCoversRESTAndGraphQL(t *testing.T) {
 	if lock.GraphQL.QueryFields[0].Line <= 0 || lock.GraphQL.QueryFields[0].Root != "Query" {
 		t.Fatalf("first GraphQL source location = %#v", lock.GraphQL.QueryFields[0])
 	}
-	if lock.Rest.Bytes != 12920264 || lock.GraphQL.Bytes != 1546421 || len(lock.Rest.SHA256) != 64 || len(lock.GraphQL.SHA256) != 64 {
+	if lock.Rest.Bytes != 12920264 || lock.GraphQL.Bytes != 1551372 || len(lock.Rest.SHA256) != 64 || len(lock.GraphQL.SHA256) != 64 {
 		t.Fatalf("checked-in source byte/digest pins = REST %#v GraphQL %#v", lock.Rest, lock.GraphQL.sourceImportArtifact)
 	}
 }
@@ -274,25 +518,64 @@ func TestSourceImport_CheckedInGitHubProjectionDigestIsCanonical(t *testing.T) {
 func TestSourceImportVersion2UsesEmbeddedLockedGraphQLProjection(t *testing.T) {
 	t.Parallel()
 	rest := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"operationId":"items/list","responses":{"200":{"description":"ok"}}}}}}`)
+	graphql := []byte("type Query { viewer: User }\ntype User { id: ID! }\n")
+	graphqlDigest := sha256.Sum256(graphql)
 	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/rest.json", rest)
 	lock.SchemaVersion = 2
 	lock.GraphQL = sourceImportGraphQL{
-		sourceImportArtifact: sourceImportArtifact{SourceURL: "https://fixtures.polymetrics.invalid/unversioned.graphql", SHA256: strings.Repeat("a", 64), Bytes: 128},
+		sourceImportArtifact: sourceImportArtifact{SourceURL: "https://fixtures.polymetrics.invalid/unversioned.graphql", SHA256: hex.EncodeToString(graphqlDigest[:]), Bytes: int64(len(graphql))},
 		QueryFields:          []sourceGraphQLField{{Root: "Query", Name: "viewer", Line: 7, Signature: "viewer: User", ReturnType: sourceGraphQLTypeRef{Kind: "OBJECT", Name: "User"}}},
 		TypeSystem:           sourceGraphQLTypeSystem{Enums: []sourceGraphQLNamedType{}, InputObjects: []sourceGraphQLNamedType{}, Interfaces: []sourceGraphQLNamedType{}, Objects: []sourceGraphQLNamedType{}, Scalars: []string{}, Unions: []sourceGraphQLNamedType{}},
 	}
 	lock = sourceImportTestWithProjectionDigest(t, lock)
 	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
-		if sourceURL != lock.Rest.SourceURL {
-			t.Fatalf("version 2 import fetched unversioned GraphQL URL %q", sourceURL)
+		switch sourceURL {
+		case lock.Rest.SourceURL:
+			return rest, nil
+		case lock.GraphQL.SourceURL:
+			return graphql, nil
+		default:
+			t.Fatalf("version 2 import fetched unexpected URL %q", sourceURL)
 		}
-		return rest, nil
+		return nil, nil
 	}), defaultSourceImportLimits())
 	if err != nil {
 		t.Fatalf("version 2 import: %v", err)
 	}
 	if len(result.Operations) != 2 || result.Operations[1].GraphQL == nil || result.Operations[1].Source.SHA256 != lock.GraphQL.ProjectionSHA256 || result.Operations[1].Source.Bytes != lock.GraphQL.ProjectionBytes {
 		t.Fatalf("embedded GraphQL projection = %#v", result.Operations)
+	}
+}
+
+// A version-two lock embeds a generated GraphQL projection, but it still pins
+// the provider schema's raw bytes. The retained-artifact contract must verify
+// that pin as well: otherwise a checked-in schema mirror can silently be
+// missing while source-import claims the whole lock was verified.
+func TestSourceImportVersion2RequiresRawGraphQLArtifactAlongsideProjection(t *testing.T) {
+	t.Parallel()
+	rest := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"paths":{"/items":{"get":{"operationId":"items/list","responses":{"200":{"description":"ok"}}}}}}`)
+	graphql := []byte("type Query { viewer: User }\ntype User { id: ID! }\n")
+	graphqlDigest := sha256.Sum256(graphql)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/rest.json", rest)
+	lock.SchemaVersion = 2
+	lock.GraphQL = sourceImportGraphQL{
+		sourceImportArtifact: sourceImportArtifact{SourceURL: "https://fixtures.polymetrics.invalid/schema.graphql", SHA256: hex.EncodeToString(graphqlDigest[:]), Bytes: int64(len(graphql))},
+		QueryFields:          []sourceGraphQLField{{Root: "Query", Name: "viewer", Line: 1, Signature: "viewer: User", ReturnType: sourceGraphQLTypeRef{Kind: "OBJECT", Name: "User"}}},
+		TypeSystem:           sourceGraphQLTypeSystem{Enums: []sourceGraphQLNamedType{}, InputObjects: []sourceGraphQLNamedType{}, Interfaces: []sourceGraphQLNamedType{}, Objects: []sourceGraphQLNamedType{}, Scalars: []string{}, Unions: []sourceGraphQLNamedType{}},
+	}
+	lock = sourceImportTestWithProjectionDigest(t, lock)
+	_, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		if sourceURL == lock.Rest.SourceURL {
+			return rest, nil
+		}
+		if sourceURL == lock.GraphQL.SourceURL {
+			return nil, fmt.Errorf("retained GraphQL artifact is absent")
+		}
+		t.Fatalf("unexpected source URL %q", sourceURL)
+		return nil, nil
+	}), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "fetch locked GraphQL source artifact") {
+		t.Fatalf("missing raw GraphQL artifact error = %v, want retained-artifact refusal", err)
 	}
 }
 
@@ -601,99 +884,185 @@ func TestSourceImportRejectsArtifactDriftAndSizeBeforeParsing(t *testing.T) {
 	}
 }
 
-func TestSourceImportArtifactCacheColdSlowFetchWritesOnlyVerifiedBytes(t *testing.T) {
+func TestSourceImportRetainedArtifactImportsMachineReadableSpecWithoutProvider(t *testing.T) {
+	t.Parallel()
 	raw := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
-	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", raw)
-	cacheDir := t.TempDir()
-	calls := 0
-	fetcher := newSourceImportArtifactCacheFetcher(sourceImportFetchFunc(func(ctx context.Context, sourceURL string) ([]byte, error) {
-		calls++
-		if sourceURL != lock.Rest.SourceURL {
-			t.Fatalf("cold fetch source URL = %q, want %q", sourceURL, lock.Rest.SourceURL)
-		}
-		select {
-		case <-time.After(20 * time.Millisecond):
-			return raw, nil
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		}
-	}), cacheDir, defaultSourceImportLimits())
+	lock := sourceImportFixtureLock("alpha", "https://provider.example.invalid/alpha-openapi.yaml", raw)
+	sourcesDir := filepath.Join(t.TempDir(), "sources")
+	writeSourceImportRetainedFixture(t, sourcesDir, lock.Connector, lock.Rest.sourceImportArtifact, raw)
 
-	if _, err := importSourceLock(context.Background(), lock, fetcher, defaultSourceImportLimits()); err != nil {
-		t.Fatalf("cold slow source import: %v", err)
-	}
-	if calls != 1 {
-		t.Fatalf("cold fetch calls = %d, want 1", calls)
-	}
-	cachePath, err := sourceImportArtifactCachePath(cacheDir, lock.Rest.sourceImportArtifact)
+	fetcher, err := newSourceImportRetainedArtifactFetcher(sourcesDir, lock.Connector, defaultSourceImportLimits())
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("construct retained artifact fetcher: %v", err)
 	}
-	if got, err := os.ReadFile(cachePath); err != nil || !bytes.Equal(got, raw) {
-		t.Fatalf("verified cache content = %q, read error = %v; want locked artifact", got, err)
+	result, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import retained source with unreachable provider URL: %v", err)
+	}
+	if len(result.Operations) != 2 || result.Operations[0].Source.URL != lock.Rest.SourceURL {
+		t.Fatalf("retained source import result = %#v", result.Operations)
 	}
 }
 
-func TestSourceImportArtifactCacheHitVerifiesWithoutNetwork(t *testing.T) {
+func TestSourceImportRetainedArtifactRejectsMissingAndMismatchedCopies(t *testing.T) {
+	t.Parallel()
 	raw := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
-	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", raw)
-	cacheDir := t.TempDir()
-	seed := newSourceImportArtifactCacheFetcher(sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
-		return raw, nil
-	}), cacheDir, defaultSourceImportLimits())
-	if _, err := importSourceLock(context.Background(), lock, seed, defaultSourceImportLimits()); err != nil {
-		t.Fatalf("seed verified artifact cache: %v", err)
+	lock := sourceImportFixtureLock("alpha", "https://provider.example.invalid/alpha-openapi.yaml", raw)
+
+	t.Run("missing retained copy never falls back to provider", func(t *testing.T) {
+		sourcesDir := filepath.Join(t.TempDir(), "sources")
+		writeSourceImportRetainedFixture(t, sourcesDir, lock.Connector, lock.Rest.sourceImportArtifact, nil)
+		fetcher, err := newSourceImportRetainedArtifactFetcher(sourcesDir, lock.Connector, defaultSourceImportLimits())
+		if err != nil {
+			t.Fatalf("construct retained artifact fetcher: %v", err)
+		}
+		_, err = importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+		if err == nil || !strings.Contains(err.Error(), "retained source artifact is missing") || strings.Contains(err.Error(), "provider.example.invalid") {
+			t.Fatalf("missing retained artifact error = %v", err)
+		}
+	})
+
+	t.Run("retained bytes must match preexisting lock", func(t *testing.T) {
+		sourcesDir := filepath.Join(t.TempDir(), "sources")
+		writeSourceImportRetainedFixture(t, sourcesDir, lock.Connector, lock.Rest.sourceImportArtifact, []byte("not the locked bytes"))
+		fetcher, err := newSourceImportRetainedArtifactFetcher(sourcesDir, lock.Connector, defaultSourceImportLimits())
+		if err != nil {
+			t.Fatalf("construct retained artifact fetcher: %v", err)
+		}
+		_, err = importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+		if err == nil || !strings.Contains(err.Error(), "retained source artifact does not match locked bytes and SHA-256") {
+			t.Fatalf("mismatched retained artifact error = %v", err)
+		}
+	})
+
+	t.Run("manifest provenance cannot redirect a lock", func(t *testing.T) {
+		sourcesDir := filepath.Join(t.TempDir(), "sources")
+		writeSourceImportRetainedFixture(t, sourcesDir, lock.Connector, lock.Rest.sourceImportArtifact, raw)
+		manifestPath := filepath.Join(sourcesDir, lock.Connector+"-retained-artifacts.json")
+		manifest, err := os.ReadFile(manifestPath)
+		if err != nil {
+			t.Fatalf("read fixture manifest: %v", err)
+		}
+		manifest = bytes.Replace(manifest, []byte("provider.example.invalid"), []byte("redirect.example.invalid"), 1)
+		if err := os.WriteFile(manifestPath, manifest, 0o644); err != nil {
+			t.Fatalf("tamper fixture manifest: %v", err)
+		}
+		fetcher, err := newSourceImportRetainedArtifactFetcher(sourcesDir, lock.Connector, defaultSourceImportLimits())
+		if err != nil {
+			t.Fatalf("construct retained artifact fetcher: %v", err)
+		}
+		_, err = importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+		if err == nil || !strings.Contains(err.Error(), "provenance does not match source lock") {
+			t.Fatalf("redirected provenance error = %v", err)
+		}
+	})
+
+	t.Run("manifest identity-query declaration cannot change a lock", func(t *testing.T) {
+		sourcesDir := filepath.Join(t.TempDir(), "sources")
+		writeSourceImportRetainedFixture(t, sourcesDir, lock.Connector, lock.Rest.sourceImportArtifact, raw)
+		manifestPath := filepath.Join(sourcesDir, lock.Connector+"-retained-artifacts.json")
+		manifest, err := os.ReadFile(manifestPath)
+		if err != nil {
+			t.Fatalf("read fixture manifest: %v", err)
+		}
+		manifest = bytes.Replace(manifest, []byte(`"identity_query":false`), []byte(`"identity_query":true`), 1)
+		if err := os.WriteFile(manifestPath, manifest, 0o644); err != nil {
+			t.Fatalf("tamper identity-query fixture manifest: %v", err)
+		}
+		_, err = newSourceImportRetainedArtifactFetcher(sourcesDir, lock.Connector, defaultSourceImportLimits())
+		if err == nil || !strings.Contains(err.Error(), "identity artifact query is missing") {
+			t.Fatalf("redirected identity-query error = %v", err)
+		}
+	})
+
+	t.Run("symlinked retained copy is rejected", func(t *testing.T) {
+		sourcesDir := filepath.Join(t.TempDir(), "sources")
+		writeSourceImportRetainedFixture(t, sourcesDir, lock.Connector, lock.Rest.sourceImportArtifact, raw)
+		artifactPath := filepath.Join(sourcesDir, "artifacts", strings.ToLower(lock.Rest.SHA256)+".artifact")
+		external := filepath.Join(t.TempDir(), "external.artifact")
+		if err := os.WriteFile(external, raw, 0o644); err != nil {
+			t.Fatalf("write external retained fixture: %v", err)
+		}
+		if err := os.Remove(artifactPath); err != nil {
+			t.Fatalf("remove fixture artifact before symlink: %v", err)
+		}
+		if err := os.Symlink(external, artifactPath); err != nil {
+			t.Fatalf("create retained artifact symlink: %v", err)
+		}
+		fetcher, err := newSourceImportRetainedArtifactFetcher(sourcesDir, lock.Connector, defaultSourceImportLimits())
+		if err != nil {
+			t.Fatalf("construct retained artifact fetcher: %v", err)
+		}
+		_, err = importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+		if err == nil || !strings.Contains(err.Error(), "regular non-symlink") {
+			t.Fatalf("symlinked retained artifact error = %v", err)
+		}
+	})
+}
+
+func TestSourceImportRetainedArtifactSupportsMachineRenderedAndBundleShapes(t *testing.T) {
+	t.Parallel()
+	spec := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	bundle := sourceImportRetainedZIP(t, "openapi.yaml", spec)
+	tests := []struct {
+		name string
+		url  string
+		raw  []byte
+	}{
+		{name: "machine readable", url: "https://provider.example.invalid/openapi.yaml", raw: spec},
+		{name: "rendered citation", url: "https://provider.example.invalid/reference.html", raw: []byte("<html><body>provider reference</body></html>")},
+		{name: "zip bundle", url: "https://provider.example.invalid/openapi.zip", raw: bundle},
 	}
-	networkCalls := 0
-	hit := newSourceImportArtifactCacheFetcher(sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
-		networkCalls++
-		return nil, fmt.Errorf("network must not run for a verified cache hit")
-	}), cacheDir, defaultSourceImportLimits())
-	if _, err := importSourceLock(context.Background(), lock, hit, defaultSourceImportLimits()); err != nil {
-		t.Fatalf("verified cache import: %v", err)
-	}
-	if networkCalls != 0 {
-		t.Fatalf("verified cache hit made %d network calls", networkCalls)
+	for _, tc := range tests {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			artifact := sourceImportFixtureLock("alpha", tc.url, tc.raw).Rest.sourceImportArtifact
+			sourcesDir := filepath.Join(t.TempDir(), "sources")
+			writeSourceImportRetainedFixture(t, sourcesDir, "alpha", artifact, tc.raw)
+			fetcher, err := newSourceImportRetainedArtifactFetcher(sourcesDir, "alpha", defaultSourceImportLimits())
+			if err != nil {
+				t.Fatalf("construct retained artifact fetcher: %v", err)
+			}
+			got, err := fetcher.FetchArtifact(context.Background(), artifact)
+			if err != nil || !bytes.Equal(got, tc.raw) {
+				t.Fatalf("retained %s bytes = %d/%v, want exact %d bytes", tc.name, len(got), err, len(tc.raw))
+			}
+		})
 	}
 }
 
-func TestSourceImportArtifactCacheRejectsCorruptionAndOnlyRecoversFromVerifiedFetch(t *testing.T) {
+func TestSourceImportRetainedArtifactEncodesElasticsearchAndZoomRecoveryRegressions(t *testing.T) {
+	t.Parallel()
 	raw := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
-	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", raw)
-	cacheDir := t.TempDir()
-	cachePath, err := sourceImportArtifactCachePath(cacheDir, lock.Rest.sourceImportArtifact)
-	if err != nil {
-		t.Fatal(err)
+	tests := []struct {
+		name string
+		url  string
+	}{
+		{
+			name: "elasticsearch source bytes changed upstream",
+			url:  "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+		},
+		{
+			name: "zoom accounts source is upstream 404",
+			url:  "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/accounts.json?slug=accounts",
+		},
 	}
-	if err := os.MkdirAll(filepath.Dir(cachePath), 0o700); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(cachePath, []byte("corrupt cache"), 0o600); err != nil {
-		t.Fatal(err)
-	}
-	freshCalls := 0
-	recovering := newSourceImportArtifactCacheFetcher(sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
-		freshCalls++
-		return raw, nil
-	}), cacheDir, defaultSourceImportLimits())
-	if _, err := importSourceLock(context.Background(), lock, recovering, defaultSourceImportLimits()); err != nil {
-		t.Fatalf("recover corrupt cache with pinned source: %v", err)
-	}
-	if freshCalls != 1 {
-		t.Fatalf("corrupt cache recovery calls = %d, want one fresh fetch", freshCalls)
-	}
-	if got, err := os.ReadFile(cachePath); err != nil || !bytes.Equal(got, raw) {
-		t.Fatalf("recovered cache content = %q, read error = %v; want locked artifact", got, err)
-	}
-
-	if err := os.WriteFile(cachePath, []byte("corrupt cache again"), 0o600); err != nil {
-		t.Fatal(err)
-	}
-	unavailable := newSourceImportArtifactCacheFetcher(sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
-		return nil, fmt.Errorf("source unavailable")
-	}), cacheDir, defaultSourceImportLimits())
-	if _, err := importSourceLock(context.Background(), lock, unavailable, defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "source unavailable") {
-		t.Fatalf("corrupt cache with unavailable source error = %v, want source failure", err)
+	for _, tc := range tests {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			lock := sourceImportFixtureLock("alpha", tc.url, raw)
+			lock.Rest.IdentityQuery = strings.Contains(tc.url, "?")
+			sourcesDir := filepath.Join(t.TempDir(), "sources")
+			writeSourceImportRetainedFixture(t, sourcesDir, lock.Connector, lock.Rest.sourceImportArtifact, raw)
+			fetcher, err := newSourceImportRetainedArtifactFetcher(sourcesDir, lock.Connector, defaultSourceImportLimits())
+			if err != nil {
+				t.Fatalf("construct retained artifact fetcher: %v", err)
+			}
+			result, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+			if err != nil || len(result.Operations) != 2 {
+				t.Fatalf("retained historic source result = %d/%v", len(result.Operations), err)
+			}
+		})
 	}
 }
 
@@ -708,7 +1077,7 @@ func TestSourceImportCommandContractAndMigrationDocumentation(t *testing.T) {
 			t.Fatalf("source-import help exposes %s: %s", forbidden, stdout.String())
 		}
 	}
-	if !strings.Contains(stdout.String(), "source-import <connector>") || !strings.Contains(stdout.String(), "source-lock") || !strings.Contains(stdout.String(), "--cache-dir <dir>") {
+	if !strings.Contains(stdout.String(), "source-import <connector>") || !strings.Contains(stdout.String(), "retained artifact") || strings.Contains(stdout.String(), "--cache-dir") {
 		t.Fatalf("source-import help is incomplete: %s", stdout.String())
 	}
 	stdout.Reset()
@@ -720,7 +1089,7 @@ func TestSourceImportCommandContractAndMigrationDocumentation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read migration conventions: %v", err)
 	}
-	if !strings.Contains(string(docs), "connectorgen source-import") || !strings.Contains(string(docs), "source-lock refresh") || !strings.Contains(string(docs), "non-symlink cache root") || !strings.Contains(string(docs), "identity_query") {
+	if !strings.Contains(string(docs), "connectorgen source-import") || !strings.Contains(string(docs), "retained-artifacts.json") || !strings.Contains(string(docs), "missing copy") || !strings.Contains(string(docs), "identity_query") || !strings.Contains(string(docs), "pm-request-contract-bounds-v1") || !strings.Contains(string(docs), "request_execution_limits") {
 		t.Fatalf("migration conventions lack source-import adoption contract")
 	}
 }
@@ -770,50 +1139,121 @@ func TestSourceImportCommandUsesOnlyConnectorOwnedLockAndCheckMode(t *testing.T)
 	}
 }
 
-func TestSourceImportCommandUsesExplicitVerifiedCacheRoot(t *testing.T) {
+func TestSourceImportRejectsSymlinkedSourcesDirectoryEvenInsideConnectorBundle(t *testing.T) {
+	t.Parallel()
 	defsRoot := t.TempDir()
-	lockPath := filepath.Join(defsRoot, "alpha", "sources", "alpha-operation-source-lock.json")
-	if err := os.MkdirAll(filepath.Dir(lockPath), 0o755); err != nil {
-		t.Fatalf("create fixture lock directory: %v", err)
+	bundleDir := filepath.Join(defsRoot, "alpha")
+	realSourcesDir := filepath.Join(bundleDir, "real-sources")
+	if err := os.MkdirAll(realSourcesDir, 0o755); err != nil {
+		t.Fatalf("create real sources directory: %v", err)
 	}
+	lockRaw := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-operation-source-lock.json"))
+	if err := os.WriteFile(filepath.Join(realSourcesDir, "alpha-operation-source-lock.json"), lockRaw, 0o644); err != nil {
+		t.Fatalf("write source lock: %v", err)
+	}
+	if err := os.Symlink(realSourcesDir, filepath.Join(bundleDir, "sources")); err != nil {
+		t.Fatalf("create in-bundle sources symlink: %v", err)
+	}
+	if _, err := loadConnectorSourceImportLock(defsRoot, "alpha"); err == nil || !strings.Contains(err.Error(), "source directory must not be a symlink") {
+		t.Fatalf("in-bundle sources symlink error = %v, want terminal refusal", err)
+	}
+}
+
+func TestSourceImportCheckedInGitHubArtifactsAreRetainedAndLockVerified(t *testing.T) {
+	t.Parallel()
+	defsRoot := filepath.Join("..", "..", "internal", "connectors", "defs")
+	lock, err := loadConnectorSourceImportLock(defsRoot, "github")
+	if err != nil {
+		t.Fatalf("load GitHub source lock: %v", err)
+	}
+	fetcher, err := newConnectorSourceImportRetainedArtifactFetcher(defsRoot, "github", defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("construct GitHub retained-artifact reader: %v", err)
+	}
+	for _, artifact := range []sourceImportArtifact{lock.Rest.sourceImportArtifact, lock.GraphQL.sourceImportArtifact} {
+		raw, fetchErr := fetcher.FetchArtifact(context.Background(), artifact)
+		if fetchErr != nil {
+			t.Fatalf("read GitHub retained %s: %v", artifact.SourceURL, fetchErr)
+		}
+		if validateErr := validateSourceImportArtifactBytes(raw, artifact); validateErr != nil {
+			t.Fatalf("verify GitHub retained %s: %v", artifact.SourceURL, validateErr)
+		}
+	}
+}
+
+func TestSourceImportCommandReadsConnectorOwnedRetainedArtifact(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	sourcesDir := filepath.Join(defsRoot, "alpha", "sources")
 	raw := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
-	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", raw)
+	lock := sourceImportFixtureLock("alpha", "https://provider.example.invalid/alpha-openapi.yaml", raw)
 	lockRaw, err := json.Marshal(lock)
 	if err != nil {
 		t.Fatalf("marshal fixture lock: %v", err)
 	}
-	if err := os.WriteFile(lockPath, lockRaw, 0o644); err != nil {
-		t.Fatalf("write fixture lock: %v", err)
+	writeSourceImportRetainedFixture(t, sourcesDir, lock.Connector, lock.Rest.sourceImportArtifact, raw)
+	if err := os.WriteFile(filepath.Join(sourcesDir, "alpha-operation-source-lock.json"), lockRaw, 0o644); err != nil {
+		t.Fatalf("write retained fixture lock: %v", err)
 	}
-	cacheDir := t.TempDir()
 	outPath := filepath.Join(t.TempDir(), "alpha-descriptors.json")
-	args := []string{"source-import", "alpha", "--defs", defsRoot, "--out", outPath, "--cache-dir", cacheDir}
+	var stdout, stderr bytes.Buffer
+	if exit := runSourceImportWithFetcher([]string{"source-import", "alpha", "--defs", defsRoot, "--out", outPath}, &stdout, &stderr, nil); exit != 0 {
+		t.Fatalf("retained source-import exit = %d, stderr = %s", exit, stderr.String())
+	}
+	if descriptor, err := os.ReadFile(outPath); err != nil || !strings.Contains(string(descriptor), "getWidget") {
+		t.Fatalf("retained source-import descriptor = %q, error = %v", descriptor, err)
+	}
+}
+
+func TestSourceImportReportsUnavailableSourceBeforeRequiringRetainedManifest(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	sourcesDir := filepath.Join(defsRoot, "zoom", "sources")
+	if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+		t.Fatalf("create Zoom sources directory: %v", err)
+	}
+	lock := map[string]any{
+		"schema_version": 3,
+		"connector":      "zoom",
+		"rest": map[string]any{
+			"retrieval": "Zoom accounts historical source unavailable",
+			"openapi":   []any{},
+			"coverage_confidence": map[string]any{
+				"level": "unavailable-public-source",
+				"basis": "accounts source returned HTTP 404; no verified historic copy exists",
+			},
+			"source_documents": []any{map[string]any{
+				"id":                 "accounts",
+				"kind":               "unavailable",
+				"unavailable_reason": "accounts source returned HTTP 404; no verified historic copy exists",
+				"operations":         []any{},
+			}},
+		},
+		"counts": map[string]any{"rest": 0, "graphql_query": 0, "graphql_mutation": 0, "total": 0},
+	}
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatalf("marshal unavailable Zoom lock: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(sourcesDir, "zoom-operation-source-lock.json"), raw, 0o644); err != nil {
+		t.Fatalf("write unavailable Zoom lock: %v", err)
+	}
+	var stdout, stderr bytes.Buffer
+	if exit := runSourceImportWithFetcher([]string{"source-import", "zoom", "--defs", defsRoot}, &stdout, &stderr, nil); exit != 1 || !strings.Contains(stderr.String(), "source document \"accounts\" is unavailable") || strings.Contains(stderr.String(), "retained artifact manifest") {
+		t.Fatalf("unavailable source-import exit/stderr = %d/%q", exit, stderr.String())
+	}
+}
+
+func TestSourceImportCommandRejectsCacheDirWithoutCallingFetcher(t *testing.T) {
+	t.Parallel()
 	var stdout, stderr bytes.Buffer
 	calls := 0
-	fetcher := sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+	exit := runSourceImportWithFetcher([]string{"source-import", "alpha", "--cache-dir", t.TempDir()}, &stdout, &stderr, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
 		calls++
-		return raw, nil
-	})
-	if exit := runSourceImportWithFetcher(args, &stdout, &stderr, fetcher); exit != 0 {
-		t.Fatalf("cold source-import exit = %d, stderr = %s", exit, stderr.String())
-	}
-	if calls != 1 {
-		t.Fatalf("cold source-import fetch calls = %d, want 1", calls)
-	}
-	cachePath, err := sourceImportArtifactCachePath(cacheDir, lock.Rest.sourceImportArtifact)
-	if err != nil {
-		t.Fatalf("cache path: %v", err)
-	}
-	if cached, err := os.ReadFile(cachePath); err != nil || !bytes.Equal(cached, raw) {
-		t.Fatalf("isolated cache contents = %q, read error = %v", cached, err)
-	}
-	stdout.Reset()
-	stderr.Reset()
-	if exit := runSourceImportWithFetcher(append(args, "--check"), &stdout, &stderr, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
-		t.Fatal("warm cache verification unexpectedly fetched from network")
-		return nil, nil
-	})); exit != 0 {
-		t.Fatalf("warm source-import check exit = %d, stderr = %s", exit, stderr.String())
+		return nil, fmt.Errorf("cache fallback must not be invoked")
+	}))
+	if exit != 2 || !strings.Contains(stderr.String(), "no longer supported") || calls != 0 {
+		t.Fatalf("cache-dir source-import exit/stderr/calls = %d/%q/%d", exit, stderr.String(), calls)
 	}
 }
 
@@ -835,7 +1275,7 @@ func TestSourceImportRejectsSourcesDirectoryEscapingConnectorBundle(t *testing.T
 	if err := os.Symlink(externalSources, filepath.Join(bundleDir, "sources")); err != nil {
 		t.Fatalf("create escaping source symlink: %v", err)
 	}
-	if _, err := loadConnectorSourceImportLock(defsRoot, "alpha"); err == nil || !strings.Contains(err.Error(), "outside connector-owned bundle") {
+	if _, err := loadConnectorSourceImportLock(defsRoot, "alpha"); err == nil || !strings.Contains(err.Error(), "source directory must not be a symlink") {
 		t.Fatalf("escaping source directory error = %v", err)
 	}
 }
@@ -2484,6 +2924,56 @@ func sourceImportFixtureLock(connector, sourceURL string, raw []byte) sourceImpo
 	return sourceImportLock{SchemaVersion: 1, Connector: connector, Rest: sourceImportREST{sourceImportArtifact: sourceImportArtifact{SourceURL: sourceURL, SHA256: hex.EncodeToString(digest[:]), Bytes: int64(len(raw))}}}
 }
 
+func writeSourceImportRetainedFixture(t *testing.T, sourcesDir, connector string, artifact sourceImportArtifact, raw []byte) {
+	t.Helper()
+	manifest := map[string]any{
+		"schema_version": 1,
+		"connector":      connector,
+		"artifacts": []any{map[string]any{
+			"sha256":         artifact.SHA256,
+			"bytes":          artifact.Bytes,
+			"source_url":     artifact.SourceURL,
+			"identity_query": artifact.IdentityQuery,
+			"retrieved_at":   "2026-08-24T00:00:00Z",
+			"license":        "undetermined",
+			"terms":          "undetermined",
+		}},
+	}
+	manifestRaw, err := json.Marshal(manifest)
+	if err != nil {
+		t.Fatalf("marshal retained artifact fixture manifest: %v", err)
+	}
+	if err := os.MkdirAll(filepath.Join(sourcesDir, "artifacts"), 0o755); err != nil {
+		t.Fatalf("create retained artifact fixture directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(sourcesDir, connector+"-retained-artifacts.json"), manifestRaw, 0o644); err != nil {
+		t.Fatalf("write retained artifact fixture manifest: %v", err)
+	}
+	if raw == nil {
+		return
+	}
+	if err := os.WriteFile(filepath.Join(sourcesDir, "artifacts", strings.ToLower(artifact.SHA256)+".artifact"), raw, 0o644); err != nil {
+		t.Fatalf("write retained artifact fixture: %v", err)
+	}
+}
+
+func sourceImportRetainedZIP(t *testing.T, name string, raw []byte) []byte {
+	t.Helper()
+	var buffer bytes.Buffer
+	archive := zip.NewWriter(&buffer)
+	entry, err := archive.Create(name)
+	if err != nil {
+		t.Fatalf("create retained zip fixture entry: %v", err)
+	}
+	if _, err := entry.Write(raw); err != nil {
+		t.Fatalf("write retained zip fixture entry: %v", err)
+	}
+	if err := archive.Close(); err != nil {
+		t.Fatalf("close retained zip fixture: %v", err)
+	}
+	return buffer.Bytes()
+}
+
 func descriptorResponse(t *testing.T, descriptor sourceOperationDescriptor, status string) sourceResponseDescriptor {
 	t.Helper()
 	for _, response := range descriptor.Responses {
@@ -2498,6 +2988,8 @@ func descriptorResponse(t *testing.T, descriptor sourceOperationDescriptor, stat
 type sourceImportV3FixtureDocument struct {
 	ID            string
 	Path          string
+	Method        string
+	OperationID   string
 	Artifact      []byte
 	ArtifactURL   string
 	IdentityQuery *bool
@@ -2526,6 +3018,14 @@ func sourceImportV3FixtureLock(t *testing.T, connector string, documents []sourc
 		if document.IdentityQuery != nil {
 			artifact["identity_query"] = *document.IdentityQuery
 		}
+		method := document.Method
+		if method == "" {
+			method = "GET"
+		}
+		operationID := document.OperationID
+		if operationID == "" {
+			operationID = "shared"
+		}
 		sourceDocuments = append(sourceDocuments, map[string]any{
 			"id":       document.ID,
 			"artifact": artifact,
@@ -2540,10 +3040,10 @@ func sourceImportV3FixtureLock(t *testing.T, connector string, documents []sourc
 			"operations": []any{map[string]any{
 				"id":              connector + ".rest." + document.ID + ".shared",
 				"protocol":        "rest",
-				"method":          "GET",
+				"method":          method,
 				"path":            document.Path,
-				"operation_id":    "shared",
-				"source_location": `paths["` + document.Path + `"].get`,
+				"operation_id":    operationID,
+				"source_location": `paths["` + document.Path + `"].` + strings.ToLower(method),
 			}},
 		})
 	}
@@ -2583,7 +3083,7 @@ func TestSourceImportVersion3FetchesDeclaredIdentityQuery(t *testing.T) {
 	})
 	requests := 0
 	var fetched *url.URL
-	fetcher := newSourceImportArtifactCacheFetcher(httpSourceImportFetcher{
+	fetcher := httpSourceImportFetcher{
 		limits: defaultSourceImportLimits(),
 		lookup: lookup,
 		client: &http.Client{Transport: sourceImportRoundTripFunc(func(request *http.Request) (*http.Response, error) {
@@ -2596,7 +3096,7 @@ func TestSourceImportVersion3FetchesDeclaredIdentityQuery(t *testing.T) {
 				Request:    request,
 			}, nil
 		})},
-	}, t.TempDir(), defaultSourceImportLimits())
+	}
 	result, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
 	if err != nil {
 		t.Fatalf("import v3 identity-query lock: %v", err)
@@ -2949,9 +3449,9 @@ func TestSourceImportPreservesFrozenGitHubArtifacts(t *testing.T) {
 		bytes  int
 		sha256 string
 	}{
-		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"), bytes: 3420025, sha256: "281b1cfcc67eb63e19ef83daf06197bf3d3b23db0b6bc9b73e02fc18ee278fb6"},
-		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-descriptor.json"), bytes: 43354021, sha256: "d1978c0c6fd0eb66e9fcd4d78d637864a6e486f558aaad1e51550bc43758b899"},
-		{path: filepath.Join("..", "..", ".planning", "phases", "github-parity-extract-r1", "GITHUB-COMBINED-OPERATION-LEDGER.json"), bytes: 2553169, sha256: "c4a904a919f30065fcc8453c6689e1a3dcc7be5ac8e11a7154d310b334972de3"},
+		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"), bytes: 3420025, sha256: "79f6eaf203394aabe7d2558d0f87a8100a7a084b2e39bd264f7773f235acf2c8"},
+		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-descriptor.json"), bytes: 43355704, sha256: "69b23e5146480eb67f10c3ba65b45fc6fac466cfb8ae244953b19b8373f10062"},
+		{path: filepath.Join("..", "..", ".planning", "phases", "github-parity-extract-r1", "GITHUB-COMBINED-OPERATION-LEDGER.json"), bytes: 2553169, sha256: "b2bc566e8c844fcf307b37000c8bf3d482a9da932aff5c8d375f54b6a6ed3391"},
 	}
 	for _, check := range checks {
 		check := check
