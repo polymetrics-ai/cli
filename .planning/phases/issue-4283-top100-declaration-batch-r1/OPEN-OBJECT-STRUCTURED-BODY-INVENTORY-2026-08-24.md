@@ -51,7 +51,21 @@ object unless `additionalProperties` is explicitly the boolean `false` and
 then requires `properties`. This is an execution-bound rule, not a statement
 that the provider source is malformed.
 
-## 2. Fixed-100 descope availability
+## 2. Corrected fixed-100 premise
+
+This section's original conclusion was incorrect. It treated the branch's
+unmerged reselected cohort as an immutable shipped baseline. `origin/main`
+contains 100 GitHub rows and no Docker Hub rows; branch commit `36079c9c9`
+replaced 63 of those rows and introduced the two SCIM rows. Thus neither SCIM
+operation is currently anchored by the shipped fixed cohort, and that cohort
+cannot support the asserted no-descope conclusion.
+
+The correction, its authority audit, the exact deterministic selection rule,
+and the smallest non-engine follow-up are recorded in
+`FIXED-100-COHORT-RECONCILIATION-2026-08-24.md`. The obsolete analysis is
+retained below only as a superseded record; sections 1 and 3 remain current.
+
+### Superseded analysis
 
 Docker Hub cannot retain fixed-100 membership while declaring either of those
 two SCIM operations unsupported/partial under the current rule. Both exact
