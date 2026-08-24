@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"encoding/json"
 	"fmt"
 	"math/big"
 	"net/url"
@@ -225,16 +224,16 @@ func validateOperationParameterWireValue(op OperationSpec, parameter OperationPa
 			return fmt.Errorf("operation %q %s parameter %q must be boolean", op.ID, location, parameter.Name)
 		}
 	case "integer":
-		if !json.Valid([]byte(value)) {
-			return fmt.Errorf("operation %q %s parameter %q must be an integer", op.ID, location, parameter.Name)
-		}
 		integer, ok := new(big.Int).SetString(value, 10)
 		if !ok {
 			return fmt.Errorf("operation %q %s parameter %q must be an integer", op.ID, location, parameter.Name)
 		}
 		parsedNumber = new(big.Rat).SetInt(integer)
 	case "number":
-		if !json.Valid([]byte(value)) {
+		// Rat also accepts fractional a/b syntax, which the previous
+		// strconv.ParseFloat contract never did. Retain the established CLI
+		// numeric grammar while using Rat for exact comparisons.
+		if strings.Contains(value, "/") {
 			return fmt.Errorf("operation %q %s parameter %q must be a number", op.ID, location, parameter.Name)
 		}
 		var ok bool

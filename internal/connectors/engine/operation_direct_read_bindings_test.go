@@ -184,6 +184,26 @@ func TestOperationParametersPreserveExactFiniteNumericLexemes(t *testing.T) {
 	}
 }
 
+func TestOperationParametersPreservePreviouslyAcceptedNumericLexemes(t *testing.T) {
+	op := OperationSpec{ID: "acme.numeric", REST: &RESTOperationSpec{}}
+	for _, test := range []struct {
+		name      string
+		parameter OperationParameter
+		value     string
+	}{
+		{name: "signed integer with leading zero", parameter: OperationParameter{Name: "value", In: "query", Type: "integer"}, value: "+01"},
+		{name: "signed decimal without leading zero", parameter: OperationParameter{Name: "value", In: "query", Type: "number"}, value: "+.5"},
+		{name: "decimal with trailing point", parameter: OperationParameter{Name: "value", In: "query", Type: "number"}, value: "01."},
+		{name: "hexadecimal float", parameter: OperationParameter{Name: "value", In: "query", Type: "number"}, value: "0x1p+2"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if err := validateOperationParameterWireValue(op, test.parameter, "query", test.value); err != nil {
+				t.Fatalf("previously accepted numeric lexeme %q: %v", test.value, err)
+			}
+		})
+	}
+}
+
 func TestOperationDirectReadValidatesEffectiveConfigPathParamsBeforeIO(t *testing.T) {
 	var hits atomic.Int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {

@@ -302,6 +302,20 @@ func TestSourceImportVersion3KeepsUnboundedHeaderAsMergeBlockingGap(t *testing.T
 	}
 }
 
+func TestSourceProjectionKeepsNumericHeaderWithoutTextualByteBoundMergeBlocked(t *testing.T) {
+	limits := defaultSourceImportLimits()
+	limits.UseExecutionEnvelopes = true
+	schema := map[string]any{
+		"type":    "integer",
+		"minimum": json.Number("0"),
+		"maximum": json.Number("100"),
+	}
+	err := sourceProjectionOperationParameterGap(schema, sourceDocumentForm{Family: "openapi", Version: "3.0.3"}, limits, "header", http.MethodGet)
+	if err == nil || !strings.Contains(err.Error(), "compatibility-censused PM byte envelope") {
+		t.Fatalf("numeric header without a textual byte bound gap = %v", err)
+	}
+}
+
 func TestSourceImportVersion3RepresentsCommonBodyBoundsWithSeparateEnvelope(t *testing.T) {
 	t.Parallel()
 	artifact := []byte(`{

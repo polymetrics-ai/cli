@@ -6108,7 +6108,13 @@ func sourcePathQueryExecutionBound(schema any) (int, string) {
 
 func sourceBoundedHeaderMaxBytes(schema any) int {
 	object, ok := schema.(map[string]any)
-	if !ok || object["type"] != "string" {
+	if !ok {
+		return 0
+	}
+	if object["type"] == "boolean" {
+		return len("false")
+	}
+	if object["type"] != "string" {
 		return 0
 	}
 	maxBytes := 0
@@ -6445,12 +6451,8 @@ func sourceProjectionOperationParameterGap(schema any, form sourceDocumentForm, 
 	if (location == "path" || location == "query") && !sourceScalarWireSchema(schema) {
 		return fmt.Errorf("%s parameter requires non-scalar serialization support", location)
 	}
-	if location == "header" {
-		strict := limits
-		strict.UseExecutionEnvelopes = false
-		if err := validateBoundedRequestSchema(schema, form, strict, 0); sourceRequestSchemaDispositionOf(err) == sourceRequestRepresentedWithPolicyBound {
-			return fmt.Errorf("unbounded request header requires a compatibility-censused PM byte envelope")
-		}
+	if location == "header" && sourceScalarWireSchema(schema) && !sourceStringScalarWireUnion(schema) && sourceBoundedHeaderMaxBytes(schema) == 0 {
+		return fmt.Errorf("unbounded request header requires a compatibility-censused PM byte envelope")
 	}
 	return sourceProjectionSchemaGap(schema, form, limits)
 }
