@@ -43,13 +43,21 @@
   This ruled out the retained-source-artifact foundation as a pre-existing mainline failure.
 - **Green / generated artifact:**
   `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES=connectors_inspect_github_json GOFLAGS='-p=3' go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$/^connectors_inspect_github_json$' -count=1`
-  used the test's targeted canonical writer and changed one expected transcript line for the
-  declared GitHub binary-upload command surface; the same test then passed normally.
+  used the test's targeted canonical writer and changed one expected transcript line. The inspect
+  view does not expose `cli_surface.commands`; it added `redact_fields: ["file_path"]` to the
+  existing `releases_release_id_assets2` write action. That redaction is required by the new
+  `releases assets upload` `binary_upload` command so a local source path cannot appear in its
+  inspect output. The same test then passed normally.
 - **Green / provider double:** prior to the repair, the actual plan → preview → approval →
-  execute double failed because it substituted a local upload origin but retained the public
-  source-origin allow-list, then because its generic `200` receipt violated the upload action's
-  declared exact `201`. The double now substitutes its own origin consistently and returns the
-  first declared action success receipt when no fixture provides one. Its real engine path passes
+  execute double's `githubProviderDoubleBundle` substituted `HTTP.URL` and the action target with
+  its local capture server but retained `allowed_base_url_origins: https://api.github.com` while
+  `TestGitHubExhaustiveProviderDouble` required every write row to be exercised. That success
+  expectation was implicitly the former origin-binding bypass, not an unrelated regression:
+  `TestGitHubReleaseAssetUpload_RejectsEnterpriseCrossOriginBeforeIO` still proves a real GHES
+  origin cannot send a credential to public `uploads.github.com`. The double now substitutes all
+  related origins consistently. Its generic `200` fallback was likewise an obsolete assertion for
+  this action; the declaration requires an exact `201`, so an unfixtured narrowed action now gets
+  its declared success receipt. Its real engine path passes
   with `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/conformance -run '^TestGitHubExhaustiveProviderDouble$' -count=1`.
 
 ## Deliberate break proof

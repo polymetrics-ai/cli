@@ -67,9 +67,17 @@
   absorbed as a pre-existing main failure.
 - [x] The golden was regenerated through its test-owned targeted writer, not edited manually:
   `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES=connectors_inspect_github_json GOFLAGS='-p=3' go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$/^connectors_inspect_github_json$' -count=1` — pass (6.532s), changing one line.
+  The new line is `redact_fields: ["file_path"]` on the existing GitHub release-asset action;
+  `connectors inspect` deliberately omits CLI command objects, while the new
+  `releases assets upload` binary-upload command requires this path redaction.
 - [x] Final behavior checks:
   `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/conformance -run '^TestGitHubExhaustiveProviderDouble$' -count=1` — pass (6.197s), and
   `GOFLAGS='-p=3' go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$/^connectors_inspect_github_json$' -count=1` — pass (4.427s).
+  The provider-double prior success condition was an implicit former-origin-bypass expectation:
+  it rewrote the configured and target origins but left the real-source allow-list in place, then
+  required the resulting mismatched request to be exercised. The repaired double carries its
+  local origin through all three fields and emits the action's declared exact `201`; the separate
+  F-4343-01 GHES/public-host zero-I/O test retains the production security assertion.
 
 ## Constraint
 
