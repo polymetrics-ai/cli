@@ -1655,6 +1655,14 @@ go run ./cmd/connectorgen source-retain <connector> \
   --terms <known-terms-or-status>
 ```
 
+Pre-operation-lock parity bundles use the same maintenance command during
+their migration. When no `*-operation-source-lock.json` exists,
+`source-retain` reads only the connector's existing
+`*-parity-source-lock.json` artifact list, including its already-declared fixed
+public identity query when present. It neither creates an operation lock nor
+lets `source-import` read parity locks; normal import remains
+operation-lock-only and hermetic.
+
 If a current provider document differs from a pin, do not use
 `source-retain` to make it fit. Preserve the lock first; only the separately
 recorded delivery-owner authorization and re-pin report described below may

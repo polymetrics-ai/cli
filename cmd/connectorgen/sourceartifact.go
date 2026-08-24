@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
@@ -15,12 +16,13 @@ import (
 
 const sourceRetainUsage = `connectorgen source-retain <connector> [--defs <dir>] --retrieved-at <RFC3339> --license <text> --terms <text>
 
-Fetches only the artifacts already identified by a connector-owned source lock,
-verifies their preexisting byte counts and SHA-256 values, and stores the raw
-bytes under sources/artifacts/. It never changes a source lock. Builds and
+Fetches only the artifacts already identified by a connector-owned operation
+source lock, or by a legacy parity source lock when no operation lock exists.
+It verifies their preexisting byte counts and SHA-256 values, and stores the
+raw bytes under sources/artifacts/. It never changes either lock. Builds and
 source-import remain offline: this is an explicit maintenance command only.
 
-  <connector>       connector whose source lock is retained
+  <connector>       connector whose operation or legacy parity source lock is retained
   --defs <dir>      connector defs root (default internal/connectors/defs)
   --retrieved-at    UTC RFC3339 time at which the provider artifact was read
   --license <text>  known license or redistribution status, recorded as data
@@ -56,7 +58,7 @@ func runSourceRetainWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, sourceRetainUsage)
 		return 2
 	}
-	lock, err := loadConnectorSourceImportLock(opts.DefsDir, opts.Connector)
+	artifacts, err := loadConnectorSourceRetainArtifacts(opts.DefsDir, opts.Connector)
 	if err != nil {
 		logln(stderr, "connectorgen source-retain:", err)
 		return 1
@@ -69,7 +71,7 @@ func runSourceRetainWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 	}
 	context, cancel := context.WithTimeout(context.Background(), defaultSourceImportCorpusTimeout)
 	defer cancel()
-	payloads, err := sourceRetainFetchLockedArtifacts(context, lock, fetcher, defaultSourceImportLimits())
+	payloads, err := sourceRetainFetchArtifacts(context, artifacts, fetcher, defaultSourceImportLimits())
 	if err != nil {
 		logln(stderr, "connectorgen source-retain:", err)
 		return 1
@@ -85,6 +87,92 @@ func runSourceRetainWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 	}
 	logf(stdout, "connectorgen source-retain: %s, %d artifact(s) retained\n", opts.Connector, len(payloads))
 	return 0
+}
+
+// sourceRetainParityLock is the pre-operation-lock source provenance retained
+// by the Batch 4/5 connectors. It is read only by source-retain so those
+// already-pinned artifact identities can be mirrored without changing normal
+// source-import's operation-lock contract.
+type sourceRetainParityLock struct {
+	SchemaVersion   int    `json:"schema_version"`
+	Connector       string `json:"connector"`
+	SourceRetrieval struct {
+		Artifacts []sourceRetainParityArtifact `json:"artifacts"`
+	} `json:"source_retrieval"`
+}
+
+type sourceRetainParityArtifact struct {
+	SourceURL string `json:"source_url"`
+	SHA256    string `json:"sha256"`
+	Bytes     int64  `json:"bytes"`
+}
+
+// loadConnectorSourceRetainArtifacts prefers an operation source lock when it
+// exists. The legacy parity fallback is deliberately limited to its already
+// declared artifact identities; it neither creates an operation lock nor gives
+// source-import a network or legacy-lock fallback.
+func loadConnectorSourceRetainArtifacts(defsDir, connector string) ([]sourceImportArtifact, error) {
+	sourcesDir, err := sourceImportConnectorSourcesDir(defsDir, connector)
+	if err != nil {
+		return nil, err
+	}
+	operationLockPath := filepath.Join(sourcesDir, connector+"-operation-source-lock.json")
+	if _, err := os.Lstat(operationLockPath); err == nil {
+		lock, loadErr := loadConnectorSourceImportLock(defsDir, connector)
+		if loadErr != nil {
+			return nil, loadErr
+		}
+		return sourceRetainLockArtifacts(lock), nil
+	} else if !os.IsNotExist(err) {
+		return nil, fmt.Errorf("inspect connector-owned operation source lock: %w", err)
+	}
+	return loadConnectorParitySourceRetainArtifacts(sourcesDir, connector)
+}
+
+func loadConnectorParitySourceRetainArtifacts(sourcesDir, connector string) ([]sourceImportArtifact, error) {
+	path := filepath.Join(sourcesDir, connector+"-parity-source-lock.json")
+	resolvedPath, err := filepath.EvalSymlinks(path)
+	if err != nil {
+		return nil, fmt.Errorf("resolve connector-owned parity source lock: %w", err)
+	}
+	if !sourceImportPathWithin(sourcesDir, resolvedPath) {
+		return nil, fmt.Errorf("parity source lock is outside connector-owned sources directory")
+	}
+	raw, err := os.ReadFile(resolvedPath)
+	if err != nil {
+		return nil, fmt.Errorf("read connector-owned parity source lock: %w", err)
+	}
+	var lock sourceRetainParityLock
+	if err := decodeSourceJSON(raw, &lock); err != nil {
+		return nil, fmt.Errorf("parse parity source lock: %w", err)
+	}
+	if lock.SchemaVersion != 1 {
+		return nil, fmt.Errorf("parity source lock has unsupported schema version %d", lock.SchemaVersion)
+	}
+	if lock.Connector != connector {
+		return nil, fmt.Errorf("parity source lock connector %q does not match requested connector %q", lock.Connector, connector)
+	}
+	artifacts := make([]sourceImportArtifact, 0, len(lock.SourceRetrieval.Artifacts))
+	for _, legacy := range lock.SourceRetrieval.Artifacts {
+		parsed, err := url.Parse(legacy.SourceURL)
+		if err != nil {
+			return nil, fmt.Errorf("parse parity source artifact URL: %w", err)
+		}
+		artifact := sourceImportArtifact{
+			SourceURL:     legacy.SourceURL,
+			SHA256:        legacy.SHA256,
+			Bytes:         legacy.Bytes,
+			IdentityQuery: parsed.RawQuery != "",
+		}
+		if err := validateSourceImportArtifact(artifact); err != nil {
+			return nil, fmt.Errorf("parity source artifact: %w", err)
+		}
+		artifacts = append(artifacts, artifact)
+	}
+	if len(artifacts) == 0 {
+		return nil, fmt.Errorf("parity source lock has no retainable provider artifacts")
+	}
+	return sourceRetainUniqueArtifacts(artifacts), nil
 }
 
 func parseSourceRetainOptions(args []string) (sourceRetainOptions, error) {
@@ -164,8 +252,12 @@ func sourceRetainLockArtifacts(lock sourceImportLock) []sourceImportArtifact {
 	if len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) > 0 {
 		artifacts = append(artifacts, lock.GraphQL.sourceImportArtifact)
 	}
+	return sourceRetainUniqueArtifacts(artifacts)
+}
+
+func sourceRetainUniqueArtifacts(artifacts []sourceImportArtifact) []sourceImportArtifact {
 	seen := make(map[string]bool, len(artifacts))
-	unique := artifacts[:0]
+	unique := make([]sourceImportArtifact, 0, len(artifacts))
 	for _, artifact := range artifacts {
 		key := strings.ToLower(artifact.SHA256) + "\x00" + artifact.SourceURL + "\x00" + fmt.Sprint(artifact.IdentityQuery)
 		if !seen[key] {
@@ -183,10 +275,13 @@ func sourceRetainLockArtifacts(lock sourceImportLock) []sourceImportArtifact {
 }
 
 func sourceRetainFetchLockedArtifacts(ctx context.Context, lock sourceImportLock, fetcher sourceImportFetcher, limits sourceImportLimits) ([]sourceRetainPayload, error) {
+	return sourceRetainFetchArtifacts(ctx, sourceRetainLockArtifacts(lock), fetcher, limits)
+}
+
+func sourceRetainFetchArtifacts(ctx context.Context, artifacts []sourceImportArtifact, fetcher sourceImportFetcher, limits sourceImportLimits) ([]sourceRetainPayload, error) {
 	if fetcher == nil {
 		return nil, fmt.Errorf("source retention has no fetcher")
 	}
-	artifacts := sourceRetainLockArtifacts(lock)
 	payloads := make([]sourceRetainPayload, 0, len(artifacts))
 	for _, artifact := range artifacts {
 		raw, err := fetchSourceImportArtifact(ctx, fetcher, artifact)
