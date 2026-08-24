@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "adobe-commerce-magento",
+  "artifacts": [
+    {
+      "sha256": "6012876bf8a0e4423f9dc151bf102d5b161f19da716e9cf3a1a6d25e950eeb42",
+      "bytes": 8292,
+      "source_url": "https://developer.adobe.com/commerce/webapi/rest/",
+      "retrieved_at": "2026-08-24T12:15:00Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

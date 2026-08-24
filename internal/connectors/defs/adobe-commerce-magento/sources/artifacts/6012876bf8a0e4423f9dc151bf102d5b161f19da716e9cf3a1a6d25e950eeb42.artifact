@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>REST API Overview</title>
+    <link rel="canonical" href="https://developer.adobe.com/commerce/webapi/rest/">
+    <meta name="description" content="Overview of the Adobe Commerce and Magento Open Source REST API documentation.">
+    <meta name="keywords" content="REST">
+    <meta property="og:title" content="REST API Overview">
+    <meta property="og:description" content="Overview of the Adobe Commerce and Magento Open Source REST API documentation.">
+    <meta property="og:url" content="https://developer.adobe.com/commerce/webapi/rest/">
+    <meta property="og:image" content="https://developer.adobe.com/default-meta-image.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta property="og:image:secure_url" content="https://developer.adobe.com/default-meta-image.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="REST API Overview">
+    <meta name="twitter:description" content="Overview of the Adobe Commerce and Magento Open Source REST API documentation.">
+    <meta name="twitter:image" content="https://developer.adobe.com/default-meta-image.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta name="source" content="github">
+    <meta name="pathprefix" content="/commerce/webapi">
+    <meta name="githubblobpath" content="https://github.com/AdobeDocs/commerce-webapi/blob/main/src/pages/rest/index.md">
+    <meta name="template" content="documentation">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/hlx_statics/scripts/scripts.js" type="module" crossorigin="use-credentials"></script>
+    <link rel="stylesheet" href="/hlx_statics/styles/styles.css">
+    <link rel="icon" href="data:,">
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <div>
+        <h1 id="rest-api-overview">REST API Overview</h1>
+        <p>The REST API documentation describes the REST APIs that are available in Adobe Commerce (PaaS) and Adobe Commerce as a Cloud Service (SaaS).</p>
+        <p>The APIs can be used to perform a wide array of tasks. For example:</p>
+        <ul>
+          <li>
+            <p>Create a shopping app. This can be a traditional app that a user downloads on a mobile device. You could also create an app that an employee uses on a showroom floor to help customers make purchases.</p>
+          </li>
+          <li>
+            <p>Integrate with CRM (Customer Relationship Management) or ERP (Enterprise Resource Planning) backend systems, such as Salesforce or Xero.</p>
+          </li>
+          <li>
+            <p>Integrate with a CMS (Content Management System). Currently, content tagging is not supported.</p>
+          </li>
+        </ul>
+        <h2 id="adobe-commerce">Adobe Commerce</h2>
+        <div class="fragment">
+          <div>
+            <div>
+              <pre><code>data-src=../includes/paas-only.md
+</code></pre>
+            </div>
+          </div>
+        </div>
+        <p><a href="https://experienceleague.adobe.com/en/docs/commerce-on-cloud/user-guide/overview?lang=en">Adobe Commerce on Cloud</a>, Adobe Commerce on-premises, and <a href="https://experienceleague.adobe.com/en/docs/commerce-admin/start/guide-overview">Magento Open Source</a> all use the same REST API framework. The REST API documentation describes the REST APIs that are available in these versions of Adobe Commerce and Magento Open Source.</p>
+        <h3 id="endpoints">Endpoints</h3>
+        <p>Adobe Commerce provides a wide range of REST API endpoints that allow you to perform actions on behalf of Commerce administrators, customers, and guest shoppers. Integrations are also supported.</p>
+        <h3 id="authentication">Authentication</h3>
+        <p>Adobe Commerce REST APIs support multiple <a href="/commerce/webapi/get-started/authentication/">authentication methods</a>, including:</p>
+        <ul>
+          <li>Third-party applications authenticate with <a href="/commerce/webapi/get-started/authentication/gs-authentication-oauth">OAuth 1.0a</a>.</li>
+          <li>Mobile applications authenticate using <a href="/commerce/webapi/get-started/authentication/gs-authentication-token">tokens</a>.</li>
+          <li>Administrators and customers are authenticated with <a href="/commerce/webapi/get-started/authentication/gs-authentication-token">login credentials</a>.</li>
+        </ul>
+        <h3 id="url-structure">URL structure</h3>
+        <p>The URL for Adobe Commerce REST endpoints is structured as follows:</p>
+        <p><code>https://&#x3C;host>/rest/&#x3C;store-view-code>/&#x3C;endpoint></code></p>
+        <h2 id="adobe-commerce-as-a-cloud-service">Adobe Commerce as a Cloud Service</h2>
+        <div class="fragment">
+          <div>
+            <div>
+              <pre><code>data-src=../includes/saas-only.md
+</code></pre>
+            </div>
+          </div>
+        </div>
+        <p>The Adobe Commerce as a Cloud Service REST API serves as a critical tool for extending and integrating commerce functionalities, but the endpoints available differ significantly from the REST APIs for Adobe Commerce on Cloud and on-premises deployments.</p>
+        <p>The following key differences are important to consider when planning your REST API integrations with Adobe Commerce as a Cloud Service:</p>
+        <h3 id="endpoints-1">Endpoints</h3>
+        <p>Primarily the Cloud Service REST API differs in that it includes a smaller subset of endpoints. Specifically, the customer and guest REST APIs that are available in Adobe Commerce on Cloud and on-premises deployments are not available in Adobe Commerce as a Cloud Service. However, access to similar functionality remains available with the <a href="/commerce/webapi/graphql/">GraphQL APIs</a>.</p>
+        <p>The <a href="/commerce/webapi/reference/rest/saas">API reference</a> lists the available endpoints.</p>
+        <h3 id="authentication-1">Authentication</h3>
+        <p>In previous versions of Adobe Commerce, you would use authentication tokens to authorize your requests to the REST API. In Adobe Commerce as a Cloud Service, you must use Adobe Identity Management Service (IMS) to <a href="/commerce/webapi/rest/authentication/">authenticate your requests</a>.</p>
+        <p>The authentication system supports both <a href="/commerce/webapi/rest/authentication/user">interactive user-based workflows</a> and automated <a href="/commerce/webapi/rest/authentication/server-to-server">server-to-server integrations</a>, ensuring secure and appropriate access for different use cases. Both of these authentication methods require every request to be signed with an IMS Access Token.</p>
+        <h3 id="url-structure-1">URL structure</h3>
+        <p>In Adobe Commerce as a Cloud Service, REST endpoint URLs do not include <code>/rest</code> or the store view code. The store scope is specified via the <code>Store</code> HTTP header.</p>
+        <ul>
+          <li>
+            <p>Base format:</p>
+            <p><code>https://&#x3C;server>.api.commerce.adobe.com/&#x3C;tenant-id>/&#x3C;endpoint></code></p>
+          </li>
+          <li>
+            <p>Set the scope with the <code>Store</code> header:</p>
+            <ul>
+              <li>
+                <p>Predefined values:</p>
+                <ul>
+                  <li><code>Store: all</code> — Execute in the global scope</li>
+                  <li><code>Store: default</code> — Target the default store view (or use your specific store view code)</li>
+                </ul>
+              </li>
+              <li>
+                <p>You can also pass any specific store view code: <code>Store: &#x3C;store_view_code></code></p>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <p>The following <code>curl</code> command shows the request pattern:</p>
+        <pre><code class="language-bash">curl --location 'https://&#x3C;server>.api.commerce.adobe.com/&#x3C;tenant-id>/&#x3C;endpoint>' \
+  --header 'Authorization: Bearer &#x3C;token>' \
+  --header 'Content-Type: application/json' \
+  --header 'Store: &#x3C;all | default | &#x3C;store_view_code>>'
+  ....
+</code></pre>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>

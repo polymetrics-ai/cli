@@ -3,1192 +3,1161 @@
   "connector": "brex",
   "captured_at": "2026-08-19T16:46:55.099Z",
   "rest": {
-    "source_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml",
-    "representation": "machine-readable-spec",
-    "documents": [
-      {
-        "source_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml",
-        "sha256": "1fa24713033c1228ca0495ddeec5b7270cfb177703e3230eaa68df589446b5fc",
-        "bytes": 20483,
-        "content_type": "application/yaml",
-        "retrieval_method": "http",
-        "representation": "machine-readable-spec"
-      },
-      {
-        "source_url": "https://developer.brex.com/_bundle/openapi/expenses_api.yaml",
-        "sha256": "83302fc5e4a870565821ac2668dcc0150b1fd972a0e88d7a553a393df7568d3e",
-        "bytes": 62414,
-        "content_type": "application/yaml",
-        "retrieval_method": "http",
-        "representation": "machine-readable-spec"
-      },
-      {
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml",
-        "sha256": "58e231ca118eadf26eab21a9f819e63eec0ecb994409a60a2dfef3ce72449849",
-        "bytes": 51063,
-        "content_type": "application/yaml",
-        "retrieval_method": "http",
-        "representation": "machine-readable-spec"
-      },
-      {
-        "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml",
-        "sha256": "611c6959db8d653f54ad4f9536009d77754e5ba42d58a4c6d6fe61453fbf7f59",
-        "bytes": 44094,
-        "content_type": "application/yaml",
-        "retrieval_method": "http",
-        "representation": "machine-readable-spec"
-      },
-      {
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml",
-        "sha256": "bc197ebb855cf19c3261685045046459ae7b45ee339768cf577637fd7b37eed4",
-        "bytes": 42427,
-        "content_type": "application/yaml",
-        "retrieval_method": "http",
-        "representation": "machine-readable-spec"
-      },
-      {
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml",
-        "sha256": "e93b1cd07aaf86d8f5191bf6fafc825aa37bd86e0af6d4d48c0af6c870d19dbf",
-        "bytes": 67534,
-        "content_type": "application/yaml",
-        "retrieval_method": "http",
-        "representation": "machine-readable-spec"
-      },
-      {
-        "source_url": "https://developer.brex.com/_bundle/openapi/accounting_api.yaml",
-        "sha256": "19746ae84d48a83212bdb4c6c12897d0d01180d9b18b85e106eff7d175ac2770",
-        "bytes": 49430,
-        "content_type": "application/yaml",
-        "retrieval_method": "http",
-        "representation": "machine-readable-spec"
-      },
-      {
-        "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml",
-        "sha256": "b1ba15754f284029471b20e01facabbbb72f27d8db1427a49ad2670fefa03725",
-        "bytes": 30120,
-        "content_type": "application/yaml",
-        "retrieval_method": "http",
-        "representation": "machine-readable-spec"
-      },
-      {
-        "source_url": "https://developer.brex.com/_bundle/openapi/onboarding_api.yaml",
-        "sha256": "9a5329a23c39d456ce39c5a16cdedc6ae6f8a6b4e65d06b060c4fe23c509ef2c",
-        "bytes": 22441,
-        "content_type": "application/yaml",
-        "retrieval_method": "http",
-        "representation": "machine-readable-spec"
-      },
-      {
-        "source_url": "https://developer.brex.com/_bundle/openapi/travel_api.yaml",
-        "sha256": "3392373807f9945af10238f17b7b0b70b688dc30b87adc18cce58331590d65cc",
-        "bytes": 59539,
-        "content_type": "application/yaml",
-        "retrieval_method": "http",
-        "representation": "machine-readable-spec"
-      }
-    ],
-    "source_bundle": {
-      "document_count": 10,
-      "sha256": "5eae56f98995d4e966df4e3c61a42361bb0763012b414f650e1b324d24eb504a",
-      "bytes": 449545
-    },
-    "counts": {
-      "total": 108,
-      "by_method": {
-        "DELETE": 5,
-        "GET": 59,
-        "POST": 34,
-        "PUT": 10
-      },
-      "by_kind": {
-        "rest": 108
-      }
-    },
+    "retrieval": "preserved issue-4292 public capture via http",
+    "openapi": [],
     "coverage_confidence": {
       "level": "machine-readable",
       "basis": "Brex publishes this complete per-product OpenAPI bundle at developer.brex.com; every HTTP path item in all ten current product documents is extracted."
     },
-    "operations": [
-      {
-        "id": "brex.rest.addwebhookgroupmembers-source-5",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/webhooks/groups/{id}/add_members",
-        "operation_id": "addWebhookGroupMembers",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks/groups/{id}/add_members\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
-      },
-      {
-        "id": "brex.rest.archivebudget-source-6",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/budgets/{id}/archive",
-        "operation_id": "archiveBudget",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/budgets/{id}/archive\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.archivespendbudget-source-6",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/budgets/{id}/archive",
-        "operation_id": "archiveSpendBudget",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/budgets/{id}/archive\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.archivespendlimit-source-6",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/spend_limits/{id}/archive",
-        "operation_id": "archiveSpendLimit",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/spend_limits/{id}/archive\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.createbudget-source-6",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/budgets",
-        "operation_id": "createBudget",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/budgets\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.createcard-source-3",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/cards",
-        "operation_id": "createCard",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/cards\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.createdepartment-source-3",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/departments",
-        "operation_id": "createDepartment",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/departments\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.createdocument-source-9",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/referrals/{id}/document_upload",
-        "operation_id": "createDocument",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/referrals/{id}/document_upload\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/onboarding_api.yaml"
-      },
-      {
-        "id": "brex.rest.createfield-source-8",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/fields",
-        "operation_id": "createField",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/fields\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml"
-      },
-      {
-        "id": "brex.rest.createfieldvalues-source-8",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/fields/{field_id}/values",
-        "operation_id": "createFieldValues",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/fields/{field_id}/values\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml"
-      },
-      {
-        "id": "brex.rest.createincomingtransfer-source-4",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/incoming_transfers",
-        "operation_id": "createIncomingTransfer",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/incoming_transfers\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml"
-      },
-      {
-        "id": "brex.rest.createintegration-source-7",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v3/accounting/integration",
-        "operation_id": "createIntegration",
-        "deprecated": false,
-        "source_location": "paths[\"/v3/accounting/integration\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/accounting_api.yaml"
-      },
-      {
-        "id": "brex.rest.createlocation-source-3",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/locations",
-        "operation_id": "createLocation",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/locations\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.createreferralrequest-source-9",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/referrals",
-        "operation_id": "createReferralRequest",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/referrals\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/onboarding_api.yaml"
-      },
-      {
-        "id": "brex.rest.createspendbudget-source-6",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/budgets",
-        "operation_id": "createSpendBudget",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/budgets\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.createspendlimit-source-6",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/spend_limits",
-        "operation_id": "createSpendLimit",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/spend_limits\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.createtitle-source-3",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/titles",
-        "operation_id": "createTitle",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/titles\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.createtransfer-source-4",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/transfers",
-        "operation_id": "createTransfer",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/transfers\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml"
-      },
-      {
-        "id": "brex.rest.createuser-source-3",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/users",
-        "operation_id": "createUser",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/users\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.createvendor-source-4",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/vendors",
-        "operation_id": "createVendor",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/vendors\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml"
-      },
-      {
-        "id": "brex.rest.createwebhookgroup-source-5",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/webhooks/groups",
-        "operation_id": "createWebhookGroup",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks/groups\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
-      },
-      {
-        "id": "brex.rest.createwebhooksubscription-source-5",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/webhooks",
-        "operation_id": "createWebhookSubscription",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
-      },
-      {
-        "id": "brex.rest.deletefield-source-8",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v1/fields/{id}",
-        "operation_id": "deleteField",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/fields/{id}\"].delete",
-        "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml"
-      },
-      {
-        "id": "brex.rest.deletefieldvalues-source-8",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v1/fields/{field_id}/values",
-        "operation_id": "deleteFieldValues",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/fields/{field_id}/values\"].delete",
-        "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml"
-      },
-      {
-        "id": "brex.rest.deletevendor-source-4",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v1/vendors/{id}",
-        "operation_id": "deleteVendor",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/vendors/{id}\"].delete",
-        "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml"
-      },
-      {
-        "id": "brex.rest.deletewebhookgroup-source-5",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v1/webhooks/groups/{id}",
-        "operation_id": "deleteWebhookGroup",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks/groups/{id}\"].delete",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
-      },
-      {
-        "id": "brex.rest.deletewebhooksubscription-source-5",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/v1/webhooks/{id}",
-        "operation_id": "deleteWebhookSubscription",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks/{id}\"].delete",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
-      },
-      {
-        "id": "brex.rest.disconnectintegration-source-7",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v3/accounting/integration/{integration_id}/disconnect",
-        "operation_id": "disconnectIntegration",
-        "deprecated": false,
-        "source_location": "paths[\"/v3/accounting/integration/{integration_id}/disconnect\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/accounting_api.yaml"
-      },
-      {
-        "id": "brex.rest.emailcardnumber-source-3",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/cards/{id}/secure_email",
-        "operation_id": "emailCardNumber",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/cards/{id}/secure_email\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.getaccount-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/accounts/cash/{id}",
-        "operation_id": "getAccount",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/accounts/cash/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml"
-      },
-      {
-        "id": "brex.rest.getaccountingrecord-source-7",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v3/accounting/records/{record_id}",
-        "operation_id": "getAccountingRecord",
-        "deprecated": false,
-        "source_location": "paths[\"/v3/accounting/records/{record_id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/accounting_api.yaml"
-      },
-      {
-        "id": "brex.rest.getbooking-source-10",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/trips/{trip_id}/bookings/{booking_id}",
-        "operation_id": "getBooking",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/trips/{trip_id}/bookings/{booking_id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/travel_api.yaml"
-      },
-      {
-        "id": "brex.rest.getbudgetbyid-source-6",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/budgets/{id}",
-        "operation_id": "getBudgetById",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/budgets/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.getbudgetprogrambyid-source-6",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/budget_programs/{id}",
-        "operation_id": "getBudgetProgramById",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/budget_programs/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.getcardbyid-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/cards/{id}",
-        "operation_id": "getCardById",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/cards/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.getcardexpense-source-2",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/expenses/card/{expense_id}",
-        "operation_id": "getCardExpense",
-        "deprecated": true,
-        "source_location": "paths[\"/v1/expenses/card/{expense_id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/expenses_api.yaml"
-      },
-      {
-        "id": "brex.rest.getcardnumber-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/cards/{id}/pan",
-        "operation_id": "getCardNumber",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/cards/{id}/pan\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.getcompany-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/company",
-        "operation_id": "getCompany",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/company\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.getdepartmentbyid-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/departments/{id}",
-        "operation_id": "getDepartmentById",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/departments/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.getexpense-source-2",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/expenses/{id}",
-        "operation_id": "getExpense",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/expenses/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/expenses_api.yaml"
-      },
-      {
-        "id": "brex.rest.getfieldbyid-source-8",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/fields/{id}",
-        "operation_id": "getFieldById",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/fields/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml"
-      },
-      {
-        "id": "brex.rest.getfieldvaluebyid-source-8",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/fields/{field_id}/values/{brex_id}",
-        "operation_id": "getFieldValueById",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/fields/{field_id}/values/{brex_id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml"
-      },
-      {
-        "id": "brex.rest.getlegalentity-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/legal_entities/{id}",
-        "operation_id": "getLegalEntity",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/legal_entities/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.getlocationbyid-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/locations/{id}",
-        "operation_id": "getLocationById",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/locations/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.getme-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/users/me",
-        "operation_id": "getMe",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/users/me\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.getprimaryaccount-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/accounts/cash/primary",
-        "operation_id": "getPrimaryAccount",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/accounts/cash/primary\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml"
-      },
-      {
-        "id": "brex.rest.getreferral-source-9",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/referrals/{id}",
-        "operation_id": "getReferral",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/referrals/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/onboarding_api.yaml"
-      },
-      {
-        "id": "brex.rest.getspendbudgetbyid-source-6",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/budgets/{id}",
-        "operation_id": "getSpendBudgetById",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/budgets/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.getspendlimitbyid-source-6",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/spend_limits/{id}",
-        "operation_id": "getSpendLimitById",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/spend_limits/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.gettitlebyid-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/titles/{id}",
-        "operation_id": "getTitleById",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/titles/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.gettransfersbyid-source-4",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/transfers/{id}",
-        "operation_id": "getTransfersById",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/transfers/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml"
-      },
-      {
-        "id": "brex.rest.gettrip-source-10",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/trips/{trip_id}",
-        "operation_id": "getTrip",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/trips/{trip_id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/travel_api.yaml"
-      },
-      {
-        "id": "brex.rest.getuserbyid-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/users/{id}",
-        "operation_id": "getUserById",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/users/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.getuserlimit-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/users/{id}/limit",
-        "operation_id": "getUserLimit",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/users/{id}/limit\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.getvendorbyid-source-4",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/vendors/{id}",
-        "operation_id": "getVendorById",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/vendors/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml"
-      },
-      {
-        "id": "brex.rest.getwebhookgroup-source-5",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/webhooks/groups/{id}",
-        "operation_id": "getWebhookGroup",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks/groups/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
-      },
-      {
-        "id": "brex.rest.getwebhooksubscription-source-5",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/webhooks/{id}",
-        "operation_id": "getWebhookSubscription",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
-      },
-      {
-        "id": "brex.rest.listaccounts-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/accounts/cash",
-        "operation_id": "listAccounts",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/accounts/cash\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml"
-      },
-      {
-        "id": "brex.rest.listbudgetprograms-source-6",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/budget_programs",
-        "operation_id": "listBudgetPrograms",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/budget_programs\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.listbudgets-source-6",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/budgets",
-        "operation_id": "listBudgets",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/budgets\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.listcardaccounts-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/accounts/card",
-        "operation_id": "listCardAccounts",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/accounts/card\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml"
-      },
-      {
-        "id": "brex.rest.listcardsbyuserid-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/cards",
-        "operation_id": "listCardsByUserId",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/cards\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.listcashstatements-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/accounts/cash/{id}/statements",
-        "operation_id": "listCashStatements",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/accounts/cash/{id}/statements\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml"
-      },
-      {
-        "id": "brex.rest.listcashtransactions-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/transactions/cash/{id}",
-        "operation_id": "listCashTransactions",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/transactions/cash/{id}\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml"
-      },
-      {
-        "id": "brex.rest.listdepartments-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/departments",
-        "operation_id": "listDepartments",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/departments\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.listexpenses-1-source-2",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/expenses/card",
-        "operation_id": "listExpenses_1",
-        "deprecated": true,
-        "source_location": "paths[\"/v1/expenses/card\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/expenses_api.yaml"
-      },
-      {
-        "id": "brex.rest.listexpenses-source-2",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/expenses",
-        "operation_id": "listExpenses",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/expenses\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/expenses_api.yaml"
-      },
-      {
-        "id": "brex.rest.listfields-source-8",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/fields",
-        "operation_id": "listFields",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/fields\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml"
-      },
-      {
-        "id": "brex.rest.listfieldvalues-source-8",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/fields/{field_id}/values",
-        "operation_id": "listFieldValues",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/fields/{field_id}/values\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml"
-      },
-      {
-        "id": "brex.rest.listlegalentities-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/legal_entities",
-        "operation_id": "listLegalEntities",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/legal_entities\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.listlinkedaccounts-source-4",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/linked_accounts",
-        "operation_id": "listLinkedAccounts",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/linked_accounts\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml"
-      },
-      {
-        "id": "brex.rest.listlocations-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/locations",
-        "operation_id": "listLocations",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/locations\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.listprimarycardstatements-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/accounts/card/primary/statements",
-        "operation_id": "listPrimaryCardStatements",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/accounts/card/primary/statements\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml"
-      },
-      {
-        "id": "brex.rest.listprimarycardtransactions-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/transactions/card/primary",
-        "operation_id": "listPrimaryCardTransactions",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/transactions/card/primary\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml"
-      },
-      {
-        "id": "brex.rest.listreferrals-source-9",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/referrals",
-        "operation_id": "listReferrals",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/referrals\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/onboarding_api.yaml"
-      },
-      {
-        "id": "brex.rest.listspendbudgets-source-6",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/budgets",
-        "operation_id": "listSpendBudgets",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/budgets\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.listspendlimits-source-6",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/spend_limits",
-        "operation_id": "listSpendLimits",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/spend_limits\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.listtitles-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/titles",
-        "operation_id": "listTitles",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/titles\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.listtransfers-source-4",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/transfers",
-        "operation_id": "listTransfers",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/transfers\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml"
-      },
-      {
-        "id": "brex.rest.listtripbookings-source-10",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/trips/{trip_id}/bookings",
-        "operation_id": "listTripBookings",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/trips/{trip_id}/bookings\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/travel_api.yaml"
-      },
-      {
-        "id": "brex.rest.listtrips-source-10",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/trips",
-        "operation_id": "listTrips",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/trips\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/travel_api.yaml"
-      },
-      {
-        "id": "brex.rest.listusers-source-3",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v2/users",
-        "operation_id": "listUsers",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/users\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.listvendors-source-4",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/vendors",
-        "operation_id": "listVendors",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/vendors\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml"
-      },
-      {
-        "id": "brex.rest.listwebhookgroupmembers-source-5",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/webhooks/groups/{id}/members",
-        "operation_id": "listWebhookGroupMembers",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks/groups/{id}/members\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
-      },
-      {
-        "id": "brex.rest.listwebhookgroups-source-5",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/webhooks/groups",
-        "operation_id": "listWebhookGroups",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks/groups\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
-      },
-      {
-        "id": "brex.rest.listwebhooksecrets-source-5",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/webhooks/secrets",
-        "operation_id": "listWebhookSecrets",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks/secrets\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
-      },
-      {
-        "id": "brex.rest.listwebhooksubscriptions-source-5",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v1/webhooks",
-        "operation_id": "listWebhookSubscriptions",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
-      },
-      {
-        "id": "brex.rest.lockcard-source-3",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/cards/{id}/lock",
-        "operation_id": "lockCard",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/cards/{id}/lock\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.processdelayedeindocument-source-9",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/referrals/{id}/process_ein_document",
-        "operation_id": "processDelayedEINDocument",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/referrals/{id}/process_ein_document\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/onboarding_api.yaml"
-      },
-      {
-        "id": "brex.rest.queryaccountingrecords-source-7",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/v3/accounting/records",
-        "operation_id": "queryAccountingRecords",
-        "deprecated": false,
-        "source_location": "paths[\"/v3/accounting/records\"].get",
-        "source_url": "https://developer.brex.com/_bundle/openapi/accounting_api.yaml"
-      },
-      {
-        "id": "brex.rest.reactivateintegration-source-7",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v3/accounting/integration/{integration_id}/reactivate",
-        "operation_id": "reactivateIntegration",
-        "deprecated": false,
-        "source_location": "paths[\"/v3/accounting/integration/{integration_id}/reactivate\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/accounting_api.yaml"
-      },
-      {
-        "id": "brex.rest.receiptmatch-source-2",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/expenses/card/receipt_match",
-        "operation_id": "receiptMatch",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/expenses/card/receipt_match\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/expenses_api.yaml"
-      },
-      {
-        "id": "brex.rest.receiptupload-source-2",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/expenses/card/{expense_id}/receipt_upload",
-        "operation_id": "receiptUpload",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/expenses/card/{expense_id}/receipt_upload\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/expenses_api.yaml"
-      },
-      {
-        "id": "brex.rest.removewebhookgroupmembers-source-5",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v1/webhooks/groups/{id}/remove_members",
-        "operation_id": "removeWebhookGroupMembers",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks/groups/{id}/remove_members\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
-      },
-      {
-        "id": "brex.rest.reportaccountingexportresults-source-7",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v3/accounting/records/export-results",
-        "operation_id": "reportAccountingExportResults",
-        "deprecated": false,
-        "source_location": "paths[\"/v3/accounting/records/export-results\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/accounting_api.yaml"
-      },
-      {
-        "id": "brex.rest.setuserlimit-source-3",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/users/{id}/limit",
-        "operation_id": "setUserLimit",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/users/{id}/limit\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.terminatecard-source-3",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/cards/{id}/terminate",
-        "operation_id": "terminateCard",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/cards/{id}/terminate\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.unlockcard-source-3",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/v2/cards/{id}/unlock",
-        "operation_id": "unlockCard",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/cards/{id}/unlock\"].post",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.updatebudget-source-6",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v1/budgets/{id}",
-        "operation_id": "updateBudget",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/budgets/{id}\"].put",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.updatecard-source-3",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/cards/{id}",
-        "operation_id": "updateCard",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/cards/{id}\"].put",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.updateexpense-source-2",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v1/expenses/card/{expense_id}",
-        "operation_id": "updateExpense",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/expenses/card/{expense_id}\"].put",
-        "source_url": "https://developer.brex.com/_bundle/openapi/expenses_api.yaml"
-      },
-      {
-        "id": "brex.rest.updatefield-source-8",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v1/fields/{id}",
-        "operation_id": "updateField",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/fields/{id}\"].put",
-        "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml"
-      },
-      {
-        "id": "brex.rest.updatefieldvalues-source-8",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v1/fields/{field_id}/values",
-        "operation_id": "updateFieldValues",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/fields/{field_id}/values\"].put",
-        "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml"
-      },
-      {
-        "id": "brex.rest.updatespendbudget-source-6",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/budgets/{id}",
-        "operation_id": "updateSpendBudget",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/budgets/{id}\"].put",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.updatespendlimit-source-6",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/spend_limits/{id}",
-        "operation_id": "updateSpendLimit",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/spend_limits/{id}\"].put",
-        "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml"
-      },
-      {
-        "id": "brex.rest.updateuser-source-3",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v2/users/{id}",
-        "operation_id": "updateUser",
-        "deprecated": false,
-        "source_location": "paths[\"/v2/users/{id}\"].put",
-        "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml"
-      },
-      {
-        "id": "brex.rest.updatevendor-source-4",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v1/vendors/{id}",
-        "operation_id": "updateVendor",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/vendors/{id}\"].put",
-        "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml"
-      },
-      {
-        "id": "brex.rest.updatewebhooksubscription-source-5",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/v1/webhooks/{id}",
-        "operation_id": "updateWebhookSubscription",
-        "deprecated": false,
-        "source_location": "paths[\"/v1/webhooks/{id}\"].put",
-        "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml"
+    "source_documents": [
+      {
+        "id": "document-0001",
+        "artifact": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml",
+          "sha256": "1fa24713033c1228ca0495ddeec5b7270cfb177703e3230eaa68df589446b5fc",
+          "bytes": 20483
+        },
+        "published_source": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml",
+          "capture_url": "https://developer.brex.com/_bundle/openapi/transactions_api.yaml",
+          "sha256": "1fa24713033c1228ca0495ddeec5b7270cfb177703e3230eaa68df589446b5fc",
+          "bytes": 20483,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "brex.rest.getaccount-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/accounts/cash/{id}",
+            "operation_id": "getAccount",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/accounts/cash/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getprimaryaccount-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/accounts/cash/primary",
+            "operation_id": "getPrimaryAccount",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/accounts/cash/primary\"].get"
+          },
+          {
+            "id": "brex.rest.listaccounts-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/accounts/cash",
+            "operation_id": "listAccounts",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/accounts/cash\"].get"
+          },
+          {
+            "id": "brex.rest.listcardaccounts-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/accounts/card",
+            "operation_id": "listCardAccounts",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/accounts/card\"].get"
+          },
+          {
+            "id": "brex.rest.listcashstatements-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/accounts/cash/{id}/statements",
+            "operation_id": "listCashStatements",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/accounts/cash/{id}/statements\"].get"
+          },
+          {
+            "id": "brex.rest.listcashtransactions-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/transactions/cash/{id}",
+            "operation_id": "listCashTransactions",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/transactions/cash/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.listprimarycardstatements-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/accounts/card/primary/statements",
+            "operation_id": "listPrimaryCardStatements",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/accounts/card/primary/statements\"].get"
+          },
+          {
+            "id": "brex.rest.listprimarycardtransactions-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/transactions/card/primary",
+            "operation_id": "listPrimaryCardTransactions",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/transactions/card/primary\"].get"
+          }
+        ]
+      },
+      {
+        "id": "document-0002",
+        "artifact": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/expenses_api.yaml",
+          "sha256": "83302fc5e4a870565821ac2668dcc0150b1fd972a0e88d7a553a393df7568d3e",
+          "bytes": 62414
+        },
+        "published_source": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/expenses_api.yaml",
+          "capture_url": "https://developer.brex.com/_bundle/openapi/expenses_api.yaml",
+          "sha256": "83302fc5e4a870565821ac2668dcc0150b1fd972a0e88d7a553a393df7568d3e",
+          "bytes": 62414,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "brex.rest.getcardexpense-source-2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/expenses/card/{expense_id}",
+            "operation_id": "getCardExpense",
+            "deprecated": true,
+            "source_location": "paths[\"/v1/expenses/card/{expense_id}\"].get"
+          },
+          {
+            "id": "brex.rest.getexpense-source-2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/expenses/{id}",
+            "operation_id": "getExpense",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/expenses/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.listexpenses-1-source-2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/expenses/card",
+            "operation_id": "listExpenses_1",
+            "deprecated": true,
+            "source_location": "paths[\"/v1/expenses/card\"].get"
+          },
+          {
+            "id": "brex.rest.listexpenses-source-2",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/expenses",
+            "operation_id": "listExpenses",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/expenses\"].get"
+          },
+          {
+            "id": "brex.rest.receiptmatch-source-2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/expenses/card/receipt_match",
+            "operation_id": "receiptMatch",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/expenses/card/receipt_match\"].post"
+          },
+          {
+            "id": "brex.rest.receiptupload-source-2",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/expenses/card/{expense_id}/receipt_upload",
+            "operation_id": "receiptUpload",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/expenses/card/{expense_id}/receipt_upload\"].post"
+          },
+          {
+            "id": "brex.rest.updateexpense-source-2",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/expenses/card/{expense_id}",
+            "operation_id": "updateExpense",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/expenses/card/{expense_id}\"].put"
+          }
+        ]
+      },
+      {
+        "id": "document-0003",
+        "artifact": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml",
+          "sha256": "58e231ca118eadf26eab21a9f819e63eec0ecb994409a60a2dfef3ce72449849",
+          "bytes": 51063
+        },
+        "published_source": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml",
+          "capture_url": "https://developer.brex.com/_bundle/openapi/team_api.yaml",
+          "sha256": "58e231ca118eadf26eab21a9f819e63eec0ecb994409a60a2dfef3ce72449849",
+          "bytes": 51063,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "brex.rest.createcard-source-3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/cards",
+            "operation_id": "createCard",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/cards\"].post"
+          },
+          {
+            "id": "brex.rest.createdepartment-source-3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/departments",
+            "operation_id": "createDepartment",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/departments\"].post"
+          },
+          {
+            "id": "brex.rest.createlocation-source-3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/locations",
+            "operation_id": "createLocation",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/locations\"].post"
+          },
+          {
+            "id": "brex.rest.createtitle-source-3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/titles",
+            "operation_id": "createTitle",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/titles\"].post"
+          },
+          {
+            "id": "brex.rest.createuser-source-3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/users",
+            "operation_id": "createUser",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/users\"].post"
+          },
+          {
+            "id": "brex.rest.emailcardnumber-source-3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/cards/{id}/secure_email",
+            "operation_id": "emailCardNumber",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/cards/{id}/secure_email\"].post"
+          },
+          {
+            "id": "brex.rest.getcardbyid-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/cards/{id}",
+            "operation_id": "getCardById",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/cards/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getcardnumber-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/cards/{id}/pan",
+            "operation_id": "getCardNumber",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/cards/{id}/pan\"].get"
+          },
+          {
+            "id": "brex.rest.getcompany-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/company",
+            "operation_id": "getCompany",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/company\"].get"
+          },
+          {
+            "id": "brex.rest.getdepartmentbyid-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/departments/{id}",
+            "operation_id": "getDepartmentById",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/departments/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getlegalentity-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/legal_entities/{id}",
+            "operation_id": "getLegalEntity",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/legal_entities/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getlocationbyid-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/locations/{id}",
+            "operation_id": "getLocationById",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/locations/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getme-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/users/me",
+            "operation_id": "getMe",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/users/me\"].get"
+          },
+          {
+            "id": "brex.rest.gettitlebyid-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/titles/{id}",
+            "operation_id": "getTitleById",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/titles/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getuserbyid-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/users/{id}",
+            "operation_id": "getUserById",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/users/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getuserlimit-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/users/{id}/limit",
+            "operation_id": "getUserLimit",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/users/{id}/limit\"].get"
+          },
+          {
+            "id": "brex.rest.listcardsbyuserid-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/cards",
+            "operation_id": "listCardsByUserId",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/cards\"].get"
+          },
+          {
+            "id": "brex.rest.listdepartments-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/departments",
+            "operation_id": "listDepartments",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/departments\"].get"
+          },
+          {
+            "id": "brex.rest.listlegalentities-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/legal_entities",
+            "operation_id": "listLegalEntities",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/legal_entities\"].get"
+          },
+          {
+            "id": "brex.rest.listlocations-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/locations",
+            "operation_id": "listLocations",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/locations\"].get"
+          },
+          {
+            "id": "brex.rest.listtitles-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/titles",
+            "operation_id": "listTitles",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/titles\"].get"
+          },
+          {
+            "id": "brex.rest.listusers-source-3",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/users",
+            "operation_id": "listUsers",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/users\"].get"
+          },
+          {
+            "id": "brex.rest.lockcard-source-3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/cards/{id}/lock",
+            "operation_id": "lockCard",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/cards/{id}/lock\"].post"
+          },
+          {
+            "id": "brex.rest.setuserlimit-source-3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/users/{id}/limit",
+            "operation_id": "setUserLimit",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/users/{id}/limit\"].post"
+          },
+          {
+            "id": "brex.rest.terminatecard-source-3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/cards/{id}/terminate",
+            "operation_id": "terminateCard",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/cards/{id}/terminate\"].post"
+          },
+          {
+            "id": "brex.rest.unlockcard-source-3",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/cards/{id}/unlock",
+            "operation_id": "unlockCard",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/cards/{id}/unlock\"].post"
+          },
+          {
+            "id": "brex.rest.updatecard-source-3",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/cards/{id}",
+            "operation_id": "updateCard",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/cards/{id}\"].put"
+          },
+          {
+            "id": "brex.rest.updateuser-source-3",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/users/{id}",
+            "operation_id": "updateUser",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/users/{id}\"].put"
+          }
+        ]
+      },
+      {
+        "id": "document-0004",
+        "artifact": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml",
+          "sha256": "611c6959db8d653f54ad4f9536009d77754e5ba42d58a4c6d6fe61453fbf7f59",
+          "bytes": 44094
+        },
+        "published_source": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml",
+          "capture_url": "https://developer.brex.com/_bundle/openapi/payments_api.yaml",
+          "sha256": "611c6959db8d653f54ad4f9536009d77754e5ba42d58a4c6d6fe61453fbf7f59",
+          "bytes": 44094,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "brex.rest.createincomingtransfer-source-4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/incoming_transfers",
+            "operation_id": "createIncomingTransfer",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/incoming_transfers\"].post"
+          },
+          {
+            "id": "brex.rest.createtransfer-source-4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/transfers",
+            "operation_id": "createTransfer",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/transfers\"].post"
+          },
+          {
+            "id": "brex.rest.createvendor-source-4",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/vendors",
+            "operation_id": "createVendor",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/vendors\"].post"
+          },
+          {
+            "id": "brex.rest.deletevendor-source-4",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/vendors/{id}",
+            "operation_id": "deleteVendor",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/vendors/{id}\"].delete"
+          },
+          {
+            "id": "brex.rest.gettransfersbyid-source-4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/transfers/{id}",
+            "operation_id": "getTransfersById",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/transfers/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getvendorbyid-source-4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/vendors/{id}",
+            "operation_id": "getVendorById",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/vendors/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.listlinkedaccounts-source-4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/linked_accounts",
+            "operation_id": "listLinkedAccounts",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/linked_accounts\"].get"
+          },
+          {
+            "id": "brex.rest.listtransfers-source-4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/transfers",
+            "operation_id": "listTransfers",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/transfers\"].get"
+          },
+          {
+            "id": "brex.rest.listvendors-source-4",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/vendors",
+            "operation_id": "listVendors",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/vendors\"].get"
+          },
+          {
+            "id": "brex.rest.updatevendor-source-4",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/vendors/{id}",
+            "operation_id": "updateVendor",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/vendors/{id}\"].put"
+          }
+        ]
+      },
+      {
+        "id": "document-0005",
+        "artifact": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml",
+          "sha256": "bc197ebb855cf19c3261685045046459ae7b45ee339768cf577637fd7b37eed4",
+          "bytes": 42427
+        },
+        "published_source": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml",
+          "capture_url": "https://developer.brex.com/_bundle/openapi/webhooks_api.yaml",
+          "sha256": "bc197ebb855cf19c3261685045046459ae7b45ee339768cf577637fd7b37eed4",
+          "bytes": 42427,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "brex.rest.addwebhookgroupmembers-source-5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/webhooks/groups/{id}/add_members",
+            "operation_id": "addWebhookGroupMembers",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks/groups/{id}/add_members\"].post"
+          },
+          {
+            "id": "brex.rest.createwebhookgroup-source-5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/webhooks/groups",
+            "operation_id": "createWebhookGroup",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks/groups\"].post"
+          },
+          {
+            "id": "brex.rest.createwebhooksubscription-source-5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/webhooks",
+            "operation_id": "createWebhookSubscription",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks\"].post"
+          },
+          {
+            "id": "brex.rest.deletewebhookgroup-source-5",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/webhooks/groups/{id}",
+            "operation_id": "deleteWebhookGroup",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks/groups/{id}\"].delete"
+          },
+          {
+            "id": "brex.rest.deletewebhooksubscription-source-5",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/webhooks/{id}",
+            "operation_id": "deleteWebhookSubscription",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks/{id}\"].delete"
+          },
+          {
+            "id": "brex.rest.getwebhookgroup-source-5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/webhooks/groups/{id}",
+            "operation_id": "getWebhookGroup",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks/groups/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getwebhooksubscription-source-5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/webhooks/{id}",
+            "operation_id": "getWebhookSubscription",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.listwebhookgroupmembers-source-5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/webhooks/groups/{id}/members",
+            "operation_id": "listWebhookGroupMembers",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks/groups/{id}/members\"].get"
+          },
+          {
+            "id": "brex.rest.listwebhookgroups-source-5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/webhooks/groups",
+            "operation_id": "listWebhookGroups",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks/groups\"].get"
+          },
+          {
+            "id": "brex.rest.listwebhooksecrets-source-5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/webhooks/secrets",
+            "operation_id": "listWebhookSecrets",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks/secrets\"].get"
+          },
+          {
+            "id": "brex.rest.listwebhooksubscriptions-source-5",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/webhooks",
+            "operation_id": "listWebhookSubscriptions",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks\"].get"
+          },
+          {
+            "id": "brex.rest.removewebhookgroupmembers-source-5",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/webhooks/groups/{id}/remove_members",
+            "operation_id": "removeWebhookGroupMembers",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks/groups/{id}/remove_members\"].post"
+          },
+          {
+            "id": "brex.rest.updatewebhooksubscription-source-5",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/webhooks/{id}",
+            "operation_id": "updateWebhookSubscription",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/webhooks/{id}\"].put"
+          }
+        ]
+      },
+      {
+        "id": "document-0006",
+        "artifact": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml",
+          "sha256": "e93b1cd07aaf86d8f5191bf6fafc825aa37bd86e0af6d4d48c0af6c870d19dbf",
+          "bytes": 67534
+        },
+        "published_source": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml",
+          "capture_url": "https://developer.brex.com/_bundle/openapi/budgets_api.yaml",
+          "sha256": "e93b1cd07aaf86d8f5191bf6fafc825aa37bd86e0af6d4d48c0af6c870d19dbf",
+          "bytes": 67534,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "brex.rest.archivebudget-source-6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/budgets/{id}/archive",
+            "operation_id": "archiveBudget",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/budgets/{id}/archive\"].post"
+          },
+          {
+            "id": "brex.rest.archivespendbudget-source-6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/budgets/{id}/archive",
+            "operation_id": "archiveSpendBudget",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/budgets/{id}/archive\"].post"
+          },
+          {
+            "id": "brex.rest.archivespendlimit-source-6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/spend_limits/{id}/archive",
+            "operation_id": "archiveSpendLimit",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/spend_limits/{id}/archive\"].post"
+          },
+          {
+            "id": "brex.rest.createbudget-source-6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/budgets",
+            "operation_id": "createBudget",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/budgets\"].post"
+          },
+          {
+            "id": "brex.rest.createspendbudget-source-6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/budgets",
+            "operation_id": "createSpendBudget",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/budgets\"].post"
+          },
+          {
+            "id": "brex.rest.createspendlimit-source-6",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v2/spend_limits",
+            "operation_id": "createSpendLimit",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/spend_limits\"].post"
+          },
+          {
+            "id": "brex.rest.getbudgetbyid-source-6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/budgets/{id}",
+            "operation_id": "getBudgetById",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/budgets/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getbudgetprogrambyid-source-6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/budget_programs/{id}",
+            "operation_id": "getBudgetProgramById",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/budget_programs/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getspendbudgetbyid-source-6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/budgets/{id}",
+            "operation_id": "getSpendBudgetById",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/budgets/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getspendlimitbyid-source-6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/spend_limits/{id}",
+            "operation_id": "getSpendLimitById",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/spend_limits/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.listbudgetprograms-source-6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/budget_programs",
+            "operation_id": "listBudgetPrograms",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/budget_programs\"].get"
+          },
+          {
+            "id": "brex.rest.listbudgets-source-6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/budgets",
+            "operation_id": "listBudgets",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/budgets\"].get"
+          },
+          {
+            "id": "brex.rest.listspendbudgets-source-6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/budgets",
+            "operation_id": "listSpendBudgets",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/budgets\"].get"
+          },
+          {
+            "id": "brex.rest.listspendlimits-source-6",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v2/spend_limits",
+            "operation_id": "listSpendLimits",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/spend_limits\"].get"
+          },
+          {
+            "id": "brex.rest.updatebudget-source-6",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/budgets/{id}",
+            "operation_id": "updateBudget",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/budgets/{id}\"].put"
+          },
+          {
+            "id": "brex.rest.updatespendbudget-source-6",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/budgets/{id}",
+            "operation_id": "updateSpendBudget",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/budgets/{id}\"].put"
+          },
+          {
+            "id": "brex.rest.updatespendlimit-source-6",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v2/spend_limits/{id}",
+            "operation_id": "updateSpendLimit",
+            "deprecated": false,
+            "source_location": "paths[\"/v2/spend_limits/{id}\"].put"
+          }
+        ]
+      },
+      {
+        "id": "document-0007",
+        "artifact": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/accounting_api.yaml",
+          "sha256": "19746ae84d48a83212bdb4c6c12897d0d01180d9b18b85e106eff7d175ac2770",
+          "bytes": 49430
+        },
+        "published_source": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/accounting_api.yaml",
+          "capture_url": "https://developer.brex.com/_bundle/openapi/accounting_api.yaml",
+          "sha256": "19746ae84d48a83212bdb4c6c12897d0d01180d9b18b85e106eff7d175ac2770",
+          "bytes": 49430,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "brex.rest.createintegration-source-7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v3/accounting/integration",
+            "operation_id": "createIntegration",
+            "deprecated": false,
+            "source_location": "paths[\"/v3/accounting/integration\"].post"
+          },
+          {
+            "id": "brex.rest.disconnectintegration-source-7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v3/accounting/integration/{integration_id}/disconnect",
+            "operation_id": "disconnectIntegration",
+            "deprecated": false,
+            "source_location": "paths[\"/v3/accounting/integration/{integration_id}/disconnect\"].post"
+          },
+          {
+            "id": "brex.rest.getaccountingrecord-source-7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v3/accounting/records/{record_id}",
+            "operation_id": "getAccountingRecord",
+            "deprecated": false,
+            "source_location": "paths[\"/v3/accounting/records/{record_id}\"].get"
+          },
+          {
+            "id": "brex.rest.queryaccountingrecords-source-7",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v3/accounting/records",
+            "operation_id": "queryAccountingRecords",
+            "deprecated": false,
+            "source_location": "paths[\"/v3/accounting/records\"].get"
+          },
+          {
+            "id": "brex.rest.reactivateintegration-source-7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v3/accounting/integration/{integration_id}/reactivate",
+            "operation_id": "reactivateIntegration",
+            "deprecated": false,
+            "source_location": "paths[\"/v3/accounting/integration/{integration_id}/reactivate\"].post"
+          },
+          {
+            "id": "brex.rest.reportaccountingexportresults-source-7",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v3/accounting/records/export-results",
+            "operation_id": "reportAccountingExportResults",
+            "deprecated": false,
+            "source_location": "paths[\"/v3/accounting/records/export-results\"].post"
+          }
+        ]
+      },
+      {
+        "id": "document-0008",
+        "artifact": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml",
+          "sha256": "b1ba15754f284029471b20e01facabbbb72f27d8db1427a49ad2670fefa03725",
+          "bytes": 30120
+        },
+        "published_source": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml",
+          "capture_url": "https://developer.brex.com/_bundle/openapi/fields_api.yaml",
+          "sha256": "b1ba15754f284029471b20e01facabbbb72f27d8db1427a49ad2670fefa03725",
+          "bytes": 30120,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "brex.rest.createfield-source-8",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/fields",
+            "operation_id": "createField",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/fields\"].post"
+          },
+          {
+            "id": "brex.rest.createfieldvalues-source-8",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/fields/{field_id}/values",
+            "operation_id": "createFieldValues",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/fields/{field_id}/values\"].post"
+          },
+          {
+            "id": "brex.rest.deletefield-source-8",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/fields/{id}",
+            "operation_id": "deleteField",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/fields/{id}\"].delete"
+          },
+          {
+            "id": "brex.rest.deletefieldvalues-source-8",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/v1/fields/{field_id}/values",
+            "operation_id": "deleteFieldValues",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/fields/{field_id}/values\"].delete"
+          },
+          {
+            "id": "brex.rest.getfieldbyid-source-8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/fields/{id}",
+            "operation_id": "getFieldById",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/fields/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.getfieldvaluebyid-source-8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/fields/{field_id}/values/{brex_id}",
+            "operation_id": "getFieldValueById",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/fields/{field_id}/values/{brex_id}\"].get"
+          },
+          {
+            "id": "brex.rest.listfields-source-8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/fields",
+            "operation_id": "listFields",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/fields\"].get"
+          },
+          {
+            "id": "brex.rest.listfieldvalues-source-8",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/fields/{field_id}/values",
+            "operation_id": "listFieldValues",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/fields/{field_id}/values\"].get"
+          },
+          {
+            "id": "brex.rest.updatefield-source-8",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/fields/{id}",
+            "operation_id": "updateField",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/fields/{id}\"].put"
+          },
+          {
+            "id": "brex.rest.updatefieldvalues-source-8",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/v1/fields/{field_id}/values",
+            "operation_id": "updateFieldValues",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/fields/{field_id}/values\"].put"
+          }
+        ]
+      },
+      {
+        "id": "document-0009",
+        "artifact": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/onboarding_api.yaml",
+          "sha256": "9a5329a23c39d456ce39c5a16cdedc6ae6f8a6b4e65d06b060c4fe23c509ef2c",
+          "bytes": 22441
+        },
+        "published_source": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/onboarding_api.yaml",
+          "capture_url": "https://developer.brex.com/_bundle/openapi/onboarding_api.yaml",
+          "sha256": "9a5329a23c39d456ce39c5a16cdedc6ae6f8a6b4e65d06b060c4fe23c509ef2c",
+          "bytes": 22441,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "brex.rest.createdocument-source-9",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/referrals/{id}/document_upload",
+            "operation_id": "createDocument",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/referrals/{id}/document_upload\"].post"
+          },
+          {
+            "id": "brex.rest.createreferralrequest-source-9",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/referrals",
+            "operation_id": "createReferralRequest",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/referrals\"].post"
+          },
+          {
+            "id": "brex.rest.getreferral-source-9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/referrals/{id}",
+            "operation_id": "getReferral",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/referrals/{id}\"].get"
+          },
+          {
+            "id": "brex.rest.listreferrals-source-9",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/referrals",
+            "operation_id": "listReferrals",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/referrals\"].get"
+          },
+          {
+            "id": "brex.rest.processdelayedeindocument-source-9",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/v1/referrals/{id}/process_ein_document",
+            "operation_id": "processDelayedEINDocument",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/referrals/{id}/process_ein_document\"].post"
+          }
+        ]
+      },
+      {
+        "id": "document-0010",
+        "artifact": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/travel_api.yaml",
+          "sha256": "3392373807f9945af10238f17b7b0b70b688dc30b87adc18cce58331590d65cc",
+          "bytes": 59539
+        },
+        "published_source": {
+          "source_url": "https://developer.brex.com/_bundle/openapi/travel_api.yaml",
+          "capture_url": "https://developer.brex.com/_bundle/openapi/travel_api.yaml",
+          "sha256": "3392373807f9945af10238f17b7b0b70b688dc30b87adc18cce58331590d65cc",
+          "bytes": 59539,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "brex.rest.getbooking-source-10",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/trips/{trip_id}/bookings/{booking_id}",
+            "operation_id": "getBooking",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/trips/{trip_id}/bookings/{booking_id}\"].get"
+          },
+          {
+            "id": "brex.rest.gettrip-source-10",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/trips/{trip_id}",
+            "operation_id": "getTrip",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/trips/{trip_id}\"].get"
+          },
+          {
+            "id": "brex.rest.listtripbookings-source-10",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/trips/{trip_id}/bookings",
+            "operation_id": "listTripBookings",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/trips/{trip_id}/bookings\"].get"
+          },
+          {
+            "id": "brex.rest.listtrips-source-10",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/v1/trips",
+            "operation_id": "listTrips",
+            "deprecated": false,
+            "source_location": "paths[\"/v1/trips\"].get"
+          }
+        ]
       }
     ]
+  },
+  "counts": {
+    "rest": 108,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 108
   }
 }
