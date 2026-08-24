@@ -647,3 +647,94 @@ connector special case.
 Post-merge report checks passed: `go build -o pm ./cmd/pm`; the 390-command current-binary sweep
 above; `go test -timeout 20m ./internal/connectors/defs`; `make docs-check`; and
 `go run ./cmd/agentcontractgen check`.
+
+## Conversion red gate — operation identities are not typed executable contracts — 2026-08-24
+
+### Correction to the reported conversion count
+
+The reported **5,543** was not an operation count from the providers' retained artifacts. It is a
+legacy declaration-mapping count which includes **39 `local_execution_bindings`**: BambooHR 26,
+LaunchDarkly 2, Pipedrive 5, and Zendesk Support 6. Those bindings are local implementation
+references, not provider operations, and cannot become provider-cited commands. The corrected
+number of retained, provider REST operation identities remaining after the already-runnable
+Zendesk rows and the 49 known explicit open request maps is **5,504**:
+
+| Connector | Retained provider REST operations | Non-provider local bindings previously included | Deduction | Candidate provider operations |
+| --- | ---: | ---: | ---: | ---: |
+| BambooHR | 319 | 26 | 0 | 319 |
+| Fastly | 732 | 0 | 0 | 732 |
+| HubSpot | 3,118 | 0 | 36 known open request maps | 3,082 |
+| LaunchDarkly | 397 | 2 | 0 | 397 |
+| Pipedrive | 213 | 5 | 0 | 213 |
+| ShipStation | 47 | 0 | 0 | 47 |
+| Squarespace | 53 | 0 | 0 | 53 |
+| WooCommerce | 140 | 0 | 0 | 140 |
+| Zendesk Support | 629 | 6 | 95 already runnable; 13 known open request maps | 521 |
+| **Total** | **5,648** | **39** | **144** | **5,504** |
+
+This fixes the number without downgrading a command: all 390 existing credential-boundary
+observations remain intact, and every remaining row stays partial until a source-derived executor
+contract is present.
+
+### Red evidence: no safe connector-local promotion exists from this inventory alone
+
+`source-import` is intentionally operation-lock-only. The batch has only legacy
+`*-parity-source-lock.json` files, so it refuses before source projection when the required
+`*-operation-source-lock.json` is absent (the prior exact `fastly --check` failure is retained
+above). This is correct: the parity lock records operation identity and artifact provenance, not
+the typed request parameters, body media/schema, output envelope, or executable bounds used by
+the runtime.
+
+Even after an operation descriptor exists, the current projector deliberately does **not** create
+a write action, direct-read operation, stream schema, fixture, or command route from an endpoint.
+`cmd/connectorgen/sourceprojection.go` matches a source operation only to an already-authored
+connector action and returns `source operation(s) have no complete executable action` for the
+rest. That guard is the reason an operation count cannot be promoted by changing
+`availability`. It preserves the no-generic-body and no-invented-`additionalProperties:false`
+requirements.
+
+The retained artifacts therefore divide by contract form, not merely by connector count:
+
+| Connector | Retained source form | Provider-operation identities | Existing definition gap that prevents a binary-reachable command |
+| --- | --- | ---: | --- |
+| BambooHR | Rendered HTML reference | 319 | No operation lock, typed operation/action contract, or command bindings; 26 local bindings are not provider operations. |
+| Fastly | Postman collection JSON | 732 | The collection supplies request examples, not a parseable OpenAPI `paths` contract for the existing importer; no typed actions or operation routes exist. |
+| HubSpot | Gzip archive containing 524 JSON documents | 3,118 | The importer accepts a retained source document, not an archive corpus; the current metadata-only `operations.json` does not supply executable action/flag contracts. |
+| LaunchDarkly | OpenAPI 3.0.3 | 397 | No operation lock, actions, streams, or operation routes. |
+| Pipedrive | OpenAPI 3.0.1 | 213 | Seventeen legacy actions exist but none has a CLI binding; the other provider operations have no action or direct-read route. |
+| ShipStation | OpenAPI 3.1.0 | 47 | No actions or operation routes. |
+| Squarespace | OpenAPI 3.1.1 | 53 | Two legacy actions exist but no CLI bindings; the other provider operations have no action or direct-read route. |
+| WooCommerce | Rendered HTML reference | 140 | No operation lock, typed operation/action contract, or command bindings. |
+| Zendesk Support | OpenAPI 3.0.3 | 629 | Ninety legacy actions exist; 62 are already runnable, while 28 remain partial and the remaining source operations lack action/direct-read contracts. |
+
+Existing legacy actions are not a safe shortcut. For example, the partial Zendesk create/update
+actions contain provider-declared nested open objects such as `automation`, `group`, `ticket`,
+and `user`; changing only their command availability would make the binary stop at credentials
+while leaving the action body less bounded than this task permits. Conversely, a `direct_read`
+row needs either a declared stream or an exact `operations.json` operation and its input/output
+bindings; a source URL and `api_surface` endpoint are insufficient under the command-runner
+preflight.
+
+### Manual GSD/TDD decision point
+
+- **Red:** the corrected conversion map has 5,504 candidate provider operation identities but
+  zero new typed executable contracts. Attempting to promote any of them from only the parity
+  lock would violate both the runtime's source-projection guard and the task's provider-fidelity
+  rule.
+- **Green condition:** for a selected source form, derive and retain an operation lock/descriptor,
+  then author connector-owned typed action, direct-read operation, or stream contracts only where
+  the source provides every required field, body, response, pagination, and bound. Run
+  `surface-sync`, bundle validation, and a fresh built-binary credential-boundary probe for every
+  promoted command.
+- **Refactor/guard:** do not add a generic JSON body, close an open provider object, or reclassify
+  a local execution binding as a provider operation. A source row whose body or response remains
+  open stays partial with its existing citation.
+
+This is a delivery-scope decision, not a connector-local implementation detail. Reaching the
+green condition for the OAS connectors needs a reusable source-lock-to-action/operation authoring
+path; the HTML, Postman, and HubSpot archive forms additionally need source-form-specific
+extraction before any fields can be declared. The task prohibits adding that shared foundation in
+this connector-only wave. The safe next authority is either (1) a separately scoped foundation
+issue for artifact-corpus/source-contract extraction followed by connector conversion waves, or
+(2) an explicitly narrowed connector-local wave with a named set of provider operations and
+individually retained typed contracts. No availability value has been changed pending that choice.
