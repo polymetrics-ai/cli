@@ -210973,16 +210973,16 @@
         "provider_version_evidence": "internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "enabled",
-        "declaration_status": "enabled; bounded binary read and CLI command bind the pinned source contract",
-        "contract": {
-          "operation": "gorgias.download_file",
-          "command": "files download"
-        },
-        "api_surface_binding": {
-          "direct_read": "files download"
-        },
-        "rejection": null
+        "source_state": "disabled",
+        "declaration_status": "disabled; provider-contract-unavailable exact redirect host and final media contract",
+        "contract": null,
+        "api_surface_binding": null,
+        "rejection": {
+          "reason": "provider-contract-unavailable",
+          "recoverable": true,
+          "detail": "The provider documents a signed cross-host redirect without publishing an exact allowed host or final media contract. The executor correctly refuses an unbounded redirect policy; this needs provider evidence, not a connector-local bypass.",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoint GET /api/{file_type}/download/{domain_hash}/{resource_name}; internal/connectors/engine/operation_headers.go:455-491."
+        }
       },
       "surfaces": {
         "direct_read": {
@@ -210999,17 +210999,21 @@
         },
         "binary_read": {
           "state": "mapped",
-          "source_state": "enabled",
-          "rejection": null
+          "source_state": "disabled",
+          "rejection": {
+            "reason": "provider-contract-unavailable",
+            "recoverable": true,
+            "detail": "The provider documents a signed cross-host redirect without publishing an exact allowed host or final media contract.",
+            "evidence": "internal/connectors/engine/operation_headers.go:455-491 refuses an unbounded redirect policy."
+          }
         },
         "binary_write": {
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "generated_binding_present",
-          "binding": {
-            "direct_read": "files download"
-          }
+          "state": "declared_partial_not_runnable",
+          "command": "files download",
+          "reason": "provider-contract-unavailable exact redirect host and final media contract"
         }
       },
       "generated_projections": {
@@ -211025,7 +211029,7 @@
         "provider_live": "pending"
       },
       "merge_readiness": {
-        "enabled": true,
+        "enabled": false,
         "open_foundation_gap": null,
         "merge_ready": false
       }
@@ -214908,7 +214912,7 @@
         "operation_id": "get-statistic",
         "method": "POST",
         "path": "/api/reporting/stats",
-        "primary_parity_class": "direct_write"
+        "primary_parity_class": "direct_read"
       },
       "source": {
         "url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
@@ -214920,29 +214924,29 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending typed-operation-contract-gorgias",
+        "declaration_status": "disabled; foundation-gap structured_recursive_filter_input",
         "contract": null,
         "api_surface_binding": null,
         "rejection": {
-          "reason": "declaration-pending",
+          "reason": "foundation-gap",
           "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[71] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/reporting/stats\"].post."
+          "detail": "The required provider query is a recursive 50-arm filter-expression union. Direct read intentionally prohibits a generic JSON raw-body escape hatch, so this requires a closed structured filter-expression input/builder.",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[71]; internal/connectors/engine/direct_read.go:286-293 and :785-786."
         }
       },
       "surfaces": {
         "direct_read": {
-          "state": "not_mapped_for_this_provider_operation"
-        },
-        "direct_write": {
           "state": "mapped",
           "source_state": "disabled",
           "rejection": {
-            "reason": "declaration-pending",
+            "reason": "foundation-gap",
             "recoverable": true,
-            "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-            "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[71] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/reporting/stats\"].post."
+            "detail": "The required provider query is a recursive 50-arm filter-expression union; a closed structured input/builder is absent.",
+            "evidence": "internal/connectors/engine/direct_read.go:286-293 and :785-786."
           }
+        },
+        "direct_write": {
+          "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
           "state": "not_mapped_for_this_provider_operation"
@@ -214974,7 +214978,7 @@
       },
       "merge_readiness": {
         "enabled": false,
-        "open_foundation_gap": null,
+        "open_foundation_gap": "structured_recursive_filter_input",
         "merge_ready": false
       }
     },
@@ -215361,7 +215365,7 @@
         "operation_id": "download-legacy-statistic",
         "method": "POST",
         "path": "/api/stats/{name}/download",
-        "primary_parity_class": "direct_write"
+        "primary_parity_class": "binary_read"
       },
       "source": {
         "url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
@@ -215373,14 +215377,14 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending typed-operation-contract-gorgias",
+        "declaration_status": "disabled; foundation-gap post_binary_text_export",
         "contract": null,
         "api_surface_binding": null,
         "rejection": {
-          "reason": "declaration-pending",
+          "reason": "foundation-gap",
           "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[77] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/stats/{name}/download\"].post."
+          "detail": "The provider returns CSV from POST with a required JSON filter body, but the binary/text-export executor requires GET.",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[77]; internal/connectors/engine/binary_read.go:292-293 and :333-334."
         }
       },
       "surfaces": {
@@ -215388,14 +215392,7 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "direct_write": {
-          "state": "mapped",
-          "source_state": "disabled",
-          "rejection": {
-            "reason": "declaration-pending",
-            "recoverable": true,
-            "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-            "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[77] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/stats/{name}/download\"].post."
-          }
+          "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
           "state": "not_mapped_for_this_provider_operation"
@@ -215404,7 +215401,14 @@
           "state": "no_connector_owned_typed_action"
         },
         "binary_read": {
-          "state": "not_mapped_for_this_provider_operation"
+          "state": "mapped",
+          "source_state": "disabled",
+          "rejection": {
+            "reason": "foundation-gap",
+            "recoverable": true,
+            "detail": "A bounded POST-capable binary/text-export operation with an exact declared request-body and response contract is absent.",
+            "evidence": "internal/connectors/engine/binary_read.go:292-293 and :333-334."
+          }
         },
         "binary_write": {
           "state": "not_mapped_for_this_provider_operation"
@@ -215427,7 +215431,7 @@
       },
       "merge_readiness": {
         "enabled": false,
-        "open_foundation_gap": null,
+        "open_foundation_gap": "post_binary_text_export",
         "merge_ready": false
       }
     },
@@ -216438,14 +216442,14 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending typed-operation-contract-gorgias",
+        "declaration_status": "disabled; foundation-gap scalar_json_write_body",
         "contract": null,
         "api_surface_binding": null,
         "rejection": {
-          "reason": "declaration-pending",
+          "reason": "foundation-gap",
           "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[91] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/customers/{customer_id}/custom-fields/{id}\"].put."
+          "detail": "The provider requires a bare string/integer/boolean JSON scalar request body; the default JSON writer always materializes an object.",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[91]; internal/connectors/engine/write.go:674-692."
         }
       },
       "surfaces": {
@@ -216456,10 +216460,10 @@
           "state": "mapped",
           "source_state": "disabled",
           "rejection": {
-            "reason": "declaration-pending",
+            "reason": "foundation-gap",
             "recoverable": true,
-            "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-            "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[91] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/customers/{customer_id}/custom-fields/{id}\"].put."
+            "detail": "The provider requires a bare JSON scalar; a closed schema-validated scalar JSON write body type is absent.",
+            "evidence": "internal/connectors/engine/write.go:674-692."
           }
         },
         "etl": {
@@ -216492,7 +216496,7 @@
       },
       "merge_readiness": {
         "enabled": false,
-        "open_foundation_gap": null,
+        "open_foundation_gap": "scalar_json_write_body",
         "merge_ready": false
       }
     },
@@ -217655,14 +217659,14 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending typed-operation-contract-gorgias",
+        "declaration_status": "disabled; foundation-gap scalar_json_write_body",
         "contract": null,
         "api_surface_binding": null,
         "rejection": {
-          "reason": "declaration-pending",
+          "reason": "foundation-gap",
           "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[107] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/tickets/{ticket_id}/custom-fields/{id}\"].put."
+          "detail": "The provider requires a bare string/integer/boolean JSON scalar request body; the default JSON writer always materializes an object.",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[107]; internal/connectors/engine/write.go:674-692."
         }
       },
       "surfaces": {
@@ -217673,10 +217677,10 @@
           "state": "mapped",
           "source_state": "disabled",
           "rejection": {
-            "reason": "declaration-pending",
+            "reason": "foundation-gap",
             "recoverable": true,
-            "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-            "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[107] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/tickets/{ticket_id}/custom-fields/{id}\"].put."
+            "detail": "The provider requires a bare JSON scalar; a closed schema-validated scalar JSON write body type is absent.",
+            "evidence": "internal/connectors/engine/write.go:674-692."
           }
         },
         "etl": {
@@ -217709,7 +217713,7 @@
       },
       "merge_readiness": {
         "enabled": false,
-        "open_foundation_gap": null,
+        "open_foundation_gap": "scalar_json_write_body",
         "merge_ready": false
       }
     },
@@ -218024,7 +218028,7 @@
         "operation_id": "update-view-items",
         "method": "PUT",
         "path": "/api/views/{view_id}/items",
-        "primary_parity_class": "direct_write"
+        "primary_parity_class": "direct_read"
       },
       "source": {
         "url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r",
@@ -218036,29 +218040,29 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending typed-operation-contract-gorgias",
+        "declaration_status": "disabled; foundation-gap put_operation_direct_read",
         "contract": null,
         "api_surface_binding": null,
         "rejection": {
-          "reason": "declaration-pending",
+          "reason": "foundation-gap",
           "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[112] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/views/{view_id}/items\"].put."
+          "detail": "The provider defines this filtered read as PUT with a request body, while the operation direct-read executor accepts GET or POST only.",
+          "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[112]; internal/connectors/engine/direct_read.go:429-432."
         }
       },
       "surfaces": {
         "direct_read": {
-          "state": "not_mapped_for_this_provider_operation"
-        },
-        "direct_write": {
           "state": "mapped",
           "source_state": "disabled",
           "rejection": {
-            "reason": "declaration-pending",
+            "reason": "foundation-gap",
             "recoverable": true,
-            "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-            "evidence": "internal/connectors/defs/gorgias/api_surface.json endpoints[112] is bound to the pinned provider operation; internal/connectors/defs/gorgias/sources/gorgias-operation-source-lock.json: .paths[\"/api/views/{view_id}/items\"].put."
+            "detail": "A bounded PUT-capable operation direct-read executor is absent.",
+            "evidence": "internal/connectors/engine/direct_read.go:429-432."
           }
+        },
+        "direct_write": {
+          "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
           "state": "not_mapped_for_this_provider_operation"
@@ -218090,7 +218094,7 @@
       },
       "merge_readiness": {
         "enabled": false,
-        "open_foundation_gap": null,
+        "open_foundation_gap": "put_operation_direct_read",
         "merge_ready": false
       }
     },

@@ -5,8 +5,8 @@
   "purpose": "Incremental source-lock migration state. It supplements READINESS-BASELINE.json; it does not replace the seven-surface operation evidence.",
   "preconversion_split": {
     "documented_operations": 3932,
-    "runtime_enabled_with_generated_cli_path": 288,
-    "connector_definition_declarable": 3638,
+    "runtime_enabled_with_generated_cli_path": 287,
+    "connector_definition_declarable": 3639,
     "genuinely_execution_foundation_blocked": 5,
     "provider_contract_unavailable": 1,
     "qualification": "Provisional: five Gorgias operations require a concrete shared executor capability; one Gorgias binary operation lacks the provider-published exact redirect/media contract required to declare it safely. Source-retention and source-import refusals are recorded per connector as discovered."

@@ -93,7 +93,7 @@ operations can be moved to a document-owned v3 lock.
   migrations and the committed Iterable lock were first copied under this phase and then restored
   byte-for-byte after the merge.
 - The current 20-connector source-locked inventory has **3,932** operations. The current
-  `operation-evidence` projection classifies **288** as runtime-enabled with a generated CLI path,
+  `operation-evidence` projection initially classified **288** as runtime-enabled with a generated CLI path,
   **3,644** as connector-definition-declarable (`runtime.enabled: false` and no declared
   foundation), and **0** as genuinely execution-foundation-blocked. This is a pre-conversion
   classification; provider-live certification is pending, and the installed-binary no-credential
@@ -172,7 +172,8 @@ while the operation reader accepts GET or POST only (`direct_read.go:429-432`).
 cross-host redirect but no exact allowed redirect host or final media contract. The engine already
 has the safe capability and refuses only unbounded redirect metadata
 (`operation_headers.go:455-491`); the necessary change is provider evidence, not an engine or
-connector shim. The machine-readable split is therefore **288 runtime-enabled**, **3,638
+connector shim. A subsequent matrix reconciliation removed the incorrectly counted partial Gorgias
+file-download command, so the machine-readable split is therefore **287 runtime-enabled**, **3,639
 connector-declaration-pending**, **5 execution-foundation-blocked**, and **1
 provider-contract-unavailable** (3,932 total). No credentials, provider operation, or live
 certification was used for this source-only audit.

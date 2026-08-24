@@ -37,3 +37,17 @@ The operation-level fixture/conformance cells are intentionally recorded as `not
 the current declaration does not tie evidence to that exact provider operation. They are not
 treated as N/A or certification success. Provider-live certification remains pending for every
 connector because this lane is credential-free. Therefore the portfolio remains non-merge-ready.
+
+## Increment 3 — Gorgias executor-boundary reconciliation
+
+The prior projection made two false claims: it inferred direct-write classification from POST/PUT
+verbs for two documented read/export operations, and it treated the declared-partial `files
+download` command as executable. The corrected six source rows are: two direct-write scalar-body
+foundation gaps, one recursive-filter direct-read foundation gap, one POST text-export foundation
+gap, one PUT direct-read foundation gap, and one `provider-contract-unavailable` binary download.
+The latter lacks an exact provider redirect host/final media contract and is not a foundation gap.
+
+The resulting provisional portfolio split is **287 runtime-enabled**, **3,639
+connector-declaration-pending**, **5 execution-foundation-blocked**, and **1
+provider-contract-unavailable**. Every affected row now has a specific surface classification and
+refusal; none is counted as an enabled command.
