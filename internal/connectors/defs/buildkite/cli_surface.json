@@ -58,9 +58,10 @@
       "path": "operations get-v2-organizations",
       "summary": "Declared etl: GET /v2/organizations.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-5-5 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v2/organizations is bound to the existing organizations stream with its connector-owned schema and pagination contract.",
+      "stream": "organizations"
     },
     {
       "path": "operations get-v2-organizations-org-slug",
@@ -80,9 +81,10 @@
       "path": "operations get-v2-organizations-org-slug-agents",
       "summary": "Declared etl: GET /v2/organizations/{org.slug}/agents.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-agents-7-7 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v2/organizations/{org.slug}/agents is bound to the existing agents stream with its connector-owned schema and pagination contract.",
+      "stream": "agents"
     },
     {
       "path": "operations get-v2-organizations-org-slug-agents-id",
@@ -198,9 +200,10 @@
       "path": "operations get-v2-organizations-org-slug-clusters",
       "summary": "Declared etl: GET /v2/organizations/{org.slug}/clusters.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-clusters-17-17 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v2/organizations/{org.slug}/clusters is bound to the existing clusters stream with its connector-owned schema and pagination contract.",
+      "stream": "clusters"
     },
     {
       "path": "operations post-v2-organizations-org-slug-clusters",
@@ -706,9 +709,10 @@
       "path": "operations get-v2-organizations-org-slug-pipelines",
       "summary": "Declared etl: GET /v2/organizations/{org.slug}/pipelines.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-62-62 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v2/organizations/{org.slug}/pipelines is bound to the existing pipelines stream with its connector-owned schema and pagination contract.",
+      "stream": "pipelines"
     },
     {
       "path": "operations post-v2-organizations-org-slug-pipelines",
@@ -724,9 +728,10 @@
       "path": "operations get-v2-organizations-org-slug-pipelines-pipeline-slug-builds",
       "summary": "Declared etl: GET /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-64-64 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds is bound to the existing builds stream with its connector-owned schema and pagination contract.",
+      "stream": "builds"
     },
     {
       "path": "operations post-v2-organizations-org-slug-pipelines-pipeline-slug-builds",
@@ -1234,9 +1239,10 @@
       "path": "operations get-v2-organizations-org-slug-teams",
       "summary": "Declared etl: GET /v2/organizations/{org.slug}/teams.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-teams-108-108 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v2/organizations/{org.slug}/teams is bound to the existing teams stream with its connector-owned schema and pagination contract.",
+      "stream": "teams"
     },
     {
       "path": "operations post-v2-organizations-org-slug-teams",

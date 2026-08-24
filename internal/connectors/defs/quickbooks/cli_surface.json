@@ -1632,41 +1632,46 @@
       "path": "operations get-v3-company-realm-id-query-query-select-from-customer-startposition-n-maxresults-size",
       "summary": "Declared etl: GET /v3/company/{realmId}/query?query=SELECT * FROM Customer STARTPOSITION <n> MAXRESULTS <size>.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-customer-startposition-n-maxresults-size-130 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v3/company/{realmId}/query?query=SELECT * FROM Customer STARTPOSITION <n> MAXRESULTS <size> is bound to the existing customers stream with its connector-owned schema and pagination contract.",
+      "stream": "customers"
     },
     {
       "path": "operations get-v3-company-realm-id-query-query-select-from-invoice-startposition-n-maxresults-size",
       "summary": "Declared etl: GET /v3/company/{realmId}/query?query=SELECT * FROM Invoice STARTPOSITION <n> MAXRESULTS <size>.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-invoice-startposition-n-maxresults-size-131 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v3/company/{realmId}/query?query=SELECT * FROM Invoice STARTPOSITION <n> MAXRESULTS <size> is bound to the existing invoices stream with its connector-owned schema and pagination contract.",
+      "stream": "invoices"
     },
     {
       "path": "operations get-v3-company-realm-id-query-query-select-from-payment-startposition-n-maxresults-size",
       "summary": "Declared etl: GET /v3/company/{realmId}/query?query=SELECT * FROM Payment STARTPOSITION <n> MAXRESULTS <size>.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-payment-startposition-n-maxresults-size-132 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v3/company/{realmId}/query?query=SELECT * FROM Payment STARTPOSITION <n> MAXRESULTS <size> is bound to the existing payments stream with its connector-owned schema and pagination contract.",
+      "stream": "payments"
     },
     {
       "path": "operations get-v3-company-realm-id-query-query-select-from-account-startposition-n-maxresults-size",
       "summary": "Declared etl: GET /v3/company/{realmId}/query?query=SELECT * FROM Account STARTPOSITION <n> MAXRESULTS <size>.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-account-startposition-n-maxresults-size-133 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v3/company/{realmId}/query?query=SELECT * FROM Account STARTPOSITION <n> MAXRESULTS <size> is bound to the existing accounts stream with its connector-owned schema and pagination contract.",
+      "stream": "accounts"
     },
     {
       "path": "operations get-v3-company-realm-id-query-query-select-from-vendor-startposition-n-maxresults-size",
       "summary": "Declared etl: GET /v3/company/{realmId}/query?query=SELECT * FROM Vendor STARTPOSITION <n> MAXRESULTS <size>.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json",
-      "notes": "Blocked: locked source operation quickbooks.local-api-surface.get-v3-company-realmid-query-query-select-from-vendor-startposition-n-maxresults-size-134 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v3/company/{realmId}/query?query=SELECT * FROM Vendor STARTPOSITION <n> MAXRESULTS <size> is bound to the existing vendors stream with its connector-owned schema and pagination contract.",
+      "stream": "vendors"
     }
   ]
 }
