@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "hubspot",
+  "artifacts": [
+    {
+      "sha256": "7bfcdb27e8d7e52341e90284f670768020f62aeebf43f5cd339263fa5d801619",
+      "bytes": 4132728,
+      "source_url": "https://codeload.github.com/HubSpot/HubSpot-public-api-spec-collection/tar.gz/2bebde2dca45eaa1792931089c4e441c8e377594",
+      "retrieved_at": "2026-08-24T12:03:25Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

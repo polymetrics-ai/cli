@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "fastly",
+  "artifacts": [
+    {
+      "sha256": "c6ae5b0fd118fe2d87e7d0ef431f67cda703d1487d27b5f02725d82219386677",
+      "bytes": 2341028,
+      "source_url": "https://www.fastly.com/documentation/downloads/fastly.collection.json",
+      "retrieved_at": "2026-08-24T12:03:25Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

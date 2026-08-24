@@ -1,20 +1,20 @@
 {
   "schema_version": 1,
   "connector": "bamboo-hr",
-  "captured_at": "2026-08-19T00:00:00Z",
+  "captured_at": "2026-08-24T12:05:15Z",
   "source_retrieval": {
     "state": "fetched",
     "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
     "requested_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-    "sha256": "ecfc63823d7f08942bec89f7175ac6fedc582b07177346fdc8e4d03400ebf15a",
-    "bytes": 1562871,
+    "sha256": "a04e654442c3980b7f3172b7160404723a1ae096ca78aca1cead0721f1177890",
+    "bytes": 1627565,
     "content_type": "text/html; charset=utf-8",
     "artifacts": [
       {
         "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
         "requested_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-        "sha256": "ecfc63823d7f08942bec89f7175ac6fedc582b07177346fdc8e4d03400ebf15a",
-        "bytes": 1562871,
+        "sha256": "a04e654442c3980b7f3172b7160404723a1ae096ca78aca1cead0721f1177890",
+        "bytes": 1627565,
         "content_type": "text/html; charset=utf-8"
       }
     ],
@@ -32,8 +32,8 @@
   },
   "rest": {
     "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-    "sha256": "ecfc63823d7f08942bec89f7175ac6fedc582b07177346fdc8e4d03400ebf15a",
-    "bytes": 1562871,
+    "sha256": "a04e654442c3980b7f3172b7160404723a1ae096ca78aca1cead0721f1177890",
+    "bytes": 1627565,
     "operation_counts": [
       {
         "key": "DELETE",
@@ -3570,8 +3570,8 @@
   },
   "graphql": {
     "source_url": "https://documentation.bamboohr.com/reference/get-meta-company",
-    "sha256": "ecfc63823d7f08942bec89f7175ac6fedc582b07177346fdc8e4d03400ebf15a",
-    "bytes": 1562871,
+    "sha256": "a04e654442c3980b7f3172b7160404723a1ae096ca78aca1cead0721f1177890",
+    "bytes": 1627565,
     "operation_counts": [],
     "operations": []
   },

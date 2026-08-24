@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "zendesk-support",
+  "artifacts": [
+    {
+      "sha256": "a487892c8e1f3feeba96c234148be69fddd50afce17bf30437bcb8de36d9a0c8",
+      "bytes": 1757202,
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "retrieved_at": "2026-08-24T12:03:25Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}
