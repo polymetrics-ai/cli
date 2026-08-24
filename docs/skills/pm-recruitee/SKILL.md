@@ -61,6 +61,18 @@ Reads Recruitee offers, candidates, departments, sources, and tags through the R
 - approval: none; read-only ATS API
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Recruitee's declared typed write actions.
+- Usage: pm recruitee <command> [flags]
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual

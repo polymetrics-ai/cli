@@ -328,6 +328,19 @@
 
 ## Refactor / review
 
+### Shared source-factory evidence integration regression — 2026-08-24
+
+- **Red:** `TestDefinitionTransportFactoriesSelectDeclaredEvidence` passed on
+  merge base `060bb7864e` (2.520s) but failed on this branch because the 30
+  connector-owned `sync_transport.json` source declarations correctly added
+  their own static evidence to the reusable factory. The old assertion treated
+  GitHub's evidence as the arbitrary primary entry, even though
+  `AcceptedSourceEvidences` is the installed multi-declaration contract.
+- **Green:** the test now proves the stronger runtime property: GitHub's exact
+  declaration evidence must be accepted by the shared source factory, whether
+  it is primary or an additional declaration-owned evidence reference. No
+  connector name branch, engine behavior, or source declaration was changed.
+
 - The source lock carries `counts.total`, per-method and per-kind counts,
   source-document pins, and coverage basis. Dispositions use
   `operations_found`; no generated summary has `declared_percent`.

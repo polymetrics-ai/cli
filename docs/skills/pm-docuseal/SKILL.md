@@ -102,12 +102,20 @@ Reads DocuSeal templates, submissions, and submitters, and writes submission/sub
   - archive submission apply - Plan and execute the archive submission reverse-ETL action [intent=reverse_etl availability=implemented write=archive_submission]; approval: requires plan, preview, approval, and execute; risk: external mutation; archives a live DocuSeal submission (soft-delete, still recoverable via the DocuSeal UI); approval required; flags: --id (required)
   - archive template apply - Plan and execute the archive template reverse-ETL action [intent=reverse_etl availability=implemented write=archive_template]; approval: requires plan, preview, approval, and execute; risk: external mutation; archives a live DocuSeal template (soft-delete, recoverable by unarchiving via update_template); approval required; flags: --id (required)
   - clone template apply - Plan and execute the clone template reverse-ETL action [intent=reverse_etl availability=implemented write=clone_template]; approval: requires plan, preview, approval, and execute; risk: external mutation; creates a new live DocuSeal template by cloning an existing one; approval required; flags: --id (required)
+  - create submission apply - POST /submissions (create_submission) [intent=reverse_etl availability=implemented write=create_submission]; approval: reverse ETL writes require plan, preview, approval, and execute.; risk: external mutation; dispatches a live signature-request email/SMS to every listed submitter unless send_email/send_sms are explicitly set false; approval required; notes: Generated from the connector-owned typed action; execution remains plan-gated.; flags: --submitters (required), --template-id (required)
   - submissions list - Run the submissions ETL stream [intent=etl availability=implemented stream=submissions]
   - submitters list - Run the submitters ETL stream [intent=etl availability=implemented stream=submitters]
   - template detail list - Run the template detail ETL stream [intent=etl availability=implemented stream=template_detail]
   - templates list - Run the templates ETL stream [intent=etl availability=implemented stream=templates]
   - update submitter apply - Plan and execute the update submitter reverse-ETL action [intent=reverse_etl availability=implemented write=update_submitter]; approval: requires plan, preview, approval, and execute; risk: external mutation; overwrites a live DocuSeal submitter's pre-filled values/contact info, can re-send signature request notifications, and can force-mark the submitter completed/auto-signed; approval required; flags: --id (required)
   - update template apply - Plan and execute the update template reverse-ETL action [intent=reverse_etl availability=implemented write=update_template]; approval: requires plan, preview, approval, and execute; risk: external mutation; renames/moves/relabels a live DocuSeal template and can unarchive it; approval required; flags: --id (required)
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
 
 ## Commands
 
