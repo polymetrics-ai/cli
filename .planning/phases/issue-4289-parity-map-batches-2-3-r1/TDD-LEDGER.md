@@ -191,3 +191,37 @@ docs/connectors` passes after generated connector documentation. A freshly
 built binary run from four separately initialized no-credential projects exits
 1 with no stdout and exactly `error: missing --credential` for every command.
 Evidence: `evidence/grafana-parameterless-direct-read-command-proof-20260825.json`.
+
+## Elasticsearch Parameterless JSON Direct Reads — Red
+
+**Red:** the source-pinned Elasticsearch OpenAPI artifact declares `info`,
+`cluster-remote-info`, `ilm-get-status`, `license-get-basic-status`, and
+`license-get-trial-status` as JSON `GET` operations with no path-item or
+operation parameters. The five exact source rows are declaration-pending, and
+Elasticsearch has neither an `operations.json` contract nor installed command
+for any of them. The root route's previous `disallowed` classification was a
+legacy sync-stream exclusion, not a runtime incapability.
+
+**Planned Green:** declare only the five exact 1 MiB `json_redacted`
+`rest_read` contracts and source-bound commands. Preserve the provider-stated
+cluster privileges as operation `auth_scopes` metadata (`monitor` for all but
+the ILM status's `read_ilm`) without withholding any surface. A fresh built
+binary in a separately initialized project with no credential must emit exactly
+`error: missing --credential` for each command; no provider request is made.
+
+**Green:** the five exact contracts now bind their source rows and canonical
+API-surface routes. `TestEveryImplementedCommandPassesRuntimePreflight` and
+`TestConformance/elasticsearch` pass, as do generated connector documentation
+validation and namespace/command help checks. A fresh binary in five separately
+initialized no-credential projects exits 1 with no stdout and exactly
+`error: missing --credential` for every command. Evidence:
+`evidence/elasticsearch-parameterless-direct-read-command-proof-20260825.json`.
+
+**Residual importer boundary:** `connectorgen source-import elasticsearch
+--defs internal/connectors/defs --check` verifies the retained v3 artifact then
+stops at `paths["/_alias"].get` because its first parameter has an ambiguous
+request schema using `allOf`. The refusal is emitted by
+`sourceReferenceResolver.preflightDocument` through
+`sourcePrepareSourceDocument` in `cmd/connectorgen/sourceimport.go:3376-3377`.
+It is independent of the five input-free reads above; no descriptor or schema
+was hand-authored to bypass it.

@@ -1,0 +1,89 @@
+{
+  "operations": [
+    {
+      "id": "elasticsearch.cluster.info.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch cluster information.",
+      "description": "Bounded direct read of the source-pinned info operation. The provider declares no path-item or operation parameters and returns JSON cluster information.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["monitor"],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "elasticsearch.cluster.remote.info.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch remote-cluster information.",
+      "description": "Bounded direct read of the source-pinned cluster-remote-info operation. The provider declares no path-item or operation parameters and returns JSON remote-cluster information.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["monitor"],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/_remote/info",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "elasticsearch.ilm.status.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch index lifecycle management status.",
+      "description": "Bounded direct read of the source-pinned ilm-get-status operation. The provider declares no path-item or operation parameters and returns a JSON lifecycle status response.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["read_ilm"],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/_ilm/status",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "elasticsearch.license.basic_status.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch basic-license status.",
+      "description": "Bounded direct read of the source-pinned license-get-basic-status operation. The provider declares no path-item or operation parameters and returns a JSON license-status response.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["monitor"],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/_license/basic_status",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "elasticsearch.license.trial_status.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch trial-license status.",
+      "description": "Bounded direct read of the source-pinned license-get-trial-status operation. The provider declares no path-item or operation parameters and returns a JSON license-status response.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["monitor"],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/_license/trial_status",
+        "max_bytes": 1048576
+      }
+    }
+  ]
+}

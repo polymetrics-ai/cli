@@ -53,6 +53,23 @@ SECURITY
   approval: none; read-only cluster access
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Read Elasticsearch declared streams and bounded REST metadata.
+  Usage: pm elasticsearch <command> [flags]
+  Source CLI: Elasticsearch REST API (https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json)
+  Global flags:
+    --credential (string): Named Elasticsearch credential; secrets are loaded from the credential store.
+    --json (boolean): Emit machine-readable JSON output.
+    --max-bytes (integer): Clamp direct-read response size; these operations are capped at 1 MiB.
+  Elasticsearch cluster direct reads
+  Elasticsearch lifecycle and license direct reads
+  Other Commands
+    cluster info get - Get Elasticsearch cluster information. [intent=direct_read availability=implemented operation=elasticsearch.cluster.info.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    cluster remote info get - Get Elasticsearch remote-cluster information. [intent=direct_read availability=implemented operation=elasticsearch.cluster.remote.info.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    ilm status get - Get Elasticsearch index lifecycle management status. [intent=direct_read availability=implemented operation=elasticsearch.ilm.status.get]; approval: none; risk: bounded read; requires the Elasticsearch read_ilm cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    license basic status get - Get Elasticsearch basic-license status. [intent=direct_read availability=implemented operation=elasticsearch.license.basic_status.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    license trial status get - Get Elasticsearch trial-license status. [intent=direct_read availability=implemented operation=elasticsearch.license.trial_status.get]; approval: none; risk: bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect elasticsearch

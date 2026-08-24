@@ -1,0 +1,113 @@
+{
+  "tagline": "Read Elasticsearch declared streams and bounded REST metadata.",
+  "usage": "pm elasticsearch <command> [flags]",
+  "source_cli": {
+    "name": "Elasticsearch REST API",
+    "docs": "https://www.elastic.co/docs/reference/elasticsearch",
+    "reference": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+    "source": "Elasticsearch's pinned public OpenAPI document"
+  },
+  "groups": [
+    {
+      "id": "cluster",
+      "title": "Elasticsearch cluster direct reads",
+      "commands": [
+        "cluster info get",
+        "cluster remote info get"
+      ]
+    },
+    {
+      "id": "lifecycle-and-license",
+      "title": "Elasticsearch lifecycle and license direct reads",
+      "commands": [
+        "ilm status get",
+        "license basic status get",
+        "license trial status get"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Named Elasticsearch credential; secrets are loaded from the credential store."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Clamp direct-read response size; these operations are capped at 1 MiB."
+    }
+  ],
+  "commands": [
+    {
+      "path": "cluster info get",
+      "summary": "Get Elasticsearch cluster information.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "elasticsearch.cluster.info.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "api_surface": [{"method": "GET", "path": "/"}],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": ["pm elasticsearch cluster info get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "cluster remote info get",
+      "summary": "Get Elasticsearch remote-cluster information.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "elasticsearch.cluster.remote.info.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "api_surface": [{"method": "GET", "path": "/_remote/info"}],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": ["pm elasticsearch cluster remote info get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "ilm status get",
+      "summary": "Get Elasticsearch index lifecycle management status.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "elasticsearch.ilm.status.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "api_surface": [{"method": "GET", "path": "/_ilm/status"}],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; requires the Elasticsearch read_ilm cluster privilege; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": ["pm elasticsearch ilm status get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "license basic status get",
+      "summary": "Get Elasticsearch basic-license status.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "elasticsearch.license.basic_status.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "api_surface": [{"method": "GET", "path": "/_license/basic_status"}],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": ["pm elasticsearch license basic status get --credential elasticsearch-local --json"]
+    },
+    {
+      "path": "license trial status get",
+      "summary": "Get Elasticsearch trial-license status.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "elasticsearch.license.trial_status.get",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "api_surface": [{"method": "GET", "path": "/_license/trial_status"}],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; requires the Elasticsearch monitor cluster privilege; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": ["pm elasticsearch license trial status get --credential elasticsearch-local --json"]
+    }
+  ]
+}

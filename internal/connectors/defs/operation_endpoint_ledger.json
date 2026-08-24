@@ -1097,7 +1097,38 @@
   "ebay-finance": [],
   "ebay-fulfillment": [],
   "elasticemail": [],
-  "elasticsearch": [],
+  "elasticsearch": [
+    {
+      "method": "GET",
+      "path": "/",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_remote/info",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_ilm/status",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_license/basic_status",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_license/trial_status",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "emailoctopus": [],
   "employment-hero": [],
   "encharge": [],

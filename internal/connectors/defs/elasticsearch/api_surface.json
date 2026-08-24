@@ -21,14 +21,8 @@
     {
       "method": "GET",
       "path": "/",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "cluster info/health root, used only by base.check, not a syncable object stream",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "legacy_exclusion=non_data_endpoint; converted for the source-locked parity ledger"
+      "covered_by": {
+        "direct_read": "cluster info get"
       }
     },
     {
@@ -1269,14 +1263,8 @@
     {
       "method": "GET",
       "path": "/_remote/info",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.cluster-remote-info; source_location=paths[\"/_remote/info\"].get"
+      "covered_by": {
+        "direct_read": "cluster remote info get"
       }
     },
     {
@@ -2777,14 +2765,8 @@
     {
       "method": "GET",
       "path": "/_ilm/status",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.ilm-get-status; source_location=paths[\"/_ilm/status\"].get"
+      "covered_by": {
+        "direct_read": "ilm status get"
       }
     },
     {
@@ -5026,27 +5008,15 @@
     {
       "method": "GET",
       "path": "/_license/basic_status",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.license-get-basic-status; source_location=paths[\"/_license/basic_status\"].get"
+      "covered_by": {
+        "direct_read": "license basic status get"
       }
     },
     {
       "method": "GET",
       "path": "/_license/trial_status",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.license-get-trial-status; source_location=paths[\"/_license/trial_status\"].get"
+      "covered_by": {
+        "direct_read": "license trial status get"
       }
     },
     {

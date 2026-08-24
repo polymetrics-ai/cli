@@ -204,6 +204,23 @@ locks, schemas, pagination, writes, or shared engine code. Each installed
 command must reach exactly `error: missing --credential` from a fresh
 credential-free project.
 
+### Elasticsearch Parameterless JSON Direct-Read Slice
+
+The pinned Elasticsearch OpenAPI document declares five exact, parameterless
+JSON `GET` operations: `info` at `/`, `cluster-remote-info` at `/_remote/info`,
+`ilm-get-status` at `/_ilm/status`, `license-get-basic-status` at
+`/_license/basic_status`, and `license-get-trial-status` at
+`/_license/trial_status`. Their source-ledger/API-surface rows are
+declaration-pending only because Elasticsearch has no connector-owned
+`operations.json` or executable CLI surface. The connector-local slice adds
+only bounded 1 MiB `json_redacted` direct-read contracts and source-bound
+commands. It preserves the source document's required cluster privileges as
+operation `auth_scopes` metadata (`monitor` or `read_ilm`); those scopes do not
+disable the commands. It does not alter the source lock, invent request/body
+schemas, alter stream pagination, or change the shared engine. Each installed
+command must reach exactly `error: missing --credential` from a fresh,
+credential-free project.
+
 ## Captain Delivery Discipline — 2026-08-24
 
 The 4,535-operation declarable-now inventory is planning input, not delivered

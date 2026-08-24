@@ -1,0 +1,68 @@
+{
+  "issue": 4289,
+  "connector": "elasticsearch",
+  "source": {
+    "lock": "internal/connectors/defs/elasticsearch/sources/elasticsearch-operation-source-lock.json",
+    "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+    "sha256": "aace81c4c46fa503895ea524d30313856597975f67115fc9cde9c61c7f76b952",
+    "bytes": 6458837,
+    "operations": [
+      "elasticsearch.rest.info",
+      "elasticsearch.rest.cluster-remote-info",
+      "elasticsearch.rest.ilm-get-status",
+      "elasticsearch.rest.license-get-basic-status",
+      "elasticsearch.rest.license-get-trial-status"
+    ]
+  },
+  "binary": {
+    "path": ".fm-elasticsearch-parameterless-proof.bAgFwA/pm",
+    "sha256": "95a5276bfb1fdaf0d509e7e0e5c2ae289e1c57f7d2feb003f18c0dce803191d4",
+    "build_command": "go build -o .fm-elasticsearch-parameterless-proof.bAgFwA/pm ./cmd/pm"
+  },
+  "proof": {
+    "credential_configuration": "none; each command ran from its own project initialized with pm init --root <project> --json",
+    "provider_requests": 0,
+    "expected_stderr": "error: missing --credential",
+    "commands": [
+      {
+        "path": "cluster info get",
+        "exit_code": 1,
+        "stdout_bytes": 0,
+        "stderr": "error: missing --credential"
+      },
+      {
+        "path": "cluster remote info get",
+        "exit_code": 1,
+        "stdout_bytes": 0,
+        "stderr": "error: missing --credential"
+      },
+      {
+        "path": "ilm status get",
+        "exit_code": 1,
+        "stdout_bytes": 0,
+        "stderr": "error: missing --credential"
+      },
+      {
+        "path": "license basic status get",
+        "exit_code": 1,
+        "stdout_bytes": 0,
+        "stderr": "error: missing --credential"
+      },
+      {
+        "path": "license trial status get",
+        "exit_code": 1,
+        "stdout_bytes": 0,
+        "stderr": "error: missing --credential"
+      }
+    ],
+    "help_checks": [
+      "pm help elasticsearch",
+      "pm elasticsearch",
+      "pm elasticsearch cluster info get --help",
+      "pm elasticsearch cluster remote info get --help",
+      "pm elasticsearch ilm status get --help",
+      "pm elasticsearch license basic status get --help",
+      "pm elasticsearch license trial status get --help"
+    ]
+  }
+}
