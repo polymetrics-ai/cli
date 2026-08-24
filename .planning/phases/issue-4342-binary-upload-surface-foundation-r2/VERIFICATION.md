@@ -6,8 +6,9 @@
 
 - [x] Red/green behavioral coverage for F-4343-01 through F-4343-05, F-4343-07, and F-4343-08 as
   listed in `PLAN.md`; these replace the original overstated lifecycle claims.
-- [x] Separately authorized F-4343-06 public GitHub upload-host proof: plan, preview, approval,
-  exact `201`, byte/digest read-back, pre-I/O unsafe-input refusals, and complete cleanup.
+- [x] Separately authorized F-4343-06 public GitHub upload-host proof: plan, persisted preview,
+  approval, exact `201`, byte/digest read-back, oversize/arbitrary-media/missing-file refusals,
+  and an empty retained draft after asset cleanup.
 
 ### Remediation execution evidence
 
@@ -21,12 +22,12 @@
 
 - [x] The `github-live-upload-proof` encrypted credential was used only in the disposable
   `karthik-sivadas/pm-binary-upload-testbed` draft-release fixture. The public binary built from
-  this worktree completed plan → preview → approval-on-stdin → exact 32-byte upload to
-  `uploads.github.com`; its retained provider response is `201`.
+  this worktree completed plan → persisted preview → approval-on-stdin → exact 32-byte upload to
+  `uploads.github.com`; its retained provider response is `201`. It then refused a 64 MiB + 1 byte
+  source, arbitrary `--content-type image/png`, and a missing source before any provider receipt.
 - [x] `gh-axi release download` read the named asset back independently; `cmp`, byte count, and
-  SHA-256 matched. `gh-axi release delete --yes` then removed the dedicated draft release and
-  asset, and `gh-axi release view` confirmed the tag was absent. The complete non-secret record
-  is `LIVE-PROOF.md`.
+  SHA-256 matched. The proof asset was then deleted through `gh-axi api DELETE`, and the fresh
+  retained draft reports `assets: []` for audit. The complete non-secret record is `LIVE-PROOF.md`.
 - [x] The generic certification stage is intentionally still `not_live`: it has no safe input
   contract to carry an upload transfer/read-back/cleanup proof, so this observed proof cannot
   falsely promote a generated matrix cell.

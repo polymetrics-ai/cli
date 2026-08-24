@@ -13,7 +13,8 @@ Refs #4342
 - Red/green and deliberate-break records are in `.planning/phases/issue-4342-binary-upload-surface-foundation-r2/TDD-LEDGER.md`.
 - The deliberate breaks removed planner admission and then the binary persisted-preview gate; the public commandrunner and App lifecycle tests failed, then passed after restoration.
 - The App lifecycle test covers project-root source resolution, withheld path state/output, no pre-preview token or I/O, persisted preview, approval, changed-file zero-I/O refusal, exact bytes/SHA-256, and the retained `201` receipt. Engine tests separately prove Enterprise-to-public-host refusal, exact-`201` policy, and media-policy pre-I/O refusal.
-- An authorized real GitHub proof uploaded 32 bytes to `uploads.github.com`, received `201`, read back an identical SHA-256, and deleted its dedicated draft release/asset. The bounded non-secret record is `LIVE-PROOF.md`. The generic certification stage remains `not_live`, not `pass`, until it can own transfer/read-back/cleanup evidence itself.
+- The fresh authorized GitHub proof uploaded 32 bytes to `uploads.github.com`, received `201`, read back an identical SHA-256, and then verified oversize, arbitrary-media, and missing-file refusal with no partial provider asset. It deleted the proof asset and retained the draft empty for audit. The bounded non-secret record is `LIVE-PROOF.md`. The generic certification stage remains `not_live`, not `pass`, until it can own transfer/read-back/cleanup evidence itself.
+- F-4343-01 through F-4343-08 are closed by their declared origin, redaction, exact-status, media, lifecycle, real-provider, guidance, and project-root fixes. F-4343-09 is fixed only for `binary_upload`: plan has no token, persisted preview mints it, and run requires that preview. The inherited generic no-confirmation `reverse_etl` behavior remains explicitly out of scope.
 
 ## Verification
 

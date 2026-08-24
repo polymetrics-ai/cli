@@ -90,8 +90,10 @@
 - **F-4343-04:** closed by runtime media-policy enforcement for raw/base64 upload executors.
 - **F-4343-05:** closed by the real App lifecycle test and its deliberate persisted-preview-gate
   break; prior evidence claims were rewritten rather than reused.
-- **F-4343-06:** the actual public GitHub host proof, independent read-back, and deleted-release
-  cleanup ledger are recorded in `LIVE-PROOF.md`. The generated stage remains non-passing until it
+- **F-4343-06:** `LIVE-PROOF.md` records fresh actual GitHub-host transfer, exact byte/digest
+  read-back, oversize/arbitrary-media/missing-file refusals, and an empty audited draft cleanup.
+  The original disposable release was deleted during its first cleanup, which made it unauditable;
+  the fresh draft is deliberately retained empty. The generated stage remains non-passing until it
   owns this full proof contract.
 - **F-4343-07:** closed by the rendered-guide regression and regenerated manual/skill/website rows.
 - **F-4343-08:** closed by resolving `binary_upload` source files against the project root, while
