@@ -325,3 +325,69 @@ The only safe dependency order is: land #4348's retention mechanism; validate/re
 and candidate source artifacts through that mechanism; write explicit provenance updates for each
 re-pin; then regenerate/compare the local operation mapping. No command, write action, or transport
 may be promoted on the basis of a source URL alone.
+
+## Source-retention compatibility continuation — 2026-08-24
+
+PR #4348 landed at `db2892653`, and Firstmate directed this lane to use its `source-retain`
+maintenance command. The first controlled attempt is the TDD red observation:
+
+```text
+go run ./cmd/connectorgen source-retain fastly \
+  --retrieved-at 2026-08-24T12:05:00Z --license undetermined --terms undetermined
+→ resolve connector-owned source lock: .../fastly-operation-source-lock.json: no such file or directory
+```
+
+All 20 Batch 4/5 connectors have only their prior `*-parity-source-lock.json`; none has an
+`*-operation-source-lock.json`. The landed command correctly refuses to guess a URL, but it has no
+reader for the already connector-owned parity artifact identity. That makes retention impossible
+even for Fastly, whose current provider collection matched the parity lock byte-for-byte.
+
+### Manual GSD / TDD plan
+
+The canonical GSD command sources were resolved with `scripts/gsd doctor`, `scripts/gsd sources`
+for `discuss-phase`, `plan-phase`, `execute-phase`, `verify-work`, and `code-review`, and the
+corresponding `scripts/gsd prompt … 4349` prompts were reviewed. This task uses the documented
+inline/manual fallback: the connector delivery contract forbids role spawning, and this is a small
+shared maintenance compatibility hook rather than a connector runtime change. Required skills
+loaded: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`,
+`golang-security`, `golang-safety`, and `golang-documentation`; the CLI help/docs parity guidance
+was also read.
+
+- **Scope:** `cmd/connectorgen` only plus its tests and the source-retention documentation. No
+  connector runtime, engine, CLI surface, or provider contract changes.
+- **Red:** add a test that a valid connector-owned v1 parity lock with one exact public artifact is
+  retained and recorded without modifying that parity lock. Add a regression that the presence of
+  an operation lock is authoritative: a malformed operation lock must fail rather than falling back
+  to a parity lock. Add a fixed public-query case so identity queries already present in a parity
+  artifact are retained as part of identity, never accepted from command input.
+- **Green:** let `source-retain` read the existing operation lock when it exists; otherwise read
+  only `<connector>-parity-source-lock.json`, duplicate-safe decode its recorded artifact list,
+  validate connector identity, URL, bytes, and SHA-256 through the existing public-URL policy, and
+  retain only those predeclared artifacts. The compatibility reader has no operation importer
+  semantics: `source-import` remains operation-lock-only and hermetic.
+- **Guard:** an absent artifact list, an unavailable diagnostic lock, invalid identity, malformed
+  lock, terminal response, redirect, login wall, or byte/digest change is terminal. The fallback
+  never invents an `operation-source-lock.json`, operation inventory, source URL, or query. A
+  query already present in a strict legacy artifact identity is allowed only if the existing public
+  query policy accepts it.
+- **CLI parity:** `connectorgen` is a developer tool, not `pm`; its own help and
+  `docs/migration/conventions.md` are updated and tested. `pm` help/manual/website changes are
+  not applicable.
+
+Only after this compatibility hook is green will this lane invoke `source-retain` against the
+twenty existing connector-owned parity locks. Each source mismatch will be classified and recorded
+before any lock update; `source-retain` itself still cannot alter a lock.
+
+### TDD ledger — legacy parity retention compatibility
+
+- **Red:** the unmodified `source-retain fastly` command failed before any provider request because
+  `fastly-operation-source-lock.json` does not exist. The new legacy-parity behavior tests likewise
+  failed with that exact missing-operation-lock error.
+- **Green:** `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceRetain'` passes. It proves
+  exact legacy bytes are retained without modifying the parity lock, preserves a predeclared fixed
+  public query as identity provenance, refuses a malformed operation lock instead of falling back,
+  and renders the developer-command help contract.
+- **Security review target:** the sole new trust boundary is a checked-in legacy source lock. The
+  reader uses the existing public URL/SSRF policy, requires a matching connector name and v1 lock,
+  allows only the lock's own non-secret query, and runs the same byte/digest validation before any
+  write. It never accepts a runtime URL, artifact path, or credentials.
