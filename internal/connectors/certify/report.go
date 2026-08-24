@@ -110,16 +110,18 @@ type DeclaredTransportResult struct {
 // later-phase field, deliberately absent from this struct (DATA-MODEL.md
 // §6).
 type Capabilities struct {
-	Check             CapabilityResult             `json:"check"`
-	Catalog           CapabilityResult             `json:"catalog"`
-	Read              CapabilityResult             `json:"read"`
-	SyncModes         map[string]SyncModeResult    `json:"sync_modes"`
-	Resume            CapabilityResult             `json:"resume"`
-	JSONContract      CapabilityResult             `json:"json_contract"`
-	SecretRedaction   CapabilityResult             `json:"secret_redaction"`
-	DirectRead        *CapabilityResult            `json:"direct_read,omitempty"`
-	GraphQL           *GraphQLCertificationResult  `json:"graphql,omitempty"`
+	Check           CapabilityResult            `json:"check"`
+	Catalog         CapabilityResult            `json:"catalog"`
+	Read            CapabilityResult            `json:"read"`
+	SyncModes       map[string]SyncModeResult   `json:"sync_modes"`
+	Resume          CapabilityResult            `json:"resume"`
+	JSONContract    CapabilityResult            `json:"json_contract"`
+	SecretRedaction CapabilityResult            `json:"secret_redaction"`
+	DirectRead      *CapabilityResult           `json:"direct_read,omitempty"`
+	GraphQL         *GraphQLCertificationResult `json:"graphql,omitempty"`
+	// Binary retains the backwards-compatible binary-download report key.
 	Binary            *CapabilityResult            `json:"binary,omitempty"`
+	BinaryUpload      *CapabilityResult            `json:"binary_upload,omitempty"`
 	Surface           *SurfaceResult               `json:"surface,omitempty"`
 	Flow              *CapabilityResult            `json:"flow,omitempty"`
 	Schedule          *ScheduleResult              `json:"schedule,omitempty"`

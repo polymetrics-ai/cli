@@ -210,8 +210,12 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		"graphql_schema_conformance": true,
 		"graphql_inventory_boundary": true,
 		"binary_download_sweep":      true,
-		"surface_inventory":          true,
-		"declared_transport_pair":    true,
+		// Like binary_download_sweep, a connector with no definition-owned
+		// candidate records this stage as a documented skip without invoking
+		// the CLI. A real upload candidate is covered by its own stage test.
+		"binary_upload_sweep":     true,
+		"surface_inventory":       true,
+		"declared_transport_pair": true,
 	}
 	for _, stage := range rep.Stages {
 		if metaStagesWithoutDirectCLICall[stage.Name] {
