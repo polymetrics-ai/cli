@@ -65,6 +65,34 @@ func TestConnectorInspectJSONIncludesManifest(t *testing.T) {
 	}
 }
 
+func TestConnectorInspectJSONIncludesRequestExecutionLimits(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"connectors", "inspect", "github", "--json"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(connectors inspect github) code = %d stderr = %s", code, stderr.String())
+	}
+	var got struct {
+		Limits []struct {
+			PolicyVersion string `json:"policy_version"`
+			Origin        string `json:"origin"`
+			Unit          string `json:"unit"`
+			Effective     int    `json:"effective"`
+		} `json:"request_execution_limits"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &got); err != nil {
+		t.Fatalf("stdout is not JSON: %v", err)
+	}
+	if len(got.Limits) == 0 {
+		t.Fatal("connector inspection omitted request_execution_limits")
+	}
+	for _, limit := range got.Limits {
+		if limit.PolicyVersion == "pm-request-contract-bounds-v1" && limit.Origin == "pm_policy" && limit.Unit == "encoded_bytes" && limit.Effective > 0 {
+			return
+		}
+	}
+	t.Fatalf("connector inspection has no PM encoded-byte limit: %#v", got.Limits)
+}
+
 func TestConnectorInspectRejectsUnsafeIdentifier(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"connectors", "inspect", "bad\x1b[31m", "--json"}, &stdout, &stderr)

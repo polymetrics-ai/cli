@@ -20,6 +20,9 @@
 //	                           verifies a connector-owned source lock and
 //	                           emits canonical provider contracts for later
 //	                           declaration materializers
+//	source-retain <connector> --retrieved-at <RFC3339> --license <text> --terms <text>
+//	                           explicitly obtains, verifies, and stores the
+//	                           bytes already pinned by a source lock
 //	surface-reconcile [dir] [--check] [--json] [--reason-contains text]
 //	                           derives direct-read api_surface coverage and
 //	                           blocked reasons from runtime preflight
@@ -73,6 +76,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runParamsImport(args, stdout, stderr)
 	case "source-import":
 		return runSourceImport(args, stdout, stderr)
+	case "source-retain":
+		return runSourceRetain(args, stdout, stderr)
 	case "evidence-gate":
 		return runEvidenceGate(args, stdout, stderr)
 	case "surface-reconcile":
@@ -124,6 +129,7 @@ func usage() string {
 	connectorgen gen
 	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
 	connectorgen source-import <connector> --out <path> [--defs <dir>] [--check]
+	connectorgen source-retain <connector> [--defs <dir>] --retrieved-at <RFC3339> --license <text> --terms <text>
 	connectorgen evidence-gate <evidence-manifest.json> <TDD-LEDGER.md> <REVIEW.md>
 	connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text]  (default dir: internal/connectors/defs)
 	connectorgen certification-matrix [repo-root] (--connector <name> [--check] | --all | --check)

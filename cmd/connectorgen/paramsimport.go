@@ -140,8 +140,10 @@ type openAPIParameter struct {
 	Schema      openAPIParameterSchema `json:"schema"`
 	// Swagger 2 puts type/enum directly on the parameter rather than under a
 	// schema object.
-	Type string   `json:"type"`
-	Enum []string `json:"enum"`
+	Type    string                  `json:"type"`
+	Enum    []string                `json:"enum"`
+	Minimum *connectors.ExactNumber `json:"minimum"`
+	Maximum *connectors.ExactNumber `json:"maximum"`
 }
 
 // openAPIParameterSchema is the deliberately small parameter subset the
@@ -155,6 +157,8 @@ type openAPIParameterSchema struct {
 	Pattern   string                   `json:"pattern"`
 	MinLength int                      `json:"minLength"`
 	MaxLength int                      `json:"maxLength"`
+	Minimum   *connectors.ExactNumber  `json:"minimum"`
+	Maximum   *connectors.ExactNumber  `json:"maximum"`
 	OneOf     []openAPIParameterSchema `json:"oneOf"`
 	AnyOf     []openAPIParameterSchema `json:"anyOf"`
 }
@@ -583,6 +587,14 @@ func importedParameters(doc openAPIDoc, params []openAPIParameter, skip map[stri
 		if summary := strings.TrimSpace(firstLine(p.Description)); summary != "" {
 			entry["summary"] = summary
 		}
+		if typ, _ := entry["type"].(string); typ == "integer" || typ == "number" {
+			if minimum := firstExactNumber(p.Schema.Minimum, p.Minimum); minimum != nil {
+				entry["minimum"] = *minimum
+			}
+			if maximum := firstExactNumber(p.Schema.Maximum, p.Maximum); maximum != nil {
+				entry["maximum"] = *maximum
+			}
+		}
 		if p.In == "header" {
 			schema, maxBytes, ok := importedHeaderSchema(p)
 			if !ok {
@@ -601,6 +613,16 @@ func importedParameters(doc openAPIDoc, params []openAPIParameter, skip map[stri
 		return out[i]["name"].(string) < out[j]["name"].(string)
 	})
 	return out
+}
+
+func firstExactNumber(values ...*connectors.ExactNumber) *connectors.ExactNumber {
+	for _, value := range values {
+		if value != nil {
+			copy := *value
+			return &copy
+		}
+	}
+	return nil
 }
 
 func importedParameterWireType(p openAPIParameter) string {
@@ -835,6 +857,19 @@ func sameImportedParameter(got *orderedObject, want map[string]any) bool {
 			return false
 		}
 	}
+	for _, field := range []string{"minimum", "maximum"} {
+		wantNumber, declared := want[field].(connectors.ExactNumber)
+		gotNumber, gotDeclared := got.get(field)
+		if declared != gotDeclared {
+			return false
+		}
+		if declared {
+			number, ok := gotNumber.(json.Number)
+			if !ok || number.String() != wantNumber.String() {
+				return false
+			}
+		}
+	}
 	return true
 }
 
@@ -896,6 +931,11 @@ func setImportedField(rest *orderedObject, field string, want []map[string]any) 
 		}
 		if maxBytes, ok := param["max_bytes"].(int); ok && maxBytes > 0 {
 			entry.set("max_bytes", json.Number(strconv.Itoa(maxBytes)))
+		}
+		for _, field := range []string{"minimum", "maximum"} {
+			if number, ok := param[field].(connectors.ExactNumber); ok {
+				entry.set(field, json.Number(number.String()))
+			}
 		}
 		entries = append(entries, entry)
 	}

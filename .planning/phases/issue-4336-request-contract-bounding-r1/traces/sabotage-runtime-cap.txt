@@ -1,0 +1,12 @@
+$ GOFLAGS=-p=3 go test -timeout 20m ./internal/connectors/engine -run '^TestOperationParametersReportPMExecutionCapBeforeIO$' -count=1
+--- FAIL: TestOperationParametersReportPMExecutionCapBeforeIO (0.00s)
+    operation_direct_read_bindings_test.go:113: over-cap error = <nil>, want PM execution limit, encoded_bytes, and effective cap
+FAIL
+FAIL polymetrics.ai/internal/connectors/engine
+
+Negative control: the production `len(encoded) > capBytes` condition was
+temporarily disabled. The real operation direct-read test immediately observed
+that cap+1 no longer failed before the local provider boundary. The condition
+was restored with `apply_patch`, the focused test passed, and
+`git diff --exit-code -- internal/connectors/engine/operation_parameters.go`
+proved the sabotage left no source diff.

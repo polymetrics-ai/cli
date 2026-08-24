@@ -1,0 +1,12 @@
+{
+  "record": {
+    "lastPublishedVersionId": "lastPublishedVersionId_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/workflows",
+    "body": {
+      "lastPublishedVersionId": "lastPublishedVersionId_fixture_1"
+    }
+  }
+}

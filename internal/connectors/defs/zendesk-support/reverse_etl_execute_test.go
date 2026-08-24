@@ -59,7 +59,7 @@ const (
 	// bound to a write action, pinned on its own so the ledger arithmetic can
 	// never be satisfied by dropping covered_by blocks and re-blocking them
 	// under a freshly worded reason.
-	reverseETLBoundEndpoints = 89
+	reverseETLBoundEndpoints = 90
 
 	// blockedDestructiveOperations is the number of destructive_action rows
 	// that remain unbound pending connector-local action, command, and fixture

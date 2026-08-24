@@ -1,9 +1,9 @@
 {
   "api": "Zendesk Support API v2 (OpenAPI 2.0.0)",
   "docs": "https://developer.zendesk.com/api-reference/ticketing/introduction/; https://developer.zendesk.com/zendesk/oas.yaml",
-  "reviewed_at": "2026-08-01",
+  "reviewed_at": "2026-08-19",
   "operation_ledger_version": 1,
-  "scope": "Complete official Zendesk Support OAS 2.0.0 operation ledger: 625 official operations inventoried exactly once. Existing fixture-backed streams and reverse-ETL writes remain covered; non-executable official operations are blocked by default as typed operation metadata. Supplemental covered_by rows are included only for existing Airbyte/Zendesk Guide/community bundle surfaces not present in the Support OAS so connector validation remains truthful.",
+  "scope": "Provider-source inventory regenerated for issue #4290 from Official Zendesk Support OpenAPI document; count is HTTP method plus path. It contains 629 documented provider operations plus 6 explicit local compatibility binding(s) retained solely because the current executor still dispatches them. The local bindings are not used to bound or count the provider source.",
   "endpoints": [
     {
       "method": "GET",
@@ -164,6 +164,49 @@
     },
     {
       "method": "GET",
+      "path": "/api/v2/api_tokens",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=ListApiTokens"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/api_tokens",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=CreateApiToken"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/api_tokens/{id}",
+      "covered_by": {
+        "write": "delete_api_token"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/api_tokens/{id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
+        "notes": "operation_id=UpdateApiToken"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api/v2/approval_requests",
       "operation": {
         "model": "direct_read",
@@ -180,6 +223,19 @@
       "path": "/api/v2/approval_requests",
       "covered_by": {
         "write": "create_approval_request"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/attachments/{attachment_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteAttachment; summary=Delete Attachment; tags=Attachments"
       }
     },
     {
@@ -200,19 +256,6 @@
       "path": "/api/v2/attachments/{attachment_id}",
       "covered_by": {
         "write": "update_attachment"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/attachments/{attachment_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteAttachment; summary=Delete Attachment; tags=Attachments"
       }
     },
     {
@@ -295,6 +338,13 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/automations/{automation_id}",
+      "covered_by": {
+        "write": "delete_automation"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/automations/{automation_id}",
       "operation": {
@@ -312,13 +362,6 @@
       "path": "/api/v2/automations/{automation_id}",
       "covered_by": {
         "write": "update_automation"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/automations/{automation_id}",
-      "covered_by": {
-        "write": "delete_automation"
       }
     },
     {
@@ -420,19 +463,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/brand_agents/{brand_agent_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowBrandAgentById; summary=Show Brand Agent Membership; tags=Brand Agents"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/brand_agents/{brand_agent_id}",
       "operation": {
@@ -447,6 +477,19 @@
     },
     {
       "method": "GET",
+      "path": "/api/v2/brand_agents/{brand_agent_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowBrandAgentById; summary=Show Brand Agent Membership; tags=Brand Agents"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api/v2/brands",
       "covered_by": {
         "stream": "brands"
@@ -457,6 +500,19 @@
       "path": "/api/v2/brands",
       "covered_by": {
         "write": "create_brand"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/brands/{brand_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteBrand; summary=Delete a Brand; tags=Brands"
       }
     },
     {
@@ -477,19 +533,6 @@
       "path": "/api/v2/brands/{brand_id}",
       "covered_by": {
         "write": "update_brand"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/brands/{brand_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteBrand; summary=Delete a Brand; tags=Brands"
       }
     },
     {
@@ -519,19 +562,6 @@
       }
     },
     {
-      "method": "PUT",
-      "path": "/api/v2/brands/{brand_id}/logo",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateBrandLogo; summary=Update a Brand Logo; tags=Brands"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/brands/{brand_id}/logo",
       "operation": {
@@ -542,6 +572,19 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=DeleteBrandLogo; summary=Delete a Brand Logo; tags=Brands"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/brands/{brand_id}/logo",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=UpdateBrandLogo; summary=Update a Brand Logo; tags=Brands"
       }
     },
     {
@@ -728,6 +771,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{custom_object_key}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteCustomObject; summary=Delete Custom Object; tags=Custom Objects"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}",
       "operation": {
@@ -754,19 +810,6 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/v2/custom_objects/{custom_object_key}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteCustomObject; summary=Delete Custom Object; tags=Custom Objects"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/access_rules",
       "operation": {
@@ -787,6 +830,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{custom_object_key}/access_rules/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteAccessRule; summary=Delete Access Rule; tags=Custom Object Permissions"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/access_rules/{id}",
       "operation": {
@@ -804,19 +860,6 @@
       "path": "/api/v2/custom_objects/{custom_object_key}/access_rules/{id}",
       "covered_by": {
         "write": "update_access_rule"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/custom_objects/{custom_object_key}/access_rules/{id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteAccessRule; summary=Delete Access Rule; tags=Custom Object Permissions"
       }
     },
     {
@@ -853,6 +896,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{custom_object_key}/fields/{custom_object_field_key_or_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteCustomObjectField; summary=Delete Custom Object Field; tags=Custom Object Fields"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/fields/{custom_object_field_key_or_id}",
       "operation": {
@@ -876,19 +932,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateCustomObjectField; summary=Update Custom Object Field; tags=Custom Object Fields"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/custom_objects/{custom_object_key}/fields/{custom_object_field_key_or_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteCustomObjectField; summary=Delete Custom Object Field; tags=Custom Object Fields"
       }
     },
     {
@@ -958,6 +1001,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{custom_object_key}/records",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteCustomObjectRecordByExternalIdOrName; summary=Delete Custom Object Record by External Id Or Name; tags=Custom Object Records"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/records",
       "operation": {
@@ -971,13 +1027,6 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/api/v2/custom_objects/{custom_object_key}/records",
-      "covered_by": {
-        "write": "create_custom_object_record"
-      }
-    },
-    {
       "method": "PATCH",
       "path": "/api/v2/custom_objects/{custom_object_key}/records",
       "covered_by": {
@@ -985,16 +1034,23 @@
       }
     },
     {
-      "method": "DELETE",
+      "method": "POST",
       "path": "/api/v2/custom_objects/{custom_object_key}/records",
+      "covered_by": {
+        "write": "create_custom_object_record"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{custom_object_key}/records/{custom_object_record_id}",
       "operation": {
         "model": "destructive_action",
         "status": "blocked",
-        "risk": "high",
+        "risk": "critical",
         "blocked_by_default": true,
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteCustomObjectRecordByExternalIdOrName; summary=Delete Custom Object Record by External Id Or Name; tags=Custom Object Records"
+        "notes": "operationId=DeleteCustomObjectRecord; summary=Delete Custom Object Record; tags=Custom Object Records"
       }
     },
     {
@@ -1024,19 +1080,6 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/v2/custom_objects/{custom_object_key}/records/{custom_object_record_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteCustomObjectRecord; summary=Delete Custom Object Record; tags=Custom Object Records"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments",
       "operation": {
@@ -1063,13 +1106,6 @@
       }
     },
     {
-      "method": "PUT",
-      "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}",
-      "covered_by": {
-        "write": "update_custom_object_record_attachment"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}",
       "operation": {
@@ -1080,6 +1116,13 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=DeleteCustomObjectRecordAttachment; summary=Delete Custom Object Record Attachment; tags=Custom Object Record Attachments"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}",
+      "covered_by": {
+        "write": "update_custom_object_record_attachment"
       }
     },
     {
@@ -1168,6 +1211,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteObjectTrigger; summary=Delete Object Trigger; tags=Object Triggers"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}",
       "operation": {
@@ -1185,19 +1241,6 @@
       "path": "/api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}",
       "covered_by": {
         "write": "update_object_trigger"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteObjectTrigger; summary=Delete Object Trigger; tags=Object Triggers"
       }
     },
     {
@@ -1306,6 +1349,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/custom_roles/{custom_role_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteCustomRoleById; summary=Delete Custom Role; tags=Custom Roles"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/custom_roles/{custom_role_id}",
       "operation": {
@@ -1329,19 +1385,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateCustomRoleById; summary=Update Custom Role; tags=Custom Roles"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/custom_roles/{custom_role_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteCustomRoleById; summary=Delete Custom Role; tags=Custom Roles"
       }
     },
     {
@@ -1372,6 +1415,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/custom_statuses/{custom_status_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteCustomStatus; summary=Delete Custom Ticket Status; tags=Custom Ticket Statuses"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/custom_statuses/{custom_status_id}",
       "operation": {
@@ -1389,19 +1445,6 @@
       "path": "/api/v2/custom_statuses/{custom_status_id}",
       "covered_by": {
         "write": "update_custom_status"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/custom_statuses/{custom_status_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteCustomStatus; summary=Delete Custom Ticket Status; tags=Custom Ticket Statuses"
       }
     },
     {
@@ -1484,19 +1527,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/deleted_users/{deleted_user_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowDeletedUser; summary=Show Deleted User; tags=Users"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/deleted_users/{deleted_user_id}",
       "operation": {
@@ -1507,6 +1537,19 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=PermanentlyDeleteUser; summary=Permanently Delete User; tags=Users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/deleted_users/{deleted_user_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowDeletedUser; summary=Show Deleted User; tags=Users"
       }
     },
     {
@@ -1543,6 +1586,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/deletion_schedules/{deletion_schedule_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteDeletionSchedule; summary=Delete Deletion Schedule; tags=Deletion Schedules"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/deletion_schedules/{deletion_schedule_id}",
       "operation": {
@@ -1560,19 +1616,6 @@
       "path": "/api/v2/deletion_schedules/{deletion_schedule_id}",
       "covered_by": {
         "write": "update_deletion_schedule"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/deletion_schedules/{deletion_schedule_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteDeletionSchedule; summary=Delete Deletion Schedule; tags=Deletion Schedules"
       }
     },
     {
@@ -1602,6 +1645,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteDynamicContentItem; summary=Delete Item; tags=Dynamic Content"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}",
       "operation": {
@@ -1625,19 +1681,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateDynamicContentItem; summary=Update Item; tags=Dynamic Content"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteDynamicContentItem; summary=Delete Item; tags=Dynamic Content"
       }
     },
     {
@@ -1667,6 +1710,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteDynamicContentVariant; summary=Delete Variant; tags=Dynamic Content Item Variants"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id}",
       "operation": {
@@ -1690,19 +1746,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateDynamicContentVariant; summary=Update Variant; tags=Dynamic Content Item Variants"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteDynamicContentVariant; summary=Delete Variant; tags=Dynamic Content Item Variants"
       }
     },
     {
@@ -1810,19 +1853,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/end_users/{user_id}/identities/{user_identity_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowEndUserIdentity; summary=Show End User Identity; tags=User Identities"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/end_users/{user_id}/identities/{user_identity_id}",
       "operation": {
@@ -1833,6 +1863,19 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=DeleteEndUserIdentity; summary=Delete End User Identity; tags=User Identities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/end_users/{user_id}/identities/{user_identity_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowEndUserIdentity; summary=Show End User Identity; tags=User Identities"
       }
     },
     {
@@ -1876,19 +1919,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/group_memberships/{group_membership_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowGroupMembershipById; summary=Show Membership; tags=Group Memberships"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/group_memberships/{group_membership_id}",
       "operation": {
@@ -1899,6 +1929,19 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=DeleteGroupMembership; summary=Delete Membership; tags=Group Memberships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/group_memberships/{group_membership_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowGroupMembershipById; summary=Show Membership; tags=Group Memberships"
       }
     },
     {
@@ -1961,6 +2004,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/group_slas/policies/{group_sla_policy_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteGroupSLAPolicy; summary=Delete Group SLA Policy; tags=Group SLA Policies"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/group_slas/policies/{group_sla_policy_id}",
       "operation": {
@@ -1984,19 +2040,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateGroupSLAPolicy; summary=Update Group SLA Policy; tags=Group SLA Policies"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/group_slas/policies/{group_sla_policy_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteGroupSLAPolicy; summary=Delete Group SLA Policy; tags=Group SLA Policies"
       }
     },
     {
@@ -2040,6 +2083,13 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/groups/{group_id}",
+      "covered_by": {
+        "write": "delete_group"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/groups/{group_id}",
       "operation": {
@@ -2057,13 +2107,6 @@
       "path": "/api/v2/groups/{group_id}",
       "covered_by": {
         "write": "update_group"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/groups/{group_id}",
-      "covered_by": {
-        "write": "delete_group"
       }
     },
     {
@@ -2362,6 +2405,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteItamAssetType; summary=Delete Asset Type; tags=ITAM Asset Types"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}",
       "operation": {
@@ -2388,19 +2444,6 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteItamAssetType; summary=Delete Asset Type; tags=ITAM Asset Types"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}/fields",
       "operation": {
@@ -2418,6 +2461,19 @@
       "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}/fields",
       "covered_by": {
         "write": "create_itam_asset_type_field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}/fields/{asset_type_field_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteItamAssetTypeField; summary=Delete Asset Field; tags=ITAM Asset Fields"
       }
     },
     {
@@ -2447,19 +2503,6 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}/fields/{asset_type_field_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteItamAssetTypeField; summary=Delete Asset Field; tags=ITAM Asset Fields"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/v2/it_asset_management/assets",
       "operation": {
@@ -2477,6 +2520,19 @@
       "path": "/api/v2/it_asset_management/assets",
       "covered_by": {
         "write": "create_itam_asset"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/assets/{asset_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteItamAsset; summary=Delete Asset; tags=ITAM Assets"
       }
     },
     {
@@ -2503,19 +2559,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateItamAsset; summary=Update Asset; tags=ITAM Assets"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/it_asset_management/assets/{asset_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteItamAsset; summary=Delete Asset; tags=ITAM Assets"
       }
     },
     {
@@ -2572,6 +2615,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/locations/{location_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteItamLocation; summary=Delete Asset Location; tags=ITAM Asset Locations"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/it_asset_management/locations/{location_id}",
       "operation": {
@@ -2598,19 +2654,6 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/v2/it_asset_management/locations/{location_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteItamLocation; summary=Delete Asset Location; tags=ITAM Asset Locations"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/v2/it_asset_management/statuses",
       "operation": {
@@ -2631,6 +2674,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/statuses/{status_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteItamStatus; summary=Delete Asset Status; tags=ITAM Asset Statuses"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/it_asset_management/statuses/{status_id}",
       "operation": {
@@ -2648,19 +2704,6 @@
       "path": "/api/v2/it_asset_management/statuses/{status_id}",
       "covered_by": {
         "write": "update_itam_status"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/it_asset_management/statuses/{status_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteItamStatus; summary=Delete Asset Status; tags=ITAM Asset Statuses"
       }
     },
     {
@@ -2795,6 +2838,13 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/macros/{macro_id}",
+      "covered_by": {
+        "write": "delete_macro"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/macros/{macro_id}",
       "operation": {
@@ -2812,13 +2862,6 @@
       "path": "/api/v2/macros/{macro_id}",
       "covered_by": {
         "write": "update_macro"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/macros/{macro_id}",
-      "covered_by": {
-        "write": "delete_macro"
       }
     },
     {
@@ -3011,6 +3054,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/oauth/clients/{oauth_client_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteClient; summary=Delete Client; tags=OAuth Clients"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/oauth/clients/{oauth_client_id}",
       "operation": {
@@ -3034,19 +3090,6 @@
         "reason": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateClient; summary=Update Client; tags=OAuth Clients"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/oauth/clients/{oauth_client_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteClient; summary=Delete Client; tags=OAuth Clients"
       }
     },
     {
@@ -3128,19 +3171,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/oauth/tokens/{oauth_token_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowToken; summary=Show Token; tags=OAuth Tokens"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/oauth/tokens/{oauth_token_id}",
       "operation": {
@@ -3155,7 +3185,7 @@
     },
     {
       "method": "GET",
-      "path": "/api/v2/oauth/tokens/current",
+      "path": "/api/v2/oauth/tokens/{oauth_token_id}",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -3163,7 +3193,7 @@
         "blocked_by_default": true,
         "reason": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowCurrentToken; summary=Show Current Token; tags=OAuth Tokens"
+        "notes": "operationId=ShowToken; summary=Show Token; tags=OAuth Tokens"
       }
     },
     {
@@ -3177,6 +3207,19 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RevokeCurrentOAuthToken; summary=Revoke Current Token; tags=OAuth Tokens"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/oauth/tokens/current",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowCurrentToken; summary=Show Current Token; tags=OAuth Tokens"
       }
     },
     {
@@ -3197,6 +3240,19 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateOrganizationField; summary=Create Organization Field; tags=Organization Fields"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/organization_fields/{organization_field_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteOrganizationField; summary=Delete Organization Field; tags=Organization Fields"
       }
     },
     {
@@ -3223,19 +3279,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateOrganizationField; summary=Update Organization Field; tags=Organization Fields"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/organization_fields/{organization_field_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteOrganizationField; summary=Delete Organization Field; tags=Organization Fields"
       }
     },
     {
@@ -3272,19 +3315,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/organization_memberships/{organization_membership_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowOrganizationMembershipById; summary=Show Membership; tags=Organization Memberships"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/organization_memberships/{organization_membership_id}",
       "operation": {
@@ -3295,6 +3325,19 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=DeleteOrganizationMembership; summary=Delete Membership; tags=Organization Memberships"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/organization_memberships/{organization_membership_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowOrganizationMembershipById; summary=Show Membership; tags=Organization Memberships"
       }
     },
     {
@@ -3357,19 +3400,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/organization_subscriptions/{organization_subscription_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowOrganizationSubscription; summary=Show Organization Subscription; tags=Organization Subscriptions"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/organization_subscriptions/{organization_subscription_id}",
       "operation": {
@@ -3384,6 +3414,19 @@
     },
     {
       "method": "GET",
+      "path": "/api/v2/organization_subscriptions/{organization_subscription_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowOrganizationSubscription; summary=Show Organization Subscription; tags=Organization Subscriptions"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api/v2/organizations",
       "covered_by": {
         "stream": "organizations"
@@ -3394,6 +3437,13 @@
       "path": "/api/v2/organizations",
       "covered_by": {
         "write": "create_organization"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/organizations/{organization_id}",
+      "covered_by": {
+        "write": "delete_organization"
       }
     },
     {
@@ -3414,13 +3464,6 @@
       "path": "/api/v2/organizations/{organization_id}",
       "covered_by": {
         "write": "update_organization"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/organizations/{organization_id}",
-      "covered_by": {
-        "write": "delete_organization"
       }
     },
     {
@@ -3502,6 +3545,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/organizations/{organization_id}/tags",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=RemoveOrganizationTags; summary=Remove Organization Tags; tags=Tags"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/organizations/{organization_id}/tags",
       "operation": {
@@ -3538,19 +3594,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=AddOrganizationTags; summary=Add Organization Tags; tags=Tags"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/organizations/{organization_id}/tags",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=RemoveOrganizationTags; summary=Remove Organization Tags; tags=Tags"
       }
     },
     {
@@ -3775,6 +3818,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/queues/{queue_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteQueue; summary=Delete Queue; tags=Omnichannel Routing Queues"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/queues/{queue_id}",
       "operation": {
@@ -3798,19 +3854,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateQueue; summary=Update Queue; tags=Omnichannel Routing Queues"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/queues/{queue_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteQueue; summary=Delete Queue; tags=Omnichannel Routing Queues"
       }
     },
     {
@@ -3866,6 +3909,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/recipient_addresses/{support_address_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteRecipientAddress; summary=Delete Support Address; tags=Support Addresses"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/recipient_addresses/{support_address_id}",
       "operation": {
@@ -3889,19 +3945,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateSupportAddress; summary=Update Support Address; tags=Support Addresses"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/recipient_addresses/{support_address_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteRecipientAddress; summary=Delete Support Address; tags=Support Addresses"
       }
     },
     {
@@ -4100,6 +4143,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/resource_collections/{resource_collection_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteResourceCollection; summary=Delete Resource Collection; tags=Resource Collections"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/resource_collections/{resource_collection_id}",
       "operation": {
@@ -4123,19 +4179,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateResourceCollection; summary=Update Resource Collection; tags=Resource Collections"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/resource_collections/{resource_collection_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteResourceCollection; summary=Delete Resource Collection; tags=Resource Collections"
       }
     },
     {
@@ -4205,6 +4248,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/routing/attributes/{attribute_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteAttribute; summary=Delete Attribute; tags=Skill Based Routing"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/routing/attributes/{attribute_id}",
       "operation": {
@@ -4228,19 +4284,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateAttribute; summary=Update Attribute; tags=Skill Based Routing"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/routing/attributes/{attribute_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteAttribute; summary=Delete Attribute; tags=Skill Based Routing"
       }
     },
     {
@@ -4270,6 +4313,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/routing/attributes/{attribute_id}/values/{attribute_value_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteAttributeValue; summary=Delete Attribute Value; tags=Skill Based Routing"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/routing/attributes/{attribute_id}/values/{attribute_value_id}",
       "operation": {
@@ -4293,19 +4349,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateAttributeValue; summary=Update Attribute Value; tags=Skill Based Routing"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/routing/attributes/{attribute_id}/values/{attribute_value_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteAttributeValue; summary=Delete Attribute Value; tags=Skill Based Routing"
       }
     },
     {
@@ -4434,13 +4477,6 @@
       }
     },
     {
-      "method": "PUT",
-      "path": "/api/v2/saved_searches/{id}",
-      "covered_by": {
-        "write": "update_saved_search"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/saved_searches/{id}",
       "operation": {
@@ -4451,6 +4487,13 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=DeleteSavedSearch; summary=Delete Saved Search; tags=Saved Searches"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/saved_searches/{id}",
+      "covered_by": {
+        "write": "update_saved_search"
       }
     },
     {
@@ -4545,6 +4588,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/sharing_agreements/{sharing_agreement_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteSharingAgreement; summary=Delete a Sharing Agreement; tags=Sharing Agreements"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/sharing_agreements/{sharing_agreement_id}",
       "operation": {
@@ -4568,19 +4624,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateSharingAgreement; summary=Update a Sharing Agreement; tags=Sharing Agreements"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/sharing_agreements/{sharing_agreement_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteSharingAgreement; summary=Delete a Sharing Agreement; tags=Sharing Agreements"
       }
     },
     {
@@ -4624,6 +4667,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/slas/policies/{sla_policy_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteSLAPolicy; summary=Delete SLA Policy; tags=SLA Policies"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/slas/policies/{sla_policy_id}",
       "operation": {
@@ -4647,19 +4703,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateSLAPolicy; summary=Update SLA Policy; tags=SLA Policies"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/slas/policies/{sla_policy_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteSLAPolicy; summary=Delete SLA Policy; tags=SLA Policies"
       }
     },
     {
@@ -4702,19 +4745,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/suspended_tickets/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowSuspendedTickets; summary=Show Suspended Ticket; tags=Suspended Tickets"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/suspended_tickets/{id}",
       "operation": {
@@ -4725,6 +4755,19 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=DeleteSuspendedTicket; summary=Delete Suspended Ticket; tags=Suspended Tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/suspended_tickets/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowSuspendedTickets; summary=Show Suspended Ticket; tags=Suspended Tickets"
       }
     },
     {
@@ -4872,6 +4915,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/targets/{target_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteTarget; summary=Delete Target; tags=Targets"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/targets/{target_id}",
       "operation": {
@@ -4898,19 +4954,6 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/v2/targets/{target_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteTarget; summary=Delete Target; tags=Targets"
-      }
-    },
-    {
       "method": "GET",
       "path": "/api/v2/task_list_templates",
       "operation": {
@@ -4931,6 +4974,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/task_list_templates/{task_list_template_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteTaskListTemplate; summary=Delete Task List Template; tags=Task List Templates"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/task_list_templates/{task_list_template_id}",
       "operation": {
@@ -4948,19 +5004,6 @@
       "path": "/api/v2/task_list_templates/{task_list_template_id}",
       "covered_by": {
         "write": "update_task_list_template"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/task_list_templates/{task_list_template_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteTaskListTemplate; summary=Delete Task List Template; tags=Task List Templates"
       }
     },
     {
@@ -5031,6 +5074,13 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/ticket_fields/{ticket_field_id}",
+      "covered_by": {
+        "write": "delete_ticket_field"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/ticket_fields/{ticket_field_id}",
       "operation": {
@@ -5048,13 +5098,6 @@
       "path": "/api/v2/ticket_fields/{ticket_field_id}",
       "covered_by": {
         "write": "update_ticket_field"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/ticket_fields/{ticket_field_id}",
-      "covered_by": {
-        "write": "delete_ticket_field"
       }
     },
     {
@@ -5084,19 +5127,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/ticket_fields/{ticket_field_id}/options/{ticket_field_option_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTicketFieldOption; summary=Show Ticket Field Option; tags=Ticket Fields"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/ticket_fields/{ticket_field_id}/options/{ticket_field_option_id}",
       "operation": {
@@ -5107,6 +5137,19 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=DeleteTicketFieldOption; summary=Delete Ticket Field Option; tags=Ticket Fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ticket_fields/{ticket_field_id}/options/{ticket_field_option_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowTicketFieldOption; summary=Show Ticket Field Option; tags=Ticket Fields"
       }
     },
     {
@@ -5195,6 +5238,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/ticket_forms/{ticket_form_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteTicketForm; summary=Delete Ticket Form; tags=Ticket Forms"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/ticket_forms/{ticket_form_id}",
       "operation": {
@@ -5221,19 +5277,6 @@
       }
     },
     {
-      "method": "DELETE",
-      "path": "/api/v2/ticket_forms/{ticket_form_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteTicketForm; summary=Delete Ticket Form; tags=Ticket Forms"
-      }
-    },
-    {
       "method": "POST",
       "path": "/api/v2/ticket_forms/{ticket_form_id}/clone",
       "operation": {
@@ -5244,6 +5287,19 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CloneTicketForm; summary=Clone an Already Existing Ticket Form; tags=Ticket Forms"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteTicketFormStatuses; summary=Delete Ticket Form Statuses; tags=Ticket Form Statuses"
       }
     },
     {
@@ -5275,26 +5331,6 @@
     },
     {
       "method": "DELETE",
-      "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteTicketFormStatuses; summary=Delete Ticket Form Statuses; tags=Ticket Form Statuses"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}",
-      "covered_by": {
-        "write": "update_ticket_form_status_by_id"
-      }
-    },
-    {
-      "method": "DELETE",
       "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}",
       "operation": {
         "model": "destructive_action",
@@ -5304,6 +5340,13 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=DeleteTicketFormStatusById; summary=Delete Ticket Form Status By Id; tags=Ticket Form Statuses"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}",
+      "covered_by": {
+        "write": "update_ticket_form_status_by_id"
       }
     },
     {
@@ -5373,6 +5416,13 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{ticket_id}",
+      "covered_by": {
+        "write": "delete_ticket"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}",
       "operation": {
@@ -5390,13 +5440,6 @@
       "path": "/api/v2/tickets/{ticket_id}",
       "covered_by": {
         "write": "update_ticket"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/tickets/{ticket_id}",
-      "covered_by": {
-        "write": "delete_ticket"
       }
     },
     {
@@ -5673,6 +5716,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{ticket_id}/tags",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteTagsTicket; summary=Remove Tags; tags=Tags"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/tags",
       "operation": {
@@ -5709,19 +5765,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=PutTagsTicket; summary=Add Tags; tags=Tags"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/tickets/{ticket_id}/tags",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteTagsTicket; summary=Remove Tags; tags=Tags"
       }
     },
     {
@@ -5863,6 +5906,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/trigger_categories/{trigger_category_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteTriggerCategory; summary=Delete Ticket Trigger Category; tags=Trigger Categories"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/trigger_categories/{trigger_category_id}",
       "operation": {
@@ -5880,19 +5936,6 @@
       "path": "/api/v2/trigger_categories/{trigger_category_id}",
       "covered_by": {
         "write": "update_trigger_category"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/trigger_categories/{trigger_category_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteTriggerCategory; summary=Delete Ticket Trigger Category; tags=Trigger Categories"
       }
     },
     {
@@ -5917,6 +5960,13 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/triggers/{trigger_id}",
+      "covered_by": {
+        "write": "delete_trigger"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/triggers/{trigger_id}",
       "operation": {
@@ -5934,13 +5984,6 @@
       "path": "/api/v2/triggers/{trigger_id}",
       "covered_by": {
         "write": "update_trigger"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/triggers/{trigger_id}",
-      "covered_by": {
-        "write": "delete_trigger"
       }
     },
     {
@@ -6088,6 +6131,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/user_fields/{user_field_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteUserField; summary=Delete User Field; tags=User Fields"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/user_fields/{user_field_id}",
       "operation": {
@@ -6111,19 +6167,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateUserField; summary=Update User Field; tags=User Fields"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/user_fields/{user_field_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteUserField; summary=Delete User Field; tags=User Fields"
       }
     },
     {
@@ -6153,19 +6196,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/user_fields/{user_field_id}/options/{user_field_option_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowUserFieldOption; summary=Show a User Field Option; tags=User Fields"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/user_fields/{user_field_id}/options/{user_field_option_id}",
       "operation": {
@@ -6176,6 +6206,19 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=DeleteUserFieldOption; summary=Delete User Field Option; tags=User Fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/user_fields/{user_field_id}/options/{user_field_option_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowUserFieldOption; summary=Show a User Field Option; tags=User Fields"
       }
     },
     {
@@ -6219,6 +6262,13 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/users/{user_id}",
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/users/{user_id}",
       "operation": {
@@ -6236,13 +6286,6 @@
       "path": "/api/v2/users/{user_id}",
       "covered_by": {
         "write": "update_user"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/users/{user_id}",
-      "covered_by": {
-        "write": "delete_user"
       }
     },
     {
@@ -6318,19 +6361,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/users/{user_id}/group_memberships/{group_membership_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowUserGroupMembershipById; summary=Show User's Group Membership; tags=Group Memberships, Users"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/users/{user_id}/group_memberships/{group_membership_id}",
       "operation": {
@@ -6341,6 +6371,19 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=DeleteUserGroupMembership; summary=Delete User's Group Membership; tags=Group Memberships, Users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{user_id}/group_memberships/{group_membership_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowUserGroupMembershipById; summary=Show User's Group Membership; tags=Group Memberships, Users"
       }
     },
     {
@@ -6409,6 +6452,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/users/{user_id}/identities/{user_identity_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteUserIdentity; summary=Delete Identity; tags=User Identities"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/identities/{user_identity_id}",
       "operation": {
@@ -6432,19 +6488,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateUserIdentity; summary=Update Identity; tags=User Identities"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/users/{user_id}/identities/{user_identity_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteUserIdentity; summary=Delete Identity; tags=User Identities"
       }
     },
     {
@@ -6526,19 +6569,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/users/{user_id}/organization_memberships/{organization_membership_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowOrganizationMembershipByUserId; summary=Show Organization Membership by User; tags=Organization Memberships"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/users/{user_id}/organization_memberships/{organization_membership_id}",
       "operation": {
@@ -6549,6 +6579,19 @@
         "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=DeleteUserOrganizationMembership; summary=Delete Organization Membership for User; tags=Organization Memberships, Users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/users/{user_id}/organization_memberships/{organization_membership_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowOrganizationMembershipByUserId; summary=Show Organization Membership by User; tags=Organization Memberships"
       }
     },
     {
@@ -6695,19 +6738,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/api/v2/users/{user_id}/sessions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserSessions; summary=List Sessions for User; tags=Sessions, Users"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/api/v2/users/{user_id}/sessions",
       "operation": {
@@ -6722,7 +6752,7 @@
     },
     {
       "method": "GET",
-      "path": "/api/v2/users/{user_id}/sessions/{session_id}",
+      "path": "/api/v2/users/{user_id}/sessions",
       "operation": {
         "model": "direct_read",
         "status": "blocked",
@@ -6730,7 +6760,7 @@
         "blocked_by_default": true,
         "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowSession; summary=Show Session; tags=Sessions"
+        "notes": "operationId=ListUserSessions; summary=List Sessions for User; tags=Sessions, Users"
       }
     },
     {
@@ -6748,6 +6778,19 @@
     },
     {
       "method": "GET",
+      "path": "/api/v2/users/{user_id}/sessions/{session_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=ShowSession; summary=Show Session; tags=Sessions"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api/v2/users/{user_id}/skips",
       "operation": {
         "model": "direct_read",
@@ -6757,6 +6800,19 @@
         "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ListTicketSkips; summary=List Ticket Skips; tags=Ticket Skips"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/users/{user_id}/tags",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteUserTags; summary=Remove User Tags; tags=Tags"
       }
     },
     {
@@ -6796,19 +6852,6 @@
         "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=PutUserTags; summary=Add User Tags; tags=Tags"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/users/{user_id}/tags",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteUserTags; summary=Remove User Tags; tags=Tags"
       }
     },
     {
@@ -7127,6 +7170,13 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/views/{view_id}",
+      "covered_by": {
+        "write": "delete_view"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/views/{view_id}",
       "operation": {
@@ -7144,13 +7194,6 @@
       "path": "/api/v2/views/{view_id}",
       "covered_by": {
         "write": "update_view"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/views/{view_id}",
-      "covered_by": {
-        "write": "delete_view"
       }
     },
     {
@@ -7369,6 +7412,19 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/api/v2/workspaces/{workspace_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=DeleteWorkspace; summary=Delete Workspace; tags=Workspaces"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/workspaces/{workspace_id}",
       "operation": {
@@ -7386,19 +7442,6 @@
       "path": "/api/v2/workspaces/{workspace_id}",
       "covered_by": {
         "write": "update_workspace"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/api/v2/workspaces/{workspace_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DeleteWorkspace; summary=Delete Workspace; tags=Workspaces"
       }
     },
     {

@@ -285,6 +285,9 @@ func runConnectors(ctx context.Context, root string, args []string, stdout, stde
 				if rateLimits, ok := connectors.RateLimitCoordinationOf(c); ok {
 					response["rate_limit_coordination"] = rateLimits
 				}
+				if executionLimits := connectors.RequestExecutionLimitsOf(c); len(executionLimits) > 0 {
+					response["request_execution_limits"] = executionLimits
+				}
 				if def, ok := connectors.DefinitionOf(c); ok && def.Changefeed != nil {
 					response["changefeed"] = def.Changefeed
 				}

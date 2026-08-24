@@ -1,0 +1,304 @@
+{
+  "tagline": "Declared google-analytics-data-api API commands.",
+  "usage": "pm google-analytics-data-api <command> [flags]",
+  "commands": [
+    {
+      "path": "operations delete-v1-name",
+      "summary": "Declared direct write: DELETE /v1/{+name}.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-operations-delete-1 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: DELETE /v1/{+name}.",
+      "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
+    },
+    {
+      "path": "operations get-v1-name",
+      "summary": "Declared direct read: GET /v1/{+name}.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-operations-list-2 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/{+name}"
+        }
+      ]
+    },
+    {
+      "path": "operations post-v1-name-cancel",
+      "summary": "Declared direct write: POST /v1/{+name}:cancel.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-operations-cancel-3 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1/{+name}:cancel.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-v1alpha-name",
+      "summary": "Declared direct read: GET /v1alpha/{+name}.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-getpropertyquotassnapshot-4 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1alpha/{+name}"
+        }
+      ]
+    },
+    {
+      "path": "operations post-v1alpha-name-query",
+      "summary": "Declared direct write: POST /v1alpha/{+name}:query.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-reporttasks-query-5 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1alpha/{+name}:query.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-v1alpha-parent-audience-lists",
+      "summary": "Declared direct read: GET /v1alpha/{+parent}/audienceLists.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-audiencelists-list-6 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1alpha/{+parent}/audienceLists"
+        }
+      ]
+    },
+    {
+      "path": "operations post-v1alpha-parent-audience-lists",
+      "summary": "Declared direct write: POST /v1alpha/{+parent}/audienceLists.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-audiencelists-create-7 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1alpha/{+parent}/audienceLists.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-v1alpha-parent-recurring-audience-lists",
+      "summary": "Declared direct read: GET /v1alpha/{+parent}/recurringAudienceLists.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-recurringaudiencelists-list-8 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1alpha/{+parent}/recurringAudienceLists"
+        }
+      ]
+    },
+    {
+      "path": "operations post-v1alpha-parent-recurring-audience-lists",
+      "summary": "Declared direct write: POST /v1alpha/{+parent}/recurringAudienceLists.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-recurringaudiencelists-create-9 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1alpha/{+parent}/recurringAudienceLists.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-v1alpha-parent-report-tasks",
+      "summary": "Declared direct read: GET /v1alpha/{+parent}/reportTasks.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-reporttasks-list-10 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1alpha/{+parent}/reportTasks"
+        }
+      ]
+    },
+    {
+      "path": "operations post-v1alpha-parent-report-tasks",
+      "summary": "Declared direct write: POST /v1alpha/{+parent}/reportTasks.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-reporttasks-create-11 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1alpha/{+parent}/reportTasks.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-v1alpha-property-run-funnel-report",
+      "summary": "Declared direct write: POST /v1alpha/{+property}:runFunnelReport.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-runfunnelreport-12 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1alpha/{+property}:runFunnelReport.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-v1alpha-property-run-report",
+      "summary": "Declared direct write: POST /v1alpha/{+property}:runReport.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-runreport-13 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1alpha/{+property}:runReport.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-v1beta-name",
+      "summary": "Declared direct read: GET /v1beta/{+name}.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-getmetadata-14 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1beta/{+name}"
+        }
+      ]
+    },
+    {
+      "path": "operations post-v1beta-name-query",
+      "summary": "Declared direct write: POST /v1beta/{+name}:query.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-audienceexports-query-15 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1beta/{+name}:query.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-v1beta-parent-audience-exports",
+      "summary": "Declared direct read: GET /v1beta/{+parent}/audienceExports.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-audienceexports-list-16 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1beta/{+parent}/audienceExports"
+        }
+      ]
+    },
+    {
+      "path": "operations post-v1beta-parent-audience-exports",
+      "summary": "Declared direct write: POST /v1beta/{+parent}/audienceExports.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-audienceexports-create-17 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1beta/{+parent}/audienceExports.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-v1beta-property-batch-run-pivot-reports",
+      "summary": "Declared direct write: POST /v1beta/{+property}:batchRunPivotReports.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-batchrunpivotreports-18 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1beta/{+property}:batchRunPivotReports.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-v1beta-property-batch-run-reports",
+      "summary": "Declared direct write: POST /v1beta/{+property}:batchRunReports.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-batchrunreports-19 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1beta/{+property}:batchRunReports.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-v1beta-property-check-compatibility",
+      "summary": "Declared direct write: POST /v1beta/{+property}:checkCompatibility.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-checkcompatibility-20 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1beta/{+property}:checkCompatibility.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-v1beta-property-run-pivot-report",
+      "summary": "Declared direct write: POST /v1beta/{+property}:runPivotReport.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-runpivotreport-21 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1beta/{+property}:runPivotReport.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-v1beta-property-run-realtime-report",
+      "summary": "Declared direct write: POST /v1beta/{+property}:runRealtimeReport.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-runrealtimereport-22 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1beta/{+property}:runRealtimeReport.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-v1beta-property-run-report",
+      "summary": "Declared direct write: POST /v1beta/{+property}:runReport.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.provider.analyticsdata-properties-runreport-23 has no declaration-owned executable direct_write route.",
+      "risk": "Declared provider mutation: POST /v1beta/{+property}:runReport.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path",
+      "summary": "Declared etl: HOOK internal/connectors/google-analytics-data-api daily_active_users read path.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path-24 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations hook-internal-connectors-google-analytics-data-api-website-overview-read-path",
+      "summary": "Declared etl: HOOK internal/connectors/google-analytics-data-api website_overview read path.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-website-overview-read-path-25 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path",
+      "summary": "Declared etl: HOOK internal/connectors/google-analytics-data-api traffic_sources read path.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path-26 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations hook-internal-connectors-google-analytics-data-api-devices-read-path",
+      "summary": "Declared etl: HOOK internal/connectors/google-analytics-data-api devices read path.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-devices-read-path-27 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations hook-internal-connectors-google-analytics-data-api-pages-read-path",
+      "summary": "Declared etl: HOOK internal/connectors/google-analytics-data-api pages read path.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+      "notes": "Blocked: locked source operation google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-pages-read-path-28 has no declaration-owned executable etl route."
+    }
+  ]
+}

@@ -1,0 +1,6103 @@
+{
+  "schema_version": 1,
+  "connector": "twenty",
+  "source": "connector declarations",
+  "declared_commands": 168,
+  "declared_rows": 172,
+  "status_total": 172,
+  "commands": [
+    {
+      "summary": "Batch-create Twenty attachments records",
+      "path": "attachments batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/attachments"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty attachments record",
+      "path": "attachments create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/attachments"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty attachments record",
+      "path": "attachments delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/attachments/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty attachments record by ID",
+      "path": "attachments get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/attachments/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty attachments records",
+      "path": "attachments list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "attachments",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/attachments"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty attachments record",
+      "path": "attachments update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/attachments/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty blocklists records",
+      "path": "blocklists batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/blocklists"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty blocklists record",
+      "path": "blocklists create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "handle",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.handle"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/blocklists"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty blocklists record",
+      "path": "blocklists delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/blocklists/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty blocklists record by ID",
+      "path": "blocklists get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/blocklists/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty blocklists records",
+      "path": "blocklists list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "blocklists",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/blocklists"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty blocklists record",
+      "path": "blocklists update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "handle",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.handle"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/blocklists/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty calendar channel event associations records",
+      "path": "calendar-channel-event-associations batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/calendarChannelEventAssociations"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty calendar channel event associations record",
+      "path": "calendar-channel-event-associations create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "calendar-channel-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.calendarChannelId"
+        },
+        {
+          "name": "event-external-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.eventExternalId"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "recurring-event-external-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.recurringEventExternalId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/calendarChannelEventAssociations"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty calendar channel event associations record",
+      "path": "calendar-channel-event-associations delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/calendarChannelEventAssociations/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty calendar channel event associations record by ID",
+      "path": "calendar-channel-event-associations get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/calendarChannelEventAssociations/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty calendar channel event associations records",
+      "path": "calendar-channel-event-associations list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "calendar_channel_event_associations",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/calendarChannelEventAssociations"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty calendar channel event associations record",
+      "path": "calendar-channel-event-associations update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "calendar-channel-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.calendarChannelId"
+        },
+        {
+          "name": "event-external-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.eventExternalId"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "recurring-event-external-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.recurringEventExternalId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/calendarChannelEventAssociations/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty calendar event participants records",
+      "path": "calendar-event-participants batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/calendarEventParticipants"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty calendar event participants record",
+      "path": "calendar-event-participants create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "display-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.displayName"
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.handle"
+        },
+        {
+          "name": "is-organizer",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.isOrganizer"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "response-status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.responseStatus"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/calendarEventParticipants"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty calendar event participants record",
+      "path": "calendar-event-participants delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/calendarEventParticipants/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty calendar event participants record by ID",
+      "path": "calendar-event-participants get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/calendarEventParticipants/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty calendar event participants records",
+      "path": "calendar-event-participants list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "calendar_event_participants",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/calendarEventParticipants"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty calendar event participants record",
+      "path": "calendar-event-participants update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "display-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.displayName"
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.handle"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "is-organizer",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.isOrganizer"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "response-status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.responseStatus"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/calendarEventParticipants/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty calendar events records",
+      "path": "calendar-events batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/calendarEvents"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty calendar events record",
+      "path": "calendar-events create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "call-recorder-preference",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.callRecorderPreference"
+        },
+        {
+          "name": "conference-solution",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.conferenceSolution"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "ends-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.endsAt"
+        },
+        {
+          "name": "external-created-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.externalCreatedAt"
+        },
+        {
+          "name": "external-updated-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.externalUpdatedAt"
+        },
+        {
+          "name": "i-cal-uid",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.iCalUid"
+        },
+        {
+          "name": "is-canceled",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.isCanceled"
+        },
+        {
+          "name": "is-full-day",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.isFullDay"
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.location"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "starts-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.startsAt"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.title"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/calendarEvents"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty calendar events record",
+      "path": "calendar-events delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/calendarEvents/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty calendar events record by ID",
+      "path": "calendar-events get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/calendarEvents/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty calendar events records",
+      "path": "calendar-events list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "calendar_events",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/calendarEvents"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty calendar events record",
+      "path": "calendar-events update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "call-recorder-preference",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.callRecorderPreference"
+        },
+        {
+          "name": "conference-solution",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.conferenceSolution"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.description"
+        },
+        {
+          "name": "ends-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.endsAt"
+        },
+        {
+          "name": "external-created-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.externalCreatedAt"
+        },
+        {
+          "name": "external-updated-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.externalUpdatedAt"
+        },
+        {
+          "name": "i-cal-uid",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.iCalUid"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "is-canceled",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.isCanceled"
+        },
+        {
+          "name": "is-full-day",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.isFullDay"
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.location"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "starts-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.startsAt"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.title"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/calendarEvents/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty call recordings records",
+      "path": "call-recordings batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/callRecordings"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty call recordings record",
+      "path": "call-recordings create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.applicationId"
+        },
+        {
+          "name": "call-recorder-failure-reason",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.callRecorderFailureReason"
+        },
+        {
+          "name": "ended-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.endedAt"
+        },
+        {
+          "name": "external-bot-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.externalBotId"
+        },
+        {
+          "name": "external-recording-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.externalRecordingId"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "recording-request-status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.recordingRequestStatus"
+        },
+        {
+          "name": "started-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.startedAt"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.status"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.summary"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.title"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/callRecordings"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty call recordings record",
+      "path": "call-recordings delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/callRecordings/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty call recordings record by ID",
+      "path": "call-recordings get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/callRecordings/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty call recordings records",
+      "path": "call-recordings list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "call_recordings",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/callRecordings"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty call recordings record",
+      "path": "call-recordings update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.applicationId"
+        },
+        {
+          "name": "call-recorder-failure-reason",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.callRecorderFailureReason"
+        },
+        {
+          "name": "ended-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.endedAt"
+        },
+        {
+          "name": "external-bot-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.externalBotId"
+        },
+        {
+          "name": "external-recording-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.externalRecordingId"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "recording-request-status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.recordingRequestStatus"
+        },
+        {
+          "name": "started-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.startedAt"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.status"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.summary"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.title"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/callRecordings/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty companies records",
+      "path": "companies batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/companies"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty companies record",
+      "path": "companies create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "last-contact-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.lastContactAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "pdl-company-type",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlCompanyType"
+        },
+        {
+          "name": "pdl-employee-count",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlEmployeeCount"
+        },
+        {
+          "name": "pdl-enrichment-status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlEnrichmentStatus"
+        },
+        {
+          "name": "pdl-founded-year",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlFoundedYear"
+        },
+        {
+          "name": "pdl-funding-stages",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "record.pdlFundingStages"
+        },
+        {
+          "name": "pdl-headline",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlHeadline"
+        },
+        {
+          "name": "pdl-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlId"
+        },
+        {
+          "name": "pdl-industry",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlIndustry"
+        },
+        {
+          "name": "pdl-industry-detail",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlIndustryDetail"
+        },
+        {
+          "name": "pdl-last-enriched-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLastEnrichedAt"
+        },
+        {
+          "name": "pdl-last-funding-date",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLastFundingDate"
+        },
+        {
+          "name": "pdl-latest-funding-stage",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLatestFundingStage"
+        },
+        {
+          "name": "pdl-legal-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLegalName"
+        },
+        {
+          "name": "pdl-linkedin-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLinkedinId"
+        },
+        {
+          "name": "pdl-location-continent",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLocationContinent"
+        },
+        {
+          "name": "pdl-location-metro",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLocationMetro"
+        },
+        {
+          "name": "pdl-mic-exchange",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlMicExchange"
+        },
+        {
+          "name": "pdl-number-funding-rounds",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlNumberFundingRounds"
+        },
+        {
+          "name": "pdl-size-range",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlSizeRange"
+        },
+        {
+          "name": "pdl-summary",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlSummary"
+        },
+        {
+          "name": "pdl-ticker",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlTicker"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/companies"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty companies record",
+      "path": "companies delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/companies/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty companies record by ID",
+      "path": "companies get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/companies/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty companies records",
+      "path": "companies list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "companies",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/companies"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty companies record",
+      "path": "companies update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "last-contact-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.lastContactAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "pdl-company-type",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlCompanyType"
+        },
+        {
+          "name": "pdl-employee-count",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlEmployeeCount"
+        },
+        {
+          "name": "pdl-enrichment-status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlEnrichmentStatus"
+        },
+        {
+          "name": "pdl-founded-year",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlFoundedYear"
+        },
+        {
+          "name": "pdl-funding-stages",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "record.pdlFundingStages"
+        },
+        {
+          "name": "pdl-headline",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlHeadline"
+        },
+        {
+          "name": "pdl-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlId"
+        },
+        {
+          "name": "pdl-industry",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlIndustry"
+        },
+        {
+          "name": "pdl-industry-detail",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlIndustryDetail"
+        },
+        {
+          "name": "pdl-last-enriched-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLastEnrichedAt"
+        },
+        {
+          "name": "pdl-last-funding-date",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLastFundingDate"
+        },
+        {
+          "name": "pdl-latest-funding-stage",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLatestFundingStage"
+        },
+        {
+          "name": "pdl-legal-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLegalName"
+        },
+        {
+          "name": "pdl-linkedin-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLinkedinId"
+        },
+        {
+          "name": "pdl-location-continent",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLocationContinent"
+        },
+        {
+          "name": "pdl-location-metro",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLocationMetro"
+        },
+        {
+          "name": "pdl-mic-exchange",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlMicExchange"
+        },
+        {
+          "name": "pdl-number-funding-rounds",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlNumberFundingRounds"
+        },
+        {
+          "name": "pdl-size-range",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlSizeRange"
+        },
+        {
+          "name": "pdl-summary",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlSummary"
+        },
+        {
+          "name": "pdl-ticker",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlTicker"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/companies/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty dashboards records",
+      "path": "dashboards batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/dashboards"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty dashboards record",
+      "path": "dashboards create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "page-layout-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pageLayoutId"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.title"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/dashboards"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty dashboards record",
+      "path": "dashboards delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/dashboards/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty dashboards record by ID",
+      "path": "dashboards get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/dashboards/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty dashboards records",
+      "path": "dashboards list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "dashboards",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/dashboards"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty dashboards record",
+      "path": "dashboards update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "page-layout-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pageLayoutId"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.title"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/dashboards/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty message campaigns records",
+      "path": "message-campaigns batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageCampaigns"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty message campaigns record",
+      "path": "message-campaigns create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "body-template",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.bodyTemplate"
+        },
+        {
+          "name": "bounced-count",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.bouncedCount"
+        },
+        {
+          "name": "complained-count",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.complainedCount"
+        },
+        {
+          "name": "failed-count",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.failedCount"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "sent-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.sentAt"
+        },
+        {
+          "name": "sent-count",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.sentCount"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.status"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "unsubscribe-topic-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.unsubscribeTopicId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageCampaigns"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty message campaigns record",
+      "path": "message-campaigns delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageCampaigns/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty message campaigns record by ID",
+      "path": "message-campaigns get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageCampaigns/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty message campaigns records",
+      "path": "message-campaigns list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "message_campaigns",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageCampaigns"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty message campaigns record",
+      "path": "message-campaigns update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "body-template",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.bodyTemplate"
+        },
+        {
+          "name": "bounced-count",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.bouncedCount"
+        },
+        {
+          "name": "complained-count",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.complainedCount"
+        },
+        {
+          "name": "failed-count",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.failedCount"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "sent-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.sentAt"
+        },
+        {
+          "name": "sent-count",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.sentCount"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.status"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "unsubscribe-topic-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.unsubscribeTopicId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageCampaigns/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty message channel message association message folders records",
+      "path": "message-channel-message-association-message-folders batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageChannelMessageAssociationMessageFolders"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty message channel message association message folders record",
+      "path": "message-channel-message-association-message-folders create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "message-folder-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.messageFolderId"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageChannelMessageAssociationMessageFolders"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty message channel message association message folders record",
+      "path": "message-channel-message-association-message-folders delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageChannelMessageAssociationMessageFolders/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty message channel message association message folders record by ID",
+      "path": "message-channel-message-association-message-folders get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageChannelMessageAssociationMessageFolders/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty message channel message association message folders records",
+      "path": "message-channel-message-association-message-folders list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "message_channel_message_association_message_folders",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageChannelMessageAssociationMessageFolders"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty message channel message association message folders record",
+      "path": "message-channel-message-association-message-folders update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "message-folder-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.messageFolderId"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageChannelMessageAssociationMessageFolders/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty message channel message associations records",
+      "path": "message-channel-message-associations batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageChannelMessageAssociations"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty message channel message associations record",
+      "path": "message-channel-message-associations create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "direction",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.direction"
+        },
+        {
+          "name": "message-channel-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.messageChannelId"
+        },
+        {
+          "name": "message-external-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.messageExternalId"
+        },
+        {
+          "name": "message-thread-external-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.messageThreadExternalId"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageChannelMessageAssociations"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty message channel message associations record",
+      "path": "message-channel-message-associations delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageChannelMessageAssociations/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty message channel message associations record by ID",
+      "path": "message-channel-message-associations get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageChannelMessageAssociations/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty message channel message associations records",
+      "path": "message-channel-message-associations list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "message_channel_message_associations",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageChannelMessageAssociations"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty message channel message associations record",
+      "path": "message-channel-message-associations update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "direction",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.direction"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "message-channel-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.messageChannelId"
+        },
+        {
+          "name": "message-external-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.messageExternalId"
+        },
+        {
+          "name": "message-thread-external-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.messageThreadExternalId"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageChannelMessageAssociations/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty message list members records",
+      "path": "message-list-members batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageListMembers"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty message list members record",
+      "path": "message-list-members create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageListMembers"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty message list members record",
+      "path": "message-list-members delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageListMembers/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty message list members record by ID",
+      "path": "message-list-members get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageListMembers/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty message list members records",
+      "path": "message-list-members list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "message_list_members",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageListMembers"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty message list members record",
+      "path": "message-list-members update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageListMembers/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty message lists records",
+      "path": "message-lists batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageLists"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty message lists record",
+      "path": "message-lists create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageLists"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty message lists record",
+      "path": "message-lists delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageLists/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty message lists record by ID",
+      "path": "message-lists get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageLists/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty message lists records",
+      "path": "message-lists list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "message_lists",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageLists"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty message lists record",
+      "path": "message-lists update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageLists/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty message participants records",
+      "path": "message-participants batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageParticipants"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty message participants record",
+      "path": "message-participants create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "display-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.displayName"
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.handle"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.role"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageParticipants"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty message participants record",
+      "path": "message-participants delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageParticipants/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty message participants record by ID",
+      "path": "message-participants get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageParticipants/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty message participants records",
+      "path": "message-participants list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "message_participants",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageParticipants"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty message participants record",
+      "path": "message-participants update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "display-name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.displayName"
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.handle"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.role"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageParticipants/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty message threads records",
+      "path": "message-threads batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageThreads"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty message threads record",
+      "path": "message-threads create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.subject"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageThreads"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty message threads record",
+      "path": "message-threads delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageThreads/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty message threads record by ID",
+      "path": "message-threads get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageThreads/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty message threads records",
+      "path": "message-threads list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "message_threads",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageThreads"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty message threads record",
+      "path": "message-threads update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.subject"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageThreads/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty messages records",
+      "path": "messages batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messages"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty messages record",
+      "path": "messages create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "delivery-status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.deliveryStatus"
+        },
+        {
+          "name": "header-message-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.headerMessageId"
+        },
+        {
+          "name": "is-draft",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.isDraft"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "received-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.receivedAt"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.text"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messages"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty messages record",
+      "path": "messages delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messages/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty messages record by ID",
+      "path": "messages get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messages/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty messages records",
+      "path": "messages list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "messages",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messages"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty messages record",
+      "path": "messages update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "delivery-status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.deliveryStatus"
+        },
+        {
+          "name": "header-message-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.headerMessageId"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "is-draft",
+          "type": "boolean",
+          "required": false,
+          "maps_to": "record.isDraft"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "received-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.receivedAt"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.text"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messages/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty note targets records",
+      "path": "note-targets batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/noteTargets"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty note targets record",
+      "path": "note-targets create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/noteTargets"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty note targets record",
+      "path": "note-targets delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/noteTargets/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty note targets record by ID",
+      "path": "note-targets get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/noteTargets/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty note targets records",
+      "path": "note-targets list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "note_targets",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/noteTargets"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty note targets record",
+      "path": "note-targets update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/noteTargets/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty notes records",
+      "path": "notes batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/notes"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty notes record",
+      "path": "notes create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "body-v2",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.bodyV2"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.title"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/notes"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty notes record",
+      "path": "notes delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/notes/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty notes record by ID",
+      "path": "notes get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/notes/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty notes records",
+      "path": "notes list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "notes",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/notes"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty notes record",
+      "path": "notes update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "body-v2",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.bodyV2"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.title"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/notes/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty opportunities records",
+      "path": "opportunities batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/opportunities"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty opportunities record",
+      "path": "opportunities create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "close-date",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.closeDate"
+        },
+        {
+          "name": "last-contact-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.lastContactAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "stage",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.stage"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/opportunities"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty opportunities record",
+      "path": "opportunities delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/opportunities/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty opportunities record by ID",
+      "path": "opportunities get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/opportunities/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty opportunities records",
+      "path": "opportunities list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "opportunities",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/opportunities"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty opportunities record",
+      "path": "opportunities update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "close-date",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.closeDate"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "last-contact-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.lastContactAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "stage",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.stage"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/opportunities/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty people records",
+      "path": "people batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/people"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty people record",
+      "path": "people create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "avatar-url",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.avatarUrl"
+        },
+        {
+          "name": "job-title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.jobTitle"
+        },
+        {
+          "name": "last-contact-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.lastContactAt"
+        },
+        {
+          "name": "last-inbound-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.lastInboundAt"
+        },
+        {
+          "name": "last-outbound-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.lastOutboundAt"
+        },
+        {
+          "name": "pdl-birth-date",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlBirthDate"
+        },
+        {
+          "name": "pdl-birth-year",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlBirthYear"
+        },
+        {
+          "name": "pdl-enrichment-status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlEnrichmentStatus"
+        },
+        {
+          "name": "pdl-headline",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlHeadline"
+        },
+        {
+          "name": "pdl-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlId"
+        },
+        {
+          "name": "pdl-industry",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlIndustry"
+        },
+        {
+          "name": "pdl-inferred-salary",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlInferredSalary"
+        },
+        {
+          "name": "pdl-job-onet-code",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlJobOnetCode"
+        },
+        {
+          "name": "pdl-job-role",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlJobRole"
+        },
+        {
+          "name": "pdl-job-start-date",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlJobStartDate"
+        },
+        {
+          "name": "pdl-job-summary",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlJobSummary"
+        },
+        {
+          "name": "pdl-job-title-class",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlJobTitleClass"
+        },
+        {
+          "name": "pdl-job-title-sub-role",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlJobTitleSubRole"
+        },
+        {
+          "name": "pdl-last-enriched-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLastEnrichedAt"
+        },
+        {
+          "name": "pdl-likelihood",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlLikelihood"
+        },
+        {
+          "name": "pdl-linkedin-connections",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlLinkedinConnections"
+        },
+        {
+          "name": "pdl-linkedin-username",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLinkedinUsername"
+        },
+        {
+          "name": "pdl-location-metro",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLocationMetro"
+        },
+        {
+          "name": "pdl-seniority",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "record.pdlSeniority"
+        },
+        {
+          "name": "pdl-sex",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlSex"
+        },
+        {
+          "name": "pdl-summary",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlSummary"
+        },
+        {
+          "name": "pdl-years-experience",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlYearsExperience"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/people"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty people record",
+      "path": "people delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/people/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty people record by ID",
+      "path": "people get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/people/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty people records",
+      "path": "people list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "people",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/people"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty people record",
+      "path": "people update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "avatar-url",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.avatarUrl"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "job-title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.jobTitle"
+        },
+        {
+          "name": "last-contact-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.lastContactAt"
+        },
+        {
+          "name": "last-inbound-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.lastInboundAt"
+        },
+        {
+          "name": "last-outbound-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.lastOutboundAt"
+        },
+        {
+          "name": "pdl-birth-date",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlBirthDate"
+        },
+        {
+          "name": "pdl-birth-year",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlBirthYear"
+        },
+        {
+          "name": "pdl-enrichment-status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlEnrichmentStatus"
+        },
+        {
+          "name": "pdl-headline",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlHeadline"
+        },
+        {
+          "name": "pdl-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlId"
+        },
+        {
+          "name": "pdl-industry",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlIndustry"
+        },
+        {
+          "name": "pdl-inferred-salary",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlInferredSalary"
+        },
+        {
+          "name": "pdl-job-onet-code",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlJobOnetCode"
+        },
+        {
+          "name": "pdl-job-role",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlJobRole"
+        },
+        {
+          "name": "pdl-job-start-date",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlJobStartDate"
+        },
+        {
+          "name": "pdl-job-summary",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlJobSummary"
+        },
+        {
+          "name": "pdl-job-title-class",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlJobTitleClass"
+        },
+        {
+          "name": "pdl-job-title-sub-role",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlJobTitleSubRole"
+        },
+        {
+          "name": "pdl-last-enriched-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLastEnrichedAt"
+        },
+        {
+          "name": "pdl-likelihood",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlLikelihood"
+        },
+        {
+          "name": "pdl-linkedin-connections",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlLinkedinConnections"
+        },
+        {
+          "name": "pdl-linkedin-username",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLinkedinUsername"
+        },
+        {
+          "name": "pdl-location-metro",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlLocationMetro"
+        },
+        {
+          "name": "pdl-seniority",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "record.pdlSeniority"
+        },
+        {
+          "name": "pdl-sex",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlSex"
+        },
+        {
+          "name": "pdl-summary",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.pdlSummary"
+        },
+        {
+          "name": "pdl-years-experience",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.pdlYearsExperience"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/people/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty task targets records",
+      "path": "task-targets batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/taskTargets"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty task targets record",
+      "path": "task-targets create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/taskTargets"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty task targets record",
+      "path": "task-targets delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/taskTargets/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty task targets record by ID",
+      "path": "task-targets get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/taskTargets/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty task targets records",
+      "path": "task-targets list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "task_targets",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/taskTargets"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty task targets record",
+      "path": "task-targets update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/taskTargets/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty tasks records",
+      "path": "tasks batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/tasks"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty tasks record",
+      "path": "tasks create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "body-v2",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.bodyV2"
+        },
+        {
+          "name": "due-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.dueAt"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.status"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.title"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/tasks"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty tasks record",
+      "path": "tasks delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/tasks/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty tasks record by ID",
+      "path": "tasks get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/tasks/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty tasks records",
+      "path": "tasks list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "tasks",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/tasks"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty tasks record",
+      "path": "tasks update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "body-v2",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.bodyV2"
+        },
+        {
+          "name": "due-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.dueAt"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.status"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.title"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/tasks/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty timeline activities records",
+      "path": "timeline-activities batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/timelineActivities"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty timeline activities record",
+      "path": "timeline-activities create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "happens-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.happensAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/timelineActivities"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty timeline activities record",
+      "path": "timeline-activities delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/timelineActivities/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty timeline activities record by ID",
+      "path": "timeline-activities get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/timelineActivities/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty timeline activities records",
+      "path": "timeline-activities list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "timeline_activities",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/timelineActivities"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty timeline activities record",
+      "path": "timeline-activities update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "happens-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.happensAt"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/timelineActivities/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty workflow automated triggers records",
+      "path": "workflow-automated-triggers batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/workflowAutomatedTriggers"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty workflow automated triggers record",
+      "path": "workflow-automated-triggers create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.type"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/workflowAutomatedTriggers"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty workflow automated triggers record",
+      "path": "workflow-automated-triggers delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/workflowAutomatedTriggers/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty workflow automated triggers record by ID",
+      "path": "workflow-automated-triggers get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflowAutomatedTriggers/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty workflow automated triggers records",
+      "path": "workflow-automated-triggers list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "workflow_automated_triggers",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflowAutomatedTriggers"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty workflow automated triggers record",
+      "path": "workflow-automated-triggers update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.type"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/workflowAutomatedTriggers/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty workflow runs records",
+      "path": "workflow-runs batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/workflowRuns"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty workflow runs record",
+      "path": "workflow-runs create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "ended-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.endedAt"
+        },
+        {
+          "name": "enqueued-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.enqueuedAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "started-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.startedAt"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.status"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/workflowRuns"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty workflow runs record",
+      "path": "workflow-runs delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/workflowRuns/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty workflow runs record by ID",
+      "path": "workflow-runs get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflowRuns/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty workflow runs records",
+      "path": "workflow-runs list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "workflow_runs",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflowRuns"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty workflow runs record",
+      "path": "workflow-runs update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "ended-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.endedAt"
+        },
+        {
+          "name": "enqueued-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.enqueuedAt"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "started-at",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.startedAt"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.status"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/workflowRuns/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty workflow versions records",
+      "path": "workflow-versions batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/workflowVersions"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty workflow versions record",
+      "path": "workflow-versions create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.status"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/workflowVersions"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty workflow versions record",
+      "path": "workflow-versions delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/workflowVersions/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty workflow versions record by ID",
+      "path": "workflow-versions get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflowVersions/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty workflow versions records",
+      "path": "workflow-versions list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "workflow_versions",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflowVersions"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty workflow versions record",
+      "path": "workflow-versions update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.status"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/workflowVersions/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty workflows records",
+      "path": "workflows batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/workflows"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty workflows record",
+      "path": "workflows create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "last-published-version-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.lastPublishedVersionId"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "statuses",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "record.statuses"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/workflows"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty workflows record",
+      "path": "workflows delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/workflows/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty workflows record by ID",
+      "path": "workflows get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflows/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty workflows records",
+      "path": "workflows list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "workflows",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflows"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty workflows record",
+      "path": "workflows update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        },
+        {
+          "name": "last-published-version-id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.lastPublishedVersionId"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "required": false,
+          "maps_to": "record.position"
+        },
+        {
+          "name": "statuses",
+          "type": "string_array",
+          "required": false,
+          "maps_to": "record.statuses"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/workflows/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Batch-create Twenty workspace members records",
+      "path": "workspace-members batch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [
+        {
+          "name": "records",
+          "type": "json",
+          "required": true,
+          "maps_to": "record.records"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/workspaceMembers"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required; required flags: --records",
+      "required_flags": [
+        "--records"
+      ]
+    },
+    {
+      "summary": "Create a Twenty workspace members record",
+      "path": "workspace-members create",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "create",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/workspaceMembers"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Delete a Twenty workspace members record",
+      "path": "workspace-members delete",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "write_action_kind": "delete",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/workspaceMembers/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Get one Twenty workspace members record by ID",
+      "path": "workspace-members get",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workspaceMembers/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "direct-read fixture and declaration-owned produced-value assertion are required; required flags: --id",
+      "required_flags": [
+        "--id"
+      ]
+    },
+    {
+      "summary": "List Twenty workspace members records",
+      "path": "workspace-members list",
+      "intent": "etl",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "stream": "workspace_members",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "required": false,
+          "maps_to": "limit"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workspaceMembers"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "stream fixture and produced-record assertion are required"
+    },
+    {
+      "summary": "Update a Twenty workspace members record",
+      "path": "workspace-members update",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "write_action_kind": "update",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/workspaceMembers/{id}"
+        }
+      ],
+      "status": "fixture_required",
+      "reason": "owned mutation fixture, plan, preview, approval, execution, independent read-back, and cleanup are required"
+    },
+    {
+      "summary": "Declared read capability",
+      "path": "capability read",
+      "intent": "capability_read",
+      "availability": "implemented",
+      "operation_kind": "rest_read",
+      "op_class": "direct_read",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared read capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared write capability",
+      "path": "capability write",
+      "intent": "capability_write",
+      "availability": "implemented",
+      "operation_kind": "rest_write",
+      "op_class": "direct_write",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared write capability requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared source transport",
+      "path": "transport source",
+      "intent": "transport_source",
+      "availability": "implemented",
+      "operation_kind": "etl",
+      "op_class": "etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared source transport requires connector-owned fixture and live proof"
+    },
+    {
+      "summary": "Declared managed destination transport",
+      "path": "transport destination",
+      "intent": "transport_destination",
+      "availability": "implemented",
+      "operation_kind": "reverse_etl",
+      "op_class": "reverse_etl",
+      "flags": [],
+      "api_surface": [],
+      "status": "fixture_required",
+      "reason": "declared managed destination transport requires connector-owned fixture and live proof"
+    }
+  ],
+  "product_defects": [],
+  "provider_refusals": []
+}

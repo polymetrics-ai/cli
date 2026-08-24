@@ -1138,6 +1138,6 @@ The mapping/generation lens is not shippable at 8a8a866ff6d5282c28bda12acceed8a6
 
 ---
 
-_Reviewed: 2026-08-21T02:59:22Z_  
-_Reviewer: gsd-code-reviewer (deep mapping/generation lens)_  
+_Reviewed: 2026-08-21T02:59:22Z_
+_Reviewer: gsd-code-reviewer (deep mapping/generation lens)_
 _Frozen diff: e62ae21d428f0d27225f9bff564dc2cd797f6b65..8a8a866ff6d5282c28bda12acceed8a624218f01_

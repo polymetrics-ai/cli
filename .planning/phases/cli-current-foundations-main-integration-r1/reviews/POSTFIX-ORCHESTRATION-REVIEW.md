@@ -491,6 +491,6 @@ Passing tests do not cover the adversarial interleavings and commit-outcome case
 
 ---
 
-_Reviewed: 2026-08-21T02:52:36Z_  
-_Reviewer: gsd-code-reviewer (independent post-fix orchestration/delivery lens)_  
+_Reviewed: 2026-08-21T02:52:36Z_
+_Reviewer: gsd-code-reviewer (independent post-fix orchestration/delivery lens)_
 _Depth: deep_

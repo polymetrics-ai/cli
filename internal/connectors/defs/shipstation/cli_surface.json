@@ -1,0 +1,540 @@
+{
+  "tagline": "Declared shipstation API commands.",
+  "usage": "pm shipstation <command> [flags]",
+  "commands": [
+    {
+      "path": "operations get-accounts-listtags",
+      "summary": "Declared direct read: GET /accounts/listtags.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-account-tags-1 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/listtags"
+        }
+      ]
+    },
+    {
+      "path": "operations get-carriers",
+      "summary": "Declared direct read: GET /carriers.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-carriers-2 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/carriers"
+        }
+      ]
+    },
+    {
+      "path": "operations post-carriers-addfunds",
+      "summary": "Declared direct write: POST /carriers/addfunds.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.add-funds-to-carrier-3 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-carriers-getcarrier",
+      "summary": "Declared direct read: GET /carriers/getcarrier.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.get-carrier-4 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/carriers/getcarrier"
+        }
+      ]
+    },
+    {
+      "path": "operations get-carriers-listpackages",
+      "summary": "Declared direct read: GET /carriers/listpackages.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-packages-5 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/carriers/listpackages"
+        }
+      ]
+    },
+    {
+      "path": "operations get-carriers-listservices",
+      "summary": "Declared direct read: GET /carriers/listservices.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-services-6 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/carriers/listservices"
+        }
+      ]
+    },
+    {
+      "path": "operations get-customers",
+      "summary": "Declared etl: GET /customers.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-customers-7 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations get-customers-customer-id",
+      "summary": "Declared direct read: GET /customers/{customerId}.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.get-customer-8 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers/{customerId}"
+        }
+      ]
+    },
+    {
+      "path": "operations get-fulfillments",
+      "summary": "Declared direct read: GET /fulfillments.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-fulfillments-9 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fulfillments"
+        }
+      ]
+    },
+    {
+      "path": "operations get-orders",
+      "summary": "Declared etl: GET /orders.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-orders-10 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations delete-orders-order-id",
+      "summary": "Declared direct write: DELETE /orders/{orderId}.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.delete-order-11 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
+    },
+    {
+      "path": "operations get-orders-order-id",
+      "summary": "Declared direct read: GET /orders/{orderId}.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.get-order-12 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders/{orderId}"
+        }
+      ]
+    },
+    {
+      "path": "operations post-orders-addtag",
+      "summary": "Declared direct write: POST /orders/addtag.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.add-tag-to-order-13 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-orders-assignuser",
+      "summary": "Declared direct write: POST /orders/assignuser.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.assign-user-to-order-14 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-orders-createlabelfororder",
+      "summary": "Declared direct write: POST /orders/createlabelfororder.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.create-label-for-order-15 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-orders-createorder",
+      "summary": "Declared direct write: POST /orders/createorder.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.create-update-order-16 has no declaration-owned executable direct_write route.",
+      "risk": "Legacy connector never implemented order creation",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-orders-createorders",
+      "summary": "Declared direct write: POST /orders/createorders.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.create-update-multiple-orders-17 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-orders-holduntil",
+      "summary": "Declared direct write: POST /orders/holduntil.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.hold-order-until-18 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-orders-listbytag",
+      "summary": "Declared direct read: GET /orders/listbytag.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-orders-by-tag-19 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders/listbytag"
+        }
+      ]
+    },
+    {
+      "path": "operations post-orders-markasshipped",
+      "summary": "Declared direct write: POST /orders/markasshipped.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.mark-order-as-shipped-20 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-orders-removetag",
+      "summary": "Declared direct write: POST /orders/removetag.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.remove-tag-from-order-21 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-orders-restorefromhold",
+      "summary": "Declared direct write: POST /orders/restorefromhold.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.restore-order-from-hold-22 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-orders-unassignuser",
+      "summary": "Declared direct write: POST /orders/unassignuser.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.unassign-user-from-order-23 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-products",
+      "summary": "Declared etl: GET /products.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-products-24 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations get-products-product-id",
+      "summary": "Declared direct read: GET /products/{productId}.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.get-product-25 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{productId}"
+        }
+      ]
+    },
+    {
+      "path": "operations put-products-product-id",
+      "summary": "Declared direct write: PUT /products/{productId}.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.update-product-26 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-shipments",
+      "summary": "Declared etl: GET /shipments.",
+      "intent": "etl",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-shipments-27 has no declaration-owned executable etl route."
+    },
+    {
+      "path": "operations post-shipments-createlabel",
+      "summary": "Declared direct write: POST /shipments/createlabel.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.create-shipment-label-28 has no declaration-owned executable direct_write route.",
+      "risk": "Legacy connector never implemented label purchasing",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-shipments-getrates",
+      "summary": "Declared direct write: POST /shipments/getrates.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.get-rates-29 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-shipments-voidlabel",
+      "summary": "Declared direct write: POST /shipments/voidlabel.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.void-label-30 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-stores",
+      "summary": "Declared direct read: GET /stores.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-stores-31 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stores"
+        }
+      ]
+    },
+    {
+      "path": "operations get-stores-store-id",
+      "summary": "Declared direct read: GET /stores/{storeId}.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.get-store-32 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stores/{storeId}"
+        }
+      ]
+    },
+    {
+      "path": "operations put-stores-store-id",
+      "summary": "Declared direct write: PUT /stores/{storeId}.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.update-store-33 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-stores-deactivate",
+      "summary": "Declared direct write: POST /stores/deactivate.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.deactivate-store-34 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-stores-getrefreshstatus",
+      "summary": "Declared direct read: GET /stores/getrefreshstatus.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.get-store-refresh-status-35 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stores/getrefreshstatus"
+        }
+      ]
+    },
+    {
+      "path": "operations get-stores-marketplaces",
+      "summary": "Declared direct read: GET /stores/marketplaces.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-marketplaces-36 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stores/marketplaces"
+        }
+      ]
+    },
+    {
+      "path": "operations post-stores-reactivate",
+      "summary": "Declared direct write: POST /stores/reactivate.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.reactivate-store-37 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations post-stores-refreshstore",
+      "summary": "Declared direct write: POST /stores/refreshstore.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.refresh-store-38 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-users",
+      "summary": "Declared direct read: GET /users.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-users-39 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
+    },
+    {
+      "path": "operations get-warehouses",
+      "summary": "Declared direct read: GET /warehouses.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-warehouses-40 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/warehouses"
+        }
+      ]
+    },
+    {
+      "path": "operations delete-warehouses-warehouse-id",
+      "summary": "Declared direct write: DELETE /warehouses/{warehouseId}.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.delete-warehouse-41 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
+    },
+    {
+      "path": "operations get-warehouses-warehouse-id",
+      "summary": "Declared direct read: GET /warehouses/{warehouseId}.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.get-warehouse-42 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/warehouses/{warehouseId}"
+        }
+      ]
+    },
+    {
+      "path": "operations post-warehouses-createwarehouse",
+      "summary": "Declared direct write: POST /warehouses/createwarehouse.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.create-warehouse-43 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations put-warehouses-updatewarehouse",
+      "summary": "Declared direct write: PUT /warehouses/updatewarehouse.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.update-warehouse-44 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    },
+    {
+      "path": "operations get-webhooks",
+      "summary": "Declared direct read: GET /webhooks.",
+      "intent": "direct_read",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.list-webhooks-45 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ]
+    },
+    {
+      "path": "operations delete-webhooks-webhook-id",
+      "summary": "Declared direct write: DELETE /webhooks/{webhookId}.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.unsubscribe-webhook-46 has no declaration-owned executable direct_write route.",
+      "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
+    },
+    {
+      "path": "operations post-webhooks-subscribe",
+      "summary": "Declared direct write: POST /webhooks/subscribe.",
+      "intent": "direct_write",
+      "availability": "partial",
+      "source_url": "https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download",
+      "notes": "Blocked: locked source operation shipstation.provider.subscribe-webhook-47 has no declaration-owned executable direct_write route.",
+      "risk": "/webhooks/subscribe is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+      "approval": "direct_write commands require plan, preview, approval, execute"
+    }
+  ]
+}

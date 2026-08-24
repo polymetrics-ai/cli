@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -75,6 +76,131 @@ func TestOperationParametersEnforceEncodedPathAndQueryByteCaps(t *testing.T) {
 	}
 	if hits.Load() != 1 {
 		t.Fatalf("provider hits after rejected values = %d, want 1", hits.Load())
+	}
+}
+
+func TestOperationParametersReportPMExecutionCapBeforeIO(t *testing.T) {
+	var hits atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		hits.Add(1)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	op := OperationSpec{
+		ID: "acme.search", Kind: "rest_read", Summary: "search", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+		REST: &RESTOperationSpec{
+			Method: http.MethodGet, Path: "/search", MaxBytes: 1024,
+			Parameters: []OperationParameter{{Name: "workspaceId", In: "query", Type: "string", Required: true, MaxBytes: 6}},
+		},
+	}
+	bundle := operationBindingTestBundle(srv.URL, op)
+	if _, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation: op.ID,
+		Query:     map[string]string{"workspaceId": "é"},
+	}, nil); err != nil {
+		t.Fatalf("exact encoded cap: %v", err)
+	}
+	if hits.Load() != 1 {
+		t.Fatalf("provider hits = %d, want 1", hits.Load())
+	}
+	_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation: op.ID,
+		Query:     map[string]string{"workspaceId": "éé"},
+	}, nil)
+	if err == nil || !strings.Contains(err.Error(), "PM execution limit") || !strings.Contains(err.Error(), "encoded_bytes") || !strings.Contains(err.Error(), "6") {
+		t.Fatalf("over-cap error = %v, want PM execution limit, encoded_bytes, and effective cap", err)
+	}
+	if hits.Load() != 1 {
+		t.Fatalf("over-cap value reached provider; hits = %d, want 1", hits.Load())
+	}
+}
+
+func TestOperationParametersPreserveExactFiniteNumericLexemes(t *testing.T) {
+	var hits atomic.Int32
+	var gotQuery atomic.Value
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		hits.Add(1)
+		gotQuery.Store(request.URL.Query())
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	integerMinimum := connectors.ExactNumber("9999999999999999999999999999999999999998")
+	numberMaximum := connectors.ExactNumber("0.123456789012345678901234567890123456790")
+	op := OperationSpec{
+		ID: "acme.numeric", Kind: "rest_read", Summary: "numeric", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+		REST: &RESTOperationSpec{
+			Method: http.MethodGet, Path: "/numeric", MaxBytes: 1024,
+			Parameters: []OperationParameter{
+				{Name: "integer", In: "query", Type: "integer", Required: true, Minimum: &integerMinimum, MaxBytes: 128},
+				{Name: "number", In: "query", Type: "number", Required: true, Maximum: &numberMaximum, MaxBytes: 128},
+			},
+		},
+	}
+	integer := "9999999999999999999999999999999999999999"
+	number := "0.123456789012345678901234567890123456789"
+	_, err := OperationDirectRead(context.Background(), operationBindingTestBundle(srv.URL, op), connectors.OperationDirectReadRequest{
+		Operation: op.ID,
+		Query:     map[string]string{"integer": integer, "number": number},
+	}, nil)
+	if err != nil {
+		t.Fatalf("exact finite numerics: %v", err)
+	}
+	query, _ := gotQuery.Load().(url.Values)
+	if query.Get("integer") != integer || query.Get("number") != number {
+		t.Fatalf("wire numerics = integer %q number %q, want exact source lexemes", query.Get("integer"), query.Get("number"))
+	}
+	if hits.Load() != 1 {
+		t.Fatalf("provider hits = %d, want 1", hits.Load())
+	}
+	for _, test := range []struct {
+		name  string
+		query map[string]string
+		want  string
+	}{
+		{name: "below exact minimum", query: map[string]string{"integer": "9999999999999999999999999999999999999997", "number": number}, want: integerMinimum.String()},
+		{name: "above exact maximum", query: map[string]string{"integer": integer, "number": "0.123456789012345678901234567890123456791"}, want: numberMaximum.String()},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := OperationDirectRead(context.Background(), operationBindingTestBundle(srv.URL, op), connectors.OperationDirectReadRequest{Operation: op.ID, Query: test.query}, nil)
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("numeric bound error = %v, want exact bound %s", err, test.want)
+			}
+		})
+	}
+	oversizedExponent := "1e" + strings.Repeat("9", 256)
+	_, err = OperationDirectRead(context.Background(), operationBindingTestBundle(srv.URL, op), connectors.OperationDirectReadRequest{
+		Operation: op.ID,
+		Query:     map[string]string{"integer": integer, "number": oversizedExponent},
+	}, nil)
+	if err == nil || !strings.Contains(err.Error(), "PM execution limit") || !strings.Contains(err.Error(), "encoded_bytes") {
+		t.Fatalf("oversized numeric lexeme error = %v, want pre-parse PM byte limit", err)
+	}
+	if hits.Load() != 1 {
+		t.Fatalf("out-of-bound numerics reached provider; hits = %d, want 1", hits.Load())
+	}
+}
+
+func TestOperationParametersPreservePreviouslyAcceptedNumericLexemes(t *testing.T) {
+	op := OperationSpec{ID: "acme.numeric", REST: &RESTOperationSpec{}}
+	for _, test := range []struct {
+		name      string
+		parameter OperationParameter
+		value     string
+	}{
+		{name: "signed integer with leading zero", parameter: OperationParameter{Name: "value", In: "query", Type: "integer"}, value: "+01"},
+		{name: "signed decimal without leading zero", parameter: OperationParameter{Name: "value", In: "query", Type: "number"}, value: "+.5"},
+		{name: "decimal with trailing point", parameter: OperationParameter{Name: "value", In: "query", Type: "number"}, value: "01."},
+		{name: "hexadecimal float", parameter: OperationParameter{Name: "value", In: "query", Type: "number"}, value: "0x1p+2"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if err := validateOperationParameterWireValue(op, test.parameter, "query", test.value); err != nil {
+				t.Fatalf("previously accepted numeric lexeme %q: %v", test.value, err)
+			}
+		})
 	}
 }
 
