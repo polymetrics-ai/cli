@@ -32,7 +32,7 @@ The brief's initial declarative inventory is stale:
 
 - All twenty connectors now have `cli_surface.json`, not only Mailchimp and Zendesk Support.
 - Eighteen have only `partial` declaration-pending commands. Mailchimp has 295 `implemented` rows and Zendesk Support has 95; across the cohort this is 7,054 partial and 390 implemented rows.
-- The exact provider source-lock total is 7,301 operations across the 17 locks that can honestly count their provider surface. eBay Fulfillment and TikTok Marketing have unavailable public sources; Salesforce is tenant-dynamic. Those three totals are unknown, not zero.
+- The formerly reported 7,301-operation source-lock aggregate is historical audit data, not a current provider-contract total: five of its counted URLs were later proved to be landing pages. No cohort-wide source-operation total is asserted until the replacement sources are committed as new lock identities and their projections are re-derived. eBay Fulfillment and TikTok Marketing have no retrievable public source; their totals are unknown, not zero.
 - Eight, rather than seven, bundles have `writes.json`: Airtable, BambooHR, Buildkite, Mailchimp, Pipedrive, SonarCloud, Squarespace, and Zendesk Support. All twenty lack `sync_transport.json`.
 - `TestEveryImplementedCommandPassesRuntimePreflight` succeeds for all 390 declared rows. It is structural evidence only. Built-binary credential-boundary probes independently confirmed 36 distinct Mailchimp commands and Zendesk Support's `streams tickets list`; the remaining 353 declared implemented rows are not counted as Phase 1 binary-certified usable.
 
@@ -42,10 +42,23 @@ After approval of the initial map, Firstmate remeasured every locked URL and est
 of this cohort's recorded URLs resolve to **landing pages, not provider specifications**:
 **Google Analytics Data API, Linear, Mailchimp, QuickBooks, and Salesforce.** The counts and lane
 crosswalks marked `†` below are therefore historical observations from the checked-in lock, **not
-admissible provider-contract evidence for Phase 2**. No operation, `not_applicable` claim, source
-transition, or executable surface will be re-derived from any of those URLs while the source
-research wave establishes their correct replacements. In particular, retaining a byte-identical
-historical artifact does not make its landing-page URL a usable specification source.
+admissible provider-contract evidence for Phase 2**. Firstmate's two-fetch research has now
+supplied actual replacements, but this source-only correction deliberately does not import, pin,
+or project them:
+
+- Google Analytics Data API — `https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta`
+- Linear — `https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql`
+- Mailchimp — `https://mailchimp.com/developer/marketing/api/`
+- QuickBooks — `https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities`
+- Salesforce — `https://developer.salesforce.com/docs/get_document_content/api_rest/resources_list.htm/en-us/262.0`
+
+The same research confirms that **eBay Fulfillment** and **TikTok Marketing** have no retrievable
+public source (`‡` below): eBay's direct OAS, release-notes, and rendered-reference requests were
+403 responses; TikTok's legacy and current provider-documentation requests failed TLS in both
+curl and Chrome. No operation, `not_applicable` claim, source transition, or executable surface
+will be re-derived until a provider source can be retrieved. In particular, retaining a
+byte-identical historical artifact does not make its landing-page URL a usable specification
+source.
 
 Notation below: `I` means declared `implemented`, `P` means declared `partial`, `S` means the source disposition crosswalk count, and `W` means a source-backed provider write candidate. `S` can include explicit local execution bindings; the source column remains the provider-operation total. `none classified` never claims a provider lacks a capability: the pinned lock simply does not establish a bounded binary contract.
 
@@ -54,29 +67,33 @@ Notation below: `I` means declared `implemented`, `P` means declared `partial`, 
 | Airtable | 103 [source](https://airtable.com/developers/web/api/introduction) | P5/S5 | —/W74 | P26/S26 | P74/S74 | 0; none classified | pending; none classified | system | system |
 | BambooHR | 319 [source](https://documentation.bamboohr.com/reference/get-meta-company) | P84/S84 | —/W190 | P71/S71 | P190/S190 | 0; none classified | pending; 19 binary/multipart-tagged rows, direction not preserved | system | system |
 | Buildkite | 129 [source](https://buildkite.com/docs/apis/rest-api) | P6/S6 | —/W76 | P50/S50 | P76/S76 | 0; none classified | pending; none classified | system | system |
-| eBay Fulfillment | unknown; [official error-page evidence](https://developer.ebay.com/develop/api/fulfillment-api/release-notes) | P4/S? | —/W? | P4/S? | P3/S? | unknown | pending; source unavailable | system | system |
+| eBay Fulfillment ‡ | unknown; no retrievable public source | P4/S? | —/W? | P4/S? | P3/S? | unknown | pending; source unavailable | system | system |
 | Fastly | 732 [source](https://www.fastly.com/documentation/downloads/fastly.collection.json) | P6/S6 | —/W389 | P337/S337 | P389/S389 | 0; none classified | pending; none classified | system | system |
-| Google Analytics Data API † | 23 [source](https://analyticsdata.googleapis.com/$discovery/rest?version=v1) | P5/S5 | —/W16 | P7/S7 | P16/S16 | 0; none classified | pending; none classified | system | system |
+| Google Analytics Data API † | unknown; [replacement Discovery v1beta](https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta) | P5/S? | —/W? | P7/S? | P16/W? | unknown | pending; source projection not yet derived | system | system |
 | HubSpot | 3,118 [source](https://codeload.github.com/HubSpot/HubSpot-public-api-spec-collection/tar.gz/2bebde2dca45eaa1792931089c4e441c8e377594) | 0/S0 | —/W1,901 | P1,240/S1,217 | P1,901/S1,901 | 0/S32 `binary_read` | pending; 229 binary/multipart-tagged rows, direction not preserved | system | system |
 | LaunchDarkly | 397 [source](https://app.launchdarkly.com/api/v2/openapi.json) | P5/S5 | —/W205 | P189/S189 | P205/S205 | 0; none classified | pending; none classified | system | system |
-| Linear † | 539 [source](https://studio.apollographql.com/public/Linear-API/variant/current/schema/reference) | P4/S4 | —/W373 | P166/S166 | P373/S373 | 0; none classified | pending; none classified | system | system |
-| Mailchimp † | 295 [source](https://api.mailchimp.com/schema/3.0/Swagger.json) | I79/S79 | I148/W164 | I68+P12/S80 | P16/W164 | 0; none classified | pending; none classified | system | system |
+| Linear † | unknown; [replacement GraphQL SDL](https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql) | P4/S? | —/W? | P166/S? | P373/W? | unknown | pending; source projection not yet derived | system | system |
+| Mailchimp † | unknown; [replacement Marketing API reference](https://mailchimp.com/developer/marketing/api/) | I79/S? | I148/W? | I68+P12/S? | P16/W? | unknown | pending; source projection not yet derived | system | system |
 | Pinterest | 279 [source](https://developers.pinterest.com/docs/api/v5/introduction/) | P5/S5 | —/W135 | P144/S144 | P135/S135 | 0; none classified | pending; none classified | system | system |
 | Pipedrive | 213 [source](https://developers.pipedrive.com/docs/api/v1/openapi.yaml) | P21/S21 | —/W99 | P98/S98 | P99/S99 | 0; one explicit raw-binary download | pending; 12 binary/multipart-tagged rows, direction not preserved | system | system |
-| QuickBooks † | 129 [source](https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json) | P5/S5 | —/W45 | P84/S84 | P45/S45 | 0; none classified | pending; none classified | system | system |
-| Salesforce † | unknown; [dynamic resource index](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm) | P4/S? | —/W? | P3/S? | P3/S? | unknown | pending; source total is tenant-dynamic | system | system |
+| QuickBooks † | unknown; [replacement Accounting API reference](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities) | P5/S? | —/W? | P84/S? | P45/W? | unknown | pending; source projection not yet derived | system | system |
+| Salesforce † | unknown; [replacement REST resource reference](https://developer.salesforce.com/docs/get_document_content/api_rest/resources_list.htm/en-us/262.0) | P4/S? | —/W? | P3/S? | P3/W? | unknown | pending; source total remains tenant-dynamic | system | system |
 | ShipStation | 47 [source](https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download) | P4/S4 | —/W25 | P18/S18 | P25/S25 | 0; none classified | pending; none classified | system | system |
 | SonarCloud | 156 [source](https://sonarcloud.io/api/webservices/list) | P11/S11 | —/W87 | P59/S59 | P87/S87 | 0; none classified | pending; none classified | system | system |
 | Squarespace | 53 [source](https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json) | P8/S8 | —/W30 | P15/S15 | P30/S30 | 0; none classified | pending; one multipart image-upload row | system | system |
-| TikTok Marketing | unknown; [SSL-error evidence](https://business-api.tiktok.com/portal/docs?id=1740029169927169) | P4/S? | —/W? | P1/S? | P2/S? | unknown | pending; source unavailable | system | system |
+| TikTok Marketing ‡ | unknown; no retrievable public source | P4/S? | —/W? | P1/S? | P2/S? | unknown | pending; source unavailable | system | system |
 | WooCommerce | 140 [source](https://woocommerce.github.io/woocommerce-rest-api-docs/) | P4/S4 | —/W73 | P63/S63 | P73/S73 | 0; none classified | pending; none classified | system | system |
 | Zendesk Support | 629 [source](https://developer.zendesk.com/zendesk/oas.yaml) | I33/S33 | I62+P28/W294 | P308/S308 | P204/W294 | 0/S1 `binary_read` | pending; six binary/multipart-tagged rows, direction not preserved | system | system |
 
 `binary_upload` is pending globally: its intent is not on `main` and is supplied only by unmerged PR #4343. No row above asserts that it is currently implemented. The source tags identify potential later work; they do not invent a bounded input policy, media allow-list, size cap, or provider request shape.
 
-`†` The URL was subsequently proven to be a landing page rather than the provider specification
-the lock purported to cite. Its number and per-lane `S`/`W` values are retained only as Phase 1
-audit history; they must not be used to select or implement a Phase 2 surface.
+`†` Firstmate's two-fetch source research (`data/cli-top100-source-research-r1/report.md`, rows
+31, 34, 36, 39, and 43) proved that the old URL was not the provider specification and supplied
+the linked replacement. The local declaration counts remain measured facts; all old provider
+operation and `S`/`W` values are retired from this map until a new source lock and projection
+exist. `‡` The same report's rows 42 and 49 establish that no retrievable public provider source
+exists for TikTok Marketing or eBay Fulfillment, respectively; their source-dependent values
+remain unknown rather than being inferred from an error or shell page.
 
 ### Schedule and flow are system-level surfaces
 
