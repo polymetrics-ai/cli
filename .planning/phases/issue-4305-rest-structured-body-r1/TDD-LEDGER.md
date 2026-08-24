@@ -72,3 +72,11 @@
 - Root cause: the credential-safe direct-write diagnostic branch treated every error from a credential-bound request as a provider error. The multipart snapshot's local, pre-I/O digest mismatch was therefore hidden despite the existing fixture's zero-provider-capture assertion.
 - Green: only HTTP and URL-bearing transport errors retain the generic diagnostic; safe local errors pass through the existing literal-redaction path. The focused conformance regression, `go test -timeout 20m -count=1 ./internal/connectors/conformance`, and `go test -timeout 20m -count=1 ./internal/connectors/engine` pass. Credential-bound provider-error tests still prove provider echoes remain generic and secret-safe.
 - Scope: this assigned CI phase did not invoke no-mistakes controls, rerun CI, push, or mutate the PR; those remain with the outer executor.
+
+### 2026-08-24 — active CI-phase generated connector-manual fixture repair
+
+- Manual-GSD fallback: this is an assigned no-mistakes CI phase, so the outer executor retains ownership of lifecycle controls, CI re-runs, pushes, and PR updates.
+- Red: hosted Verify run `32695514116` and `go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$' -count=1` failed only `json_connectors_manual` and `connectors_help_github_known_legacy_namespace_help_intercept`.
+- Root cause: the structured-write manual's now-required closed schema-path wording changed the runtime output after those two generated transcript records were last refreshed. Both records render the same connector manual in different output modes.
+- Green: regenerated only those two records with `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 POLYMETRICS_GOLDEN_TRANSCRIPT_NAMES=json_connectors_manual,connectors_help_github_known_legacy_namespace_help_intercept go test -timeout 20m ./internal/cli -run '^TestGoldenTranscripts$' -count=1`. Re-running `go test -timeout 20m ./internal/cli -run '^(TestGoldenTranscripts|TestGoldenDocsGenerateMatchesTrackedCLIManuals)$' -count=1` without update mode passed, as did `git diff --check`.
+- Scope: only generated transcript records changed; no production connector definition, request behavior, raw-body escape hatch, no-mistakes control, CI re-run, push, or PR mutation was invoked.

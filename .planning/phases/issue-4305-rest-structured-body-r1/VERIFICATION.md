@@ -55,3 +55,9 @@ The explicit Firstmate correction defers the no-mistakes, push, and PR stages. T
 - `go test -timeout 20m ./internal/app -count=1` — pass (256.922s).
 - `go test -timeout 20m ./internal/cli -count=1` — pass (561.504s).
 - The targeted generator-backed transcript refresh and validation passed; `go vet ./internal/app ./internal/cli` and `git diff --check` also passed.
+
+### CI Verify follow-up — 2026-08-24
+
+- Hosted Verify run `32695514116` failed only because `json_connectors_manual` and `connectors_help_github_known_legacy_namespace_help_intercept` had stale generated copies of the connector manual.
+- Refreshed those two records only. `go test -timeout 20m ./internal/cli -run '^(TestGoldenTranscripts|TestGoldenDocsGenerateMatchesTrackedCLIManuals)$' -count=1` passed without update mode, and `git diff --check` passed.
+- This assigned CI phase did not invoke no-mistakes controls, a CI re-run, a push, or a PR mutation.
