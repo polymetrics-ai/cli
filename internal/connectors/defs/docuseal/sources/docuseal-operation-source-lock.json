@@ -3,270 +3,243 @@
   "connector": "docuseal",
   "captured_at": "2026-08-19T16:46:25.967Z",
   "rest": {
-    "source_url": "https://console.docuseal.com/openapi.yml",
-    "representation": "machine-readable-spec",
-    "documents": [
-      {
-        "source_url": "https://console.docuseal.com/openapi.yml",
-        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
-        "bytes": 192929,
-        "content_type": "text/plain; charset=utf-8",
-        "retrieval_method": "http",
-        "representation": "machine-readable-spec"
-      }
-    ],
-    "source_bundle": {
-      "document_count": 1,
-      "sha256": "ed119c5de6d5eb9f2691bb324d7474cfafe3cc034afaf85c2e33ea7669afb0cc",
-      "bytes": 192929
-    },
-    "counts": {
-      "total": 23,
-      "by_method": {
-        "DELETE": 2,
-        "GET": 7,
-        "POST": 10,
-        "PUT": 4
-      },
-      "by_kind": {
-        "rest": 23
-      }
-    },
+    "retrieval": "preserved issue-4292 public capture via http",
+    "openapi": [],
     "coverage_confidence": {
       "level": "machine-readable",
       "basis": "DocuSeal publishes its OpenAPI document at this official console URL; every HTTP path item is extracted."
     },
-    "operations": [
+    "source_documents": [
       {
-        "id": "docuseal.rest.archivesubmission-source-1",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/submissions/{id}",
-        "operation_id": "archiveSubmission",
-        "deprecated": false,
-        "source_location": "paths[\"/submissions/{id}\"].delete",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.archivetemplate-source-1",
-        "protocol": "rest",
-        "method": "DELETE",
-        "path": "/templates/{id}",
-        "operation_id": "archiveTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/templates/{id}\"].delete",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.clonetemplate-source-1",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/{id}/clone",
-        "operation_id": "cloneTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/templates/{id}/clone\"].post",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.createsubmission-source-1",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/submissions",
-        "operation_id": "createSubmission",
-        "deprecated": false,
-        "source_location": "paths[\"/submissions\"].post",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.createsubmissionfromdocx-source-1",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/submissions/docx",
-        "operation_id": "createSubmissionFromDocx",
-        "deprecated": false,
-        "source_location": "paths[\"/submissions/docx\"].post",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.createsubmissionfromhtml-source-1",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/submissions/html",
-        "operation_id": "createSubmissionFromHtml",
-        "deprecated": false,
-        "source_location": "paths[\"/submissions/html\"].post",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.createsubmissionfrompdf-source-1",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/submissions/pdf",
-        "operation_id": "createSubmissionFromPdf",
-        "deprecated": false,
-        "source_location": "paths[\"/submissions/pdf\"].post",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.createsubmissionsfromemails-source-1",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/submissions/emails",
-        "operation_id": "createSubmissionsFromEmails",
-        "deprecated": false,
-        "source_location": "paths[\"/submissions/emails\"].post",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.createtemplatefromdocx-source-1",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/docx",
-        "operation_id": "createTemplateFromDocx",
-        "deprecated": false,
-        "source_location": "paths[\"/templates/docx\"].post",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.createtemplatefromhtml-source-1",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/html",
-        "operation_id": "createTemplateFromHtml",
-        "deprecated": false,
-        "source_location": "paths[\"/templates/html\"].post",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.createtemplatefrompdf-source-1",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/pdf",
-        "operation_id": "createTemplateFromPdf",
-        "deprecated": false,
-        "source_location": "paths[\"/templates/pdf\"].post",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.getsubmission-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/submissions/{id}",
-        "operation_id": "getSubmission",
-        "deprecated": false,
-        "source_location": "paths[\"/submissions/{id}\"].get",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.getsubmissiondocuments-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/submissions/{id}/documents",
-        "operation_id": "getSubmissionDocuments",
-        "deprecated": false,
-        "source_location": "paths[\"/submissions/{id}/documents\"].get",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.getsubmissions-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/submissions",
-        "operation_id": "getSubmissions",
-        "deprecated": false,
-        "source_location": "paths[\"/submissions\"].get",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.getsubmitter-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/submitters/{id}",
-        "operation_id": "getSubmitter",
-        "deprecated": false,
-        "source_location": "paths[\"/submitters/{id}\"].get",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.getsubmitters-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/submitters",
-        "operation_id": "getSubmitters",
-        "deprecated": false,
-        "source_location": "paths[\"/submitters\"].get",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.gettemplate-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/templates/{id}",
-        "operation_id": "getTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/templates/{id}\"].get",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.gettemplates-source-1",
-        "protocol": "rest",
-        "method": "GET",
-        "path": "/templates",
-        "operation_id": "getTemplates",
-        "deprecated": false,
-        "source_location": "paths[\"/templates\"].get",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.mergetemplate-source-1",
-        "protocol": "rest",
-        "method": "POST",
-        "path": "/templates/merge",
-        "operation_id": "mergeTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/templates/merge\"].post",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.updatesubmission-source-1",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/submissions/{id}",
-        "operation_id": "updateSubmission",
-        "deprecated": false,
-        "source_location": "paths[\"/submissions/{id}\"].put",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.updatesubmitter-source-1",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/submitters/{id}",
-        "operation_id": "updateSubmitter",
-        "deprecated": false,
-        "source_location": "paths[\"/submitters/{id}\"].put",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.updatetemplate-source-1",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/templates/{id}",
-        "operation_id": "updateTemplate",
-        "deprecated": false,
-        "source_location": "paths[\"/templates/{id}\"].put",
-        "source_url": "https://console.docuseal.com/openapi.yml"
-      },
-      {
-        "id": "docuseal.rest.updatetemplatedocuments-source-1",
-        "protocol": "rest",
-        "method": "PUT",
-        "path": "/templates/{id}/documents",
-        "operation_id": "updateTemplateDocuments",
-        "deprecated": false,
-        "source_location": "paths[\"/templates/{id}/documents\"].put",
-        "source_url": "https://console.docuseal.com/openapi.yml"
+        "id": "document-0001",
+        "artifact": {
+          "source_url": "https://console.docuseal.com/openapi.yml",
+          "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+          "bytes": 192929
+        },
+        "published_source": {
+          "source_url": "https://console.docuseal.com/openapi.yml",
+          "capture_url": "https://console.docuseal.com/openapi.yml",
+          "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b",
+          "bytes": 192929,
+          "adapter": "issue-4292-http-capture"
+        },
+        "operations": [
+          {
+            "id": "docuseal.rest.archivesubmission-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/submissions/{id}",
+            "operation_id": "archiveSubmission",
+            "deprecated": false,
+            "source_location": "paths[\"/submissions/{id}\"].delete"
+          },
+          {
+            "id": "docuseal.rest.archivetemplate-source-1",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/templates/{id}",
+            "operation_id": "archiveTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/templates/{id}\"].delete"
+          },
+          {
+            "id": "docuseal.rest.clonetemplate-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/{id}/clone",
+            "operation_id": "cloneTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/templates/{id}/clone\"].post"
+          },
+          {
+            "id": "docuseal.rest.createsubmission-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/submissions",
+            "operation_id": "createSubmission",
+            "deprecated": false,
+            "source_location": "paths[\"/submissions\"].post"
+          },
+          {
+            "id": "docuseal.rest.createsubmissionfromdocx-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/submissions/docx",
+            "operation_id": "createSubmissionFromDocx",
+            "deprecated": false,
+            "source_location": "paths[\"/submissions/docx\"].post"
+          },
+          {
+            "id": "docuseal.rest.createsubmissionfromhtml-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/submissions/html",
+            "operation_id": "createSubmissionFromHtml",
+            "deprecated": false,
+            "source_location": "paths[\"/submissions/html\"].post"
+          },
+          {
+            "id": "docuseal.rest.createsubmissionfrompdf-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/submissions/pdf",
+            "operation_id": "createSubmissionFromPdf",
+            "deprecated": false,
+            "source_location": "paths[\"/submissions/pdf\"].post"
+          },
+          {
+            "id": "docuseal.rest.createsubmissionsfromemails-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/submissions/emails",
+            "operation_id": "createSubmissionsFromEmails",
+            "deprecated": false,
+            "source_location": "paths[\"/submissions/emails\"].post"
+          },
+          {
+            "id": "docuseal.rest.createtemplatefromdocx-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/docx",
+            "operation_id": "createTemplateFromDocx",
+            "deprecated": false,
+            "source_location": "paths[\"/templates/docx\"].post"
+          },
+          {
+            "id": "docuseal.rest.createtemplatefromhtml-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/html",
+            "operation_id": "createTemplateFromHtml",
+            "deprecated": false,
+            "source_location": "paths[\"/templates/html\"].post"
+          },
+          {
+            "id": "docuseal.rest.createtemplatefrompdf-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/pdf",
+            "operation_id": "createTemplateFromPdf",
+            "deprecated": false,
+            "source_location": "paths[\"/templates/pdf\"].post"
+          },
+          {
+            "id": "docuseal.rest.getsubmission-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/submissions/{id}",
+            "operation_id": "getSubmission",
+            "deprecated": false,
+            "source_location": "paths[\"/submissions/{id}\"].get"
+          },
+          {
+            "id": "docuseal.rest.getsubmissiondocuments-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/submissions/{id}/documents",
+            "operation_id": "getSubmissionDocuments",
+            "deprecated": false,
+            "source_location": "paths[\"/submissions/{id}/documents\"].get"
+          },
+          {
+            "id": "docuseal.rest.getsubmissions-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/submissions",
+            "operation_id": "getSubmissions",
+            "deprecated": false,
+            "source_location": "paths[\"/submissions\"].get"
+          },
+          {
+            "id": "docuseal.rest.getsubmitter-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/submitters/{id}",
+            "operation_id": "getSubmitter",
+            "deprecated": false,
+            "source_location": "paths[\"/submitters/{id}\"].get"
+          },
+          {
+            "id": "docuseal.rest.getsubmitters-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/submitters",
+            "operation_id": "getSubmitters",
+            "deprecated": false,
+            "source_location": "paths[\"/submitters\"].get"
+          },
+          {
+            "id": "docuseal.rest.gettemplate-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/templates/{id}",
+            "operation_id": "getTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/templates/{id}\"].get"
+          },
+          {
+            "id": "docuseal.rest.gettemplates-source-1",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/templates",
+            "operation_id": "getTemplates",
+            "deprecated": false,
+            "source_location": "paths[\"/templates\"].get"
+          },
+          {
+            "id": "docuseal.rest.mergetemplate-source-1",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/templates/merge",
+            "operation_id": "mergeTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/templates/merge\"].post"
+          },
+          {
+            "id": "docuseal.rest.updatesubmission-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/submissions/{id}",
+            "operation_id": "updateSubmission",
+            "deprecated": false,
+            "source_location": "paths[\"/submissions/{id}\"].put"
+          },
+          {
+            "id": "docuseal.rest.updatesubmitter-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/submitters/{id}",
+            "operation_id": "updateSubmitter",
+            "deprecated": false,
+            "source_location": "paths[\"/submitters/{id}\"].put"
+          },
+          {
+            "id": "docuseal.rest.updatetemplate-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/templates/{id}",
+            "operation_id": "updateTemplate",
+            "deprecated": false,
+            "source_location": "paths[\"/templates/{id}\"].put"
+          },
+          {
+            "id": "docuseal.rest.updatetemplatedocuments-source-1",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/templates/{id}/documents",
+            "operation_id": "updateTemplateDocuments",
+            "deprecated": false,
+            "source_location": "paths[\"/templates/{id}/documents\"].put"
+          }
+        ]
       }
     ]
+  },
+  "counts": {
+    "rest": 23,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 23
   }
 }
