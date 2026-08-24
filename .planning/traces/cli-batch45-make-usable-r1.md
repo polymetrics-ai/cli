@@ -175,3 +175,51 @@ declaration-only claim that fails shared runtime preflight. The required next wo
 source-contract decision: retain provider-pinned evidence for one suitable action per connector,
 including its idempotency header and bounded receipt locator/read-back; only then author and test
 the transport descriptor. No production connector or engine files were changed by this check.
+
+## Phase 2 source-contract feasibility probe — 2026-08-24
+
+### Authorization and bounded method
+
+Firstmate message `005` authorized the source-contract work for the same eight connectors only,
+without adding any write actions. The governing rule is that an idempotency header and receipt
+read-back may be added only when the connector's own pinned source proves both. A provider contract
+that is absent, source-drifted, or not retained is an ineligible target, never a guessed header.
+
+The source locks in this cohort are schema-version 1 parity locks. They retain operation identity,
+source URL, byte count, and SHA-256 but not the source's request-header and response declarations.
+I therefore probed one existing candidate action per connector only after re-fetching its exact
+locked public artifact and comparing its SHA-256. A changed document is not evidence: the authoring
+conventions classify it as a source-lock refresh decision, not a contract that may be imported.
+
+### Per-connector result
+
+| Connector | Existing actions requiring possible source derivation | Result | Pinned source evidence |
+| --- | ---: | --- | --- |
+| Airtable | 12 | Not currently eligible. The sole retained rendered-reference artifact drifted, so the original request-header and receipt shape are unavailable. | `https://airtable.com/developers/web/api/introduction`, expected SHA-256 `9a61c17c…b2cb239`, fetched `ab87a415…bc99cba`. The relevant existing action maps to `POST /v0/{baseId}/{tableIdOrName}` (`create-records`). |
+| BambooHR | 101 | Not currently eligible. The sole retained rendered-reference artifact drifted; no replacement contract was accepted. | `https://documentation.bamboohr.com/reference/get-meta-company`, expected `ecfc6382…0ebf15a`, fetched `eb9d25cf…3d399059`; candidate `create-time-tracking-project`, `POST /api/v1/time-tracking/projects`. |
+| Buildkite | 17 | Not currently eligible. The sole retained rendered-reference artifact drifted; its endpoint table has no retained header/response material. | `https://buildkite.com/docs/apis/rest-api`, expected `350d7584…982eedd`, fetched `2f2f547b…f71fd0f`; candidate `POST /v2/organizations/{org.slug}/pipelines`. |
+| Mailchimp | 148 | Not currently eligible from the bounded probe. The exact root Swagger artifact and selected existing `put_lists_members` operation contain no idempotency declaration. Establishing whether any other existing action differs requires reviewing its action-specific source artifact(s), up to 148 action contracts, rather than a bounded one-action wave. | Root `https://api.mailchimp.com/schema/3.0/Swagger.json`, SHA-256 `9b17c3c8…8e98a9a0`; member operation `https://us22.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Instance.json`, SHA-256 `c2c22744…6bebf47d`, `PUT /lists/{list_id}/members/{subscriber_hash}`. |
+| Pipedrive | 17 | Not eligible. The verified full pinned OpenAPI artifact has no `idempotency` declaration, so none of its already-declared actions can supply the required provider-owned header. | `https://developers.pipedrive.com/docs/api/v1/openapi.yaml`, SHA-256 `302b0d7c…bf501c2b`; this covers `POST /leads` (`addLead`) and the other existing actions. |
+| SonarCloud | 8 | Not currently eligible. The sole retained catalog artifact drifted, so its original action/header/response contract cannot be derived. | `https://sonarcloud.io/api/webservices/list`, expected `76f39c51…8553db5e`, fetched `46bc01d8…659a3f0a`; candidate `create`, `POST /api/webhooks/create`. |
+| Squarespace | 2 | Not eligible. The verified full pinned OpenAPI declares `Idempotency-Key` only for `POST /1.0/commerce/inventory/adjustments` and `POST /1.0/commerce/orders`; neither is one of the two existing `writes.json` actions, which are webhook-subscription operations. | `https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json`, SHA-256 `eff1274e…b2b2debc`; existing candidate `createWebhookSubscription`, `POST /1.0/webhook_subscriptions`. |
+| Zendesk Support | 90 | Not eligible. The verified full pinned OpenAPI artifact has no `idempotency` declaration, so none of its already-declared actions can supply the required provider-owned header. | `https://developer.zendesk.com/zendesk/oas.yaml`, SHA-256 `a487892c…36d9a0c8`; this covers `CreateTicket`, `POST /api/v2/tickets`, and the other existing actions. |
+
+The digest prefixes above identify the full values retained in each connector's
+`sources/<connector>-parity-source-lock.json`; no provider API operation was executed and no
+credential was used. Source checks verified Pipedrive, Squarespace, Zendesk Support, the Mailchimp root, and
+the selected Mailchimp member-operation artifact byte-for-byte. Airtable, BambooHR, Buildkite, and
+SonarCloud were refused because their fetched bytes differed from the pinned digest.
+
+### Honest size and stop condition
+
+No connector reached header admission, so no receipt-readback or transport JSON can be authored
+faithfully. The remaining source work is not a bounded eight-action change: four connectors first
+need immutable source-artifact retention or an approved source-lock refresh (12 + 101 + 17 + 8 =
+138 existing actions potentially affected), and Mailchimp requires action-specific review across
+up to 148 existing contracts to discover whether a header-bearing action exists. Pipedrive,
+Squarespace, and Zendesk Support are already ruled out by their verified full pinned sources.
+
+This exceeds the authorized bounded wave. No `writes.json`, `sync_transport.json`, CLI surface, or
+shared-engine file was changed. The required decision is whether to open a separate, source-lock
+refresh/retention and per-action-evidence wave; without it, this task's honest Phase 2 result is
+zero new typed destinations.
