@@ -34,9 +34,10 @@
       "path": "operations get-1-0-commerce-inventory",
       "summary": "Declared etl: GET /1.0/commerce/inventory.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
-      "notes": "Blocked: locked source operation squarespace.provider.getinventoryitems-3 has no declaration-owned executable etl route."
+      "notes": "Provider GET /1.0/commerce/inventory is bound to the existing inventory stream with its connector-owned schema and pagination contract.",
+      "stream": "inventory"
     },
     {
       "path": "operations get-1-0-commerce-inventory-variant-id-csvs",
@@ -66,9 +67,10 @@
       "path": "operations get-1-0-commerce-orders",
       "summary": "Declared etl: GET /1.0/commerce/orders.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
-      "notes": "Blocked: locked source operation squarespace.provider.getorders-6 has no declaration-owned executable etl route."
+      "notes": "Provider GET /1.0/commerce/orders is bound to the existing orders stream with its connector-owned schema and pagination contract.",
+      "stream": "orders"
     },
     {
       "path": "operations post-1-0-commerce-orders",
@@ -108,17 +110,19 @@
       "path": "operations get-1-0-commerce-store-pages",
       "summary": "Declared etl: GET /1.0/commerce/store_pages.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
-      "notes": "Blocked: locked source operation squarespace.provider.getstorepages-10 has no declaration-owned executable etl route."
+      "notes": "Provider GET /1.0/commerce/store_pages is bound to the existing store_pages stream with its connector-owned schema and pagination contract.",
+      "stream": "store_pages"
     },
     {
       "path": "operations get-1-0-commerce-transactions",
       "summary": "Declared etl: GET /1.0/commerce/transactions.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
-      "notes": "Blocked: locked source operation squarespace.provider.getdocumentsbyupdatedon-11 has no declaration-owned executable etl route."
+      "notes": "Provider GET /1.0/commerce/transactions is bound to the existing transactions stream with its connector-owned schema and pagination contract.",
+      "stream": "transactions"
     },
     {
       "path": "operations get-1-0-commerce-transactions-document-ids",
@@ -138,9 +142,10 @@
       "path": "operations get-1-0-profiles",
       "summary": "Declared etl: GET /1.0/profiles.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
-      "notes": "Blocked: locked source operation squarespace.provider.getprofiles-13 has no declaration-owned executable etl route."
+      "notes": "Provider GET /1.0/profiles is bound to the existing profiles stream with its connector-owned schema and pagination contract.",
+      "stream": "profiles"
     },
     {
       "path": "operations get-1-0-profiles-profile-id-csvs",
@@ -160,9 +165,10 @@
       "path": "operations get-1-0-webhook-subscriptions",
       "summary": "Declared etl: GET /1.0/webhook_subscriptions.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
-      "notes": "Blocked: locked source operation squarespace.provider.getwebhooksubscriptions-15 has no declaration-owned executable etl route."
+      "notes": "Provider GET /1.0/webhook_subscriptions is bound to the existing webhook_subscriptions stream with its connector-owned schema and pagination contract.",
+      "stream": "webhook_subscriptions"
     },
     {
       "path": "operations post-1-0-webhook-subscriptions",
@@ -300,9 +306,10 @@
       "path": "operations get-v1-contacts",
       "summary": "Declared etl: GET /v1/contacts.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
-      "notes": "Blocked: locked source operation squarespace.provider.getcontacts-28 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v1/contacts is bound to the existing contacts stream with its connector-owned schema and pagination contract.",
+      "stream": "contacts"
     },
     {
       "path": "operations post-v1-contacts",
@@ -434,9 +441,10 @@
       "path": "operations get-v2-commerce-products",
       "summary": "Declared etl: GET /v2/commerce/products.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
-      "notes": "Blocked: locked source operation squarespace.provider.getproducts-40 has no declaration-owned executable etl route."
+      "notes": "Provider GET /v2/commerce/products is bound to the existing products stream with its connector-owned schema and pagination contract.",
+      "stream": "products"
     },
     {
       "path": "operations post-v2-commerce-products",

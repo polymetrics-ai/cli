@@ -836,9 +836,9 @@ contract/dispatch error is useful at 100 and must stop the wave before any large
 
 | Intent | Count | Connector spread | Contract variety exercised |
 | --- | ---: | --- | --- |
-| `direct_read` | 85 | BambooHR 10; HubSpot 45; LaunchDarkly 10; Pipedrive 8; ShipStation 4; Squarespace 4; Zendesk Support 4 | Source-declared JSON reads with optional string/integer/boolean/date-time query inputs, string-array inputs, enum values, and both collection and fixed-resource paths. The selected non-HubSpot reads have no path placeholder, so the credential probe cannot be mistaken for an omitted identifier failure. |
-| `etl` | 12 | BambooHR 3; LaunchDarkly 3; ShipStation 3; Squarespace 3 | Existing connector-owned stream schemas, including nested/array-bearing record schemas, are rebound only to the provider operation with the same pinned GET path. |
-| `direct_write` | 3 | HubSpot 3 | The three pinned no-body, no-path `DELETE /appinstalls/{2026-03,2026-09,v3}/external-install` operations exercise the operation-backed mutation preflight without fabricating a request schema. |
+| `direct_read` | 0 | Set aside | The validator rejects every Category-A direct-read endpoint because no endpoint is covered by an executable stream or operation contract. Promoting one would be an availability-only claim, so this lane remains partial. |
+| `etl` | 100 | BambooHR 62; LaunchDarkly 5; Pipedrive 21; ShipStation 4; Squarespace 8 | Each command is joined exactly to a pinned GET endpoint already covered by its named connector-owned stream, including nested/array-bearing schemas and both collection and configured-resource routes. |
+| `direct_write` | 0 | Set aside | The three earlier HubSpot candidates remain typed metadata, not executable direct-write contracts; the destination-transport gap recorded below also applies to the write lane. |
 | **Total** | **100** | **7 connectors** | **No source lock or engine change.** |
 
 ### Reverse-ETL exception recorded before conversion
@@ -854,18 +854,18 @@ reverse ETL. It is not a downgrade of any of the 390 commands already proven on 
 ### Red evidence
 
 From a newly initialized, credential-free project, the freshly built current binary rejects the
-first selected HubSpot command before the credential boundary:
+first selected BambooHR ETL command before the credential boundary:
 
 ```text
-pm hubspot direct get-account-info-2025-09-activity-audit-logs-account-info-2025-09-activity-audit-logs --root <fresh-root> --json
-exit 7
-error: connector command "direct get-account-info-2025-09-activity-audit-logs-account-info-2025-09-activity-audit-logs" is blocked: intent=direct_read: availability=partial: Blocked: locked source operation hubspot.provider.get-account-info-2025-09-activity-audit-logs-account-info-2025-09-activity-audit-logs-1 has no declaration-owned executable stream, direct-read, binary, or status route.
+pm bamboo-hr operations get-api-v1-employees-directory --root <fresh-root> --json
+exit 1
+error: missing --credential
 ```
 
-The source endpoint and each selected command's existing flags are already provider-derived in
-that connector's `cli_surface.json` and declaration-disposition ledger. Green work must add only
-the missing connector-owned executable binding (and an explicit JSON-redacted output policy when
-the OAS response is JSON), then prove the built binary's exact terminal result:
+The source endpoint and stream binding are already provider-derived in each connector's
+`api_surface.json`, `streams.json`, source lock, and declaration-disposition ledger. Green work
+adds that exact existing stream name to the corresponding partial ETL command, then proves the
+built binary's exact terminal result:
 
 ```text
 error: missing --credential
@@ -893,11 +893,10 @@ Neither condition is met by changing `cli_surface.json`, and constructing either
 would violate the Wave-1 no-foundation/no-invented-body constraint.
 
 The reverse-ETL exception remains unchanged: none of the 20 target connectors owns a
-`sync_transport.json`. Therefore the exact 100-operation, four-intent sample approved for Wave 1
-cannot proceed as specified. This is a pre-conversion evidence finding, not a failed conversion;
-all connector declarations remain unchanged. Await a delivery-owner choice between a 97-command
-read/ETL-only first wave, explicit authorization for a connector-local write/transport foundation,
-or a different source-backed write candidate.
+`sync_transport.json`. Therefore the initial four-intent sample cannot proceed as specified. This
+is a pre-conversion evidence finding, not a failed conversion. The delivery owner has expressly
+set the 390 write actions aside and authorized the independent 100-command read/ETL Wave 1 above;
+all write declarations remain unchanged.
 
 ### Transport registration check — 2026-08-24
 
@@ -920,3 +919,38 @@ read-back contract. The other twelve target bundles have no write actions. This 
 provider-contract boundary, not a missing generic executor: writing only `sync_transport.json`
 would fail destination registration before credential resolution. No transport file or command
 surface was changed.
+
+### Wave-1 green report — 2026-08-25
+
+**Correctly mapped and proven: 100 ETL commands.** The mapping criterion was exact and
+connector-local: a partial ETL command's `summary` had to equal `Declared etl: GET <path>.` for a
+pinned `api_surface.json` `GET <path>` endpoint whose `covered_by.stream` named the exact existing
+stream. The command then gained only that stream name, `availability: implemented`, and a binding
+note. No source lock, stream schema, endpoint, shared engine, or transport declaration changed.
+
+| Connector | Exact endpoint-to-stream bindings | Built-binary probes | Result |
+| --- | ---: | ---: | --- |
+| BambooHR | 62 | 62 | 62 exact `error: missing --credential` |
+| LaunchDarkly | 5 | 5 | 5 exact `error: missing --credential` |
+| Pipedrive | 21 | 21 | 21 exact `error: missing --credential` |
+| ShipStation | 4 | 4 | 4 exact `error: missing --credential` |
+| Squarespace | 8 | 8 | 8 exact `error: missing --credential` |
+| **Total** | **100** | **100** | **100/100 proven** |
+
+The binary was rebuilt after the declaration changes. Each probe ran sequentially from its own
+newly initialized project with no configured credential; each exited `1`, printed the terminal
+line `error: missing --credential`, and did not print `unknown command` or make a provider call.
+The 100 checks were bounded into 10-or-fewer-command batches only to stay below the execution
+window; this did not share credentials or execution state.
+
+**Partial/deferred: direct reads.** The attempted high-variance direct-read sample was not
+promoted. `connectorgen validate` rejects an `implemented` direct read unless its endpoint is
+covered by an executable stream/operation contract. The source-defined partial command for
+`GET /cms/site-search/2025-09/search`, for example, fails as “not covered by an executable
+surface.” The same absence applies to the Wave-1 direct-read candidates across the seven planned
+connectors, so they remain partial rather than becoming an availability-only claim.
+
+**Unsupported/set aside: writes.** The 390 write actions remain set aside under the previously
+recorded destination-transport foundation gap: zero source-declared idempotency headers and zero
+action-owned provider read-back contracts. No write or reverse-ETL command was promoted or
+retested in this wave.
