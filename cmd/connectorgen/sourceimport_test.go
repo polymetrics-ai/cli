@@ -427,17 +427,18 @@ func TestSourceImportImportsLockedRESTAndGraphQLIdentities(t *testing.T) {
 	}
 }
 
-func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
+func TestSourceImportRejectsUnsafeOrRetainsMalformedSourceForms(t *testing.T) {
 	t.Parallel()
 	baseLimits := defaultSourceImportLimits()
 	cases := []struct {
 		name     string
 		artifact string
 		want     string
+		wantGap  string
 		limits   sourceImportLimits
 	}{
 		{name: "external reference", artifact: "external-ref.json", want: "external reference", limits: baseLimits},
-		{name: "unresolved reference", artifact: "unresolved-ref.json", want: "unresolved reference", limits: baseLimits},
+		{name: "unresolved response schema reference", artifact: "unresolved-ref.json", want: "unresolved reference", wantGap: sourceMalformedReferenceFoundation, limits: baseLimits},
 		{name: "ambiguous request", artifact: "ambiguous-request.json", want: "ambiguous request schema", limits: baseLimits},
 		{name: "duplicate identity", artifact: "duplicate-id.json", want: "duplicate source identity", limits: baseLimits},
 		{name: "unbounded request", artifact: "unbounded-request.json", want: "unbounded request schema", limits: baseLimits},
@@ -445,7 +446,7 @@ func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 		{name: "unsupported encoding", artifact: "unsupported-encoding.json", want: "unsupported request encoding", limits: baseLimits},
 		{name: "invalid relative path", artifact: "invalid-relative-path.json", want: "connector-relative", limits: baseLimits},
 		{name: "whitespace path", artifact: "whitespace-path.json", want: "connector-relative", limits: baseLimits},
-		{name: "missing path parameter", artifact: "missing-path-parameter.json", want: "path placeholder", limits: baseLimits},
+		{name: "missing path parameter", artifact: "missing-path-parameter.json", want: "path placeholder", wantGap: sourceMalformedPathParameterFoundation, limits: baseLimits},
 		{name: "multiple YAML documents", artifact: "multiple-documents.yaml", want: "multiple YAML documents", limits: baseLimits},
 		{name: "reference depth", artifact: "deep-reference.json", want: "reference depth limit", limits: sourceImportLimits{MaxArtifactBytes: baseLimits.MaxArtifactBytes, MaxSchemaBytes: baseLimits.MaxSchemaBytes, MaxOperations: baseLimits.MaxOperations, MaxReferences: baseLimits.MaxReferences, MaxReferenceDepth: 1}},
 		{name: "reference count", artifact: "many-references.json", want: "reference count limit", limits: sourceImportLimits{MaxArtifactBytes: baseLimits.MaxArtifactBytes, MaxSchemaBytes: baseLimits.MaxSchemaBytes, MaxOperations: baseLimits.MaxOperations, MaxReferences: 1, MaxReferenceDepth: baseLimits.MaxReferenceDepth}},
@@ -459,7 +460,21 @@ func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 			t.Parallel()
 			raw := loadSourceImportFixture(t, filepath.Join("invalid", tc.artifact))
 			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/invalid/"+tc.artifact, raw)
-			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), tc.limits)
+			result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), tc.limits)
+			if tc.wantGap != "" {
+				if err != nil {
+					t.Fatalf("retained malformed source import: %v", err)
+				}
+				if len(result.Operations) != 1 || !result.Operations[0].Runtime.MergeBlocked {
+					t.Fatalf("retained malformed operation = %#v", result.Operations)
+				}
+				for _, gap := range result.Operations[0].Runtime.Gaps {
+					if gap.Foundation == tc.wantGap && strings.Contains(gap.Location, result.Operations[0].Source.Location) && strings.Contains(gap.Reason, tc.want) {
+						return
+					}
+				}
+				t.Fatalf("retained malformed source gaps = %#v", result.Operations[0].Runtime.Gaps)
+			}
 			if err == nil || !strings.Contains(err.Error(), tc.want) {
 				t.Fatalf("import error = %v, want %q", err, tc.want)
 			}
@@ -2209,14 +2224,225 @@ func TestSourceImportBoundsExtensionKeysBeforeSorting(t *testing.T) {
 	}
 }
 
+// TestSourceImportProviderDialectContracts keeps the seven provider failures
+// reported by the Batch-1 repair run behavioral. Each fixture is reduced to
+// the affected operation and its provider-declared response/request fragment;
+// its path, operationId, pointer, and dialect keyword are copied from the
+// pinned upstream artifact recorded in issue #4325's RUN-STATE.md. The test
+// exercises the importer, not a declaration count or a schema-shape helper.
+func TestSourceImportProviderDialectContracts(t *testing.T) {
+	tests := []struct {
+		name            string
+		raw             []byte
+		wantOperation   string
+		wantResponseKey string
+		wantGap         string
+		wantTrace       string
+	}{
+		{
+			name:            "Bitbucket pull request comment response stays within the raised finite schema bound",
+			raw:             sourceProviderNestedResponseDocument("3.0.0", "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}", "getPullRequestComment", 16),
+			wantOperation:   "getPullRequestComment",
+			wantResponseKey: "level_00",
+		},
+		{
+			name:            "Notion meeting notes response stays within the raised finite schema bound",
+			raw:             sourceProviderNestedResponseDocument("3.1.0", "/v1/blocks/meeting_notes/query", "query-meeting-notes", 16),
+			wantOperation:   "query-meeting-notes",
+			wantResponseKey: "level_00",
+		},
+		{
+			name:            "Stripe GET account follows a finite provider reference chain",
+			raw:             sourceProviderReferenceChainDocument(30),
+			wantOperation:   "GetAccount",
+			wantResponseKey: "next",
+		},
+		{
+			name:            "Vercel API key response retains OpenAPI 3.0 pattern properties",
+			raw:             sourceVercelPatternPropertiesDocument(),
+			wantOperation:   "createApiKeys",
+			wantResponseKey: "patternProperties",
+		},
+		{
+			name:          "Docker Hub malformed response target is retained with a source trace",
+			raw:           sourceDockerHubMalformedReferenceDocument(),
+			wantOperation: "createToken",
+			wantGap:       "cli-malformed-source-reference-foundation-r1",
+			wantTrace:     "#/components/responses/team_repo",
+		},
+		{
+			name:          "GitLab malformed epic issue path stays present with a source trace",
+			raw:           sourceGitLabMissingPathParameterDocument(),
+			wantOperation: "putApiV4GroupsIdDashEpicsEpicIidIssuesEpicIssueId",
+			wantGap:       "cli-malformed-path-parameter-foundation-r1",
+			wantTrace:     "epic_issue_id",
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := importInlineSourceResultError(tt.raw, defaultSourceImportLimits())
+			if err != nil {
+				t.Fatalf("provider-derived source import: %v", err)
+			}
+			if len(result.Operations) != 1 || result.Operations[0].SourceID != tt.wantOperation {
+				t.Fatalf("provider operation was not retained: %#v", result.Operations)
+			}
+			operation := result.Operations[0]
+			encoded, err := json.Marshal(operation.Responses)
+			if err != nil {
+				t.Fatalf("marshal retained provider response: %v", err)
+			}
+			if tt.wantResponseKey != "" && !strings.Contains(string(encoded), tt.wantResponseKey) {
+				t.Fatalf("retained response is missing %q: %s", tt.wantResponseKey, encoded)
+			}
+			if tt.wantGap == "" {
+				if operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 0 {
+					t.Fatalf("supported provider dialect unexpectedly has gaps: %#v", operation.Runtime)
+				}
+				return
+			}
+			var gap *sourceContractGap
+			for index := range operation.Runtime.Gaps {
+				candidate := &operation.Runtime.Gaps[index]
+				if candidate.Foundation == tt.wantGap {
+					gap = candidate
+					break
+				}
+			}
+			if gap == nil || !operation.Runtime.MergeBlocked || !strings.Contains(gap.Location, operation.Source.Location) || !strings.Contains(gap.Reason, tt.wantTrace) {
+				t.Fatalf("provider malformed-contract trace = %#v", operation.Runtime)
+			}
+		})
+	}
+}
+
+func TestSourceImportKeepsDepthBoundFiniteAfterProviderIncrease(t *testing.T) {
+	raw := sourceProviderNestedResponseDocument("3.1.0", "/pathological", "pathological", 65)
+	_, err := importInlineSourceResultError(raw, defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "schema depth limit exceeded") {
+		t.Fatalf("pathological provider schema error = %v, want finite depth refusal", err)
+	}
+}
+
+func sourceProviderNestedResponseDocument(openAPI, path, operationID string, depth int) []byte {
+	schema := sourceProviderNestedSchema(depth)
+	return sourceProviderOperationDocument(openAPI, path, "get", operationID, map[string]any{
+		"200": map[string]any{
+			"description": "provider response",
+			"content":     map[string]any{"application/json": map[string]any{"schema": schema}},
+		},
+	}, nil, sourceProviderRequiredPathParameterNames(path)...)
+}
+
+func sourceProviderRequiredPathParameterNames(path string) []string {
+	parameters, err := sourcePathTemplateParameters(path)
+	if err != nil {
+		panic(err)
+	}
+	return parameters
+}
+
+func sourceProviderNestedSchema(depth int) map[string]any {
+	schema := map[string]any{"type": "string"}
+	for index := depth - 1; index >= 0; index-- {
+		schema = map[string]any{
+			"type":       "object",
+			"properties": map[string]any{fmt.Sprintf("level_%02d", index): schema},
+		}
+	}
+	return schema
+}
+
+func sourceProviderReferenceChainDocument(depth int) []byte {
+	schemas := map[string]any{}
+	for index := 0; index < depth; index++ {
+		name := fmt.Sprintf("account_level_%02d", index)
+		child := map[string]any{"type": "string"}
+		if index+1 < depth {
+			child = map[string]any{"$ref": "#/components/schemas/" + fmt.Sprintf("account_level_%02d", index+1)}
+		}
+		schemas[name] = map[string]any{"type": "object", "properties": map[string]any{"next": child}}
+	}
+	return sourceProviderOperationDocument("3.0.0", "/v1/account", "get", "GetAccount", map[string]any{
+		"200": map[string]any{
+			"description": "account response",
+			"content":     map[string]any{"application/json": map[string]any{"schema": map[string]any{"$ref": "#/components/schemas/account_level_00"}}},
+		},
+	}, map[string]any{"schemas": schemas})
+}
+
+func sourceVercelPatternPropertiesDocument() []byte {
+	return sourceProviderOperationDocument("3.0.0", "/api-keys", "post", "createApiKeys", map[string]any{
+		"200": map[string]any{
+			"description": "Information about the newly created API key.",
+			"content":     map[string]any{"application/json": map[string]any{"schema": map[string]any{"$ref": "#/components/schemas/APIKey"}}},
+		},
+	}, map[string]any{"schemas": map[string]any{
+		"APIKey": map[string]any{
+			"type": "object",
+			"properties": map[string]any{
+				"metadata": map[string]any{"type": "object", "patternProperties": map[string]any{"^(.*)$": map[string]any{}}},
+			},
+		},
+	}})
+}
+
+func sourceDockerHubMalformedReferenceDocument() []byte {
+	return sourceProviderOperationDocument("3.0.3", "/v2/auth/token", "post", "createToken", map[string]any{
+		"401": map[string]any{
+			"description": "provider response",
+			"content":     map[string]any{"application/json": map[string]any{"schema": map[string]any{"$ref": "#/components/responses/team_repo"}}},
+		},
+	}, map[string]any{"responses": map[string]any{
+		"team_repo": map[string]any{"description": "provider response"},
+	}})
+}
+
+func sourceGitLabMissingPathParameterDocument() []byte {
+	path := "/api/v4/groups/{id}/(-/)epics/{epic_iid}/issues/{epic_issue_id}"
+	return sourceProviderOperationDocument("3.0.0", path, "put", "putApiV4GroupsIdDashEpicsEpicIidIssuesEpicIssueId", map[string]any{
+		"200": map[string]any{"description": "updated"},
+	}, nil, "id", "epic_iid")
+}
+
+func sourceProviderOperationDocument(openAPI, path, method, operationID string, responses map[string]any, components map[string]any, suppliedPathParameters ...string) []byte {
+	parameters := make([]any, 0, len(suppliedPathParameters))
+	for _, name := range suppliedPathParameters {
+		parameters = append(parameters, map[string]any{"name": name, "in": "path", "required": true, "schema": map[string]any{"type": "string", "maxLength": 256}})
+	}
+	operation := map[string]any{"operationId": operationID, "responses": responses}
+	if len(parameters) != 0 {
+		operation["parameters"] = parameters
+	}
+	document := map[string]any{
+		"openapi": openAPI,
+		"info":    map[string]any{"title": "provider-derived", "version": "1"},
+		"paths":   map[string]any{path: map[string]any{method: operation}},
+	}
+	if components != nil {
+		document["components"] = components
+	}
+	raw, err := json.Marshal(document)
+	if err != nil {
+		panic(err)
+	}
+	return raw
+}
+
 func importInlineSourceResult(t *testing.T, raw []byte, limits sourceImportLimits) sourceImportResult {
 	t.Helper()
-	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/inline-openapi.json", raw)
-	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+	result, err := importInlineSourceResultError(raw, limits)
 	if err != nil {
 		t.Fatalf("import inline source: %v", err)
 	}
 	return result
+}
+
+func importInlineSourceResultError(raw []byte, limits sourceImportLimits) (sourceImportResult, error) {
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/inline-openapi.json", raw)
+	return importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
 }
 
 func loadSourceImportFixtureLock(t *testing.T, connector string) sourceImportLock {
