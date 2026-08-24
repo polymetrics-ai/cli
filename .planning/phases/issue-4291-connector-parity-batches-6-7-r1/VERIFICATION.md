@@ -173,7 +173,8 @@ cross-host redirect but no exact allowed redirect host or final media contract. 
 has the safe capability and refuses only unbounded redirect metadata
 (`operation_headers.go:455-491`); the necessary change is provider evidence, not an engine or
 connector shim. A subsequent matrix reconciliation removed the incorrectly counted partial Gorgias
-file-download command, so the machine-readable split is therefore **287 runtime-enabled**, **3,639
+file-download command and then restored the five shipped Help Scout route bindings; the matrix is
+therefore **576 runtime-enabled**, **3,350
 connector-declaration-pending**, **5 execution-foundation-blocked**, and **1
 provider-contract-unavailable** (3,932 total). No credentials, provider operation, or live
 certification was used for this source-only audit.

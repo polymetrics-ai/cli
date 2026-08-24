@@ -47,7 +47,7 @@ foundation gaps, one recursive-filter direct-read foundation gap, one POST text-
 gap, one PUT direct-read foundation gap, and one `provider-contract-unavailable` binary download.
 The latter lacks an exact provider redirect host/final media contract and is not a foundation gap.
 
-The resulting provisional portfolio split is **287 runtime-enabled**, **3,639
+The resulting provisional portfolio split is **576 runtime-enabled**, **3,350
 connector-declaration-pending**, **5 execution-foundation-blocked**, and **1
 provider-contract-unavailable**. Every affected row now has a specific surface classification and
 refusal; none is counted as an enabled command.
