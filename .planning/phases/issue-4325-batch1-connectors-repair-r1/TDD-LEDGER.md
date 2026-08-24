@@ -64,6 +64,37 @@
   commands retain engine-incompatible backreference regexes. These working
   commands are neither downgraded nor tagged as non-executable.
 
+### 2026-08-24 Asana schema/regex disposition
+
+- Current validation's 24 `cli-request-schema-foundation-r1` rows each carry
+  an optional `opt_fields` query gap *and* an unbounded body gap. Only
+  `createEnumOptionForCustomField` and `updateCustomField` have optional
+  bodies; the Zoom optional-body exception can clear only those two, while
+  retaining their citations and counts. The other 22 bodies are required and
+  need a complete bounded request contract: `createCustomField`, `createGoal`,
+  `createOooEntry`, `createPortfolio`, `createProject`, `createProjectBrief`,
+  `createProjectStatusForProject`, `createStatusForObject`, `createTag`,
+  `createTask`, `createSubtaskForTask`, `createTeam`, `createProjectForTeam`,
+  `createProjectForWorkspace`, `createTagForWorkspace`,
+  `updateGoalRelationship`, `updateGoal`, `updatePortfolio`,
+  `updateProjectBrief`, `updateTeam`, `updateUser`, and
+  `updateUserForWorkspace`. No required body was tagged or made optional.
+- The four unsafe-pattern validation rows are two distinct provider patterns,
+  each compiled through both the `--data` and `--opt-fields` command flags:
+  `duplicateProject` has the 16 project include values and `duplicateTask` the
+  10 task include values. Both source patterns use a character class around
+  words plus `\\1`; Go's RE2 compiler rejects that backreference at
+  `internal/connectors/engine/schema.go:311-314`. They are not a catastrophic
+  backtracking risk in this runtime—compilation fails first—but would still be
+  functionally unsafe in a backreference engine because `[a|b]` matches one
+  character, not one named field. The source-backed correct form is anchored
+  `^(?:value1|value2)(?:,(?:value1|value2))*$`, using the documented provider
+  value list for each operation. `sourceProjectionSchema` currently copies a
+  provider `pattern` verbatim at `cmd/connectorgen/sourceprojection.go:1656-9`,
+  so a connector-local rewrite would be regenerated away. This needs a shared
+  source-pattern dialect normalization (or provider-source correction), never
+  a non-executable tag.
+
 ## Jira red/green evidence
 
 - Red: `go run ./cmd/connectorgen source-import jira --check` exited 1 because
