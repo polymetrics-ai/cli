@@ -1,0 +1,20 @@
+# Review — issue-4336 request-contract execution envelopes
+
+Inline code-review fallback: the repository contract forbids spawning a reviewer
+role in this lane. Review scope was the complete `origin/main...HEAD` diff, with
+special attention to schema truth, finite-resource enforcement, request authority,
+numeric compatibility, generated-surface drift, and provider-neutral behavior.
+
+## Findings and dispositions
+
+| Severity | Finding | Disposition | Evidence |
+| --- | --- | --- | --- |
+| warning | Body-envelope validation checked only positive shape, so an altered but plausible effective limit could project. | fixed | Canonical full-envelope comparison and red/green altered-limit test; commit `8a5bcfcdd`. |
+| warning | `json.Valid` narrowed the previous CLI numeric grammar and would reject already accepted spellings such as `+01` and hexadecimal floats. | fixed | Preserve the prior `strconv` grammar with exact `big.Int`/`big.Rat` arithmetic; four red/green compatibility cases; commit `8e368b5ac`. |
+| warning | A numeric header with finite provider range still lacks a finite textual byte bound and could evade the uncensused-header quarantine. | fixed | Such headers now produce the shared merge-blocking gap; booleans derive a five-byte bound; commit `8e368b5ac`. |
+| info | Runtime inspection reports the effective bound as PM policy even when an immutable source envelope records a tighter provider-derived component. | accepted for this slice | The plan deliberately avoids a fleet-wide JSON rewrite; source descriptors retain `provider_and_pm_policy`, while help/inspection truthfully describe the enforced effective value as PM policy. |
+
+No critical or unresolved warning finding remains. The final full generator and
+engine suites, lint, vet, builds, generated parity, connector boundary, and
+release workflow checks passed after the fixes. External Claude/Copilot coverage
+will be recorded after the direct PR is opened; it is not claimed here.

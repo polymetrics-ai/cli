@@ -37,8 +37,24 @@ GOFLAGS=-p=3 go test -timeout 20m ./internal/connectors ./internal/connectors/en
 
 These prove the exact Gong-shaped import, source/envelope separation, typed
 schema dispositions, header quarantine, body envelopes, help/inspection
-provenance, pre-I/O caps, and exact numeric request lexemes. Full-package and
-repository gates remain pending final verification.
+provenance, pre-I/O caps, and exact numeric request lexemes.
+
+Code review added three further red/green controls:
+
+- Altering an otherwise well-shaped body envelope's effective byte limit was
+  initially accepted; complete canonical-envelope comparison now rejects it.
+- `json.Valid` initially rejected numeric spellings accepted by the prior
+  `strconv` contract (`+01`, `+.5`, `01.`, and `0x1p+2`); exact `big.Int` /
+  `big.Rat` parsing now preserves that compatibility while continuing to reject
+  fraction syntax that `ParseFloat` never accepted.
+- A numeric header with provider minimum and maximum still had no finite
+  textual byte bound but initially escaped the unbounded-header gap; it is now
+  merge-blocked pending the shared header census. Booleans derive the exact
+  five-byte `false` ceiling.
+
+The final full `cmd/connectorgen` package, full engine package, lint, vet,
+builds, and repository generator/boundary/release gates passed after these
+review fixes.
 
 ## Deliberate sabotage evidence
 

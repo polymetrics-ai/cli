@@ -1,7 +1,7 @@
 {
   "issue": 4336,
   "phase": "request-contract-bounding-r1",
-  "status": "green_focused",
+  "status": "verified_local_pending_pr",
   "delivery": "direct-pr",
   "base": "main@8127de418",
   "branch": "fm/cli-request-contract-bounding-design-r1",
@@ -14,5 +14,11 @@
   },
   "dependencies": {
     "pr_4339": "malformed-path/media-quota quarantine and unrelated provider dialect prerequisites; not stacked or duplicated"
+  },
+  "verification": {
+    "full_packages": "cmd/connectorgen, internal/connectors, internal/connectors/engine passed",
+    "cli": "focused policy/help/inspection/golden tests passed; two full-suite fresh-child cases passed only when serialized",
+    "repository_gates": "vet, builds, tidy, docs, lint, smoke, agent contract, validate, surface-sync, operation-evidence, boundary, and release workflow passed",
+    "review": "three warning findings fixed with red/green regressions; no unresolved critical or warning finding"
   }
 }

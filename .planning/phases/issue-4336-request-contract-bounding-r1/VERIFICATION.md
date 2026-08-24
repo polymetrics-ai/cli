@@ -20,18 +20,22 @@
 - [x] Green focused engine tests with `GOFLAGS=-p=3`.
 - [x] Deliberate sabotage makes the new bounding tests fail; restored green.
 - [x] `gofmt` on changed Go files.
-- [ ] `go vet ./...` with bounded concurrency.
-- [ ] `go build ./cmd/connectorgen` and `go build ./cmd/pm`.
-- [ ] Serialized `go test -timeout 20m ./cmd/connectorgen`.
-- [ ] Serialized `go test -timeout 20m ./internal/cli` if CLI output changes.
-- [ ] Applicable individual `make verify` gates from AGENTS.md.
-- [ ] `git diff --check origin/main...HEAD`.
+- [x] `go vet ./...` with bounded concurrency.
+- [x] `go build ./cmd/connectorgen` and `go build ./cmd/pm`.
+- [x] Serialized `go test -timeout 20m ./cmd/connectorgen`.
+- [x] Focused generated CLI/help/inspection parity tests. The full
+      `internal/cli` suite's two concurrent fresh-child build cases failed only
+      under suite concurrency and each passed when rerun serialized; this is
+      recorded as an environmental full-suite limitation, not a package pass.
+- [x] Applicable individual `make verify` gates from AGENTS.md.
+- [x] `git diff --check origin/main...HEAD`.
 
 ## Lifecycle and delivery
 
 - [x] Execute-phase prompt executed inline and evidenced.
-- [ ] Verify-work prompt executed inline; gaps planned/executed if found.
-- [ ] `golang-lint` loaded; code-review prompt executed inline.
+- [x] Verify-work prompt executed inline; no deliverable gap remained.
+- [x] `golang-lint` loaded; code-review prompt executed inline and three
+      warning findings fixed with red/green tests.
 - [ ] PR body records issue, Red/Green evidence, skills, gates, review status,
       and accepted no-mistakes record or explicit task prohibition.
 - [ ] Pull request opened against `main`; API-reported base verified `main`.
@@ -41,6 +45,7 @@
 
 - [x] Effective PM cap visible in connector help/inspection fixture.
 - [x] PM-labelled runtime error covered.
-- [ ] `pm help <topic>`, bare namespace, and affected `--help` checked.
-- [ ] Docs/website/generated artifacts either updated together or explicitly
-      proved unchanged/not applicable.
+- [x] `pm help gong`, bare `pm gong`, and `pm gong calls get --help` checked.
+- [x] Generated connector manuals/skills and CLI docs updated; no command or
+      flag set changed and the branch contains no `website/**` diff, so website
+      projection is not applicable to this additive policy-provenance text.
