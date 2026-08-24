@@ -460,6 +460,14 @@ not a full override by default.
   media types or bounded media ranges) and `binary.response.success_statuses` (exact 2xx statuses
   or inclusive 2xx ranges). A redirect is disabled unless `binary.redirect` declares its hop bound
   plus same-origin permission and/or exact cross-origin hosts.
+- **Binary uploads are their own write intent**: declare `intent:"binary_upload"` only for a
+  named `writes.json` action with `body_type` `binary_upload`, `base64_upload`, or a multipart
+  required file part. The command must expose every declared source as a required `record.*` flag;
+  its source field, byte cap, media allow-list, request shape, and provider origin stay action-owned.
+  It always uses the existing plan → preview → approval → execute lifecycle, which binds the file's
+  digest before execution. Do not add a URL, body, content-type, or generic file flag: such values
+  would create an unchecked second upload path. `file_upload` remains declarable but intentionally
+  has no public executor.
 - **Operation-only capability contracts stay typed and bounded**: use `rest_status` with
   `intent:"status_check"`, a single HEAD endpoint, and `output_policy:"status"` for a
   response-less status probe; it cannot be declared as `direct_read`, its `rest.max_bytes` must
