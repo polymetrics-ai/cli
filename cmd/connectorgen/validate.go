@@ -875,7 +875,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 	for i, cmd := range b.CLISurface.Commands {
 		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes, operations)...)
 		findings = append(findings, checkCLISurfaceOperationSafety(b, i, cmd, operations)...)
-		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
+		findings = append(findings, checkCLISurfaceIntent(b, i, cmd, writes)...)
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceValidationDeclarations(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceEnvOnlyFlags(b, i, cmd, operations, writes)...)
@@ -1072,7 +1072,7 @@ func checkCLISurfaceStructuredJSONFlags(b engine.Bundle, i int, cmd engine.CLICo
 			continue
 		}
 		switch {
-		case cmd.Intent == "reverse_etl" && strings.TrimSpace(cmd.Write) != "" && strings.HasPrefix(flag.MapsTo, "record."):
+		case (cmd.Intent == "reverse_etl" || cmd.Intent == "binary_upload") && strings.TrimSpace(cmd.Write) != "" && strings.HasPrefix(flag.MapsTo, "record."):
 			continue
 		case cmd.Intent == "direct_write" && strings.TrimSpace(cmd.Operation) != "":
 			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
@@ -1811,7 +1811,7 @@ func checkCLISurfaceWriteFlags(
 	cmd engine.CLICommand,
 	writes map[string]engine.WriteAction,
 ) []Finding {
-	if cmd.Availability != "implemented" || cmd.Intent != "reverse_etl" || cmd.Write == "" {
+	if cmd.Availability != "implemented" || (cmd.Intent != "reverse_etl" && cmd.Intent != "binary_upload") || cmd.Write == "" {
 		return nil
 	}
 
@@ -2140,7 +2140,7 @@ func directReadMethodRequirement(cmd engine.CLICommand) string {
 	return "GET"
 }
 
-func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
+func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand, writes map[string]engine.WriteAction) []Finding {
 	if cmd.Availability != "implemented" {
 		return nil
 	}
@@ -2164,6 +2164,41 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 				Message:   fmt.Sprintf("implemented reverse ETL command %d (%q) must reference write action", i, cmd.Path),
 			}}
 		}
+	case "binary_upload":
+		var findings []Finding
+		if cmd.Write == "" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceMissingMapping, Message: fmt.Sprintf("implemented binary upload command %d (%q) must reference write action", i, cmd.Path)})
+		}
+		if cmd.Stream != "" || cmd.Operation != "" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented binary upload command %d (%q) may bind only one declared write action", i, cmd.Path)})
+		}
+		action, found := writes[cmd.Write]
+		if !found {
+			return findings
+		}
+		if err := engine.ValidatePromotableRecordSchema(action.RecordSchema); err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "writes.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented binary upload command %d (%q) write %q is not safely promotable: %v", i, cmd.Path, cmd.Write, err)})
+			return findings
+		}
+		sources, err := engine.BinaryUploadSourcesForWriteAction(action)
+		if err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "writes.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented binary upload command %d (%q) write %q is not safely promotable: %v", i, cmd.Path, cmd.Write, err)})
+			return findings
+		}
+		for _, source := range sources {
+			target := "record." + source.Field
+			bound := false
+			for _, flag := range cmd.Flags {
+				if flag.Required && flag.MapsTo == target {
+					bound = true
+					break
+				}
+			}
+			if !bound {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented binary upload command %d (%q) source %q must be one required declared command flag", i, cmd.Path, source.Field)})
+			}
+		}
+		return findings
 	case "direct_read":
 		// Operation-backed commands are NOT exempt. The runtime
 		// (commandrunner.validateOperationDirectReadCommand) enforces exactly
@@ -2368,12 +2403,15 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 
 func checkCLISurfaceRiskApproval(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
 	if (cmd.Availability != "implemented" && cmd.Availability != "partial") ||
-		(cmd.Intent != "reverse_etl" && cmd.Intent != "direct_write") {
+		(cmd.Intent != "reverse_etl" && cmd.Intent != "direct_write" && cmd.Intent != "binary_upload") {
 		return nil
 	}
 	label := "reverse ETL"
-	if cmd.Intent == "direct_write" {
+	switch cmd.Intent {
+	case "direct_write":
 		label = "direct write"
+	case "binary_upload":
+		label = "binary upload"
 	}
 
 	var findings []Finding

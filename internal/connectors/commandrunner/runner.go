@@ -60,6 +60,7 @@ type Result struct {
 type WriteCommand struct {
 	Connector string `json:"connector"`
 	Command   string `json:"command"`
+	Intent    string `json:"intent"`
 	Write     string `json:"write"`
 	// Operation is set only for a typed direct_write command. Write remains
 	// the plan action for backward-compatible reverse_etl command plans.
@@ -88,6 +89,14 @@ var ErrNotWriteCommand = errors.New("connector command is not a reverse ETL writ
 // second, hand-maintained schema contract.
 type declarativeWritePreflighter interface {
 	PreflightWriteAction(name string) error
+}
+
+// binaryUploadActionPreflighter is intentionally more specific than the
+// ordinary write preflight. A public binary_upload command may expose only a
+// declaration-owned, bounded file source with an explicit media policy; it is
+// never a route to an arbitrary request body or URL.
+type binaryUploadActionPreflighter interface {
+	PreflightBinaryUploadAction(name string) ([]connectors.BinaryUploadSource, error)
 }
 
 // structuredJSONRecordPreflighter is deliberately narrower than a generic
@@ -195,7 +204,7 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 	if cmd.Intent == "direct_write" {
 		return buildOperationDirectWriteCommand(ctx, connector, cmd, command, req)
 	}
-	if cmd.Intent != "reverse_etl" {
+	if cmd.Intent != "reverse_etl" && cmd.Intent != "binary_upload" {
 		return WriteCommand{}, ErrNotWriteCommand
 	}
 	if cmd.Availability != "implemented" || cmd.Write == "" {
@@ -204,7 +213,7 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 			Command:      command,
 			Intent:       cmd.Intent,
 			Availability: cmd.Availability,
-			Reason:       "implemented reverse ETL commands must reference write action",
+			Reason:       "implemented reverse ETL and binary_upload commands must reference a write action",
 		}
 	}
 	action, ok := findWriteAction(connectors.ManifestOf(connector), cmd.Write)
@@ -231,12 +240,13 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 	out := WriteCommand{
 		Connector:             connector.Name(),
 		Command:               command,
+		Intent:                cmd.Intent,
 		Write:                 cmd.Write,
 		MutationClass:         mutationClassOf(action),
 		TargetResource:        targetResourceOf(cmd),
 		ApprovalRequired:      true,
 		Risk:                  firstNonEmpty(cmd.Risk, action.Risk),
-		Approval:              firstNonEmpty(cmd.Approval, "reverse ETL writes require plan, preview, approval, execute"),
+		Approval:              firstNonEmpty(cmd.Approval, writeCommandApproval(cmd.Intent)),
 		ConfirmationChallenge: string(connectors.ConfirmationForWriteAction(action).Kind),
 		Record:                cloneRecord(record),
 		RedactedRecord:        cloneRecord(record),
@@ -260,6 +270,13 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 		out.Preview = &preview
 	}
 	return out, nil
+}
+
+func writeCommandApproval(intent string) string {
+	if intent == "binary_upload" {
+		return "binary uploads require plan, preview, approval, execute"
+	}
+	return "reverse ETL writes require plan, preview, approval, execute"
 }
 
 // buildOperationDirectWriteCommand shapes a declared direct_write command for
@@ -309,6 +326,7 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 	return WriteCommand{
 		Connector:             connector.Name(),
 		Command:               command,
+		Intent:                cmd.Intent,
 		Write:                 cmd.Operation,
 		Operation:             cmd.Operation,
 		MutationClass:         metadata.MutationClass,
@@ -482,6 +500,12 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	if cmd.Intent == "etl" && cmd.Availability == "implemented" && cmd.Stream != "" {
 		return cmd, command, nil
 	}
+	if cmd.Intent == "binary_upload" && cmd.Availability == "implemented" && cmd.Write != "" {
+		if err := validateBinaryUploadCommand(connector, cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, command, err
+		}
+		return cmd, command, nil
+	}
 	if cmd.Intent == "reverse_etl" && cmd.Availability == "implemented" && cmd.Write != "" {
 		if preflighter, ok := connector.(declarativeWritePreflighter); ok {
 			if err := preflighter.PreflightWriteAction(cmd.Write); err != nil {
@@ -505,6 +529,37 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	}
 }
 
+func validateBinaryUploadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
+	if strings.TrimSpace(cmd.Write) == "" {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "binary_upload commands require a declared write action"}
+	}
+	if cmd.Stream != "" || cmd.Operation != "" {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "binary_upload commands may bind only one declared write action"}
+	}
+	preflighter, ok := connector.(binaryUploadActionPreflighter)
+	if !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose a declarative binary upload action"}
+	}
+	sources, err := preflighter.PreflightBinaryUploadAction(cmd.Write)
+	if err != nil {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("binary upload action %q is not safely promotable: %v", cmd.Write, err)}
+	}
+	for _, source := range sources {
+		declaredTarget := "record." + source.Field
+		bound := false
+		for _, flag := range cmd.Flags {
+			if flag.Required && flag.MapsTo == declaredTarget {
+				bound = true
+				break
+			}
+		}
+		if !bound {
+			return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("binary upload source %q must be one required declared command flag", source.Field)}
+		}
+	}
+	return nil
+}
+
 // preflightStructuredJSONFlags preserves the original reverse-ETL record
 // boundary and adds operation-specific exceptions. A JSON flag never means
 // "take an arbitrary request body": direct writes and reads can name only a
@@ -522,7 +577,7 @@ func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors
 			continue
 		}
 		switch {
-		case cmd.Intent == "reverse_etl" && strings.TrimSpace(cmd.Write) != "":
+		case (cmd.Intent == "reverse_etl" || cmd.Intent == "binary_upload") && strings.TrimSpace(cmd.Write) != "":
 			field, ok := strings.CutPrefix(flag.MapsTo, "record.")
 			if !ok || field == "" {
 				return fmt.Errorf("structured JSON flag --%s must map to a record field", flag.Name)
@@ -1037,11 +1092,14 @@ func blockReason(cmd connectors.CommandSurfaceCommand) string {
 		return "direct_write commands require plan, preview, approval, execute"
 	case cmd.Operation != "":
 		return fmt.Sprintf("operation %s executor is not implemented in this slice", cmd.Operation)
-	case cmd.Intent == "reverse_etl" && cmd.Write == "":
+	case (cmd.Intent == "reverse_etl" || cmd.Intent == "binary_upload") && cmd.Write == "":
 		return "implemented reverse ETL commands must reference write action"
-	case cmd.Intent == "reverse_etl":
+	case cmd.Intent == "reverse_etl" || cmd.Intent == "binary_upload":
 		if cmd.Approval != "" {
 			return cmd.Approval
+		}
+		if cmd.Intent == "binary_upload" {
+			return "binary uploads require plan, preview, approval, execute"
 		}
 		return "reverse ETL writes require plan, preview, approval, execute"
 	case cmd.Intent == "local_workflow":
@@ -2238,7 +2296,7 @@ func structuredJSONRecordValueStartsContainer(raw string) bool {
 // URL, header, or JSON field because only the exact body mapping reaches this
 // path. Other control characters remain refused.
 func coerceCommandFlagValue(cmd connectors.CommandSurfaceCommand, flag connectors.CommandSurfaceFlag, values []string) (any, error) {
-	if cmd.Intent == "reverse_etl" && strings.HasPrefix(flag.MapsTo, "record.") {
+	if (cmd.Intent == "reverse_etl" || cmd.Intent == "binary_upload") && strings.HasPrefix(flag.MapsTo, "record.") {
 		return coerceRecordFlagValue(flag, values)
 	}
 	if flag.Type == "json" && isDeclaredStructuredJSONOperationBodyFlag(cmd, flag) {
@@ -2418,7 +2476,7 @@ func validateCommandFlagEncodedBytes(flag connectors.CommandSurfaceFlag, value s
 // annotated, and silence there is indistinguishable from "no confirmation".
 func ConfirmationChallengeForCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) string {
 	switch cmd.Intent {
-	case "reverse_etl":
+	case "reverse_etl", "binary_upload":
 		action, ok := findWriteAction(connectors.ManifestOf(connector), cmd.Write)
 		if !ok {
 			return ""
