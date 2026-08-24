@@ -56,6 +56,11 @@ error response remains irrecoverable and is never re-pinned.
   docs/skills --json`; it changed only `docs/skills/pm-github/SKILL.md`.
   `go test -timeout 20m ./internal/cli -run '^TestSkillsGenerateMatchesTrackedSkills$' -count=1`
   then passed in 6.215s.
+- CI's `Website generated data` check then correctly found four stale website
+  projections of those same GitHub availability changes. Ran the exact
+  workflow-prescribed `pnpm run gen:website-data` in `website/`; it updated
+  `content/docs/github-cli-surface.mdx`, `data/connectors.generated.json`,
+  `lib/connectors.catalog.data.generated.json`, and `lib/docs.generated.ts`.
 
 ## Inline GSD lifecycle
 
