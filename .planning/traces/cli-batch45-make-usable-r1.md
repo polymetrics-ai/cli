@@ -1026,3 +1026,52 @@ no `unknown command` result and no provider call. The cumulative exact endpoint-
 ETL total is now **170 commands across 14 connectors**. Fastly's six and WooCommerce's four exact
 shapes remain partial pending their required Category-B official-document capture; direct reads,
 direct writes, reverse ETL, and transport declarations remain unchanged.
+
+### Category-B source-artifact audit and bounded ETL increment
+
+The requested documentation capture is already present in the connector-owned retained artifacts;
+it was verified rather than re-fetched. The source-lock contract prohibits replacing a pinned
+artifact from a mutable current page without separately recorded re-pin authorization. The retained
+files hash to their locks and have the required provenance manifest records:
+
+| Connector | Pinned source URL | SHA-256 | Bytes | Retained artifact |
+| --- | --- | --- | ---: | --- |
+| Fastly | `https://www.fastly.com/documentation/downloads/fastly.collection.json` | `c6ae5b0fd118fe2d87e7d0ef431f67cda703d1487d27b5f02725d82219386677` | 2,341,028 | `sources/artifacts/c6ae5b0fd118fe2d87e7d0ef431f67cda703d1487d27b5f02725d82219386677.artifact` |
+| WooCommerce | `https://woocommerce.github.io/woocommerce-rest-api-docs/` | `a02e504ae56786d94f6a859e55b5c7e3229749ea3d43147424cfd987b2ec550e` | 4,400,931 | `sources/artifacts/a02e504ae56786d94f6a859e55b5c7e3229749ea3d43147424cfd987b2ec550e.artifact` |
+
+The exact per-operation source records are in each connector's
+`sources/<connector>-parity-source-lock.json`; all are `GET` operations from the named retained
+artifact. Fastly’s locations are `collection.item[0].item[3].item[1].request`
+(`/current_customer`), `collection.item[0].item[10].item[0].request` (`/current_user`),
+`collection.item[0].item[3].item[0].request` (`/customer/{customer_id}/users`),
+`collection.item[22].item[3].item[0].request` (`/datacenters`),
+`collection.item[18].item[6].item[0].request` (`/service`), and
+`collection.item[18].item[6].item[2].request` (`/service/{service_id}/details`). WooCommerce’s
+four records—`coupons-2-2`, `customers-8-8`, `orders-23-23`, and `products-44-44`—each name their
+respective `/wp-json/wc/v3/{coupons,customers,orders,products}` endpoint and the locked rendered
+reference location `rendered-api-endpoint`.
+
+- **Red satisfied:** the documentation provenance is fixed, retained, source-locked, and maps
+  uniquely to ten partial ETL commands that each have an exact existing `api_surface.json`
+  `covered_by.stream` binding (Fastly 6; WooCommerce 4). No source lock, artifact, digest, byte
+  count, or provider source location will be changed.
+- **Green condition:** apply only the existing-stream binding, implemented availability, and a
+  binding note; validate both bundles and the generated surface; then run all ten commands with
+  the built binary in fresh credential-free projects. Any output other than terminal
+  `error: missing --credential` stops the increment.
+
+### Category-B source-artifact increment — green report
+
+**Correctly mapped and proven: 10 source-locked ETL commands.** The Fastly and WooCommerce
+retained artifact SHA-256 and byte counts were independently recomputed and matched their source
+locks before conversion. The two connector-local validations, full `surface-sync --check`, and the
+real commandrunner implemented-command preflight sweep passed. The rebuilt binary then ran the six
+Fastly and four WooCommerce commands from separate newly initialized credential-free projects;
+all 10 exited `1` with terminal `error: missing --credential`, without `unknown command` or a
+provider call.
+
+The cumulative exact endpoint-to-existing-stream ETL total is now **180 commands across 16 target
+connectors**. This exhausts the currently source-cited, exact `GET` endpoint-to-existing-stream
+intersection in all 20 target bundles. It does not promote a direct read or write lane, establish a
+transport, invent a provider operation, or turn any retained provenance into an execution contract
+without the existing connector stream that the binary proved reachable.
