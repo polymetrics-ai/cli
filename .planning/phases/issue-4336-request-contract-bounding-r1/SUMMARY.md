@@ -84,3 +84,11 @@ heavy suite at a time. The full `internal/cli` suite was not claimed green: two
 fresh-child binary tests failed only when their builds ran concurrently, then
 each passed serialized. Focused CLI policy, inspection, help, docs, skills, and
 golden parity tests passed.
+
+After the required final merge of `main` at `43cda8924`, GitHub Verify exposed
+one generated-artifact integration gap rather than a runtime-policy defect:
+Twenty's newly admitted command surface was absent from the tracked execution-
+policy notice. Canonical skill regeneration changed only
+`docs/skills/pm-twenty/SKILL.md`; a second pass was byte-stable and the exact
+generated-tree test passed in 4.376s. PR #4345 must rerun its required checks on
+that repair before handoff.

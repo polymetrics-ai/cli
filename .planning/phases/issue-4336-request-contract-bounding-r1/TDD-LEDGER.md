@@ -64,3 +64,33 @@ the cap+1 request returned no error instead of the PM policy error. The guard
 was restored immediately; the same test passed and a path-scoped `git diff
 --exit-code` proved no sabotage remained. Full output is retained in
 `traces/sabotage-runtime-cap.txt`.
+
+## Post-main-merge generated-surface red/green
+
+After Firstmate required merging `main` at `43cda8924`, the final-head Verify
+run `32679838571` failed in `TestSkillsGenerateMatchesTrackedSkills`. A bounded
+local reproduction named the same drift: Twenty's newly admitted source-cited
+command surface did not yet carry this branch's generated
+`pm-request-contract-bounds-v1` notice in the tracked skill.
+
+Red:
+
+```text
+GOFLAGS=-p=2 go test -timeout 20m -count=1 ./internal/cli
+--- FAIL: TestSkillsGenerateMatchesTrackedSkills (2.15s)
+    agentic_contract_test.go:176: generated skills drift
+FAIL polymetrics.ai/internal/cli 440.393s
+```
+
+Green:
+
+```text
+GOFLAGS=-p=2 go run ./cmd/pm skills generate --dir docs/skills --json
+# only docs/skills/pm-twenty/SKILL.md changed
+GOFLAGS=-p=2 go test -timeout 20m -count=1 ./internal/cli \
+  -run '^TestSkillsGenerateMatchesTrackedSkills$'
+ok polymetrics.ai/internal/cli 4.376s
+```
+
+A second generator pass preserved the exact diff SHA-256
+`57b542f0a61b9b6daa9e609fb2ec1ca1573422f08161bda928191a4e7c2a40e9`.

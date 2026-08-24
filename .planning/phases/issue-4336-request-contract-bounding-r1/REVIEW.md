@@ -18,3 +18,14 @@ No critical or unresolved warning finding remains. The final full generator and
 engine suites, lint, vet, builds, generated parity, connector boundary, and
 release workflow checks passed after the fixes. External Claude/Copilot coverage
 will be recorded after the direct PR is opened; it is not claimed here.
+
+## Post-merge CI disposition
+
+Final-head Verify run `32679838571` found tracked skill drift after main's
+#4341 integration. Canonical regeneration changed only the Twenty skill by
+adding the same PM execution-policy notice already emitted for command-bearing
+connectors. The generator was byte-stable on a second pass and the exact failing
+test passed. This is a generated integration closure, not a hand-authored
+connector exception. Automated Claude/Copilot review remained unavailable due
+fleet defect `fm-gh-axi-projectcards-deprecation-r1`; Firstmate explicitly
+confirmed it is not a required check, so no automated review pass is claimed.

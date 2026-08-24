@@ -27,6 +27,10 @@
       `internal/cli` suite's two concurrent fresh-child build cases failed only
       under suite concurrency and each passed when rerun serialized; this is
       recorded as an environmental full-suite limitation, not a package pass.
+- [x] After merging final `main`, reproduced the CI generated-skills drift,
+      regenerated only `docs/skills/pm-twenty/SKILL.md`, proved a second
+      generator pass byte-stable, and passed
+      `TestSkillsGenerateMatchesTrackedSkills` in 4.376s.
 - [x] Applicable individual `make verify` gates from AGENTS.md.
 - [x] `git diff --check origin/main...HEAD`.
 
@@ -36,9 +40,10 @@
 - [x] Verify-work prompt executed inline; no deliverable gap remained.
 - [x] `golang-lint` loaded; code-review prompt executed inline and three
       warning findings fixed with red/green tests.
-- [ ] PR body records issue, Red/Green evidence, skills, gates, review status,
+- [x] PR body records issue, Red/Green evidence, skills, gates, review status,
       and accepted no-mistakes record or explicit task prohibition.
-- [ ] Pull request opened against `main`; API-reported base verified `main`.
+- [x] Pull request #4345 opened against `main`; API-reported base verified
+      `main` and the branch was updated through `43cda8924` as directed.
 - [ ] Required GitHub checks and automated review coverage complete.
 
 ## CLI help/manual/docs/website parity
