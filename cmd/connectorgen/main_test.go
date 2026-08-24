@@ -826,6 +826,42 @@ func TestValidate_CLISurfaceImplementedDirectWritePasses(t *testing.T) {
 	}
 }
 
+func TestCheckCLISurfaceBinaryUploadRequiresBoundDeclaredFileAction(t *testing.T) {
+	newBundle := func(action engine.WriteAction, command engine.CLICommand) engine.Bundle {
+		return engine.Bundle{
+			Name:       "widgets",
+			Writes:     []engine.WriteAction{action},
+			CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{command}},
+		}
+	}
+	action := engine.WriteAction{
+		Name: "upload_widget", Kind: "create", Method: "POST", Path: "/widgets", BodyType: "binary_upload",
+		RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
+		BinaryUpload: &engine.BinaryUploadSpec{SourceField: "file_path", MaxBytes: 1024, AllowedMediaTypes: []string{"application/octet-stream"}},
+	}
+	command := engine.CLICommand{
+		Path: "widgets upload", Intent: "binary_upload", Availability: "implemented", Write: action.Name,
+		Risk: "uploads one declared file", Approval: "plan, preview, approval, execute",
+		Flags: []engine.CLIFlag{{Name: "file-path", Type: "string", MapsTo: "record.file_path", Required: true}},
+	}
+	if findings := checkCLISurface(newBundle(action, command)); len(findings) != 0 {
+		t.Fatalf("valid binary upload findings = %+v", findings)
+	}
+
+	wrongSource := command
+	wrongSource.Flags[0].MapsTo = "record.other_path"
+	if findings := checkCLISurface(newBundle(action, wrongSource)); len(findings) == 0 {
+		t.Fatal("binary upload source mapping outside its declaration produced no finding")
+	}
+
+	wrongAction := action
+	wrongAction.BodyType = "json"
+	wrongAction.BinaryUpload = nil
+	if findings := checkCLISurface(newBundle(wrongAction, command)); len(findings) == 0 {
+		t.Fatal("ordinary JSON action was accepted as a binary upload")
+	}
+}
+
 func TestCheckCLISurfaceDirectWriteQueryBindings(t *testing.T) {
 	batchable := false
 	op := engine.OperationSpec{

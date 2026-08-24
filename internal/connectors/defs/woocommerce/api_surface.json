@@ -1,83 +1,2100 @@
 {
   "api": "WooCommerce REST API v3 (wc/v3)",
   "docs": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams (orders, products, customers, coupons) only; the broader WooCommerce surface (refunds, shipping, taxes, reports, webhooks, order notes) is out of scope until Pass B",
+  "reviewed_at": "2026-08-19",
+  "operation_ledger_version": 2,
+  "scope": "Provider-source inventory regenerated for issue #4290 from Official WooCommerce REST v3 reference has 140 unique normalized method/path request examples after the duplicated root query variant is deduplicated. Existing executable bindings are preserved only at an identical documented method/path; every other documented operation is a blocked ledger entry awaiting a connector-owned declaration.",
+  "artifacts": [
+    {
+      "id": "woocommerce-provider-source-2026-08-19-1",
+      "url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
+      "retrieved_at": "2026-08-19",
+      "sha256": "a02e504ae56786d94f6a859e55b5c7e3229749ea3d43147424cfd987b2ec550e"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/wp-json/wc/v3/orders",
-      "covered_by": {
-        "stream": "orders"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/wp-json/wc/v3/products",
-      "covered_by": {
-        "stream": "products"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/wp-json/wc/v3/customers",
-      "covered_by": {
-        "stream": "customers"
+      "path": "/wp-json/wc/v3",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
       }
     },
     {
       "method": "GET",
       "path": "/wp-json/wc/v3/coupons",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
       "covered_by": {
         "stream": "coupons"
       }
     },
     {
       "method": "POST",
-      "path": "/wp-json/wc/v3/orders",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/wp-json/wc/v3/orders is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      "path": "/wp-json/wc/v3/coupons",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/coupons/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/coupons/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
       }
     },
     {
       "method": "PUT",
-      "path": "/wp-json/wc/v3/orders/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/wp-json/wc/v3/orders/{id} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      "path": "/wp-json/wc/v3/coupons/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/coupons/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/customers",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/customers",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/customers/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/customers/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/customers/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/customers/{id}/downloads",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/customers/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/data",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/data/continents",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/data/continents/{location}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/data/countries",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/data/countries/{location}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/data/currencies",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/data/currencies/{currency}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/data/currencies/current",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/orders",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "covered_by": {
+        "stream": "orders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/orders",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/wp-json/wc/v3/orders is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
       }
     },
     {
       "method": "DELETE",
       "path": "/wp-json/wc/v3/orders/{id}",
-      "excluded": {
-        "category": "destructive_admin",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
         "reason": "reverse ETL delete not enabled for this connector"
       }
     },
     {
       "method": "GET",
+      "path": "/wp-json/wc/v3/orders/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/orders/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/wp-json/wc/v3/orders/{id} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/orders/{id}/actions/email_templates",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/orders/{id}/actions/send_email",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/orders/{id}/actions/send_order_details",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/orders/{id}/notes",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/orders/{id}/notes",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/orders/{id}/notes/{note_id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/orders/{id}/notes/{note_id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/orders/{id}/refunds",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/orders/{id}/refunds",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/orders/{id}/refunds/{refund_id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/orders/{id}/refunds/{refund_id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/orders/{id}/refunds/preview",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/orders/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/payment_gateways",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/payment_gateways/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/payment_gateways/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/products/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/products/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/{product_id}/duplicate",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/{product_id}/variations",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/{product_id}/variations",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/products/{product_id}/variations/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/{product_id}/variations/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/products/{product_id}/variations/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/{product_id}/variations/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/attributes",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/attributes",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/attributes/{attribute_id}/terms",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/attributes/{attribute_id}/terms",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/products/attributes/{attribute_id}/terms/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/attributes/{attribute_id}/terms/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/products/attributes/{attribute_id}/terms/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/attributes/{attribute_id}/terms/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/products/attributes/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/attributes/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/products/attributes/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/attributes/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/categories",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/categories",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/products/categories/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/categories/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/products/categories/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/categories/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/custom-fields/names",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/reviews",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/reviews",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/products/reviews/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/reviews/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/products/reviews/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/reviews/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/shipping_classes",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/shipping_classes",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/products/shipping_classes/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/shipping_classes/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/products/shipping_classes/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/shipping_classes/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/tags",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/tags",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/products/tags/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/products/tags/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/products/tags/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/products/tags/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/wp-json/wc/v3/refunds",
-      "excluded": {
-        "category": "out_of_scope",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
         "reason": "/wp-json/wc/v3/refunds is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
       }
     },
     {
       "method": "GET",
+      "path": "/wp-json/wc/v3/reports",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/reports/coupons/totals",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/reports/customers/totals",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/reports/orders/totals",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/reports/products/totals",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/reports/reviews/totals",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/wp-json/wc/v3/reports/sales",
-      "excluded": {
-        "category": "out_of_scope",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
         "reason": "/wp-json/wc/v3/reports/sales is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
       }
     },
     {
       "method": "GET",
+      "path": "/wp-json/wc/v3/reports/top_sellers",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/settings",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/settings/{group_id}/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/settings/{group_id}/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/settings/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/settings/{id}/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/shipping_methods",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/shipping_methods/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/shipping/zones",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/shipping/zones",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/shipping/zones/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/shipping/zones/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/shipping/zones/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/shipping/zones/{id}/locations",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/shipping/zones/{id}/locations",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/shipping/zones/{id}/methods",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/shipping/zones/{id}/methods",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/shipping/zones/{zone_id}/methods/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/shipping/zones/{zone_id}/methods/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/shipping/zones/{zone_id}/methods/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/system_status",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/system_status/tools",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/system_status/tools/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/system_status/tools/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/taxes",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/taxes",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/taxes/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/taxes/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/taxes/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/taxes/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/taxes/classes",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/taxes/classes",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/taxes/classes/{slug}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/wp-json/wc/v3/webhooks",
-      "excluded": {
-        "category": "out_of_scope",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
         "reason": "/wp-json/wc/v3/webhooks is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/webhooks",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/wp-json/wc/v3/webhooks/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/wp-json/wc/v3/webhooks/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream or operation contract."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/wp-json/wc/v3/webhooks/{id}",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/wp-json/wc/v3/webhooks/batch",
+      "provenance": {
+        "artifact": "woocommerce-provider-source-2026-08-19-1",
+        "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract."
       }
     }
   ]

@@ -450,6 +450,10 @@ type ReversePlan struct {
 	Mappings              map[string]string `json:"mappings"`
 	ConnectorCommand      string            `json:"connector_command,omitempty"`
 	ConnectorCommandPath  []string          `json:"connector_command_path,omitempty"`
+	// ConnectorCommandIntent preserves the public command contract so a
+	// binary_upload plan can require its stronger persisted-preview gate without
+	// changing legacy reverse_etl behavior.
+	ConnectorCommandIntent string `json:"connector_command_intent,omitempty"`
 	// ConnectorCommandOperation identifies a direct_write operation. When it is
 	// empty, the plan retains the existing writes.json action path.
 	ConnectorCommandOperation  string            `json:"connector_command_operation,omitempty"`

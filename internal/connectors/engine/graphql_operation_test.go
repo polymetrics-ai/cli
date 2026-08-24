@@ -653,7 +653,7 @@ func TestOperationDirectReadExecutesFixedGraphQLQueryAndPreservesPartialData(t *
 	}
 }
 
-func TestOperationDirectReadMasksConfiguredGraphQLDiagnosticsAndReceipts(t *testing.T) {
+func TestOperationDirectReadPreservesConfiguredEqualGraphQLDiagnosticsAndReceipts(t *testing.T) {
 	const credential = "opaque-provider-value-77"
 	encoded := base64.RawURLEncoding.EncodeToString([]byte(credential))
 	diagnostic := "provider diagnostic " + credential + " encoded " + encoded + " occurrence_id=graphql-occurrence-9007199254740993"
@@ -708,14 +708,14 @@ func TestOperationDirectReadMasksConfiguredGraphQLDiagnosticsAndReceipts(t *test
 		t.Fatal(err)
 	}
 	for _, value := range []string{credential, encoded} {
-		if strings.Contains(string(public), value) {
-			t.Fatal("public GraphQL result exposed configured material")
+		if !strings.Contains(string(public), value) {
+			t.Fatal("public GraphQL result did not preserve provider-returned configured-equal material")
 		}
 	}
-	if result.GraphQL == nil || len(result.GraphQL.Errors) != 1 || !strings.Contains(result.GraphQL.Errors[0].Message, "occurrence_id=graphql-occurrence-9007199254740993") || !strings.Contains(result.GraphQL.Errors[0].Message, "[masked]") {
-		t.Fatal("GraphQL metadata did not preserve ordinary context and redact configured material")
+	if result.GraphQL == nil || len(result.GraphQL.Errors) != 1 || result.GraphQL.Errors[0].Message != diagnostic {
+		t.Fatal("GraphQL metadata did not preserve provider-returned diagnostics")
 	}
-	wantHeaders := []string{"[masked]", "graphql-occurrence-9007199254740993", "[masked]", "ghp_unconfigured_provider_token", "[masked]"}
+	wantHeaders := []string{credential, "graphql-occurrence-9007199254740993", encoded, "ghp_unconfigured_provider_token", credential}
 	if result.Receipt == nil || !reflect.DeepEqual(result.Receipt.Headers[http.CanonicalHeaderKey("X-GraphQL-Metadata")].Values, wantHeaders) {
 		t.Fatalf("GraphQL receipt headers = %#v, want %#v", result.Receipt, wantHeaders)
 	}

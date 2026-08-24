@@ -29,6 +29,10 @@ func setupRestWriteDemoApp(t *testing.T, ctx context.Context, baseURL string) *a
 }
 
 func setupRestWriteDemoAppWithBundle(t *testing.T, ctx context.Context, baseURL string, mutate func(*engine.Bundle)) *app.App {
+	return setupRestWriteDemoAppWithBundleAndSecrets(t, ctx, baseURL, nil, mutate)
+}
+
+func setupRestWriteDemoAppWithBundleAndSecrets(t *testing.T, ctx context.Context, baseURL string, secrets map[string]string, mutate func(*engine.Bundle)) *app.App {
 	t.Helper()
 	root := t.TempDir()
 	if err := app.InitProject(root); err != nil {
@@ -50,6 +54,7 @@ func setupRestWriteDemoAppWithBundle(t *testing.T, ctx context.Context, baseURL 
 		Name:      "restwrite-local",
 		Connector: restWriteDemoConnector,
 		Config:    map[string]string{"base_url": baseURL},
+		Secrets:   secrets,
 	}); err != nil {
 		t.Fatalf("AddCredential: %v", err)
 	}
@@ -497,6 +502,66 @@ func TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.
 			}
 			t.Logf("direct-write command policy=%q status=%d response=%s", tt.policy, run.OperationDirectWrite.Status, encoded)
 		})
+	}
+}
+
+func TestDirectWriteCommandPreservesCredentialEqualUndeclaredProviderValue(t *testing.T) {
+	ctx := context.Background()
+	const credentialValue = "credential-collision-sentinel"
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodPatch || r.URL.Path != "/api/widgets/w_1" {
+			t.Fatalf("request = %s %s, want PATCH /api/widgets/w_1", r.Method, r.URL.Path)
+		}
+		if r.Header.Get("Authorization") != "Bearer "+credentialValue {
+			t.Fatal("direct write did not use the configured bearer credential")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"account_code":"credential-collision-sentinel","provider_status":"accepted"}`))
+	}))
+	defer server.Close()
+
+	a := setupRestWriteDemoAppWithBundleAndSecrets(t, ctx, server.URL, map[string]string{"token": credentialValue}, func(bundle *engine.Bundle) {
+		bundle.HTTP.Auth = []engine.AuthSpec{{Mode: "bearer", Token: "{{ secrets.token }}"}}
+	})
+	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  restWriteDemoConnector,
+		Credential: "restwrite-local",
+		Path:       []string{"widget", "update"},
+		Flags:      map[string][]string{"id": {"w_1"}, "name": {"Ada"}},
+		Preview:    true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+	if err != nil {
+		t.Fatalf("RunReverseETL: %v", err)
+	}
+	if calls != 1 || run.Status != "completed" || run.OperationDirectWrite == nil {
+		t.Fatalf("run/calls = %#v/%d, want one completed direct write", run, calls)
+	}
+	if got := run.OperationDirectWrite.OutputSecretFields; len(got) != 0 {
+		t.Fatalf("output secret fields = %#v, want no declared provider-secret field", got)
+	}
+	body, ok := run.OperationDirectWrite.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("provider body type = %T, want map", run.OperationDirectWrite.Body)
+	}
+	if got := body["account_code"]; got != credentialValue {
+		t.Fatalf("undeclared credential-equal provider value = %#v, want verbatim %q", got, credentialValue)
+	}
+	if got := run.OperationDirectWrite.BodyRaw; !strings.Contains(got, credentialValue) {
+		t.Fatalf("provider raw response omitted credential-equal value: %q", got)
+	}
+	encoded, err := json.Marshal(run)
+	if err != nil {
+		t.Fatalf("marshal completed run: %v", err)
+	}
+	if !strings.Contains(string(encoded), credentialValue) {
+		t.Fatalf("persisted public run omitted credential-equal provider value: %s", encoded)
 	}
 }
 

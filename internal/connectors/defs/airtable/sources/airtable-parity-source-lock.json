@@ -1,0 +1,1227 @@
+{
+  "schema_version": 1,
+  "connector": "airtable",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://airtable.com/developers/web/api/introduction",
+    "requested_url": "https://airtable.com/developers/web/api/introduction",
+    "sha256": "9a61c17ca297d70ba6ec186a7acb03a00d15915b3007bc11db6263cf0b2cb239",
+    "bytes": 623469,
+    "content_type": "text/html; charset=utf-8",
+    "artifacts": [
+      {
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "requested_url": "https://airtable.com/developers/web/api/introduction",
+        "sha256": "9a61c17ca297d70ba6ec186a7acb03a00d15915b3007bc11db6263cf0b2cb239",
+        "bytes": 623469,
+        "content_type": "text/html; charset=utf-8"
+      }
+    ],
+    "coverage_confidence": "complete-rendered-reference",
+    "coverage_basis": "Official Airtable rendered Web API reference embeds its complete 3.1 schema with 103 HTTP method/path operations."
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "fc9a6d003e68876fc2f54919627367bcbab457a71de270875deba35d6ea6ad8b",
+    "bytes": 47327,
+    "source_operation_count": 103,
+    "old_api_surface_rows": 30,
+    "regenerated_api_surface_rows": 105,
+    "regeneration_basis": "provider-source-derived with 2 explicit local execution binding(s) outside the provider source inventory"
+  },
+  "rest": {
+    "source_url": "https://airtable.com/developers/web/api/introduction",
+    "sha256": "9a61c17ca297d70ba6ec186a7acb03a00d15915b3007bc11db6263cf0b2cb239",
+    "bytes": 623469,
+    "operation_counts": [
+      {
+        "key": "DELETE",
+        "count": 19
+      },
+      {
+        "key": "GET",
+        "count": 31
+      },
+      {
+        "key": "PATCH",
+        "count": 15
+      },
+      {
+        "key": "POST",
+        "count": 33
+      },
+      {
+        "key": "PUT",
+        "count": 5
+      }
+    ],
+    "operations": [
+      {
+        "id": "airtable.provider.list-scim-groups-1",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scim/v2/Groups",
+        "operation_id": "list-scim-groups",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./scim/v2/Groups.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-scim-group-2",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scim/v2/Groups",
+        "operation_id": "create-scim-group",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./scim/v2/Groups.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-scim-group-3",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/scim/v2/Groups/{groupId}",
+        "operation_id": "delete-scim-group",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./scim/v2/Groups/{groupId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-scim-group-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scim/v2/Groups/{groupId}",
+        "operation_id": "get-scim-group",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./scim/v2/Groups/{groupId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.patch-scim-group-5",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/scim/v2/Groups/{groupId}",
+        "operation_id": "patch-scim-group",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./scim/v2/Groups/{groupId}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.put-scim-group-6",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/scim/v2/Groups/{groupId}",
+        "operation_id": "put-scim-group",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./scim/v2/Groups/{groupId}.put",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-scim-users-7",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scim/v2/Users",
+        "operation_id": "list-scim-users",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./scim/v2/Users.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-scim-user-8",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/scim/v2/Users",
+        "operation_id": "create-scim-user",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./scim/v2/Users.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-scim-user-9",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/scim/v2/Users/{userId}",
+        "operation_id": "delete-scim-user",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./scim/v2/Users/{userId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-scim-user-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/scim/v2/Users/{userId}",
+        "operation_id": "get-scim-user",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./scim/v2/Users/{userId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.patch-scim-user-11",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/scim/v2/Users/{userId}",
+        "operation_id": "patch-scim-user",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./scim/v2/Users/{userId}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.put-scim-user-12",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/scim/v2/Users/{userId}",
+        "operation_id": "put-scim-user",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./scim/v2/Users/{userId}.put",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.upload-attachment-13",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/{baseId}/{recordId}/{attachmentFieldIdOrName}/uploadAttachment",
+        "operation_id": "upload-attachment",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{recordId}/{attachmentFieldIdOrName}/uploadAttachment.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-multiple-records-14",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/{baseId}/{tableIdOrName}",
+        "operation_id": "delete-multiple-records",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-records-15",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/{baseId}/{tableIdOrName}",
+        "operation_id": "list-records",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-multiple-records-16",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/{baseId}/{tableIdOrName}",
+        "operation_id": "update-multiple-records",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-records-17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/{baseId}/{tableIdOrName}",
+        "operation_id": "create-records",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-multiple-records-put-18",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v0/{baseId}/{tableIdOrName}",
+        "operation_id": "update-multiple-records-put",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}.put",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-record-19",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}",
+        "operation_id": "delete-record",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-record-20",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}",
+        "operation_id": "get-record",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-record-21",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}",
+        "operation_id": "update-record",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-record-put-22",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}",
+        "operation_id": "update-record-put",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}.put",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-comments-23",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments",
+        "operation_id": "list-comments",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}/comments.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-comment-24",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments",
+        "operation_id": "create-comment",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}/comments.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-comment-25",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments/{rowCommentId}",
+        "operation_id": "delete-comment",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}/comments/{rowCommentId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-comment-26",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments/{rowCommentId}",
+        "operation_id": "update-comment",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}/comments/{rowCommentId}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-date-dependency-metadata-27",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/dateDependencyMetadata",
+        "operation_id": "update-date-dependency-metadata",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}/{recordId}/dateDependencyMetadata.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.post-sync-api-endpoint-28",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/{baseId}/{tableIdOrName}/sync/{apiEndpointSyncId}",
+        "operation_id": "post-sync-api-endpoint",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{baseId}/{tableIdOrName}/sync/{apiEndpointSyncId}.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.hyperdb-delete-records-by-primary-keys-29",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/{enterpriseAccountId}/{dataTableId}/deleteRecords",
+        "operation_id": "hyperdb-delete-records-by-primary-keys",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{enterpriseAccountId}/{dataTableId}/deleteRecords.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.hyperdb-table-read-records-30",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/{enterpriseAccountId}/{dataTableId}/getRecords",
+        "operation_id": "hyperdb-table-read-records",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{enterpriseAccountId}/{dataTableId}/getRecords.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.hyperdb-upsert-records-by-primary-keys-31",
+        "protocol": "rest",
+        "method": "PUT",
+        "path": "/v0/{enterpriseAccountId}/{dataTableId}/upsertRecords",
+        "operation_id": "hyperdb-upsert-records-by-primary-keys",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/{enterpriseAccountId}/{dataTableId}/upsertRecords.put",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-webhooks-32",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/bases/{baseId}/webhooks",
+        "operation_id": "list-webhooks",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/bases/{baseId}/webhooks.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-a-webhook-33",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/bases/{baseId}/webhooks",
+        "operation_id": "create-a-webhook",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/bases/{baseId}/webhooks.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-a-webhook-34",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/bases/{baseId}/webhooks/{webhookId}",
+        "operation_id": "delete-a-webhook",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/bases/{baseId}/webhooks/{webhookId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.enable-disable-webhook-notifications-35",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/bases/{baseId}/webhooks/{webhookId}/enableNotifications",
+        "operation_id": "enable-disable-webhook-notifications",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/bases/{baseId}/webhooks/{webhookId}/enableNotifications.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-webhook-payloads-36",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/bases/{baseId}/webhooks/{webhookId}/payloads",
+        "operation_id": "list-webhook-payloads",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/bases/{baseId}/webhooks/{webhookId}/payloads.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.refresh-a-webhook-37",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/bases/{baseId}/webhooks/{webhookId}/refresh",
+        "operation_id": "refresh-a-webhook",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/bases/{baseId}/webhooks/{webhookId}/refresh.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-bases-38",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/bases",
+        "operation_id": "list-bases",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-base-39",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/bases",
+        "operation_id": "create-base",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-base-40",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{baseId}",
+        "operation_id": "delete-base",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-base-collaborators-41",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/bases/{baseId}",
+        "operation_id": "get-base-collaborators",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-block-installations-42",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/bases/{baseId}/blockInstallations",
+        "operation_id": "list-block-installations",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/blockInstallations.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-block-installation-43",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{baseId}/blockInstallations/{blockInstallationId}",
+        "operation_id": "delete-block-installation",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/blockInstallations/{blockInstallationId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.manage-block-installation-44",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{baseId}/blockInstallations/{blockInstallationId}",
+        "operation_id": "manage-block-installation",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/blockInstallations/{blockInstallationId}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.add-base-collaborator-45",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/bases/{baseId}/collaborators",
+        "operation_id": "add-base-collaborator",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/collaborators.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-base-collaborator-46",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{baseId}/collaborators/{userOrGroupId}",
+        "operation_id": "delete-base-collaborator",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/collaborators/{userOrGroupId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-collaborator-base-permission-47",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{baseId}/collaborators/{userOrGroupId}",
+        "operation_id": "update-collaborator-base-permission",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/collaborators/{userOrGroupId}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-interface-48",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/bases/{baseId}/interfaces/{pageBundleId}",
+        "operation_id": "get-interface",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/interfaces/{pageBundleId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.add-interface-collaborator-49",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators",
+        "operation_id": "add-interface-collaborator",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-interface-collaborator-50",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators/{userOrGroupId}",
+        "operation_id": "delete-interface-collaborator",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators/{userOrGroupId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-interface-collaborator-51",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators/{userOrGroupId}",
+        "operation_id": "update-interface-collaborator",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators/{userOrGroupId}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-interface-invite-52",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{baseId}/interfaces/{pageBundleId}/invites/{inviteId}",
+        "operation_id": "delete-interface-invite",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/interfaces/{pageBundleId}/invites/{inviteId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-base-invite-53",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{baseId}/invites/{inviteId}",
+        "operation_id": "delete-base-invite",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/invites/{inviteId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-shares-54",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/bases/{baseId}/shares",
+        "operation_id": "list-shares",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/shares.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-share-55",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{baseId}/shares/{shareId}",
+        "operation_id": "delete-share",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/shares/{shareId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.manage-share-56",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{baseId}/shares/{shareId}",
+        "operation_id": "manage-share",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/shares/{shareId}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-base-schema-57",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/bases/{baseId}/tables",
+        "operation_id": "get-base-schema",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/tables.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-table-58",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/bases/{baseId}/tables",
+        "operation_id": "create-table",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/tables.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-field-59",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/bases/{baseId}/tables/{tableId}/fields",
+        "operation_id": "create-field",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/tables/{tableId}/fields.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-field-60",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{baseId}/tables/{tableId}/fields/{columnId}",
+        "operation_id": "update-field",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/tables/{tableId}/fields/{columnId}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-table-61",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/meta/bases/{baseId}/tables/{tableIdOrName}",
+        "operation_id": "update-table",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/tables/{tableIdOrName}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-views-62",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/bases/{baseId}/views",
+        "operation_id": "list-views",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/views.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-view-63",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/bases/{baseId}/views/{viewId}",
+        "operation_id": "delete-view",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/views/{viewId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-view-metadata-64",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/bases/{baseId}/views/{viewId}",
+        "operation_id": "get-view-metadata",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/bases/{baseId}/views/{viewId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-enterprise-65",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}",
+        "operation_id": "get-enterprise",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.audit-log-events-66",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogEvents",
+        "operation_id": "audit-log-events",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogEvents.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-audit-log-requests-67",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs",
+        "operation_id": "list-audit-log-requests",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-audit-log-request-68",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs",
+        "operation_id": "create-audit-log-request",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-audit-log-request-69",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs/{enterpriseAuditLogTaskId}",
+        "operation_id": "get-audit-log-request",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs/{enterpriseAuditLogTaskId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.change-events-70",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/changeEvents",
+        "operation_id": "change-events",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/changeEvents.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-descendant-enterprise-71",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/descendants",
+        "operation_id": "create-descendant-enterprise",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/descendants.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-ediscovery-export-72",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports",
+        "operation_id": "list-ediscovery-export",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-ediscovery-export-73",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports",
+        "operation_id": "create-ediscovery-export",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-ediscovery-export-74",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports/{enterpriseTaskId}",
+        "operation_id": "get-ediscovery-export",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports/{enterpriseTaskId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.move-user-groups-75",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveGroups",
+        "operation_id": "move-user-groups",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveGroups.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.move-workspaces-76",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveWorkspaces",
+        "operation_id": "move-workspaces",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveWorkspaces.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-enterprise-packages-77",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/packages",
+        "operation_id": "list-enterprise-packages",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/packages.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-base-from-package-enterprise-78",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/packages/{packageId}/install",
+        "operation_id": "create-base-from-package-enterprise",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/packages/{packageId}/install.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.list-enterprise-personal-access-tokens-79",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/personalAccessTokens",
+        "operation_id": "list-enterprise-personal-access-tokens",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/personalAccessTokens.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.revoke-enterprise-personal-access-tokens-80",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/personalAccessTokens/revoke",
+        "operation_id": "revoke-enterprise-personal-access-tokens",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/personalAccessTokens/revoke.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-users-by-email-81",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users",
+        "operation_id": "delete-users-by-email",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-users-by-id-or-email-82",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users",
+        "operation_id": "get-users-by-id-or-email",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.manage-user-batched-83",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users",
+        "operation_id": "manage-user-batched",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-user-by-id-84",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}",
+        "operation_id": "delete-user-by-id",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-user-by-id-85",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}",
+        "operation_id": "get-user-by-id",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.manage-user-86",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}",
+        "operation_id": "manage-user",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.logout-user-87",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}/logout",
+        "operation_id": "logout-user",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}/logout.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.remove-user-from-enterprise-88",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}/remove",
+        "operation_id": "remove-user-from-enterprise",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}/remove.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.manage-user-membership-89",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/claim",
+        "operation_id": "manage-user-membership",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/claim.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.grant-admin-access-90",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/grantAdminAccess",
+        "operation_id": "grant-admin-access",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/grantAdminAccess.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.revoke-admin-access-91",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/revokeAdminAccess",
+        "operation_id": "revoke-admin-access",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/revokeAdminAccess.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-workspace-ai-allowlist-92",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/workspaceAiAllowlist",
+        "operation_id": "update-workspace-ai-allowlist",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/enterpriseAccounts/{enterpriseAccountId}/workspaceAiAllowlist.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-user-group-93",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/groups/{groupId}",
+        "operation_id": "get-user-group",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/groups/{groupId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-user-id-scopes-94",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/whoami",
+        "operation_id": "get-user-id-scopes",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/whoami.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.create-workspace-95",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/workspaces",
+        "operation_id": "create-workspace",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/workspaces.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-workspace-96",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/workspaces/{workspaceId}",
+        "operation_id": "delete-workspace",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/workspaces/{workspaceId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.get-workspace-collaborators-97",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v0/meta/workspaces/{workspaceId}",
+        "operation_id": "get-workspace-collaborators",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/workspaces/{workspaceId}.get",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.add-workspace-collaborator-98",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/workspaces/{workspaceId}/collaborators",
+        "operation_id": "add-workspace-collaborator",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/workspaces/{workspaceId}/collaborators.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-workspace-collaborator-99",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/workspaces/{workspaceId}/collaborators/{userOrGroupId}",
+        "operation_id": "delete-workspace-collaborator",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/workspaces/{workspaceId}/collaborators/{userOrGroupId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-workspace-collaborator-100",
+        "protocol": "rest",
+        "method": "PATCH",
+        "path": "/v0/meta/workspaces/{workspaceId}/collaborators/{userOrGroupId}",
+        "operation_id": "update-workspace-collaborator",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/workspaces/{workspaceId}/collaborators/{userOrGroupId}.patch",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.delete-workspace-invite-101",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v0/meta/workspaces/{workspaceId}/invites/{inviteId}",
+        "operation_id": "delete-workspace-invite",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/workspaces/{workspaceId}/invites/{inviteId}.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.move-base-102",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/workspaces/{workspaceId}/moveBase",
+        "operation_id": "move-base",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/workspaces/{workspaceId}/moveBase.post",
+        "artifact_index": 0
+      },
+      {
+        "id": "airtable.provider.update-workspace-restrictions-103",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v0/meta/workspaces/{workspaceId}/updateRestrictions",
+        "operation_id": "update-workspace-restrictions",
+        "deprecated": false,
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "source_location": "paths./v0/meta/workspaces/{workspaceId}/updateRestrictions.post",
+        "artifact_index": 0
+      }
+    ]
+  },
+  "graphql": {
+    "source_url": "https://airtable.com/developers/web/api/introduction",
+    "sha256": "9a61c17ca297d70ba6ec186a7acb03a00d15915b3007bc11db6263cf0b2cb239",
+    "bytes": 623469,
+    "operation_counts": [],
+    "operations": []
+  },
+  "local_execution_bindings": [
+    {
+      "method": "PATCH",
+      "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments/{commentId}",
+      "api_surface_index": 103,
+      "source_location": "api_surface.json:endpoints[103]"
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments/{commentId}",
+      "api_surface_index": 104,
+      "source_location": "api_surface.json:endpoints[104]"
+    }
+  ],
+  "counts": {
+    "total": 103,
+    "rest": 103,
+    "graphql": 0,
+    "local_execution_bindings": 2,
+    "mapped_api_surface_rows": 105
+  },
+  "coverage_confidence": {
+    "level": "complete-rendered-reference",
+    "basis": "Official Airtable rendered Web API reference embeds its complete 3.1 schema with 103 HTTP method/path operations."
+  }
+}

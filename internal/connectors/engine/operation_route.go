@@ -225,6 +225,9 @@ func resolveWriteActionRoute(b Bundle, cfg connectors.RuntimeConfig, action Writ
 		if err := validateWriteActionBaseURL(-1, action); err != nil {
 			return "", err
 		}
+		if err := validateWriteActionSourceOrigin(b, cfg, action); err != nil {
+			return "", err
+		}
 		baseURL, err := Interpolate(action.BaseURL, requestVars(cfg, nil, ""))
 		if err != nil {
 			return "", fmt.Errorf("engine: resolve write action base URL: %w", err)
@@ -232,6 +235,32 @@ func resolveWriteActionRoute(b Bundle, cfg connectors.RuntimeConfig, action Writ
 		return baseURL, nil
 	}
 	return resolveOperationRoute(b, cfg, "", action.Name, action.Path, "")
+}
+
+// validateWriteActionSourceOrigin prevents a credential configured against one
+// API origin from crossing to an alternate action origin unless the action
+// explicitly declares that pairing. This is evaluated before requester
+// construction or transport I/O, so an Enterprise GitHub token cannot reach
+// uploads.github.com merely because the upload action has a fixed public URL.
+func validateWriteActionSourceOrigin(b Bundle, cfg connectors.RuntimeConfig, action WriteAction) error {
+	if len(action.AllowedBaseURLOrigins) == 0 {
+		return nil
+	}
+	configured, err := resolveOperationRoute(b, cfg, "", action.Name, action.Path, "")
+	if err != nil {
+		return err
+	}
+	origin, err := fixedHTTPOrigin(configured)
+	if err != nil {
+		return fmt.Errorf("engine: write action %q configured base URL is not a fixed HTTP origin", action.Name)
+	}
+	for _, allowed := range action.AllowedBaseURLOrigins {
+		allowedOrigin, err := fixedHTTPOrigin(allowed)
+		if err == nil && origin == allowedOrigin {
+			return nil
+		}
+	}
+	return fmt.Errorf("engine: write action %q refuses alternate origin because configured base origin %q is not declared", action.Name, origin)
 }
 
 func newRuntimeForOperationRoute(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks, selection, operation, path, sourceURL string) (*Runtime, error) {

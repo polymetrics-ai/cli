@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "connector": "google-analytics-data-api",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "fetched",
+    "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+    "requested_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+    "sha256": "cafd0552fe8ec00b7026bc15a223e8b6931c2eb653900e9375bc3b88702aa3f3",
+    "bytes": 306884,
+    "content_type": "multiple-public-artifacts",
+    "artifacts": [
+      {
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "requested_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "sha256": "92487efec56020b9ef2f9644b55a352f9ae9ca34eba41612f90a82d54266b499",
+        "bytes": 14971,
+        "content_type": "application/json; charset=UTF-8"
+      },
+      {
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha",
+        "requested_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha",
+        "sha256": "3cf80498a331d3fea9e896e6e07157af5c443d68588ba3e91f55b96c5b8d9359",
+        "bytes": 174016,
+        "content_type": "application/json; charset=UTF-8"
+      },
+      {
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta",
+        "requested_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta",
+        "sha256": "28bb49de277c9d0339ff4f584f46f477aea91c2b906353ecc859f1828dddf843",
+        "bytes": 117897,
+        "content_type": "application/json; charset=UTF-8"
+      }
+    ],
+    "coverage_confidence": "machine-readable-spec",
+    "coverage_basis": "Official v1, v1alpha, and v1beta Discovery documents, deduped by HTTP method and path (23 unique provider requests)."
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "aaf128ac2c84fca2dd1511bb0838b5a3e2cdf8a3e78c22cef3347c643629ac0a",
+    "bytes": 9975,
+    "source_operation_count": 23,
+    "old_api_surface_rows": 5,
+    "regenerated_api_surface_rows": 28,
+    "regeneration_basis": "provider-source-derived with 5 explicit local execution binding(s) outside the provider source inventory"
+  },
+  "rest": {
+    "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+    "sha256": "cafd0552fe8ec00b7026bc15a223e8b6931c2eb653900e9375bc3b88702aa3f3",
+    "bytes": 306884,
+    "operation_counts": [
+      {
+        "key": "DELETE",
+        "count": 1
+      },
+      {
+        "key": "GET",
+        "count": 7
+      },
+      {
+        "key": "POST",
+        "count": 15
+      }
+    ],
+    "operations": [
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-operations-delete-1",
+        "protocol": "rest",
+        "method": "DELETE",
+        "path": "/v1/{+name}",
+        "operation_id": "analyticsdata.operations.delete",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.delete",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-operations-list-2",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1/{+name}",
+        "operation_id": "analyticsdata.operations.list",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.list",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-operations-cancel-3",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1/{+name}:cancel",
+        "operation_id": "analyticsdata.operations.cancel",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.cancel",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-getpropertyquotassnapshot-4",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1alpha/{+name}",
+        "operation_id": "analyticsdata.properties.getPropertyQuotasSnapshot",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.getPropertyQuotasSnapshot",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-reporttasks-query-5",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1alpha/{+name}:query",
+        "operation_id": "analyticsdata.properties.reportTasks.query",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.query",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-audiencelists-list-6",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1alpha/{+parent}/audienceLists",
+        "operation_id": "analyticsdata.properties.audienceLists.list",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.list",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-audiencelists-create-7",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1alpha/{+parent}/audienceLists",
+        "operation_id": "analyticsdata.properties.audienceLists.create",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.create",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-recurringaudiencelists-list-8",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1alpha/{+parent}/recurringAudienceLists",
+        "operation_id": "analyticsdata.properties.recurringAudienceLists.list",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.list",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-recurringaudiencelists-create-9",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1alpha/{+parent}/recurringAudienceLists",
+        "operation_id": "analyticsdata.properties.recurringAudienceLists.create",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.create",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-reporttasks-list-10",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1alpha/{+parent}/reportTasks",
+        "operation_id": "analyticsdata.properties.reportTasks.list",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.list",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-reporttasks-create-11",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1alpha/{+parent}/reportTasks",
+        "operation_id": "analyticsdata.properties.reportTasks.create",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.create",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-runfunnelreport-12",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1alpha/{+property}:runFunnelReport",
+        "operation_id": "analyticsdata.properties.runFunnelReport",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.runFunnelReport",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-runreport-13",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1alpha/{+property}:runReport",
+        "operation_id": "analyticsdata.properties.runReport",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.runReport",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-getmetadata-14",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1beta/{+name}",
+        "operation_id": "analyticsdata.properties.getMetadata",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.getMetadata",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-audienceexports-query-15",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1beta/{+name}:query",
+        "operation_id": "analyticsdata.properties.audienceExports.query",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.query",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-audienceexports-list-16",
+        "protocol": "rest",
+        "method": "GET",
+        "path": "/v1beta/{+parent}/audienceExports",
+        "operation_id": "analyticsdata.properties.audienceExports.list",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.list",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-audienceexports-create-17",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1beta/{+parent}/audienceExports",
+        "operation_id": "analyticsdata.properties.audienceExports.create",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.create",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-batchrunpivotreports-18",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1beta/{+property}:batchRunPivotReports",
+        "operation_id": "analyticsdata.properties.batchRunPivotReports",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.batchRunPivotReports",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-batchrunreports-19",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1beta/{+property}:batchRunReports",
+        "operation_id": "analyticsdata.properties.batchRunReports",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.batchRunReports",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-checkcompatibility-20",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1beta/{+property}:checkCompatibility",
+        "operation_id": "analyticsdata.properties.checkCompatibility",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.checkCompatibility",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-runpivotreport-21",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1beta/{+property}:runPivotReport",
+        "operation_id": "analyticsdata.properties.runPivotReport",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.runPivotReport",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-runrealtimereport-22",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1beta/{+property}:runRealtimeReport",
+        "operation_id": "analyticsdata.properties.runRealtimeReport",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.runRealtimeReport",
+        "artifact_index": 0
+      },
+      {
+        "id": "google-analytics-data-api.provider.analyticsdata-properties-runreport-23",
+        "protocol": "rest",
+        "method": "POST",
+        "path": "/v1beta/{+property}:runReport",
+        "operation_id": "analyticsdata.properties.runReport",
+        "deprecated": false,
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.runReport",
+        "artifact_index": 0
+      }
+    ]
+  },
+  "graphql": {
+    "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+    "sha256": "cafd0552fe8ec00b7026bc15a223e8b6931c2eb653900e9375bc3b88702aa3f3",
+    "bytes": 306884,
+    "operation_counts": [],
+    "operations": []
+  },
+  "local_execution_bindings": [
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api daily_active_users read path",
+      "api_surface_index": 23,
+      "source_location": "api_surface.json:endpoints[23]"
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api website_overview read path",
+      "api_surface_index": 24,
+      "source_location": "api_surface.json:endpoints[24]"
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api traffic_sources read path",
+      "api_surface_index": 25,
+      "source_location": "api_surface.json:endpoints[25]"
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api devices read path",
+      "api_surface_index": 26,
+      "source_location": "api_surface.json:endpoints[26]"
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api pages read path",
+      "api_surface_index": 27,
+      "source_location": "api_surface.json:endpoints[27]"
+    }
+  ],
+  "counts": {
+    "total": 23,
+    "rest": 23,
+    "graphql": 0,
+    "local_execution_bindings": 5,
+    "mapped_api_surface_rows": 28
+  },
+  "coverage_confidence": {
+    "level": "machine-readable-spec",
+    "basis": "Official v1, v1alpha, and v1beta Discovery documents, deduped by HTTP method and path (23 unique provider requests)."
+  }
+}

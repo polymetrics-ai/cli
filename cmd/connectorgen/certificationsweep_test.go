@@ -379,10 +379,10 @@ func TestCertificationParityClassifierProjectsOnlyTheNormalizedTaxonomy(t *testi
 			}, wantKind: certificationParityKindBinaryDownload, wantClass: certificationParityClassBinary,
 		},
 		{
-			name: "file upload remains binary class", input: certificationParityInput{
-				Command:   &engine.CLICommand{Path: "widgets upload", Intent: "direct_write", Operation: "widgets_upload"},
-				Operation: &engine.OperationSpec{ID: "widgets_upload", Kind: "file_upload"},
-			}, wantKind: certificationParityKindFileUpload, wantClass: certificationParityClassBinary,
+			name: "binary upload", input: certificationParityInput{
+				Command: &engine.CLICommand{Path: "widgets upload", Intent: "binary_upload", Write: "upload_widget"},
+				Write:   &engine.WriteAction{Name: "upload_widget", Kind: "create", BodyType: "binary_upload", BinaryUpload: &engine.BinaryUploadSpec{SourceField: "file_path", MaxBytes: 1024, AllowedMediaTypes: []string{"application/octet-stream"}}},
+			}, wantKind: certificationParityKindBinaryUpload, wantClass: certificationParityClassBinaryUpload, wantAction: "create",
 		},
 		{
 			name: "CDC capability", input: certificationParityInput{Capabilities: &engine.Capabilities{CDC: true}},
@@ -418,6 +418,20 @@ func TestCertificationParityClassifierProjectsOnlyTheNormalizedTaxonomy(t *testi
 	}
 }
 
+func TestCertificationSweepAcceptsBinaryUploadWriteActionKind(t *testing.T) {
+	kind := certificationParityKindBinaryUpload
+	class := certificationParityClassBinaryUpload
+	command := certificationSweepCommand{
+		Path:            "widgets upload",
+		OperationKind:   &kind,
+		OpClass:         &class,
+		WriteActionKind: "create",
+	}
+	if err := validateCertificationSweepParity(command); err != nil {
+		t.Fatalf("validateCertificationSweepParity(binary upload) = %v", err)
+	}
+}
+
 func TestCertificationParityClassifierRefusesMismatchedOrUnresolvedReferences(t *testing.T) {
 	cases := []struct {
 		name  string
@@ -437,6 +451,13 @@ func TestCertificationParityClassifierRefusesMismatchedOrUnresolvedReferences(t 
 		{
 			name:  "reverse ETL command lacks declared write action",
 			input: certificationParityInput{Command: &engine.CLICommand{Path: "widgets delete", Intent: "reverse_etl", Write: "delete_widget"}},
+		},
+		{
+			name: "file upload remains non executable",
+			input: certificationParityInput{
+				Command:   &engine.CLICommand{Path: "widgets upload", Intent: "direct_write", Operation: "widgets_upload"},
+				Operation: &engine.OperationSpec{ID: "widgets_upload", Kind: "file_upload"},
+			},
 		},
 		{
 			name:  "source transport is not a managed destination",

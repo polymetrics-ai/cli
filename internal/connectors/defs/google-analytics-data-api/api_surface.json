@@ -1,9 +1,193 @@
 {
   "api": "Google Analytics 4 (GA4) legacy connector hook surface",
   "docs": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog",
-  "reviewed_at": "2026-07-04",
-  "scope": "Tier-2 quarantine migration for the legacy google-analytics-data-api connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/google-analytics-data-api, which delegates to internal/connectors/google-analytics-data-api until the human-gated wave 6 cutover.",
+  "reviewed_at": "2026-08-19",
+  "scope": "Complete Google Analytics Data API Discovery inventory (23 documented HTTP operations) plus 5 retained Tier-2 legacy-hook execution bindings. The hook rows are connector-local dispatch evidence, not provider operation claims; all provider operations remain declaration-pending until the hook is replaced by exact declarative contracts.",
   "endpoints": [
+    {
+      "method": "DELETE",
+      "path": "/v1/{+name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{+name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{+name}:cancel",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1alpha/{+name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1alpha/{+name}:query",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1alpha/{+parent}/audienceLists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1alpha/{+parent}/audienceLists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1alpha/{+parent}/recurringAudienceLists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1alpha/{+parent}/recurringAudienceLists",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1alpha/{+parent}/reportTasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1alpha/{+parent}/reportTasks",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1alpha/{+property}:runFunnelReport",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1alpha/{+property}:runReport",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1beta/{+name}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+name}:query",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1beta/{+parent}/audienceExports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+parent}/audienceExports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+property}:batchRunPivotReports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+property}:batchRunReports",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+property}:checkCompatibility",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+property}:runPivotReport",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+property}:runRealtimeReport",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+property}:runReport",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+      }
+    },
     {
       "method": "HOOK",
       "path": "internal/connectors/google-analytics-data-api daily_active_users read path",

@@ -171,8 +171,8 @@ fields.
 
 Risk classes:
 
-- Nine `delete` actions (`delete_ticket`, `delete_user`, `delete_organization`, `delete_group`,
-  `delete_macro`, `delete_trigger`, `delete_automation`, `delete_view`, `delete_ticket_field`) carry
+- Ten `delete` actions (`delete_ticket`, `delete_user`, `delete_organization`, `delete_group`,
+  `delete_macro`, `delete_trigger`, `delete_automation`, `delete_api_token`, `delete_view`, `delete_ticket_field`) carry
   the legacy `confirm: "destructive"` declaration normalized by the shared typed gate and treat
   status `404` as success. They are the only destructive actions. The shared gate makes the 88
   remaining `destructive_action` rows technically bindable, but they stay unbound pending
