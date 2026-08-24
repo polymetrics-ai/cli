@@ -211,14 +211,8 @@
     {
       "method": "GET",
       "path": "/api/access-control/status",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
-        "notes": "classification=declaration-pending; source_id=grafana.rest.getAccessControlStatus; source_location=paths[\"/access-control/status\"].get"
+      "covered_by": {
+        "direct_read": "access control status get"
       }
     },
     {
@@ -1849,14 +1843,8 @@
     {
       "method": "GET",
       "path": "/api/health",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
-        "notes": "classification=declaration-pending; source_id=grafana.rest.getHealth; source_location=paths[\"/health\"].get"
+      "covered_by": {
+        "direct_read": "health get"
       }
     },
     {
@@ -3812,14 +3800,8 @@
     {
       "method": "GET",
       "path": "/api/v1/provisioning/mute-timings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
-        "notes": "classification=declaration-pending; source_id=grafana.rest.RouteGetMuteTimings; source_location=paths[\"/v1/provisioning/mute-timings\"].get"
+      "covered_by": {
+        "direct_read": "alerting provisioning mute timings list"
       }
     },
     {
@@ -3916,14 +3898,8 @@
     {
       "method": "GET",
       "path": "/api/v1/provisioning/policies",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
-        "notes": "classification=declaration-pending; source_id=grafana.rest.RouteGetPolicyTree; source_location=paths[\"/v1/provisioning/policies\"].get"
+      "covered_by": {
+        "direct_read": "alerting provisioning policy get"
       }
     },
     {
@@ -3955,14 +3931,8 @@
     {
       "method": "GET",
       "path": "/api/v1/provisioning/templates",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
-        "notes": "classification=declaration-pending; source_id=grafana.rest.RouteGetTemplates; source_location=paths[\"/v1/provisioning/templates\"].get"
+      "covered_by": {
+        "direct_read": "alerting provisioning templates list"
       }
     },
     {

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "slack",
+  "artifacts": [
+    {
+      "sha256": "742a5c977180a829df8767cf57bc417d99b3713583aee83741efb9c08ca731e7",
+      "bytes": 1237332,
+      "source_url": "https://raw.githubusercontent.com/slackapi/slack-api-specs/master/web-api/slack_web_openapi_v2.json",
+      "retrieved_at": "2026-08-24T11:56:04Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

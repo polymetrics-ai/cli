@@ -1,0 +1,5417 @@
+{
+  "schema_version": 3,
+  "operations": [
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_calls_id_recording.31",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/calls/:id/recording",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/calls/:id/recording",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_calls_id_voicemail.32",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/calls/:id/voicemail",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/calls/:id/voicemail",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_contacts_id.70",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/contacts/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/contacts/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_contacts_id_email_details_email_id.76",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/contacts/:id/email_details/:email_id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/contacts/:id/email_details/:email_id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_contacts_id_phone_details_phone_number_id.73",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/contacts/:id/phone_details/:phone_number_id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/contacts/:id/phone_details/:phone_number_id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_numbers_id_messages_configuration.60",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/numbers/:id/messages/configuration",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/numbers/:id/messages/configuration",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_tags_id.81",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/tags/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/tags/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_teams_id.18",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/teams/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/teams/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_teams_team_id_users_user_id.20",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/teams/:team_id/users/:user_id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/teams/:team_id/users/:user_id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_users_id.5",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/users/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/users/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_users_user_id_dialer_campaign.46",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/users/:user_id/dialer_campaign",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/users/:user_id/dialer_campaign",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_users_user_id_dialer_campaign_phone_numbers_id.49",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/users/:user_id/dialer_campaign/phone_numbers/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/users/:user_id/dialer_campaign/phone_numbers/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.delete.v1_webhooks_webhook_id.86",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index DELETE /v1/webhooks/:webhook_id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "delete",
+      "path": "/v1/webhooks/:webhook_id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_analytics_report_export_export_id.93",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/analytics/report/export/:export_id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/analytics/report/export/:export_id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_analytics_report_export_export_id.93",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls.21",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls.21",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls_call_id_action_items.41",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls/:call_id/action_items",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls/:call_id/action_items",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls_call_id_action_items.41",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls_call_id_custom_summary_result.40",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls/:call_id/custom_summary_result",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls/:call_id/custom_summary_result",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls_call_id_custom_summary_result.40",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls_call_id_evaluations.43",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls/:call_id/evaluations",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls/:call_id/evaluations",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls_call_id_evaluations.43",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls_call_id_playbook_result.42",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls/:call_id/playbook_result",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls/:call_id/playbook_result",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls_call_id_playbook_result.42",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls_call_id_predicted_csat.37",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls/:call_id/predicted_csat",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls/:call_id/predicted_csat",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls_call_id_predicted_csat.37",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls_call_id_realtime_transcription.35",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls/:call_id/realtime_transcription",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls/:call_id/realtime_transcription",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls_call_id_realtime_transcription.35",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls_call_id_sentiments.36",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls/:call_id/sentiments",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls/:call_id/sentiments",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls_call_id_sentiments.36",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls_call_id_summary.39",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls/:call_id/summary",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls/:call_id/summary",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls_call_id_summary.39",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls_call_id_topics.38",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls/:call_id/topics",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls/:call_id/topics",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls_call_id_topics.38",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls_call_id_transcription.34",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls/:call_id/transcription",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls/:call_id/transcription",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls_call_id_transcription.34",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls_id.22",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls_id.22",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_calls_search.23",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/calls/search",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/calls/search",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_calls_search.23",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_company.87",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/company",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/company",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_company.87",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_contacts.65",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/contacts",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/contacts",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_contacts.65",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_contacts_id.67",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/contacts/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/contacts/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_contacts_id.67",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_contacts_search.66",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/contacts/search",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/contacts/search",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_contacts_search.66",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_integrations_me.88",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/integrations/me",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/integrations/me",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_integrations_me.88",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_numbers.50",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/numbers",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/numbers",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_numbers.50",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_numbers_id.51",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/numbers/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/numbers/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_numbers_id.51",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_numbers_id_messages_configuration.59",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/numbers/:id/messages/configuration",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/numbers/:id/messages/configuration",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_numbers_id_messages_configuration.59",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_numbers_id_registration_status.53",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/numbers/:id/registration_status",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/numbers/:id/registration_status",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_numbers_id_registration_status.53",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_numbers_id_templates.54",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/numbers/:id/templates",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/numbers/:id/templates",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_numbers_id_templates.54",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_numbers_id_whatsapp_status.55",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/numbers/:id/whatsapp_status",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/numbers/:id/whatsapp_status",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_numbers_id_whatsapp_status.55",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_tags.77",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/tags",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/tags",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_tags.77",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_tags_id.78",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/tags/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/tags/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_tags_id.78",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_teams.15",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/teams",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/teams",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_teams.15",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_teams_id.16",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/teams/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/teams/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_teams_id.16",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_users.1",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/users",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/users",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_users.1",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_users_id.2",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/users/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/users/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_users_id.2",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_users_id_availability.7",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/users/:id/availability",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/users/:id/availability",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_users_id_availability.7",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_users_user_id_dialer_campaign.44",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/users/:user_id/dialer_campaign",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/users/:user_id/dialer_campaign",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_users_user_id_dialer_campaign.44",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_users_user_id_dialer_campaign_phone_numbers.47",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/users/:user_id/dialer_campaign/phone_numbers",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/users/:user_id/dialer_campaign/phone_numbers",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_users_user_id_dialer_campaign_phone_numbers.47",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_users_availabilities.6",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/users/availabilities",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/users/availabilities",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_users_availabilities.6",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_webhooks.82",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/webhooks",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/webhooks",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_webhooks.82",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v1_webhooks_webhook_id.83",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v1/webhooks/:webhook_id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v1/webhooks/:webhook_id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v1_webhooks_webhook_id.83",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v2_users.10",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v2/users",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v2/users",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v2_users.10",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v2_users_id.11",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v2/users/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v2/users/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v2_users_id.11",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.get.v2_users_id_numbers.14",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index GET /v2/users/:id/numbers",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "get",
+      "path": "/v2/users/:id/numbers",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation aircall.rest.get.v2_users_id_numbers.14",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+          }
+        ]
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_analytics_report_export.92",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/analytics/report/export",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/analytics/report/export",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_calls_id_comments.25",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/calls/:id/comments",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/calls/:id/comments",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_calls_id_insight_cards.33",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/calls/:id/insight_cards",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/calls/:id/insight_cards",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_calls_id_pause_recording.29",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/calls/:id/pause_recording",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/calls/:id/pause_recording",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_calls_id_resume_recording.30",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/calls/:id/resume_recording",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/calls/:id/resume_recording",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_calls_id_tags.26",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/calls/:id/tags",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/calls/:id/tags",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_calls_id_transfers.24",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/calls/:id/transfers",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/calls/:id/transfers",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_contacts.68",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/contacts",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/contacts",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_contacts_id.69",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/contacts/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/contacts/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_contacts_id_email_details.74",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/contacts/:id/email_details",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/contacts/:id/email_details",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_contacts_id_phone_details.71",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/contacts/:id/phone_details",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/contacts/:id/phone_details",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_integrations_disable.90",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/integrations/disable",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/integrations/disable",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_integrations_enable.89",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/integrations/enable",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/integrations/enable",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_messages_send_whatsapp_native.63",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/messages/send/whatsapp/native",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/messages/send/whatsapp/native",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_messages_whatsapp_send.64",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/messages/whatsapp/send",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/messages/whatsapp/send",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_numbers_id_messages_configuration.58",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/numbers/:id/messages/configuration",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/numbers/:id/messages/configuration",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_numbers_id_messages_group_native_send.57",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/numbers/:id/messages/group/native/send",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/numbers/:id/messages/group/native/send",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_numbers_id_messages_group_send.62",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/numbers/:id/messages/group/send",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/numbers/:id/messages/group/send",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_numbers_id_messages_native_send.56",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/numbers/:id/messages/native/send",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/numbers/:id/messages/native/send",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_numbers_id_messages_send.61",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/numbers/:id/messages/send",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/numbers/:id/messages/send",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_outbound_calls_agents_agent_id.91",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/outbound-calls/agents/:agent_id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/outbound-calls/agents/:agent_id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_tags.79",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/tags",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/tags",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_teams.17",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/teams",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/teams",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_teams_team_id_users_user_id.19",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/teams/:team_id/users/:user_id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/teams/:team_id/users/:user_id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_users.3",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/users",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/users",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_users_id_calls.8",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/users/:id/calls",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/users/:id/calls",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_users_id_dial.9",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/users/:id/dial",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/users/:id/dial",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_users_user_id_dialer_campaign.45",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/users/:user_id/dialer_campaign",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/users/:user_id/dialer_campaign",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_users_user_id_dialer_campaign_phone_numbers.48",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/users/:user_id/dialer_campaign/phone_numbers",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/users/:user_id/dialer_campaign/phone_numbers",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v1_webhooks.84",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v1/webhooks",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v1/webhooks",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.post.v2_users.12",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index POST /v2/users",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "post",
+      "path": "/v2/users",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.put.v1_calls_id_archive.27",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index PUT /v1/calls/:id/archive",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "put",
+      "path": "/v1/calls/:id/archive",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.put.v1_calls_id_unarchive.28",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index PUT /v1/calls/:id/unarchive",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "put",
+      "path": "/v1/calls/:id/unarchive",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.put.v1_contacts_id_email_details_email_id.75",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index PUT /v1/contacts/:id/email_details/:email_id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "put",
+      "path": "/v1/contacts/:id/email_details/:email_id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.put.v1_contacts_id_phone_details_phone_number_id.72",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index PUT /v1/contacts/:id/phone_details/:phone_number_id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "put",
+      "path": "/v1/contacts/:id/phone_details/:phone_number_id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.put.v1_numbers_id.52",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index PUT /v1/numbers/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "put",
+      "path": "/v1/numbers/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.put.v1_tags_id.80",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index PUT /v1/tags/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "put",
+      "path": "/v1/tags/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.put.v1_users_id.4",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index PUT /v1/users/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "put",
+      "path": "/v1/users/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.put.v1_webhooks_webhook_id.85",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index PUT /v1/webhooks/:webhook_id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "put",
+      "path": "/v1/webhooks/:webhook_id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    },
+    {
+      "connector": "aircall",
+      "protocol": "rest",
+      "source_id": "aircall.rest.put.v2_users_id.13",
+      "operation_id": "",
+      "source": {
+        "url": "https://developers.aircall.io/api-references",
+        "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "bytes": 875367,
+        "location": "rendered endpoint index PUT /v2/users/:id",
+        "form": "rendered_reference",
+        "version": "",
+        "document_id": "source",
+        "published_url": "https://developers.aircall.io/api-references",
+        "published_capture_url": "https://developers.aircall.io/api-references",
+        "published_sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+        "published_bytes": 875367,
+        "published_adapter": "legacy-v2-source-lock-migration-v1",
+        "content_type": "text/html",
+        "citation_url": "https://developers.aircall.io/api-references"
+      },
+      "method": "put",
+      "path": "/v2/users/:id",
+      "request": {
+        "path": null,
+        "query": null,
+        "header": null
+      },
+      "responses": null,
+      "output": {
+        "success": null
+      },
+      "byte_limits": {},
+      "auth_scopes": {
+        "declared": false,
+        "any_of": null
+      },
+      "servers": {
+        "root": {
+          "declared": false
+        },
+        "path_item": {
+          "declared": false
+        },
+        "operation": {
+          "declared": false
+        },
+        "precedence": null
+      },
+      "runtime": {
+        "merge_blocked": false
+      }
+    }
+  ],
+  "merge_blocked": true,
+  "gaps": [
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_analytics_report_export_export_id.93",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls.21",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls_call_id_action_items.41",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls_call_id_custom_summary_result.40",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls_call_id_evaluations.43",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls_call_id_playbook_result.42",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls_call_id_predicted_csat.37",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls_call_id_realtime_transcription.35",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls_call_id_sentiments.36",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls_call_id_summary.39",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls_call_id_topics.38",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls_call_id_transcription.34",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls_id.22",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_calls_search.23",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_company.87",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_contacts.65",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_contacts_id.67",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_contacts_search.66",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_integrations_me.88",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_numbers.50",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_numbers_id.51",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_numbers_id_messages_configuration.59",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_numbers_id_registration_status.53",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_numbers_id_templates.54",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_numbers_id_whatsapp_status.55",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_tags.77",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_tags_id.78",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_teams.15",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_teams_id.16",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_users.1",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_users_availabilities.6",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_users_id.2",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_users_id_availability.7",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_users_user_id_dialer_campaign.44",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_users_user_id_dialer_campaign_phone_numbers.47",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_webhooks.82",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v1_webhooks_webhook_id.83",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v2_users.10",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v2_users_id.11",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation aircall.rest.get.v2_users_id_numbers.14",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    }
+  ]
+}

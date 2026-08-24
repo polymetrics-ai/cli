@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "grafana",
+  "artifacts": [
+    {
+      "sha256": "8d54e6ceb1aeef72ef8fe31213eed910d82d264b0d8328b7e53670ce4c88b46c",
+      "bytes": 790237,
+      "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+      "retrieved_at": "2026-08-24T11:56:04Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

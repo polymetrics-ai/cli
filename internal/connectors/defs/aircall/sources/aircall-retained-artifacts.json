@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "aircall",
+  "artifacts": [
+    {
+      "sha256": "903bfd889a686cfb828100aaddb819a7fbc9d92863ae651fbde28747bdd22cd6",
+      "bytes": 875367,
+      "source_url": "https://developers.aircall.io/api-references",
+      "retrieved_at": "2026-08-24T11:56:04Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

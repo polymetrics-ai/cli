@@ -2349,7 +2349,7 @@
       "source": {
         "source_lock": "sources/n8n-operation-source-lock.json",
         "source_id": "n8n.rest.post-/api/v1/workflows",
-        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.yml",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/97947b7167a63b4763c4eb5fa7c56e8f51f8ed2c/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.yml",
         "source_location": "paths[\"/workflows\"] (./handlers/workflows/spec/paths/workflows.yml).post",
         "operation_id": "post-/api/v1/workflows",
         "deprecated": false
@@ -2604,14 +2604,14 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.publish.yml",
+          "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/39c321599e58b727c141bfbe91123d741b8eb001/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.publish.yml",
           "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/workflows/{id}/publish; source_location=paths[\"/workflows/{id}/publish\"] (./handlers/workflows/spec/paths/workflows.id.publish.yml).post"
         }
       },
       "source": {
         "source_lock": "sources/n8n-operation-source-lock.json",
         "source_id": "n8n.rest.post-/api/v1/workflows/{id}/publish",
-        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.publish.yml",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/39c321599e58b727c141bfbe91123d741b8eb001/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.publish.yml",
         "source_location": "paths[\"/workflows/{id}/publish\"] (./handlers/workflows/spec/paths/workflows.id.publish.yml).post",
         "operation_id": "post-/api/v1/workflows/{id}/publish",
         "deprecated": false
@@ -2651,14 +2651,14 @@
           "risk": "medium",
           "blocked_by_default": true,
           "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.unpublish.yml",
+          "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/39c321599e58b727c141bfbe91123d741b8eb001/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.unpublish.yml",
           "notes": "classification=declaration-pending; source_id=n8n.rest.post-/api/v1/workflows/{id}/unpublish; source_location=paths[\"/workflows/{id}/unpublish\"] (./handlers/workflows/spec/paths/workflows.id.unpublish.yml).post"
         }
       },
       "source": {
         "source_lock": "sources/n8n-operation-source-lock.json",
         "source_id": "n8n.rest.post-/api/v1/workflows/{id}/unpublish",
-        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/master/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.unpublish.yml",
+        "source_url": "https://raw.githubusercontent.com/n8n-io/n8n/39c321599e58b727c141bfbe91123d741b8eb001/packages/cli/src/public-api/v1/handlers/workflows/spec/paths/workflows.id.unpublish.yml",
         "source_location": "paths[\"/workflows/{id}/unpublish\"] (./handlers/workflows/spec/paths/workflows.id.unpublish.yml).post",
         "operation_id": "post-/api/v1/workflows/{id}/unpublish",
         "deprecated": false

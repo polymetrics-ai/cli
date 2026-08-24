@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "facebook-marketing",
+  "artifacts": [
+    {
+      "sha256": "a13fa8cf5b5b6df41623e42035d3dbf1d55fbc77a6e00f2a07977dd8a3d3a8ea",
+      "bytes": 1183653,
+      "source_url": "https://codeload.github.com/facebook/facebook-business-sdk-codegen/tar.gz/refs/heads/main",
+      "retrieved_at": "2026-08-24T11:56:04Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

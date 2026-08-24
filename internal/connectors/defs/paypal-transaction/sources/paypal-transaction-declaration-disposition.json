@@ -21,9 +21,9 @@
       "level": "complete",
       "basis": "all provider-published PayPal REST OpenAPI documents under openapi/ in the official paypal-rest-api-specifications repository"
     },
-    "enabled_operations": 0,
-    "enabled_percent": 0,
-    "disabled_operations": 115,
+    "enabled_operations": 4,
+    "enabled_percent": 3.48,
+    "disabled_operations": 111,
     "documented_deletes": 8,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -54,7 +54,7 @@
     ],
     "stream_bindings": 4,
     "writes_actions": 0,
-    "terminal_commands": 0,
+    "terminal_commands": 4,
     "live_certification": "pending",
     "gap_ids": [
       "generic-typed-destination-app-dispatch",
@@ -75,7 +75,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 115
+        "count": 111
       }
     ],
     "reverse_etl_eligibility": {
@@ -115,7 +115,7 @@
     "declaration_pending": [
       {
         "id": "typed-operation-contract-paypal-transaction",
-        "count": 111
+        "count": 107
       },
       {
         "id": "sync-transport-source-definition-paypal-transaction",
@@ -3221,15 +3221,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/v2/invoicing/accounting-sync/merchant/connections",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
-          "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.21; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/accounting-sync/merchant/connections\"].get"
+        "covered_by": {
+          "direct_read": "invoicing connections list"
         }
       },
       "source": {
@@ -3240,25 +3233,19 @@
         "operation_id": "connections.get",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-paypal-transaction",
-          "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v2/invoicing/accounting-sync/merchant/connections is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/paypal-transaction/operations.json: bounded rest_read operation paypal-transaction.invoicing.connections.get binds the pinned source route without request inputs."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v2/invoicing/accounting-sync/merchant/connections is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-paypal-transaction",
-        "contract": null
+        "status": "enabled; runnable direct_read command \"invoicing connections list\" binds the pinned provider operation",
+        "command": {
+          "path": "invoicing connections list",
+          "intent": "direct_read",
+          "availability": "implemented"
+        }
       }
     },
     {
@@ -3644,15 +3631,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/v1/notifications/webhooks-lookup",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
-          "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.8; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-lookup\"].get"
+        "covered_by": {
+          "direct_read": "webhooks lookup list"
         }
       },
       "source": {
@@ -3663,25 +3643,19 @@
         "operation_id": "webhooks-lookup.list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-paypal-transaction",
-          "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v1/notifications/webhooks-lookup is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/paypal-transaction/operations.json: bounded rest_read operation paypal-transaction.webhooks.lookup.list binds the pinned source route without request inputs."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v1/notifications/webhooks-lookup is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-paypal-transaction",
-        "contract": null
+        "status": "enabled; runnable direct_read command \"webhooks lookup list\" binds the pinned provider operation",
+        "command": {
+          "path": "webhooks lookup list",
+          "intent": "direct_read",
+          "availability": "implemented"
+        }
       }
     },
     {
@@ -3832,15 +3806,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/v1/notifications/webhooks-event-types",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
-          "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.12; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-event-types\"].get"
+        "covered_by": {
+          "direct_read": "webhooks event-types list"
         }
       },
       "source": {
@@ -3851,25 +3818,19 @@
         "operation_id": "webhooks-event-types.list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-paypal-transaction",
-          "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v1/notifications/webhooks-event-types is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/paypal-transaction/operations.json: bounded rest_read operation paypal-transaction.webhooks.event-types.list binds the pinned source route without request inputs."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v1/notifications/webhooks-event-types is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-paypal-transaction",
-        "contract": null
+        "status": "enabled; runnable direct_read command \"webhooks event-types list\" binds the pinned provider operation",
+        "command": {
+          "path": "webhooks event-types list",
+          "intent": "direct_read",
+          "availability": "implemented"
+        }
       }
     },
     {
@@ -4114,15 +4075,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/v1/payment-experience/web-profiles",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payment-experience_web_experience_profiles_v1.json",
-          "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.2; source_location=openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles\"].get"
+        "covered_by": {
+          "direct_read": "web-profiles list"
         }
       },
       "source": {
@@ -4133,25 +4087,19 @@
         "operation_id": "web-profile.get-list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-paypal-transaction",
-          "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v1/payment-experience/web-profiles is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/paypal-transaction/operations.json: bounded rest_read operation paypal-transaction.web-profiles.list binds the pinned source route without request inputs."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/paypal-transaction/api_surface.json: GET /v1/payment-experience/web-profiles is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-paypal-transaction",
-        "contract": null
+        "status": "enabled; runnable direct_read command \"web-profiles list\" binds the pinned provider operation",
+        "command": {
+          "path": "web-profiles list",
+          "intent": "direct_read",
+          "availability": "implemented"
+        }
       }
     },
     {

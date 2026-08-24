@@ -2045,25 +2045,26 @@
         "operation_id": "create_bank_account_holder_verification",
         "deprecated": false
       },
-      "state": "enabled",
+      "state": "disabled",
       "foundation": {
-        "state": "present",
-        "evidence": "A connector-local declared stream, typed action, or implemented direct-read binding owns this source operation."
+        "state": "absent",
+        "evidence": "connectorgen source-import: import source document \"source\": preflight source grammar: path item \"/bank_account_holder_verifications\": post operation: request body media \"application/json\": unbounded request schema object has dynamic additionalProperties. The closed-body refusal is enforced at internal/connectors/engine/structured_rest_body.go:1442-1443.",
+        "foundation_gap": {
+          "id": "declaration-bound-unbounded-dynamic-body",
+          "evidence": "https://developer.gocardless.com/openapi-schema-public.json paths[\"/bank_account_holder_verifications\"].post: provider request body declares unbounded dynamic additionalProperties; no exact typed flags can be derived.",
+          "minimal_change": "Add a declaration-owned typed map with an explicitly bounded value type and open key set, preserving the fixed operation, provider schema validation, body-size cap, approval, and authorization boundaries."
+        }
       },
-      "rejection": null,
+      "rejection": {
+        "reason": "foundation-gap",
+        "recoverable": true,
+        "detail": "Provider request body is an unbounded dynamic object. It cannot be faithfully represented by the current closed typed-body contract.",
+        "evidence": "connectorgen source-import: import source document \"source\": preflight source grammar: path item \"/bank_account_holder_verifications\": post operation: request body media \"application/json\": unbounded request schema object has dynamic additionalProperties."
+      },
       "declaration": {
-        "status": "enabled; existing connector-local binding",
+        "status": "disabled; foundation-gap declaration-bound-unbounded-dynamic-body",
         "contract": {
           "write": "create_a_bank_account_holder_verification"
-        },
-        "reverse_etl_eligibility": {
-          "state": "foundation-gap",
-          "detail": "The typed direct-write action is semantically eligible for reverse ETL, but persisted App/CLI dispatch has not yet selected the generic typed destination.",
-          "foundation_gap": {
-            "id": "generic-typed-destination-app-dispatch",
-            "evidence": "internal/app/transport_dispatch.go:53-67: after preflight, the persisted App dispatch admits only semantic managed targets or local-warehouse dedupe targets; declarative_typed_destination is neither, so it is not selected for a real App/CLI run.",
-            "minimal_change": "admit the exact preflighted declarative_api/declarative_typed_destination reference through persisted App/CLI dispatch while preserving definition-selected mode, action, source binding, approval, and authorization checks"
-          }
         }
       }
     },

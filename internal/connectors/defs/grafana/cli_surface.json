@@ -1,0 +1,148 @@
+{
+  "tagline": "Read Grafana's declared streams and bounded REST resources.",
+  "usage": "pm grafana <command> [flags]",
+  "source_cli": {
+    "name": "Grafana HTTP API",
+    "docs": "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/",
+    "reference": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+    "source": "Grafana's pinned public OpenAPI document"
+  },
+  "groups": [
+    {
+      "id": "access-control",
+      "title": "Grafana access-control direct reads",
+      "commands": [
+        "access control status get"
+      ]
+    },
+    {
+      "id": "health-and-provisioning",
+      "title": "Grafana health and alerting-provisioning direct reads",
+      "commands": [
+        "health get",
+        "alerting provisioning mute timings list",
+        "alerting provisioning policy get",
+        "alerting provisioning templates list"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Named Grafana credential; secrets are loaded from the credential store."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Clamp direct-read response size; this operation is capped at 1 MiB."
+    }
+  ],
+  "commands": [
+    {
+      "path": "access control status get",
+      "summary": "Get Grafana fine-grained access-control status.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "grafana.access_control.status.get",
+      "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/access-control/status"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm grafana access control status get --credential grafana-local --json"
+      ]
+    },
+    {
+      "path": "health get",
+      "summary": "Get Grafana server health.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "grafana.health.get",
+      "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/health"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm grafana health get --credential grafana-local --json"
+      ]
+    },
+    {
+      "path": "alerting provisioning mute timings list",
+      "summary": "List Grafana provisioned mute timings.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "grafana.alerting.provisioning.mute_timings.list",
+      "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/provisioning/mute-timings"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm grafana alerting provisioning mute timings list --credential grafana-local --json"
+      ]
+    },
+    {
+      "path": "alerting provisioning policy get",
+      "summary": "Get Grafana provisioned notification policy tree.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "grafana.alerting.provisioning.policy.get",
+      "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/provisioning/policies"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm grafana alerting provisioning policy get --credential grafana-local --json"
+      ]
+    },
+    {
+      "path": "alerting provisioning templates list",
+      "summary": "List Grafana provisioned notification template groups.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "grafana.alerting.provisioning.templates.list",
+      "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/provisioning/templates"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm grafana alerting provisioning templates list --credential grafana-local --json"
+      ]
+    }
+  ]
+}

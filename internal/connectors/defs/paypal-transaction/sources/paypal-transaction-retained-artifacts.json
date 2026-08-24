@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "paypal-transaction",
+  "artifacts": [
+    {
+      "sha256": "dda4b70942c2b45281d7d3330c2fb203d6e0097e84aeacc012d28d6581b5e1bf",
+      "bytes": 421176,
+      "source_url": "https://codeload.github.com/paypal/paypal-rest-api-specifications/tar.gz/refs/heads/main",
+      "retrieved_at": "2026-08-24T11:56:04Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

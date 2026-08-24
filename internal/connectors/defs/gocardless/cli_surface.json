@@ -25,7 +25,7 @@
       "path": "approve an outbound payment apply",
       "summary": "Show the exact approve an outbound payment action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "approve_an_outbound_payment",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /outbound_payments/{outbound_payment_id}/actions/approve",
@@ -39,13 +39,23 @@
       "approval": "Partial command: ambiguous outbound_payment_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless approve an outbound payment apply --json"
+      ],
+      "flags": [
+        {
+          "name": "outbound_payment_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required outbound payment id record field.",
+          "maps_to": "record.outbound_payment_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "cancel a billing request apply",
       "summary": "Show the exact cancel a billing request action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "cancel_a_billing_request",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /billing_requests/{billing_request_id}/actions/cancel",
@@ -59,13 +69,23 @@
       "approval": "Partial command: ambiguous billing_request_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless cancel a billing request apply --json"
+      ],
+      "flags": [
+        {
+          "name": "billing_request_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required billing request id record field.",
+          "maps_to": "record.billing_request_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "cancel a mandate apply",
       "summary": "Show the exact cancel a mandate action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "cancel_a_mandate",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /mandates/{mandate_id}/actions/cancel",
@@ -79,13 +99,23 @@
       "approval": "Partial command: ambiguous mandate_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless cancel a mandate apply --json"
+      ],
+      "flags": [
+        {
+          "name": "mandate_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required mandate id record field.",
+          "maps_to": "record.mandate_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "cancel a mandate import apply",
       "summary": "Show the exact cancel a mandate import action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "cancel_a_mandate_import",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /mandate_imports/{mandate_import_id}/actions/cancel",
@@ -99,13 +129,23 @@
       "approval": "Partial command: ambiguous mandate_import_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless cancel a mandate import apply --json"
+      ],
+      "flags": [
+        {
+          "name": "mandate_import_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required mandate import id record field.",
+          "maps_to": "record.mandate_import_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "cancel a payment apply",
       "summary": "Show the exact cancel a payment action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "cancel_a_payment",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /payments/{payment_id}/actions/cancel",
@@ -119,13 +159,23 @@
       "approval": "Partial command: ambiguous payment_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless cancel a payment apply --json"
+      ],
+      "flags": [
+        {
+          "name": "payment_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required payment id record field.",
+          "maps_to": "record.payment_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "cancel a subscription apply",
       "summary": "Show the exact cancel a subscription action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "cancel_a_subscription",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /subscriptions/{subscription_id}/actions/cancel",
@@ -139,13 +189,23 @@
       "approval": "Partial command: ambiguous subscription_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless cancel a subscription apply --json"
+      ],
+      "flags": [
+        {
+          "name": "subscription_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required subscription id record field.",
+          "maps_to": "record.subscription_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "cancel an instalment schedule apply",
       "summary": "Show the exact cancel an instalment schedule action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "cancel_an_instalment_schedule",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /instalment_schedules/{instalment_schedule_id}/actions/cancel",
@@ -159,13 +219,23 @@
       "approval": "Partial command: ambiguous instalment_schedule_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless cancel an instalment schedule apply --json"
+      ],
+      "flags": [
+        {
+          "name": "instalment_schedule_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required instalment schedule id record field.",
+          "maps_to": "record.instalment_schedule_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "cancel an outbound payment apply",
       "summary": "Show the exact cancel an outbound payment action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "cancel_an_outbound_payment",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /outbound_payments/{outbound_payment_id}/actions/cancel",
@@ -179,13 +249,23 @@
       "approval": "Partial command: ambiguous outbound_payment_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless cancel an outbound payment apply --json"
+      ],
+      "flags": [
+        {
+          "name": "outbound_payment_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required outbound payment id record field.",
+          "maps_to": "record.outbound_payment_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "change currency apply",
       "summary": "Show the exact change currency action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "change_currency",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /billing_requests/{billing_request_id}/actions/choose_currency",
@@ -199,13 +279,23 @@
       "approval": "Partial command: ambiguous billing_request_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless change currency apply --json"
+      ],
+      "flags": [
+        {
+          "name": "billing_request_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required billing request id record field.",
+          "maps_to": "record.billing_request_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "collect bank account details apply",
       "summary": "Show the exact collect bank account details action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "collect_bank_account_details",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /billing_requests/{billing_request_id}/actions/collect_bank_account",
@@ -219,13 +309,23 @@
       "approval": "Partial command: ambiguous billing_request_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless collect bank account details apply --json"
+      ],
+      "flags": [
+        {
+          "name": "billing_request_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required billing request id record field.",
+          "maps_to": "record.billing_request_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "collect customer details apply",
       "summary": "Show the exact collect customer details action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "collect_customer_details",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /billing_requests/{billing_request_id}/actions/collect_customer_details",
@@ -239,13 +339,23 @@
       "approval": "Partial command: ambiguous billing_request_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless collect customer details apply --json"
+      ],
+      "flags": [
+        {
+          "name": "billing_request_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required billing request id record field.",
+          "maps_to": "record.billing_request_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "complete a redirect flow apply",
       "summary": "Show the exact complete a redirect flow action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "complete_a_redirect_flow",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /redirect_flows/{redirect_flow_id}/actions/complete",
@@ -259,13 +369,23 @@
       "approval": "Partial command: ambiguous redirect_flow_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless complete a redirect flow apply --json"
+      ],
+      "flags": [
+        {
+          "name": "redirect_flow_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required redirect flow id record field.",
+          "maps_to": "record.redirect_flow_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "confirm a payer authorisation apply",
       "summary": "Show the exact confirm a payer authorisation action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "confirm_a_payer_authorisation",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /payer_authorisations/{payer_authorisation_id}/actions/confirm",
@@ -279,13 +399,23 @@
       "approval": "Partial command: ambiguous payer_authorisation_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless confirm a payer authorisation apply --json"
+      ],
+      "flags": [
+        {
+          "name": "payer_authorisation_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required payer authorisation id record field.",
+          "maps_to": "record.payer_authorisation_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "confirm the payer details apply",
       "summary": "Show the exact confirm the payer details action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "confirm_the_payer_details",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /billing_requests/{billing_request_id}/actions/confirm_payer_details",
@@ -299,13 +429,23 @@
       "approval": "Partial command: ambiguous billing_request_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless confirm the payer details apply --json"
+      ],
+      "flags": [
+        {
+          "name": "billing_request_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required billing request id record field.",
+          "maps_to": "record.billing_request_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "create a bank account holder verification apply",
       "summary": "Plan and execute the create a bank account holder verification reverse-ETL action.",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_a_bank_account_holder_verification",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /bank_account_holder_verifications",
@@ -893,7 +1033,7 @@
       "path": "disable a block apply",
       "summary": "Show the exact disable a block action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "disable_a_block",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /blocks/{block_id}/actions/disable",
@@ -907,13 +1047,23 @@
       "approval": "Partial command: ambiguous block_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless disable a block apply --json"
+      ],
+      "flags": [
+        {
+          "name": "block_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required block id record field.",
+          "maps_to": "record.block_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "disable a creditor bank account apply",
       "summary": "Show the exact disable a creditor bank account action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "disable_a_creditor_bank_account",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /creditor_bank_accounts/{creditor_bank_account_id}/actions/disable",
@@ -927,13 +1077,23 @@
       "approval": "Partial command: ambiguous creditor_bank_account_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless disable a creditor bank account apply --json"
+      ],
+      "flags": [
+        {
+          "name": "creditor_bank_account_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required creditor bank account id record field.",
+          "maps_to": "record.creditor_bank_account_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "disable a customer bank account apply",
       "summary": "Show the exact disable a customer bank account action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "disable_a_customer_bank_account",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /customer_bank_accounts/{customer_bank_account_id}/actions/disable",
@@ -947,13 +1107,23 @@
       "approval": "Partial command: ambiguous customer_bank_account_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless disable a customer bank account apply --json"
+      ],
+      "flags": [
+        {
+          "name": "customer_bank_account_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required customer bank account id record field.",
+          "maps_to": "record.customer_bank_account_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "enable a block apply",
       "summary": "Show the exact enable a block action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "enable_a_block",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /blocks/{block_id}/actions/enable",
@@ -967,13 +1137,23 @@
       "approval": "Partial command: ambiguous block_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless enable a block apply --json"
+      ],
+      "flags": [
+        {
+          "name": "block_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required block id record field.",
+          "maps_to": "record.block_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "fulfil a billing request apply",
       "summary": "Show the exact fulfil a billing request action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "fulfil_a_billing_request",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /billing_requests/{billing_request_id}/actions/fulfil",
@@ -987,13 +1167,23 @@
       "approval": "Partial command: ambiguous billing_request_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless fulfil a billing request apply --json"
+      ],
+      "flags": [
+        {
+          "name": "billing_request_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required billing request id record field.",
+          "maps_to": "record.billing_request_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "handle a notification apply",
       "summary": "Show the exact handle a notification action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "handle_a_notification",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /customer_notifications/{customer_notification_id}/actions/handle",
@@ -1007,13 +1197,23 @@
       "approval": "Partial command: ambiguous customer_notification_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless handle a notification apply --json"
+      ],
+      "flags": [
+        {
+          "name": "customer_notification_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required customer notification id record field.",
+          "maps_to": "record.customer_notification_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "initialise a billing request flow apply",
       "summary": "Show the exact initialise a billing request flow action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "initialise_a_billing_request_flow",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /billing_request_flows/{billing_request_flow_id}/actions/initialise",
@@ -1027,13 +1227,23 @@
       "approval": "Partial command: ambiguous billing_request_flow_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless initialise a billing request flow apply --json"
+      ],
+      "flags": [
+        {
+          "name": "billing_request_flow_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required billing request flow id record field.",
+          "maps_to": "record.billing_request_flow_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "notify the customer apply",
       "summary": "Show the exact notify the customer action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "notify_the_customer",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /billing_requests/{billing_request_id}/actions/notify",
@@ -1047,13 +1257,23 @@
       "approval": "Partial command: ambiguous billing_request_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless notify the customer apply --json"
+      ],
+      "flags": [
+        {
+          "name": "billing_request_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required billing request id record field.",
+          "maps_to": "record.billing_request_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "pause a subscription apply",
       "summary": "Show the exact pause a subscription action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "pause_a_subscription",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /subscriptions/{subscription_id}/actions/pause",
@@ -1067,6 +1287,16 @@
       "approval": "Partial command: ambiguous subscription_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless pause a subscription apply --json"
+      ],
+      "flags": [
+        {
+          "name": "subscription_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required subscription id record field.",
+          "maps_to": "record.subscription_id",
+          "required": true
+        }
       ]
     },
     {
@@ -1094,7 +1324,7 @@
       "path": "reinstate a mandate apply",
       "summary": "Show the exact reinstate a mandate action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "reinstate_a_mandate",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /mandates/{mandate_id}/actions/reinstate",
@@ -1108,13 +1338,23 @@
       "approval": "Partial command: ambiguous mandate_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless reinstate a mandate apply --json"
+      ],
+      "flags": [
+        {
+          "name": "mandate_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required mandate id record field.",
+          "maps_to": "record.mandate_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "remove a customer apply",
       "summary": "Show the exact remove a customer action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "remove_a_customer",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "DELETE /customers/{customer_id}",
@@ -1128,13 +1368,23 @@
       "approval": "Partial command: ambiguous customer_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless remove a customer apply --json"
+      ],
+      "flags": [
+        {
+          "name": "customer_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required customer id record field.",
+          "maps_to": "record.customer_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "resume a subscription apply",
       "summary": "Show the exact resume a subscription action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "resume_a_subscription",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /subscriptions/{subscription_id}/actions/resume",
@@ -1148,13 +1398,23 @@
       "approval": "Partial command: ambiguous subscription_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless resume a subscription apply --json"
+      ],
+      "flags": [
+        {
+          "name": "subscription_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required subscription id record field.",
+          "maps_to": "record.subscription_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "retry a payment apply",
       "summary": "Show the exact retry a payment action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "retry_a_payment",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /payments/{payment_id}/actions/retry",
@@ -1168,13 +1428,23 @@
       "approval": "Partial command: ambiguous payment_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless retry a payment apply --json"
+      ],
+      "flags": [
+        {
+          "name": "payment_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required payment id record field.",
+          "maps_to": "record.payment_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "retry a webhook apply",
       "summary": "Show the exact retry a webhook action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "retry_a_webhook",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /webhooks/{webhook_id}/actions/retry",
@@ -1188,13 +1458,23 @@
       "approval": "Partial command: ambiguous webhook_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless retry a webhook apply --json"
+      ],
+      "flags": [
+        {
+          "name": "webhook_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required webhook id record field.",
+          "maps_to": "record.webhook_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "select institution for a billing request apply",
       "summary": "Show the exact select institution for a billing request action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "select_institution_for_a_billing_request",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /billing_requests/{billing_request_id}/actions/select_institution",
@@ -1208,13 +1488,23 @@
       "approval": "Partial command: ambiguous billing_request_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless select institution for a billing request apply --json"
+      ],
+      "flags": [
+        {
+          "name": "billing_request_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required billing request id record field.",
+          "maps_to": "record.billing_request_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "simulate a scenario apply",
       "summary": "Show the exact simulate a scenario action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "simulate_a_scenario",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /scenario_simulators/{scenario}/actions/run",
@@ -1228,13 +1518,23 @@
       "approval": "Partial command: ambiguous scenario: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless simulate a scenario apply --json"
+      ],
+      "flags": [
+        {
+          "name": "scenario",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required scenario record field.",
+          "maps_to": "record.scenario",
+          "required": true
+        }
       ]
     },
     {
       "path": "submit a mandate import apply",
       "summary": "Show the exact submit a mandate import action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "submit_a_mandate_import",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /mandate_imports/{mandate_import_id}/actions/submit",
@@ -1248,13 +1548,23 @@
       "approval": "Partial command: ambiguous mandate_import_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless submit a mandate import apply --json"
+      ],
+      "flags": [
+        {
+          "name": "mandate_import_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required mandate import id record field.",
+          "maps_to": "record.mandate_import_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "submit a payer authorisation apply",
       "summary": "Show the exact submit a payer authorisation action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "submit_a_payer_authorisation",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /payer_authorisations/{payer_authorisation_id}/actions/submit",
@@ -1268,13 +1578,23 @@
       "approval": "Partial command: ambiguous payer_authorisation_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless submit a payer authorisation apply --json"
+      ],
+      "flags": [
+        {
+          "name": "payer_authorisation_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required payer authorisation id record field.",
+          "maps_to": "record.payer_authorisation_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "trigger fallback apply",
       "summary": "Show the exact trigger fallback action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "trigger_fallback",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "POST /billing_requests/{billing_request_id}/actions/fallback",
@@ -1288,13 +1608,23 @@
       "approval": "Partial command: ambiguous billing_request_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless trigger fallback apply --json"
+      ],
+      "flags": [
+        {
+          "name": "billing_request_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required billing request id record field.",
+          "maps_to": "record.billing_request_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "update a billing request template apply",
       "summary": "Show the exact update a billing request template action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_a_billing_request_template",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "PUT /billing_request_templates/{billing_request_template_id}",
@@ -1308,13 +1638,23 @@
       "approval": "Partial command: ambiguous billing_request_template_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless update a billing request template apply --json"
+      ],
+      "flags": [
+        {
+          "name": "billing_request_template_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required billing request template id record field.",
+          "maps_to": "record.billing_request_template_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "update a creditor apply",
       "summary": "Show the exact update a creditor action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_a_creditor",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "PUT /creditors/{creditor_id}",
@@ -1328,13 +1668,23 @@
       "approval": "Partial command: ambiguous creditor_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless update a creditor apply --json"
+      ],
+      "flags": [
+        {
+          "name": "creditor_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required creditor id record field.",
+          "maps_to": "record.creditor_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "update a customer apply",
       "summary": "Show the exact update a customer action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_a_customer",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "PUT /customers/{customer_id}",
@@ -1348,13 +1698,23 @@
       "approval": "Partial command: ambiguous customer_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless update a customer apply --json"
+      ],
+      "flags": [
+        {
+          "name": "customer_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required customer id record field.",
+          "maps_to": "record.customer_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "update a customer bank account apply",
       "summary": "Show the exact update a customer bank account action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_a_customer_bank_account",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "PUT /customer_bank_accounts/{customer_bank_account_id}",
@@ -1368,13 +1728,23 @@
       "approval": "Partial command: ambiguous customer_bank_account_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless update a customer bank account apply --json"
+      ],
+      "flags": [
+        {
+          "name": "customer_bank_account_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required customer bank account id record field.",
+          "maps_to": "record.customer_bank_account_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "update a mandate apply",
       "summary": "Show the exact update a mandate action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_a_mandate",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "PUT /mandates/{mandate_id}",
@@ -1388,13 +1758,23 @@
       "approval": "Partial command: ambiguous mandate_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless update a mandate apply --json"
+      ],
+      "flags": [
+        {
+          "name": "mandate_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required mandate id record field.",
+          "maps_to": "record.mandate_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "update a payer authorisation apply",
       "summary": "Show the exact update a payer authorisation action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_a_payer_authorisation",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "PUT /payer_authorisations/{payer_authorisation_id}",
@@ -1408,13 +1788,23 @@
       "approval": "Partial command: ambiguous payer_authorisation_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless update a payer authorisation apply --json"
+      ],
+      "flags": [
+        {
+          "name": "payer_authorisation_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required payer authorisation id record field.",
+          "maps_to": "record.payer_authorisation_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "update a payment apply",
       "summary": "Show the exact update a payment action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_a_payment",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "PUT /payments/{payment_id}",
@@ -1428,13 +1818,23 @@
       "approval": "Partial command: ambiguous payment_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless update a payment apply --json"
+      ],
+      "flags": [
+        {
+          "name": "payment_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required payment id record field.",
+          "maps_to": "record.payment_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "update a payout apply",
       "summary": "Show the exact update a payout action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_a_payout",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "PUT /payouts/{payout_id}",
@@ -1448,13 +1848,23 @@
       "approval": "Partial command: ambiguous payout_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless update a payout apply --json"
+      ],
+      "flags": [
+        {
+          "name": "payout_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required payout id record field.",
+          "maps_to": "record.payout_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "update a refund apply",
       "summary": "Show the exact update a refund action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_a_refund",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "PUT /refunds/{refund_id}",
@@ -1468,13 +1878,23 @@
       "approval": "Partial command: ambiguous refund_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless update a refund apply --json"
+      ],
+      "flags": [
+        {
+          "name": "refund_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required refund id record field.",
+          "maps_to": "record.refund_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "update a subscription apply",
       "summary": "Show the exact update a subscription action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_a_subscription",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "PUT /subscriptions/{subscription_id}",
@@ -1488,13 +1908,23 @@
       "approval": "Partial command: ambiguous subscription_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless update a subscription apply --json"
+      ],
+      "flags": [
+        {
+          "name": "subscription_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required subscription id record field.",
+          "maps_to": "record.subscription_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "update an instalment schedule apply",
       "summary": "Show the exact update an instalment schedule action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_an_instalment_schedule",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "PUT /instalment_schedules/{instalment_schedule_id}",
@@ -1508,13 +1938,23 @@
       "approval": "Partial command: ambiguous instalment_schedule_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless update an instalment schedule apply --json"
+      ],
+      "flags": [
+        {
+          "name": "instalment_schedule_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required instalment schedule id record field.",
+          "maps_to": "record.instalment_schedule_id",
+          "required": true
+        }
       ]
     },
     {
       "path": "update an outbound payment apply",
       "summary": "Show the exact update an outbound payment action and its declaration-bound typed-input hold.",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "update_an_outbound_payment",
       "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
       "source_cli_path": "PUT /outbound_payments/{outbound_payment_id}",
@@ -1528,6 +1968,16 @@
       "approval": "Partial command: ambiguous outbound_payment_id: string,integer. A declaration-bound scalar-union input capability is required before this exact action can collect every documented value shape; no raw request body is accepted.",
       "examples": [
         "pm gocardless update an outbound payment apply --json"
+      ],
+      "flags": [
+        {
+          "name": "outbound_payment_id",
+          "type": "json",
+          "allow_bare_string": true,
+          "summary": "Required outbound payment id record field.",
+          "maps_to": "record.outbound_payment_id",
+          "required": true
+        }
       ]
     }
   ],

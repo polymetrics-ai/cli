@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "linkedin-ads",
+  "artifacts": [
+    {
+      "sha256": "730bfc6aeaa5ea162210592ddd697b1dfa2f2c8f64bc42369de771fbaa9e31a2",
+      "bytes": 108320,
+      "source_url": "https://learn.microsoft.com/_sitemaps/linkedin_en-us_1.xml",
+      "retrieved_at": "2026-08-24T12:03:07Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

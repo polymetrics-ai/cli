@@ -82,6 +82,18 @@ Reads Facebook Marketing ad accounts, campaigns, ads, ad sets, ad creatives, cus
 - approval: writes require approval; reads are unrestricted
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Command Surface
+
+- Run Facebook Marketing's declared streams and reverse-ETL actions.
+- Usage: pm facebook-marketing <command> [flags]
+- Global flags:
+  - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
+- Reverse ETL writes
+- Other Commands
+  - create ad set apply - Plan and execute the create ad set reverse-ETL action. [intent=reverse_etl availability=implemented write=create_ad_set]; approval: requires plan, preview, approval, and execute; risk: external mutation on a live Facebook ad account; creates an ad set that can incur ad spend once ads are attached; approval required; flags: --billing_event (required), --campaign_id (required), --name (required), --optimization_goal (required), --status (required), --targeting (required)
+  - create campaign apply - Plan and execute the create campaign reverse-ETL action. [intent=reverse_etl availability=implemented write=create_campaign]; approval: requires plan, preview, approval, and execute; risk: external mutation on a live Facebook ad account; creates a campaign that can incur ad spend once ads are attached; approval required; flags: --name (required), --objective (required), --special_ad_categories (required), --status (required)
+  - update campaign apply - Plan and execute the update campaign reverse-ETL action. [intent=reverse_etl availability=implemented write=update_campaign]; approval: requires plan, preview, approval, and execute; risk: external mutation on a live Facebook ad account (e.g. pausing/resuming spend); approval required; flags: --id (required)
+
 ## Commands
 
 ### Inspect as a manual

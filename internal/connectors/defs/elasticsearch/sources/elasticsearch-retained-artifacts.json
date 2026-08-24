@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "elasticsearch",
+  "artifacts": [
+    {
+      "sha256": "aace81c4c46fa503895ea524d30313856597975f67115fc9cde9c61c7f76b952",
+      "bytes": 6458837,
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "retrieved_at": "2026-08-24T12:03:07Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

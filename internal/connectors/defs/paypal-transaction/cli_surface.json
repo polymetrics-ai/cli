@@ -1,0 +1,133 @@
+{
+  "tagline": "Read declared PayPal Transaction streams and bounded PayPal REST resources.",
+  "usage": "pm paypal-transaction <command> [flags]",
+  "source_cli": {
+    "name": "PayPal REST API",
+    "docs": "https://developer.paypal.com/api/rest/",
+    "reference": "https://github.com/paypal/paypal-rest-api-specifications",
+    "source": "official PayPal REST OpenAPI bundle"
+  },
+  "groups": [
+    {
+      "id": "invoicing",
+      "title": "PayPal Invoicing direct reads",
+      "commands": [
+        "invoicing connections list"
+      ]
+    },
+    {
+      "id": "webhooks",
+      "title": "PayPal webhook direct reads",
+      "commands": [
+        "webhooks lookup list",
+        "webhooks event-types list"
+      ]
+    },
+    {
+      "id": "web-profiles",
+      "title": "PayPal payment-experience direct reads",
+      "commands": [
+        "web-profiles list"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Named PayPal credential; secrets are loaded from the credential store."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Clamp direct-read response size; these operations are capped at 1 MiB."
+    }
+  ],
+  "commands": [
+    {
+      "path": "invoicing connections list",
+      "summary": "List PayPal invoicing accounting-sync merchant connections.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "paypal-transaction.invoicing.connections.get",
+      "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/invoicing/accounting-sync/merchant/connections"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm paypal-transaction invoicing connections list --credential paypal-local --json"
+      ]
+    },
+    {
+      "path": "webhooks lookup list",
+      "summary": "List PayPal webhook lookups.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "paypal-transaction.webhooks.lookup.list",
+      "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/notifications/webhooks-lookup"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm paypal-transaction webhooks lookup list --credential paypal-local --json"
+      ]
+    },
+    {
+      "path": "webhooks event-types list",
+      "summary": "List PayPal webhook event types.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "paypal-transaction.webhooks.event-types.list",
+      "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/notifications/webhooks-event-types"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm paypal-transaction webhooks event-types list --credential paypal-local --json"
+      ]
+    },
+    {
+      "path": "web-profiles list",
+      "summary": "List PayPal payment-experience web profiles.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "paypal-transaction.web-profiles.list",
+      "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payment-experience_web_experience_profiles_v1.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/payment-experience/web-profiles"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; the response is capped at 1 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm paypal-transaction web-profiles list --credential paypal-local --json"
+      ]
+    }
+  ]
+}

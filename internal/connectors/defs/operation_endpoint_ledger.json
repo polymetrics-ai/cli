@@ -3325,7 +3325,38 @@
       "max_bytes": 1048576
     }
   ],
-  "grafana": [],
+  "grafana": [
+    {
+      "method": "GET",
+      "path": "/api/access-control/status",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/provisioning/mute-timings",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/provisioning/policies",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/provisioning/templates",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "granola": [],
   "greenhouse": [],
   "gridly": [],
@@ -11484,7 +11515,32 @@
   "partnerize": [],
   "partnerstack": [],
   "payfit": [],
-  "paypal-transaction": [],
+  "paypal-transaction": [
+    {
+      "method": "GET",
+      "path": "/v1/notifications/webhooks-event-types",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/notifications/webhooks-lookup",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/payment-experience/web-profiles",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/invoicing/accounting-sync/merchant/connections",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "paystack": [],
   "pendo": [],
   "pennylane": [],

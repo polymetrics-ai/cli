@@ -1,0 +1,60 @@
+{
+  "issue": 4289,
+  "connector": "grafana",
+  "source": {
+    "lock": "internal/connectors/defs/grafana/sources/grafana-operation-source-lock.json",
+    "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
+    "sha256": "8d54e6ceb1aeef72ef8fe31213eed910d82d264b0d8328b7e53670ce4c88b46c",
+    "bytes": 790237,
+    "operations": [
+      "grafana.rest.getHealth",
+      "grafana.rest.RouteGetMuteTimings",
+      "grafana.rest.RouteGetPolicyTree",
+      "grafana.rest.RouteGetTemplates"
+    ]
+  },
+  "binary": {
+    "path": ".fm-grafana-parameterless-proof-correct.PDi0kj/pm",
+    "sha256": "1aa9b35f15f70b25ed08be3c2e20f51e6c8842023d295094a23ad1071fca1ce0",
+    "build_command": "go build -o .fm-grafana-parameterless-proof-correct.PDi0kj/pm ./cmd/pm"
+  },
+  "proof": {
+    "credential_configuration": "none; each command ran from its own project initialized with pm init --root <project> --json",
+    "provider_requests": 0,
+    "expected_stderr": "error: missing --credential",
+    "commands": [
+      {
+        "path": "health get",
+        "exit_code": 1,
+        "stdout_bytes": 0,
+        "stderr": "error: missing --credential"
+      },
+      {
+        "path": "alerting provisioning mute timings list",
+        "exit_code": 1,
+        "stdout_bytes": 0,
+        "stderr": "error: missing --credential"
+      },
+      {
+        "path": "alerting provisioning policy get",
+        "exit_code": 1,
+        "stdout_bytes": 0,
+        "stderr": "error: missing --credential"
+      },
+      {
+        "path": "alerting provisioning templates list",
+        "exit_code": 1,
+        "stdout_bytes": 0,
+        "stderr": "error: missing --credential"
+      }
+    ],
+    "help_checks": [
+      "pm help grafana",
+      "pm grafana",
+      "pm grafana health get --help",
+      "pm grafana alerting provisioning mute timings list --help",
+      "pm grafana alerting provisioning policy get --help",
+      "pm grafana alerting provisioning templates list --help"
+    ]
+  }
+}

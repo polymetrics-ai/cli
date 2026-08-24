@@ -21,9 +21,9 @@
       "level": "complete",
       "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
     },
-    "enabled_operations": 0,
-    "enabled_percent": 0,
-    "disabled_operations": 314,
+    "enabled_operations": 5,
+    "enabled_percent": 2,
+    "disabled_operations": 309,
     "documented_deletes": 44,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -54,7 +54,7 @@
     ],
     "stream_bindings": 4,
     "writes_actions": 0,
-    "terminal_commands": 0,
+    "terminal_commands": 5,
     "live_certification": "pending",
     "gap_ids": [
       "generic-typed-destination-app-dispatch",
@@ -75,7 +75,7 @@
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 314
+        "count": 309
       }
     ],
     "reverse_etl_eligibility": {
@@ -115,7 +115,7 @@
     "declaration_pending": [
       {
         "id": "typed-operation-contract-grafana",
-        "count": 310
+        "count": 305
       },
       {
         "id": "sync-transport-source-definition-grafana",
@@ -460,15 +460,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/access-control/status",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
-          "notes": "classification=declaration-pending; source_id=grafana.rest.getAccessControlStatus; source_location=paths[\"/access-control/status\"].get"
+        "covered_by": {
+          "direct_read": "access control status get"
         }
       },
       "source": {
@@ -479,25 +472,19 @@
         "operation_id": "getAccessControlStatus",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-grafana",
-          "evidence": "internal/connectors/defs/grafana/api_surface.json: GET /api/access-control/status is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/grafana/operations.json: bounded rest_read operation grafana.access_control.status.get binds the pinned getAccessControlStatus route without request inputs."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/grafana/api_surface.json: GET /api/access-control/status is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-grafana",
-        "contract": null
+        "status": "enabled; runnable direct_read command \"access control status get\" binds the pinned provider operation",
+        "command": {
+          "path": "access control status get",
+          "intent": "direct_read",
+          "availability": "implemented"
+        }
       }
     },
     {
@@ -6611,15 +6598,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/health",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
-          "notes": "classification=declaration-pending; source_id=grafana.rest.getHealth; source_location=paths[\"/health\"].get"
+        "covered_by": {
+          "direct_read": "health get"
         }
       },
       "source": {
@@ -6630,25 +6610,18 @@
         "operation_id": "getHealth",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-grafana",
-          "evidence": "internal/connectors/defs/grafana/api_surface.json: GET /api/health is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/grafana/operations.json: grafana.health.get binds the source-pinned GET /api/health operation to the connector-local rest_read executor."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/grafana/api_surface.json: GET /api/health is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-grafana",
-        "contract": null
+        "status": "enabled; source-bound bounded rest_read contract and runnable command",
+        "contract": {
+          "operation": "grafana.health.get",
+          "command": "health get"
+        }
       }
     },
     {
@@ -13925,15 +13898,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/v1/provisioning/mute-timings",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
-          "notes": "classification=declaration-pending; source_id=grafana.rest.RouteGetMuteTimings; source_location=paths[\"/v1/provisioning/mute-timings\"].get"
+        "covered_by": {
+          "direct_read": "alerting provisioning mute timings list"
         }
       },
       "source": {
@@ -13944,25 +13910,18 @@
         "operation_id": "RouteGetMuteTimings",
         "deprecated": true
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-grafana",
-          "evidence": "internal/connectors/defs/grafana/api_surface.json: GET /api/v1/provisioning/mute-timings is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/grafana/operations.json: grafana.alerting.provisioning.mute_timings.list binds the source-pinned GET /api/v1/provisioning/mute-timings operation to the connector-local rest_read executor."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/grafana/api_surface.json: GET /api/v1/provisioning/mute-timings is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-grafana",
-        "contract": null
+        "status": "enabled; source-bound bounded rest_read contract and runnable command",
+        "contract": {
+          "operation": "grafana.alerting.provisioning.mute_timings.list",
+          "command": "alerting provisioning mute timings list"
+        }
       }
     },
     {
@@ -14301,15 +14260,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/v1/provisioning/policies",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
-          "notes": "classification=declaration-pending; source_id=grafana.rest.RouteGetPolicyTree; source_location=paths[\"/v1/provisioning/policies\"].get"
+        "covered_by": {
+          "direct_read": "alerting provisioning policy get"
         }
       },
       "source": {
@@ -14320,25 +14272,18 @@
         "operation_id": "RouteGetPolicyTree",
         "deprecated": true
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-grafana",
-          "evidence": "internal/connectors/defs/grafana/api_surface.json: GET /api/v1/provisioning/policies is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/grafana/operations.json: grafana.alerting.provisioning.policy.get binds the source-pinned GET /api/v1/provisioning/policies operation to the connector-local rest_read executor."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/grafana/api_surface.json: GET /api/v1/provisioning/policies is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-grafana",
-        "contract": null
+        "status": "enabled; source-bound bounded rest_read contract and runnable command",
+        "contract": {
+          "operation": "grafana.alerting.provisioning.policy.get",
+          "command": "alerting provisioning policy get"
+        }
       }
     },
     {
@@ -14442,15 +14387,8 @@
       "api_surface": {
         "method": "GET",
         "path": "/api/v1/provisioning/templates",
-        "covered_by": null,
-        "operation": {
-          "model": "direct_read",
-          "status": "blocked",
-          "risk": "medium",
-          "blocked_by_default": true,
-          "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-          "source_url": "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json",
-          "notes": "classification=declaration-pending; source_id=grafana.rest.RouteGetTemplates; source_location=paths[\"/v1/provisioning/templates\"].get"
+        "covered_by": {
+          "direct_read": "alerting provisioning templates list"
         }
       },
       "source": {
@@ -14461,25 +14399,18 @@
         "operation_id": "RouteGetTemplates",
         "deprecated": true
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "typed-operation-contract-grafana",
-          "evidence": "internal/connectors/defs/grafana/api_surface.json: GET /api/v1/provisioning/templates is source-bound but has no runnable connector-local typed contract.",
-          "minimal_change": "Derive a bounded connector-owned typed contract and runnable command/action from the pinned public source, or retain this explicit disabled disposition when the source shape is not executable."
-        }
+        "evidence": "internal/connectors/defs/grafana/operations.json: grafana.alerting.provisioning.templates.list binds the source-pinned GET /api/v1/provisioning/templates operation to the connector-local rest_read executor."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/grafana/api_surface.json: GET /api/v1/provisioning/templates is source-bound but has no runnable connector-local typed contract."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-grafana",
-        "contract": null
+        "status": "enabled; source-bound bounded rest_read contract and runnable command",
+        "contract": {
+          "operation": "grafana.alerting.provisioning.templates.list",
+          "command": "alerting provisioning templates list"
+        }
       }
     },
     {

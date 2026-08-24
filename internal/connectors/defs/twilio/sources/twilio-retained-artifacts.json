@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "twilio",
+  "artifacts": [
+    {
+      "sha256": "6b6ffccef14cd55fd6d2fd38c3fde68585e1937eead4c099a92c5efe696b882c",
+      "bytes": 1877530,
+      "source_url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+      "retrieved_at": "2026-08-24T11:56:04Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

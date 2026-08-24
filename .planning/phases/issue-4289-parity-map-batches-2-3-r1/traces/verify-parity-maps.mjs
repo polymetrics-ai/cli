@@ -28,20 +28,56 @@ function actionNames(row) {
   return [covered.write, ...(Array.isArray(covered.writes) ? covered.writes : [])].filter(Boolean);
 }
 
+function sourceOperationEntries(lock) {
+  const sourceDocuments = lock.rest?.source_documents;
+  if (Array.isArray(sourceDocuments)) {
+    return sourceDocuments.flatMap((document) => (Array.isArray(document.operations) ? document.operations : []).map((operation) => ({ operation, document })));
+  }
+  return Object.values(lock).flatMap((value) => (Array.isArray(value?.operations) ? value.operations : []).map((operation) => ({ operation, document: null })));
+}
+
+function sourceLockRecord(lock) {
+  const sourceDocuments = lock.rest?.source_documents;
+  if (Array.isArray(sourceDocuments)) {
+    return {
+      captured_at: lock.captured_at,
+      source_documents: sourceDocuments.map((document) => ({
+        id: document.id,
+        kind: document.kind,
+        source_url: document.artifact?.source_url ?? null,
+        bytes: document.artifact?.bytes ?? null,
+        sha256: document.artifact?.sha256 ?? null,
+        openapi: document.artifact?.openapi ?? null,
+      })),
+      verified: "captured public source metadata is complete; remote content is intentionally not refetched"
+    };
+  }
+  return {
+    source_url: lock.rest?.source_url,
+    captured_at: lock.captured_at,
+    bytes: lock.rest?.bytes,
+    sha256: lock.rest?.sha256,
+    verified: "captured public source metadata is complete; remote content is intentionally not refetched"
+  };
+}
+
 const checks = [];
 for (const connector of connectors) {
   const lock = await readJSON(file(connector, `${connector}-operation-source-lock.json`));
   const map = await readJSON(file(connector, `${connector}-declaration-disposition.json`));
   const surface = await readJSON(path.join(root, "internal", "connectors", "defs", connector, "api_surface.json"));
   const writes = await readJSON(path.join(root, "internal", "connectors", "defs", connector, "writes.json")).catch((error) => error.code === "ENOENT" ? { actions: [] } : Promise.reject(error));
-  const operations = Object.values(lock).flatMap((value) => Array.isArray(value?.operations) ? value.operations : []);
+  const sourceEntries = sourceOperationEntries(lock);
+  const operations = sourceEntries.map((entry) => entry.operation);
   const oldSurface = JSON.parse(execFileSync("git", ["show", `${baselineRevision}:internal/connectors/defs/${connector}/api_surface.json`], { encoding: "utf8" }));
   if (operations.length !== map.ledger_dispositions.length) throw new Error(`${connector}: source inventory ${operations.length} != disposition rows ${map.ledger_dispositions.length}`);
-  if (lock.counts?.total !== operations.length || lock.rest.counts?.total !== operations.length || lock.rest.counts?.by_kind?.rest !== operations.length || !lock.rest.coverage_confidence?.level || !lock.rest.coverage_confidence?.basis) throw new Error(`${connector}: source lock lacks root/rest counts.total, per-kind counts, or coverage confidence`);
+  const declaredRestCount = lock.rest?.counts?.by_kind?.rest ?? lock.rest?.counts?.total ?? lock.counts?.rest;
+  if (lock.counts?.total !== operations.length || declaredRestCount !== operations.length || !lock.rest?.coverage_confidence?.level || !lock.rest?.coverage_confidence?.basis) throw new Error(`${connector}: source lock lacks root/rest counts.total, per-kind counts, or coverage confidence`);
   if (map.source_basis.operations_found !== operations.length || map.summary.operations_found !== operations.length || !map.source_basis.coverage_confidence?.level || map.summary.coverage_confidence?.level !== lock.rest.coverage_confidence.level || "declared_percent" in map.summary) throw new Error(`${connector}: source accounting is self-referential or incomplete`);
   const surfaceKeys = new Set(surface.endpoints.map((endpoint) => `${endpoint.method.toUpperCase()} ${canonicalPath(endpoint.path)}`));
   for (const row of map.ledger_dispositions) {
-    const sourceOperation = operations.find((operation) => operation.id === row.source?.source_id && operation.source_location === row.source?.source_location && operation.source_url === row.source?.source_url);
+    const sourceEntry = sourceEntries.find(({ operation, document }) => operation.id === row.source?.source_id && operation.source_location === row.source?.source_location && (operation.citation_url ? operation.citation_url === row.source?.source_url : document?.kind === "bundle" || document?.artifact?.source_url === row.source?.source_url));
+    const sourceOperation = sourceEntry?.operation;
     for (const key of required) if (!(key in row)) throw new Error(`${connector}: ${row.method} ${row.path} missing ${key}`);
     if (!sourceOperation || sourceOperation.method !== row.method || sourceOperation.path !== row.path) throw new Error(`${connector}: ${row.method} ${row.path} is not the exact provider source operation for ${row.source?.source_id}`);
     if (!classes.has(row.parity_class)) throw new Error(`${connector}: ${row.method} ${row.path} has invalid parity class ${row.parity_class}`);
@@ -84,13 +120,7 @@ for (const connector of connectors) {
   // discovery documents reorder JSON keys and mutable documentation pages add
   // per-request markup, so refetching would compare a new source revision to
   // the pinned one rather than prove this map's provenance.
-  const sourceLock = {
-    source_url: lock.rest.source_url,
-    captured_at: lock.captured_at,
-    bytes: lock.rest.bytes,
-    sha256: lock.rest.sha256,
-    verified: "captured public source metadata is complete; remote content is intentionally not refetched"
-  };
+  const sourceLock = sourceLockRecord(lock);
   checks.push({
     connector,
     api_surface_counts: {

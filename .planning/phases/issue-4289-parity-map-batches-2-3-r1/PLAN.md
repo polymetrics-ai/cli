@@ -67,6 +67,155 @@ The decision is resolved: firstmate authorized the bounded capability and routed
 - A `foundation-gap` requires engine refusal file/line plus minimal change. A missing command, operation contract, CLI surface, or transport declaration is `declaration-pending`.
 - Endpoint classes are mutually exclusive: direct read, direct write (including delete), ETL, binary read, or binary write. `reverse_etl` is a connector-owned destination declaration and command surface, never an endpoint class. Until the updated #4304 foundation reaches this branch and the persisted App dispatch selects the generic destination, it is accurately reported as foundation-pending rather than deployable. ETL uses the merged source declaration contract and remains declaration-pending until connector-local source evidence exists.
 
+## Captain Reconciliation — 2026-08-24
+
+The current branch's machine-measured source inventory contains 5,127 locked
+provider operations: 592 have an installed `implemented` command and are
+already runnable to the missing-credential boundary; 4,535 are declarable now
+(4,453 unauthored rows plus 82 source-cited scalar-union commands); and zero
+currently have an evidenced missing engine capability. This is branch-local
+accounting: the current branch has 2,644 installed reverse-ETL commands across
+36 connectors, while merge base `060bb7864e` independently measures 2,191
+across 27. The different totals reflect concurrent declaration work, not a
+missing reverse-ETL foundation.
+
+The first conversion investigation covers the 82 existing source-cited
+`partial` reverse-ETL commands in Twilio (34), Xero (3), and GoCardless (45).
+The GoCardless fields are genuine `string|integer` unions and pass the existing
+declaration-owned JSON-field gate, so they remain a connector-local conversion
+candidate. The Twilio and Xero fields are each only `string|null`: their public
+sources are respectively
+`https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json`
+and `https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml`.
+The captain's diagnosis is confirmed: this is a shared materializer misrouting
+defect, not a missing structured-JSON capability. The materializer rejects a
+type list whose length is not one at
+`cmd/connectorgen/batch_materialize.go:1568-1570`; meanwhile
+`sourceProjectionFlagType` removes `null` and selects a normal scalar at
+`cmd/connectorgen/sourceprojection.go:2063-2088`, and static command validation
+admits a string when it is a declared schema arm at
+`cmd/connectorgen/validate.go:2112-2129`. The structured JSON validator
+correctly drops `null` and rejects the remaining scalar at
+`internal/connectors/engine/record_schema_promotion.go:165-176`; it is reached
+only because the materializer sends nullable scalars there. The 37 Twilio/Xero
+operations are therefore in the genuinely-blocked column pending a shared,
+provider-neutral materializer correction. This lane neither changes shared code
+nor adds a connector special case. Red proof is the current partial command
+block; the GoCardless green proof remains the same installed command reaching
+exactly `error: missing --credential` after connector-local flags and
+`availability: implemented` are declared. Every later operation remains
+connector-local. A provider body that proves unbounded or user-defined is moved
+to the genuinely-blocked ledger with its exact source citation and runtime
+refusal; it is never guessed or routed to a shared workaround.
+
+### Executed GoCardless Slice
+
+All 45 GoCardless `string|integer` partial commands now have one exact named
+`json` flag mapped to their required `record.<field>`, with the declared string
+arm accepted as ordinary CLI text. A fresh built `pm` binary invoked every one
+from a credential-free initialized project; all 45 returned exactly
+`error: missing --credential`. The durable command transcript is
+`evidence/gocardless-reverse-etl-command-proof-20260824.json`, and
+`TestEveryImplementedCommandPassesRuntimePreflight` passes. Progress is
+reported as **45 converted-and-proven**, **4,453 still declarable**, and **37
+genuinely blocked** (Twilio 34, Xero 3); the latter does not include GoCardless.
+Captain review also confirms that making `create a bank account holder
+verification apply` partial corrects an unshipped branch-local over-claim: the
+GoCardless CLI surface does not exist on `origin/main`, and this branch first
+introduced the command as implemented. This is therefore a correction to the
+truth, not a downgrade of a shipped credential-bound command.
+
+### GoCardless Validation Attribution
+
+The current GoCardless validator finding is
+`sources/gocardless-operation-descriptor.json: canonical source descriptor is
+missing`. It is **not** caused by the 45-command conversion: replacing the
+current `cli_surface.json` with its pre-conversion `HEAD` content against the
+same v3 source lock produces the identical finding. The branch merge base
+`db289265354bcc7370bcc79a572f022a5668571c` validates clean because it retains
+the legacy v2 lock, which did not require a canonical descriptor; it is not
+evidence that this v3-source-lock finding was introduced by the conversion.
+
+The authorized v3 mapping correction classified GoCardless's retained public
+`openapi-schema-public.json` artifact as `openapi` version `3.0.0` and added it
+to the aggregate OpenAPI inventory. Offline source import then reached the
+provider's exact terminal grammar limit at
+`/bank_account_holder_verifications` `POST`: its `application/json` request
+schema has dynamic unbounded `additionalProperties`. No schema was invented,
+no engine code was changed, and the descriptor remains absent until that
+operation's precise bounded declaration disposition is resolved.
+
+### Unbounded Dynamic-Body Pattern
+
+GoCardless `POST /bank_account_holder_verifications` is a genuinely blocked
+source operation under `declaration-bound-unbounded-dynamic-body`, not a
+partial or invented typed-body declaration. Its public OpenAPI citation is
+`paths["/bank_account_holder_verifications"].post` in
+`https://developer.gocardless.com/openapi-schema-public.json`; offline import
+refuses its unbounded dynamic `additionalProperties` request object and the
+closed-body runtime refuses the same shape at
+`internal/connectors/engine/structured_rest_body.go:1442-1443`. The existing
+open-schema action's CLI command is explicitly `partial`, and the source row
+carries that exact foundation evidence. This is the captain-owned common
+pattern also observed for Asana, Zoom, and Docker Hub SCIM writes. Reuse this
+named pattern and its citation discipline for later occurrences; do not invent
+a schema, a tag workaround, or a raw/open request body.
+
+### PayPal Zero-Input Direct-Read Slice
+
+The retained PayPal OpenAPI bundle has four JSON GET operations with no
+path-item or operation parameters. They are a separate connector-local read
+slice: each can be declared without inventing a request schema, using the
+direct-read executor's 1 MiB default response cap and `json_redacted` output.
+The existing 80 PayPal source-projection findings are missing mutation actions
+and must remain independently visible; they do not justify withholding these
+faithfully representable read routes.
+
+The slice is now **4 converted-and-proven**: every installed command passed
+runtime preflight and reached exactly `error: missing --credential` from its
+own initialized, credential-free project. Its source descriptor has no
+remaining gap for those four source IDs; the separate PayPal mutation-action
+hold remains explicit and unchanged.
+
+### Grafana Access-Control Status Direct-Read Slice
+
+The pinned Grafana OpenAPI source declaration records
+`getAccessControlStatus`: a parameterless JSON `GET
+/access-control/status` with a `200` response. The source-ledger row is already
+bound to `/api/access-control/status` but remains `declaration-pending` solely
+because Grafana has no connector-owned `rest_read` operation or executable CLI
+command. This one-command slice adds only the bounded 1 MiB `json_redacted`
+read contract and its exact source/API-surface/CLI bindings. It does not alter
+the source lock, invent parameters or schemas, or change a write/ETL/binary
+surface. Green proof is runtime preflight plus a fresh credential-free installed
+binary result of exactly `error: missing --credential`.
+
+### Grafana Parameterless JSON Direct-Read Slice
+
+The same pinned Grafana OpenAPI artifact declares four additional exact,
+parameterless JSON GET operations: `getHealth` at `/health`,
+`RouteGetMuteTimings` at `/v1/provisioning/mute-timings`,
+`RouteGetPolicyTree` at `/v1/provisioning/policies`, and `RouteGetTemplates` at
+`/v1/provisioning/templates`. Their source rows and canonical API-surface
+endpoints are present but declaration-pending. The connector-local slice adds
+only bounded 1 MiB `json_redacted` direct-read contracts and source-bound
+commands. It does not alter the stream-backed alert-rules ETL row, source
+locks, schemas, pagination, writes, or shared engine code. Each installed
+command must reach exactly `error: missing --credential` from a fresh
+credential-free project.
+
+## Captain Delivery Discipline — 2026-08-24
+
+The 4,535-operation declarable-now inventory is planning input, not delivered
+surface. A conversion is credited only after its built `pm` binary invocation
+reaches exactly `error: missing --credential` from an isolated project with no
+credential configured. Each reviewable connector-local batch records
+`converted-and-proven` separately from `still-declarable`; it must never report
+their sum as executable reachability. If an action cannot be expressed from its
+exact provider schema, record its source citation and precise runtime refusal
+immediately, move it from declarable to engine-blocked, and stop rather than
+adding shared code or a connector-specific engine branch.
+
 ## Planned Gates and Checkpoints
 
 1. Source/artifact capture and local source-lock/disposition integrity assertion for batch 2.

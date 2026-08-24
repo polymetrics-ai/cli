@@ -59,6 +59,23 @@ SECURITY
   approval: none; read-only, no reverse-ETL write surface
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Read declared PayPal Transaction streams and bounded PayPal REST resources.
+  Usage: pm paypal-transaction <command> [flags]
+  Source CLI: PayPal REST API (https://github.com/paypal/paypal-rest-api-specifications)
+  Global flags:
+    --credential (string): Named PayPal credential; secrets are loaded from the credential store.
+    --json (boolean): Emit machine-readable JSON output.
+    --max-bytes (integer): Clamp direct-read response size; these operations are capped at 1 MiB.
+  PayPal Invoicing direct reads
+  PayPal webhook direct reads
+  PayPal payment-experience direct reads
+  Other Commands
+    invoicing connections list - List PayPal invoicing accounting-sync merchant connections. [intent=direct_read availability=implemented operation=paypal-transaction.invoicing.connections.get]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    webhooks lookup list - List PayPal webhook lookups. [intent=direct_read availability=implemented operation=paypal-transaction.webhooks.lookup.list]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    webhooks event-types list - List PayPal webhook event types. [intent=direct_read availability=implemented operation=paypal-transaction.webhooks.event-types.list]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+    web-profiles list - List PayPal payment-experience web profiles. [intent=direct_read availability=implemented operation=paypal-transaction.web-profiles.list]; approval: none; risk: bounded read; the response is capped at 1 MiB and redacted before JSON output; flags: --page, --page-cursor
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect paypal-transaction

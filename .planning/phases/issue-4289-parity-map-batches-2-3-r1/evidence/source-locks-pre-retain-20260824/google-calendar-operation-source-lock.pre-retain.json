@@ -1,0 +1,420 @@
+{
+  "schema_version": 3,
+  "connector": "google-calendar",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "rest": {
+    "retrieval": "schema-v2 source-lock migration retaining hash-pinned provider artifacts",
+    "openapi": [],
+    "coverage_confidence": {
+      "level": "complete",
+      "basis": "provider-published machine-readable OpenAPI, Swagger, Discovery, or service-model document"
+    },
+    "source_documents": [
+      {
+        "id": "source",
+        "kind": "rendered_reference",
+        "artifact": {
+          "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+          "sha256": "55537f18631fa45e5458c46b0c9a6f9cc288f38a8f4657ebc2bca87b0874be49",
+          "bytes": 169810
+        },
+        "published_source": {
+          "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+          "capture_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+          "sha256": "55537f18631fa45e5458c46b0c9a6f9cc288f38a8f4657ebc2bca87b0874be49",
+          "bytes": 169810,
+          "adapter": "legacy-v2-source-lock-migration-v1"
+        },
+        "operations": [
+          {
+            "id": "google-calendar.rest.calendar.colors.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calendar/v3/colors",
+            "operation_id": "calendar.colors.get",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.colors.get\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.events.instances",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/instances",
+            "operation_id": "calendar.events.instances",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.events.instances\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.events.patch",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+            "operation_id": "calendar.events.patch",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.events.patch\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.events.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+            "operation_id": "calendar.events.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.events.delete\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.events.quickAdd",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/calendars/{calendarId}/events/quickAdd",
+            "operation_id": "calendar.events.quickAdd",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.events.quickAdd\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.events.insert",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/calendars/{calendarId}/events",
+            "operation_id": "calendar.events.insert",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.events.insert\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.events.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+            "operation_id": "calendar.events.get",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.events.get\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.events.move",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/move",
+            "operation_id": "calendar.events.move",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.events.move\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.events.update",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+            "operation_id": "calendar.events.update",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.events.update\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.events.watch",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/calendars/{calendarId}/events/watch",
+            "operation_id": "calendar.events.watch",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.events.watch\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.events.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calendar/v3/calendars/{calendarId}/events",
+            "operation_id": "calendar.events.list",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.events.list\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.events.import",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/calendars/{calendarId}/events/import",
+            "operation_id": "calendar.events.import",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.events.import\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendars.patch",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/calendar/v3/calendars/{calendarId}",
+            "operation_id": "calendar.calendars.patch",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendars.patch\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendars.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calendar/v3/calendars/{calendarId}",
+            "operation_id": "calendar.calendars.get",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendars.get\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendars.update",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/calendar/v3/calendars/{calendarId}",
+            "operation_id": "calendar.calendars.update",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendars.update\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendars.transferOwnership",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/calendars/{calendarId}/transferOwnership",
+            "operation_id": "calendar.calendars.transferOwnership",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendars.transferOwnership\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendars.insert",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/calendars",
+            "operation_id": "calendar.calendars.insert",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendars.insert\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendars.clear",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/calendars/{calendarId}/clear",
+            "operation_id": "calendar.calendars.clear",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendars.clear\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendars.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/calendar/v3/calendars/{calendarId}",
+            "operation_id": "calendar.calendars.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendars.delete\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.freebusy.query",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/freeBusy",
+            "operation_id": "calendar.freebusy.query",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.freebusy.query\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.channels.stop",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/channels/stop",
+            "operation_id": "calendar.channels.stop",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.channels.stop\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.settings.watch",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/users/me/settings/watch",
+            "operation_id": "calendar.settings.watch",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.settings.watch\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.settings.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calendar/v3/users/me/settings",
+            "operation_id": "calendar.settings.list",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.settings.list\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.settings.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calendar/v3/users/me/settings/{setting}",
+            "operation_id": "calendar.settings.get",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.settings.get\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.acl.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+            "operation_id": "calendar.acl.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.acl.delete\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.acl.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calendar/v3/calendars/{calendarId}/acl",
+            "operation_id": "calendar.acl.list",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.acl.list\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.acl.insert",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/calendars/{calendarId}/acl",
+            "operation_id": "calendar.acl.insert",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.acl.insert\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.acl.patch",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+            "operation_id": "calendar.acl.patch",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.acl.patch\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.acl.watch",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/calendars/{calendarId}/acl/watch",
+            "operation_id": "calendar.acl.watch",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.acl.watch\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.acl.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+            "operation_id": "calendar.acl.get",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.acl.get\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.acl.update",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+            "operation_id": "calendar.acl.update",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.acl.update\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendarList.delete",
+            "protocol": "rest",
+            "method": "DELETE",
+            "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+            "operation_id": "calendar.calendarList.delete",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendarList.delete\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendarList.list",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calendar/v3/users/me/calendarList",
+            "operation_id": "calendar.calendarList.list",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendarList.list\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendarList.insert",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/users/me/calendarList",
+            "operation_id": "calendar.calendarList.insert",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendarList.insert\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendarList.get",
+            "protocol": "rest",
+            "method": "GET",
+            "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+            "operation_id": "calendar.calendarList.get",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendarList.get\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendarList.update",
+            "protocol": "rest",
+            "method": "PUT",
+            "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+            "operation_id": "calendar.calendarList.update",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendarList.update\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendarList.patch",
+            "protocol": "rest",
+            "method": "PATCH",
+            "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+            "operation_id": "calendar.calendarList.patch",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendarList.patch\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          },
+          {
+            "id": "google-calendar.rest.calendar.calendarList.watch",
+            "protocol": "rest",
+            "method": "POST",
+            "path": "/calendar/v3/users/me/calendarList/watch",
+            "operation_id": "calendar.calendarList.watch",
+            "deprecated": false,
+            "source_location": "discovery method \"calendar.calendarList.watch\"",
+            "citation_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+          }
+        ],
+        "content_type": "application/json"
+      }
+    ]
+  },
+  "counts": {
+    "rest": 38,
+    "graphql_query": 0,
+    "graphql_mutation": 0,
+    "total": 38
+  }
+}

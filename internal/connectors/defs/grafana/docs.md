@@ -5,6 +5,8 @@ through the Grafana REST API (read-only).
 
 Readable streams: `dashboards`, `folders`, `datasources`, `org_users`, `alert_rules`.
 
+Bounded direct reads: `pm grafana access control status get --credential <name> --json`.
+
 This connector is read-only; no write actions are declared.
 
 ## Auth setup
@@ -51,6 +53,6 @@ folders, data sources, org users, and alert rules.
 ## Known limits
 
 - Batch defaults: read_page_size=1000.
-- API coverage includes 5 stream-backed endpoint group(s).
+- API coverage includes 5 stream-backed endpoint group(s) and the bounded access-control status direct read.
 - Other documented endpoints are not exposed by this connector where they are classified as
   out_of_scope=6.

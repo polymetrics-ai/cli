@@ -932,14 +932,8 @@
     {
       "method": "GET",
       "path": "/v2/invoicing/accounting-sync/merchant/connections",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/invoicing_v2.json",
-        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.invoicing.v2.json.21; source_location=openapi/invoicing_v2.json:paths[\"/v2/invoicing/accounting-sync/merchant/connections\"].get"
+      "covered_by": {
+        "direct_read": "invoicing connections list"
       }
     },
     {
@@ -1049,14 +1043,8 @@
     {
       "method": "GET",
       "path": "/v1/notifications/webhooks-lookup",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
-        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.8; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-lookup\"].get"
+      "covered_by": {
+        "direct_read": "webhooks lookup list"
       }
     },
     {
@@ -1101,14 +1089,8 @@
     {
       "method": "GET",
       "path": "/v1/notifications/webhooks-event-types",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/notifications_webhooks_v1.json",
-        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.notifications.webhooks.v1.json.12; source_location=openapi/notifications_webhooks_v1.json:paths[\"/v1/notifications/webhooks-event-types\"].get"
+      "covered_by": {
+        "direct_read": "webhooks event-types list"
       }
     },
     {
@@ -1179,14 +1161,8 @@
     {
       "method": "GET",
       "path": "/v1/payment-experience/web-profiles",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/paypal/paypal-rest-api-specifications/main/openapi/payment-experience_web_experience_profiles_v1.json",
-        "notes": "classification=declaration-pending; source_id=paypal-transaction.rest.openapi.payment.experience.web.experience.profiles.v1.json.2; source_location=openapi/payment-experience_web_experience_profiles_v1.json:paths[\"/v1/payment-experience/web-profiles\"].get"
+      "covered_by": {
+        "direct_read": "web-profiles list"
       }
     },
     {

@@ -1,0 +1,371 @@
+{
+  "connector": "gocardless",
+  "binary": "/tmp/cli-map-batch23-gocardless.Ai6WC4/pm",
+  "project": "/tmp/cli-map-batch23-gocardless.Ai6WC4/project",
+  "expected": "error: missing --credential",
+  "total": 45,
+  "proven": 45,
+  "failures": [],
+  "results": [
+    {
+      "path": "approve an outbound payment apply",
+      "write": "approve_an_outbound_payment",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "cancel a billing request apply",
+      "write": "cancel_a_billing_request",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "cancel a mandate apply",
+      "write": "cancel_a_mandate",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "cancel a mandate import apply",
+      "write": "cancel_a_mandate_import",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "cancel a payment apply",
+      "write": "cancel_a_payment",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "cancel a subscription apply",
+      "write": "cancel_a_subscription",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "cancel an instalment schedule apply",
+      "write": "cancel_an_instalment_schedule",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "cancel an outbound payment apply",
+      "write": "cancel_an_outbound_payment",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "change currency apply",
+      "write": "change_currency",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "collect bank account details apply",
+      "write": "collect_bank_account_details",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "collect customer details apply",
+      "write": "collect_customer_details",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "complete a redirect flow apply",
+      "write": "complete_a_redirect_flow",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "confirm a payer authorisation apply",
+      "write": "confirm_a_payer_authorisation",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "confirm the payer details apply",
+      "write": "confirm_the_payer_details",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "disable a block apply",
+      "write": "disable_a_block",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "disable a creditor bank account apply",
+      "write": "disable_a_creditor_bank_account",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "disable a customer bank account apply",
+      "write": "disable_a_customer_bank_account",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "enable a block apply",
+      "write": "enable_a_block",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "fulfil a billing request apply",
+      "write": "fulfil_a_billing_request",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "handle a notification apply",
+      "write": "handle_a_notification",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "initialise a billing request flow apply",
+      "write": "initialise_a_billing_request_flow",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "notify the customer apply",
+      "write": "notify_the_customer",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "pause a subscription apply",
+      "write": "pause_a_subscription",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "reinstate a mandate apply",
+      "write": "reinstate_a_mandate",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "remove a customer apply",
+      "write": "remove_a_customer",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "resume a subscription apply",
+      "write": "resume_a_subscription",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "retry a payment apply",
+      "write": "retry_a_payment",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "retry a webhook apply",
+      "write": "retry_a_webhook",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "select institution for a billing request apply",
+      "write": "select_institution_for_a_billing_request",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "simulate a scenario apply",
+      "write": "simulate_a_scenario",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "submit a mandate import apply",
+      "write": "submit_a_mandate_import",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "submit a payer authorisation apply",
+      "write": "submit_a_payer_authorisation",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "trigger fallback apply",
+      "write": "trigger_fallback",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "update a billing request template apply",
+      "write": "update_a_billing_request_template",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "update a creditor apply",
+      "write": "update_a_creditor",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "update a customer apply",
+      "write": "update_a_customer",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "update a customer bank account apply",
+      "write": "update_a_customer_bank_account",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "update a mandate apply",
+      "write": "update_a_mandate",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "update a payer authorisation apply",
+      "write": "update_a_payer_authorisation",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "update a payment apply",
+      "write": "update_a_payment",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "update a payout apply",
+      "write": "update_a_payout",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "update a refund apply",
+      "write": "update_a_refund",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "update a subscription apply",
+      "write": "update_a_subscription",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "update an instalment schedule apply",
+      "write": "update_an_instalment_schedule",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    },
+    {
+      "path": "update an outbound payment apply",
+      "write": "update_an_outbound_payment",
+      "status": 1,
+      "signal": null,
+      "output": "error: missing --credential",
+      "proven": true
+    }
+  ]
+}

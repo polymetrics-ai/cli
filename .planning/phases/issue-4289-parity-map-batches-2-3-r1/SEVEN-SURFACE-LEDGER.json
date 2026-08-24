@@ -8,20 +8,20 @@
       "source_trace": {
         "pinned": 5127,
         "missing": 0,
-        "version_not_published": 2933
+        "version_not_published": 4885
       },
       "canonical_mapping": {
         "mapped": 5127,
         "missing": 0
       },
       "primary_runtime_reachability": {
-        "declaration-pending": 5086,
-        "implemented": 41
+        "declaration-pending": 5077,
+        "implemented": 50
       },
       "generated_cli_command": {
-        "declaration-pending": 4453,
-        "implemented": 592,
-        "partial": 82
+        "declaration-pending": 4432,
+        "implemented": 656,
+        "partial": 39
       },
       "website_row": {
         "declaration-pending": 5127
@@ -57,14 +57,14 @@
       "represented": {
         "binary_download": 0,
         "binary_upload": 0,
-        "direct_read": 0,
+        "direct_read": 5,
         "direct_write": 0,
         "etl": 0
       },
       "missing": {
         "binary_download": 0,
         "binary_upload": 0,
-        "direct_read": 139,
+        "direct_read": 134,
         "direct_write": 171,
         "etl": 4
       },
@@ -81,23 +81,25 @@
         "orphan_installed_command_actions": 0,
         "application_dispatch": "not-applicable"
       },
-      "executable_commands": 0,
+      "executable_commands": 5,
       "captain_premerge_gate": {
         "provider_operations": 314,
         "source_trace": {
           "pinned": 314,
           "missing": 0,
-          "version_not_published": 0
+          "version_not_published": 314
         },
         "canonical_mapping": {
           "mapped": 314,
           "missing": 0
         },
         "primary_runtime_reachability": {
-          "declaration-pending": 314
+          "declaration-pending": 309,
+          "implemented": 5
         },
         "generated_cli_command": {
-          "declaration-pending": 314
+          "declaration-pending": 309,
+          "implemented": 5
         },
         "website_row": {
           "declaration-pending": 314
@@ -143,7 +145,7 @@
         "source_trace": {
           "pinned": 261,
           "missing": 0,
-          "version_not_published": 0
+          "version_not_published": 261
         },
         "canonical_mapping": {
           "mapped": 261,
@@ -199,7 +201,7 @@
         "source_trace": {
           "pinned": 174,
           "missing": 0,
-          "version_not_published": 0
+          "version_not_published": 174
         },
         "canonical_mapping": {
           "mapped": 174,
@@ -257,7 +259,7 @@
         "source_trace": {
           "pinned": 100,
           "missing": 0,
-          "version_not_published": 0
+          "version_not_published": 100
         },
         "canonical_mapping": {
           "mapped": 100,
@@ -316,7 +318,7 @@
         "source_trace": {
           "pinned": 38,
           "missing": 0,
-          "version_not_published": 0
+          "version_not_published": 38
         },
         "canonical_mapping": {
           "mapped": 38,
@@ -369,7 +371,7 @@
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 66,
+      "executable_commands": 65,
       "captain_premerge_gate": {
         "provider_operations": 79,
         "source_trace": {
@@ -386,7 +388,8 @@
         },
         "generated_cli_command": {
           "declaration-pending": 60,
-          "implemented": 19
+          "implemented": 18,
+          "partial": 1
         },
         "website_row": {
           "declaration-pending": 79
@@ -434,7 +437,7 @@
         "source_trace": {
           "pinned": 197,
           "missing": 0,
-          "version_not_published": 0
+          "version_not_published": 197
         },
         "canonical_mapping": {
           "mapped": 197,
@@ -494,7 +497,7 @@
         "source_trace": {
           "pinned": 23,
           "missing": 0,
-          "version_not_published": 0
+          "version_not_published": 23
         },
         "canonical_mapping": {
           "mapped": 23,
@@ -552,7 +555,7 @@
         "source_trace": {
           "pinned": 845,
           "missing": 0,
-          "version_not_published": 0
+          "version_not_published": 845
         },
         "canonical_mapping": {
           "mapped": 845,
@@ -651,20 +654,20 @@
       },
       "reverse_etl": {
         "declaration": "missing",
-        "eligible_actions": 7,
+        "eligible_actions": 104,
         "bound_actions": 0,
-        "missing_actions": 7,
-        "source_input_bindings_pending": 7,
+        "missing_actions": 104,
+        "source_input_bindings_pending": 104,
         "installed_command_actions": 7,
         "implemented_installed_command_actions": 7,
         "partial_installed_command_actions": 0,
-        "missing_installed_command_actions": 0,
+        "missing_installed_command_actions": 97,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 28,
+      "executable_commands": 40,
       "captain_premerge_gate": {
         "provider_operations": 163,
         "source_trace": {
@@ -681,8 +684,8 @@
           "implemented": 21
         },
         "generated_cli_command": {
-          "declaration-pending": 135,
-          "implemented": 28
+          "implemented": 40,
+          "declaration-pending": 123
         },
         "website_row": {
           "declaration-pending": 163
@@ -932,14 +935,14 @@
       "represented": {
         "binary_download": 0,
         "binary_upload": 0,
-        "direct_read": 0,
+        "direct_read": 4,
         "direct_write": 0,
         "etl": 0
       },
       "missing": {
         "binary_download": 0,
         "binary_upload": 0,
-        "direct_read": 34,
+        "direct_read": 30,
         "direct_write": 77,
         "etl": 4
       },
@@ -956,7 +959,7 @@
         "orphan_installed_command_actions": 0,
         "application_dispatch": "not-applicable"
       },
-      "executable_commands": 0,
+      "executable_commands": 4,
       "captain_premerge_gate": {
         "provider_operations": 115,
         "source_trace": {
@@ -969,10 +972,12 @@
           "missing": 0
         },
         "primary_runtime_reachability": {
-          "declaration-pending": 115
+          "declaration-pending": 111,
+          "implemented": 4
         },
         "generated_cli_command": {
-          "declaration-pending": 115
+          "declaration-pending": 111,
+          "implemented": 4
         },
         "website_row": {
           "declaration-pending": 115
@@ -1006,15 +1011,15 @@
         "missing_actions": 76,
         "source_input_bindings_pending": 76,
         "installed_command_actions": 75,
-        "implemented_installed_command_actions": 30,
-        "partial_installed_command_actions": 45,
+        "implemented_installed_command_actions": 74,
+        "partial_installed_command_actions": 1,
         "missing_installed_command_actions": 1,
         "duplicate_installed_command_actions": 0,
         "orphan_installed_command_actions": 0,
         "application_dispatch": "foundation-pending",
         "action_selection": "foundation-pending"
       },
-      "executable_commands": 30,
+      "executable_commands": 74,
       "captain_premerge_gate": {
         "provider_operations": 137,
         "source_trace": {
@@ -1031,8 +1036,8 @@
         },
         "generated_cli_command": {
           "declaration-pending": 62,
-          "implemented": 30,
-          "partial": 45
+          "partial": 1,
+          "implemented": 74
         },
         "website_row": {
           "declaration-pending": 137

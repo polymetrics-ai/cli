@@ -139,6 +139,12 @@ function collectSourceArtifacts(value, output = []) {
   return output;
 }
 
+function sourceDocumentForRow(lock, row) {
+  const sourceDocuments = lock.rest?.source_documents;
+  if (!Array.isArray(sourceDocuments)) return null;
+  return sourceDocuments.find((document) => (Array.isArray(document.operations) ? document.operations : []).some((operation) => operation.id === row.source?.source_id && operation.source_location === row.source?.source_location && (!operation.citation_url || operation.citation_url === row.source?.source_url)));
+}
+
 function versionFromURL(sourceURL) {
   try {
     const url = new URL(sourceURL);
@@ -151,10 +157,17 @@ function versionFromURL(sourceURL) {
 function sourceTrace(lock, row) {
   const lockRoot = lock.rest ?? lock;
   const artifacts = collectSourceArtifacts(lockRoot);
+  const sourceDocument = sourceDocumentForRow(lock, row);
+  const documentArtifact = sourceDocument?.artifact ? {
+    source_url: sourceDocument.artifact.source_url ?? null,
+    sha256: sourceDocument.artifact.sha256 ?? null,
+    document_version: sourceDocument.artifact.info_version ?? sourceDocument.artifact.version ?? sourceDocument.artifact.api_version ?? sourceDocument.artifact.source_version ?? null,
+    format_version: sourceDocument.artifact.openapi ?? sourceDocument.artifact.format ?? null,
+  } : null;
   const exact = artifacts.filter((artifact) => artifact.source_url === row.source.source_url);
   const rootArtifact = artifacts.find((artifact) => artifact.source_url === lockRoot.source_url) ?? null;
-  const hashed = exact.find((artifact) => artifact.sha256) ?? rootArtifact;
-  const version = exact.find((artifact) => artifact.document_version)?.document_version ??
+  const hashed = documentArtifact?.sha256 ? documentArtifact : exact.find((artifact) => artifact.sha256) ?? rootArtifact;
+  const version = documentArtifact?.document_version ?? exact.find((artifact) => artifact.document_version)?.document_version ??
     rootArtifact?.document_version ??
     versionFromURL(row.source.source_url);
   return {
@@ -166,7 +179,7 @@ function sourceTrace(lock, row) {
     sha256: hashed?.sha256 ?? null,
     document_version: version ?? null,
     version_status: version ? "published" : "not-published-in-pinned-source",
-    format_version: exact.find((artifact) => artifact.format_version)?.format_version ?? rootArtifact?.format_version ?? null,
+    format_version: documentArtifact?.format_version ?? exact.find((artifact) => artifact.format_version)?.format_version ?? rootArtifact?.format_version ?? null,
   };
 }
 
