@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_dashboards_fixture_id",
+    "pageLayoutId": "pageLayoutId_fixture_1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/dashboards/update_dashboards_fixture_id",
+    "body": {
+      "pageLayoutId": "pageLayoutId_fixture_1"
+    }
+  }
+}

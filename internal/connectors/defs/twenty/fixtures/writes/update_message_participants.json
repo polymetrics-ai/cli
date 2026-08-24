@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_message_participants_fixture_id",
+    "displayName": "Fixture displayName 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/messageParticipants/update_message_participants_fixture_id",
+    "body": {
+      "displayName": "Fixture displayName 1"
+    }
+  }
+}
