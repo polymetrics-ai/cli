@@ -519,6 +519,7 @@ type sourceOperationDescriptor struct {
 	Protocol            string                            `json:"protocol,omitempty"`
 	SourceID            string                            `json:"source_id"`
 	ProviderOperationID string                            `json:"operation_id"`
+	Summary             string                            `json:"summary,omitempty"`
 	Source              sourceImportSource                `json:"source"`
 	Method              string                            `json:"method"`
 	Path                string                            `json:"path"`
@@ -6097,6 +6098,14 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 			return sourceOperationDescriptor{}, fmt.Errorf("%s.operationId must be a string", location)
 		}
 	}
+	summary := ""
+	if rawSummary, declared := operation["summary"]; declared {
+		var ok bool
+		summary, ok = rawSummary.(string)
+		if !ok {
+			return sourceOperationDescriptor{}, fmt.Errorf("%s.summary must be a string", location)
+		}
+	}
 	sourceID := providerID
 	if sourceID == "" {
 		sourceID = fmt.Sprintf("%s.rest.%s_%s", lock.Connector, method, path)
@@ -6171,6 +6180,7 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 		Protocol:            "rest",
 		SourceID:            sourceID,
 		ProviderOperationID: providerID,
+		Summary:             summary,
 		Source:              sourceImportProvenance(documentContext, form, location),
 		Method:              method,
 		Path:                path,

@@ -451,6 +451,42 @@ func TestSourceProjectionRequiresExplicitReadOnlyNonMutationDeclaration(t *testi
 	}
 }
 
+func TestSourceProjectionClassifiesSemanticPOSTOperations(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name      string
+		operation sourceOperationDescriptor
+		mutates   bool
+	}{
+		{
+			name: "search is a read",
+			operation: sourceOperationDescriptor{
+				Method:  "POST",
+				Path:    "/widgets/search",
+				Summary: "Search widgets",
+			},
+			mutates: false,
+		},
+		{
+			name: "create remains a mutation",
+			operation: sourceOperationDescriptor{
+				Method:  "POST",
+				Path:    "/widgets",
+				Summary: "Create widget",
+			},
+			mutates: true,
+		},
+	}
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			if got := sourceProjectionOperationMutates(test.operation); got != test.mutates {
+				t.Fatalf("sourceProjectionOperationMutates(%s %s, %q) = %t, want %t", test.operation.Method, test.operation.Path, test.operation.Summary, got, test.mutates)
+			}
+		})
+	}
+}
+
 func TestSourceProjectionRequiresReachableRESTReadOrConcreteGap(t *testing.T) {
 	source := sourceOperationDescriptor{
 		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/widgets",
@@ -1374,7 +1410,7 @@ func TestInstalledReverseActions_RequiredFieldRemovalFailsBeforeIO(t *testing.T)
 	}
 	removed := false
 	for _, operation := range descriptor.Operations {
-		if operation.Protocol == "graphql" || !sourceProjectionMutationMethod(operation.Method) || sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
+		if operation.Protocol == "graphql" || !sourceProjectionOperationMutates(operation) || sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
 			continue
 		}
 		for index := range bundle.Writes {

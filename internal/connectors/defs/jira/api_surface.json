@@ -468,10 +468,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/config/fieldschemes/projects",
-      "covered_by": {
-        "direct_reads": [
-          "config get-projects-with-field-schemes"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getProjectsWithFieldSchemes has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectsWithFieldSchemes"
       }
     },
     {
@@ -1277,10 +1280,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/fieldconfigurationscheme/project",
-      "covered_by": {
-        "direct_reads": [
-          "fieldconfigurationscheme get-field-configuration-scheme-project-mapping"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getFieldConfigurationSchemeProjectMapping has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getFieldConfigurationSchemeProjectMapping"
       }
     },
     {
@@ -1641,10 +1647,13 @@
     {
       "method": "POST",
       "path": "/rest/api/3/issue/bulkfetch",
-      "covered_by": {
-        "direct_reads": [
-          "issue bulk-fetch-issues"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bulkFetchIssues has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bulkFetchIssues"
       }
     },
     {
@@ -1767,10 +1776,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/issue/{issueIdOrKey}",
-      "covered_by": {
-        "direct_reads": [
-          "issue get-issue"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getIssue has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getIssue"
       }
     },
     {
@@ -2534,10 +2546,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/issuetypescheme/project",
-      "covered_by": {
-        "direct_reads": [
-          "issuetypescheme get-issue-type-scheme-for-projects"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getIssueTypeSchemeForProjects has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getIssueTypeSchemeForProjects"
       }
     },
     {
@@ -2624,10 +2639,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/issuetypescreenscheme/project",
-      "covered_by": {
-        "direct_reads": [
-          "issuetypescreenscheme get-issue-type-screen-scheme-project-associations"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getIssueTypeScreenSchemeProjectAssociations has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getIssueTypeScreenSchemeProjectAssociations"
       }
     },
     {
@@ -2880,10 +2898,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/notificationscheme",
-      "covered_by": {
-        "direct_reads": [
-          "notificationscheme get-notification-schemes"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getNotificationSchemes has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getNotificationSchemes"
       }
     },
     {
@@ -2907,10 +2928,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/notificationscheme/{id}",
-      "covered_by": {
-        "direct_reads": [
-          "notificationscheme get-notification-scheme"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getNotificationScheme has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getNotificationScheme"
       }
     },
     {
@@ -3798,10 +3822,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/project/{projectKeyOrId}/notificationscheme",
-      "covered_by": {
-        "direct_reads": [
-          "project get-notification-scheme-for-project"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getNotificationSchemeForProject has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getNotificationSchemeForProject"
       }
     },
     {
@@ -3879,10 +3906,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/projects/fields",
-      "covered_by": {
-        "direct_reads": [
-          "projects get-project-fields"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getProjectFields has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getProjectFields"
       }
     },
     {
@@ -4291,19 +4321,25 @@
     {
       "method": "GET",
       "path": "/rest/api/3/search/jql",
-      "covered_by": {
-        "direct_reads": [
-          "search search-and-reconsile-issues-using-jql"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation searchAndReconsileIssuesUsingJql has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=searchAndReconsileIssuesUsingJql"
       }
     },
     {
       "method": "POST",
       "path": "/rest/api/3/search/jql",
-      "covered_by": {
-        "direct_reads": [
-          "search search-and-reconsile-issues-using-jql-post"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation searchAndReconsileIssuesUsingJqlPost has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=searchAndReconsileIssuesUsingJqlPost"
       }
     },
     {
@@ -4390,10 +4426,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/statuses",
-      "covered_by": {
-        "direct_reads": [
-          "statuses get-statuses-by-id"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getStatusesById has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getStatusesById"
       }
     },
     {
@@ -4417,10 +4456,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/statuses/byNames",
-      "covered_by": {
-        "direct_reads": [
-          "statuses get-statuses-by-name"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getStatusesByName has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getStatusesByName"
       }
     },
     {
@@ -4547,28 +4589,37 @@
     {
       "method": "GET",
       "path": "/rest/api/3/universal_avatar/view/type/{type}",
-      "covered_by": {
-        "direct_reads": [
-          "universal-avatar get-avatar-image-by-type"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getAvatarImageByType has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAvatarImageByType"
       }
     },
     {
       "method": "GET",
       "path": "/rest/api/3/universal_avatar/view/type/{type}/avatar/{id}",
-      "covered_by": {
-        "direct_reads": [
-          "universal-avatar get-avatar-image-by-id"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getAvatarImageByID has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAvatarImageByID"
       }
     },
     {
       "method": "GET",
       "path": "/rest/api/3/universal_avatar/view/type/{type}/owner/{entityId}",
-      "covered_by": {
-        "direct_reads": [
-          "universal-avatar get-avatar-image-by-owner"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getAvatarImageByOwner has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getAvatarImageByOwner"
       }
     },
     {
@@ -4619,10 +4670,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/user/bulk",
-      "covered_by": {
-        "direct_reads": [
-          "user bulk-get-users"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation bulkGetUsers has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=bulkGetUsers"
       }
     },
     {
@@ -4677,10 +4731,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/user/email/bulk",
-      "covered_by": {
-        "direct_reads": [
-          "user get-user-email-bulk"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getUserEmailBulk has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getUserEmailBulk"
       }
     },
     {
@@ -4985,10 +5042,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/workflow/rule/config",
-      "covered_by": {
-        "direct_reads": [
-          "workflow get-workflow-transition-rule-configurations"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getWorkflowTransitionRuleConfigurations has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getWorkflowTransitionRuleConfigurations"
       }
     },
     {
@@ -5012,10 +5072,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/workflow/search",
-      "covered_by": {
-        "direct_reads": [
-          "workflow get-workflows-paginated"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getWorkflowsPaginated has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getWorkflowsPaginated"
       }
     },
     {
@@ -5089,9 +5152,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "the provider declares a required request-body field for this read that has no scalar leaf (payload)",
-        "source_url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-        "notes": "Named dependency: cli_surface flag types are boolean, string, integer, number, enum and string_array (engine/schema/cli_surface.schema.json), so an object-valued required body field has no flag form; connectorgen validate's checkCLISurfaceOperationBodyMappings then refuses the 'implemented' claim, and covered_by.direct_read accepts only an implemented command. Unblocks when a structured-document flag type exists."
+        "reason": "Locked source operation validateCreateWorkflows has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=validateCreateWorkflows"
       }
     },
     {
@@ -5115,10 +5177,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/workflows/search",
-      "covered_by": {
-        "direct_reads": [
-          "workflows search-workflows"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation searchWorkflows has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=searchWorkflows"
       }
     },
     {
@@ -5138,9 +5203,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "the provider declares a required request-body field for this read that has no scalar leaf (payload)",
-        "source_url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-        "notes": "Named dependency: cli_surface flag types are boolean, string, integer, number, enum and string_array (engine/schema/cli_surface.schema.json), so an object-valued required body field has no flag form; connectorgen validate's checkCLISurfaceOperationBodyMappings then refuses the 'implemented' claim, and covered_by.direct_read accepts only an implemented command. Unblocks when a structured-document flag type exists."
+        "reason": "Locked source operation validateUpdateWorkflows has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=validateUpdateWorkflows"
       }
     },
     {
@@ -5164,10 +5228,13 @@
     {
       "method": "GET",
       "path": "/rest/api/3/workflowscheme/project",
-      "covered_by": {
-        "direct_reads": [
-          "workflowscheme get-workflow-scheme-project-associations"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation getWorkflowSchemeProjectAssociations has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=getWorkflowSchemeProjectAssociations"
       }
     },
     {
@@ -5577,10 +5644,13 @@
     {
       "method": "POST",
       "path": "/rest/atlassian-connect/1/migration/workflow/rule/search",
-      "covered_by": {
-        "direct_reads": [
-          "connect workflow-rule-search"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation MigrationResource.workflowRuleSearch_post has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=MigrationResource.workflowRuleSearch_post"
       }
     },
     {
@@ -5604,10 +5674,13 @@
     {
       "method": "GET",
       "path": "/rest/atlassian-connect/1/service-registry",
-      "covered_by": {
-        "direct_reads": [
-          "connect services"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Locked source operation ServiceRegistryResource.services_get has no field-complete declaration-owned executable route.",
+        "notes": "Named dependency: source_operation=ServiceRegistryResource.services_get"
       }
     },
     {

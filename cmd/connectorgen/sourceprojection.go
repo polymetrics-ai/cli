@@ -210,7 +210,7 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 		if readOnly {
 			continue
 		}
-		if operation.Protocol == "graphql" || !sourceProjectionMutationMethod(operation.Method) {
+		if operation.Protocol == "graphql" || !sourceProjectionOperationMutates(operation) {
 			continue
 		}
 		candidates := actionsByEndpoint[sourceProjectionEndpointKey(operation.Method, operation.Path)]
@@ -572,7 +572,7 @@ func sourceProjectionMutationClaimsImplementedAction(bundle engine.Bundle, opera
 func sourceProjectionBlockedReadSources(result sourceImportResult) map[string]sourceOperationDescriptor {
 	blocked := map[string]sourceOperationDescriptor{}
 	for _, operation := range result.Operations {
-		if operation.Protocol == "graphql" || sourceProjectionMutationMethod(operation.Method) || !sourceProjectionReadHasBlockingGap(operation) {
+		if operation.Protocol == "graphql" || sourceProjectionOperationMutates(operation) || !sourceProjectionReadHasBlockingGap(operation) {
 			continue
 		}
 		blocked[sourceProjectionEndpointKey(operation.Method, operation.Path)] = operation
@@ -583,7 +583,7 @@ func sourceProjectionBlockedReadSources(result sourceImportResult) map[string]so
 func sourceProjectionReachableReadSources(result sourceImportResult) map[string]sourceOperationDescriptor {
 	reachable := map[string]sourceOperationDescriptor{}
 	for _, operation := range result.Operations {
-		if operation.Protocol == "graphql" || sourceProjectionMutationMethod(operation.Method) || sourceProjectionReadHasBlockingGap(operation) {
+		if operation.Protocol == "graphql" || sourceProjectionOperationMutates(operation) || sourceProjectionReadHasBlockingGap(operation) {
 			continue
 		}
 		reachable[operation.SourceID] = operation
@@ -618,7 +618,7 @@ func sourceProjectionNormalizeNonBlockingReadGaps(result *sourceImportResult) {
 	}
 	for index := range result.Operations {
 		operation := &result.Operations[index]
-		if operation.Protocol == "graphql" || sourceProjectionMutationMethod(operation.Method) || len(operation.Runtime.Gaps) == 0 {
+		if operation.Protocol == "graphql" || sourceProjectionOperationMutates(*operation) || len(operation.Runtime.Gaps) == 0 {
 			continue
 		}
 		gaps := operation.Runtime.Gaps[:0]
@@ -749,7 +749,7 @@ func sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli *orderedObj
 			continue
 		}
 		source, found := operations[sourceID]
-		if !found || source.Protocol == "graphql" || sourceProjectionMutationMethod(source.Method) || !sourceProjectionCommandHasEndpoint(command, sourceProjectionEndpointKey(source.Method, source.Path)) {
+		if !found || source.Protocol == "graphql" || sourceProjectionOperationMutates(source) || !sourceProjectionCommandHasEndpoint(command, sourceProjectionEndpointKey(source.Method, source.Path)) {
 			continue
 		}
 		commandChanged := false
@@ -1093,7 +1093,7 @@ func sourceProjectionReadOnlyDeclaration(bundle engine.Bundle, source sourceOper
 	if err != nil || !declared {
 		return declaration, declared, err
 	}
-	if sourceProjectionMutationMethod(source.Method) {
+	if sourceProjectionOperationMutates(source) {
 		return sourceReadOnlyDeclaration{}, true, errors.New("read-only declaration cannot cover a mutating source operation")
 	}
 	return declaration, true, nil
@@ -1123,7 +1123,32 @@ func sourceProjectionOperationMutates(operation sourceOperationDescriptor) bool 
 	if operation.Protocol == "graphql" {
 		return operation.GraphQL != nil && strings.EqualFold(operation.GraphQL.Root, "mutation")
 	}
+	if strings.EqualFold(strings.TrimSpace(operation.Method), "POST") && sourceProjectionSummaryDescribesRead(operation.Summary) {
+		return false
+	}
 	return sourceProjectionMutationMethod(operation.Method)
+}
+
+// sourceProjectionSummaryDescribesRead accepts only source-owned operation
+// summaries whose leading action describes a pure retrieval or transformation.
+// Providers commonly use POST for a read that carries a large query body; the
+// verb alone cannot make that operation a mutation. The summary is retained in
+// sourceOperationDescriptor precisely so this conclusion remains auditable.
+func sourceProjectionSummaryDescribesRead(summary string) bool {
+	words := strings.FieldsFunc(strings.ToLower(strings.TrimSpace(summary)), func(r rune) bool {
+		return (r < 'a' || r > 'z') && (r < '0' || r > '9')
+	})
+	if len(words) == 0 {
+		return false
+	}
+	switch words[0] {
+	case "get", "list", "search", "find", "fetch", "count", "check", "validate", "convert", "sanitize", "sanitise":
+		return true
+	case "bulk":
+		return len(words) > 1 && (words[1] == "get" || words[1] == "list" || words[1] == "search" || words[1] == "fetch")
+	default:
+		return false
+	}
 }
 
 func sourceProjectionEndpointKey(method, path string) string {
@@ -2448,7 +2473,7 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 			}
 			continue
 		}
-		if !sourceProjectionMutationMethod(operation.Method) {
+		if !sourceProjectionOperationMutates(operation) {
 			_, readOnly, readOnlyErr := sourceProjectionReadOnlyDeclaration(bundle, operation)
 			if readOnlyErr != nil {
 				findings = append(findings, sourceProjectionFinding(bundle.Name, file, readOnlyErr.Error()+": "+operation.SourceID))
@@ -2621,7 +2646,7 @@ func sourceProjectionRestoreSourceBoundDirectReadPathFlags(bundle *engine.Bundle
 			continue
 		}
 		source, found := operations[sourceID]
-		if !found || source.Protocol == "graphql" || sourceProjectionMutationMethod(source.Method) || !sourceProjectionCommandHasEndpointRef(*command, sourceProjectionEndpointKey(source.Method, source.Path)) {
+		if !found || source.Protocol == "graphql" || sourceProjectionOperationMutates(source) || !sourceProjectionCommandHasEndpointRef(*command, sourceProjectionEndpointKey(source.Method, source.Path)) {
 			continue
 		}
 		missing := sourceProjectionMissingRequiredDirectReadPathParameters(bundle.Spec, source, command.Flags)
@@ -2872,7 +2897,7 @@ func sourceProjectionAnnotateUnreachableReadGaps(bundle engine.Bundle, result *s
 	for index := range result.Operations {
 		operation := &result.Operations[index]
 		if (operation.Protocol == "graphql" && len(operation.Runtime.Gaps) > 0) ||
-			(operation.Protocol != "graphql" && (sourceProjectionMutationMethod(operation.Method) || sourceProjectionReadHasBlockingGap(*operation))) {
+			(operation.Protocol != "graphql" && (sourceProjectionOperationMutates(*operation) || sourceProjectionReadHasBlockingGap(*operation))) {
 			continue
 		}
 		reachable := false

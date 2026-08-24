@@ -228,6 +228,35 @@
   `source-import jira` honestly remains at 11 source-action findings. This
   requires a shared source-projection semantic-POST direct-read contract.
 
+### 2026-08-24 Jira semantic-POST classification
+
+- **Red:** add a classifier test with provider-owned operation summaries: a
+  POST whose source summary says `Search widgets` must be a read, while a POST
+  whose source summary says `Create widget` must remain a mutation. Add an
+  importer assertion that the operation summary survives in the immutable
+  descriptor. Before the classifier change, a POST is always classified as a
+  mutation (and the descriptor carries no source semantic summary).
+- **Green assertion:** retain the OpenAPI operation summary in the source
+  descriptor, and use that provider-described semantic only to distinguish an
+  otherwise-mutating REST POST. No connector-local override or operation list
+  is permitted. The 11 Jira query/search/conversion POST commands must remain
+  executable direct reads and reach the missing-credential boundary.
+- **Green result:** `TestSourceImportRetainsOperationSummary` and
+  `TestSourceProjectionClassifiesSemanticPOSTOperations` pass. The descriptor
+  now retains the OpenAPI `summary`; a `Search widgets` POST is a read, while
+  a `Create widget` POST remains a mutation. `source-import jira --check`
+  verifies all 617 provider operations, and Jira no longer reports a
+  source operation without an executable action. Targeted validation retains
+  only 23 independently source-cited request-schema gaps on genuine write
+  operations.
+- **Credential boundary:** after rebuilding `pm` and initializing a fresh
+  credential-free project, all 11 affected commands—`changelog
+  get-bulk-changelogs`, `comment get-comments-by-ids`, `issue
+  get-change-logs-by-ids`, all five `jql` commands, `search
+  count-issues`, `workflow list-workflow-history`, and `worklog
+  get-worklogs-for-ids`—each exited 1 with exactly `error: missing
+  --credential`. None was downgraded, deferred, or replaced by a write action.
+
 Every red/green command and its result is appended when it executes. No test is
 weakened or skipped to advance a row.
 

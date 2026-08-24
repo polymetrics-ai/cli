@@ -3467,3 +3467,15 @@ func TestSourceImportPreservesFrozenGitHubArtifacts(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceImportRetainsOperationSummary(t *testing.T) {
+	t.Parallel()
+	raw := []byte(`{"openapi":"3.1.0","info":{"title":"fixture","version":"1"},"paths":{"/widgets/search":{"post":{"operationId":"searchWidgets","summary":"Search widgets","responses":{"200":{"description":"ok"}}}}}}`)
+	result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+	if len(result.Operations) != 1 {
+		t.Fatalf("operations = %d, want 1", len(result.Operations))
+	}
+	if got := result.Operations[0].Summary; got != "Search widgets" {
+		t.Fatalf("operation summary = %q, want Search widgets", got)
+	}
+}
