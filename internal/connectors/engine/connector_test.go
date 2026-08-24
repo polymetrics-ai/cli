@@ -364,6 +364,14 @@ func TestCommandSurfaceProjectsOperationParameterByteCaps(t *testing.T) {
 	if flags[0].MaxBytes != 128 || flags[1].MaxBytes != defaultOperationParameterMaxBytes || flags[2].MaxBytes != 0 {
 		t.Fatalf("projected max bytes = [%d %d %d]", flags[0].MaxBytes, flags[1].MaxBytes, flags[2].MaxBytes)
 	}
+	for index, flag := range flags[:2] {
+		if flag.MaxBytesOrigin != "pm_policy" || flag.MaxBytesPolicyVersion != OperationParameterExecutionPolicyVersion {
+			t.Fatalf("flag[%d] execution provenance = (%q, %q)", index, flag.MaxBytesOrigin, flag.MaxBytesPolicyVersion)
+		}
+	}
+	if flags[2].MaxBytesOrigin != "" || flags[2].MaxBytesPolicyVersion != "" {
+		t.Fatalf("unbounded body flag execution provenance = (%q, %q)", flags[2].MaxBytesOrigin, flags[2].MaxBytesPolicyVersion)
+	}
 }
 
 // --- Definition() ---

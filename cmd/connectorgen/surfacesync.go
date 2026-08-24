@@ -798,6 +798,12 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 		if maxBytes, present := param.get("max_bytes"); present {
 			flag.set("max_bytes", maxBytes)
 		}
+		if minimum, present := param.get("minimum"); present {
+			flag.set("minimum", minimum)
+		}
+		if maximum, present := param.get("maximum"); present {
+			flag.set("maximum", maximum)
+		}
 		flag.set("maps_to", location+"."+name)
 		key := normalizedDerivedFlagName(flagName)
 		wanted[key] = flag

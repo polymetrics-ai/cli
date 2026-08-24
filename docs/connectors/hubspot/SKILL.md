@@ -44,6 +44,7 @@ Discovers each HubSpot account's CRM object/property schema and reads its provid
 - Review planned typed HubSpot API operations without exposing a raw API escape hatch.
 - Usage: pm hubspot <etl|direct|binary|reverse> <operation> [flags]
 - Source CLI: HubSpot public APIs (HubSpot-public-api-spec-collection 2bebde2dca45eaa1792931089c4e441c8e377594)
+- PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
 - Global flags:
   - --credential (non-empty) (string): Credential profile name; never pass secret values as flags.: maps_to=config.credential
   - --limit (integer): Maximum records or items to request when a future typed command supports pagination.: maps_to=query.limit

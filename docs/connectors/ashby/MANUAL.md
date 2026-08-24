@@ -656,6 +656,7 @@ COMMAND SURFACE
   Ashby applicant-tracking connector with typed REST streams, bounded direct reads, and gated reverse-ETL writes.
   Usage: pm connectors command ashby <command> [flags]
   Source CLI: Ashby Public API (https://developers.ashbyhq.com/reference)
+  PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
   Global flags:
     --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   ETL streams

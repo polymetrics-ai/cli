@@ -2800,6 +2800,7 @@ COMMAND SURFACE
   Work with GitHub repositories from the command line.
   Usage: pm github <command> <subcommand> [flags]
   Source CLI: gh (https://cli.github.com/manual/gh_help_reference)
+  PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
   Global flags:
     --json (boolean): Write machine-readable JSON output.
     --connection (string): Use a saved GitHub connector credential and repository scope.: maps_to=connection
