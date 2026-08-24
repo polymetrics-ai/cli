@@ -771,14 +771,6 @@
     },
     {
       "source": {
-        "source_id": "postApiV4AiThirdPartyAgentsDirectAccess",
-        "method": "POST",
-        "path": "/api/v4/ai/third_party_agents/direct_access"
-      },
-      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "source": {
         "source_id": "postApiV4ApplicationsIdRenewSecret",
         "method": "POST",
         "path": "/api/v4/applications/{id}/renew-secret"
@@ -790,14 +782,6 @@
         "source_id": "postApiV4BulkImportsImportIdCancel",
         "method": "POST",
         "path": "/api/v4/bulk_imports/{import_id}/cancel"
-      },
-      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "source": {
-        "source_id": "postApiV4CodeSuggestionsConnectionDetails",
-        "method": "POST",
-        "path": "/api/v4/code_suggestions/connection_details"
       },
       "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
     },
@@ -974,30 +958,6 @@
         "source_id": "postApiV4IntegrationsSlackInteractions",
         "method": "POST",
         "path": "/api/v4/integrations/slack/interactions"
-      },
-      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "source": {
-        "source_id": "postApiV4IntegrationsSlackOptions",
-        "method": "POST",
-        "path": "/api/v4/integrations/slack/options"
-      },
-      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "source": {
-        "source_id": "postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls",
-        "method": "POST",
-        "path": "/api/v4/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls"
-      },
-      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "source": {
-        "source_id": "postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
-        "method": "POST",
-        "path": "/api/v4/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls"
       },
       "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
     },

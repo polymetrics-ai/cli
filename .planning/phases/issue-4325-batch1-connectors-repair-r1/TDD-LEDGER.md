@@ -92,6 +92,36 @@
   and working; source-aware secret classification is a shared foundation gap,
   not a reason to downgrade or remove them.
 
+### 2026-08-25 GitLab semantic-POST disposition correction
+
+- **Red:** `go run ./cmd/connectorgen source-import gitlab --check` rejects
+  `postApiV4AiThirdPartyAgentsDirectAccess` because the mutation-disposition
+  file calls it mutating. The same pinned source's declaration ledger records
+  its provider summary, “Get connection details for third party agents,” as a
+  lifecycle-restricted semantic POST read.
+- **Green:** remove only the false mutation disposition; retain the provider
+  operation and its explicit disabled provider-restriction ledger row. Re-run
+  source import and validation before declaring any new executable command.
+- **Mapped correction:** five—not one—mutation dispositions were stale after
+  comparing the full pinned declaration ledger with its semantic-POST read
+  set: the AI third-party-agent direct-access, code-suggestions connection
+  details, Slack options, and two Conan upload-URL lookup operations. All five
+  remain source operations; only their incorrect non-executable-mutation
+  labels were removed. Source import refreshed the descriptor with the pinned
+  provider summaries and made no action or CLI change.
+- **Recorded foundation gap, not a wait:** source import now reaches the one
+  genuine missing declaration, `postApiV4CodeSuggestionsConnectionDetails`.
+  Its pinned summary is “Retrieve connection details,” has no request body,
+  and the declaration ledger classifies it as an implementable semantic POST
+  read. `sourceProjectionSummaryDescribesRead`
+  (`cmd/connectorgen/sourceprojection.go:1137-1152`) recognizes `get`,
+  `list`, `search`, and related verbs but not the equivalent provider verb
+  `retrieve`; `sourceProjectionOperationMutates` (`:1124-1132`) therefore
+  incorrectly routes it to the action-only path. A connector-local action
+  would misrepresent a read, while a local summary rewrite would be regenerated
+  from the pinned source. This needs the shared classifier to recognize the
+  source verb; leave the source operation and disabled ledger row intact.
+
 ### 2026-08-24 Asana red/green split
 
 - **Red:** `go run ./cmd/connectorgen source-import asana --check` reports 25
