@@ -18,10 +18,15 @@ import (
 )
 
 const (
-	maxStructuredRESTBodyDepth  = 16
-	maxStructuredRESTBodyFields = 256
-	maxStructuredRESTBodyItems  = 1024
-	maxStructuredRESTBodyNodes  = maxStructuredRESTBodyFields * maxStructuredRESTBodyItems
+	MaxStructuredRESTBodyDepth  = 16
+	MaxStructuredRESTBodyFields = 256
+	MaxStructuredRESTBodyItems  = 1024
+	MaxStructuredRESTBodyNodes  = MaxStructuredRESTBodyFields * MaxStructuredRESTBodyItems
+
+	maxStructuredRESTBodyDepth  = MaxStructuredRESTBodyDepth
+	maxStructuredRESTBodyFields = MaxStructuredRESTBodyFields
+	maxStructuredRESTBodyItems  = MaxStructuredRESTBodyItems
+	maxStructuredRESTBodyNodes  = MaxStructuredRESTBodyNodes
 )
 
 // PreflightOperationStructuredJSONBodyField proves that a command's one

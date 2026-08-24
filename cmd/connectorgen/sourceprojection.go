@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -19,6 +20,7 @@ import (
 	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/safety"
 )
 
 const (
@@ -77,6 +79,9 @@ type sourceActionContract struct {
 // method/path union: semantic aliases remain narrow, while the broad action
 // proves the provider contract is reachable without double-counting aliases.
 func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult, check bool) (sourceProjectionStats, error) {
+	if err := validateSourceProjectionExecutionEnvelopes(result); err != nil {
+		return sourceProjectionStats{}, err
+	}
 	writesPath := filepath.Join(bundleDir, "writes.json")
 	cliPath := filepath.Join(bundleDir, "cli_surface.json")
 	writesRaw, err := os.ReadFile(writesPath)
@@ -298,6 +303,46 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 		}
 	}
 	return stats, nil
+}
+
+func validateSourceProjectionExecutionEnvelopes(result sourceImportResult) error {
+	if result.DescriptorSchemaVersion < 3 {
+		return nil
+	}
+	limits := sourceImportLimits{UseExecutionEnvelopes: true}
+	for _, operation := range result.Operations {
+		if operation.Protocol == "graphql" {
+			continue
+		}
+		for _, group := range []struct {
+			location   string
+			parameters []sourceParameterDescriptor
+		}{
+			{location: "path", parameters: operation.Request.Path},
+			{location: "query", parameters: operation.Request.Query},
+			{location: "header", parameters: operation.Request.Header},
+		} {
+			for _, parameter := range group.parameters {
+				if err := validateSourceParameterExecutionEnvelope(parameter, group.location, limits); err != nil {
+					return fmt.Errorf("source operation %q parameter %q: %w", operation.SourceID, parameter.Name, err)
+				}
+				if group.location == "header" && sourceScalarWireSchema(parameter.Schema) && sourceBoundedHeaderMaxBytes(parameter.Schema) == 0 && parameter.ExecutionEnvelope == nil && !operation.Runtime.MergeBlocked {
+					return fmt.Errorf("source operation %q unbounded header parameter %q is neither enveloped nor merge-blocked", operation.SourceID, parameter.Name)
+				}
+			}
+		}
+		if operation.Request.Body != nil {
+			if err := validateSourceRequestBodyExecutionEnvelope(operation.Request.Body.ExecutionEnvelope, operation.Request.MediaType, limits); err != nil {
+				return fmt.Errorf("source operation %q: %w", operation.SourceID, err)
+			}
+		}
+		for _, media := range operation.Request.Media {
+			if err := validateSourceRequestBodyExecutionEnvelope(media.ExecutionEnvelope, media.MediaType, limits); err != nil {
+				return fmt.Errorf("source operation %q media %q: %w", operation.SourceID, media.MediaType, err)
+			}
+		}
+	}
+	return nil
 }
 
 func sourceProjectionBundleSpec(bundleDir string) (*engine.Schema, error) {
@@ -1951,8 +1996,27 @@ func sourceProjectionNewCommand(operation sourceOperationDescriptor, action *ord
 }
 
 func sourceProjectionGeneratedCommandPath(operation sourceOperationDescriptor) string {
+	// Source IDs are provider-owned provenance, not a command grammar: several
+	// OpenAPI importers use the raw method/path as their ID, including `{name}`
+	// parameter syntax that commandrunner rejects. Encode the normalized endpoint
+	// instead. Hex is injective over the complete endpoint key, so a literal and
+	// a path parameter (or two parameter names) cannot collapse to one command.
+	endpoint := sourceProjectionEndpointKey(operation.Method, operation.Path)
+	return "api op-" + hex.EncodeToString([]byte(endpoint))
+}
+
+func sourceProjectionLegacyGeneratedCommandPath(operation sourceOperationDescriptor) string {
 	path := strings.NewReplacer("/", " ", "_", "-").Replace(operation.SourceID)
 	return "api " + path
+}
+
+func sourceProjectionCommandPathIsRuntimeValid(path string) bool {
+	for index, segment := range strings.Fields(path) {
+		if err := safety.ValidateIdentifier(segment, fmt.Sprintf("command path segment %d", index+1)); err != nil {
+			return false
+		}
+	}
+	return strings.TrimSpace(path) != ""
 }
 
 // sourceProjectionRefreshGeneratedCommandMetadata refreshes only the command
@@ -1960,10 +2024,20 @@ func sourceProjectionGeneratedCommandPath(operation sourceOperationDescriptor) s
 // keep their own prose, while the generated command must continue to publish
 // the declaration's actual approval lifecycle after a later projection pass.
 func sourceProjectionRefreshGeneratedCommandMetadata(command *orderedObject, operation sourceOperationDescriptor, action *orderedObject) bool {
-	if stringField(command, "path") != sourceProjectionGeneratedCommandPath(operation) {
+	currentPath := stringField(command, "path")
+	generatedPath := sourceProjectionGeneratedCommandPath(operation)
+	if currentPath == generatedPath {
+		return setOrderedIfDifferent(command, "approval", sourceProjectionApproval(action))
+	}
+	if currentPath != sourceProjectionLegacyGeneratedCommandPath(operation) {
 		return false
 	}
-	return setOrderedIfDifferent(command, "approval", sourceProjectionApproval(action))
+	if sourceProjectionCommandPathIsRuntimeValid(currentPath) {
+		return setOrderedIfDifferent(command, "approval", sourceProjectionApproval(action))
+	}
+	command.set("path", generatedPath)
+	setOrderedIfDifferent(command, "approval", sourceProjectionApproval(action))
+	return true
 }
 
 // sourceProjectionApproval publishes the same plan lifecycle the declaration

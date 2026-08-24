@@ -1015,6 +1015,7 @@ SECURITY
 COMMAND SURFACE
   Read and write Workday HCM, Financials, Student and Platform data.
   Usage: pm workday-rest <service> <action> [flags]
+  PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
   Global flags:
     --json (boolean): Write machine-readable JSON output.
     --connection (string): Use a saved Workday REST connector credential and tenant.: maps_to=connection

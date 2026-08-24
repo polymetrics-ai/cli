@@ -22,8 +22,11 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 
 	"gopkg.in/yaml.v3"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // source-import turns a verified, connector-owned provider source into a
@@ -87,6 +90,11 @@ type sourceImportLimits struct {
 	MaxDocuments               int
 	MaxTotalArtifactBytes      int64
 	AllowSourceContractGaps    bool
+	// UseExecutionEnvelopes is enabled only for v3 immutable source
+	// descriptors. Legacy v1/v2 descriptors retain their byte identity until
+	// their locks are deliberately migrated rather than silently rewriting the
+	// 41 MiB checked-in GitHub descriptor.
+	UseExecutionEnvelopes bool
 }
 
 type sourceDocumentForm struct {
@@ -367,11 +375,27 @@ type sourceImportSource struct {
 }
 
 type sourceParameterDescriptor struct {
-	Name     string                        `json:"name"`
-	Required bool                          `json:"required"`
-	Schema   any                           `json:"schema,omitempty"`
-	Content  any                           `json:"content,omitempty"`
-	Wire     sourceParameterWireDescriptor `json:"wire"`
+	Name              string                        `json:"name"`
+	Required          bool                          `json:"required"`
+	Schema            any                           `json:"schema,omitempty"`
+	Content           any                           `json:"content,omitempty"`
+	Wire              sourceParameterWireDescriptor `json:"wire"`
+	ExecutionEnvelope *sourceExecutionEnvelope      `json:"execution_envelope,omitempty"`
+}
+
+type sourceExecutionEnvelope struct {
+	PolicyVersion  string                 `json:"policy_version"`
+	Origin         string                 `json:"origin"`
+	SourceLocation string                 `json:"source_location"`
+	Limits         []sourceExecutionLimit `json:"limits"`
+}
+
+type sourceExecutionLimit struct {
+	Kind        string `json:"kind"`
+	Unit        string `json:"unit"`
+	Default     int    `json:"default,omitempty"`
+	HardCeiling int    `json:"hard_ceiling"`
+	Effective   int    `json:"effective"`
 }
 
 type sourceContractGap struct {
@@ -412,16 +436,18 @@ type sourceParameterWireDescriptor struct {
 }
 
 type sourceRequestBodyDescriptor struct {
-	Required bool `json:"required"`
-	Schema   any  `json:"schema"`
-	Encoding any  `json:"encoding,omitempty"`
+	Required          bool                     `json:"required"`
+	Schema            any                      `json:"schema"`
+	Encoding          any                      `json:"encoding,omitempty"`
+	ExecutionEnvelope *sourceExecutionEnvelope `json:"execution_envelope,omitempty"`
 }
 
 type sourceRequestMediaDescriptor struct {
-	MediaType string `json:"media_type"`
-	Required  bool   `json:"required"`
-	Schema    any    `json:"schema"`
-	Encoding  any    `json:"encoding,omitempty"`
+	MediaType         string                   `json:"media_type"`
+	Required          bool                     `json:"required"`
+	Schema            any                      `json:"schema"`
+	Encoding          any                      `json:"encoding,omitempty"`
+	ExecutionEnvelope *sourceExecutionEnvelope `json:"execution_envelope,omitempty"`
 }
 
 type sourceRequestDescriptor struct {
@@ -1325,6 +1351,10 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 	if err != nil {
 		return sourceImportResult{}, err
 	}
+	// Version 3 is the immutable document-owned contract and therefore the
+	// first descriptor version that can make PM execution policy explicit
+	// without rewriting legacy canonical descriptor bytes.
+	limits.UseExecutionEnvelopes = true
 	result := sourceImportResult{DescriptorSchemaVersion: 3, Operations: []sourceOperationDescriptor{}}
 	for _, document := range lock.Rest.SourceDocuments {
 		raw := rawDocuments[document.ID]
@@ -6263,7 +6293,17 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 		} else if err := validateBoundedParameterContent(parameter.Name, parameter.Content, form, limits); err != nil {
 			return sourceRequestDescriptor{}, err
 		}
-		descriptor := sourceParameterDescriptor{Name: parameter.Name, Required: parameter.Required, Schema: parameter.Schema, Content: parameter.Content, Wire: parameter.Wire}
+		descriptor := sourceParameterDescriptor{
+			Name:              parameter.Name,
+			Required:          parameter.Required,
+			Schema:            parameter.Schema,
+			Content:           parameter.Content,
+			Wire:              parameter.Wire,
+			ExecutionEnvelope: sourceParameterExecutionEnvelopeFor(parameter, limits),
+		}
+		if err := validateSourceParameterExecutionEnvelope(descriptor, parameter.In, limits); err != nil {
+			return sourceRequestDescriptor{}, fmt.Errorf("parameter %q: %w", parameter.Name, err)
+		}
 		switch parameter.In {
 		case "path":
 			request.Path = append(request.Path, descriptor)
@@ -6293,7 +6333,14 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 		if err != nil {
 			return sourceRequestDescriptor{}, err
 		}
-		request.Body = &sourceRequestBodyDescriptor{Required: body.Required, Schema: body.Schema}
+		request.Body = &sourceRequestBodyDescriptor{
+			Required:          body.Required,
+			Schema:            body.Schema,
+			ExecutionEnvelope: sourceRequestBodyExecutionEnvelope(mediaType, limits, "request.body"),
+		}
+		if err := validateSourceRequestBodyExecutionEnvelope(request.Body.ExecutionEnvelope, mediaType, limits); err != nil {
+			return sourceRequestDescriptor{}, err
+		}
 		request.MediaType = mediaType
 		return sourceCompleteRequestDescriptor(path, parameters, request)
 	}
@@ -6339,16 +6386,21 @@ func sourceRequestDescriptorFrom(path string, pathParameters, operationParameter
 				return sourceRequestDescriptor{}, fmt.Errorf("request media %q: %w", mediaType, err)
 			}
 		}
-		request.Media = append(request.Media, sourceRequestMediaDescriptor{
-			MediaType: mediaType,
-			Required:  sourceBool(body["required"]),
-			Schema:    schema,
-			Encoding:  encoding,
-		})
+		descriptor := sourceRequestMediaDescriptor{
+			MediaType:         mediaType,
+			Required:          sourceBool(body["required"]),
+			Schema:            schema,
+			Encoding:          encoding,
+			ExecutionEnvelope: sourceRequestBodyExecutionEnvelope(mediaType, limits, "request.media["+strconv.Quote(mediaType)+"]"),
+		}
+		if err := validateSourceRequestBodyExecutionEnvelope(descriptor.ExecutionEnvelope, mediaType, limits); err != nil {
+			return sourceRequestDescriptor{}, fmt.Errorf("request media %q: %w", mediaType, err)
+		}
+		request.Media = append(request.Media, descriptor)
 	}
 	if len(request.Media) == 1 {
 		media := request.Media[0]
-		request.Body = &sourceRequestBodyDescriptor{Required: media.Required, Schema: media.Schema, Encoding: media.Encoding}
+		request.Body = &sourceRequestBodyDescriptor{Required: media.Required, Schema: media.Schema, Encoding: media.Encoding, ExecutionEnvelope: media.ExecutionEnvelope}
 		request.MediaType = media.MediaType
 		request.Media = nil
 	}
@@ -6360,6 +6412,159 @@ func sourceCompleteRequestDescriptor(path string, parameters []sourceParameterVa
 		return request, err
 	}
 	return request, nil
+}
+
+func sourceParameterExecutionEnvelopeFor(parameter sourceParameterValue, limits sourceImportLimits) *sourceExecutionEnvelope {
+	if !limits.UseExecutionEnvelopes || parameter.Content != nil || !sourceScalarWireSchema(parameter.Schema) {
+		return nil
+	}
+	if parameter.In == "header" {
+		effective := sourceBoundedHeaderMaxBytes(parameter.Schema)
+		if effective <= 0 {
+			return nil
+		}
+		return &sourceExecutionEnvelope{
+			PolicyVersion:  engine.OperationParameterExecutionPolicyVersion,
+			Origin:         "provider_and_pm_policy",
+			SourceLocation: fmt.Sprintf("request.%s[%q]", parameter.In, parameter.Name),
+			Limits: []sourceExecutionLimit{{
+				Kind:        "wire_value",
+				Unit:        "bytes",
+				HardCeiling: engine.MaxOperationHeaderBytes,
+				Effective:   effective,
+			}},
+		}
+	}
+	if parameter.In != "path" && parameter.In != "query" {
+		return nil
+	}
+	effective, origin := sourcePathQueryExecutionBound(parameter.Schema)
+	return &sourceExecutionEnvelope{
+		PolicyVersion:  engine.OperationParameterExecutionPolicyVersion,
+		Origin:         origin,
+		SourceLocation: fmt.Sprintf("request.%s[%q]", parameter.In, parameter.Name),
+		Limits: []sourceExecutionLimit{{
+			Kind:        "wire_value",
+			Unit:        "encoded_bytes",
+			Default:     engine.DefaultOperationParameterMaxBytes,
+			HardCeiling: engine.MaxOperationParameterMaxBytes,
+			Effective:   effective,
+		}},
+	}
+}
+
+func sourcePathQueryExecutionBound(schema any) (int, string) {
+	effective := engine.DefaultOperationParameterMaxBytes
+	origin := "pm_policy"
+	if providerBytes := sourceProjectionFlagMaxBytes(schema, "string"); providerBytes > 0 {
+		origin = "provider_and_pm_policy"
+		if providerBytes < int64(effective) {
+			effective = int(providerBytes)
+		}
+	}
+	return effective, origin
+}
+
+func sourceBoundedHeaderMaxBytes(schema any) int {
+	object, ok := schema.(map[string]any)
+	if !ok {
+		return 0
+	}
+	if object["type"] == "boolean" {
+		return len("false")
+	}
+	if object["type"] != "string" {
+		return 0
+	}
+	maxBytes := 0
+	if maxRunes := sourceProjectionSchemaMaxBytes(schema); maxRunes > 0 && maxRunes <= int64(engine.MaxOperationHeaderBytes/utf8.UTFMax) {
+		maxBytes = int(maxRunes) * utf8.UTFMax
+	}
+	for _, raw := range sourceAnySlice(object["enum"]) {
+		value, ok := raw.(string)
+		if !ok {
+			return 0
+		}
+		if len(value) > maxBytes {
+			maxBytes = len(value)
+		}
+	}
+	if maxBytes <= 0 || maxBytes > engine.MaxOperationHeaderBytes {
+		return 0
+	}
+	return maxBytes
+}
+
+func sourceRequestBodyExecutionEnvelope(mediaType string, limits sourceImportLimits, sourceLocation string) *sourceExecutionEnvelope {
+	if !limits.UseExecutionEnvelopes || !sourceJSONMediaType(sourceNormalizedMediaType(mediaType)) {
+		return nil
+	}
+	return &sourceExecutionEnvelope{
+		PolicyVersion:  engine.OperationParameterExecutionPolicyVersion,
+		Origin:         "pm_policy",
+		SourceLocation: sourceLocation,
+		Limits: []sourceExecutionLimit{
+			{Kind: "body", Unit: "encoded_bytes", Default: engine.DefaultOperationDirectWriteMaxBytes, HardCeiling: engine.MaxOperationDirectWriteBytes, Effective: engine.DefaultOperationDirectWriteMaxBytes},
+			{Kind: "array", Unit: "items", Default: sourceProjectionDefaultArrayItems, HardCeiling: engine.MaxStructuredRESTBodyItems, Effective: sourceProjectionDefaultArrayItems},
+			{Kind: "object", Unit: "properties", Default: sourceProjectionDefaultObjectProperties, HardCeiling: engine.MaxStructuredRESTBodyFields, Effective: sourceProjectionDefaultObjectProperties},
+			{Kind: "structure", Unit: "depth", Default: engine.MaxStructuredRESTBodyDepth, HardCeiling: engine.MaxStructuredRESTBodyDepth, Effective: engine.MaxStructuredRESTBodyDepth},
+			{Kind: "structure", Unit: "nodes", Default: engine.MaxStructuredRESTBodyNodes, HardCeiling: engine.MaxStructuredRESTBodyNodes, Effective: engine.MaxStructuredRESTBodyNodes},
+		},
+	}
+}
+
+func validateSourceRequestBodyExecutionEnvelope(envelope *sourceExecutionEnvelope, mediaType string, limits sourceImportLimits) error {
+	if !limits.UseExecutionEnvelopes || !sourceJSONMediaType(sourceNormalizedMediaType(mediaType)) {
+		return nil
+	}
+	if envelope == nil {
+		return fmt.Errorf("JSON request body requires a valid PM execution envelope")
+	}
+	mediaLocation := "request.media[" + strconv.Quote(mediaType) + "]"
+	if envelope.SourceLocation != "request.body" && envelope.SourceLocation != mediaLocation {
+		return fmt.Errorf("JSON request body requires a valid PM execution envelope")
+	}
+	expected := sourceRequestBodyExecutionEnvelope(mediaType, limits, envelope.SourceLocation)
+	if !reflect.DeepEqual(envelope, expected) {
+		return fmt.Errorf("JSON request body requires a valid PM execution envelope")
+	}
+	return nil
+}
+
+func validateSourceParameterExecutionEnvelope(parameter sourceParameterDescriptor, location string, limits sourceImportLimits) error {
+	if !limits.UseExecutionEnvelopes || !sourceScalarWireSchema(parameter.Schema) {
+		return nil
+	}
+	envelope := parameter.ExecutionEnvelope
+	if location == "header" {
+		effective := sourceBoundedHeaderMaxBytes(parameter.Schema)
+		if effective == 0 {
+			return nil
+		}
+		if envelope == nil || envelope.PolicyVersion != engine.OperationParameterExecutionPolicyVersion || envelope.Origin != "provider_and_pm_policy" || envelope.SourceLocation != fmt.Sprintf("request.%s[%q]", location, parameter.Name) || len(envelope.Limits) != 1 {
+			return fmt.Errorf("executable source header has an invalid PM execution envelope")
+		}
+		limit := envelope.Limits[0]
+		if limit.Kind != "wire_value" || limit.Unit != "bytes" || limit.Default != 0 || limit.HardCeiling != engine.MaxOperationHeaderBytes || limit.Effective != effective {
+			return fmt.Errorf("executable source header has an invalid byte execution limit")
+		}
+		return nil
+	}
+	if location != "path" && location != "query" {
+		return nil
+	}
+	if envelope == nil {
+		return fmt.Errorf("executable source input requires a PM execution envelope")
+	}
+	effective, origin := sourcePathQueryExecutionBound(parameter.Schema)
+	if envelope.PolicyVersion != engine.OperationParameterExecutionPolicyVersion || envelope.Origin != origin || envelope.SourceLocation != fmt.Sprintf("request.%s[%q]", location, parameter.Name) || len(envelope.Limits) != 1 {
+		return fmt.Errorf("executable source input has an invalid PM execution envelope")
+	}
+	limit := envelope.Limits[0]
+	if limit.Kind != "wire_value" || limit.Unit != "encoded_bytes" || limit.Default != engine.DefaultOperationParameterMaxBytes || limit.HardCeiling != engine.MaxOperationParameterMaxBytes || limit.Effective != effective {
+		return fmt.Errorf("executable source input has an invalid encoded-byte execution limit")
+	}
+	return nil
 }
 
 func validateBoundedParameterContent(name string, content any, form sourceDocumentForm, limits sourceImportLimits) error {
@@ -6622,7 +6827,30 @@ func sourceProjectionOperationParameterGap(schema any, form sourceDocumentForm, 
 	if !sourceProjectionMutationMethod(method) && (location == "path" || location == "query") && sourceStringScalarWireUnion(schema) {
 		return nil
 	}
+	if (location == "path" || location == "query") && !sourceScalarWireSchema(schema) {
+		return fmt.Errorf("%s parameter requires non-scalar serialization support", location)
+	}
+	if location == "header" && sourceScalarWireSchema(schema) && !sourceStringScalarWireUnion(schema) && sourceBoundedHeaderMaxBytes(schema) == 0 {
+		return fmt.Errorf("unbounded request header requires a compatibility-censused PM byte envelope")
+	}
 	return sourceProjectionSchemaGap(schema, form, limits)
+}
+
+func sourceScalarWireSchema(schema any) bool {
+	if sourceStringScalarWireUnion(schema) {
+		return true
+	}
+	object, ok := schema.(map[string]any)
+	if !ok {
+		return false
+	}
+	typeName, _ := object["type"].(string)
+	switch typeName {
+	case "string", "integer", "number", "boolean":
+		return true
+	default:
+		return false
+	}
 }
 
 // sourceStringScalarWireUnion admits only a source union with an
@@ -6667,34 +6895,15 @@ func sourceStringScalarWireUnion(schema any) bool {
 func sourceProjectionSchemaGap(schema any, form sourceDocumentForm, limits sourceImportLimits) error {
 	strict := limits
 	strict.AllowSourceContractGaps = false
-	err := validateBoundedRequestSchema(schema, form, strict, 0)
-	if err != nil && !sourceCommonInputBoundaryHandles(err) {
+	strict.UseExecutionEnvelopes = true
+	if err := validateBoundedRequestSchema(schema, form, strict, 0); err != nil {
 		return err
 	}
-	// The runtime supplies common scalar and collection caps, but source
-	// contracts with structural ambiguity still need an explicit typed gap.
-	// Checking projection after a handled boundary prevents an early missing
-	// maxLength from hiding a later union or dynamic object in the same body.
+	// The policy-aware semantic pass still validates the entire schema after a
+	// missing optional maximum. Projection then classifies representation
+	// blockers such as unions and dynamic objects without error-string matching.
 	_, projectionErr := sourceProjectionSchema(schema)
 	return projectionErr
-}
-
-func sourceCommonInputBoundaryHandles(err error) bool {
-	if err == nil {
-		return false
-	}
-	message := err.Error()
-	for _, suffix := range []string{
-		"unbounded request schema string has no maxLength",
-		"unbounded request schema number has no minimum",
-		"unbounded request schema number has no maximum",
-		"unbounded request schema array has no maxItems",
-	} {
-		if strings.Contains(message, suffix) {
-			return true
-		}
-	}
-	return false
 }
 
 func sourceServerLayerHasFixedOrigin(layer sourceServerLayer) bool {
@@ -6888,6 +7097,38 @@ func sourceSortedGaps(gaps []sourceContractGap) []sourceContractGap {
 	return out
 }
 
+type sourceRequestSchemaDisposition string
+
+const (
+	sourceRequestRepresented                sourceRequestSchemaDisposition = "represented"
+	sourceRequestRepresentedWithPolicyBound sourceRequestSchemaDisposition = "represented_with_policy_bound"
+	sourceRequestSourceGap                  sourceRequestSchemaDisposition = "source_gap"
+	sourceRequestFiniteBudgetGap            sourceRequestSchemaDisposition = "finite_budget_gap"
+	sourceRequestMalformedSourceGap         sourceRequestSchemaDisposition = "malformed_source_gap"
+)
+
+type sourceRequestSchemaError struct {
+	Disposition sourceRequestSchemaDisposition
+	Reason      string
+}
+
+func (e *sourceRequestSchemaError) Error() string { return e.Reason }
+
+func sourceRequestPolicyBoundError(reason string) error {
+	return &sourceRequestSchemaError{Disposition: sourceRequestRepresentedWithPolicyBound, Reason: reason}
+}
+
+func sourceRequestSchemaDispositionOf(err error) sourceRequestSchemaDisposition {
+	if err == nil {
+		return sourceRequestRepresented
+	}
+	var typed *sourceRequestSchemaError
+	if errors.As(err, &typed) {
+		return typed.Disposition
+	}
+	return sourceRequestMalformedSourceGap
+}
+
 func validateBoundedRequestSchema(schema any, form sourceDocumentForm, limits sourceImportLimits, depth int) error {
 	strict := limits
 	strict.AllowSourceContractGaps = false
@@ -6978,11 +7219,11 @@ func validateBoundedRequestSchemaType(object map[string]any, typeName string, fo
 	case "boolean", "null":
 		return nil
 	case "string":
-		if err := sourceValidateLengthBounds(object, bounded); err != nil {
+		if err := sourceValidateLengthBounds(object, bounded, limits.UseExecutionEnvelopes); err != nil {
 			return err
 		}
 	case "integer", "number":
-		if err := sourceValidateNumericBounds(object, form, !bounded); err != nil {
+		if err := sourceValidateNumericBounds(object, form, !bounded, limits.UseExecutionEnvelopes); err != nil {
 			return err
 		}
 	case "array":
@@ -7018,7 +7259,7 @@ func validateBoundedRequestSchemaType(object map[string]any, typeName string, fo
 			limit := int64(prefixCount)
 			closedTupleLimit = &limit
 		}
-		if err := sourceValidateArrayBounds(object, bounded, closedTupleLimit); err != nil {
+		if err := sourceValidateArrayBounds(object, bounded, closedTupleLimit, limits.UseExecutionEnvelopes); err != nil {
 			return err
 		}
 		if !exists && !bounded && closedTupleLimit == nil {
@@ -7212,7 +7453,7 @@ func sourceFiniteSchemaLiteral(value any) bool {
 	return true
 }
 
-func sourceValidateLengthBounds(object map[string]any, finiteEnum bool) error {
+func sourceValidateLengthBounds(object map[string]any, finiteEnum, policyBounded bool) error {
 	minimum, hasMinimum, err := sourceOptionalNonNegativeInteger(object, "minLength")
 	if err != nil {
 		return err
@@ -7224,13 +7465,13 @@ func sourceValidateLengthBounds(object map[string]any, finiteEnum bool) error {
 	if hasMinimum && hasMaximum && minimum > maximum {
 		return fmt.Errorf("contradictory request schema string length bounds")
 	}
-	if !finiteEnum && !hasMaximum {
-		return fmt.Errorf("unbounded request schema string has no maxLength")
+	if !finiteEnum && !hasMaximum && !policyBounded {
+		return sourceRequestPolicyBoundError("unbounded request schema string has no maxLength")
 	}
 	return nil
 }
 
-func sourceValidateArrayBounds(object map[string]any, finiteEnum bool, closedTupleLimit *int64) error {
+func sourceValidateArrayBounds(object map[string]any, finiteEnum bool, closedTupleLimit *int64, policyBounded bool) error {
 	minimum, hasMinimum, err := sourceOptionalNonNegativeInteger(object, "minItems")
 	if err != nil {
 		return err
@@ -7248,8 +7489,8 @@ func sourceValidateArrayBounds(object map[string]any, finiteEnum bool, closedTup
 		}
 		return nil
 	}
-	if !finiteEnum && !hasMaximum {
-		return fmt.Errorf("unbounded request schema array has no maxItems")
+	if !finiteEnum && !hasMaximum && !policyBounded {
+		return sourceRequestPolicyBoundError("unbounded request schema array has no maxItems")
 	}
 	return nil
 }
@@ -7260,7 +7501,7 @@ type sourceNumericBound struct {
 	present   bool
 }
 
-func sourceValidateNumericBounds(object map[string]any, form sourceDocumentForm, requireBoth bool) error {
+func sourceValidateNumericBounds(object map[string]any, form sourceDocumentForm, requireBoth, policyBounded bool) error {
 	lower, err := sourceNumericBoundFor(object, form, "minimum", "exclusiveMinimum", true)
 	if err != nil {
 		return err
@@ -7269,11 +7510,11 @@ func sourceValidateNumericBounds(object map[string]any, form sourceDocumentForm,
 	if err != nil {
 		return err
 	}
-	if requireBoth && !lower.present {
-		return fmt.Errorf("unbounded request schema number has no minimum")
+	if requireBoth && !lower.present && !policyBounded {
+		return sourceRequestPolicyBoundError("unbounded request schema number has no minimum")
 	}
-	if requireBoth && !upper.present {
-		return fmt.Errorf("unbounded request schema number has no maximum")
+	if requireBoth && !upper.present && !policyBounded {
+		return sourceRequestPolicyBoundError("unbounded request schema number has no maximum")
 	}
 	if lower.present && upper.present && (lower.value.Cmp(upper.value) > 0 || (lower.value.Cmp(upper.value) == 0 && (!lower.inclusive || !upper.inclusive))) {
 		return fmt.Errorf("contradictory request schema numeric bounds")
