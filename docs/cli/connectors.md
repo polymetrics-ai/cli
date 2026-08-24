@@ -64,6 +64,14 @@ DESCRIPTION
   certification boundary. Inspection never exposes a rate scope, coordinator
   address, or credential.
 
+  For provider-style commands with bounded caller input, JSON inspection also
+  reports request_execution_limits. Each row names the command flag, request
+  mapping, effective byte limit and unit, and the versioned PM execution-policy
+  provenance. These are local implementation resource limits, not claims that
+  the provider declared the same maximum. Connector command help renders the
+  same effective cap; exceeding it rejects before provider I/O and never
+  truncates the value.
+
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy
   source-/destination-prefixed names.

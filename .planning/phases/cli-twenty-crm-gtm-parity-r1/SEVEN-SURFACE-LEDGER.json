@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "connector": "twenty",
+  "issue": 277,
+  "scope": "Issue #277's source-locked, workspace-specific Core REST inventory. Twenty generates REST and GraphQL schemas per workspace; no GraphQL or metadata operation is inferred from the REST contract.",
+  "source_lock": {
+    "api_surface": "internal/connectors/defs/twenty/api_surface.json",
+    "operations": "internal/connectors/defs/twenty/operations.json",
+    "streams": "internal/connectors/defs/twenty/streams.json",
+    "writes": "internal/connectors/defs/twenty/writes.json",
+    "cli_surface": "internal/connectors/defs/twenty/cli_surface.json",
+    "rule": "Each of the 168 source-locked api_surface endpoints has exactly one covered_by projection; the listed artifacts are the non-duplicated operation manifest."
+  },
+  "source_operation_count": 168,
+  "surfaces": {
+    "binary_read": {
+      "count": 0,
+      "status": "not_documented",
+      "evidence": "The source-locked REST inventory has only JSON resource endpoints. Attachment resource CRUD is not an inferred binary transfer operation."
+    },
+    "binary_write": {
+      "count": 0,
+      "status": "not_documented",
+      "evidence": "The source-locked REST inventory has no upload or other binary transfer endpoint; no REST write is recast as binary."
+    },
+    "direct_read": {
+      "count": 28,
+      "status": "implemented",
+      "operation_manifest": "operations.json",
+      "cli_intent": "direct_read",
+      "evidence": "One operation-backed get command per Twenty object with exact REST path and json_redacted output policy."
+    },
+    "direct_write": {
+      "count": 0,
+      "status": "not_documented",
+      "evidence": "The source-locked REST mutations are schema-backed typed reverse-ETL actions, not direct-write operation contracts. GraphQL mutations are separately schema-generated per workspace and are not inferred."
+    },
+    "etl": {
+      "count": 28,
+      "status": "implemented",
+      "stream_manifest": "streams.json",
+      "cli_intent": "etl",
+      "transport": {
+        "executor": "declarative_api/declarative_stream_source",
+        "modes": ["full_append"],
+        "eligible_streams": 28,
+        "delivery": "keyed, source_ordered, no tombstones"
+      }
+    },
+    "reverse_etl": {
+      "count": 112,
+      "status": "implemented",
+      "action_manifest": "writes.json",
+      "cli_intent": "reverse_etl",
+      "kinds": {
+        "create": 56,
+        "update": 28,
+        "delete": 28
+      },
+      "safety": "Every action uses plan, preview, approval, and execute; all 28 delete actions retain typed destructive confirmation.",
+      "action_eligibility": {
+        "manifest": "internal/connectors/defs/twenty/write_eligibility.json",
+        "coverage": 112,
+        "bound": 0,
+        "eligible_pending_foundation_multiplicity": 55,
+        "provider_idempotency_contract_not_published": 1,
+        "semantic_array_envelope_incompatible": 28,
+        "semantic_tombstone_incompatible": 28,
+        "batch_array_envelope_certification": {
+          "status": "foundation_blocked_deferred_0_3_1",
+          "gap_id": "foundation.reverse-etl.array-envelope-delivery.v1",
+          "decision": "captain_option_c",
+          "target_release": "0.3.1",
+          "source_trace": "Each of the 28 batch rows locks the published source URL, exact POST route, records envelope schema pointer, and declared maxItems 60.",
+          "command_status": "all 28 remain implemented and CLI-reachable; none is partial or disabled"
+        },
+        "rule": "Every action remains implemented and CLI-reachable. Safety, privilege, and destructive classification govern execution and cannot be an ineligibility reason."
+      },
+      "typed_destination": {
+        "status": "not_declared; provider idempotency contract is not published",
+        "bound_actions": [],
+        "provider_contract_gap": {
+          "action": "create_companies",
+          "source": "https://docs.twenty.com/developers/extend/api POST /rest/companies",
+          "reason": "the source-locked action contract has no idempotency_key_header; declaring generic typed delivery would invent a retry guarantee"
+        },
+        "boundary": "The adapter cannot transport tombstones or form a required batch records array from one source record. Captain option C defers only the 28 batch-action application certifications to 0.3.1. Those transport limits, and the absent provider idempotency contract, do not remove, disable, or reclassify any typed CLI command.",
+        "application_dispatch": "No Twenty generic typed destination is registered. This keeps App construction valid while direct typed commands remain implemented and safety-gated.",
+        "multiplicity_dependency": "write_eligibility.json records 55 record-shaped actions that need provider-neutral per-action source bindings. No connector workaround is present."
+      }
+    },
+    "executable_cli": {
+      "count": 168,
+      "status": "implemented",
+      "availability": "all commands implemented",
+      "distribution": {
+        "etl": 28,
+        "direct_read": 28,
+        "reverse_etl": 112
+      },
+      "evidence": "TestAllProviderOperationsHaveExecutableCommands runs the actual commandrunner preflight for every command; connectorgen surface-sync verifies endpoint ownership."
+    }
+  },
+  "excluded_operations": [],
+  "reconciliation": {
+    "documented_operations_accounted_for": 168,
+    "declared_or_disabled": "168 declared, 0 disabled",
+    "dependency": "foundation rollup content is present on main; batch-array application certification is explicitly deferred to 0.3.1 by captain option C",
+    "verification_contract": "connector-local red/green persisted per-action destination and all-action eligibility tests prove the 28 batch rows retain exact source traces and implemented command reachability. This connector remains non-certified: fresh credentialed built-binary pagination, CRUD cleanup, ETL, reverse-ETL acknowledgement/read-back, and documented-binary proof are not claimed by this deferral slice."
+  }
+}

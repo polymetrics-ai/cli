@@ -1,0 +1,518 @@
+{
+  "schema_version": 1,
+  "connector": "salesforce",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/salesforce-parity-source-lock.json",
+    "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+    "source_sha256": "609709e1726e5ff221f8b86d9f7408c5acb0b00e72e99e3ecc4d6635ecadf474",
+    "source_bytes": 76875,
+    "operations_found": null,
+    "mapped_operations": 10,
+    "old_api_surface_rows": 10,
+    "regenerated_api_surface_rows": 10,
+    "api_surface_regeneration": "retained-pending-complete-source",
+    "normalized_inventory_sha256": "4c408db5bf497bfc2c0db31209cd7a7ceb76dbe440b75bff78d49f2ba6278126",
+    "source_retrieval": "browser-rendered",
+    "coverage_confidence": {
+      "level": "dynamic-instance-surface",
+      "basis": "Salesforce REST object resources and actions vary by tenant configuration. The public resource index is a stable generic reference but cannot settle a tenant-independent total."
+    }
+  },
+  "summary": {
+    "old_api_surface_rows": 10,
+    "api_surface_rows": 10,
+    "exact_source_rows": 10,
+    "declared_operations": 10,
+    "operations_found": null,
+    "coverage_confidence": {
+      "level": "dynamic-instance-surface",
+      "basis": "Salesforce REST object resources and actions vary by tenant configuration. The public resource index is a stable generic reference but cannot settle a tenant-independent total."
+    },
+    "enabled_operations": 0,
+    "declaration_pending_operations": 10,
+    "disabled_operations": 0,
+    "documented_deletes": 1,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 3
+      },
+      {
+        "key": "direct_write",
+        "count": 3
+      },
+      {
+        "key": "etl",
+        "count": 4
+      }
+    ],
+    "stream_bindings": 4,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [],
+    "foundation_gaps": [],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 10
+      }
+    ],
+    "transport": {
+      "source_transport": {
+        "state": "declaration-pending",
+        "evidence": "internal/connectors/defs/salesforce/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence."
+      },
+      "destination_transport": {
+        "state": "declaration-pending",
+        "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/salesforce/sync_transport.json is absent."
+      }
+    },
+    "foundation_gap_operations": 0,
+    "partial_commands": 10
+  },
+  "ledger_dispositions": [
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/sobjects",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/services/data/{version}/sobjects",
+        "operation": null,
+        "covered_by": {
+          "stream": "sobjects"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/salesforce-parity-source-lock.json",
+        "source_id": "salesforce.local-api-surface.get-services-data-version-sobjects-1",
+        "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+        "source_location": "api_surface.json:endpoints[0]",
+        "operation_id": "get-services-data-version-sobjects-1",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[0]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-services-data-version-sobjects\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-services-data-version-sobjects",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/salesforce/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/query (SELECT ... FROM Account)",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/services/data/{version}/query (SELECT ... FROM Account)",
+        "operation": null,
+        "covered_by": {
+          "stream": "accounts"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/salesforce-parity-source-lock.json",
+        "source_id": "salesforce.local-api-surface.get-services-data-version-query-select-from-account-2",
+        "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+        "source_location": "api_surface.json:endpoints[1]",
+        "operation_id": "get-services-data-version-query-select-from-account-2",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[1]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-services-data-version-query-select-from-account\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-services-data-version-query-select-from-account",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/salesforce/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/query (SELECT ... FROM Contact)",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/services/data/{version}/query (SELECT ... FROM Contact)",
+        "operation": null,
+        "covered_by": {
+          "stream": "contacts"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/salesforce-parity-source-lock.json",
+        "source_id": "salesforce.local-api-surface.get-services-data-version-query-select-from-contact-3",
+        "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+        "source_location": "api_surface.json:endpoints[2]",
+        "operation_id": "get-services-data-version-query-select-from-contact-3",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[2]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-services-data-version-query-select-from-contact\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-services-data-version-query-select-from-contact",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/salesforce/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/query (SELECT ... FROM Lead)",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "GET",
+        "path": "/services/data/{version}/query (SELECT ... FROM Lead)",
+        "operation": null,
+        "covered_by": {
+          "stream": "leads"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/salesforce-parity-source-lock.json",
+        "source_id": "salesforce.local-api-surface.get-services-data-version-query-select-from-lead-4",
+        "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+        "source_location": "api_surface.json:endpoints[3]",
+        "operation_id": "get-services-data-version-query-select-from-lead-4",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[3]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-services-data-version-query-select-from-lead\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-services-data-version-query-select-from-lead",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/salesforce/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/query (arbitrary SOQL)",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/services/data/{version}/query (arbitrary SOQL)",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/services/data/{version}/query (arbitrary SOQL) is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+        }
+      },
+      "source": {
+        "source_lock": "sources/salesforce-parity-source-lock.json",
+        "source_id": "salesforce.local-api-surface.get-services-data-version-query-arbitrary-soql-5",
+        "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+        "source_location": "api_surface.json:endpoints[4]",
+        "operation_id": "get-services-data-version-query-arbitrary-soql-5",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[4]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-services-data-version-query-arbitrary-soql\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-services-data-version-query-arbitrary-soql",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/sobjects/{sObject}/describe",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/services/data/{version}/sobjects/{sObject}/describe",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/services/data/{version}/sobjects/{sObject}/describe is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+        }
+      },
+      "source": {
+        "source_lock": "sources/salesforce-parity-source-lock.json",
+        "source_id": "salesforce.local-api-surface.get-services-data-version-sobjects-sobject-describe-6",
+        "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+        "source_location": "api_surface.json:endpoints[5]",
+        "operation_id": "get-services-data-version-sobjects-sobject-describe-6",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[5]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-services-data-version-sobjects-s-object-describe\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-services-data-version-sobjects-s-object-describe",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/services/data/{version}/sobjects/{sObject}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/services/data/{version}/sobjects/{sObject}",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/services/data/{version}/sobjects/{sObject} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/salesforce-parity-source-lock.json",
+        "source_id": "salesforce.local-api-surface.post-services-data-version-sobjects-sobject-7",
+        "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+        "source_location": "api_surface.json:endpoints[6]",
+        "operation_id": "post-services-data-version-sobjects-sobject-7",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[6]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-services-data-version-sobjects-s-object\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-services-data-version-sobjects-s-object",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/services/data/{version}/sobjects/{sObject}/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "PATCH",
+        "path": "/services/data/{version}/sobjects/{sObject}/{id}",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/services/data/{version}/sobjects/{sObject}/{id} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/salesforce-parity-source-lock.json",
+        "source_id": "salesforce.local-api-surface.patch-services-data-version-sobjects-sobject-id-8",
+        "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+        "source_location": "api_surface.json:endpoints[7]",
+        "operation_id": "patch-services-data-version-sobjects-sobject-id-8",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[7]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations patch-services-data-version-sobjects-s-object-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations patch-services-data-version-sobjects-s-object-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/services/data/{version}/sobjects/{sObject}/{id}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/services/data/{version}/sobjects/{sObject}/{id}",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/services/data/{version}/sobjects/{sObject}/{id} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+        }
+      },
+      "source": {
+        "source_lock": "sources/salesforce-parity-source-lock.json",
+        "source_id": "salesforce.local-api-surface.delete-services-data-version-sobjects-sobject-id-9",
+        "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+        "source_location": "api_surface.json:endpoints[8]",
+        "operation_id": "delete-services-data-version-sobjects-sobject-id-9",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[8]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations delete-services-data-version-sobjects-s-object-id\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-services-data-version-sobjects-s-object-id",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/services/data/{version}/jobs/query (Bulk API)",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/services/data/{version}/jobs/query (Bulk API)",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "/services/data/{version}/jobs/query (Bulk API) is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+        }
+      },
+      "source": {
+        "source_lock": "sources/salesforce-parity-source-lock.json",
+        "source_id": "salesforce.local-api-surface.get-services-data-version-jobs-query-bulk-api-10",
+        "source_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm",
+        "source_location": "api_surface.json:endpoints[9]",
+        "operation_id": "get-services-data-version-jobs-query-bulk-api-10",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[9]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-services-data-version-jobs-query-bulk-api\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-services-data-version-jobs-query-bulk-api",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    }
+  ]
+}

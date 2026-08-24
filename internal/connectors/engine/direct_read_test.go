@@ -478,7 +478,7 @@ func TestDirectReadDirectoryPolicyRejectsFileResponse(t *testing.T) {
 	}
 }
 
-func TestJSONOutputRedactionPreservesOrdinaryCredentialNamedFieldsAndMasksConcreteSecrets(t *testing.T) {
+func TestJSONOutputRedactionPreservesProviderValuesEqualToConfiguredCredentials(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{
@@ -509,8 +509,8 @@ func TestJSONOutputRedactionPreservesOrdinaryCredentialNamedFieldsAndMasksConcre
 		t.Fatalf("ordinary provider fields were removed: %+v", body)
 	}
 	nested := body["nested"].(map[string]any)
-	if nested["apiToken"] != "ordinary-occurrence-token" || nested["echo"] != "[masked]" || nested["safe"] != "ok" {
-		t.Fatalf("nested redaction = %+v, want names preserved and exact credential masked", nested)
+	if nested["apiToken"] != "ordinary-occurrence-token" || nested["echo"] != "secret-token" || nested["safe"] != "ok" {
+		t.Fatalf("nested provider output = %+v, want undeclared values preserved", nested)
 	}
 	items := body["items"].([]any)
 	item := items[0].(map[string]any)
@@ -643,7 +643,7 @@ func TestOperationDirectReadAppliesDeclaredSensitiveRedactFields(t *testing.T) {
 	}
 }
 
-func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
+func TestOperationDirectReadPOSTJSONBodyValidatesAndPreservesUndeclaredProviderValue(t *testing.T) {
 	var sawBody map[string]any
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -707,8 +707,8 @@ func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
 		t.Fatalf("request body = %+v, want emails array", sawBody)
 	}
 	body := result.Body.(map[string]any)
-	if body["apiToken"] != "[masked]" {
-		t.Fatalf("response body = %+v, want exact configured secret masked in place", body)
+	if body["apiToken"] != "secret-token" {
+		t.Fatalf("response body = %+v, want undeclared provider value preserved", body)
 	}
 }
 
@@ -1060,7 +1060,7 @@ func TestOperationDirectReadPreservesDeclaredResponseFieldsAndMasksKnownSecrets(
 	}
 }
 
-func TestOperationDirectReadMasksConfiguredResponseHeaderValues(t *testing.T) {
+func TestOperationDirectReadPreservesConfiguredEqualResponseHeaderValues(t *testing.T) {
 	const credential = "configured-header-material"
 	const occurrenceID = "occurrence-9007199254740993"
 	const unconfiguredToken = "ghp_unconfigured_provider_token"
@@ -1102,8 +1102,8 @@ func TestOperationDirectReadMasksConfiguredResponseHeaderValues(t *testing.T) {
 	for name, want := range map[string][]string{
 		"X-Request-ID":          {occurrenceID},
 		"X-Provider-Token":      {unconfiguredToken},
-		"X-Configured-Secret":   {"[masked]"},
-		"X-Configured-Encoding": {"[masked]"},
+		"X-Configured-Secret":   {credential},
+		"X-Configured-Encoding": {encodedCredential},
 	} {
 		header, ok := result.Headers[name]
 		if !ok || header.Redacted || !reflect.DeepEqual(header.Values, want) {
@@ -1114,8 +1114,8 @@ func TestOperationDirectReadMasksConfiguredResponseHeaderValues(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if bytes.Contains(public, []byte(credential)) || bytes.Contains(public, []byte(encodedCredential)) {
-		t.Fatal("public direct-read headers exposed configured material")
+	if !bytes.Contains(public, []byte(credential)) || !bytes.Contains(public, []byte(encodedCredential)) {
+		t.Fatal("public direct-read headers did not preserve provider-returned configured-equal material")
 	}
 }
 
@@ -1421,7 +1421,7 @@ func TestDirectReadCompleteReceiptOnSuccessAndProviderError(t *testing.T) {
 	}
 }
 
-func TestDirectReadReceiptPreservesAbsentAndInvalidBodiesAndMasksExactSecrets(t *testing.T) {
+func TestDirectReadReceiptPreservesAbsentAndInvalidBodiesWithConfiguredEqualValues(t *testing.T) {
 	t.Run("absent body", func(t *testing.T) {
 		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 			w.WriteHeader(http.StatusNoContent)
@@ -1465,17 +1465,18 @@ func TestDirectReadReceiptPreservesAbsentAndInvalidBodiesAndMasksExactSecrets(t 
 		if result.Receipt == nil || result.Receipt.BodyRawEncoding != "base64" || result.Receipt.BodyBytes != int64(len(raw)) {
 			t.Fatalf("invalid UTF-8 receipt = %#v", result.Receipt)
 		}
-		// The engine receipt is immutable. Public serialization applies masking
-		// and preserves the binary encoding without exposing raw secret bytes.
+		// The engine receipt is immutable. Public serialization preserves a
+		// provider-returned byte sequence even when it happens to contain a
+		// configured credential value, retaining its binary encoding.
 		public := connectors.SanitizeProviderResponseReceiptForOutput(*result.Receipt, map[string]string{"api_token": secret})
 		decoded, decodeErr := base64.StdEncoding.DecodeString(public.BodyRaw)
-		if decodeErr != nil || bytes.Contains(decoded, []byte(secret)) || !bytes.Contains(decoded, []byte("[masked]")) {
-			t.Fatalf("masked invalid UTF-8 receipt = %q, decode err %v", decoded, decodeErr)
+		if decodeErr != nil || !bytes.Equal(decoded, raw) {
+			t.Fatalf("preserved invalid UTF-8 receipt = %q, decode err %v", decoded, decodeErr)
 		}
 	})
 }
 
-func TestOperationDirectReadMasksConfiguredCursorAtThePublicBoundary(t *testing.T) {
+func TestOperationDirectReadPreservesConfiguredEqualCursorAtThePublicBoundary(t *testing.T) {
 	const configuredValue = "fixture-cursor-material"
 	issued := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
@@ -1499,8 +1500,8 @@ func TestOperationDirectReadMasksConfiguredCursorAtThePublicBoundary(t *testing.
 	if err != nil {
 		t.Fatal(err)
 	}
-	if bytes.Contains(public, []byte(configuredValue)) {
-		t.Fatal("public direct-read result exposed configured cursor material")
+	if !bytes.Contains(public, []byte(configuredValue)) {
+		t.Fatal("public direct-read result did not preserve provider cursor material")
 	}
 	body := result.Body.(map[string]any)
 	row := body["results"].([]any)[0].(map[string]any)

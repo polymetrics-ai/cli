@@ -12,6 +12,26 @@ import (
 
 const githubIssuesSourceID = "github.rest.issues/list-for-repo"
 
+const githubReadOnlySourceID = "github.rest.actions/list-artifacts-for-repo"
+
+func (artifact operationEvidenceArtifact) rollupContaining(rollups []operationEvidenceRollup, sourceID string) (operationEvidenceRollup, bool) {
+	for _, rollup := range rollups {
+		if slices.Contains(rollup.SourceIDs, sourceID) {
+			return rollup, true
+		}
+	}
+	return operationEvidenceRollup{}, false
+}
+
+func (artifact operationEvidenceArtifact) readOnlyRollup(connector, policy string) (operationEvidenceReadOnlyRollup, bool) {
+	for _, rollup := range artifact.IntentionallyReadOnly {
+		if rollup.Connector == connector && rollup.Policy == policy {
+			return rollup, true
+		}
+	}
+	return operationEvidenceReadOnlyRollup{}, false
+}
+
 func TestOperationEvidenceProjectsGitHubAcrossEveryEvidenceSurface(t *testing.T) {
 	root := operationEvidenceWorkspace(t)
 	artifact, _, stderr := runOperationEvidenceForTest(t, root, "")
@@ -172,6 +192,51 @@ func TestOperationEvidenceRecordsProviderEvidencedAbsence(t *testing.T) {
 	}
 	if len(row.Gaps) != 0 {
 		t.Fatalf("provider-evidenced absence was rewritten as a gap: %+v", row.Gaps)
+	}
+}
+
+func TestOperationEvidenceSeparatesDeclaredReadOnlyFromFoundations(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	mutateOperationEvidenceJSON(t, filepath.Join(root, "internal", "connectors", "defs", "github", "api_surface.json"), func(document map[string]any) {
+		for _, item := range document["endpoints"].([]any) {
+			endpoint := item.(map[string]any)
+			if endpoint["method"] != "GET" || endpoint["path"] != "/repos/{owner}/{repo}/actions/artifacts" {
+				continue
+			}
+			delete(endpoint, "covered_by")
+			endpoint["operation"] = map[string]any{
+				"model":              "read_only",
+				"status":             "blocked",
+				"risk":               "low",
+				"blocked_by_default": true,
+				"reason":             "The connector intentionally does not implement this source-cited read.",
+				"notes":              "Named policy: source-cited-read-only-operations-r1",
+			}
+			return
+		}
+		t.Fatalf("read-only source endpoint %q was not found", githubReadOnlySourceID)
+	})
+
+	artifact, _, stderr := runOperationEvidenceForTest(t, root, "")
+	if stderr != "" {
+		t.Fatalf("operation-evidence wrote diagnostics for read-only declaration: %s", stderr)
+	}
+	row, found := artifact.row(githubReadOnlySourceID)
+	if !found {
+		t.Fatalf("operation evidence omitted declared read-only source row %q", githubReadOnlySourceID)
+	}
+	if row.ReadOnly == nil || row.ReadOnly.Policy != "source-cited-read-only-operations-r1" || row.ReadOnly.Reason == "" {
+		t.Fatalf("read-only evidence = %+v, row = %+v, want explicit policy and reason", row.ReadOnly, row)
+	}
+	if row.Runtime.Enabled || len(row.Gaps) != 0 || len(row.Foundations) != 0 {
+		t.Fatalf("read-only row was rewritten as an execution or foundation gap: %+v", row)
+	}
+	if _, found := artifact.rollupContaining(artifact.MissingFoundations, githubReadOnlySourceID); found {
+		t.Fatalf("read-only source row leaked into missing-foundation rollups: %+v", artifact.MissingFoundations)
+	}
+	rollup, found := artifact.readOnlyRollup("github", "source-cited-read-only-operations-r1")
+	if !found || !slices.Contains(rollup.SourceIDs, githubReadOnlySourceID) {
+		t.Fatalf("read-only rollup = %+v, want %q", artifact.IntentionallyReadOnly, githubReadOnlySourceID)
 	}
 }
 

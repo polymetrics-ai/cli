@@ -386,6 +386,7 @@ Reads implemented Asana project-management streams and executes typed, approval-
 - Read implemented Asana streams and inspect planned fixed-target Asana operation parity without raw API passthrough.
 - Usage: pm asana <command> [flags]
 - Source CLI: Asana REST API (Pinned Asana OpenAPI commit 56796a67a3c093eedf55fd9682357957a2ebfd85)
+- PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
 - Global flags:
   - --credential (string): Credential name to use for the Asana request.
   - --connection (string): Credential name alias used only when --credential is omitted; does not resolve pm connections.
