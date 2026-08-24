@@ -1046,10 +1046,13 @@ func operationEvidenceHasDirectCommand(commands []engine.CLICommand) bool {
 // runner accepts its exact path; duplicating its executor/schema checks here
 // would let operation evidence drift from executable behavior.
 func operationEvidenceRuntimePreflight(bundle engine.Bundle, commands []engine.CLICommand) error {
-	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	var connector *engine.Connector
 	for _, command := range commands {
 		if command.Availability != "implemented" {
 			continue
+		}
+		if connector == nil {
+			connector = engine.New(bundle, engine.HooksFor(bundle.Name))
 		}
 		if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
 			return fmt.Errorf("command %q: %w", command.Path, err)
