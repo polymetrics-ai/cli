@@ -6,33 +6,37 @@
       "path": "operations get-sell-fulfillment-v1-order",
       "summary": "Declared etl: GET /sell/fulfillment/v1/order.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
-      "notes": "Blocked: locked source operation ebay-fulfillment.local-api-surface.get-sell-fulfillment-v1-order-1 has no declaration-owned executable etl route."
+      "notes": "Provider GET /sell/fulfillment/v1/order is bound to the existing orders stream with its connector-owned schema and pagination contract.",
+      "stream": "orders"
     },
     {
       "path": "operations get-sell-fulfillment-v1-order-exploded-line-items",
       "summary": "Declared etl: GET /sell/fulfillment/v1/order (exploded lineItems).",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
-      "notes": "Blocked: locked source operation ebay-fulfillment.local-api-surface.get-sell-fulfillment-v1-order-exploded-lineitems-2 has no declaration-owned executable etl route."
+      "notes": "Provider GET /sell/fulfillment/v1/order (exploded lineItems) is bound to the existing order_line_items stream with its connector-owned schema and pagination contract.",
+      "stream": "order_line_items"
     },
     {
       "path": "operations get-sell-fulfillment-v1-order-shipping-projection",
       "summary": "Declared etl: GET /sell/fulfillment/v1/order (shipping projection).",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
-      "notes": "Blocked: locked source operation ebay-fulfillment.local-api-surface.get-sell-fulfillment-v1-order-shipping-projection-3 has no declaration-owned executable etl route."
+      "notes": "Provider GET /sell/fulfillment/v1/order (shipping projection) is bound to the existing shipping_fulfillments stream with its connector-owned schema and pagination contract.",
+      "stream": "shipping_fulfillments"
     },
     {
       "path": "operations get-sell-fulfillment-v1-payment-dispute",
       "summary": "Declared etl: GET /sell/fulfillment/v1/payment_dispute.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
-      "notes": "Blocked: locked source operation ebay-fulfillment.local-api-surface.get-sell-fulfillment-v1-payment-dispute-4 has no declaration-owned executable etl route."
+      "notes": "Provider GET /sell/fulfillment/v1/payment_dispute is bound to the existing payment_disputes stream with its connector-owned schema and pagination contract.",
+      "stream": "payment_disputes"
     },
     {
       "path": "operations get-sell-fulfillment-v1-order-order-id",

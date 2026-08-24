@@ -839,12 +839,12 @@ contract/dispatch error is useful at 100 and must stop the wave before any large
 | `direct_read` | 0 | Set aside | The validator rejects every Category-A direct-read endpoint because no endpoint is covered by an executable stream or operation contract. Promoting one would be an availability-only claim, so this lane remains partial. |
 | `etl` | 100 | BambooHR 62; LaunchDarkly 5; Pipedrive 21; ShipStation 4; Squarespace 8 | Each command is joined exactly to a pinned GET endpoint already covered by its named connector-owned stream, including nested/array-bearing schemas and both collection and configured-resource routes. |
 | `direct_write` | 0 | Set aside | The three earlier HubSpot candidates remain typed metadata, not executable direct-write contracts; the destination-transport gap recorded below also applies to the write lane. |
-| **Total** | **100** | **7 connectors** | **No source lock or engine change.** |
+| **Total** | **100** | **5 connectors** | **No source lock or engine change.** |
 
 ### Reverse-ETL exception recorded before conversion
 
 The requested intent spread cannot safely include a newly promoted `reverse_etl` command. None of
-the seven Wave-1 connectors has `sync_transport.json`; the existing partial Zendesk Support write
+the five Wave-1 connectors has `sync_transport.json`; the existing partial Zendesk Support write
 rows also include the thirteen source-declared open request objects already excluded from Category
 A. Adding a connector-local transport solely to make one test command pass would invent a
 destination contract, and changing the shared transport model is out of scope. Wave 1 therefore
@@ -937,17 +937,17 @@ note. No source lock, stream schema, endpoint, shared engine, or transport decla
 | Squarespace | 8 | 8 | 8 exact `error: missing --credential` |
 | **Total** | **100** | **100** | **100/100 proven** |
 
-The binary was rebuilt after the declaration changes. Each probe ran sequentially from its own
-newly initialized project with no configured credential; each exited `1`, printed the terminal
-line `error: missing --credential`, and did not print `unknown command` or make a provider call.
-The 100 checks were bounded into 10-or-fewer-command batches only to stay below the execution
-window; this did not share credentials or execution state.
+The binary was rebuilt after the declaration changes. Each probe ran sequentially in a newly
+initialized project with no configured credential; each exited `1`, printed the terminal line
+`error: missing --credential`, and did not print `unknown command` or make a provider call. The
+100 checks were bounded into 10-or-fewer-command batches only to stay below the execution window;
+each batch used an independent credential-free project.
 
 **Partial/deferred: direct reads.** The attempted high-variance direct-read sample was not
 promoted. `connectorgen validate` rejects an `implemented` direct read unless its endpoint is
 covered by an executable stream/operation contract. The source-defined partial command for
 `GET /cms/site-search/2025-09/search`, for example, fails as “not covered by an executable
-surface.” The same absence applies to the Wave-1 direct-read candidates across the seven planned
+surface.” The same absence applies to the Wave-1 direct-read candidates across the five planned
 connectors, so they remain partial rather than becoming an availability-only claim.
 
 **Unsupported/set aside: writes.** The 390 write actions remain set aside under the previously
@@ -981,3 +981,48 @@ bounded sequential batches (8, 8, and 6). All 22 exited `1` with exactly the ter
 now has 84 source-cited, endpoint-to-existing-stream ETL bindings. Together with Wave 1, the
 honest exact-binding total is 122 commands: BambooHR 84, LaunchDarkly 5, Pipedrive 21, ShipStation
 4, and Squarespace 8. Direct reads and write lanes remain unchanged.
+
+### Next bounded increment — remaining Category-A exact ETL bindings
+
+- **Red:** Re-measurement of all 20 bundles found 58 additional partial ETL commands whose exact
+  `Declared etl: GET <path>.` summary maps to a pinned `api_surface.json` GET endpoint with an
+  existing `covered_by.stream`. Forty-eight are Category A: Airtable 5, Buildkite 6, eBay
+  Fulfillment 4, Linear 4, Pinterest 5, QuickBooks 5, Salesforce 4, SonarCloud 11, and TikTok
+  Marketing 4. Each command already carries its provider `source_url`; the mapping comes only from
+  its connector-local pinned endpoint and stream declaration.
+- **Red/explicit exclusion:** Fastly 6 and WooCommerce 4 satisfy the same endpoint-to-stream
+  shape, but they are Category B and must first receive the requested official-document capture
+  with exact URL, SHA-256, byte count, and source location. They are not part of this increment.
+- **Green condition:** for each of the 48 Category-A rows, set only the exact existing stream,
+  implemented availability, and binding note; pass connector validation and full surface-sync;
+  then prove every command with the rebuilt binary in a fresh credential-free project. Any output
+  other than terminal `error: missing --credential` stops the increment. Direct reads, direct
+  writes, reverse ETL, and transport definitions remain unchanged.
+
+### Next bounded increment — green report
+
+**Correctly mapped and proven: 48 Category-A ETL commands.** The source-preserving mapping was
+identical to the prior increments: the command's source-cited `Declared etl: GET <path>.` summary
+matched exactly one pinned `api_surface.json` `GET <path>` endpoint whose `covered_by.stream`
+already named the executable connector stream. The edits set only `availability`, that exact
+stream, and a binding note.
+
+| Connector | Exact bindings | Built-binary probes | Result |
+| --- | ---: | ---: | --- |
+| Airtable | 5 | 5 | 5 exact `error: missing --credential` |
+| Buildkite | 6 | 6 | 6 exact `error: missing --credential` |
+| eBay Fulfillment | 4 | 4 | 4 exact `error: missing --credential` |
+| Linear | 4 | 4 | 4 exact `error: missing --credential` |
+| Pinterest | 5 | 5 | 5 exact `error: missing --credential` |
+| QuickBooks | 5 | 5 | 5 exact `error: missing --credential` |
+| Salesforce | 4 | 4 | 4 exact `error: missing --credential` |
+| SonarCloud | 11 | 11 | 11 exact `error: missing --credential` |
+| TikTok Marketing | 4 | 4 | 4 exact `error: missing --credential` |
+| **Total** | **48** | **48** | **48/48 proven** |
+
+The rebuilt binary ran one sequential probe set per connector from a newly initialized,
+credential-free project. Every command exited `1` at terminal `error: missing --credential`, with
+no `unknown command` result and no provider call. The cumulative exact endpoint-to-existing-stream
+ETL total is now **170 commands across 14 connectors**. Fastly's six and WooCommerce's four exact
+shapes remain partial pending their required Category-B official-document capture; direct reads,
+direct writes, reverse ETL, and transport declarations remain unchanged.

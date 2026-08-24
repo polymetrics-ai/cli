@@ -6,33 +6,37 @@
       "path": "operations get-advertiser-info",
       "summary": "Declared etl: GET /advertiser/info/.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
-      "notes": "Blocked: locked source operation tiktok-marketing.local-api-surface.get-advertiser-info-1 has no declaration-owned executable etl route."
+      "notes": "Provider GET /advertiser/info/ is bound to the existing advertisers stream with its connector-owned schema and pagination contract.",
+      "stream": "advertisers"
     },
     {
       "path": "operations get-campaign-get",
       "summary": "Declared etl: GET /campaign/get/.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
-      "notes": "Blocked: locked source operation tiktok-marketing.local-api-surface.get-campaign-get-2 has no declaration-owned executable etl route."
+      "notes": "Provider GET /campaign/get/ is bound to the existing campaigns stream with its connector-owned schema and pagination contract.",
+      "stream": "campaigns"
     },
     {
       "path": "operations get-adgroup-get",
       "summary": "Declared etl: GET /adgroup/get/.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
-      "notes": "Blocked: locked source operation tiktok-marketing.local-api-surface.get-adgroup-get-3 has no declaration-owned executable etl route."
+      "notes": "Provider GET /adgroup/get/ is bound to the existing adgroups stream with its connector-owned schema and pagination contract.",
+      "stream": "adgroups"
     },
     {
       "path": "operations get-ad-get",
       "summary": "Declared etl: GET /ad/get/.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
-      "notes": "Blocked: locked source operation tiktok-marketing.local-api-surface.get-ad-get-4 has no declaration-owned executable etl route."
+      "notes": "Provider GET /ad/get/ is bound to the existing ads stream with its connector-owned schema and pagination contract.",
+      "stream": "ads"
     },
     {
       "path": "operations get-report-integrated-get",
