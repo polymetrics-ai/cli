@@ -11,6 +11,7 @@ import (
 	"io"
 	"math"
 	"math/big"
+	"mime"
 	"net"
 	"net/http"
 	"net/url"
@@ -149,16 +150,18 @@ type sourceImportRESTOperation struct {
 	OperationID    string `json:"operation_id"`
 	Deprecated     bool   `json:"deprecated"`
 	SourceLocation string `json:"source_location"`
+	CitationURL    string `json:"citation_url,omitempty"`
 }
 
 type sourceImportREST struct {
 	sourceImportArtifact
-	Commit          string                      `json:"commit,omitempty"`
-	InfoVersion     string                      `json:"info_version,omitempty"`
-	Operations      []sourceImportRESTOperation `json:"operations,omitempty"`
-	Retrieval       string                      `json:"-"`
-	OpenAPIVersions []string                    `json:"-"`
-	SourceDocuments []sourceImportRESTDocument  `json:"-"`
+	Commit             string                          `json:"commit,omitempty"`
+	InfoVersion        string                          `json:"info_version,omitempty"`
+	Operations         []sourceImportRESTOperation     `json:"operations,omitempty"`
+	Retrieval          string                          `json:"-"`
+	OpenAPIVersions    []string                        `json:"-"`
+	CoverageConfidence *sourceImportCoverageConfidence `json:"-"`
+	SourceDocuments    []sourceImportRESTDocument      `json:"-"`
 }
 
 // sourceImportPublishedSource records the provider document cited by an
@@ -173,15 +176,43 @@ type sourceImportPublishedSource struct {
 	Adapter    string `json:"adapter"`
 }
 
-// sourceImportRESTDocument is a v3 document-owned REST inventory. A document
-// retains both the stable bytes parsed by the importer and the provider
-// publication from which a capture adapter derived them.
+const (
+	sourceImportDocumentKindOpenAPI           = "openapi"
+	sourceImportDocumentKindRenderedReference = "rendered_reference"
+	sourceImportDocumentKindBundle            = "bundle"
+	sourceImportDocumentKindUnavailable       = "unavailable"
+)
+
+// sourceImportRESTDocument is a v3 document-owned REST inventory. The absent
+// source kind remains OpenAPI for byte-for-byte compatibility with the landed
+// v3 contract. Non-OpenAPI documents retain captured bytes and their provider
+// publication separately: source import never fetches a citation URL; the
+// captured bytes and SHA-256 are the evidence, while URLs are provenance only.
 type sourceImportRESTDocument struct {
-	ID              string                      `json:"id"`
-	Artifact        sourceImportArtifact        `json:"artifact"`
-	PublishedSource sourceImportPublishedSource `json:"published_source"`
-	InfoVersion     string                      `json:"info_version,omitempty"`
-	Operations      []sourceImportRESTOperation `json:"operations"`
+	ID                string                      `json:"id"`
+	Kind              string                      `json:"kind,omitempty"`
+	ContentType       string                      `json:"content_type,omitempty"`
+	Artifact          sourceImportArtifact        `json:"artifact"`
+	PublishedSource   sourceImportPublishedSource `json:"published_source"`
+	InfoVersion       string                      `json:"info_version,omitempty"`
+	UnavailableReason string                      `json:"unavailable_reason,omitempty"`
+	Operations        []sourceImportRESTOperation `json:"operations"`
+}
+
+func (document sourceImportRESTDocument) sourceKind() string {
+	if document.Kind == "" {
+		return sourceImportDocumentKindOpenAPI
+	}
+	return document.Kind
+}
+
+func (document sourceImportRESTDocument) isUnavailable() bool {
+	return document.sourceKind() == sourceImportDocumentKindUnavailable
+}
+
+type sourceImportCoverageConfidence struct {
+	Level string `json:"level"`
+	Basis string `json:"basis"`
 }
 
 type sourceGraphQLTypeRef struct {
@@ -268,9 +299,10 @@ type sourceImportLockLegacy struct {
 }
 
 type sourceImportRESTV3 struct {
-	Retrieval       string                     `json:"retrieval"`
-	OpenAPIVersions []string                   `json:"openapi"`
-	SourceDocuments []sourceImportRESTDocument `json:"source_documents"`
+	Retrieval          string                          `json:"retrieval"`
+	OpenAPIVersions    []string                        `json:"openapi"`
+	CoverageConfidence *sourceImportCoverageConfidence `json:"coverage_confidence,omitempty"`
+	SourceDocuments    []sourceImportRESTDocument      `json:"source_documents"`
 }
 
 type sourceImportLockV3 struct {
@@ -307,9 +339,10 @@ func (lock *sourceImportLock) UnmarshalJSON(raw []byte) error {
 			Connector:     v3.Connector,
 			CapturedAt:    v3.CapturedAt,
 			Rest: sourceImportREST{
-				Retrieval:       v3.Rest.Retrieval,
-				OpenAPIVersions: v3.Rest.OpenAPIVersions,
-				SourceDocuments: v3.Rest.SourceDocuments,
+				Retrieval:          v3.Rest.Retrieval,
+				OpenAPIVersions:    v3.Rest.OpenAPIVersions,
+				CoverageConfidence: v3.Rest.CoverageConfidence,
+				SourceDocuments:    v3.Rest.SourceDocuments,
 			},
 			GraphQL: v3.GraphQL,
 			Counts:  v3.Counts,
@@ -333,6 +366,8 @@ type sourceImportSource struct {
 	PublishedSHA256     string `json:"published_sha256,omitempty"`
 	PublishedBytes      int64  `json:"published_bytes,omitempty"`
 	PublishedAdapter    string `json:"published_adapter,omitempty"`
+	ContentType         string `json:"content_type,omitempty"`
+	CitationURL         string `json:"citation_url,omitempty"`
 }
 
 type sourceParameterDescriptor struct {
@@ -688,10 +723,7 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 	if len(lock.Rest.SourceDocuments) > defaultSourceImportDocuments {
 		return fmt.Errorf("source lock v3 document count exceeds %d", defaultSourceImportDocuments)
 	}
-	if len(lock.Rest.OpenAPIVersions) == 0 {
-		return fmt.Errorf("source lock has no v3 REST OpenAPI versions")
-	}
-	if !sort.StringsAreSorted(lock.Rest.OpenAPIVersions) {
+	if len(lock.Rest.OpenAPIVersions) > 0 && !sort.StringsAreSorted(lock.Rest.OpenAPIVersions) {
 		return fmt.Errorf("source lock v3 REST OpenAPI versions are not sorted")
 	}
 	versions := make(map[string]bool, len(lock.Rest.OpenAPIVersions))
@@ -707,6 +739,8 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 	seenOperations := map[string]bool{}
 	seenRoutes := map[string]string{}
 	restCount := 0
+	openAPIDocuments := 0
+	requiresCoverageConfidence := false
 	for index, document := range lock.Rest.SourceDocuments {
 		if document.ID == "" || document.ID != strings.ToLower(document.ID) || document.ID != strings.TrimSpace(document.ID) || !sourceImportDocumentID(document.ID) {
 			return fmt.Errorf("source lock has invalid v3 REST document ID %q", document.ID)
@@ -718,17 +752,67 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 			return fmt.Errorf("source lock v3 REST source documents are not sorted")
 		}
 		seenDocuments[document.ID] = true
+		kind := document.sourceKind()
+		switch kind {
+		case sourceImportDocumentKindOpenAPI, sourceImportDocumentKindRenderedReference, sourceImportDocumentKindBundle, sourceImportDocumentKindUnavailable:
+		default:
+			return fmt.Errorf("source lock v3 REST document %q has unsupported kind %q", document.ID, kind)
+		}
+		if kind == sourceImportDocumentKindUnavailable {
+			requiresCoverageConfidence = true
+			if err := validateSourceImportUnavailableReason(document.UnavailableReason); err != nil {
+				return fmt.Errorf("source lock v3 unavailable document %q has invalid reason: %w", document.ID, err)
+			}
+			if len(document.Operations) != 0 {
+				return fmt.Errorf("source lock v3 unavailable document %q must not declare operations", document.ID)
+			}
+			if err := validateSourceImportUnavailableCapture(document); err != nil {
+				return fmt.Errorf("source lock v3 unavailable document %q has invalid capture: %w", document.ID, err)
+			}
+			continue
+		}
 		if err := validateSourceImportArtifact(document.Artifact); err != nil {
 			return fmt.Errorf("source lock v3 REST document %q has invalid artifact: %w", document.ID, err)
-		}
-		if document.Artifact.OpenAPI == "" || !versions[document.Artifact.OpenAPI] {
-			return fmt.Errorf("source lock v3 REST document %q has an OpenAPI version outside the aggregate inventory", document.ID)
 		}
 		if err := validateSourceImportPublishedSource(document.PublishedSource); err != nil {
 			return fmt.Errorf("source lock v3 REST document %q has invalid published source: %w", document.ID, err)
 		}
+		switch kind {
+		case sourceImportDocumentKindOpenAPI:
+			if document.Artifact.Swagger != "" {
+				// Swagger 2.0 is a complete source description with its own form
+				// pin. It does not enter openapi_versions, which inventories only
+				// OpenAPI 3.0/3.1 documents.
+				break
+			}
+			openAPIDocuments++
+			if document.Artifact.OpenAPI == "" || !versions[document.Artifact.OpenAPI] {
+				return fmt.Errorf("source lock v3 REST document %q has an OpenAPI version outside the aggregate inventory", document.ID)
+			}
+		case sourceImportDocumentKindRenderedReference, sourceImportDocumentKindBundle:
+			requiresCoverageConfidence = true
+			if document.Artifact.OpenAPI != "" || document.Artifact.Swagger != "" {
+				return fmt.Errorf("source lock v3 REST document %q kind %q must not declare an OpenAPI or Swagger version", document.ID, kind)
+			}
+			if err := validateSourceImportDocumentContentType(document.ContentType); err != nil {
+				return fmt.Errorf("source lock v3 REST document %q has invalid content type: %w", document.ID, err)
+			}
+			if err := validateSourceImportCapturedDocumentEvidence(document); err != nil {
+				return fmt.Errorf("source lock v3 REST document %q has invalid captured evidence: %w", document.ID, err)
+			}
+			if kind == sourceImportDocumentKindBundle && !sourceImportBundleContentType(document.ContentType) {
+				return fmt.Errorf("source lock v3 REST bundle document %q must declare an archive content type (application/zip, application/gzip, or application/x-gzip)", document.ID)
+			}
+		}
 		if len(document.Operations) == 0 {
-			return fmt.Errorf("source lock v3 REST document %q has no operations", document.ID)
+			if kind == sourceImportDocumentKindOpenAPI {
+				return fmt.Errorf("source lock v3 REST document %q has no operations", document.ID)
+			}
+			// A rendered page or archive can be retained as hash-pinned coverage
+			// evidence even where it contributes no operation. Every declared
+			// operation still takes the same identity, citation, route, dedup, and
+			// count validation below; an empty evidence document cannot declare one.
+			continue
 		}
 		for _, operation := range document.Operations {
 			restCount++
@@ -741,6 +825,11 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 			if err := validateSourceImportPath(operation.Path); err != nil {
 				return fmt.Errorf("source lock v3 REST operation %q has invalid path", operation.ID)
 			}
+			if kind == sourceImportDocumentKindRenderedReference {
+				if err := validateSourceImportRenderedReferenceCitation(operation.CitationURL, document.PublishedSource.SourceURL); err != nil {
+					return fmt.Errorf("source lock v3 rendered-reference operation %q has invalid citation URL: %w", operation.ID, err)
+				}
+			}
 			route := strings.ToUpper(operation.Method) + "\x00" + operation.Path
 			if existing, exists := seenRoutes[route]; exists {
 				return fmt.Errorf("source lock v3 REST route %s %s occurs in both %q and %q", operation.Method, operation.Path, existing, document.ID)
@@ -749,10 +838,93 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 			seenRoutes[route] = document.ID
 		}
 	}
+	if openAPIDocuments > 0 && len(lock.Rest.OpenAPIVersions) == 0 {
+		return fmt.Errorf("source lock has no v3 REST OpenAPI versions")
+	}
+	if openAPIDocuments == 0 && len(lock.Rest.OpenAPIVersions) > 0 {
+		return fmt.Errorf("source lock v3 REST OpenAPI versions require an OpenAPI document")
+	}
+	if requiresCoverageConfidence && lock.Rest.CoverageConfidence == nil {
+		return fmt.Errorf("source lock v3 REST non-OpenAPI documents require coverage confidence")
+	}
+	if lock.Rest.CoverageConfidence != nil {
+		if err := validateSourceImportCoverageConfidence(*lock.Rest.CoverageConfidence); err != nil {
+			return fmt.Errorf("source lock has invalid v3 REST coverage confidence: %w", err)
+		}
+	}
 	if lock.Counts.REST != restCount || lock.Counts.Total != restCount+len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) {
 		return fmt.Errorf("source lock v3 counts do not match document inventories")
 	}
 	return validateSourceImportGraphQLInventory(lock)
+}
+
+func validateSourceImportDocumentContentType(value string) error {
+	if value == "" || value != strings.TrimSpace(value) || strings.ContainsAny(value, "\r\n") {
+		return fmt.Errorf("content type must be a non-empty media type")
+	}
+	mediaType, parameters, err := mime.ParseMediaType(value)
+	if err != nil || mediaType != value || len(parameters) != 0 {
+		return fmt.Errorf("content type must be a normalized media type without parameters")
+	}
+	return nil
+}
+
+// sourceImportBundleContentType intentionally accepts both the registered
+// gzip media type and its widely published x-gzip alias. Bundle enumeration is
+// declared in the checked-in operation inventory until an archive parser is
+// added; captured archive bytes and their hash remain the evidence.
+func sourceImportBundleContentType(value string) bool {
+	switch value {
+	case "application/zip", "application/gzip", "application/x-gzip":
+		return true
+	default:
+		return false
+	}
+}
+
+func validateSourceImportCapturedDocumentEvidence(document sourceImportRESTDocument) error {
+	if document.Artifact.Bytes != document.PublishedSource.Bytes || !strings.EqualFold(document.Artifact.SHA256, document.PublishedSource.SHA256) {
+		return fmt.Errorf("artifact and published capture must have the same bytes and SHA-256")
+	}
+	return nil
+}
+
+func validateSourceImportUnavailableReason(value string) error {
+	if value == "" || value != strings.TrimSpace(value) || len(value) > 1024 || strings.ContainsAny(value, "\r\n") {
+		return fmt.Errorf("reason must be non-empty provenance text")
+	}
+	return nil
+}
+
+// validateSourceImportUnavailableCapture permits an explicit unavailable
+// declaration to record a failed-source reason without fabricating captured
+// bytes. If a capture is available, it remains subject to the same complete
+// artifact and provenance checks as every other document kind. Unavailable
+// declarations have no operations and source import never fetches them.
+func validateSourceImportUnavailableCapture(document sourceImportRESTDocument) error {
+	if document.ContentType == "" && document.Artifact == (sourceImportArtifact{}) && document.PublishedSource == (sourceImportPublishedSource{}) {
+		return nil
+	}
+	if err := validateSourceImportDocumentContentType(document.ContentType); err != nil {
+		return err
+	}
+	if err := validateSourceImportArtifact(document.Artifact); err != nil {
+		return err
+	}
+	if err := validateSourceImportPublishedSource(document.PublishedSource); err != nil {
+		return err
+	}
+	return validateSourceImportCapturedDocumentEvidence(document)
+}
+
+func validateSourceImportCoverageConfidence(confidence sourceImportCoverageConfidence) error {
+	if confidence.Level == "" || confidence.Level != strings.TrimSpace(confidence.Level) || len(confidence.Level) > 128 || strings.ContainsAny(confidence.Level, "\r\n") {
+		return fmt.Errorf("level must be non-empty")
+	}
+	if confidence.Basis == "" || confidence.Basis != strings.TrimSpace(confidence.Basis) || len(confidence.Basis) > 4096 || strings.ContainsAny(confidence.Basis, "\r\n") {
+		return fmt.Errorf("basis must be non-empty provenance text")
+	}
+	return nil
 }
 
 func sourceImportDocumentID(value string) bool {
@@ -931,6 +1103,45 @@ func validateSourceImportBoundedQuery(parsed *url.URL, subject string, requireQu
 	return nil
 }
 
+// validateSourceImportRenderedReferenceCitation keeps an operation citation
+// constrained to the provider publication it documents. Source import never
+// fetches this URL: the captured artifact bytes and their SHA-256 are the
+// evidence, and a citation remains provenance only.
+func validateSourceImportRenderedReferenceCitation(raw, publishedRaw string) error {
+	if raw == "" || raw != strings.TrimSpace(raw) || strings.ContainsAny(raw, "\r\n") {
+		return fmt.Errorf("citation must be a non-empty absolute HTTPS URL")
+	}
+	citation, err := url.Parse(raw)
+	if err != nil || !citation.IsAbs() || citation.Scheme != "https" || citation.Host == "" || citation.User != nil {
+		return fmt.Errorf("citation must be an absolute HTTPS URL without userinfo")
+	}
+	published, err := url.Parse(publishedRaw)
+	if err != nil || !sourceImportURLsShareOrigin(citation, published) {
+		return fmt.Errorf("citation must use the published-source origin")
+	}
+	canonicalCitation := *citation
+	canonicalCitation.Fragment = ""
+	canonicalCitation.RawFragment = ""
+	if err := validateSourceImportPublishedURL(canonicalCitation.String()); err != nil {
+		return fmt.Errorf("citation: %w", err)
+	}
+	return nil
+}
+
+func sourceImportURLsShareOrigin(left, right *url.URL) bool {
+	return strings.EqualFold(left.Scheme, right.Scheme) && strings.EqualFold(left.Hostname(), right.Hostname()) && sourceImportURLPort(left) == sourceImportURLPort(right)
+}
+
+func sourceImportURLPort(value *url.URL) string {
+	if port := value.Port(); port != "" {
+		return port
+	}
+	if strings.EqualFold(value.Scheme, "https") {
+		return "443"
+	}
+	return ""
+}
+
 func sourceImportCredentialLikeQueryKey(key string) bool {
 	key = strings.ReplaceAll(key, "-", "_")
 	for _, prohibited := range []string{"token", "secret", "password", "credential", "authorization", "api_key", "apikey", "signature", "sig", "key"} {
@@ -1104,6 +1315,9 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 	}
 	remainingArtifactBytes := sourceImportTotalArtifactLimit(limits)
 	for _, document := range lock.Rest.SourceDocuments {
+		if document.isUnavailable() {
+			return sourceImportResult{}, fmt.Errorf("source document %q is unavailable: %s", document.ID, document.UnavailableReason)
+		}
 		if document.Artifact.Bytes > remainingArtifactBytes {
 			return sourceImportResult{}, fmt.Errorf("source artifact corpus byte limit exceeded by document %q", document.ID)
 		}
@@ -1118,6 +1332,22 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 	result := sourceImportResult{DescriptorSchemaVersion: 3, Operations: []sourceOperationDescriptor{}}
 	for _, document := range lock.Rest.SourceDocuments {
 		raw := rawDocuments[document.ID]
+		if kind := document.sourceKind(); kind == sourceImportDocumentKindRenderedReference || kind == sourceImportDocumentKindBundle {
+			if kind == sourceImportDocumentKindRenderedReference {
+				if err := validateSourceImportRenderedReferenceCapture(raw); err != nil {
+					return sourceImportResult{}, fmt.Errorf("validate rendered-reference document %q: %w", document.ID, err)
+				}
+			}
+			imported, err := importSourceLockedNonOpenAPIDocument(lock, document, limits, budget)
+			if err != nil {
+				return sourceImportResult{}, err
+			}
+			if err := validateLockedRESTDocumentProjection(document, imported.Operations); err != nil {
+				return sourceImportResult{}, err
+			}
+			result.Operations = append(result.Operations, imported.Operations...)
+			continue
+		}
 		doc, form, err := parseSourceImportDocument(raw)
 		if err != nil {
 			return sourceImportResult{}, fmt.Errorf("parse source document %q: %w", document.ID, err)
@@ -1147,6 +1377,55 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 	sortSourceExtensions(result.Extensions)
 	if err := validateSourceImportResultIdentities(result); err != nil {
 		return sourceImportResult{}, err
+	}
+	return result, nil
+}
+
+func validateSourceImportRenderedReferenceCapture(raw []byte) error {
+	_, form, err := parseSourceImportDocument(raw)
+	if err != nil {
+		// A rendered reference can be structured JSON or YAML, including an
+		// OpenAPI path fragment. It is only rejected when it is parseable as a
+		// complete standalone source description.
+		return nil
+	}
+	return fmt.Errorf("captured %s %s description is standalone and must use kind openapi", form.Family, form.Version)
+}
+
+// importSourceLockedNonOpenAPIDocument projects an immutable captured
+// reference or archive from its checked-in operation inventory. The capture
+// was already fetched and hash-verified by fetchSourceImportV3Documents. A
+// rendered reference is not a parseable standalone OpenAPI description: it
+// may still be structured JSON or YAML, including an OpenAPI path fragment,
+// so this branch deliberately does not gate on its media type or parse it as
+// a complete OpenAPI document.
+func importSourceLockedNonOpenAPIDocument(lock sourceImportLock, document sourceImportRESTDocument, limits sourceImportLimits, budget *sourceImportBudget) (sourceImportResult, error) {
+	countBudget, err := budget.countBudget(limits)
+	if err != nil {
+		return sourceImportResult{}, err
+	}
+	result := sourceImportResult{DescriptorSchemaVersion: 3, Operations: make([]sourceOperationDescriptor, 0, len(document.Operations))}
+	documentContext := sourceImportDocumentContext{Lock: lock, Artifact: document.Artifact, Document: &document}
+	form := sourceDocumentForm{Family: document.sourceKind()}
+	for _, operation := range document.Operations {
+		if err := countBudget.reserveOperations(1); err != nil {
+			return sourceImportResult{}, err
+		}
+		source := sourceImportProvenance(documentContext, form, operation.SourceLocation)
+		source.CitationURL = operation.CitationURL
+		descriptor := sourceOperationDescriptor{
+			Connector:           lock.Connector,
+			Protocol:            operation.Protocol,
+			SourceID:            operation.ID,
+			ProviderOperationID: operation.OperationID,
+			Source:              source,
+			Method:              strings.ToLower(operation.Method),
+			Path:                operation.Path,
+		}
+		if err := budget.add(descriptor, "operation"); err != nil {
+			return sourceImportResult{}, err
+		}
+		result.Operations = append(result.Operations, descriptor)
 	}
 	return result, nil
 }
@@ -7501,6 +7780,9 @@ func sourceImportProvenance(documentContext sourceImportDocumentContext, form so
 		source.PublishedSHA256 = strings.ToLower(documentContext.Document.PublishedSource.SHA256)
 		source.PublishedBytes = documentContext.Document.PublishedSource.Bytes
 		source.PublishedAdapter = documentContext.Document.PublishedSource.Adapter
+		if documentContext.Document.sourceKind() != sourceImportDocumentKindOpenAPI {
+			source.ContentType = documentContext.Document.ContentType
+		}
 	}
 	return source
 }
