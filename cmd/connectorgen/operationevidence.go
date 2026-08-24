@@ -28,6 +28,7 @@ const (
 	operationEvidenceGapWebsiteRow          = "website_row"
 	operationEvidenceGapFixtureProof        = "fixture_proof"
 	operationEvidenceGapConformanceProof    = "conformance_proof"
+	operationEvidenceGapReadOnlyConflict    = "read_only_conflict"
 
 	operationEvidenceClassETL            = "etl"
 	operationEvidenceClassReverseETL     = "reverse_etl"
@@ -53,11 +54,12 @@ var operationEvidenceGraphQLRootField = regexp.MustCompile(`(?s)\{\s*([_A-Za-z][
 // It intentionally stores absence as provider evidence, not as a local N/A
 // classification, so callers cannot silently suppress an unenumerable source.
 type operationEvidenceArtifact struct {
-	SchemaVersion      int                         `json:"schema_version"`
-	GeneratedCommand   string                      `json:"generated_command"`
-	Provenance         operationEvidenceProvenance `json:"provenance"`
-	Rows               []operationEvidenceRow      `json:"rows"`
-	MissingFoundations []operationEvidenceRollup   `json:"missing_foundations"`
+	SchemaVersion         int                               `json:"schema_version"`
+	GeneratedCommand      string                            `json:"generated_command"`
+	Provenance            operationEvidenceProvenance       `json:"provenance"`
+	Rows                  []operationEvidenceRow            `json:"rows"`
+	MissingFoundations    []operationEvidenceRollup         `json:"missing_foundations"`
+	IntentionallyReadOnly []operationEvidenceReadOnlyRollup `json:"intentionally_read_only,omitempty"`
 }
 
 // operationEvidenceProvenance binds every row set to the same source
@@ -83,6 +85,7 @@ type operationEvidenceRow struct {
 	Conformance     operationEvidenceConformance               `json:"conformance"`
 	Classifications map[string]operationEvidenceClassification `json:"classifications"`
 	Foundations     []operationEvidenceFoundation              `json:"foundations"`
+	ReadOnly        *operationEvidenceReadOnly                 `json:"read_only,omitempty"`
 	Gaps            []operationEvidenceGap                     `json:"gaps"`
 	Absence         *operationEvidenceAbsence                  `json:"absence"`
 }
@@ -144,6 +147,17 @@ type operationEvidenceAbsence struct {
 type operationEvidenceRollup struct {
 	ID        string   `json:"id"`
 	Evidence  string   `json:"evidence"`
+	SourceIDs []string `json:"source_ids"`
+}
+
+type operationEvidenceReadOnly struct {
+	Policy string `json:"policy"`
+	Reason string `json:"reason"`
+}
+
+type operationEvidenceReadOnlyRollup struct {
+	Connector string   `json:"connector"`
+	Policy    string   `json:"policy"`
 	SourceIDs []string `json:"source_ids"`
 }
 
@@ -355,11 +369,12 @@ func buildOperationEvidence(root string) (operationEvidenceArtifact, error) {
 		return rows[i].SourceID < rows[j].SourceID
 	})
 	return operationEvidenceArtifact{
-		SchemaVersion:      operationEvidenceSchemaVersion,
-		GeneratedCommand:   "go run ./cmd/connectorgen operation-evidence",
-		Provenance:         provenance,
-		Rows:               rows,
-		MissingFoundations: operationEvidenceRollups(rows),
+		SchemaVersion:         operationEvidenceSchemaVersion,
+		GeneratedCommand:      "go run ./cmd/connectorgen operation-evidence",
+		Provenance:            provenance,
+		Rows:                  rows,
+		MissingFoundations:    operationEvidenceRollups(rows),
+		IntentionallyReadOnly: operationEvidenceReadOnlyRollups(rows),
 	}, nil
 }
 
@@ -709,6 +724,22 @@ func projectOperationEvidenceRow(root, connector string, source operationEvidenc
 	websiteCommands := operationEvidenceMatchingWebsiteCommands(website, source, endpoint, targets)
 	row.CLI.Paths = operationEvidenceCommandPaths(commands)
 	row.Website.Paths = operationEvidenceWebsitePaths(websiteCommands)
+	if declaration, declared, err := sourceReadOnlyOperationDeclaration(operationForSurfaceEndpoint(endpoint)); declared {
+		if err != nil {
+			row.addGap(operationEvidenceGapReadOnlyConflict, "invalid read-only declaration: "+err.Error())
+			return row.finalize()
+		}
+		if sourceProjectionMutationMethod(source.Method) {
+			row.addGap(operationEvidenceGapReadOnlyConflict, "read-only declaration cannot cover a mutating source operation")
+			return row.finalize()
+		}
+		row.ReadOnly = &operationEvidenceReadOnly{Policy: declaration.Policy, Reason: declaration.Reason}
+		if len(row.Runtime.Targets) > 0 || len(row.CLI.Paths) > 0 || len(row.Website.Paths) > 0 {
+			row.addGap(operationEvidenceGapReadOnlyConflict, "read-only declaration has executable runtime, CLI, or website evidence")
+			return row.finalize()
+		}
+		return row.finalize()
+	}
 	operationEvidenceClassify(&row, commands, disposition.ParityClass)
 	if len(commands) == 0 {
 		row.addGap(operationEvidenceGapCLICommand, "canonical operation has no generated CLI command")
@@ -1101,6 +1132,41 @@ func operationEvidenceRollups(rows []operationEvidenceRow) []operationEvidenceRo
 		}
 		sort.Strings(sourceIDs)
 		rollups = append(rollups, operationEvidenceRollup{ID: id, Evidence: group.evidence, SourceIDs: sourceIDs})
+	}
+	return rollups
+}
+
+func operationEvidenceReadOnlyRollups(rows []operationEvidenceRow) []operationEvidenceReadOnlyRollup {
+	type group struct {
+		connector string
+		policy    string
+		sources   map[string]bool
+	}
+	groups := map[string]*group{}
+	for _, row := range rows {
+		if row.ReadOnly == nil {
+			continue
+		}
+		key := row.Connector + "\x00" + row.ReadOnly.Policy
+		if groups[key] == nil {
+			groups[key] = &group{connector: row.Connector, policy: row.ReadOnly.Policy, sources: map[string]bool{}}
+		}
+		groups[key].sources[row.SourceID] = true
+	}
+	keys := make([]string, 0, len(groups))
+	for key := range groups {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	rollups := make([]operationEvidenceReadOnlyRollup, 0, len(keys))
+	for _, key := range keys {
+		group := groups[key]
+		sourceIDs := make([]string, 0, len(group.sources))
+		for sourceID := range group.sources {
+			sourceIDs = append(sourceIDs, sourceID)
+		}
+		sort.Strings(sourceIDs)
+		rollups = append(rollups, operationEvidenceReadOnlyRollup{Connector: group.connector, Policy: group.policy, SourceIDs: sourceIDs})
 	}
 	return rollups
 }
