@@ -1,0 +1,95 @@
+{
+  "issue": 277,
+  "phase": "cli-twenty-crm-gtm-parity-r1",
+  "status": "workable_noncertified_batch_certification_deferred_0_3_1_provider_transport_not_declared",
+  "workflow": [
+    "discuss-phase",
+    "plan-phase --tdd",
+    "execute-phase",
+    "verify-work",
+    "code-review"
+  ],
+  "inline_manual_fallback": "No compatible isolated Pi worker runtime is available; execute the resolved GSD prompts inline.",
+  "target_connector": "twenty",
+  "base_branch": "main",
+  "working_branch": "fm/cli-twenty-crm-gtm-parity-r1",
+  "foundation_dependency": {
+    "issue": 4304,
+    "current_observed_sha": "d814875a902be684cb2a38b94f7a8077f66b70b1",
+    "required_state": "provider-neutral persisted per-action source bindings with exact action-specific input mappings",
+    "captain_decision": "all 55 eligible actions remain mandatory; no connector workaround"
+  },
+  "batch_array_envelope_release_deferral": {
+    "gap_id": "foundation.reverse-etl.array-envelope-delivery.v1",
+    "decision": "captain_option_c",
+    "target_release": "0.3.1",
+    "blocks_0_3_0": false,
+    "scope": "certification of application batch dispatch only; all 28 documented batch commands remain implemented and CLI-reachable",
+    "evidence": "write_eligibility.json has 28 source-traced rows with the published URL, exact POST route, records envelope pointer, and maxItems 60; the connector test enforces those rows and command reachability"
+  },
+  "live_certification_preparation": {
+    "authorization": "Firstmate approved one resume using the exact normalized local-storage enum parsed from the pinned upstream source.",
+    "safety_boundary": "Keep all environment and encryption values process-only. Render only boolean configuration checks. Do not edit the database, bypass authentication, access production, or reuse existing Docker resources.",
+    "source_backed_start_result": "passed: the four-service lane-owned project is healthy on its loopback-only port after boolean-only rendered-config validation",
+    "bootstrap_result": "passed: a disposable workspace/admin and disposable API key were created through the official interactive UI; the key moved only through a non-echoing clipboard-to-stdin handoff into the lane project's encrypted credential store",
+    "credential_validation": "incomplete: the built CLI credential test returned status ok but did not detect that the stored api_key value was empty",
+    "read_smoke": "blocked: built CLI bounded companies list received HTTP 403 because the encrypted api_key field decrypted to a zero-length value; the same lane-local REST route returned HTTP 200 for the official authenticated UI session",
+    "authorization_audit": "passed read-only: one Twenty credential and one api_key field resolved; its value was zero-length, and the engine emitted a Bearer header with no token. Pinned Twenty source and boolean-only UI/config checks found no connector scheme, role/expiry, workspace, or self-host authorization mismatch.",
+    "next_step": "land the provider-neutral shared CLI guard rejecting empty --value-stdin before vault persistence; do not retry live auth or replace the disposable token on this connector-only lane"
+  },
+  "official_recipe_review": {
+    "upstream_commit": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7",
+    "compose_blob": "0b0d172d52e5f41d6f4bee704ee8b7cb91fa5434",
+    "setup_blob": "14c4c5291c742eecc09006f06be750749e76bdf4",
+    "docker_compose_docs_blob": "650a2c9b632417667969715ac0bd3e92d25fd390",
+    "entrypoint_blob": "fd85657f5d0d010a5cea63b007023cdc3be513f9",
+    "cached_recipe_image_digest": "sha256:cb80b05bc2619a88a3a83293f45f2be495a55ac77a90946fa1f7d85f0b7fde24",
+    "review_outcome": "captain_authorized_interactive_disposable_bootstrap",
+    "lane_compose_project": "pm-twenty-cert-r1",
+    "loopback_port": 39177,
+    "resolved_image_digests": {
+      "twenty": "sha256:cb80b05bc2619a88a3a83293f45f2be495a55ac77a90946fa1f7d85f0b7fde24",
+      "postgres": "sha256:95206741a5b214807675e14165369d05b93a9cf692223b616d07cca227e74b0b",
+      "redis": "sha256:344e3945a0b431c8ff1eecd58c5573538126bd756f02fc7e218ddf1fc2546366"
+    },
+    "initial_start_result": "two documented red checkpoints preceded the approved source-backed green restart",
+    "source_backed_restart_result": "server, database, and cache healthy; worker running; health endpoint returned HTTP 200; resources remain isolated to pm-twenty-cert-r1",
+    "authorization_config_audit": "pinned source uses bearer extraction plus API-key-specific asymmetric JWT validation, cache, expiry/revocation, and assigned role authorization. Both application containers have encryption/fallback-encryption material; legacy APP_SECRET is absent but only supports the source's legacy JWT fallback."
+  },
+  "credential_ingestion_dependency": {
+    "kind": "provider_neutral_shared_cli",
+    "required_change": "reject empty credentials add --value-stdin input after newline normalization and before vault persistence",
+    "required_tests": ["non-empty stdin accepted", "empty stdin rejected", "newline-only stdin rejected"],
+    "lane_action": "blocked without foundation change or token replacement"
+  },
+  "reconciliation_20260822": {
+    "recovered_branch": "origin/fm/cli-twenty-parity-wave02-r1",
+    "recovery_assessment": "The historical branch has no merge base with current main; only its Twenty subtree was recovered. The current bundle preserves 168 source-locked REST operations: 28 ETL streams, 28 direct reads, and 112 typed reverse-ETL actions; the documented REST inventory has no direct-write or binary transfer operation.",
+    "foundation_merge": "Merged d814875a902be684cb2a38b94f7a8077f66b70b1 normally as 93e6b9d79; GitHub API confirms #4298 base ref fm/cli-reverse-etl-destination-r1 at that SHA.",
+    "mapping_result": "CI found that the recovered generic typed destination makes all-App construction fail: it has no provider-documented idempotency_key_header. The connector removes that unsupported application transport rather than inventing a header; 55 actions still need per-action mappings if a provider-supported destination becomes possible.",
+    "focused_checks": [
+      "go test -count=1 -timeout 20m ./internal/connectors/defs/twenty: pass",
+      "go test -count=1 -timeout 20m ./internal/app -run persisted-destination-focused-suite: pass",
+      "go run ./cmd/connectorgen validate internal/connectors/defs/twenty: pass",
+      "go run ./cmd/connectorgen surface-sync --check: pass",
+      "go run ./cmd/connectorgen certification-sweep --connector twenty --check: pass (172 rows; 168 CLI commands)"
+    ],
+    "stop_condition": "No generic Twenty application transport is declared until a provider-supported idempotency contract exists; batch-envelope and tombstone workset delivery are separately unassigned shared foundations. No live credential, runtime mutation, or heavy verification was attempted during this low-CPU reconciliation."
+  },
+  "foundation_handoff": {
+    "status": "ready_for_separate_foundation_lane",
+    "artifacts": [
+      ".planning/phases/cli-twenty-crm-gtm-parity-r1/FOUNDATION-HANDOFF.md",
+      ".planning/phases/cli-twenty-crm-gtm-parity-r1/FOUNDATION-HANDOFF.json"
+    ],
+    "behavioral_witness": "TestTypedDestinationDeclarationRequiresPublishedIdempotencyProof records no generic destination, no invented provider header, and intact direct typed command reachability.",
+    "scope": "No shared engine change, push, live credential use, or runtime/vault change was made by the handoff slice."
+  },
+  "captain_foundation_gap_ledger": {
+    "path": ".planning/phases/cli-twenty-crm-gtm-parity-r1/FOUNDATION-GAPS.json",
+    "status": "batch_gap_deferred_0_3_1_other_gaps_remain_noncertified",
+    "deduplicated_open_gap_count": 6,
+    "known_provider_operations_enabled_for_merge_verdict_count": 0,
+    "dynamic_workspace_inventory": "pending_not_not_applicable"
+  }
+}

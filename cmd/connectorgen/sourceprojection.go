@@ -21,10 +21,15 @@ import (
 )
 
 const (
-	sourceProjectionDefaultStringBytes      = 8 << 10
-	sourceProjectionDefaultArrayItems       = 256
-	sourceProjectionDefaultObjectProperties = 256
-	sourceOperationExecutionFoundation      = "closed-source-operation-execution-foundation-r1"
+	sourceProjectionDefaultStringBytes               = 8 << 10
+	sourceProjectionDefaultArrayItems                = 256
+	sourceProjectionDefaultObjectProperties          = 256
+	sourceOperationExecutionFoundation               = "closed-source-operation-execution-foundation-r1"
+	sourceNonExecutableMutationDispositionFoundation = "source-cited-non-executable-mutation-foundation-r1"
+	// sourceReadOnlyOperationFoundation is intentionally distinct from the
+	// mutation disposition. A read-only declaration can never satisfy mutation
+	// coverage, even when its endpoint currently lacks an executable action.
+	sourceReadOnlyOperationFoundation = "source-read-only-operation-foundation-r1"
 	// JSON-valued command flags carry a complete named field through the
 	// declaration-owned body path. They are not an unbounded replacement for a
 	// request body, so keep their encoded input explicitly bounded.
@@ -105,6 +110,17 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 	if err != nil {
 		return sourceProjectionStats{}, err
 	}
+	var declaredWrites struct {
+		Actions []engine.WriteAction `json:"actions"`
+	}
+	if err := json.Unmarshal(writesRaw, &declaredWrites); err != nil {
+		return sourceProjectionStats{}, fmt.Errorf("writes.json: %w", err)
+	}
+	var declaredCLI engine.CLISurface
+	if err := json.Unmarshal(cliRaw, &declaredCLI); err != nil {
+		return sourceProjectionStats{}, fmt.Errorf("cli_surface.json: %w", err)
+	}
+	declaredMutationBundle := engine.Bundle{Spec: spec, Writes: declaredWrites.Actions, CLISurface: &declaredCLI}
 	blockedReads := sourceProjectionBlockedReadSources(result)
 	reachableReads := sourceProjectionReachableReadSources(result)
 	stats := sourceProjectionStats{CLI: sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli.root, spec, result)}
@@ -135,6 +151,24 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 	}
 
 	for _, operation := range result.Operations {
+		if sourceProjectionOperationMutates(operation) {
+			if sourceProjectionHasReadOnlyDisposition(operation) {
+				stats.Missing++
+				continue
+			}
+			if operation.Runtime.NonExecutableMutation != nil {
+				if !sourceProjectionHasNonExecutableMutationDisposition(operation) {
+					return stats, fmt.Errorf("source-cited non-executable mutation disposition is invalid: %s", operation.SourceID)
+				}
+				if sourceProjectionMutationActionIsComplete(declaredMutationBundle, operation) {
+					return stats, fmt.Errorf("source-cited non-executable mutation disposition claims a complete executable action: %s", operation.SourceID)
+				}
+				if sourceProjectionMutationClaimsImplementedAction(declaredMutationBundle, operation) {
+					return stats, fmt.Errorf("source-cited non-executable mutation disposition claims an implemented executable action: %s", operation.SourceID)
+				}
+				continue
+			}
+		}
 		if operation.Protocol == "graphql" || !sourceProjectionMutationMethod(operation.Method) {
 			continue
 		}
@@ -289,6 +323,205 @@ func sourceProjectionBundleSpec(bundleDir string) (*engine.Schema, error) {
 		return nil, fmt.Errorf("spec.json: %w", err)
 	}
 	return spec, nil
+}
+
+type sourceNonExecutableMutationDispositionDocument struct {
+	SchemaVersion int                                      `json:"schema_version"`
+	Dispositions  []sourceNonExecutableMutationDisposition `json:"dispositions"`
+}
+
+// sourceProjectionReadNonExecutableMutationDispositions reads the connector-
+// owned, source-cited mutation exceptions. They are deliberately separate from
+// read-only coverage: every entry remains a mutation runtime gap until its
+// provider action has a complete executable declaration.
+func sourceProjectionReadNonExecutableMutationDispositions(bundleDir string) ([]sourceNonExecutableMutationDisposition, error) {
+	connector := filepath.Base(filepath.Clean(bundleDir))
+	path := filepath.Join(bundleDir, "sources", connector+"-mutation-dispositions.json")
+	raw, err := os.ReadFile(path)
+	if os.IsNotExist(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	var document sourceNonExecutableMutationDispositionDocument
+	if err := decodeSourceStrictJSON(raw, &document); err != nil {
+		return nil, fmt.Errorf("parse mutation dispositions: %w", err)
+	}
+	if document.SchemaVersion != 1 {
+		return nil, fmt.Errorf("mutation dispositions schema_version = %d, want 1", document.SchemaVersion)
+	}
+	seen := make(map[string]bool, len(document.Dispositions))
+	for _, disposition := range document.Dispositions {
+		if err := sourceProjectionValidateNonExecutableMutationDispositionInput(disposition); err != nil {
+			return nil, err
+		}
+		if seen[disposition.Source.SourceID] {
+			return nil, fmt.Errorf("mutation dispositions duplicate source operation %q", disposition.Source.SourceID)
+		}
+		seen[disposition.Source.SourceID] = true
+	}
+	return document.Dispositions, nil
+}
+
+func sourceProjectionValidateNonExecutableMutationDispositionInput(disposition sourceNonExecutableMutationDisposition) error {
+	for _, value := range []struct {
+		name  string
+		value string
+		max   int
+	}{
+		{name: "source_id", value: disposition.Source.SourceID, max: 1024},
+		{name: "method", value: disposition.Source.Method, max: 16},
+		{name: "path", value: disposition.Source.Path, max: 4096},
+		{name: "reason", value: disposition.Reason, max: 1024},
+	} {
+		if value.value == "" || value.value != strings.TrimSpace(value.value) || len(value.value) > value.max || strings.ContainsAny(value.value, "\r\n\x00") {
+			return fmt.Errorf("mutation disposition %s is invalid", value.name)
+		}
+	}
+	if !sourceProjectionMutationMethod(disposition.Source.Method) {
+		return fmt.Errorf("mutation disposition source method %q is not mutating", disposition.Source.Method)
+	}
+	if !strings.HasPrefix(disposition.Source.Path, "/") {
+		return fmt.Errorf("mutation disposition source path %q is invalid", disposition.Source.Path)
+	}
+	return nil
+}
+
+// sourceProjectionApplyNonExecutableMutationDispositions turns a connector-
+// owned citation into an operation-owned runtime gap. The source operation and
+// its exact HTTP citation are verified before any suppression can occur.
+func sourceProjectionApplyNonExecutableMutationDispositions(bundle engine.Bundle, result *sourceImportResult, dispositions []sourceNonExecutableMutationDisposition) error {
+	if len(dispositions) == 0 {
+		return nil
+	}
+	if result == nil {
+		return fmt.Errorf("mutation dispositions require source operations")
+	}
+	operations := sourceProjectionOperationsByID(*result)
+	seen := make(map[string]bool, len(dispositions))
+	for _, disposition := range dispositions {
+		if err := sourceProjectionValidateNonExecutableMutationDispositionInput(disposition); err != nil {
+			return err
+		}
+		if seen[disposition.Source.SourceID] {
+			return fmt.Errorf("mutation dispositions duplicate source operation %q", disposition.Source.SourceID)
+		}
+		seen[disposition.Source.SourceID] = true
+		operation, found := operations[disposition.Source.SourceID]
+		if !found {
+			return fmt.Errorf("mutation disposition cites unknown source operation %q", disposition.Source.SourceID)
+		}
+		if err := sourceProjectionValidateNonExecutableMutationDispositionCitation(operation, disposition); err != nil {
+			return err
+		}
+		if sourceProjectionMutationActionIsComplete(bundle, operation) {
+			return fmt.Errorf("mutation disposition source operation %q already has a complete executable action", operation.SourceID)
+		}
+		if sourceProjectionMutationClaimsImplementedAction(bundle, operation) {
+			return fmt.Errorf("mutation disposition source operation %q already claims an implemented executable action", operation.SourceID)
+		}
+		for index := range result.Operations {
+			if result.Operations[index].SourceID != operation.SourceID {
+				continue
+			}
+			if result.Operations[index].Runtime.NonExecutableMutation != nil {
+				return fmt.Errorf("source operation %q already has a non-executable mutation disposition", operation.SourceID)
+			}
+			copyDisposition := disposition
+			result.Operations[index].Runtime.NonExecutableMutation = &copyDisposition
+			result.Operations[index].Runtime.Gaps = sourceSortedGaps(append(result.Operations[index].Runtime.Gaps, sourceProjectionNonExecutableMutationRuntimeGap(result.Operations[index], copyDisposition)))
+			result.Operations[index].Runtime.MergeBlocked = true
+			break
+		}
+	}
+	return nil
+}
+
+func sourceProjectionValidateNonExecutableMutationDispositionCitation(operation sourceOperationDescriptor, disposition sourceNonExecutableMutationDisposition) error {
+	if !sourceProjectionOperationMutates(operation) {
+		return fmt.Errorf("mutation disposition source operation %q is not mutating", operation.SourceID)
+	}
+	if operation.Source.URL == "" || operation.Source.SHA256 == "" || operation.Source.Bytes <= 0 || operation.Source.Location == "" {
+		return fmt.Errorf("mutation disposition source operation %q lacks a provider source citation", operation.SourceID)
+	}
+	if disposition.Source.SourceID != operation.SourceID || !strings.EqualFold(disposition.Source.Method, operation.Method) || disposition.Source.Path != operation.Path {
+		return fmt.Errorf("mutation disposition citation does not match provider source operation %q", operation.SourceID)
+	}
+	return nil
+}
+
+func sourceProjectionNonExecutableMutationRuntimeGap(operation sourceOperationDescriptor, disposition sourceNonExecutableMutationDisposition) sourceContractGap {
+	return sourceContractGapFor(
+		sourceNonExecutableMutationDispositionFoundation,
+		"source operation "+operation.SourceID+" at "+operation.Source.URL+"#"+operation.Source.Location,
+		"provider-cited mutation has no complete declaration-owned executable action: "+disposition.Reason,
+	)
+}
+
+func sourceProjectionHasNonExecutableMutationDisposition(operation sourceOperationDescriptor) bool {
+	disposition := operation.Runtime.NonExecutableMutation
+	if disposition == nil || !operation.Runtime.MergeBlocked || sourceProjectionValidateNonExecutableMutationDispositionInput(*disposition) != nil || sourceProjectionValidateNonExecutableMutationDispositionCitation(operation, *disposition) != nil {
+		return false
+	}
+	want := sourceProjectionNonExecutableMutationRuntimeGap(operation, *disposition)
+	for _, gap := range operation.Runtime.Gaps {
+		if gap == want {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceProjectionHasReadOnlyDisposition(operation sourceOperationDescriptor) bool {
+	return sourceOperationHasFoundationGap(operation, sourceReadOnlyOperationFoundation)
+}
+
+func sourceProjectionMutationActionIsComplete(bundle engine.Bundle, operation sourceOperationDescriptor) bool {
+	commands := make(map[string]engine.CLICommand)
+	if bundle.CLISurface != nil {
+		for _, command := range bundle.CLISurface.Commands {
+			if command.Write != "" && command.Availability == "implemented" {
+				commands[command.Write] = command
+			}
+		}
+	}
+	for _, action := range bundle.Writes {
+		if sourceProjectionEndpointKey(action.Method, sourceProjectionPath(action.Path)) == sourceProjectionEndpointKey(operation.Method, operation.Path) && sourceActionCoversOperation(action, commands[action.Name], operation) {
+			return true
+		}
+	}
+	return false
+}
+
+// sourceProjectionMutationClaimsImplementedAction recognizes any declared
+// command claim for the provider mutation, whether that command's action
+// contract happens to be complete or not. A disposition may retain only an
+// absent, non-executable action; it cannot downgrade or hide a working command.
+func sourceProjectionMutationClaimsImplementedAction(bundle engine.Bundle, operation sourceOperationDescriptor) bool {
+	if bundle.CLISurface == nil {
+		return false
+	}
+	endpoint := sourceProjectionEndpointKey(operation.Method, operation.Path)
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Availability != "implemented" {
+			continue
+		}
+		for _, surface := range command.APISurface {
+			if sourceProjectionEndpointKey(surface.Method, surface.Path) == endpoint {
+				return true
+			}
+		}
+		if command.Write == "" {
+			continue
+		}
+		for _, action := range bundle.Writes {
+			if action.Name == command.Write && sourceProjectionEndpointKey(action.Method, sourceProjectionPath(action.Path)) == endpoint {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // sourceProjectionBlockedReadSources indexes source operations which are
@@ -794,6 +1027,13 @@ func sourceProjectionMutationMethod(method string) bool {
 	default:
 		return false
 	}
+}
+
+func sourceProjectionOperationMutates(operation sourceOperationDescriptor) bool {
+	if operation.Protocol == "graphql" {
+		return operation.GraphQL != nil && strings.EqualFold(operation.GraphQL.Root, "mutation")
+	}
+	return sourceProjectionMutationMethod(operation.Method)
 }
 
 func sourceProjectionEndpointKey(method, path string) string {
@@ -1896,6 +2136,9 @@ func checkSourceProjection(fsys fs.FS, bundle engine.Bundle) []Finding {
 	if err != nil {
 		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, err.Error())}
 	}
+	if unavailable, exists := sourceImportUnavailableDocument(lock); exists {
+		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, sourceImportUnavailableFindingMessage(unavailable))}
+	}
 	descriptorPath := filepath.ToSlash(filepath.Join(bundle.Name, "sources", bundle.Name+"-operation-descriptor.json"))
 	descriptorRaw, err := fs.ReadFile(fsys, descriptorPath)
 	if err != nil {
@@ -1910,11 +2153,33 @@ func checkSourceProjection(fsys fs.FS, bundle engine.Bundle) []Finding {
 	return findings
 }
 
+func sourceImportUnavailableDocument(lock sourceImportLock) (sourceImportRESTDocument, bool) {
+	if lock.SchemaVersion != 3 {
+		return sourceImportRESTDocument{}, false
+	}
+	for _, document := range lock.Rest.SourceDocuments {
+		if document.isUnavailable() {
+			return document, true
+		}
+	}
+	return sourceImportRESTDocument{}, false
+}
+
+func sourceImportUnavailableFindingMessage(document sourceImportRESTDocument) string {
+	if document.PublishedSource.SourceURL != "" {
+		return fmt.Sprintf("source inventory is unavailable: document %q cites %s: %s", document.ID, document.PublishedSource.SourceURL, document.UnavailableReason)
+	}
+	return fmt.Sprintf("source inventory is unavailable: document %q: %s", document.ID, document.UnavailableReason)
+}
+
 func sourceProjectionFinding(connector, file, message string) Finding {
 	return Finding{Connector: connector, File: strings.TrimPrefix(file, connector+"/"), Rule: ruleSourceProjection, Message: message}
 }
 
 func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImportLock, descriptor sourceImportDescriptorDocument) []Finding {
+	if unavailable, exists := sourceImportUnavailableDocument(lock); exists {
+		return []Finding{sourceProjectionFinding(connector, file, sourceImportUnavailableFindingMessage(unavailable))}
+	}
 	wantSchemaVersion := 2
 	if lock.SchemaVersion == 3 {
 		wantSchemaVersion = 3
@@ -1930,20 +2195,32 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 	if lock.SchemaVersion == 3 {
 		for _, document := range lock.Rest.SourceDocuments {
 			for _, operation := range document.Operations {
+				form := document.sourceKind()
+				version := ""
+				if form == sourceImportDocumentKindOpenAPI {
+					if document.Artifact.Swagger != "" {
+						form = "swagger"
+						version = document.Artifact.Swagger
+					} else {
+						version = document.Artifact.OpenAPI
+					}
+				}
 				expected[operation.ID] = expectedSource{
 					source: sourceImportSource{
 						URL:                 document.Artifact.SourceURL,
 						SHA256:              strings.ToLower(document.Artifact.SHA256),
 						Bytes:               document.Artifact.Bytes,
 						Location:            operation.SourceLocation,
-						Form:                "openapi",
-						Version:             document.Artifact.OpenAPI,
+						Form:                form,
+						Version:             version,
 						DocumentID:          document.ID,
 						PublishedURL:        document.PublishedSource.SourceURL,
 						PublishedCaptureURL: document.PublishedSource.CaptureURL,
 						PublishedSHA256:     strings.ToLower(document.PublishedSource.SHA256),
 						PublishedBytes:      document.PublishedSource.Bytes,
 						PublishedAdapter:    document.PublishedSource.Adapter,
+						ContentType:         document.ContentType,
+						CitationURL:         operation.CitationURL,
 					},
 					providerOperationID: operation.OperationID,
 				}
@@ -1982,7 +2259,7 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 		if operation.Source.SHA256 != expectedOperation.source.SHA256 || operation.Source.Bytes != expectedOperation.source.Bytes || (expectedOperation.source.Location != "" && operation.Source.Location != expectedOperation.source.Location) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
 		}
-		if lock.SchemaVersion == 3 && (operation.ProviderOperationID != expectedOperation.providerOperationID || operation.Source.URL != expectedOperation.source.URL || operation.Source.Form != expectedOperation.source.Form || operation.Source.Version != expectedOperation.source.Version || operation.Source.DocumentID != expectedOperation.source.DocumentID || operation.Source.PublishedURL != expectedOperation.source.PublishedURL || operation.Source.PublishedCaptureURL != expectedOperation.source.PublishedCaptureURL || operation.Source.PublishedSHA256 != expectedOperation.source.PublishedSHA256 || operation.Source.PublishedBytes != expectedOperation.source.PublishedBytes || operation.Source.PublishedAdapter != expectedOperation.source.PublishedAdapter) {
+		if lock.SchemaVersion == 3 && (operation.ProviderOperationID != expectedOperation.providerOperationID || operation.Source.URL != expectedOperation.source.URL || operation.Source.Form != expectedOperation.source.Form || operation.Source.Version != expectedOperation.source.Version || operation.Source.DocumentID != expectedOperation.source.DocumentID || operation.Source.PublishedURL != expectedOperation.source.PublishedURL || operation.Source.PublishedCaptureURL != expectedOperation.source.PublishedCaptureURL || operation.Source.PublishedSHA256 != expectedOperation.source.PublishedSHA256 || operation.Source.PublishedBytes != expectedOperation.source.PublishedBytes || operation.Source.PublishedAdapter != expectedOperation.source.PublishedAdapter || operation.Source.ContentType != expectedOperation.source.ContentType || operation.Source.CitationURL != expectedOperation.source.CitationURL) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
 		}
 		if operation.Runtime.MergeBlocked != (len(operation.Runtime.Gaps) > 0) {
@@ -2008,6 +2285,27 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 	}
 	var findings []Finding
 	for _, operation := range descriptor.Operations {
+		if sourceProjectionOperationMutates(operation) {
+			if operation.Runtime.NonExecutableMutation != nil {
+				if !sourceProjectionHasNonExecutableMutationDisposition(operation) {
+					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-cited non-executable mutation disposition is invalid: "+operation.SourceID))
+					continue
+				}
+				if sourceProjectionMutationActionIsComplete(bundle, operation) {
+					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-cited non-executable mutation disposition claims a complete executable action: "+operation.SourceID))
+					continue
+				}
+				if sourceProjectionMutationClaimsImplementedAction(bundle, operation) {
+					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-cited non-executable mutation disposition claims an implemented executable action: "+operation.SourceID))
+					continue
+				}
+				continue
+			}
+			if sourceProjectionHasReadOnlyDisposition(operation) {
+				findings = append(findings, sourceProjectionFinding(bundle.Name, file, "read-only disposition cannot cover a mutating source operation: "+operation.SourceID))
+				continue
+			}
+		}
 		if operation.Protocol == "graphql" {
 			if sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
 				continue
@@ -2480,6 +2778,16 @@ func sourceProjectionExecutionSurface(bundleDir, connector string) (engine.Bundl
 				return err
 			}
 			bundle.Streams = value.Streams
+			return nil
+		}},
+		{path: "writes.json", decode: func(raw []byte) error {
+			var value struct {
+				Actions []engine.WriteAction `json:"actions"`
+			}
+			if err := json.Unmarshal(raw, &value); err != nil {
+				return err
+			}
+			bundle.Writes = value.Actions
 			return nil
 		}},
 		{path: "cli_surface.json", decode: func(raw []byte) error {

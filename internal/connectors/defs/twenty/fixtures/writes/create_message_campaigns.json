@@ -1,0 +1,12 @@
+{
+  "record": {
+    "bodyTemplate": "Fixture bodyTemplate 1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/messageCampaigns",
+    "body": {
+      "bodyTemplate": "Fixture bodyTemplate 1"
+    }
+  }
+}
