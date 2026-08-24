@@ -120,7 +120,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationDashboard at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationDashboard",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -441,7 +456,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationDetector at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationDetector",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -563,7 +593,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationDiscoverSavedQuery at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationDiscoverSavedQuery",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -684,7 +729,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationExternalUser at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationExternalUser",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -797,7 +857,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationForwarding at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationForwarding",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -911,7 +986,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationIntegration at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationIntegration",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -1266,7 +1356,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationIssue at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationIssue",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -1410,7 +1515,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation Unlink an External Issue from an Issue at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "Unlink an External Issue from an Issue",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -1539,7 +1659,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationMember at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationMember",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -1799,7 +1934,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationMemberTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationMemberTeam",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -2055,7 +2205,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationNotificationsAction at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationNotificationsAction",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -2176,7 +2341,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationPreprodArtifactSnapshot at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationPreprodArtifactSnapshot",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -2304,7 +2484,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationRelease at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/releases/{version}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationRelease",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -2440,7 +2635,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationReleaseFile at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationReleaseFile",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -2567,7 +2777,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationScimV2Group at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationScimV2Group",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -2694,7 +2919,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationScimV2User at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationScimV2User",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -3160,7 +3400,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteOrganizationWorkflow at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteOrganizationWorkflow",
+            "method": "DELETE",
+            "path": "/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -3280,7 +3535,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteProject at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteProject",
+            "method": "DELETE",
+            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -3408,7 +3678,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation Remove a Service Hook at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "Remove a Service Hook",
+            "method": "DELETE",
+            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -3537,7 +3822,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation Bulk Remove a List of Issues at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "Bulk Remove a List of Issues",
+            "method": "DELETE",
+            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -3665,7 +3965,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteProjectKey at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteProjectKey",
+            "method": "DELETE",
+            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -3965,7 +4280,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteProjectReleaseFile at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteProjectReleaseFile",
+            "method": "DELETE",
+            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -4088,7 +4418,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteProjectReplay at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteProjectReplay",
+            "method": "DELETE",
+            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -4217,7 +4562,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteProjectSymbolSource at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteProjectSymbolSource",
+            "method": "DELETE",
+            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -4668,7 +5028,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteProjectTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteProjectTeam",
+            "method": "DELETE",
+            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -4788,7 +5163,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation Delete an External Issue at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "Delete an External Issue",
+            "method": "DELETE",
+            "path": "/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -4893,7 +5283,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteSentryApp at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/sentry-apps/{sentry_app_id_or_slug}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteSentryApp",
+            "method": "DELETE",
+            "path": "/api/0/sentry-apps/{sentry_app_id_or_slug}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -5013,7 +5418,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteTeam",
+            "method": "DELETE",
+            "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -5141,7 +5561,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation deleteTeamExternalTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/\"].delete",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "deleteTeamExternalTeam",
+            "method": "DELETE",
+            "path": "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -62963,7 +63398,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation addOrganizationMemberTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/\"].post",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "addOrganizationMemberTeam",
+            "method": "POST",
+            "path": "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -69777,7 +70227,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation uploadProjectPreprodArtifactSnapshot at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/\"].post",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "uploadProjectPreprodArtifactSnapshot",
+            "method": "POST",
+            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -71688,7 +72153,22 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "source-cited-non-executable-mutation-foundation-r1",
+            "location": "source operation addProjectTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/\"].post",
+            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+          }
+        ],
+        "non_executable_mutation": {
+          "source": {
+            "source_id": "addProjectTeam",
+            "method": "POST",
+            "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/"
+          },
+          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
+        }
       }
     },
     {
@@ -92528,6 +93008,166 @@
       "foundation": "closed-source-operation-execution-foundation-r1",
       "location": "source operation resolveOrganizationShortId",
       "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation Bulk Remove a List of Issues at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation Delete an External Issue at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation Remove a Service Hook at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation Unlink an External Issue from an Issue at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation addOrganizationMemberTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/\"].post",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation addProjectTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/\"].post",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationDashboard at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationDetector at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationDiscoverSavedQuery at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationExternalUser at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationForwarding at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationIntegration at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationIssue at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationMember at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationMemberTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationNotificationsAction at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationPreprodArtifactSnapshot at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationRelease at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/releases/{version}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationReleaseFile at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationScimV2Group at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationScimV2User at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteOrganizationWorkflow at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteProject at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteProjectKey at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteProjectReleaseFile at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteProjectReplay at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteProjectSymbolSource at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteProjectTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteSentryApp at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/sentry-apps/{sentry_app_id_or_slug}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation deleteTeamExternalTeam at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/\"].delete",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
+    },
+    {
+      "foundation": "source-cited-non-executable-mutation-foundation-r1",
+      "location": "source operation uploadProjectPreprodArtifactSnapshot at https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json#paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/\"].post",
+      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
     }
   ]
 }

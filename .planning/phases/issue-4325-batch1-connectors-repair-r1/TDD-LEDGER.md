@@ -9,7 +9,7 @@
 | Stripe semantics | Four JSON response routes classify as binary | The four routes classify as JSON direct reads and command output policy matches | Semantic regression check | pending |
 | Evidence reasons | Report scan finds forbidden scope reason or an uncited foundation gap | Scan finds none; all remaining citations resolve to the stated runtime refusal | Independent Gate B rerun | pending |
 | Final gate | Independent report returns NO-GO | Independent report returns GO | Full `make verify` and review | pending |
-| Sentry declared-and-deferred mutations | `source-import sentry --check` passes 223 source operations, but `connectorgen validate internal/connectors/defs/sentry` reports 32 exact mutations with no executable action | A strict, source-cited mutation disposition exists for each of those 32; importer and validator accept the descriptor and it records only `source-cited-non-executable-mutation-foundation-r1` gaps | `source-import --check`, targeted validate, `surface-sync --check`, focused source-projection test, and credential-boundary command sweep | in progress |
+| Sentry declared-and-deferred mutations | `source-import sentry --check` passes 223 source operations, but `connectorgen validate internal/connectors/defs/sentry` reports 32 exact mutations with no executable action | A strict, source-cited mutation disposition exists for each of those 32; importer and validator accept the descriptor and it records only `source-cited-non-executable-mutation-foundation-r1` gaps | `source-import --check`, targeted validate, `surface-sync --check`, focused source-projection test, and credential-boundary command sweep | green except global surface-sync blocked by unrelated Asana 25-action gap |
 | Vercel surface discovery | `pm vercel` returns `unknown command`; an absent `cli_surface.json` means no command can be credential-bound | Report the required declaration-owned artifacts and source-bound operation set before any mutation mapping | Do not create a command surface as part of a disposition-only slice | pending captain report |
 | Asana/Jira declared-and-deferred mutations | Targeted validation reports the documented source mutations without complete actions | Exact cited disposition files retain those operations as merge-blocked runtime gaps without changing a working command | Same focused importer/validator and runtime sweep as Sentry | pending |
 
@@ -212,3 +212,27 @@ weakened or skipped to advance a row.
 - Red hook contract: a new focused test must require `projects` to resolve to
   the provider's organization-scoped path and reject a missing organization;
   it must fail against the former legacy-wide `/api/0/projects/` implementation.
+
+### 2026-08-24 declared-and-deferred green evidence
+
+- Added 32 exact source-id/method/path rows in
+  `sources/sentry-mutation-dispositions.json`. The only source class for all
+  32 is `direct_write`, already recorded with the same provider source URL,
+  SHA-256 `b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435`,
+  byte count `3868570`, and OpenAPI location in
+  `sentry-declaration-disposition.json`.
+- Green: `go run ./cmd/connectorgen source-import sentry`, then
+  `go run ./cmd/connectorgen source-import sentry --check`, and
+  `go run ./cmd/connectorgen validate internal/connectors/defs/sentry` all
+  passed. The regenerated descriptor contains 32 cited
+  `source-cited-non-executable-mutation-foundation-r1` merge-blocking gaps.
+- Focused proof: `go test -timeout 20m ./cmd/connectorgen -run
+  'TestSourceProjectionSourceCitedNonExecutableMutationDisposition' -count=1`
+  passed. A fresh no-credential project built from the current binary ran
+  `pm sentry events|issues|projects|releases list`; each stopped exactly at
+  `error: missing --credential`, with zero `unknown command` results.
+- `go run ./cmd/connectorgen surface-sync internal/connectors/defs --check`
+  remains blocked before Sentry because Asana has 25 source operations without
+  complete executable actions. A target-directory invocation is not a valid
+  replacement because it lacks its sibling connector fixtures. No gate was
+  suppressed.
