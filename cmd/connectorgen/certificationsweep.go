@@ -35,15 +35,17 @@ const (
 	certificationParityKindETL            = "etl"
 	certificationParityKindReverseETL     = "reverse_etl"
 	certificationParityKindBinaryDownload = "binary_download"
+	certificationParityKindBinaryUpload   = "binary_upload"
 	certificationParityKindFileUpload     = "file_upload"
 	certificationParityKindCDC            = "cdc"
 	certificationParityKindChangefeed     = "changefeed"
 
-	certificationParityClassDirectRead  = "direct_read"
-	certificationParityClassDirectWrite = "direct_write"
-	certificationParityClassETL         = "etl"
-	certificationParityClassReverseETL  = "reverse_etl"
-	certificationParityClassBinary      = "binary"
+	certificationParityClassDirectRead   = "direct_read"
+	certificationParityClassDirectWrite  = "direct_write"
+	certificationParityClassETL          = "etl"
+	certificationParityClassReverseETL   = "reverse_etl"
+	certificationParityClassBinary       = "binary"
+	certificationParityClassBinaryUpload = "binary_upload"
 )
 
 type certificationParityTransportRole string
@@ -179,7 +181,7 @@ func classifyCertificationParityCommand(command engine.CLICommand, operation *en
 			}
 			return projection, nil
 		case certificationParityKindFileUpload:
-			return certificationParityProjection{OperationKind: certificationParityKindFileUpload, OpClass: certificationParityClassBinary}, nil
+			return certificationParityProjection{}, fmt.Errorf("direct_write command %q references file_upload, which is declarable but has no executable public contract", command.Path)
 		default:
 			return certificationParityProjection{}, fmt.Errorf("direct_write command %q references operation kind %q", command.Path, operationKind)
 		}
@@ -208,9 +210,37 @@ func classifyCertificationParityCommand(command engine.CLICommand, operation *en
 			return certificationParityProjection{}, fmt.Errorf("binary_download command %q references operation kind %q", command.Path, operationKind)
 		}
 		return certificationParityProjection{OperationKind: certificationParityKindBinaryDownload, OpClass: certificationParityClassBinary}, nil
+	case "binary_upload":
+		if command.Write == "" || write == nil || write.Name != command.Write {
+			return certificationParityProjection{}, fmt.Errorf("binary_upload command %q requires declared write action %q", command.Path, command.Write)
+		}
+		if !certificationBinaryUploadWriteAction(write) {
+			return certificationParityProjection{}, fmt.Errorf("binary_upload command %q write action %q does not declare binary_upload, base64_upload, or a required multipart file part", command.Path, write.Name)
+		}
+		return certificationParityProjection{OperationKind: certificationParityKindBinaryUpload, OpClass: certificationParityClassBinaryUpload, WriteActionKind: write.Kind}, nil
 	default:
 		return certificationParityProjection{}, nil
 	}
+}
+
+func certificationBinaryUploadWriteAction(write *engine.WriteAction) bool {
+	if write == nil {
+		return false
+	}
+	switch write.BodyType {
+	case "binary_upload", "base64_upload":
+		return true
+	case "multipart":
+		if write.Multipart == nil {
+			return false
+		}
+		for _, part := range write.Multipart.Parts {
+			if part.Type == "file" && part.Required {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // certificationOperationWriteActionKind derives the mutation family from the
@@ -257,7 +287,7 @@ func validCertificationWriteActionKind(kind string) bool {
 func validCertificationParityKind(kind string) bool {
 	switch kind {
 	case certificationParityKindRESTRead, certificationParityKindRESTWrite, certificationParityKindETL,
-		certificationParityKindReverseETL, certificationParityKindBinaryDownload, certificationParityKindFileUpload,
+		certificationParityKindReverseETL, certificationParityKindBinaryDownload, certificationParityKindBinaryUpload, certificationParityKindFileUpload,
 		certificationParityKindCDC, certificationParityKindChangefeed:
 		return true
 	default:
@@ -268,7 +298,7 @@ func validCertificationParityKind(kind string) bool {
 func validCertificationParityClass(opClass string) bool {
 	switch opClass {
 	case certificationParityClassDirectRead, certificationParityClassDirectWrite, certificationParityClassETL,
-		certificationParityClassReverseETL, certificationParityClassBinary:
+		certificationParityClassReverseETL, certificationParityClassBinary, certificationParityClassBinaryUpload:
 		return true
 	default:
 		return false
@@ -848,6 +878,9 @@ func classifyCertificationSweepCommand(command engine.CLICommand, operation engi
 	case "binary_download":
 		row.Status = certificationSweepFixtureRequired
 		row.Reason = certificationSweepFixtureReason("owned binary fixture, destination, and produced-value assertion are required", row.RequiredFlags)
+	case "binary_upload":
+		row.Status = certificationSweepFixtureRequired
+		row.Reason = certificationSweepFixtureReason("owned binary fixture, plan, preview, approval, exact transmitted bytes and digest, provider response, independent read-back, and cleanup are required", row.RequiredFlags)
 	case "etl":
 		row.Status = certificationSweepFixtureRequired
 		row.Reason = certificationSweepFixtureReason("stream fixture and produced-record assertion are required", row.RequiredFlags)
@@ -1028,7 +1061,7 @@ func validateCertificationSweepParity(command certificationSweepCommand) error {
 		if !validCertificationWriteActionKind(command.WriteActionKind) {
 			return fmt.Errorf("sweep command %q has unsupported write action kind %q", command.Path, command.WriteActionKind)
 		}
-		if *command.OperationKind != certificationParityKindRESTWrite && *command.OperationKind != certificationParityKindReverseETL {
+		if *command.OperationKind != certificationParityKindRESTWrite && *command.OperationKind != certificationParityKindReverseETL && *command.OperationKind != certificationParityKindBinaryUpload {
 			return fmt.Errorf("sweep command %q has write action kind outside a write parity projection", command.Path)
 		}
 	}

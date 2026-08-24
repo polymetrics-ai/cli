@@ -434,10 +434,30 @@ func payloadIdentitiesForRecords(projectDir string, records []connectors.Record)
 }
 
 // payloadIdentitiesForConnectorCommand uses the connector's closed operation
-// metadata for multipart source fields. Older non-multipart direct writes keep
+// metadata for direct-write file fields and its binary-upload declaration for
+// the public binary_upload path. Legacy generic reverse-ETL commands retain
 // their established file_path discovery behavior.
-func payloadIdentitiesForConnectorCommand(projectDir string, connector connectors.Connector, operation string, record connectors.Record) ([]PayloadIdentity, error) {
+func payloadIdentitiesForConnectorCommand(projectDir string, connector connectors.Connector, operation, intent, action string, record connectors.Record) ([]PayloadIdentity, error) {
 	if strings.TrimSpace(operation) == "" {
+		if intent == "binary_upload" {
+			provider, ok := connector.(interface {
+				PreflightBinaryUploadAction(string) ([]connectors.BinaryUploadSource, error)
+			})
+			if !ok {
+				return nil, fmt.Errorf("connector %q does not expose a binary-upload declaration", connector.Name())
+			}
+			sources, err := provider.PreflightBinaryUploadAction(action)
+			if err != nil {
+				return nil, err
+			}
+			fields := make([]string, 0, len(sources))
+			caps := make(map[string]int64, len(sources))
+			for _, source := range sources {
+				fields = append(fields, source.Field)
+				caps[source.Field] = source.MaxBytes
+			}
+			return payloadIdentitiesForDeclaredFieldsWithCaps(projectDir, []connectors.Record{record}, fields, caps)
+		}
 		return payloadIdentitiesForRecords(projectDir, []connectors.Record{record})
 	}
 	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
