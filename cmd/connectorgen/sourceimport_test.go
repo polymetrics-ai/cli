@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net"
 	"net/http"
 	"net/url"
@@ -132,6 +133,94 @@ func TestSourceImportAcceptsStringScalarUnionPathWireContract(t *testing.T) {
 	arms, _ := schema["oneOf"].([]any)
 	if len(arms) != 2 {
 		t.Fatalf("path union arms = %#v, want exact two-arm source contract", schema)
+	}
+}
+
+func TestSourceImportRetainsRecursiveSchemaReferencesAsSourceBoundGaps(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name        string
+		components  string
+		responseRef string
+		wantPointer string
+		wantSchema  string
+		wantGap     bool
+	}{
+		{
+			name:        "direct self reference",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"children":{"type":"array","items":{"$ref":"#/components/schemas/Folder"}}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantPointer: "#/components/schemas/Folder",
+			wantSchema:  "Folder",
+			wantGap:     true,
+		},
+		{
+			name:        "mutually recursive schemas",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"parent":{"$ref":"#/components/schemas/Parent"}}},"Parent":{"type":"object","additionalProperties":false,"properties":{"folder":{"$ref":"#/components/schemas/Folder"}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantPointer: "#/components/schemas/Folder",
+			wantSchema:  "Folder",
+			wantGap:     true,
+		},
+		{
+			name:        "deeply nested cycle",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"metadata":{"type":"object","additionalProperties":false,"properties":{"tree":{"type":"object","additionalProperties":false,"properties":{"child":{"$ref":"#/components/schemas/Folder"}}}}}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantPointer: "#/components/schemas/Folder",
+			wantSchema:  "Folder",
+			wantGap:     true,
+		},
+		{
+			name:        "non cyclic schema",
+			components:  `"Folder":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string","maxLength":64}}}`,
+			responseRef: "#/components/schemas/Folder",
+			wantGap:     false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.1.0","info":{"title":"recursive fixture","version":"1"},"components":{"schemas":{` + tt.components + `}},"paths":{"/folders":{"get":{"operationId":"folders/get","responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"` + tt.responseRef + `"}}}}}}}}}`)
+			result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+			if len(result.Operations) != 1 {
+				t.Fatalf("operations = %d, want retained operation", len(result.Operations))
+			}
+			operation := result.Operations[0]
+			if operation.SourceID != "folders/get" || operation.ProviderOperationID != "folders/get" || operation.Source.Location != `paths["/folders"].get` || operation.Source.URL != "https://fixtures.polymetrics.invalid/inline-openapi.json" {
+				t.Fatalf("operation source trace = %#v", operation.Source)
+			}
+
+			var cycleGap *sourceContractGap
+			for index := range operation.Runtime.Gaps {
+				gap := &operation.Runtime.Gaps[index]
+				if gap.Foundation == "cli-recursive-schema-foundation-r1" {
+					cycleGap = gap
+					break
+				}
+			}
+			if !tt.wantGap {
+				if cycleGap != nil || operation.Runtime.MergeBlocked {
+					t.Fatalf("non-cyclic runtime gaps = %#v", operation.Runtime)
+				}
+				return
+			}
+			if cycleGap == nil || !operation.Runtime.MergeBlocked {
+				t.Fatalf("recursive schema runtime gap = %#v", operation.Runtime)
+			}
+			if !strings.Contains(cycleGap.Location, `response 200`) || !strings.Contains(cycleGap.Reason, tt.wantPointer) || !strings.Contains(cycleGap.Reason, tt.wantSchema) {
+				t.Fatalf("cycle gap = %#v, want response location and schema pointer %q", cycleGap, tt.wantPointer)
+			}
+
+			response := descriptorResponse(t, operation, "200")
+			encoded, err := json.Marshal(response.Declaration)
+			if err != nil {
+				t.Fatalf("marshal retained response declaration: %v", err)
+			}
+			if !strings.Contains(string(encoded), `"$ref":"`+tt.wantPointer+`"`) {
+				t.Fatalf("recursive schema was flattened or truncated: %s", encoded)
+			}
+		})
 	}
 }
 
@@ -338,18 +427,18 @@ func TestSourceImportImportsLockedRESTAndGraphQLIdentities(t *testing.T) {
 	}
 }
 
-func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
+func TestSourceImportRejectsUnsafeOrRetainsMalformedSourceForms(t *testing.T) {
 	t.Parallel()
 	baseLimits := defaultSourceImportLimits()
 	cases := []struct {
 		name     string
 		artifact string
 		want     string
+		wantGap  string
 		limits   sourceImportLimits
 	}{
 		{name: "external reference", artifact: "external-ref.json", want: "external reference", limits: baseLimits},
-		{name: "unresolved reference", artifact: "unresolved-ref.json", want: "unresolved reference", limits: baseLimits},
-		{name: "cyclic reference", artifact: "cyclic-ref.json", want: "reference cycle", limits: baseLimits},
+		{name: "unresolved response schema reference", artifact: "unresolved-ref.json", want: "unresolved reference", wantGap: sourceMalformedReferenceFoundation, limits: baseLimits},
 		{name: "ambiguous request", artifact: "ambiguous-request.json", want: "ambiguous request schema", limits: baseLimits},
 		{name: "duplicate identity", artifact: "duplicate-id.json", want: "duplicate source identity", limits: baseLimits},
 		{name: "unbounded request", artifact: "unbounded-request.json", want: "unbounded request schema", limits: baseLimits},
@@ -357,7 +446,7 @@ func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 		{name: "unsupported encoding", artifact: "unsupported-encoding.json", want: "unsupported request encoding", limits: baseLimits},
 		{name: "invalid relative path", artifact: "invalid-relative-path.json", want: "connector-relative", limits: baseLimits},
 		{name: "whitespace path", artifact: "whitespace-path.json", want: "connector-relative", limits: baseLimits},
-		{name: "missing path parameter", artifact: "missing-path-parameter.json", want: "path placeholder", limits: baseLimits},
+		{name: "missing path parameter", artifact: "missing-path-parameter.json", want: "path placeholder", wantGap: sourceMalformedPathParameterFoundation, limits: baseLimits},
 		{name: "multiple YAML documents", artifact: "multiple-documents.yaml", want: "multiple YAML documents", limits: baseLimits},
 		{name: "reference depth", artifact: "deep-reference.json", want: "reference depth limit", limits: sourceImportLimits{MaxArtifactBytes: baseLimits.MaxArtifactBytes, MaxSchemaBytes: baseLimits.MaxSchemaBytes, MaxOperations: baseLimits.MaxOperations, MaxReferences: baseLimits.MaxReferences, MaxReferenceDepth: 1}},
 		{name: "reference count", artifact: "many-references.json", want: "reference count limit", limits: sourceImportLimits{MaxArtifactBytes: baseLimits.MaxArtifactBytes, MaxSchemaBytes: baseLimits.MaxSchemaBytes, MaxOperations: baseLimits.MaxOperations, MaxReferences: 1, MaxReferenceDepth: baseLimits.MaxReferenceDepth}},
@@ -371,7 +460,21 @@ func TestSourceImportRejectsUnsafeOrUnboundedSourceForms(t *testing.T) {
 			t.Parallel()
 			raw := loadSourceImportFixture(t, filepath.Join("invalid", tc.artifact))
 			lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/invalid/"+tc.artifact, raw)
-			_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), tc.limits)
+			result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), tc.limits)
+			if tc.wantGap != "" {
+				if err != nil {
+					t.Fatalf("retained malformed source import: %v", err)
+				}
+				if len(result.Operations) != 1 || !result.Operations[0].Runtime.MergeBlocked {
+					t.Fatalf("retained malformed operation = %#v", result.Operations)
+				}
+				for _, gap := range result.Operations[0].Runtime.Gaps {
+					if gap.Foundation == tc.wantGap && strings.Contains(gap.Location, result.Operations[0].Source.Location) && strings.Contains(gap.Reason, tc.want) {
+						return
+					}
+				}
+				t.Fatalf("retained malformed source gaps = %#v", result.Operations[0].Runtime.Gaps)
+			}
 			if err == nil || !strings.Contains(err.Error(), tc.want) {
 				t.Fatalf("import error = %v, want %q", err, tc.want)
 			}
@@ -617,7 +720,7 @@ func TestSourceImportCommandContractAndMigrationDocumentation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read migration conventions: %v", err)
 	}
-	if !strings.Contains(string(docs), "connectorgen source-import") || !strings.Contains(string(docs), "source-lock refresh") || !strings.Contains(string(docs), "non-symlink cache root") {
+	if !strings.Contains(string(docs), "connectorgen source-import") || !strings.Contains(string(docs), "source-lock refresh") || !strings.Contains(string(docs), "non-symlink cache root") || !strings.Contains(string(docs), "identity_query") {
 		t.Fatalf("migration conventions lack source-import adoption contract")
 	}
 }
@@ -821,6 +924,79 @@ func TestSourceImportPreservesLiteralReferenceFieldsAndReferenceSiblings(t *test
 	properties := schema["properties"].(map[string]any)
 	if _, exists := properties["$ref"]; !exists {
 		t.Fatalf("literal property named $ref was lost: %#v", properties)
+	}
+}
+
+func TestSourceImportRetainsBoundedOpenAPI30ReferenceSiblings(t *testing.T) {
+	t.Parallel()
+	for _, sibling := range []struct {
+		name  string
+		field string
+		value string
+	}{
+		{name: "description", field: "description", value: "provider description"},
+		{name: "summary", field: "summary", value: "provider summary"},
+	} {
+		sibling := sibling
+		t.Run(sibling.name, func(t *testing.T) {
+			raw := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","` + sibling.field + `":"` + sibling.value + `"}}}}}}`)
+			result := importInlineSourceResult(t, raw, defaultSourceImportLimits())
+			response := descriptorResponse(t, result.Operations[0], "200")
+			declaration, ok := response.Declaration.(map[string]any)
+			if !ok || declaration[sibling.field] != sibling.value {
+				t.Fatalf("OpenAPI 3.0 %s sibling declaration = %#v", sibling.field, response.Declaration)
+			}
+		})
+	}
+
+	extension := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","x-provider-note":"preserved"}}}}}}`)
+	if result := importInlineSourceResult(t, extension, defaultSourceImportLimits()); len(result.Operations) != 1 {
+		t.Fatalf("OpenAPI 3.0 extension sibling result = %#v", result.Operations)
+	}
+
+	readOnly := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"identifier":{"type":"string","maxLength":8}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/identifier","readOnly":true}}}}}}}}}`)
+	result := importInlineSourceResult(t, readOnly, defaultSourceImportLimits())
+	response := descriptorResponse(t, result.Operations[0], "200")
+	media := response.Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)
+	schema := media["schema"].(map[string]any)
+	if schema["readOnly"] != true {
+		t.Fatalf("OpenAPI 3.0 readOnly schema sibling = %#v", schema)
+	}
+
+	matchingType := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"identifier":{"type":"string","maxLength":8}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/identifier","type":"string"}}}}}}}}}`)
+	result = importInlineSourceResult(t, matchingType, defaultSourceImportLimits())
+	response = descriptorResponse(t, result.Operations[0], "200")
+	media = response.Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)
+	schema = media["schema"].(map[string]any)
+	if schema["type"] != "string" {
+		t.Fatalf("OpenAPI 3.0 matching schema type sibling = %#v", schema)
+	}
+
+	conflictingType := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"identifier":{"type":"string","maxLength":8}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/identifier","type":"integer"}}}}}}}}}`)
+	result = importInlineSourceResult(t, conflictingType, defaultSourceImportLimits())
+	response = descriptorResponse(t, result.Operations[0], "200")
+	media = response.Declaration.(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)
+	schema = media["schema"].(map[string]any)
+	if schema["type"] != "integer" {
+		t.Fatalf("OpenAPI 3.0 retained type sibling = %#v", schema)
+	}
+	var typeGap *sourceContractGap
+	for index := range result.Operations[0].Runtime.Gaps {
+		gap := &result.Operations[0].Runtime.Gaps[index]
+		if gap.Foundation == "cli-openapi30-reference-sibling-foundation-r1" {
+			typeGap = gap
+			break
+		}
+	}
+	if typeGap == nil || !result.Operations[0].Runtime.MergeBlocked || result.Operations[0].Source.Location != `paths["/items"].get` || typeGap.Location != "schema reference #/components/schemas/identifier" || !strings.Contains(typeGap.Reason, `sibling field "type"`) {
+		t.Fatalf("OpenAPI 3.0 type sibling source-bound gap = %#v", result.Operations[0].Runtime)
+	}
+
+	semantic := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"original"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","content":{"application/json":{"schema":{"type":"string"}}}}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/openapi30-semantic-sibling.json", semantic)
+	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return semantic, nil }), defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), `ambiguous response reference with sibling field "content"`) {
+		t.Fatalf("OpenAPI 3.0 semantic reference sibling error = %v", err)
 	}
 }
 
@@ -1053,11 +1229,6 @@ func TestSourceImportPreservesExactFormAndSwaggerRouteBinding(t *testing.T) {
 			t.Fatalf("unsupported document form was accepted: %s", raw)
 		}
 	}
-	openAPI30Sibling := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"responses":{"ok":{"description":"ok"}}},"paths":{"/items":{"get":{"responses":{"200":{"$ref":"#/components/responses/ok","description":"override"}}}}}}`)
-	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/openapi30-sibling.json", openAPI30Sibling)
-	if _, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return openAPI30Sibling, nil }), defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "ambiguous response reference") {
-		t.Fatalf("OpenAPI 3.0 reference sibling error = %v", err)
-	}
 	swagger := []byte(`{"swagger":"2.0","info":{"title":"x","version":"1"},"host":"api.example.invalid","basePath":"/v1","schemes":["https","http"],"paths":{"/items":{"get":{"schemes":["http"],"responses":{"200":{"description":"ok"}}}}}}`)
 	result := importInlineSourceResult(t, swagger, defaultSourceImportLimits())
 	descriptor := result.Operations[0]
@@ -1274,11 +1445,6 @@ func TestSourceImportPreflightsUnusedGrammarObjects(t *testing.T) {
 			want: "external reference",
 		},
 		{
-			name: "unused schema cycle",
-			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$ref":"#/components/schemas/Unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
-			want: "reference cycle",
-		},
-		{
 			name: "unused dynamic schema",
 			raw:  []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$dynamicRef":"#unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`),
 			want: "cli-openapi-dynamic-ref-foundation-r1",
@@ -1298,6 +1464,48 @@ func TestSourceImportPreflightsUnusedGrammarObjects(t *testing.T) {
 				t.Fatalf("unused grammar error = %v, want %q", err, tc.want)
 			}
 		})
+	}
+
+	unusedCycle := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Unused":{"$ref":"#/components/schemas/Unused"}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/unused-grammar-cycle.json", unusedCycle)
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return unusedCycle, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("unused recursive schema import: %v", err)
+	}
+	if len(result.Gaps) != 1 {
+		t.Fatalf("unused recursive schema gaps = %#v", result.Gaps)
+	}
+	gap := result.Gaps[0]
+	if gap.Foundation != sourceRecursiveSchemaFoundation || !strings.Contains(gap.Location, "#/components/schemas/Unused") || !strings.Contains(gap.Reason, "#/components/schemas/Unused") {
+		t.Fatalf("unused recursive schema gap = %#v", gap)
+	}
+	encoded, err := marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal unused recursive schema descriptor: %v", err)
+	}
+	if !strings.Contains(string(encoded), `"merge_blocked": true`) || !strings.Contains(string(encoded), `"foundation": "cli-recursive-schema-foundation-r1"`) {
+		t.Fatalf("unused recursive schema evidence disappeared from descriptor: %s", encoded)
+	}
+
+	unusedTypeSibling := []byte(`{"openapi":"3.0.3","info":{"title":"x","version":"1"},"components":{"schemas":{"Base":{"anyOf":[{"type":"object","additionalProperties":false,"properties":{}}]},"Unused":{"allOf":[{"$ref":"#/components/schemas/Base","type":"object"}]}}},"paths":{"/items":{"get":{"responses":{"200":{"description":"ok"}}}}}}`)
+	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/unused-grammar-type-sibling.json", unusedTypeSibling)
+	result, err = importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return unusedTypeSibling, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("unused type sibling import: %v", err)
+	}
+	if len(result.Gaps) != 1 {
+		t.Fatalf("unused type sibling gaps = %#v", result.Gaps)
+	}
+	gap = result.Gaps[0]
+	if gap.Foundation != sourceOpenAPI30ReferenceSiblingFoundation || gap.Location != "schema reference #/components/schemas/Base" || !strings.Contains(gap.Reason, `sibling field "type"`) {
+		t.Fatalf("unused type sibling gap = %#v", gap)
+	}
+	encoded, err = marshalSourceImportResult(result)
+	if err != nil {
+		t.Fatalf("marshal unused type sibling descriptor: %v", err)
+	}
+	if !strings.Contains(string(encoded), `"merge_blocked": true`) || !strings.Contains(string(encoded), `"foundation": "cli-openapi30-reference-sibling-foundation-r1"`) {
+		t.Fatalf("unused type sibling evidence disappeared from descriptor: %s", encoded)
 	}
 }
 
@@ -1751,9 +1959,23 @@ func TestSourceImportNormalizesDirectReferenceFragments(t *testing.T) {
 	}
 	literalPercentCycle := []byte(`{"openapi":"3.1.0","info":{"title":"x","version":"1"},"components":{"schemas":{"Root":{"type":"object","additionalProperties":false,"properties":{"percent%2F":{"$ref":"#/components/schemas/Root/properties/percent%252F"}}}}},"paths":{"/items":{"get":{"parameters":[{"name":"filter","in":"query","schema":{"$ref":"#/components/schemas/Root"}}],"responses":{"200":{"description":"ok"}}}}}}`)
 	lock = sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/literal-percent-reference-cycle.json", literalPercentCycle)
-	_, err = importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return literalPercentCycle, nil }), defaultSourceImportLimits())
-	if err == nil || !strings.Contains(err.Error(), "reference cycle") {
-		t.Fatalf("literal percent reference cycle error = %v", err)
+	cycleResult, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return literalPercentCycle, nil }), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("literal percent recursive schema import: %v", err)
+	}
+	if len(cycleResult.Operations) != 1 || !cycleResult.Operations[0].Runtime.MergeBlocked {
+		t.Fatalf("literal percent recursive schema operation = %#v", cycleResult.Operations)
+	}
+	var cycleGap *sourceContractGap
+	for index := range cycleResult.Operations[0].Runtime.Gaps {
+		gap := &cycleResult.Operations[0].Runtime.Gaps[index]
+		if gap.Foundation == sourceRecursiveSchemaFoundation {
+			cycleGap = gap
+			break
+		}
+	}
+	if cycleGap == nil || !strings.Contains(cycleGap.Reason, "#/components/schemas/Root/properties/percent%2F") {
+		t.Fatalf("literal percent recursive schema gap = %#v", cycleResult.Operations[0].Runtime.Gaps)
 	}
 }
 
@@ -2002,14 +2224,225 @@ func TestSourceImportBoundsExtensionKeysBeforeSorting(t *testing.T) {
 	}
 }
 
+// TestSourceImportProviderDialectContracts keeps the seven provider failures
+// reported by the Batch-1 repair run behavioral. Each fixture is reduced to
+// the affected operation and its provider-declared response/request fragment;
+// its path, operationId, pointer, and dialect keyword are copied from the
+// pinned upstream artifact recorded in issue #4325's RUN-STATE.md. The test
+// exercises the importer, not a declaration count or a schema-shape helper.
+func TestSourceImportProviderDialectContracts(t *testing.T) {
+	tests := []struct {
+		name            string
+		raw             []byte
+		wantOperation   string
+		wantResponseKey string
+		wantGap         string
+		wantTrace       string
+	}{
+		{
+			name:            "Bitbucket pull request comment response stays within the raised finite schema bound",
+			raw:             sourceProviderNestedResponseDocument("3.0.0", "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}", "getPullRequestComment", 16),
+			wantOperation:   "getPullRequestComment",
+			wantResponseKey: "level_00",
+		},
+		{
+			name:            "Notion meeting notes response stays within the raised finite schema bound",
+			raw:             sourceProviderNestedResponseDocument("3.1.0", "/v1/blocks/meeting_notes/query", "query-meeting-notes", 16),
+			wantOperation:   "query-meeting-notes",
+			wantResponseKey: "level_00",
+		},
+		{
+			name:            "Stripe GET account follows a finite provider reference chain",
+			raw:             sourceProviderReferenceChainDocument(30),
+			wantOperation:   "GetAccount",
+			wantResponseKey: "next",
+		},
+		{
+			name:            "Vercel API key response retains OpenAPI 3.0 pattern properties",
+			raw:             sourceVercelPatternPropertiesDocument(),
+			wantOperation:   "createApiKeys",
+			wantResponseKey: "patternProperties",
+		},
+		{
+			name:          "Docker Hub malformed response target is retained with a source trace",
+			raw:           sourceDockerHubMalformedReferenceDocument(),
+			wantOperation: "createToken",
+			wantGap:       "cli-malformed-source-reference-foundation-r1",
+			wantTrace:     "#/components/responses/team_repo",
+		},
+		{
+			name:          "GitLab malformed epic issue path stays present with a source trace",
+			raw:           sourceGitLabMissingPathParameterDocument(),
+			wantOperation: "putApiV4GroupsIdDashEpicsEpicIidIssuesEpicIssueId",
+			wantGap:       "cli-malformed-path-parameter-foundation-r1",
+			wantTrace:     "epic_issue_id",
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := importInlineSourceResultError(tt.raw, defaultSourceImportLimits())
+			if err != nil {
+				t.Fatalf("provider-derived source import: %v", err)
+			}
+			if len(result.Operations) != 1 || result.Operations[0].SourceID != tt.wantOperation {
+				t.Fatalf("provider operation was not retained: %#v", result.Operations)
+			}
+			operation := result.Operations[0]
+			encoded, err := json.Marshal(operation.Responses)
+			if err != nil {
+				t.Fatalf("marshal retained provider response: %v", err)
+			}
+			if tt.wantResponseKey != "" && !strings.Contains(string(encoded), tt.wantResponseKey) {
+				t.Fatalf("retained response is missing %q: %s", tt.wantResponseKey, encoded)
+			}
+			if tt.wantGap == "" {
+				if operation.Runtime.MergeBlocked || len(operation.Runtime.Gaps) != 0 {
+					t.Fatalf("supported provider dialect unexpectedly has gaps: %#v", operation.Runtime)
+				}
+				return
+			}
+			var gap *sourceContractGap
+			for index := range operation.Runtime.Gaps {
+				candidate := &operation.Runtime.Gaps[index]
+				if candidate.Foundation == tt.wantGap {
+					gap = candidate
+					break
+				}
+			}
+			if gap == nil || !operation.Runtime.MergeBlocked || !strings.Contains(gap.Location, operation.Source.Location) || !strings.Contains(gap.Reason, tt.wantTrace) {
+				t.Fatalf("provider malformed-contract trace = %#v", operation.Runtime)
+			}
+		})
+	}
+}
+
+func TestSourceImportKeepsDepthBoundFiniteAfterProviderIncrease(t *testing.T) {
+	raw := sourceProviderNestedResponseDocument("3.1.0", "/pathological", "pathological", 65)
+	_, err := importInlineSourceResultError(raw, defaultSourceImportLimits())
+	if err == nil || !strings.Contains(err.Error(), "schema depth limit exceeded") {
+		t.Fatalf("pathological provider schema error = %v, want finite depth refusal", err)
+	}
+}
+
+func sourceProviderNestedResponseDocument(openAPI, path, operationID string, depth int) []byte {
+	schema := sourceProviderNestedSchema(depth)
+	return sourceProviderOperationDocument(openAPI, path, "get", operationID, map[string]any{
+		"200": map[string]any{
+			"description": "provider response",
+			"content":     map[string]any{"application/json": map[string]any{"schema": schema}},
+		},
+	}, nil, sourceProviderRequiredPathParameterNames(path)...)
+}
+
+func sourceProviderRequiredPathParameterNames(path string) []string {
+	parameters, err := sourcePathTemplateParameters(path)
+	if err != nil {
+		panic(err)
+	}
+	return parameters
+}
+
+func sourceProviderNestedSchema(depth int) map[string]any {
+	schema := map[string]any{"type": "string"}
+	for index := depth - 1; index >= 0; index-- {
+		schema = map[string]any{
+			"type":       "object",
+			"properties": map[string]any{fmt.Sprintf("level_%02d", index): schema},
+		}
+	}
+	return schema
+}
+
+func sourceProviderReferenceChainDocument(depth int) []byte {
+	schemas := map[string]any{}
+	for index := 0; index < depth; index++ {
+		name := fmt.Sprintf("account_level_%02d", index)
+		child := map[string]any{"type": "string"}
+		if index+1 < depth {
+			child = map[string]any{"$ref": "#/components/schemas/" + fmt.Sprintf("account_level_%02d", index+1)}
+		}
+		schemas[name] = map[string]any{"type": "object", "properties": map[string]any{"next": child}}
+	}
+	return sourceProviderOperationDocument("3.0.0", "/v1/account", "get", "GetAccount", map[string]any{
+		"200": map[string]any{
+			"description": "account response",
+			"content":     map[string]any{"application/json": map[string]any{"schema": map[string]any{"$ref": "#/components/schemas/account_level_00"}}},
+		},
+	}, map[string]any{"schemas": schemas})
+}
+
+func sourceVercelPatternPropertiesDocument() []byte {
+	return sourceProviderOperationDocument("3.0.0", "/api-keys", "post", "createApiKeys", map[string]any{
+		"200": map[string]any{
+			"description": "Information about the newly created API key.",
+			"content":     map[string]any{"application/json": map[string]any{"schema": map[string]any{"$ref": "#/components/schemas/APIKey"}}},
+		},
+	}, map[string]any{"schemas": map[string]any{
+		"APIKey": map[string]any{
+			"type": "object",
+			"properties": map[string]any{
+				"metadata": map[string]any{"type": "object", "patternProperties": map[string]any{"^(.*)$": map[string]any{}}},
+			},
+		},
+	}})
+}
+
+func sourceDockerHubMalformedReferenceDocument() []byte {
+	return sourceProviderOperationDocument("3.0.3", "/v2/auth/token", "post", "createToken", map[string]any{
+		"401": map[string]any{
+			"description": "provider response",
+			"content":     map[string]any{"application/json": map[string]any{"schema": map[string]any{"$ref": "#/components/responses/team_repo"}}},
+		},
+	}, map[string]any{"responses": map[string]any{
+		"team_repo": map[string]any{"description": "provider response"},
+	}})
+}
+
+func sourceGitLabMissingPathParameterDocument() []byte {
+	path := "/api/v4/groups/{id}/(-/)epics/{epic_iid}/issues/{epic_issue_id}"
+	return sourceProviderOperationDocument("3.0.0", path, "put", "putApiV4GroupsIdDashEpicsEpicIidIssuesEpicIssueId", map[string]any{
+		"200": map[string]any{"description": "updated"},
+	}, nil, "id", "epic_iid")
+}
+
+func sourceProviderOperationDocument(openAPI, path, method, operationID string, responses map[string]any, components map[string]any, suppliedPathParameters ...string) []byte {
+	parameters := make([]any, 0, len(suppliedPathParameters))
+	for _, name := range suppliedPathParameters {
+		parameters = append(parameters, map[string]any{"name": name, "in": "path", "required": true, "schema": map[string]any{"type": "string", "maxLength": 256}})
+	}
+	operation := map[string]any{"operationId": operationID, "responses": responses}
+	if len(parameters) != 0 {
+		operation["parameters"] = parameters
+	}
+	document := map[string]any{
+		"openapi": openAPI,
+		"info":    map[string]any{"title": "provider-derived", "version": "1"},
+		"paths":   map[string]any{path: map[string]any{method: operation}},
+	}
+	if components != nil {
+		document["components"] = components
+	}
+	raw, err := json.Marshal(document)
+	if err != nil {
+		panic(err)
+	}
+	return raw
+}
+
 func importInlineSourceResult(t *testing.T, raw []byte, limits sourceImportLimits) sourceImportResult {
 	t.Helper()
-	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/inline-openapi.json", raw)
-	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
+	result, err := importInlineSourceResultError(raw, limits)
 	if err != nil {
 		t.Fatalf("import inline source: %v", err)
 	}
 	return result
+}
+
+func importInlineSourceResultError(raw []byte, limits sourceImportLimits) (sourceImportResult, error) {
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/inline-openapi.json", raw)
+	return importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return raw, nil }), limits)
 }
 
 func loadSourceImportFixtureLock(t *testing.T, connector string) sourceImportLock {
@@ -2063,10 +2496,12 @@ func descriptorResponse(t *testing.T, descriptor sourceOperationDescriptor, stat
 }
 
 type sourceImportV3FixtureDocument struct {
-	ID           string
-	Path         string
-	Artifact     []byte
-	PublishedURL string
+	ID            string
+	Path          string
+	Artifact      []byte
+	ArtifactURL   string
+	IdentityQuery *bool
+	PublishedURL  string
 }
 
 func sourceImportV3FixtureLock(t *testing.T, connector string, documents []sourceImportV3FixtureDocument) []byte {
@@ -2074,18 +2509,26 @@ func sourceImportV3FixtureLock(t *testing.T, connector string, documents []sourc
 	sourceDocuments := make([]any, 0, len(documents))
 	for _, document := range documents {
 		artifactDigest := sha256.Sum256(document.Artifact)
+		artifactURL := document.ArtifactURL
+		if artifactURL == "" {
+			artifactURL = "https://fixtures.polymetrics.invalid/" + document.ID + ".openapi.json"
+		}
 		publishedURL := document.PublishedURL
 		if publishedURL == "" {
 			publishedURL = "https://published.polymetrics.invalid/" + document.ID + "?slug=" + document.ID
 		}
+		artifact := map[string]any{
+			"source_url": artifactURL,
+			"sha256":     hex.EncodeToString(artifactDigest[:]),
+			"bytes":      len(document.Artifact),
+			"openapi":    "3.0.3",
+		}
+		if document.IdentityQuery != nil {
+			artifact["identity_query"] = *document.IdentityQuery
+		}
 		sourceDocuments = append(sourceDocuments, map[string]any{
-			"id": document.ID,
-			"artifact": map[string]any{
-				"source_url": "https://fixtures.polymetrics.invalid/" + document.ID + ".openapi.json",
-				"sha256":     hex.EncodeToString(artifactDigest[:]),
-				"bytes":      len(document.Artifact),
-				"openapi":    "3.0.3",
-			},
+			"id":       document.ID,
+			"artifact": artifact,
 			"published_source": map[string]any{
 				"source_url":  publishedURL,
 				"capture_url": "https://fixtures.polymetrics.invalid/" + document.ID + ".capture.json",
@@ -2119,6 +2562,255 @@ func sourceImportV3FixtureLock(t *testing.T, connector string, documents []sourc
 		t.Fatalf("encode v3 fixture lock: %v", err)
 	}
 	return raw
+}
+
+func TestSourceImportVersion3FetchesDeclaredIdentityQuery(t *testing.T) {
+	t.Parallel()
+	identityQuery := true
+	document := sourceImportV3FixtureDocument{
+		ID:            "identity",
+		Path:          "/identity",
+		Artifact:      []byte(`{"openapi":"3.0.3","info":{"title":"identity","version":"1"},"paths":{"/identity":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`),
+		ArtifactURL:   "https://fixtures.polymetrics.invalid/identity.openapi.json?version=2026-08-01",
+		IdentityQuery: &identityQuery,
+	}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture")
+	if err != nil {
+		t.Fatalf("parse v3 identity-query lock: %v", err)
+	}
+	lookup := batchArtifactLookupIPAddr(func(context.Context, string) ([]net.IPAddr, error) {
+		return []net.IPAddr{{IP: net.ParseIP("8.8.8.8")}}, nil
+	})
+	requests := 0
+	var fetched *url.URL
+	fetcher := newSourceImportArtifactCacheFetcher(httpSourceImportFetcher{
+		limits: defaultSourceImportLimits(),
+		lookup: lookup,
+		client: &http.Client{Transport: sourceImportRoundTripFunc(func(request *http.Request) (*http.Response, error) {
+			requests++
+			fetched = request.URL
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Header:     make(http.Header),
+				Body:       io.NopCloser(bytes.NewReader(document.Artifact)),
+				Request:    request,
+			}, nil
+		})},
+	}, t.TempDir(), defaultSourceImportLimits())
+	result, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import v3 identity-query lock: %v", err)
+	}
+	if len(result.Operations) != 1 || result.Operations[0].SourceID != "fixture.rest.identity.shared" {
+		t.Fatalf("identity-query import result = %#v", result.Operations)
+	}
+	gotQuery := ""
+	if fetched != nil {
+		gotQuery = fetched.Query().Get("version")
+	}
+	if requests != 1 || fetched == nil || fetched.String() != document.ArtifactURL || gotQuery != "2026-08-01" {
+		t.Fatalf("identity artifact request count/URL/query = %d/%v/%q", requests, fetched, gotQuery)
+	}
+}
+
+func TestSourceImportVersion3LeavesCaptureQueryAsProvenanceOnly(t *testing.T) {
+	t.Parallel()
+	document := sourceImportV3FixtureDocument{
+		ID:           "capture",
+		Path:         "/capture",
+		Artifact:     []byte(`{"openapi":"3.0.3","info":{"title":"capture","version":"1"},"paths":{"/capture":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`),
+		PublishedURL: "https://published.polymetrics.invalid/capture?slug=rotating-capture",
+	}
+	lock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture")
+	if err != nil {
+		t.Fatalf("parse v3 capture-query lock: %v", err)
+	}
+	var fetched []string
+	result, err := importSourceLockResult(context.Background(), lock, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		fetched = append(fetched, sourceURL)
+		return document.Artifact, nil
+	}), defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import v3 capture-query lock: %v", err)
+	}
+	if len(result.Operations) != 1 || !reflect.DeepEqual(fetched, []string{"https://fixtures.polymetrics.invalid/capture.openapi.json"}) {
+		t.Fatalf("capture provenance import operations/requests = %#v/%#v", result.Operations, fetched)
+	}
+}
+
+func TestSourceImportVersion3AbsentOrFalseIdentityQueryProjectsIdentically(t *testing.T) {
+	t.Parallel()
+	identityQuery := false
+	document := sourceImportV3FixtureDocument{
+		ID:       "legacy",
+		Path:     "/legacy",
+		Artifact: []byte(`{"openapi":"3.0.3","info":{"title":"legacy","version":"1"},"paths":{"/legacy":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`),
+	}
+	absentLock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture")
+	if err != nil {
+		t.Fatalf("parse absent identity declaration: %v", err)
+	}
+	document.IdentityQuery = &identityQuery
+	falseLock, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture")
+	if err != nil {
+		t.Fatalf("parse false identity declaration: %v", err)
+	}
+	fetch := sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return document.Artifact, nil })
+	absentResult, err := importSourceLockResult(context.Background(), absentLock, fetch, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import absent identity declaration: %v", err)
+	}
+	falseResult, err := importSourceLockResult(context.Background(), falseLock, fetch, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import false identity declaration: %v", err)
+	}
+	absentProjection, err := marshalSourceImportResult(absentResult)
+	if err != nil {
+		t.Fatalf("marshal absent identity declaration: %v", err)
+	}
+	falseProjection, err := marshalSourceImportResult(falseResult)
+	if err != nil {
+		t.Fatalf("marshal false identity declaration: %v", err)
+	}
+	if !bytes.Equal(absentProjection, falseProjection) {
+		t.Fatalf("absent and false identity-query projections differ\nabsent: %s\nfalse: %s", absentProjection, falseProjection)
+	}
+}
+
+func TestSourceImportVersion3RejectsUnsafeIdentityArtifactQueries(t *testing.T) {
+	t.Parallel()
+	identityQuery := true
+	excessKeys := make([]string, maxSourceImportPublishedQueryKeys+1)
+	for index := range excessKeys {
+		excessKeys[index] = fmt.Sprintf("part%d=value", index)
+	}
+	cases := []struct {
+		name string
+		url  string
+	}{
+		{name: "credential-shaped key", url: "https://fixtures.polymetrics.invalid/identity.openapi.json?api_key=value"},
+		{name: "oversized query", url: "https://fixtures.polymetrics.invalid/identity.openapi.json?version=" + strings.Repeat("a", maxSourceImportPublishedQueryBytes)},
+		{name: "too many keys", url: "https://fixtures.polymetrics.invalid/identity.openapi.json?" + strings.Join(excessKeys, "&")},
+		{name: "missing query", url: "https://fixtures.polymetrics.invalid/identity.openapi.json"},
+	}
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			document := sourceImportV3FixtureDocument{
+				ID:            "identity",
+				Path:          "/identity",
+				Artifact:      []byte(`{"openapi":"3.0.3","info":{"title":"identity","version":"1"},"paths":{"/identity":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`),
+				ArtifactURL:   tc.url,
+				IdentityQuery: &identityQuery,
+			}
+			_, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture")
+			if err == nil || !strings.Contains(err.Error(), "identity artifact query") {
+				t.Fatalf("unsafe identity artifact URL %q error = %v", tc.url, err)
+			}
+		})
+	}
+}
+
+func TestSourceImportIdentityQueryRequiresV3RESTDocument(t *testing.T) {
+	t.Parallel()
+	artifact := []byte(`{"openapi":"3.0.3","info":{"title":"identity","version":"1"},"paths":{"/identity":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`)
+	digest := sha256.Sum256(artifact)
+	identityArtifact := sourceImportArtifact{
+		SourceURL:     "https://fixtures.polymetrics.invalid/identity.openapi.json?version=1",
+		SHA256:        hex.EncodeToString(digest[:]),
+		Bytes:         int64(len(artifact)),
+		OpenAPI:       "3.0.3",
+		IdentityQuery: true,
+	}
+	legacyRaw, err := json.Marshal(sourceImportLock{
+		SchemaVersion: 2,
+		Connector:     "fixture",
+		Rest:          sourceImportREST{sourceImportArtifact: identityArtifact},
+	})
+	if err != nil {
+		t.Fatalf("marshal legacy identity-query lock: %v", err)
+	}
+	if _, err := parseSourceImportLock(legacyRaw, "fixture"); err == nil || !strings.Contains(err.Error(), "v3 REST source document") {
+		t.Fatalf("legacy identity-query lock error = %v", err)
+	}
+
+	identityQuery := true
+	document := sourceImportV3FixtureDocument{ID: "identity", Path: "/identity", Artifact: artifact, ArtifactURL: identityArtifact.SourceURL, IdentityQuery: &identityQuery}
+	var v3Lock map[string]any
+	if err := json.Unmarshal(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), &v3Lock); err != nil {
+		t.Fatalf("decode v3 identity-query lock: %v", err)
+	}
+	v3Lock["graphql"] = map[string]any{
+		"source_url":     identityArtifact.SourceURL,
+		"sha256":         identityArtifact.SHA256,
+		"bytes":          identityArtifact.Bytes,
+		"identity_query": true,
+	}
+	v3Raw, err := json.Marshal(v3Lock)
+	if err != nil {
+		t.Fatalf("marshal v3 GraphQL identity-query lock: %v", err)
+	}
+	if _, err := parseSourceImportLock(v3Raw, "fixture"); err == nil || !strings.Contains(err.Error(), "v3 REST source document") {
+		t.Fatalf("v3 GraphQL identity-query lock error = %v", err)
+	}
+}
+
+func TestSourceImportIdentityQueryRetainsArtifactURLGuards(t *testing.T) {
+	t.Parallel()
+	identityQuery := true
+	artifact := []byte(`{"openapi":"3.0.3","info":{"title":"identity","version":"1"},"paths":{"/identity":{"get":{"operationId":"shared","responses":{"200":{"description":"ok"}}}}}}`)
+	cases := []struct {
+		name string
+		url  string
+	}{
+		{name: "non HTTPS", url: "http://fixtures.polymetrics.invalid/identity.openapi.json?version=1"},
+		{name: "userinfo", url: "https://user@fixtures.polymetrics.invalid/identity.openapi.json?version=1"},
+		{name: "fragment", url: "https://fixtures.polymetrics.invalid/identity.openapi.json?version=1#fragment"},
+		{name: "non-public host", url: "https://localhost/identity.openapi.json?version=1"},
+		{name: "private literal", url: "https://127.0.0.1/identity.openapi.json?version=1"},
+	}
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			document := sourceImportV3FixtureDocument{ID: "identity", Path: "/identity", Artifact: artifact, ArtifactURL: tc.url, IdentityQuery: &identityQuery}
+			_, err := parseSourceImportLock(sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{document}), "fixture")
+			if err == nil || !strings.Contains(err.Error(), "invalid artifact") {
+				t.Fatalf("identity artifact URL %q error = %v", tc.url, err)
+			}
+		})
+	}
+
+	digest := sha256.Sum256(artifact)
+	lockedArtifact := sourceImportArtifact{
+		SourceURL:     "https://fixtures.polymetrics.invalid/identity.openapi.json?version=1",
+		SHA256:        hex.EncodeToString(digest[:]),
+		Bytes:         int64(len(artifact)),
+		OpenAPI:       "3.0.3",
+		IdentityQuery: true,
+	}
+	called := false
+	fetcher := httpSourceImportFetcher{
+		limits: defaultSourceImportLimits(),
+		lookup: batchArtifactLookupIPAddr(func(context.Context, string) ([]net.IPAddr, error) {
+			return []net.IPAddr{{IP: net.ParseIP("169.254.169.254")}}, nil
+		}),
+		client: &http.Client{Transport: sourceImportRoundTripFunc(func(*http.Request) (*http.Response, error) {
+			called = true
+			return nil, fmt.Errorf("unexpected request")
+		})},
+	}
+	if _, err := fetcher.FetchArtifact(context.Background(), lockedArtifact); err == nil || !strings.Contains(err.Error(), "not public") {
+		t.Fatalf("private resolved identity artifact error = %v", err)
+	}
+	if called {
+		t.Fatal("private resolved identity artifact reached the HTTP transport")
+	}
+}
+
+type sourceImportRoundTripFunc func(*http.Request) (*http.Response, error)
+
+func (f sourceImportRoundTripFunc) RoundTrip(request *http.Request) (*http.Response, error) {
+	return f(request)
 }
 
 func TestSourceImportVersion3ImportsDocumentOwnedProvenanceAndDuplicateProviderIDs(t *testing.T) {

@@ -49,8 +49,12 @@ func TestSchemaCompileKeywordMatrix(t *testing.T) {
 			raw:  `{"type":"object","additionalProperties":false,"properties":{"a":{"type":"string"}}}`,
 		},
 		{
-			name: "annotations compile",
-			raw:  `{"type":"string","format":"date-time","default":"x","title":"t","description":"d","$schema":"http://json-schema.org/draft-07/schema#"}`,
+			name: "OpenAPI example annotation compiles",
+			raw:  `{"type":"string","format":"date-time","default":"x","example":"urn:ietf:params:scim:api:messages:2.0:ListResponse","title":"t","description":"d","$schema":"http://json-schema.org/draft-07/schema#"}`,
+		},
+		{
+			name: "pattern properties compile",
+			raw:  `{"type":"object","additionalProperties":false,"patternProperties":{"^x-[a-z]+$":{"type":"integer"}}}`,
 		},
 		{
 			name:    "unknown keyword is compile error",
@@ -189,6 +193,25 @@ func TestSchemaValidateInstances(t *testing.T) {
 			instance:  `{"a":"x","b":"y"}`,
 			wantErr:   true,
 			errSubstr: "/b",
+		},
+		{
+			name:     "pattern properties validates matching provider metadata",
+			raw:      `{"type":"object","additionalProperties":false,"patternProperties":{"^x-[a-z]+$":{"type":"integer"}}}`,
+			instance: `{"x-retries":3}`,
+		},
+		{
+			name:      "pattern properties reject a matching value with the wrong type",
+			raw:       `{"type":"object","additionalProperties":false,"patternProperties":{"^x-[a-z]+$":{"type":"integer"}}}`,
+			instance:  `{"x-retries":"three"}`,
+			wantErr:   true,
+			errSubstr: "/x-retries",
+		},
+		{
+			name:      "pattern properties do not permit unmatched extra fields",
+			raw:       `{"type":"object","additionalProperties":false,"patternProperties":{"^x-[a-z]+$":{"type":"integer"}}}`,
+			instance:  `{"retries":3}`,
+			wantErr:   true,
+			errSubstr: "/retries",
 		},
 		{
 			name:      "nested path in error",
