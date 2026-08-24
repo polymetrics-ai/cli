@@ -1,0 +1,1279 @@
+{
+  "schema_version": 1,
+  "connector": "google-analytics-data-api",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_basis": {
+    "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+    "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+    "source_sha256": "cafd0552fe8ec00b7026bc15a223e8b6931c2eb653900e9375bc3b88702aa3f3",
+    "source_bytes": 306884,
+    "operations_found": 23,
+    "mapped_operations": 28,
+    "old_api_surface_rows": 5,
+    "regenerated_api_surface_rows": 28,
+    "api_surface_regeneration": "provider-source-derived",
+    "normalized_inventory_sha256": "aaf128ac2c84fca2dd1511bb0838b5a3e2cdf8a3e78c22cef3347c643629ac0a",
+    "source_retrieval": "fetched",
+    "coverage_confidence": {
+      "level": "machine-readable-spec",
+      "basis": "Official v1, v1alpha, and v1beta Discovery documents, deduped by HTTP method and path (23 unique provider requests)."
+    }
+  },
+  "summary": {
+    "old_api_surface_rows": 5,
+    "api_surface_rows": 28,
+    "exact_source_rows": 28,
+    "declared_operations": 28,
+    "operations_found": 23,
+    "coverage_confidence": {
+      "level": "machine-readable-spec",
+      "basis": "Official v1, v1alpha, and v1beta Discovery documents, deduped by HTTP method and path (23 unique provider requests)."
+    },
+    "enabled_operations": 0,
+    "declaration_pending_operations": 28,
+    "disabled_operations": 0,
+    "documented_deletes": 1,
+    "enabled_deletes": 0,
+    "parity_class_counts": [
+      {
+        "key": "direct_read",
+        "count": 7
+      },
+      {
+        "key": "direct_write",
+        "count": 16
+      },
+      {
+        "key": "etl",
+        "count": 5
+      }
+    ],
+    "stream_bindings": 5,
+    "writes_actions": 0,
+    "terminal_commands": 0,
+    "live_certification": "pending",
+    "gap_ids": [],
+    "foundation_gaps": [],
+    "rejected_by_reason": [
+      {
+        "key": "declaration-pending",
+        "count": 28
+      }
+    ],
+    "transport": {
+      "source_transport": {
+        "state": "declaration-pending",
+        "evidence": "internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent; the declarative source factory is connector-neutral but requires a connector-owned definition and conformance evidence."
+      },
+      "destination_transport": {
+        "state": "declaration-pending",
+        "evidence": "The merged #4304 foundation head dispatches definition-preflighted declarative typed destinations through the persisted App/CLI path. This connector still needs its own destination sync_transport declaration and conformance evidence. internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent."
+      }
+    },
+    "foundation_gap_operations": 0,
+    "partial_commands": 28
+  },
+  "ledger_dispositions": [
+    {
+      "method": "DELETE",
+      "path": "/v1/{+name}",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "DELETE",
+        "path": "/v1/{+name}",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-operations-delete-1",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.delete",
+        "operation_id": "analyticsdata.operations.delete",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[0]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations delete-v1-name\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations delete-v1-name",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/{+name}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1/{+name}",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-operations-list-2",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.list",
+        "operation_id": "analyticsdata.operations.list",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[1]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-v1-name\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1-name",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/{+name}:cancel",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1/{+name}:cancel",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-operations-cancel-3",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.cancel",
+        "operation_id": "analyticsdata.operations.cancel",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[2]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1-name-cancel\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1-name-cancel",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1alpha/{+name}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1alpha/{+name}",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-getpropertyquotassnapshot-4",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.getPropertyQuotasSnapshot",
+        "operation_id": "analyticsdata.properties.getPropertyQuotasSnapshot",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[3]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-v1alpha-name\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1alpha-name",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1alpha/{+name}:query",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1alpha/{+name}:query",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-reporttasks-query-5",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.query",
+        "operation_id": "analyticsdata.properties.reportTasks.query",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[4]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1alpha-name-query\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1alpha-name-query",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1alpha/{+parent}/audienceLists",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1alpha/{+parent}/audienceLists",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-audiencelists-list-6",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.list",
+        "operation_id": "analyticsdata.properties.audienceLists.list",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[5]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-v1alpha-parent-audience-lists\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1alpha-parent-audience-lists",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1alpha/{+parent}/audienceLists",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1alpha/{+parent}/audienceLists",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-audiencelists-create-7",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.create",
+        "operation_id": "analyticsdata.properties.audienceLists.create",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[6]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1alpha-parent-audience-lists\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1alpha-parent-audience-lists",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1alpha/{+parent}/recurringAudienceLists",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1alpha/{+parent}/recurringAudienceLists",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-recurringaudiencelists-list-8",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.list",
+        "operation_id": "analyticsdata.properties.recurringAudienceLists.list",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[7]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-v1alpha-parent-recurring-audience-lists\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1alpha-parent-recurring-audience-lists",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1alpha/{+parent}/recurringAudienceLists",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1alpha/{+parent}/recurringAudienceLists",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-recurringaudiencelists-create-9",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.create",
+        "operation_id": "analyticsdata.properties.recurringAudienceLists.create",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[8]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1alpha-parent-recurring-audience-lists\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1alpha-parent-recurring-audience-lists",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1alpha/{+parent}/reportTasks",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1alpha/{+parent}/reportTasks",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-reporttasks-list-10",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.list",
+        "operation_id": "analyticsdata.properties.reportTasks.list",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[9]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-v1alpha-parent-report-tasks\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1alpha-parent-report-tasks",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1alpha/{+parent}/reportTasks",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1alpha/{+parent}/reportTasks",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-reporttasks-create-11",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.create",
+        "operation_id": "analyticsdata.properties.reportTasks.create",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[10]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1alpha-parent-report-tasks\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1alpha-parent-report-tasks",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1alpha/{+property}:runFunnelReport",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1alpha/{+property}:runFunnelReport",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-runfunnelreport-12",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.runFunnelReport",
+        "operation_id": "analyticsdata.properties.runFunnelReport",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[11]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1alpha-property-run-funnel-report\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1alpha-property-run-funnel-report",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1alpha/{+property}:runReport",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1alpha/{+property}:runReport",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-runreport-13",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.runReport",
+        "operation_id": "analyticsdata.properties.runReport",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[12]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1alpha-property-run-report\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1alpha-property-run-report",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1beta/{+name}",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1beta/{+name}",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-getmetadata-14",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.getMetadata",
+        "operation_id": "analyticsdata.properties.getMetadata",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[13]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-v1beta-name\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1beta-name",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+name}:query",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1beta/{+name}:query",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-audienceexports-query-15",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.query",
+        "operation_id": "analyticsdata.properties.audienceExports.query",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[14]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-name-query\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-name-query",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1beta/{+parent}/audienceExports",
+      "parity_class": "direct_read",
+      "api_surface": {
+        "method": "GET",
+        "path": "/v1beta/{+parent}/audienceExports",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-audienceexports-list-16",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.list",
+        "operation_id": "analyticsdata.properties.audienceExports.list",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[15]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations get-v1beta-parent-audience-exports\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations get-v1beta-parent-audience-exports",
+          "intent": "direct_read",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+parent}/audienceExports",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1beta/{+parent}/audienceExports",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-audienceexports-create-17",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.create",
+        "operation_id": "analyticsdata.properties.audienceExports.create",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[16]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-parent-audience-exports\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-parent-audience-exports",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+property}:batchRunPivotReports",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1beta/{+property}:batchRunPivotReports",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-batchrunpivotreports-18",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.batchRunPivotReports",
+        "operation_id": "analyticsdata.properties.batchRunPivotReports",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[17]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-property-batch-run-pivot-reports\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-property-batch-run-pivot-reports",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+property}:batchRunReports",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1beta/{+property}:batchRunReports",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-batchrunreports-19",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.batchRunReports",
+        "operation_id": "analyticsdata.properties.batchRunReports",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[18]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-property-batch-run-reports\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-property-batch-run-reports",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+property}:checkCompatibility",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1beta/{+property}:checkCompatibility",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-checkcompatibility-20",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.checkCompatibility",
+        "operation_id": "analyticsdata.properties.checkCompatibility",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[19]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-property-check-compatibility\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-property-check-compatibility",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+property}:runPivotReport",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1beta/{+property}:runPivotReport",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-runpivotreport-21",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.runPivotReport",
+        "operation_id": "analyticsdata.properties.runPivotReport",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[20]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-property-run-pivot-report\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-property-run-pivot-report",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+property}:runRealtimeReport",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1beta/{+property}:runRealtimeReport",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-runrealtimereport-22",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.runRealtimeReport",
+        "operation_id": "analyticsdata.properties.runRealtimeReport",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[21]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-property-run-realtime-report\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-property-run-realtime-report",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1beta/{+property}:runReport",
+      "parity_class": "direct_write",
+      "api_surface": {
+        "method": "POST",
+        "path": "/v1beta/{+property}:runReport",
+        "operation": null,
+        "covered_by": null,
+        "excluded": {
+          "category": "out_of_scope",
+          "reason": "Documented provider operation has no exact declarative stream or typed operation contract; the five retained hook rows below are local executor bindings, not source coverage for this provider request."
+        }
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.provider.analyticsdata-properties-runreport-23",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "methods.runReport",
+        "operation_id": "analyticsdata.properties.runReport",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[22]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations post-v1beta-property-run-report\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations post-v1beta-property-run-report",
+          "intent": "direct_write",
+          "availability": "partial"
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api daily_active_users read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api daily_active_users read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "daily_active_users"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path-24",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "api_surface.json:endpoints[23]",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path-24",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[23]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations hook-internal-connectors-google-analytics-data-api-daily-active-users-read-path",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api website_overview read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api website_overview read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "website_overview"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-website-overview-read-path-25",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "api_surface.json:endpoints[24]",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-website-overview-read-path-25",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[24]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations hook-internal-connectors-google-analytics-data-api-website-overview-read-path\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations hook-internal-connectors-google-analytics-data-api-website-overview-read-path",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api traffic_sources read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api traffic_sources read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "traffic_sources"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path-26",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "api_surface.json:endpoints[25]",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path-26",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[25]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations hook-internal-connectors-google-analytics-data-api-traffic-sources-read-path",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api devices read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api devices read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "devices"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-devices-read-path-27",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "api_surface.json:endpoints[26]",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-devices-read-path-27",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[26]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations hook-internal-connectors-google-analytics-data-api-devices-read-path\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations hook-internal-connectors-google-analytics-data-api-devices-read-path",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    },
+    {
+      "method": "HOOK",
+      "path": "internal/connectors/google-analytics-data-api pages read path",
+      "parity_class": "etl",
+      "api_surface": {
+        "method": "HOOK",
+        "path": "internal/connectors/google-analytics-data-api pages read path",
+        "operation": null,
+        "covered_by": {
+          "stream": "pages"
+        },
+        "excluded": null
+      },
+      "source": {
+        "source_lock": "sources/google-analytics-data-api-parity-source-lock.json",
+        "source_id": "google-analytics-data-api.local-api-surface.hook-internal-connectors-google-analytics-data-api-pages-read-path-28",
+        "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1",
+        "source_location": "api_surface.json:endpoints[27]",
+        "operation_id": "hook-internal-connectors-google-analytics-data-api-pages-read-path-28",
+        "deprecated": false
+      },
+      "state": "declaration-pending",
+      "foundation": {
+        "state": "present",
+        "evidence": "No current engine refusal is evidenced; a missing operation contract, command, or CLI surface is a declaration gap."
+      },
+      "rejection": {
+        "reason": "declaration-pending",
+        "recoverable": true,
+        "detail": "The normalized documented endpoint has no implemented connector-owned terminal declaration.",
+        "evidence": "api_surface.json:endpoints[27]"
+      },
+      "declaration": {
+        "status": "declaration-pending; partial connector command \"operations hook-internal-connectors-google-analytics-data-api-pages-read-path\" records the normalized source endpoint, but no declaration-owned executable contract exists",
+        "command": {
+          "path": "operations hook-internal-connectors-google-analytics-data-api-pages-read-path",
+          "intent": "etl",
+          "availability": "partial"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/google-analytics-data-api/sync_transport.json is absent; the source executor is connector-neutral but requires a connector-owned declaration and conformance evidence."
+          }
+        }
+      }
+    }
+  ]
+}

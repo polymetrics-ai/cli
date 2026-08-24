@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "connector": "ebay-fulfillment",
+  "captured_at": "2026-08-19T00:00:00Z",
+  "source_retrieval": {
+    "state": "skipped",
+    "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+    "coverage_confidence": "unavailable-public-source",
+    "coverage_basis": "Chrome returned the official eBay error page rather than API documentation.",
+    "reason": "no-public-api-description",
+    "evidence": "chrome-devtools-axi browser fetch on 2026-08-19: https://developer.ebay.com/develop/api/fulfillment-api/release-notes returned the official Error Page | eBay rather than API documentation."
+  },
+  "normalized_inventory": {
+    "path": "api_surface.json",
+    "sha256": "5543a2cc434eeaeb2d9f6a685d21b30b588fc7fa2cb93dda83672a5ccbfa34f3",
+    "bytes": 4129,
+    "source_operation_count": null,
+    "old_api_surface_rows": 11,
+    "regenerated_api_surface_rows": 11,
+    "regeneration_basis": "dynamic, unavailable, or pending rendered-reference crawl; existing local execution inventory retained until a complete public source can be materialized"
+  },
+  "rest": {
+    "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+    "sha256": null,
+    "bytes": null,
+    "operation_counts": [],
+    "operations": []
+  },
+  "graphql": {
+    "source_url": "https://developer.ebay.com/develop/api/fulfillment-api/release-notes",
+    "sha256": null,
+    "bytes": null,
+    "operation_counts": [],
+    "operations": []
+  },
+  "local_execution_bindings": [
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order",
+      "api_surface_index": 0,
+      "source_location": "api_surface.json:endpoints[0]"
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order (exploded lineItems)",
+      "api_surface_index": 1,
+      "source_location": "api_surface.json:endpoints[1]"
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order (shipping projection)",
+      "api_surface_index": 2,
+      "source_location": "api_surface.json:endpoints[2]"
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/payment_dispute",
+      "api_surface_index": 3,
+      "source_location": "api_surface.json:endpoints[3]"
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order/{orderId}",
+      "api_surface_index": 4,
+      "source_location": "api_surface.json:endpoints[4]"
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment",
+      "api_surface_index": 5,
+      "source_location": "api_surface.json:endpoints[5]"
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment/{fulfillmentId}",
+      "api_surface_index": 6,
+      "source_location": "api_surface.json:endpoints[6]"
+    },
+    {
+      "method": "POST",
+      "path": "/sell/fulfillment/v1/order/{orderId}/shipping_fulfillment",
+      "api_surface_index": 7,
+      "source_location": "api_surface.json:endpoints[7]"
+    },
+    {
+      "method": "GET",
+      "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}",
+      "api_surface_index": 8,
+      "source_location": "api_surface.json:endpoints[8]"
+    },
+    {
+      "method": "POST",
+      "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/accept",
+      "api_surface_index": 9,
+      "source_location": "api_surface.json:endpoints[9]"
+    },
+    {
+      "method": "POST",
+      "path": "/sell/fulfillment/v1/payment_dispute/{payment_dispute_id}/contest",
+      "api_surface_index": 10,
+      "source_location": "api_surface.json:endpoints[10]"
+    }
+  ],
+  "counts": {
+    "total": null,
+    "rest": null,
+    "graphql": null,
+    "local_execution_bindings": 11,
+    "mapped_api_surface_rows": 11
+  },
+  "coverage_confidence": {
+    "level": "unavailable-public-source",
+    "basis": "Chrome returned the official eBay error page rather than API documentation."
+  }
+}

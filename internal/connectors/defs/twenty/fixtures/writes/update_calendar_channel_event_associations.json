@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_calendar_channel_event_associations_fixture_id",
+    "calendarChannelId": "calendarChannelId_fixture_1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/calendarChannelEventAssociations/update_calendar_channel_event_associations_fixture_id",
+    "body": {
+      "calendarChannelId": "calendarChannelId_fixture_1"
+    }
+  }
+}

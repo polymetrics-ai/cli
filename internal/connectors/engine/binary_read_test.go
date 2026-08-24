@@ -168,7 +168,7 @@ func TestBinaryDownloadWritesBoundedFile(t *testing.T) {
 	}
 }
 
-func TestOperationBinaryDownloadMasksConfiguredResponseHeaderValues(t *testing.T) {
+func TestOperationBinaryDownloadPreservesConfiguredEqualResponseHeaderValues(t *testing.T) {
 	const credential = "configured-header-material"
 	const occurrenceID = "occurrence-9007199254740993"
 	const unconfiguredToken = "ghp_unconfigured_provider_token"
@@ -196,7 +196,10 @@ func TestOperationBinaryDownloadMasksConfiguredResponseHeaderValues(t *testing.T
 	if err != nil {
 		t.Fatalf("OperationBinaryDownload: %v", err)
 	}
-	want := []string{"[masked]", occurrenceID, "[masked]", unconfiguredToken, "[masked]"}
+	// A provider may legitimately return a value byte-identical to a configured
+	// credential. Response headers are provider output, so that coincidence is
+	// preserved unless the operation explicitly declares the output secret.
+	want := []string{credential, occurrenceID, encoded, unconfiguredToken, credential}
 	for _, headers := range []map[string]connectors.OperationResponseHeader{result.Headers, result.Receipt.Headers} {
 		if !reflect.DeepEqual(headers["X-Provider-Metadata"].Values, want) {
 			t.Fatalf("header values = %#v, want %#v", headers["X-Provider-Metadata"].Values, want)

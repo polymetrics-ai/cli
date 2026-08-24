@@ -2,13 +2,13 @@
 
 ## Task Delivery Header
 
-- Issue: Refs #4303 — connector-neutral typed reverse-ETL destinations.
-- Base branch: `origin/fm/cli-reverse-etl-action-binding-foundation-r1` at `846ff9e5d9f56cef3f9835d35b57b1b4d468b379`.
-- Merges into: Firstmate-directed integration/rebase after this source-isolated repair and the parallel Foundation repair are independently green and reviewed; never directly into `main`.
-- Delivery: committed and non-force-pushed repair branch with all canonical review IDs resolved, full evidence, clean worktree, and no PR opened.
+- Issue: Refs #4303 — connector-neutral typed reverse-ETL destinations; Refs #4321 — preserve undeclared provider values that collide with credentials.
+- Base branch: `origin/main` at `486b92b4246a8c993cd229a56e9a6b5af87deea6`.
+- Merges into: `main` through a direct PR; Firstmate owns review and the human merge gate.
+- Delivery: committed, non-force-pushed repair branch and a direct PR targeting `main`, with all canonical review IDs and the captain's credential-echo decision evidenced, full local verification, and a clean worktree.
 - Working branch: `fm/cli-reverse-etl-action-binding-foundation-r1`.
 - Task: repair AB-B01 through AB-B09 and AB-W01 through AB-W05 without weakening declarations, approval visibility, destructive-operation handling, or provider output.
-- Verification: report-focused red/green tests; changed-package and race cohorts; `connectorgen validate`; `surface-sync --check`; docs/surface/contract/boundary checks; GSD verification/review artifacts; complete no-mistakes pipeline; remote SHA check.
+- Verification: report-focused red/green tests; changed-package and race cohorts; `connectorgen validate`; `surface-sync --check`; docs/surface/contract/boundary checks; GSD verification/review artifacts; full `make verify`; remote SHA and PR-base checks.
 
 ## Evidence table
 
@@ -24,7 +24,7 @@
 
 ## Required skills and lifecycle
 
-Loaded: `golang-how-to`, `golang-cli`, `golang-documentation`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-context`, `golang-concurrency`, `vercel-react-best-practices`, `vercel-composition-patterns`, `no-mistakes`, `gsd-discuss-phase`, `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, and `gsd-code-review`.
+Loaded: `golang-how-to`, `golang-cli`, `golang-documentation`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-context`, `golang-concurrency`, `golang-lint`, `vercel-react-best-practices`, `vercel-composition-patterns`, `gsd-discuss-phase`, `gsd-plan-phase`, `gsd-execute-phase`, `gsd-verify-work`, and `gsd-code-review`.
 
 `scripts/gsd doctor`, all five `scripts/gsd sources` lookups, all five generated lifecycle prompts, and `go run ./cmd/agentcontractgen check` passed. `gsd-sdk query init.phase-op 4303` has no registered roadmap phase; therefore this plan is the required inline/manual GSD fallback. It preserves `discuss-phase --auto` → `plan-phase --tdd` → inline execution → verification → deep code review, and records the worker-isolation limitation without weakening TDD or gates.
 
@@ -58,6 +58,19 @@ Loaded: `golang-how-to`, `golang-cli`, `golang-documentation`, `golang-design-pa
 - [ ] `docs/cli/etl.md`, `website/content/docs/etl.mdx`, embedded help, and generated/golden surfaces match.
 - [ ] no credentials or reverse-ETL execution are used for help validation.
 
+## Gap closure — declared provider-output boundary
+
+The captain's 2026-08-23 credential-echo decision is an explicit delivery
+constraint: output is masked only at declared `OutputSecretFields`; a
+provider-returned value that merely equals a configured credential remains
+verbatim. `TestDirectWriteCommandPreservesCredentialEqualUndeclaredProviderValue`
+executes the approved direct-write path against a declared local HTTP fixture,
+proves the configured bearer credential reached the request, and verifies that
+the provider's byte-identical undeclared value survives body, raw-body, and
+persisted-run projection. Declared-field masking and secret-safe synthetic
+diagnostics remain independently covered; this is a test-contract correction,
+not a relaxation of declared-field masking.
+
 ## Final gates
 
-Run the report’s focused red/green proofs, package tests and `-race`, `gofmt`, `go vet`, `go build ./cmd/pm`, `tidy-check`, `lint`, `docs-check`, `smoke-no-build`, `agent-contract-check`, `connectorgen validate`, `connectorgen surface-sync --check`, `connector-boundary`, and `release-workflow-check`. Execute the full no-mistakes pipeline only after committed local gates are green. Do not open a PR.
+Run the report’s focused red/green proofs, package tests and `-race`, `gofmt`, `go vet`, `go build ./cmd/pm`, `tidy-check`, `lint`, `docs-check`, `smoke-no-build`, `agent-contract-check`, `connectorgen validate`, `connectorgen surface-sync --check`, `connector-boundary`, `release-workflow-check`, and full `make verify`. The captain replaced the contested no-mistakes route with direct PR delivery; do not start, resume, respond to, or cancel a no-mistakes run. Open the direct PR only after local gates pass.

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "connector": "github",
   "generated_from": {
-    "source_lock_sha256": "0c63c2b8fa57b6169642cd9182cb4daf2b65c89b525614f6299a475f1bb2b647",
+    "source_lock_sha256": "322e9ee3c6afaa04e91d126babf385b4369e64c171067bd01f8ba15eb2f33b2e",
     "captured_at": "2026-08-09"
   },
   "sources": {
@@ -14,8 +14,8 @@
     },
     "graphql": {
       "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-      "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
-      "bytes": 1546421
+      "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
+      "bytes": 1551372
     }
   },
   "counts": {
@@ -48,7 +48,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:26950",
         "signature": "abortQueuedMigrations(input: AbortQueuedMigrationsInput!): AbortQueuedMigrationsPayload",
         "arguments": [
@@ -109,7 +109,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:26960",
         "signature": "abortRepositoryMigration(input: AbortRepositoryMigrationInput!): AbortRepositoryMigrationPayload",
         "arguments": [
@@ -170,7 +170,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:26970",
         "signature": "acceptEnterpriseAdministratorInvitation(input: AcceptEnterpriseAdministratorInvitationInput!): AcceptEnterpriseAdministratorInvitationPayload",
         "arguments": [
@@ -231,7 +231,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:26980",
         "signature": "acceptEnterpriseMemberInvitation(input: AcceptEnterpriseMemberInvitationInput!): AcceptEnterpriseMemberInvitationPayload",
         "arguments": [
@@ -292,7 +292,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:26990",
         "signature": "acceptTopicSuggestion(input: AcceptTopicSuggestionInput!): AcceptTopicSuggestionPayload",
         "arguments": [
@@ -353,7 +353,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27000",
         "signature": "accessUserNamespaceRepository(input: AccessUserNamespaceRepositoryInput!): AccessUserNamespaceRepositoryPayload",
         "arguments": [
@@ -414,7 +414,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27010",
         "signature": "addAssigneesToAssignable(input: AddAssigneesToAssignableInput!): AddAssigneesToAssignablePayload",
         "arguments": [
@@ -475,7 +475,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27020",
         "signature": "addBlockedBy(input: AddBlockedByInput!): AddBlockedByPayload",
         "arguments": [
@@ -536,7 +536,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27030",
         "signature": "addComment(input: AddCommentInput!): AddCommentPayload",
         "arguments": [
@@ -597,7 +597,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27040",
         "signature": "addDiscussionComment(input: AddDiscussionCommentInput!): AddDiscussionCommentPayload",
         "arguments": [
@@ -658,7 +658,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27050",
         "signature": "addDiscussionPollVote(input: AddDiscussionPollVoteInput!): AddDiscussionPollVotePayload",
         "arguments": [
@@ -719,7 +719,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27060",
         "signature": "addEnterpriseOrganizationMember(input: AddEnterpriseOrganizationMemberInput!): AddEnterpriseOrganizationMemberPayload",
         "arguments": [
@@ -780,7 +780,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27070",
         "signature": "addEnterpriseSupportEntitlement(input: AddEnterpriseSupportEntitlementInput!): AddEnterpriseSupportEntitlementPayload",
         "arguments": [
@@ -841,7 +841,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27080",
         "signature": "addLabelsToLabelable(input: AddLabelsToLabelableInput!): AddLabelsToLabelablePayload",
         "arguments": [
@@ -902,7 +902,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27090",
         "signature": "addProjectCard(input: AddProjectCardInput!): AddProjectCardPayload",
         "arguments": [
@@ -963,7 +963,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27104",
         "signature": "addProjectColumn(input: AddProjectColumnInput!): AddProjectColumnPayload",
         "arguments": [
@@ -1024,7 +1024,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27118",
         "signature": "addProjectV2DraftIssue(input: AddProjectV2DraftIssueInput!): AddProjectV2DraftIssuePayload",
         "arguments": [
@@ -1086,7 +1086,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27128",
         "signature": "addProjectV2ItemById(input: AddProjectV2ItemByIdInput!): AddProjectV2ItemByIdPayload",
         "arguments": [
@@ -1147,7 +1147,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27141",
         "signature": "addPullRequestCreationCapBypassUsers(input: AddPullRequestCreationCapBypassUsersInput!): AddPullRequestCreationCapBypassUsersPayload",
         "arguments": [
@@ -1208,7 +1208,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27151",
         "signature": "addPullRequestReview(input: AddPullRequestReviewInput!): AddPullRequestReviewPayload",
         "arguments": [
@@ -1269,7 +1269,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27161",
         "signature": "addPullRequestReviewComment(input: AddPullRequestReviewCommentInput!): AddPullRequestReviewCommentPayload",
         "arguments": [
@@ -1330,7 +1330,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27171",
         "signature": "addPullRequestReviewThread(input: AddPullRequestReviewThreadInput!): AddPullRequestReviewThreadPayload",
         "arguments": [
@@ -1391,7 +1391,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27181",
         "signature": "addPullRequestReviewThreadReply(input: AddPullRequestReviewThreadReplyInput!): AddPullRequestReviewThreadReplyPayload",
         "arguments": [
@@ -1452,7 +1452,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27191",
         "signature": "addReaction(input: AddReactionInput!): AddReactionPayload",
         "arguments": [
@@ -1513,7 +1513,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27201",
         "signature": "addStar(input: AddStarInput!): AddStarPayload",
         "arguments": [
@@ -1574,7 +1574,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27211",
         "signature": "addSubIssue(input: AddSubIssueInput!): AddSubIssuePayload",
         "arguments": [
@@ -1635,7 +1635,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27221",
         "signature": "addUpvote(input: AddUpvoteInput!): AddUpvotePayload",
         "arguments": [
@@ -1696,7 +1696,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27231",
         "signature": "addVerifiableDomain(input: AddVerifiableDomainInput!): AddVerifiableDomainPayload",
         "arguments": [
@@ -1757,7 +1757,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27241",
         "signature": "applyPendingIssueSuggestions(input: ApplyPendingIssueSuggestionsInput!): ApplyPendingIssueSuggestionsPayload",
         "arguments": [
@@ -1818,7 +1818,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27251",
         "signature": "approveDeployments(input: ApproveDeploymentsInput!): ApproveDeploymentsPayload",
         "arguments": [
@@ -1879,7 +1879,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27261",
         "signature": "approveVerifiableDomain(input: ApproveVerifiableDomainInput!): ApproveVerifiableDomainPayload",
         "arguments": [
@@ -1940,7 +1940,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27271",
         "signature": "archiveProjectV2Item(input: ArchiveProjectV2ItemInput!): ArchiveProjectV2ItemPayload",
         "arguments": [
@@ -2001,7 +2001,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27282",
         "signature": "archivePullRequest(input: ArchivePullRequestInput!): ArchivePullRequestPayload",
         "arguments": [
@@ -2062,7 +2062,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27292",
         "signature": "archiveRepository(input: ArchiveRepositoryInput!): ArchiveRepositoryPayload",
         "arguments": [
@@ -2123,7 +2123,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27302",
         "signature": "cancelEnterpriseAdminInvitation(input: CancelEnterpriseAdminInvitationInput!): CancelEnterpriseAdminInvitationPayload",
         "arguments": [
@@ -2184,7 +2184,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27312",
         "signature": "cancelEnterpriseMemberInvitation(input: CancelEnterpriseMemberInvitationInput!): CancelEnterpriseMemberInvitationPayload",
         "arguments": [
@@ -2245,7 +2245,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27322",
         "signature": "cancelSponsorship(input: CancelSponsorshipInput!): CancelSponsorshipPayload",
         "arguments": [
@@ -2306,7 +2306,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27332",
         "signature": "changeUserStatus(input: ChangeUserStatusInput!): ChangeUserStatusPayload",
         "arguments": [
@@ -2367,7 +2367,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27342",
         "signature": "clearLabelsFromLabelable(input: ClearLabelsFromLabelableInput!): ClearLabelsFromLabelablePayload",
         "arguments": [
@@ -2428,7 +2428,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27354",
         "signature": "clearProjectV2ItemFieldValue(input: ClearProjectV2ItemFieldValueInput!): ClearProjectV2ItemFieldValuePayload",
         "arguments": [
@@ -2489,7 +2489,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27364",
         "signature": "cloneProject(input: CloneProjectInput!): CloneProjectPayload",
         "arguments": [
@@ -2550,7 +2550,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27378",
         "signature": "cloneTemplateRepository(input: CloneTemplateRepositoryInput!): CloneTemplateRepositoryPayload",
         "arguments": [
@@ -2611,7 +2611,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27388",
         "signature": "closeDiscussion(input: CloseDiscussionInput!): CloseDiscussionPayload",
         "arguments": [
@@ -2672,7 +2672,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27398",
         "signature": "closeIssue(input: CloseIssueInput!): CloseIssuePayload",
         "arguments": [
@@ -2733,7 +2733,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27408",
         "signature": "closePullRequest(input: ClosePullRequestInput!): ClosePullRequestPayload",
         "arguments": [
@@ -2794,7 +2794,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27418",
         "signature": "convertProjectCardNoteToIssue(input: ConvertProjectCardNoteToIssueInput!): ConvertProjectCardNoteToIssuePayload",
         "arguments": [
@@ -2855,7 +2855,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27432",
         "signature": "convertProjectV2DraftIssueItemToIssue(input: ConvertProjectV2DraftIssueItemToIssueInput!): ConvertProjectV2DraftIssueItemToIssuePayload",
         "arguments": [
@@ -2916,7 +2916,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27442",
         "signature": "convertPullRequestToDraft(input: ConvertPullRequestToDraftInput!): ConvertPullRequestToDraftPayload",
         "arguments": [
@@ -2977,7 +2977,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27452",
         "signature": "copyProjectV2(input: CopyProjectV2Input!): CopyProjectV2Payload",
         "arguments": [
@@ -3038,7 +3038,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27462",
         "signature": "createAttributionInvitation(input: CreateAttributionInvitationInput!): CreateAttributionInvitationPayload",
         "arguments": [
@@ -3099,7 +3099,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27472",
         "signature": "createBranchProtectionRule(input: CreateBranchProtectionRuleInput!): CreateBranchProtectionRulePayload",
         "arguments": [
@@ -3160,7 +3160,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27482",
         "signature": "createCheckRun(input: CreateCheckRunInput!): CreateCheckRunPayload",
         "arguments": [
@@ -3221,7 +3221,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27492",
         "signature": "createCheckSuite(input: CreateCheckSuiteInput!): CreateCheckSuitePayload",
         "arguments": [
@@ -3282,7 +3282,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27543",
         "signature": "createCommitOnBranch(input: CreateCommitOnBranchInput!): CreateCommitOnBranchPayload",
         "arguments": [
@@ -3343,7 +3343,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27553",
         "signature": "createDeployment(input: CreateDeploymentInput!): CreateDeploymentPayload",
         "arguments": [
@@ -3404,7 +3404,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27563",
         "signature": "createDeploymentStatus(input: CreateDeploymentStatusInput!): CreateDeploymentStatusPayload",
         "arguments": [
@@ -3465,7 +3465,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27573",
         "signature": "createDiscussion(input: CreateDiscussionInput!): CreateDiscussionPayload",
         "arguments": [
@@ -3527,7 +3527,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27588",
         "signature": "createEnterpriseOrganization(input: CreateEnterpriseOrganizationInput!): CreateEnterpriseOrganizationPayload",
         "arguments": [
@@ -3588,7 +3588,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27598",
         "signature": "createEnvironment(input: CreateEnvironmentInput!): CreateEnvironmentPayload",
         "arguments": [
@@ -3649,7 +3649,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27608",
         "signature": "createIpAllowListEntry(input: CreateIpAllowListEntryInput!): CreateIpAllowListEntryPayload",
         "arguments": [
@@ -3710,7 +3710,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27618",
         "signature": "createIssue(input: CreateIssueInput!): CreateIssuePayload",
         "arguments": [
@@ -3771,7 +3771,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27628",
         "signature": "createIssueField(input: CreateIssueFieldInput!): CreateIssueFieldPayload",
         "arguments": [
@@ -3832,7 +3832,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27638",
         "signature": "createIssueFieldValue(input: CreateIssueFieldValueInput!): CreateIssueFieldValuePayload",
         "arguments": [
@@ -3893,7 +3893,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27648",
         "signature": "createIssueType(input: CreateIssueTypeInput!): CreateIssueTypePayload",
         "arguments": [
@@ -3954,7 +3954,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27658",
         "signature": "createLabel(input: CreateLabelInput!): CreateLabelPayload",
         "arguments": [
@@ -4015,7 +4015,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27668",
         "signature": "createLinkedBranch(input: CreateLinkedBranchInput!): CreateLinkedBranchPayload",
         "arguments": [
@@ -4076,7 +4076,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27678",
         "signature": "createMigrationSource(input: CreateMigrationSourceInput!): CreateMigrationSourcePayload",
         "arguments": [
@@ -4137,7 +4137,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27688",
         "signature": "createProject(input: CreateProjectInput!): CreateProjectPayload",
         "arguments": [
@@ -4198,7 +4198,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27702",
         "signature": "createProjectV2(input: CreateProjectV2Input!): CreateProjectV2Payload",
         "arguments": [
@@ -4260,7 +4260,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27712",
         "signature": "createProjectV2Field(input: CreateProjectV2FieldInput!): CreateProjectV2FieldPayload",
         "arguments": [
@@ -4321,7 +4321,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27722",
         "signature": "createProjectV2IssueField(input: CreateProjectV2IssueFieldInput!): CreateProjectV2IssueFieldPayload",
         "arguments": [
@@ -4382,7 +4382,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27732",
         "signature": "createProjectV2StatusUpdate(input: CreateProjectV2StatusUpdateInput!): CreateProjectV2StatusUpdatePayload",
         "arguments": [
@@ -4443,7 +4443,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27742",
         "signature": "createProjectV2View(input: CreateProjectV2ViewInput!): CreateProjectV2ViewPayload",
         "arguments": [
@@ -4504,7 +4504,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27752",
         "signature": "createPullRequest(input: CreatePullRequestInput!): CreatePullRequestPayload",
         "arguments": [
@@ -4565,7 +4565,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27762",
         "signature": "createRef(input: CreateRefInput!): CreateRefPayload",
         "arguments": [
@@ -4626,7 +4626,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27772",
         "signature": "createRepository(input: CreateRepositoryInput!): CreateRepositoryPayload",
         "arguments": [
@@ -4687,7 +4687,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27782",
         "signature": "createRepositoryCustomProperty(input: CreateRepositoryCustomPropertyInput!): CreateRepositoryCustomPropertyPayload",
         "arguments": [
@@ -4748,7 +4748,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27792",
         "signature": "createRepositoryRuleset(input: CreateRepositoryRulesetInput!): CreateRepositoryRulesetPayload",
         "arguments": [
@@ -4809,7 +4809,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27822",
         "signature": "createSponsorship(input: CreateSponsorshipInput!): CreateSponsorshipPayload",
         "arguments": [
@@ -4870,7 +4870,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27833",
         "signature": "createSponsorships(input: CreateSponsorshipsInput!): CreateSponsorshipsPayload",
         "arguments": [
@@ -4931,7 +4931,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27802",
         "signature": "createSponsorsListing(input: CreateSponsorsListingInput!): CreateSponsorsListingPayload",
         "arguments": [
@@ -4992,7 +4992,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27812",
         "signature": "createSponsorsTier(input: CreateSponsorsTierInput!): CreateSponsorsTierPayload",
         "arguments": [
@@ -5053,7 +5053,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27843",
         "signature": "createUserList(input: CreateUserListInput!): CreateUserListPayload",
         "arguments": [
@@ -5114,7 +5114,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27853",
         "signature": "declineTopicSuggestion(input: DeclineTopicSuggestionInput!): DeclineTopicSuggestionPayload",
         "arguments": [
@@ -5175,7 +5175,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27863",
         "signature": "deleteBranchProtectionRule(input: DeleteBranchProtectionRuleInput!): DeleteBranchProtectionRulePayload",
         "arguments": [
@@ -5236,7 +5236,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27873",
         "signature": "deleteDeployment(input: DeleteDeploymentInput!): DeleteDeploymentPayload",
         "arguments": [
@@ -5297,7 +5297,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27883",
         "signature": "deleteDiscussion(input: DeleteDiscussionInput!): DeleteDiscussionPayload",
         "arguments": [
@@ -5358,7 +5358,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27893",
         "signature": "deleteDiscussionComment(input: DeleteDiscussionCommentInput!): DeleteDiscussionCommentPayload",
         "arguments": [
@@ -5419,7 +5419,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27903",
         "signature": "deleteEnvironment(input: DeleteEnvironmentInput!): DeleteEnvironmentPayload",
         "arguments": [
@@ -5480,7 +5480,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27913",
         "signature": "deleteIpAllowListEntry(input: DeleteIpAllowListEntryInput!): DeleteIpAllowListEntryPayload",
         "arguments": [
@@ -5541,7 +5541,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27923",
         "signature": "deleteIssue(input: DeleteIssueInput!): DeleteIssuePayload",
         "arguments": [
@@ -5603,7 +5603,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27933",
         "signature": "deleteIssueComment(input: DeleteIssueCommentInput!): DeleteIssueCommentPayload",
         "arguments": [
@@ -5664,7 +5664,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27943",
         "signature": "deleteIssueField(input: DeleteIssueFieldInput!): DeleteIssueFieldPayload",
         "arguments": [
@@ -5725,7 +5725,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27953",
         "signature": "deleteIssueFieldValue(input: DeleteIssueFieldValueInput!): DeleteIssueFieldValuePayload",
         "arguments": [
@@ -5786,7 +5786,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27963",
         "signature": "deleteIssueType(input: DeleteIssueTypeInput!): DeleteIssueTypePayload",
         "arguments": [
@@ -5847,7 +5847,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27973",
         "signature": "deleteLabel(input: DeleteLabelInput!): DeleteLabelPayload",
         "arguments": [
@@ -5908,7 +5908,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27983",
         "signature": "deleteLinkedBranch(input: DeleteLinkedBranchInput!): DeleteLinkedBranchPayload",
         "arguments": [
@@ -5969,7 +5969,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:27993",
         "signature": "deletePackageVersion(input: DeletePackageVersionInput!): DeletePackageVersionPayload",
         "arguments": [
@@ -6030,7 +6030,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28003",
         "signature": "deleteProject(input: DeleteProjectInput!): DeleteProjectPayload",
         "arguments": [
@@ -6091,7 +6091,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28017",
         "signature": "deleteProjectCard(input: DeleteProjectCardInput!): DeleteProjectCardPayload",
         "arguments": [
@@ -6152,7 +6152,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28031",
         "signature": "deleteProjectColumn(input: DeleteProjectColumnInput!): DeleteProjectColumnPayload",
         "arguments": [
@@ -6213,7 +6213,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28045",
         "signature": "deleteProjectV2(input: DeleteProjectV2Input!): DeleteProjectV2Payload",
         "arguments": [
@@ -6274,7 +6274,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28055",
         "signature": "deleteProjectV2Field(input: DeleteProjectV2FieldInput!): DeleteProjectV2FieldPayload",
         "arguments": [
@@ -6335,7 +6335,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28065",
         "signature": "deleteProjectV2Item(input: DeleteProjectV2ItemInput!): DeleteProjectV2ItemPayload",
         "arguments": [
@@ -6396,7 +6396,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28075",
         "signature": "deleteProjectV2StatusUpdate(input: DeleteProjectV2StatusUpdateInput!): DeleteProjectV2StatusUpdatePayload",
         "arguments": [
@@ -6457,7 +6457,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28085",
         "signature": "deleteProjectV2View(input: DeleteProjectV2ViewInput!): DeleteProjectV2ViewPayload",
         "arguments": [
@@ -6518,7 +6518,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28095",
         "signature": "deleteProjectV2Workflow(input: DeleteProjectV2WorkflowInput!): DeleteProjectV2WorkflowPayload",
         "arguments": [
@@ -6579,7 +6579,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28105",
         "signature": "deletePullRequestReview(input: DeletePullRequestReviewInput!): DeletePullRequestReviewPayload",
         "arguments": [
@@ -6640,7 +6640,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28115",
         "signature": "deletePullRequestReviewComment(input: DeletePullRequestReviewCommentInput!): DeletePullRequestReviewCommentPayload",
         "arguments": [
@@ -6701,7 +6701,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28125",
         "signature": "deleteRef(input: DeleteRefInput!): DeleteRefPayload",
         "arguments": [
@@ -6762,7 +6762,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28135",
         "signature": "deleteRepositoryCustomProperty(input: DeleteRepositoryCustomPropertyInput!): DeleteRepositoryCustomPropertyPayload",
         "arguments": [
@@ -6823,7 +6823,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28145",
         "signature": "deleteRepositoryRuleset(input: DeleteRepositoryRulesetInput!): DeleteRepositoryRulesetPayload",
         "arguments": [
@@ -6884,7 +6884,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28155",
         "signature": "deleteUserList(input: DeleteUserListInput!): DeleteUserListPayload",
         "arguments": [
@@ -6945,7 +6945,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28165",
         "signature": "deleteVerifiableDomain(input: DeleteVerifiableDomainInput!): DeleteVerifiableDomainPayload",
         "arguments": [
@@ -7006,7 +7006,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28175",
         "signature": "dequeuePullRequest(input: DequeuePullRequestInput!): DequeuePullRequestPayload",
         "arguments": [
@@ -7067,7 +7067,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28185",
         "signature": "disablePullRequestAutoMerge(input: DisablePullRequestAutoMergeInput!): DisablePullRequestAutoMergePayload",
         "arguments": [
@@ -7128,7 +7128,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28195",
         "signature": "dismissPullRequestReview(input: DismissPullRequestReviewInput!): DismissPullRequestReviewPayload",
         "arguments": [
@@ -7189,7 +7189,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28205",
         "signature": "dismissRepositoryVulnerabilityAlert(input: DismissRepositoryVulnerabilityAlertInput!): DismissRepositoryVulnerabilityAlertPayload",
         "arguments": [
@@ -7250,7 +7250,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28215",
         "signature": "enablePullRequestAutoMerge(input: EnablePullRequestAutoMergeInput!): EnablePullRequestAutoMergePayload",
         "arguments": [
@@ -7311,7 +7311,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28225",
         "signature": "enqueuePullRequest(input: EnqueuePullRequestInput!): EnqueuePullRequestPayload",
         "arguments": [
@@ -7372,7 +7372,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28235",
         "signature": "followOrganization(input: FollowOrganizationInput!): FollowOrganizationPayload",
         "arguments": [
@@ -7433,7 +7433,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28245",
         "signature": "followUser(input: FollowUserInput!): FollowUserPayload",
         "arguments": [
@@ -7494,7 +7494,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28255",
         "signature": "grantEnterpriseOrganizationsMigratorRole(input: GrantEnterpriseOrganizationsMigratorRoleInput!): GrantEnterpriseOrganizationsMigratorRolePayload",
         "arguments": [
@@ -7555,7 +7555,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28265",
         "signature": "grantMigratorRole(input: GrantMigratorRoleInput!): GrantMigratorRolePayload",
         "arguments": [
@@ -7616,7 +7616,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28275",
         "signature": "importProject(input: ImportProjectInput!): ImportProjectPayload",
         "arguments": [
@@ -7677,7 +7677,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28289",
         "signature": "inviteEnterpriseAdmin(input: InviteEnterpriseAdminInput!): InviteEnterpriseAdminPayload",
         "arguments": [
@@ -7738,7 +7738,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28299",
         "signature": "inviteEnterpriseMember(input: InviteEnterpriseMemberInput!): InviteEnterpriseMemberPayload",
         "arguments": [
@@ -7799,7 +7799,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28309",
         "signature": "linkProjectV2ToRepository(input: LinkProjectV2ToRepositoryInput!): LinkProjectV2ToRepositoryPayload",
         "arguments": [
@@ -7860,7 +7860,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28319",
         "signature": "linkProjectV2ToTeam(input: LinkProjectV2ToTeamInput!): LinkProjectV2ToTeamPayload",
         "arguments": [
@@ -7921,7 +7921,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28329",
         "signature": "linkRepositoryToProject(input: LinkRepositoryToProjectInput!): LinkRepositoryToProjectPayload",
         "arguments": [
@@ -7982,7 +7982,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28343",
         "signature": "lockLockable(input: LockLockableInput!): LockLockablePayload",
         "arguments": [
@@ -8043,7 +8043,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28353",
         "signature": "markDiscussionCommentAsAnswer(input: MarkDiscussionCommentAsAnswerInput!): MarkDiscussionCommentAsAnswerPayload",
         "arguments": [
@@ -8104,7 +8104,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28363",
         "signature": "markFileAsViewed(input: MarkFileAsViewedInput!): MarkFileAsViewedPayload",
         "arguments": [
@@ -8165,7 +8165,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28373",
         "signature": "markProjectV2AsTemplate(input: MarkProjectV2AsTemplateInput!): MarkProjectV2AsTemplatePayload",
         "arguments": [
@@ -8226,7 +8226,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28383",
         "signature": "markPullRequestReadyForReview(input: MarkPullRequestReadyForReviewInput!): MarkPullRequestReadyForReviewPayload",
         "arguments": [
@@ -8288,7 +8288,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28393",
         "signature": "mergeBranch(input: MergeBranchInput!): MergeBranchPayload",
         "arguments": [
@@ -8349,7 +8349,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28403",
         "signature": "mergePullRequest(input: MergePullRequestInput!): MergePullRequestPayload",
         "arguments": [
@@ -8410,7 +8410,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28413",
         "signature": "minimizeComment(input: MinimizeCommentInput!): MinimizeCommentPayload",
         "arguments": [
@@ -8471,7 +8471,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28423",
         "signature": "moveProjectCard(input: MoveProjectCardInput!): MoveProjectCardPayload",
         "arguments": [
@@ -8532,7 +8532,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28437",
         "signature": "moveProjectColumn(input: MoveProjectColumnInput!): MoveProjectColumnPayload",
         "arguments": [
@@ -8593,7 +8593,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28451",
         "signature": "pinEnvironment(input: PinEnvironmentInput!): PinEnvironmentPayload",
         "arguments": [
@@ -8654,7 +8654,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28461",
         "signature": "pinIssue(input: PinIssueInput!): PinIssuePayload",
         "arguments": [
@@ -8716,7 +8716,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28471",
         "signature": "pinIssueComment(input: PinIssueCommentInput!): PinIssueCommentPayload",
         "arguments": [
@@ -8777,7 +8777,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28481",
         "signature": "promoteRepositoryCustomProperty(input: PromoteRepositoryCustomPropertyInput!): PromoteRepositoryCustomPropertyPayload",
         "arguments": [
@@ -8838,7 +8838,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28491",
         "signature": "publishSponsorsTier(input: PublishSponsorsTierInput!): PublishSponsorsTierPayload",
         "arguments": [
@@ -8899,7 +8899,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28501",
         "signature": "regenerateEnterpriseIdentityProviderRecoveryCodes(input: RegenerateEnterpriseIdentityProviderRecoveryCodesInput!): RegenerateEnterpriseIdentityProviderRecoveryCodesPayload",
         "arguments": [
@@ -8960,7 +8960,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28511",
         "signature": "regenerateVerifiableDomainToken(input: RegenerateVerifiableDomainTokenInput!): RegenerateVerifiableDomainTokenPayload",
         "arguments": [
@@ -9021,7 +9021,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28521",
         "signature": "rejectDeployments(input: RejectDeploymentsInput!): RejectDeploymentsPayload",
         "arguments": [
@@ -9082,7 +9082,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28531",
         "signature": "rejectPendingIssueSuggestions(input: RejectPendingIssueSuggestionsInput!): RejectPendingIssueSuggestionsPayload",
         "arguments": [
@@ -9143,7 +9143,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28541",
         "signature": "removeAssigneesFromAssignable(input: RemoveAssigneesFromAssignableInput!): RemoveAssigneesFromAssignablePayload",
         "arguments": [
@@ -9204,7 +9204,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28551",
         "signature": "removeBlockedBy(input: RemoveBlockedByInput!): RemoveBlockedByPayload",
         "arguments": [
@@ -9265,7 +9265,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28561",
         "signature": "removeEnterpriseAdmin(input: RemoveEnterpriseAdminInput!): RemoveEnterpriseAdminPayload",
         "arguments": [
@@ -9326,7 +9326,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28572",
         "signature": "removeEnterpriseIdentityProvider(input: RemoveEnterpriseIdentityProviderInput!): RemoveEnterpriseIdentityProviderPayload",
         "arguments": [
@@ -9387,7 +9387,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28582",
         "signature": "removeEnterpriseMember(input: RemoveEnterpriseMemberInput!): RemoveEnterpriseMemberPayload",
         "arguments": [
@@ -9448,7 +9448,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28592",
         "signature": "removeEnterpriseOrganization(input: RemoveEnterpriseOrganizationInput!): RemoveEnterpriseOrganizationPayload",
         "arguments": [
@@ -9509,7 +9509,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28602",
         "signature": "removeEnterpriseSupportEntitlement(input: RemoveEnterpriseSupportEntitlementInput!): RemoveEnterpriseSupportEntitlementPayload",
         "arguments": [
@@ -9570,7 +9570,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28612",
         "signature": "removeLabelsFromLabelable(input: RemoveLabelsFromLabelableInput!): RemoveLabelsFromLabelablePayload",
         "arguments": [
@@ -9631,7 +9631,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28622",
         "signature": "removeOutsideCollaborator(input: RemoveOutsideCollaboratorInput!): RemoveOutsideCollaboratorPayload",
         "arguments": [
@@ -9692,7 +9692,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28633",
         "signature": "removePullRequestCreationCapBypassUsers(input: RemovePullRequestCreationCapBypassUsersInput!): RemovePullRequestCreationCapBypassUsersPayload",
         "arguments": [
@@ -9753,7 +9753,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28643",
         "signature": "removeReaction(input: RemoveReactionInput!): RemoveReactionPayload",
         "arguments": [
@@ -9814,7 +9814,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28653",
         "signature": "removeStar(input: RemoveStarInput!): RemoveStarPayload",
         "arguments": [
@@ -9875,7 +9875,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28663",
         "signature": "removeSubIssue(input: RemoveSubIssueInput!): RemoveSubIssuePayload",
         "arguments": [
@@ -9936,7 +9936,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28673",
         "signature": "removeUpvote(input: RemoveUpvoteInput!): RemoveUpvotePayload",
         "arguments": [
@@ -9997,7 +9997,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28683",
         "signature": "reopenDiscussion(input: ReopenDiscussionInput!): ReopenDiscussionPayload",
         "arguments": [
@@ -10058,7 +10058,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28693",
         "signature": "reopenIssue(input: ReopenIssueInput!): ReopenIssuePayload",
         "arguments": [
@@ -10119,7 +10119,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28703",
         "signature": "reopenPullRequest(input: ReopenPullRequestInput!): ReopenPullRequestPayload",
         "arguments": [
@@ -10180,7 +10180,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28713",
         "signature": "reorderEnvironment(input: ReorderEnvironmentInput!): ReorderEnvironmentPayload",
         "arguments": [
@@ -10241,7 +10241,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28723",
         "signature": "replaceActorsForAssignable(input: ReplaceActorsForAssignableInput!): ReplaceActorsForAssignablePayload",
         "arguments": [
@@ -10302,7 +10302,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28733",
         "signature": "reprioritizeSubIssue(input: ReprioritizeSubIssueInput!): ReprioritizeSubIssuePayload",
         "arguments": [
@@ -10363,7 +10363,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28743",
         "signature": "requestReviews(input: RequestReviewsInput!): RequestReviewsPayload",
         "arguments": [
@@ -10424,7 +10424,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28753",
         "signature": "requestReviewsByLogin(input: RequestReviewsByLoginInput!): RequestReviewsByLoginPayload",
         "arguments": [
@@ -10485,7 +10485,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28763",
         "signature": "rerequestCheckSuite(input: RerequestCheckSuiteInput!): RerequestCheckSuitePayload",
         "arguments": [
@@ -10546,7 +10546,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28773",
         "signature": "resolveReviewThread(input: ResolveReviewThreadInput!): ResolveReviewThreadPayload",
         "arguments": [
@@ -10607,7 +10607,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28783",
         "signature": "retireSponsorsTier(input: RetireSponsorsTierInput!): RetireSponsorsTierPayload",
         "arguments": [
@@ -10668,7 +10668,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28793",
         "signature": "revertPullRequest(input: RevertPullRequestInput!): RevertPullRequestPayload",
         "arguments": [
@@ -10730,7 +10730,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28803",
         "signature": "revokeEnterpriseOrganizationsMigratorRole(input: RevokeEnterpriseOrganizationsMigratorRoleInput!): RevokeEnterpriseOrganizationsMigratorRolePayload",
         "arguments": [
@@ -10791,7 +10791,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28813",
         "signature": "revokeMigratorRole(input: RevokeMigratorRoleInput!): RevokeMigratorRolePayload",
         "arguments": [
@@ -10852,7 +10852,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28823",
         "signature": "setEnterpriseIdentityProvider(input: SetEnterpriseIdentityProviderInput!): SetEnterpriseIdentityProviderPayload",
         "arguments": [
@@ -10913,7 +10913,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28833",
         "signature": "setIssueFieldValue(input: SetIssueFieldValueInput!): SetIssueFieldValuePayload",
         "arguments": [
@@ -10974,7 +10974,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28843",
         "signature": "setOrganizationInteractionLimit(input: SetOrganizationInteractionLimitInput!): SetOrganizationInteractionLimitPayload",
         "arguments": [
@@ -11035,7 +11035,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28853",
         "signature": "setRepositoryCustomPropertyValues(input: SetRepositoryCustomPropertyValuesInput!): SetRepositoryCustomPropertyValuesPayload",
         "arguments": [
@@ -11096,7 +11096,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28863",
         "signature": "setRepositoryInteractionLimit(input: SetRepositoryInteractionLimitInput!): SetRepositoryInteractionLimitPayload",
         "arguments": [
@@ -11157,7 +11157,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28873",
         "signature": "setUserInteractionLimit(input: SetUserInteractionLimitInput!): SetUserInteractionLimitPayload",
         "arguments": [
@@ -11218,7 +11218,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28883",
         "signature": "startOrganizationMigration(input: StartOrganizationMigrationInput!): StartOrganizationMigrationPayload",
         "arguments": [
@@ -11279,7 +11279,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28893",
         "signature": "startRepositoryMigration(input: StartRepositoryMigrationInput!): StartRepositoryMigrationPayload",
         "arguments": [
@@ -11340,7 +11340,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28903",
         "signature": "submitPullRequestReview(input: SubmitPullRequestReviewInput!): SubmitPullRequestReviewPayload",
         "arguments": [
@@ -11401,7 +11401,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28913",
         "signature": "transferEnterpriseOrganization(input: TransferEnterpriseOrganizationInput!): TransferEnterpriseOrganizationPayload",
         "arguments": [
@@ -11462,7 +11462,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28923",
         "signature": "transferIssue(input: TransferIssueInput!): TransferIssuePayload",
         "arguments": [
@@ -11524,7 +11524,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28933",
         "signature": "unarchiveProjectV2Item(input: UnarchiveProjectV2ItemInput!): UnarchiveProjectV2ItemPayload",
         "arguments": [
@@ -11585,7 +11585,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28945",
         "signature": "unarchivePullRequest(input: UnarchivePullRequestInput!): UnarchivePullRequestPayload",
         "arguments": [
@@ -11646,7 +11646,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28955",
         "signature": "unarchiveRepository(input: UnarchiveRepositoryInput!): UnarchiveRepositoryPayload",
         "arguments": [
@@ -11707,7 +11707,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28965",
         "signature": "unfollowOrganization(input: UnfollowOrganizationInput!): UnfollowOrganizationPayload",
         "arguments": [
@@ -11768,7 +11768,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28975",
         "signature": "unfollowUser(input: UnfollowUserInput!): UnfollowUserPayload",
         "arguments": [
@@ -11829,7 +11829,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28985",
         "signature": "unlinkProjectV2FromRepository(input: UnlinkProjectV2FromRepositoryInput!): UnlinkProjectV2FromRepositoryPayload",
         "arguments": [
@@ -11890,7 +11890,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:28995",
         "signature": "unlinkProjectV2FromTeam(input: UnlinkProjectV2FromTeamInput!): UnlinkProjectV2FromTeamPayload",
         "arguments": [
@@ -11951,7 +11951,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29005",
         "signature": "unlinkRepositoryFromProject(input: UnlinkRepositoryFromProjectInput!): UnlinkRepositoryFromProjectPayload",
         "arguments": [
@@ -12012,7 +12012,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29019",
         "signature": "unlockLockable(input: UnlockLockableInput!): UnlockLockablePayload",
         "arguments": [
@@ -12073,7 +12073,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29029",
         "signature": "unmarkDiscussionCommentAsAnswer(input: UnmarkDiscussionCommentAsAnswerInput!): UnmarkDiscussionCommentAsAnswerPayload",
         "arguments": [
@@ -12134,7 +12134,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29039",
         "signature": "unmarkFileAsViewed(input: UnmarkFileAsViewedInput!): UnmarkFileAsViewedPayload",
         "arguments": [
@@ -12195,7 +12195,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29049",
         "signature": "unmarkIssueAsDuplicate(input: UnmarkIssueAsDuplicateInput!): UnmarkIssueAsDuplicatePayload",
         "arguments": [
@@ -12256,7 +12256,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29059",
         "signature": "unmarkProjectV2AsTemplate(input: UnmarkProjectV2AsTemplateInput!): UnmarkProjectV2AsTemplatePayload",
         "arguments": [
@@ -12317,7 +12317,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29069",
         "signature": "unminimizeComment(input: UnminimizeCommentInput!): UnminimizeCommentPayload",
         "arguments": [
@@ -12378,7 +12378,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29079",
         "signature": "unpinIssue(input: UnpinIssueInput!): UnpinIssuePayload",
         "arguments": [
@@ -12440,7 +12440,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29089",
         "signature": "unpinIssueComment(input: UnpinIssueCommentInput!): UnpinIssueCommentPayload",
         "arguments": [
@@ -12501,7 +12501,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29099",
         "signature": "unresolveReviewThread(input: UnresolveReviewThreadInput!): UnresolveReviewThreadPayload",
         "arguments": [
@@ -12562,7 +12562,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29109",
         "signature": "updateBranchProtectionRule(input: UpdateBranchProtectionRuleInput!): UpdateBranchProtectionRulePayload",
         "arguments": [
@@ -12623,7 +12623,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29119",
         "signature": "updateCheckRun(input: UpdateCheckRunInput!): UpdateCheckRunPayload",
         "arguments": [
@@ -12684,7 +12684,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29129",
         "signature": "updateCheckSuitePreferences(input: UpdateCheckSuitePreferencesInput!): UpdateCheckSuitePreferencesPayload",
         "arguments": [
@@ -12745,7 +12745,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29139",
         "signature": "updateDiscussion(input: UpdateDiscussionInput!): UpdateDiscussionPayload",
         "arguments": [
@@ -12806,7 +12806,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29149",
         "signature": "updateDiscussionComment(input: UpdateDiscussionCommentInput!): UpdateDiscussionCommentPayload",
         "arguments": [
@@ -12867,7 +12867,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29159",
         "signature": "updateEnterpriseAdministratorRole(input: UpdateEnterpriseAdministratorRoleInput!): UpdateEnterpriseAdministratorRolePayload",
         "arguments": [
@@ -12928,7 +12928,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29169",
         "signature": "updateEnterpriseAllowPrivateRepositoryForkingSetting(input: UpdateEnterpriseAllowPrivateRepositoryForkingSettingInput!): UpdateEnterpriseAllowPrivateRepositoryForkingSettingPayload",
         "arguments": [
@@ -12989,7 +12989,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29179",
         "signature": "updateEnterpriseDefaultRepositoryPermissionSetting(input: UpdateEnterpriseDefaultRepositoryPermissionSettingInput!): UpdateEnterpriseDefaultRepositoryPermissionSettingPayload",
         "arguments": [
@@ -13050,7 +13050,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29189",
         "signature": "updateEnterpriseDeployKeySetting(input: UpdateEnterpriseDeployKeySettingInput!): UpdateEnterpriseDeployKeySettingPayload",
         "arguments": [
@@ -13111,7 +13111,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29199",
         "signature": "updateEnterpriseMembersCanChangeRepositoryVisibilitySetting(input: UpdateEnterpriseMembersCanChangeRepositoryVisibilitySettingInput!): UpdateEnterpriseMembersCanChangeRepositoryVisibilitySettingPayload",
         "arguments": [
@@ -13172,7 +13172,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29209",
         "signature": "updateEnterpriseMembersCanCreateRepositoriesSetting(input: UpdateEnterpriseMembersCanCreateRepositoriesSettingInput!): UpdateEnterpriseMembersCanCreateRepositoriesSettingPayload",
         "arguments": [
@@ -13233,7 +13233,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29219",
         "signature": "updateEnterpriseMembersCanDeleteIssuesSetting(input: UpdateEnterpriseMembersCanDeleteIssuesSettingInput!): UpdateEnterpriseMembersCanDeleteIssuesSettingPayload",
         "arguments": [
@@ -13294,7 +13294,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29229",
         "signature": "updateEnterpriseMembersCanDeleteRepositoriesSetting(input: UpdateEnterpriseMembersCanDeleteRepositoriesSettingInput!): UpdateEnterpriseMembersCanDeleteRepositoriesSettingPayload",
         "arguments": [
@@ -13355,7 +13355,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29239",
         "signature": "updateEnterpriseMembersCanInviteCollaboratorsSetting(input: UpdateEnterpriseMembersCanInviteCollaboratorsSettingInput!): UpdateEnterpriseMembersCanInviteCollaboratorsSettingPayload",
         "arguments": [
@@ -13416,7 +13416,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29249",
         "signature": "updateEnterpriseMembersCanMakePurchasesSetting(input: UpdateEnterpriseMembersCanMakePurchasesSettingInput!): UpdateEnterpriseMembersCanMakePurchasesSettingPayload",
         "arguments": [
@@ -13477,7 +13477,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29259",
         "signature": "updateEnterpriseMembersCanUpdateProtectedBranchesSetting(input: UpdateEnterpriseMembersCanUpdateProtectedBranchesSettingInput!): UpdateEnterpriseMembersCanUpdateProtectedBranchesSettingPayload",
         "arguments": [
@@ -13538,7 +13538,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29269",
         "signature": "updateEnterpriseMembersCanViewDependencyInsightsSetting(input: UpdateEnterpriseMembersCanViewDependencyInsightsSettingInput!): UpdateEnterpriseMembersCanViewDependencyInsightsSettingPayload",
         "arguments": [
@@ -13599,7 +13599,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29279",
         "signature": "updateEnterpriseOrganizationProjectsSetting(input: UpdateEnterpriseOrganizationProjectsSettingInput!): UpdateEnterpriseOrganizationProjectsSettingPayload",
         "arguments": [
@@ -13660,7 +13660,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29289",
         "signature": "updateEnterpriseOwnerOrganizationRole(input: UpdateEnterpriseOwnerOrganizationRoleInput!): UpdateEnterpriseOwnerOrganizationRolePayload",
         "arguments": [
@@ -13721,7 +13721,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29299",
         "signature": "updateEnterpriseProfile(input: UpdateEnterpriseProfileInput!): UpdateEnterpriseProfilePayload",
         "arguments": [
@@ -13782,7 +13782,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29309",
         "signature": "updateEnterpriseProofOfPresenceRequiredSetting(input: UpdateEnterpriseProofOfPresenceRequiredSettingInput!): UpdateEnterpriseProofOfPresenceRequiredSettingPayload",
         "arguments": [
@@ -13843,7 +13843,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29319",
         "signature": "updateEnterpriseRepositoryProjectsSetting(input: UpdateEnterpriseRepositoryProjectsSettingInput!): UpdateEnterpriseRepositoryProjectsSettingPayload",
         "arguments": [
@@ -13904,7 +13904,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29329",
         "signature": "updateEnterpriseTwoFactorAuthenticationDisallowedMethodsSetting(input: UpdateEnterpriseTwoFactorAuthenticationDisallowedMethodsSettingInput!): UpdateEnterpriseTwoFactorAuthenticationDisallowedMethodsSettingPayload",
         "arguments": [
@@ -13965,7 +13965,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29339",
         "signature": "updateEnterpriseTwoFactorAuthenticationRequiredSetting(input: UpdateEnterpriseTwoFactorAuthenticationRequiredSettingInput!): UpdateEnterpriseTwoFactorAuthenticationRequiredSettingPayload",
         "arguments": [
@@ -14026,7 +14026,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29349",
         "signature": "updateEnvironment(input: UpdateEnvironmentInput!): UpdateEnvironmentPayload",
         "arguments": [
@@ -14087,7 +14087,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29359",
         "signature": "updateIpAllowListEnabledSetting(input: UpdateIpAllowListEnabledSettingInput!): UpdateIpAllowListEnabledSettingPayload",
         "arguments": [
@@ -14148,7 +14148,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29369",
         "signature": "updateIpAllowListEntry(input: UpdateIpAllowListEntryInput!): UpdateIpAllowListEntryPayload",
         "arguments": [
@@ -14209,7 +14209,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29379",
         "signature": "updateIpAllowListForInstalledAppsEnabledSetting(input: UpdateIpAllowListForInstalledAppsEnabledSettingInput!): UpdateIpAllowListForInstalledAppsEnabledSettingPayload",
         "arguments": [
@@ -14270,7 +14270,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29389",
         "signature": "updateIpAllowListUserLevelEnforcementEnabledSetting(input: UpdateIpAllowListUserLevelEnforcementEnabledSettingInput!): UpdateIpAllowListUserLevelEnforcementEnabledSettingPayload",
         "arguments": [
@@ -14331,7 +14331,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29399",
         "signature": "updateIssue(input: UpdateIssueInput!): UpdateIssuePayload",
         "arguments": [
@@ -14392,7 +14392,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29409",
         "signature": "updateIssueComment(input: UpdateIssueCommentInput!): UpdateIssueCommentPayload",
         "arguments": [
@@ -14453,7 +14453,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29419",
         "signature": "updateIssueField(input: UpdateIssueFieldInput!): UpdateIssueFieldPayload",
         "arguments": [
@@ -14514,7 +14514,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29429",
         "signature": "updateIssueFieldValue(input: UpdateIssueFieldValueInput!): UpdateIssueFieldValuePayload",
         "arguments": [
@@ -14575,7 +14575,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29439",
         "signature": "updateIssueIssueType(input: UpdateIssueIssueTypeInput!): UpdateIssueIssueTypePayload",
         "arguments": [
@@ -14636,7 +14636,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29449",
         "signature": "updateIssueType(input: UpdateIssueTypeInput!): UpdateIssueTypePayload",
         "arguments": [
@@ -14697,7 +14697,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29459",
         "signature": "updateLabel(input: UpdateLabelInput!): UpdateLabelPayload",
         "arguments": [
@@ -14758,7 +14758,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29469",
         "signature": "updateNotificationRestrictionSetting(input: UpdateNotificationRestrictionSettingInput!): UpdateNotificationRestrictionSettingPayload",
         "arguments": [
@@ -14819,7 +14819,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29479",
         "signature": "updateOrganizationAllowPrivateRepositoryForkingSetting(input: UpdateOrganizationAllowPrivateRepositoryForkingSettingInput!): UpdateOrganizationAllowPrivateRepositoryForkingSettingPayload",
         "arguments": [
@@ -14880,7 +14880,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29489",
         "signature": "updateOrganizationWebCommitSignoffSetting(input: UpdateOrganizationWebCommitSignoffSettingInput!): UpdateOrganizationWebCommitSignoffSettingPayload",
         "arguments": [
@@ -14941,7 +14941,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29502",
         "signature": "updatePatreonSponsorability(input: UpdatePatreonSponsorabilityInput!): UpdatePatreonSponsorabilityPayload",
         "arguments": [
@@ -15002,7 +15002,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29512",
         "signature": "updateProject(input: UpdateProjectInput!): UpdateProjectPayload",
         "arguments": [
@@ -15063,7 +15063,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29526",
         "signature": "updateProjectCard(input: UpdateProjectCardInput!): UpdateProjectCardPayload",
         "arguments": [
@@ -15124,7 +15124,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29540",
         "signature": "updateProjectColumn(input: UpdateProjectColumnInput!): UpdateProjectColumnPayload",
         "arguments": [
@@ -15185,7 +15185,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29554",
         "signature": "updateProjectV2(input: UpdateProjectV2Input!): UpdateProjectV2Payload",
         "arguments": [
@@ -15246,7 +15246,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29564",
         "signature": "updateProjectV2Collaborators(input: UpdateProjectV2CollaboratorsInput!): UpdateProjectV2CollaboratorsPayload",
         "arguments": [
@@ -15307,7 +15307,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29574",
         "signature": "updateProjectV2DraftIssue(input: UpdateProjectV2DraftIssueInput!): UpdateProjectV2DraftIssuePayload",
         "arguments": [
@@ -15368,7 +15368,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29584",
         "signature": "updateProjectV2Field(input: UpdateProjectV2FieldInput!): UpdateProjectV2FieldPayload",
         "arguments": [
@@ -15429,7 +15429,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29595",
         "signature": "updateProjectV2ItemFieldValue(input: UpdateProjectV2ItemFieldValueInput!): UpdateProjectV2ItemFieldValuePayload",
         "arguments": [
@@ -15490,7 +15490,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29605",
         "signature": "updateProjectV2ItemPosition(input: UpdateProjectV2ItemPositionInput!): UpdateProjectV2ItemPositionPayload",
         "arguments": [
@@ -15551,7 +15551,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29615",
         "signature": "updateProjectV2StatusUpdate(input: UpdateProjectV2StatusUpdateInput!): UpdateProjectV2StatusUpdatePayload",
         "arguments": [
@@ -15612,7 +15612,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29625",
         "signature": "updateProjectV2View(input: UpdateProjectV2ViewInput!): UpdateProjectV2ViewPayload",
         "arguments": [
@@ -15673,7 +15673,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29635",
         "signature": "updatePullRequest(input: UpdatePullRequestInput!): UpdatePullRequestPayload",
         "arguments": [
@@ -15734,7 +15734,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29645",
         "signature": "updatePullRequestBranch(input: UpdatePullRequestBranchInput!): UpdatePullRequestBranchPayload",
         "arguments": [
@@ -15795,7 +15795,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29655",
         "signature": "updatePullRequestReview(input: UpdatePullRequestReviewInput!): UpdatePullRequestReviewPayload",
         "arguments": [
@@ -15856,7 +15856,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29665",
         "signature": "updatePullRequestReviewComment(input: UpdatePullRequestReviewCommentInput!): UpdatePullRequestReviewCommentPayload",
         "arguments": [
@@ -15917,7 +15917,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29675",
         "signature": "updateRef(input: UpdateRefInput!): UpdateRefPayload",
         "arguments": [
@@ -15978,7 +15978,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29702",
         "signature": "updateRefs(input: UpdateRefsInput!): UpdateRefsPayload",
         "arguments": [
@@ -16039,7 +16039,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29712",
         "signature": "updateRepository(input: UpdateRepositoryInput!): UpdateRepositoryPayload",
         "arguments": [
@@ -16100,7 +16100,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29722",
         "signature": "updateRepositoryCustomProperty(input: UpdateRepositoryCustomPropertyInput!): UpdateRepositoryCustomPropertyPayload",
         "arguments": [
@@ -16161,7 +16161,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29732",
         "signature": "updateRepositoryRuleset(input: UpdateRepositoryRulesetInput!): UpdateRepositoryRulesetPayload",
         "arguments": [
@@ -16222,7 +16222,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29742",
         "signature": "updateRepositoryWebCommitSignoffSetting(input: UpdateRepositoryWebCommitSignoffSettingInput!): UpdateRepositoryWebCommitSignoffSettingPayload",
         "arguments": [
@@ -16283,7 +16283,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29752",
         "signature": "updateSponsorshipPreferences(input: UpdateSponsorshipPreferencesInput!): UpdateSponsorshipPreferencesPayload",
         "arguments": [
@@ -16344,7 +16344,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29762",
         "signature": "updateSubscription(input: UpdateSubscriptionInput!): UpdateSubscriptionPayload",
         "arguments": [
@@ -16405,7 +16405,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29772",
         "signature": "updateTeamReviewAssignment(input: UpdateTeamReviewAssignmentInput!): UpdateTeamReviewAssignmentPayload",
         "arguments": [
@@ -16466,7 +16466,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29782",
         "signature": "updateTeamsRepository(input: UpdateTeamsRepositoryInput!): UpdateTeamsRepositoryPayload",
         "arguments": [
@@ -16527,7 +16527,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29792",
         "signature": "updateTopics(input: UpdateTopicsInput!): UpdateTopicsPayload",
         "arguments": [
@@ -16588,7 +16588,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29802",
         "signature": "updateUserList(input: UpdateUserListInput!): UpdateUserListPayload",
         "arguments": [
@@ -16649,7 +16649,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29812",
         "signature": "updateUserListsForItem(input: UpdateUserListsForItemInput!): UpdateUserListsForItemPayload",
         "arguments": [
@@ -16710,7 +16710,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Mutation:29822",
         "signature": "verifyVerifiableDomain(input: VerifyVerifiableDomainInput!): VerifyVerifiableDomainPayload",
         "arguments": [
@@ -16771,7 +16771,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47550",
         "signature": "codeOfConduct(key: String!): CodeOfConduct",
         "arguments": [
@@ -16832,7 +16832,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47560",
         "signature": "codesOfConduct: [CodeOfConduct]",
         "arguments": [],
@@ -16888,7 +16888,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47565",
         "signature": "enterprise(invitationToken: String slug: String!): Enterprise",
         "arguments": [
@@ -16957,7 +16957,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47580",
         "signature": "enterpriseAdministratorInvitation(enterpriseSlug: String! role: EnterpriseAdministratorRole! userLogin: String!): EnterpriseAdministratorInvitation",
         "arguments": [
@@ -17034,7 +17034,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47602",
         "signature": "enterpriseAdministratorInvitationByToken(invitationToken: String!): EnterpriseAdministratorInvitation",
         "arguments": [
@@ -17095,7 +17095,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47612",
         "signature": "enterpriseMemberInvitation(enterpriseSlug: String! userLogin: String!): EnterpriseMemberInvitation",
         "arguments": [
@@ -17164,7 +17164,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47629",
         "signature": "enterpriseMemberInvitationByToken(invitationToken: String!): EnterpriseMemberInvitation",
         "arguments": [
@@ -17225,7 +17225,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47639",
         "signature": "id: ID!",
         "arguments": [],
@@ -17277,7 +17277,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47644",
         "signature": "license(key: String!): License",
         "arguments": [
@@ -17338,7 +17338,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47654",
         "signature": "licenses: [License]!",
         "arguments": [],
@@ -17394,7 +17394,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47659",
         "signature": "marketplaceCategories(excludeEmpty: Boolean excludeSubcategories: Boolean includeCategories: [String!]): [MarketplaceCategory!]!",
         "arguments": [
@@ -17479,7 +17479,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47679",
         "signature": "marketplaceCategory(slug: String! useTopicAliases: Boolean): MarketplaceCategory",
         "arguments": [
@@ -17548,7 +17548,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47694",
         "signature": "marketplaceListing(slug: String!): MarketplaceListing",
         "arguments": [
@@ -17609,7 +17609,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47704",
         "signature": "marketplaceListings(adminId: ID after: String allStates: Boolean before: String categorySlug: String first: Int last: Int organizationId: ID primaryCategoryOnly: Boolean = false slugs: [String] useTopicAliases: Boolean viewerCanAdmin: Boolean withFreeTrialsOnly: Boolean = false): MarketplaceListingConnection!",
         "arguments": [
@@ -17770,7 +17770,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47776",
         "signature": "meta: GitHubMetadata!",
         "arguments": [],
@@ -17822,7 +17822,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47781",
         "signature": "node(id: ID!): Node",
         "arguments": [
@@ -18458,7 +18458,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47791",
         "signature": "nodes(ids: [ID!]!): [Node]!",
         "arguments": [
@@ -19100,7 +19100,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47801",
         "signature": "organization(login: String!): Organization",
         "arguments": [
@@ -19161,7 +19161,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47811",
         "signature": "rateLimit(dryRun: Boolean = false): RateLimit",
         "arguments": [
@@ -19222,7 +19222,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47822",
         "signature": "relay: Query!",
         "arguments": [],
@@ -19274,7 +19274,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47827",
         "signature": "repository(followRenames: Boolean = true name: String! owner: String!): Repository",
         "arguments": [
@@ -19357,7 +19357,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47847",
         "signature": "repositoryOwner(login: String!): RepositoryOwner",
         "arguments": [
@@ -19420,7 +19420,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47857",
         "signature": "resource(url: URI!): UniformResourceLocatable",
         "arguments": [
@@ -19481,7 +19481,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47867",
         "signature": "search(after: String before: String first: Int last: Int query: String! type: SearchType!): SearchResultItemConnection!",
         "arguments": [
@@ -19582,7 +19582,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47906",
         "signature": "securityAdvisories(after: String before: String classifications: [SecurityAdvisoryClassification!] epssPercentage: Float epssPercentile: Float first: Int identifier: SecurityAdvisoryIdentifierFilter last: Int orderBy: SecurityAdvisoryOrder = { field: UPDATED_AT direction: DESC} publishedSince: DateTime updatedSince: DateTime): SecurityAdvisoryConnection!",
         "arguments": [
@@ -19727,7 +19727,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47966",
         "signature": "securityAdvisory(ghsaId: String!): SecurityAdvisory",
         "arguments": [
@@ -19788,7 +19788,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:47976",
         "signature": "securityVulnerabilities(after: String before: String classifications: [SecurityAdvisoryClassification!] ecosystem: SecurityAdvisoryEcosystem first: Int last: Int orderBy: SecurityVulnerabilityOrder = { field: UPDATED_AT direction: DESC} package: String severities: [SecurityAdvisorySeverity!]): SecurityVulnerabilityConnection!",
         "arguments": [
@@ -19921,7 +19921,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:48026",
         "signature": "sponsorables(after: String before: String dependencyEcosystem: SecurityAdvisoryEcosystem ecosystem: DependencyGraphEcosystem first: Int last: Int onlyDependencies: Boolean = false orderBy: SponsorableOrder = { field: LOGIN direction: ASC} orgLoginForDependencies: String): SponsorableItemConnection!",
         "arguments": [
@@ -20046,7 +20046,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:48090",
         "signature": "topic(name: String!): Topic",
         "arguments": [
@@ -20107,7 +20107,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:48100",
         "signature": "user(login: String!): User",
         "arguments": [
@@ -20168,7 +20168,7 @@
       "source": {
         "artifact": "GitHub Docs public GraphQL schema",
         "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d",
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d",
         "location": "type Query:48110",
         "signature": "viewer: User!",
         "arguments": [],

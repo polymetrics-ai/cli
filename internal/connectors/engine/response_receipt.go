@@ -45,8 +45,8 @@ func providerResponseReceipt(b Bundle, status int, headers http.Header, raw []by
 	}
 	// Engine direct-read results are also returned by native adapters, so this
 	// boundary cannot rely on commandrunner being the sole public projection.
-	// The sanitizer replaces only configured credential material and preserves
-	// all other receipt bytes and provider metadata for readback binding.
+	// The sanitizer preserves provider receipt bytes and metadata for readback
+	// binding; declaration-owned output-secret paths are applied separately.
 	safe := connectors.SanitizeProviderResponseReceiptForOutput(receipt, secrets)
 	return &safe
 }
@@ -58,8 +58,8 @@ func completeProviderResponseHeaders(b Bundle, headers http.Header) map[string]c
 	out := make(map[string]connectors.OperationResponseHeader, len(headers))
 	for name, values := range headers {
 		// A response header name is provider-owned metadata, not a secret
-		// classifier. Keep every name/value here; the public projection masks
-		// only values proven to equal configured credential material.
+		// classifier. Keep every name/value here; an equal configured credential
+		// value remains ordinary provider output without an explicit declaration.
 		out[name] = connectors.OperationResponseHeader{Values: append([]string(nil), values...)}
 	}
 	return out

@@ -2792,6 +2792,51 @@ func TestBundleLoadAPISurfaceOperationLedger(t *testing.T) {
 	}
 }
 
+func TestParseAPISurfaceOperationModelEnumRemainsClosedWithReadOnly(t *testing.T) {
+	const reason = "tracked blocked operation"
+	currentModels := []string{
+		"direct_read",
+		"binary_read",
+		"text_export",
+		"status_check",
+		"sensitive_reverse_etl",
+		"admin_reverse_etl",
+		"destructive_action",
+		"local_workflow",
+		"duplicate",
+		"deprecated",
+		"disallowed",
+	}
+
+	for _, model := range currentModels {
+		t.Run(model, func(t *testing.T) {
+			raw := []byte(fmt.Sprintf(`{"api":"test","endpoints":[{"method":"POST","path":"/widgets","operation":{"model":%q,"status":"blocked","risk":"low","blocked_by_default":true,"reason":%q}}]}`, model, reason))
+			surface, err := ParseAPISurface(raw)
+			if err != nil {
+				t.Fatalf("ParseAPISurface(%q): %v", model, err)
+			}
+			got, err := json.Marshal(surface.Endpoints[0].Operation)
+			if err != nil {
+				t.Fatalf("marshal operation %q: %v", model, err)
+			}
+			want := fmt.Sprintf(`{"model":%q,"status":"blocked","risk":"low","blocked_by_default":true,"reason":%q}`, model, reason)
+			if string(got) != want {
+				t.Fatalf("operation %q bytes = %s, want %s", model, got, want)
+			}
+		})
+	}
+
+	readOnlyRaw := []byte(fmt.Sprintf(`{"api":"test","endpoints":[{"method":"POST","path":"/widgets","operation":{"model":"read_only","status":"blocked","risk":"low","blocked_by_default":true,"reason":%q}}]}`, reason))
+	if _, err := ParseAPISurface(readOnlyRaw); err != nil {
+		t.Fatalf("ParseAPISurface(read_only): %v", err)
+	}
+
+	unknownRaw := []byte(fmt.Sprintf(`{"api":"test","endpoints":[{"method":"POST","path":"/widgets","operation":{"model":"made_up_model","status":"blocked","risk":"low","blocked_by_default":true,"reason":%q}}]}`, reason))
+	if _, err := ParseAPISurface(unknownRaw); err == nil || !strings.Contains(err.Error(), "value not in enum") {
+		t.Fatalf("ParseAPISurface(unknown model) error = %v, want closed-enum rejection", err)
+	}
+}
+
 // TestBundleLoadAPISurfaceV2ProvenanceContract is the #3785 red/green
 // contract: a v2 ledger carries an artifact table and endpoint-local
 // provenance without changing the endpoint's covered_by classifier.

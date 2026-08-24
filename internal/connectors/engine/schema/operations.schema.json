@@ -157,6 +157,8 @@
                     "repeatable": { "type": "boolean" },
                     "values": { "type": "array", "items": { "type": "string" } },
                     "summary": { "type": "string" },
+                    "minimum": { "type": "number" },
+                    "maximum": { "type": "number" },
                     "schema": { "type": "object" },
                     "max_bytes": { "type": "integer" }
                   }
@@ -308,6 +310,8 @@
 					"repeatable": { "type": "boolean" },
 					"values": { "type": "array", "items": { "type": "string" } },
 					"summary": { "type": "string" },
+					"minimum": { "type": "number" },
+					"maximum": { "type": "number" },
 					"schema": { "type": "object" },
 					"max_bytes": { "type": "integer" }
 				  }
