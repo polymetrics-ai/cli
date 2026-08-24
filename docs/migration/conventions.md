@@ -1641,24 +1641,33 @@ go run ./cmd/connectorgen source-import <connector> --out <reviewed-descriptor-p
 
 Version 1 and 2 locks pin one fixed public artifact URL. Version 3 locks retain
 that wire contract for existing locks but use `rest.retrieval`, a sorted aggregate
-`rest.openapi` array, and sorted `rest.source_documents`. Each v3 document owns a
-queryless immutable `artifact`, its exact operation inventory, and a
-`published_source` record identifying the provider document from which it was
-captured. The importer retrieves only each document's fixed artifact URL without
-credentials and verifies its exact locked byte count and SHA-256 before parsing.
-A mismatch is a **source-lock refresh** decision: do not infer a replacement
-schema or accept source drift. The generated descriptor preserves each
-operation's document ID, stable artifact, published URL, capture identity, and
-provider operation ID; a document-qualified locked `id` is the descriptor source
-identity even when the provider repeats an `operationId` in another document.
+`rest.openapi` array, and sorted `rest.source_documents`. Each v3 document owns
+an immutable `artifact`, its exact operation inventory, and a `published_source`
+record identifying the provider document from which it was captured. An artifact
+is queryless by default. A provider whose document identity requires a query may
+declare `artifact.identity_query: true`; this is valid only on a v3 REST source
+document and makes the exact bounded, non-secret query already locked in its
+`artifact.source_url` part of the retrieval identity. It never accepts a query
+or URL from source-import command input. The importer retrieves only each
+document's fixed artifact URL without credentials and verifies its exact locked
+byte count and SHA-256 before parsing. A mismatch is a **source-lock refresh**
+decision: do not infer a replacement schema or accept source drift. The generated
+descriptor preserves each operation's document ID, stable artifact, published
+URL, capture identity, and provider operation ID; a document-qualified locked
+`id` is the descriptor source identity even when the provider repeats an
+`operationId` in another document.
 
 A v3 `published_source.source_url` is a historical citation, not a retrieval
 endpoint. It may carry only a bounded, non-secret provider query (for example a
 fixed `slug`); it must not contain userinfo, fragments, controls, repeated keys,
-oversized values, or credential-like parameter names. Its `capture_url` and the
-imported `artifact.source_url` remain absolute public HTTPS URLs with no query,
-and only the artifact is fetched by `source-import`. This preserves provenance
-when a provider's rendered documentation URLs expire or rotate.
+oversized values, or credential-like parameter names. This capture/provenance
+query is never fetched: its `capture_url` remains queryless and only the
+artifact is retrieved. An `artifact.source_url` is likewise queryless unless
+the document explicitly sets `identity_query:true`; that opt-in uses the same
+bounded query policy and retains the absolute-public-HTTPS, no-userinfo,
+no-fragment, literal-public-IP, and DNS-public-address checks. This preserves
+provenance when rendered documentation URLs expire or rotate while still
+allowing a provider's fixed version query to identify the document.
 
 The generated descriptor is an intermediate provider contract for later fixed
 declaration materializers, never an execution command or a generic HTTP escape
