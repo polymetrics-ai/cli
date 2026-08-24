@@ -16,4 +16,6 @@
 - [!] Full `go test -timeout 20m ./...` was attempted by the repository commit hook before production edits and failed at 601.236s in baseline `internal/cli` `TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked` while logging a local Redis connection refusal. Per constrained-machine guidance, the complete suite was not restarted; all changed-package and repository-owned targeted gates above passed.
 - [!] `GOFLAGS='-p=3' go run ./cmd/connectorgen source-import bitbucket --check` cannot run because `internal/connectors/defs/bitbucket/sources` is absent on this base. Therefore the requested reviewed-artifact 50-command/28-path Bitbucket sweep is recorded as an integration dependency, not falsely reported as passed.
 - [x] Inline verify-work/code-review evidence — PASS; see `REVIEW.md`.
-- [ ] PR API base read-back after opening the pull request.
+- [x] PR API base read-back — `GET /repos/polymetrics-ai/cli/pulls/4346`
+  confirmed base `main`, head `fm/cli-runtime-valid-generated-command-paths-r1`,
+  and open PR https://github.com/polymetrics-ai/cli/pull/4346.

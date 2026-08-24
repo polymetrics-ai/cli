@@ -1,7 +1,6 @@
 # Run state — #4344
 
-- State: implementation, inline verification, and code review complete; PR
-  handoff pending.
+- State: pull request open; awaiting captain-held review and integration.
 - GSD: `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`,
   and `code-review` prompts resolved inline on 2026-08-24; no role spawning.
 - Red: restoring the raw `SourceID` command identity made
@@ -18,3 +17,6 @@
   `internal/connectors/defs/bitbucket/sources` does not exist. The reviewed
   batch-1 source descriptor is required for the requested 50-command/28-path
   binary sweep; this foundation branch must not copy unrelated connector work.
+- PR: https://github.com/polymetrics-ai/cli/pull/4346. Read-only GitHub API
+  read-back confirmed base `main` and head
+  `fm/cli-runtime-valid-generated-command-paths-r1`.
