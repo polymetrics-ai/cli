@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/rest/companies",
+    "query": {
+      "limit": "60"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "companies": [
+          {
+            "id": "id_fixture_1",
+            "createdAt": "2026-01-01T00:00:01Z",
+            "updatedAt": "2026-01-01T00:00:01Z",
+            "position": 1,
+            "name": "Fixture name 1"
+          }
+        ]
+      },
+      "pageInfo": {
+        "endCursor": "companies_fixture_cursor_1",
+        "hasNextPage": false
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_calendar_event_participants_fixture_id",
+    "displayName": "Fixture displayName 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/calendarEventParticipants/update_calendar_event_participants_fixture_id",
+    "body": {
+      "displayName": "Fixture displayName 1"
+    }
+  }
+}

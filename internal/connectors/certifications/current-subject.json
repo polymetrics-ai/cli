@@ -3,10 +3,10 @@
   "generated_command": "go run ./cmd/connectorgen certification-subject",
   "subject": {
     "schema_version": 2,
-    "fingerprint": "159f1595873c5fa6ab351c6bbc571e7680fab48b2d1708ad9711d33ce6d5b9d9",
-    "declarations_sha256": "d2608b6d808ac97a4cd50fb0bd36ce4052e027dbcfe771b014db87e6110087e3",
+    "fingerprint": "9db8ce0d1baa8caa48bb2c6314f6b66b2375ad0c09315659b24ed510f7dbac89",
+    "declarations_sha256": "6a9d03de4e8d4356b7eefbb69c8b5a6270d0021bea9d94fa178af410cd80166d",
     "source_projection_sha256": "875ab65998afa77ab9770dc675294d8b0af1a95053dc32cab77807fe53106161",
-    "cli_command_mapping_sha256": "4f06885e568d4d21225c7641f36038d3cfd103cfff37b9c515a467d628a9e9f7",
+    "cli_command_mapping_sha256": "adcf8d17e7a75d1d6c5dbadd495e8c3154f1f2e4729fdf8ac6584fb13114d1ab",
     "relevant_config_sha256": "4b59f27395f5127578bce027786ba9c3f1829b044281e39467a2c1b182ee6ffe",
     "proof_protocol": "foundation-certification-proof-v1"
   }

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_message_lists_fixture_id",
+    "name": "Fixture name 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/messageLists/update_message_lists_fixture_id",
+    "body": {
+      "name": "Fixture name 1"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_notes_fixture_id",
+    "bodyV2": "Fixture bodyV2 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/notes/update_notes_fixture_id",
+    "body": {
+      "bodyV2": "Fixture bodyV2 1"
+    }
+  }
+}
