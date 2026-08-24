@@ -5,9 +5,11 @@
 - Issue: Refs #4325 — restore batch 1 independent gate
 - Base branch: main
 - Merges into: main
-- Delivery: Pull request open against `main` from
-  `fm/cli-batch1-repair-r1`, with the independent credential-free Gate B rerun
-  returning GO and all repository checks green.
+- Delivery: prepare connector-owned mapping commits on
+  `fm/cli-batch1-repair-r1`; do not open a pull request or merge while the
+  shared validator review is outstanding. The eventual pull request targets
+  `main` and requires the independent credential-free Gate B rerun returning
+  GO and all repository checks green.
 - Working branch: fm/cli-batch1-repair-r1
 - Task: Repair the ten batch-1 source bundles and their derived command,
   operation, and evidence surfaces without credentials or reduced quality gates.
@@ -44,6 +46,54 @@
   changed connector command `--help`, generated docs checks, and discovery
   metadata. Hand-authored CLI/website pages are not applicable unless a
   generator reports changed output.
+
+## Gap plan — cited non-executable mutations (2026-08-24)
+
+Captain direction is to retain every provider operation and mark a mutation
+whose source-cited action cannot yet be executed as declared-and-deferred. The
+only permitted mechanism is
+`sourceProjectionApplyNonExecutableMutationDispositions` in
+`cmd/connectorgen/sourceprojection.go`. Its fixed foundation tag is
+`source-cited-non-executable-mutation-foundation-r1`; the generated descriptor
+copies the provider URL, SHA-256, byte count, and document location from the
+source operation and marks the gap merge-blocked.
+
+- Active target: Sentry, then Asana and Jira. Each connector remains a
+  sequential slice. Vercel is discovery-only until its absent CLI surface has
+  been separately reported to the captain.
+- Source-of-truth classification: retain the existing connector-owned
+  `sources/<connector>-declaration-disposition.json` entry for every affected
+  source ID. It supplies the audited `etl`, `reverse_etl`, `direct_read`,
+  `direct_write`, `binary_upload`, or `binary_download` classification and
+  provider trace; the mutation-disposition file is deliberately narrow and
+  only adds the executable-action foundation gap.
+- Hard boundary: never add a disposition for any method/path with a working
+  `availability: implemented` command. The importer and validator both refuse
+  that downgrade. Non-mutating reads without an executable path are reported
+  as evidence gaps; no mutation-only workaround is invented.
+- Manual GSD fallback: the canonical prompts were resolved with
+  `scripts/gsd prompt`; compatible isolated runtime agents are unavailable and
+  project policy forbids role spawning, so this gap is planned and executed
+  inline. Required skills used: `golang-how-to`, `golang-design-patterns`,
+  `golang-structs-interfaces`, `golang-error-handling`, `golang-security`,
+  `golang-safety`, and `golang-testing`.
+
+### Red / green contract
+
+- **Red:** On 2026-08-24, `go run ./cmd/connectorgen source-import sentry
+  --check` passed with 223 operations, while `go run ./cmd/connectorgen
+  validate internal/connectors/defs/sentry` exited 1 with 32 exact
+  `source operation has no executable action` findings.
+- **Green:** after a connector-owned, strict v1
+  `<connector>-mutation-dispositions.json` names each exact source ID, method,
+  and path, `source-import --check` and `connectorgen validate` both pass; the
+  rewritten descriptor records the named source-cited mutation foundation for
+  every deferred row and no working command loses credential-bound dispatch.
+- **Refactor/quality:** run the source importer and validator for the target,
+  `surface-sync --check`, a focused source-projection test, and an isolated
+  built-binary credential-boundary sweep for its implemented commands. The
+  shared validator review may still prevent a final batch-wide gate; record the
+  exact result without bypassing it.
 
 ## Sequential TDD slices
 

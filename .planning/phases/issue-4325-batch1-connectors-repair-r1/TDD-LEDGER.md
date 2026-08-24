@@ -9,6 +9,9 @@
 | Stripe semantics | Four JSON response routes classify as binary | The four routes classify as JSON direct reads and command output policy matches | Semantic regression check | pending |
 | Evidence reasons | Report scan finds forbidden scope reason or an uncited foundation gap | Scan finds none; all remaining citations resolve to the stated runtime refusal | Independent Gate B rerun | pending |
 | Final gate | Independent report returns NO-GO | Independent report returns GO | Full `make verify` and review | pending |
+| Sentry declared-and-deferred mutations | `source-import sentry --check` passes 223 source operations, but `connectorgen validate internal/connectors/defs/sentry` reports 32 exact mutations with no executable action | A strict, source-cited mutation disposition exists for each of those 32; importer and validator accept the descriptor and it records only `source-cited-non-executable-mutation-foundation-r1` gaps | `source-import --check`, targeted validate, `surface-sync --check`, focused source-projection test, and credential-boundary command sweep | in progress |
+| Vercel surface discovery | `pm vercel` returns `unknown command`; an absent `cli_surface.json` means no command can be credential-bound | Report the required declaration-owned artifacts and source-bound operation set before any mutation mapping | Do not create a command surface as part of a disposition-only slice | pending captain report |
+| Asana/Jira declared-and-deferred mutations | Targeted validation reports the documented source mutations without complete actions | Exact cited disposition files retain those operations as merge-blocked runtime gaps without changing a working command | Same focused importer/validator and runtime sweep as Sentry | pending |
 
 ## Jira red/green evidence
 
