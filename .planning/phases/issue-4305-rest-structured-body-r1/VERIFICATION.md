@@ -45,6 +45,14 @@
 - Final `make verify` — pass. It includes `gofmt`, tidy check, `go vet ./...`, `go test -timeout 20m ./...`, `pm` build/docs/smoke, lint (0 issues), agent contract, generator validation/sync, GitHub artifacts, connector boundary, connector canon, pinned dependencies, and release target parity.
 - `git diff --check` — pass.
 
+### Final local validation — 2026-08-24
+
+- Built the real `pm` binary and confirmed `pm help connectors` plus bare `pm connectors` behavior.
+- Focused structured-body engine and commandrunner tests, the configured-base-URL error-persistence regression, and the complete CLI golden/manual suite passed with `-timeout 20m`.
+- `go vet ./...`, `go run ./cmd/connectorgen validate internal/connectors/defs` (553 connectors, 0 findings), and `go run ./cmd/connectorgen surface-sync --check` (553 scanned, 0 changes) passed.
+- `make connector-boundary` completed with exit 0 in a completion-tracked session.
+- `make verify` completed with exit 0 in a completion-tracked session. Its full repository suite passed, including formatting/tidy, full tests, binary/docs/smoke, lint, generated artifacts, connector boundary, release checks, and installed GitHub certification.
+
 ### Delivery note
 
 The explicit Firstmate correction defers the no-mistakes, push, and PR stages. They were not invoked in this worktree.
