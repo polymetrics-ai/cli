@@ -5,12 +5,14 @@ Phase: `zoom-full-definition-mapping-r1`
 
 ## Delivered
 
-- Preserved 35 captured Zoom Developer Docs modules (12,127,228 bytes; 1,937 source operations)
-  and crosswalked them with the 1,913-row provider ledger. #4332 landed v3 rendered-reference
-  citations, and a migration probe correctly advanced to the next terminal cause: the first
-  immutable Next-data artifact returns HTTP 404 and no verified cache contains the pinned bytes.
-  The 2026-08-23 stable-capture decision requires an attested mirror; the original lock is retained
-  byte-for-byte and no unavailable URL is fabricated as a fetchable artifact or descriptor.
+- Migrated Zoom to the v3 document-owned source lock and retained 34 current first-party API Hub
+  OpenAPI artifacts (11,719,368 bytes; 1,871 operation identities). Each authorized re-pin has
+  an old/new URL, byte count, digest, 200/no-redirect classification, and exact
+  method/path/operation-ID comparison in `sources/zoom-source-repin-report.json`.
+- Recorded `accounts` as an explicit unavailable source: its historical 805,789-byte
+  `d8d650…a98319a` Next-data capture now returns an 8,329-byte HTTP 404 body and no historic blob
+  exists. Its 66 historic provider identities remain in the 1,937-operation crosswalk and ledger;
+  no error body or synthetic replacement is treated as source evidence.
 - Declared 1,748 source-backed executor contracts: 776 `rest_read`, 971 `rest_write`, and one
   bounded binary-download contract, including 311 destructive DELETE contracts.
 - Added 505 source-backed direct-read commands, 202 approval-gated no-body scalar write commands,
@@ -51,7 +53,8 @@ Phase: `zoom-full-definition-mapping-r1`
   JSON-body writes (the two narrow Meeting lifecycle contracts are explicit exceptions), array-query
   contracts, file uploads, the bounded Clip download redirect case, paid-tier operations, or
   source/ledger mismatches.
-- No Zoom operation is certified yet. The accepted REST-read live proof lacks an exact operation
+- No Zoom operation is certified yet. The retained REST-read proof is historical because it lacks
+  the current certification subject, and a future current proof still lacks an exact operation
   fixture because the shared matrix projects fixtures only for capabilities, not operation kinds;
   `operation-specific-fixture-evidence-projection` records the minimal recovery.
 - The SHA-pinned public OpenAPI response schemas provide creation timestamps for all three preserved
@@ -72,9 +75,10 @@ Phase: `zoom-full-definition-mapping-r1`
   explicit implementation or technical-contract gaps, and no provider entitlement or destructive
   classification is presented as a reason to hide an otherwise-modelled command.
 - No auth, engine, generator, certification allowlist, or status code was changed.
-- The v3 multi-document and rendered-reference foundations are on `main`, but stable capture
-  attestation is still required before the 35 rotating Next-data artifacts can be re-verified.
-  No Zoom source lock is migrated or descriptor synthesized until that separate foundation lands.
+- `source-import --check` and `connectorgen validate` deliberately stop on the Accounts unavailable
+  declaration, and `surface-sync --check` consequently refuses the missing canonical descriptor.
+  This is an explicit blocking source gap, not a claim that the 34 retained documents complete
+  provider-wide source validation.
 - The later captain hard gate means this remains explicitly **not merge-ready**: open foundation
   gaps, incomplete all-operation CLI/website reachability, and the missing final six-surface live
   proof prevent any provider-wide completeness claim.

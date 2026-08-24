@@ -182844,7 +182844,7 @@
         "name": "zoom_contact_center_deleteuserrecordings",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/v2/contact_center/users/{{ record.userId }}/recordings",
+        "path": "/v2/contact_center/users/{{ record.user_id }}/recordings",
         "risk": "high: Delete a user's recordings",
         "confirm": "destructive"
       },
@@ -182930,7 +182930,7 @@
         "name": "zoom_contact_center_userdelete",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/v2/contact_center/users/{{ record.userId }}",
+        "path": "/v2/contact_center/users/{{ record.user_id }}",
         "risk": "high: Delete a user's profile",
         "confirm": "destructive"
       },
@@ -183352,12 +183352,26 @@
         "confirm": "destructive"
       },
       {
+        "name": "zoom_meetings_meetingcreate",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v2/users/{{ record.user_id }}/meetings",
+        "risk": "high: Create a scheduled meeting"
+      },
+      {
         "name": "zoom_meetings_meetingdelete",
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/meetings/{{ record.meetingId }}",
         "risk": "high: Delete a meeting",
         "confirm": "destructive"
+      },
+      {
+        "name": "zoom_meetings_meetingupdate",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v2/meetings/{{ record.meeting_id }}",
+        "risk": "high: Update a meeting"
       },
       {
         "name": "zoom_meetings_meetingpolldelete",
@@ -183561,7 +183575,7 @@
         "name": "zoom_scim2_userscim2delete",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/scim2/Users/{{ record.userId }}",
+        "path": "/scim2/Users/{{ record.user_id }}",
         "risk": "high: Delete a user",
         "confirm": "destructive"
       },
@@ -183633,7 +183647,7 @@
         "name": "zoom_users_deluservb",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/v2/users/{{ record.userId }}/settings/virtual_backgrounds",
+        "path": "/v2/users/{{ record.user_id }}/settings/virtual_backgrounds",
         "risk": "high: Delete Virtual Background files",
         "confirm": "destructive"
       },
@@ -183641,7 +183655,7 @@
         "name": "zoom_users_userdelete",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/v2/users/{{ record.userId }}",
+        "path": "/v2/users/{{ record.user_id }}",
         "risk": "high: Delete a user",
         "confirm": "destructive"
       },
@@ -183649,7 +183663,7 @@
         "name": "zoom_users_userpicturedelete",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/v2/users/{{ record.userId }}/picture",
+        "path": "/v2/users/{{ record.user_id }}/picture",
         "risk": "high: Delete a user's profile picture",
         "confirm": "destructive"
       },
@@ -183665,7 +183679,7 @@
         "name": "zoom_users_userschedulersdelete",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/v2/users/{{ record.userId }}/schedulers",
+        "path": "/v2/users/{{ record.user_id }}/schedulers",
         "risk": "high: Delete user schedulers",
         "confirm": "destructive"
       },
@@ -183673,7 +183687,7 @@
         "name": "zoom_users_userssotokendelete",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/v2/users/{{ record.userId }}/token",
+        "path": "/v2/users/{{ record.user_id }}/token",
         "risk": "high: Revoke a user's SSO token",
         "confirm": "destructive"
       },

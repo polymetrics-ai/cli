@@ -1,9 +1,9 @@
 # Zoom seven-surface readiness
 
 Issue: #4265
-Base: `main` after the temporary reverse-ETL foundation stack landed. #4332 has landed the
-rendered-reference citation contract; final source-lock validation now awaits the separately
-decided stable, attested mirror of the 35 rotating Next-data captures.
+Base: `main` after the temporary reverse-ETL foundation stack landed. The retained-artifact
+foundation is landed: 34 current direct API Hub OpenAPI documents are retained and source-traced;
+the historic Accounts capture is explicitly unavailable rather than silently replaced.
 
 [`sources/zoom-seven-surface-readiness.json`](../../../internal/connectors/defs/zoom/sources/zoom-seven-surface-readiness.json)
 is the committed machine-readable reconciliation ledger. It contains 1,939 records: all 1,937
@@ -31,6 +31,8 @@ Zoom-specific executor or a connector-side workaround for any shared gap.
 | Measure | Count | Honest status |
 | --- | ---: | --- |
 | Documented source operations | 1,937 | Reconciled; this is the source lock, not a completeness claim. |
+| Retained current source operations | 1,871 | 34 exact first-party OpenAPI artifacts; all method/path/operation-ID sets match the preserved historical inventory. |
+| Explicit unavailable historical operations | 66 | Accounts remains represented in the crosswalk and ledger, but its rotating capture is HTTP 404 with no verified historic bytes. |
 | Reconciliation records | 1,939 | Includes two ledger-only identities. |
 | Declared operation contracts | 1,748 | 776 reads, 971 writes, one binary-read contract. |
 | Command-bound installed-CLI entries | 714 | 505 direct reads, three ETL streams, and 206 reverse-ETL commands, plus capability/transport entries. |
@@ -65,13 +67,12 @@ action merely to claim coverage.
 
 ## Certification boundary
 
-The connector definition cannot receive its current complete validation result until the stable
-attested mirror exists. #4332 accepts the 35 rendered-reference documents, and the migration probe
-preserved all 1,937 identities, but `source-import` then reached the first immutable artifact and
-received HTTP 404. The cited provenance URL was not fetched; the missing verified artifact prevents
-creating the required canonical descriptor. The original v2 lock remains byte-identical, rather
-than inventing an artifact for a rotating URL. After that Foundation revision lands and the persisted
-App/CLI path is exercised, certification requires built-binary proof using only the registered
+The connector definition cannot receive its current complete validation result while the Accounts
+source is explicitly unavailable. `sources/zoom-source-repin-report.json` records 34 authorized
+re-pins from rotating Next-data URLs to current first-party OpenAPI documents; `source-retain`
+checked in their exact raw bytes. `source-import --check` stops before provider or cache fallback at
+the Accounts unavailable reason, so no canonical descriptor is created from an error body. After
+that source gap is resolved and the persisted App/CLI path is exercised, certification requires built-binary proof using only the registered
 secret-store reference at process execution time: authenticated read; a unique lane-owned
 create/read-back/update/delete-cleanup flow; ETL; reverse-ETL plan/apply/acknowledgement plus
 independent provider read-back; and a binary round-trip where supported. No pre-existing resource,

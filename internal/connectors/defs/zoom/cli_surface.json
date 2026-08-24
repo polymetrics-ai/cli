@@ -335,12 +335,6 @@
             "pastOne",
             "live"
           ]
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -386,18 +380,6 @@
             "past",
             "live"
           ]
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
-        },
-        {
-          "name": "participantId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.participantId"
         }
       ],
       "api_surface": [
@@ -638,12 +620,6 @@
           "maps_to": "path.fileId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "fileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.fileId"
         }
       ],
       "api_surface": [
@@ -939,12 +915,6 @@
           "maps_to": "path.requestId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "requestId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.requestId"
         }
       ],
       "api_surface": [
@@ -972,12 +942,6 @@
           "maps_to": "path.roleId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "roleId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.roleId"
         }
       ],
       "api_surface": [
@@ -1026,12 +990,6 @@
           "summary": "Zoom query parameter submit_time_end.",
           "maps_to": "query.submit_time_end",
           "allow_empty": false
-        },
-        {
-          "name": "surveyId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.surveyId"
         }
       ],
       "api_surface": [
@@ -1059,12 +1017,6 @@
           "maps_to": "path.surveyId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "surveyId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.surveyId"
         }
       ],
       "api_surface": [
@@ -1113,12 +1065,6 @@
           "summary": "Zoom query parameter survey_id.",
           "maps_to": "query.survey_id",
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -1153,12 +1099,6 @@
           "summary": "Zoom query parameter instance_id.",
           "maps_to": "query.instance_id",
           "allow_empty": false
-        },
-        {
-          "name": "surveyId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.surveyId"
         }
       ],
       "api_surface": [
@@ -1186,12 +1126,6 @@
           "maps_to": "path.policyId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "policyId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.policyId"
         }
       ],
       "api_surface": [
@@ -1299,12 +1233,6 @@
           "maps_to": "path.jobId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "jobId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.jobId"
         }
       ],
       "api_surface": [
@@ -1340,18 +1268,6 @@
           "maps_to": "path.fileId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "jobId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.jobId"
-        },
-        {
-          "name": "fileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.fileId"
         }
       ],
       "api_surface": [
@@ -1379,12 +1295,6 @@
           "maps_to": "path.jobId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "jobId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.jobId"
         }
       ],
       "api_surface": [
@@ -1420,18 +1330,6 @@
           "maps_to": "path.fileId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "jobId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.jobId"
-        },
-        {
-          "name": "fileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.fileId"
         }
       ],
       "api_surface": [
@@ -1459,12 +1357,6 @@
           "maps_to": "path.jobId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "jobId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.jobId"
         }
       ],
       "api_surface": [
@@ -1500,18 +1392,6 @@
           "maps_to": "path.fileId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "jobId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.jobId"
-        },
-        {
-          "name": "fileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.fileId"
         }
       ],
       "api_surface": [
@@ -1539,12 +1419,6 @@
           "maps_to": "path.jobId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "jobId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.jobId"
         }
       ],
       "api_surface": [
@@ -1619,12 +1493,6 @@
             "FILE_CANCELED",
             "FILE_SKIPPED"
           ]
-        },
-        {
-          "name": "jobId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.jobId"
         }
       ],
       "api_surface": [
@@ -1699,12 +1567,6 @@
             "FILE_CANCELED",
             "FILE_SKIPPED"
           ]
-        },
-        {
-          "name": "jobId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.jobId"
         }
       ],
       "api_surface": [
@@ -1791,18 +1653,6 @@
           "maps_to": "path.aclId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "calId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.calId"
-        },
-        {
-          "name": "aclId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.aclId"
         }
       ],
       "api_surface": [
@@ -1830,12 +1680,6 @@
           "maps_to": "path.calId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "calId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.calId"
         }
       ],
       "api_surface": [
@@ -1871,18 +1715,6 @@
           "maps_to": "path.calendarId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userIdentifier",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userIdentifier"
-        },
-        {
-          "name": "calendarId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.calendarId"
         }
       ],
       "api_surface": [
@@ -1936,18 +1768,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "calId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.calId"
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -1983,18 +1803,6 @@
           "maps_to": "path.settingId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userIdentifier",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userIdentifier"
-        },
-        {
-          "name": "settingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.settingId"
         }
       ],
       "api_surface": [
@@ -2057,38 +1865,6 @@
           "summary": "Zoom query parameter timeZone.",
           "maps_to": "query.timeZone",
           "allow_empty": false
-        },
-        {
-          "name": "calId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.calId"
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "showDeleted",
-          "type": "boolean",
-          "maps_to": "query.showDeleted"
-        },
-        {
-          "name": "timeMax",
-          "type": "string",
-          "maps_to": "query.timeMax"
-        },
-        {
-          "name": "timeMin",
-          "type": "string",
-          "maps_to": "query.timeMin"
-        },
-        {
-          "name": "timeZone",
-          "type": "string",
-          "maps_to": "query.timeZone"
         }
       ],
       "api_surface": [
@@ -2121,17 +1897,6 @@
           "name": "show-deleted",
           "type": "boolean",
           "summary": "Zoom query parameter showDeleted.",
-          "maps_to": "query.showDeleted"
-        },
-        {
-          "name": "calId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.calId"
-        },
-        {
-          "name": "showDeleted",
-          "type": "boolean",
           "maps_to": "query.showDeleted"
         }
       ],
@@ -2183,33 +1948,6 @@
           "name": "show-hidden",
           "type": "boolean",
           "summary": "Zoom query parameter showHidden.",
-          "maps_to": "query.showHidden"
-        },
-        {
-          "name": "userIdentifier",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userIdentifier"
-        },
-        {
-          "name": "minAccessRole",
-          "type": "enum",
-          "values": [
-            "freeBusyReader",
-            "reader",
-            "writer",
-            "owner"
-          ],
-          "maps_to": "query.minAccessRole"
-        },
-        {
-          "name": "showDeleted",
-          "type": "boolean",
-          "maps_to": "query.showDeleted"
-        },
-        {
-          "name": "showHidden",
-          "type": "boolean",
           "maps_to": "query.showHidden"
         }
       ],
@@ -2288,51 +2026,6 @@
           "summary": "Zoom query parameter syncToken.",
           "maps_to": "query.syncToken",
           "allow_empty": false
-        },
-        {
-          "name": "calId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.calId"
-        },
-        {
-          "name": "orderBy",
-          "type": "enum",
-          "values": [
-            "startTime",
-            "updated"
-          ],
-          "maps_to": "query.orderBy"
-        },
-        {
-          "name": "showDeleted",
-          "type": "boolean",
-          "maps_to": "query.showDeleted"
-        },
-        {
-          "name": "singleEvents",
-          "type": "boolean",
-          "maps_to": "query.singleEvents"
-        },
-        {
-          "name": "timeMax",
-          "type": "string",
-          "maps_to": "query.timeMax"
-        },
-        {
-          "name": "timeMin",
-          "type": "string",
-          "maps_to": "query.timeMin"
-        },
-        {
-          "name": "timeZone",
-          "type": "string",
-          "maps_to": "query.timeZone"
-        },
-        {
-          "name": "syncToken",
-          "type": "string",
-          "maps_to": "query.syncToken"
         }
       ],
       "api_surface": [
@@ -2360,12 +2053,6 @@
           "maps_to": "path.userIdentifier",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userIdentifier",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userIdentifier"
         }
       ],
       "api_surface": [
@@ -2420,12 +2107,6 @@
           "maps_to": "path.importId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "importId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.importId"
         }
       ],
       "api_surface": [
@@ -2453,12 +2134,6 @@
           "maps_to": "path.fileId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "fileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.fileId"
         }
       ],
       "api_surface": [
@@ -2486,12 +2161,6 @@
           "maps_to": "path.exportId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "exportId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.exportId"
         }
       ],
       "api_surface": [
@@ -2519,12 +2188,6 @@
           "maps_to": "path.fileId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "fileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.fileId"
         }
       ],
       "api_surface": [
@@ -2552,12 +2215,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -2585,12 +2242,6 @@
           "maps_to": "path.fileId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "fileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.fileId"
         }
       ],
       "api_surface": [
@@ -2618,12 +2269,6 @@
           "maps_to": "path.fileId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "fileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.fileId"
         }
       ],
       "api_surface": [
@@ -2693,12 +2338,6 @@
           "maps_to": "path.fileId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "fileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.fileId"
         }
       ],
       "api_surface": [
@@ -2734,12 +2373,6 @@
           "maps_to": "query.file_key",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "matterId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.matterId"
         }
       ],
       "api_surface": [
@@ -2818,12 +2451,6 @@
           "maps_to": "path.spaceId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "spaceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.spaceId"
         }
       ],
       "api_surface": [
@@ -2859,18 +2486,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -2898,12 +2513,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -2931,12 +2540,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -2964,12 +2567,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -3028,18 +2625,6 @@
           "values": [
             "audio/mp4"
           ]
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
-        },
-        {
-          "name": "messageId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.messageId"
         }
       ],
       "api_surface": [
@@ -3140,12 +2725,6 @@
           "values": [
             "audio/mp4"
           ]
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -3203,12 +2782,6 @@
           "summary": "Zoom query parameter to.",
           "maps_to": "query.to",
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -3236,12 +2809,6 @@
           "maps_to": "path.fileId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "fileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.fileId"
         }
       ],
       "api_surface": [
@@ -3269,12 +2836,6 @@
           "maps_to": "path.forwardId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "forwardId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.forwardId"
         }
       ],
       "api_surface": [
@@ -3450,12 +3011,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -3483,12 +3038,6 @@
           "maps_to": "path.groupId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "groupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.groupId"
         }
       ],
       "api_surface": [
@@ -3516,12 +3065,6 @@
           "maps_to": "path.groupId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "groupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.groupId"
         }
       ],
       "api_surface": [
@@ -3643,12 +3186,6 @@
           "maps_to": "query.end_date",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -3684,18 +3221,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -3731,18 +3256,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -3770,12 +3283,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -3809,12 +3316,6 @@
           "type": "boolean",
           "summary": "Zoom query parameter include_history.",
           "maps_to": "query.include_history"
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -3876,12 +3377,6 @@
           "maps_to": "query.identifier",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "matterId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.matterId"
         }
       ],
       "api_surface": [
@@ -3993,12 +3488,6 @@
           "maps_to": "path.spaceId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "spaceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.spaceId"
         }
       ],
       "api_surface": [
@@ -4049,12 +3538,6 @@
             "active",
             "inactive"
           ]
-        },
-        {
-          "name": "spaceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.spaceId"
         }
       ],
       "api_surface": [
@@ -4116,18 +3599,6 @@
           "maps_to": "path.mentionGroupId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
-        },
-        {
-          "name": "mentionGroupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.mentionGroupId"
         }
       ],
       "api_surface": [
@@ -4155,12 +3626,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -4245,12 +3710,6 @@
           "type": "boolean",
           "summary": "Zoom query parameter include_reaction_recent_changed.",
           "maps_to": "query.include_reaction_recent_changed"
-        },
-        {
-          "name": "sessionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.sessionId"
         }
       ],
       "api_surface": [
@@ -4396,18 +3855,6 @@
           "type": "boolean",
           "summary": "Zoom query parameter need_at_items.",
           "maps_to": "query.need_at_items"
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
-        },
-        {
-          "name": "messageId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.messageId"
         }
       ],
       "api_surface": [
@@ -4484,12 +3931,6 @@
           "maps_to": "path.associatedReferenceId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "associatedReferenceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.associatedReferenceId"
         }
       ],
       "api_surface": [
@@ -4517,12 +3958,6 @@
           "maps_to": "path.documentNumber",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "documentNumber",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.documentNumber"
         }
       ],
       "api_surface": [
@@ -4550,12 +3985,6 @@
           "maps_to": "path.documentReferenceId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "documentReferenceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.documentReferenceId"
         }
       ],
       "api_surface": [
@@ -4626,12 +4055,6 @@
           "summary": "Zoom query parameter contact_email.",
           "maps_to": "query.contact_email",
           "allow_empty": false
-        },
-        {
-          "name": "accountKey",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.accountKey"
         }
       ],
       "api_surface": [
@@ -5640,12 +5063,6 @@
           "maps_to": "path.dealRegKey",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "dealRegKey",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.dealRegKey"
         }
       ],
       "api_surface": [
@@ -5687,12 +5104,6 @@
           "summary": "Zoom query parameter crm_account_number.",
           "maps_to": "query.crm_account_number",
           "allow_empty": false
-        },
-        {
-          "name": "invoiceNumber",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.invoiceNumber"
         }
       ],
       "api_surface": [
@@ -5720,12 +5131,6 @@
           "maps_to": "path.offerId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "offerId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.offerId"
         }
       ],
       "api_surface": [
@@ -5753,12 +5158,6 @@
           "maps_to": "path.orderReferenceId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "orderReferenceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.orderReferenceId"
         }
       ],
       "api_surface": [
@@ -5786,12 +5185,6 @@
           "maps_to": "path.quoteReferenceId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "quoteReferenceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.quoteReferenceId"
         }
       ],
       "api_surface": [
@@ -5819,12 +5212,6 @@
           "maps_to": "path.subscriptionNumber",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "subscriptionNumber",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.subscriptionNumber"
         }
       ],
       "api_surface": [
@@ -5852,12 +5239,6 @@
           "maps_to": "path.subscriptionNumber",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "subscriptionNumber",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.subscriptionNumber"
         }
       ],
       "api_surface": [
@@ -5885,12 +5266,6 @@
           "maps_to": "path.trialReferenceId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "trialReferenceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.trialReferenceId"
         }
       ],
       "api_surface": [
@@ -5926,18 +5301,6 @@
           "maps_to": "path.taskId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
-        },
-        {
-          "name": "taskId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.taskId"
         }
       ],
       "api_surface": [
@@ -5965,12 +5328,6 @@
           "maps_to": "path.engagementId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
         }
       ],
       "api_surface": [
@@ -5998,12 +5355,6 @@
           "maps_to": "path.engagementId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
         }
       ],
       "api_surface": [
@@ -6031,12 +5382,6 @@
           "maps_to": "path.engagementId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
         }
       ],
       "api_surface": [
@@ -6081,12 +5426,6 @@
           "summary": "Zoom query parameter flow_version.",
           "maps_to": "query.flow_version",
           "required": true
-        },
-        {
-          "name": "flowId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.flowId"
         }
       ],
       "api_surface": [
@@ -6114,12 +5453,6 @@
           "maps_to": "path.customFieldId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "customFieldId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.customFieldId"
         }
       ],
       "api_surface": [
@@ -6157,12 +5490,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "businessHourId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.businessHourId"
         }
       ],
       "api_surface": [
@@ -6190,12 +5517,6 @@
           "maps_to": "path.customFieldId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "customFieldId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.customFieldId"
         }
       ],
       "api_surface": [
@@ -6233,12 +5554,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "closureSetId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.closureSetId"
         }
       ],
       "api_surface": [
@@ -6276,12 +5591,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "consumerRoutingProfileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.consumerRoutingProfileId"
         }
       ],
       "api_surface": [
@@ -6319,12 +5628,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "addressBookId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.addressBookId"
         }
       ],
       "api_surface": [
@@ -6362,12 +5665,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "flowId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.flowId"
         }
       ],
       "api_surface": [
@@ -6405,12 +5702,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "agentRoutingProfileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.agentRoutingProfileId"
         }
       ],
       "api_surface": [
@@ -6489,12 +5780,6 @@
             "sv-SE",
             "tr-TR"
           ]
-        },
-        {
-          "name": "assetId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.assetId"
         }
       ],
       "api_surface": [
@@ -6532,12 +5817,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "categoryId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.categoryId"
         }
       ],
       "api_surface": [
@@ -6565,12 +5844,6 @@
           "maps_to": "path.templateId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "templateId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.templateId"
         }
       ],
       "api_surface": [
@@ -6608,12 +5881,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "queueId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.queueId"
         }
       ],
       "api_surface": [
@@ -6641,12 +5908,6 @@
           "maps_to": "path.queueId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "queueId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.queueId"
         }
       ],
       "api_surface": [
@@ -6684,12 +5945,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "regionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.regionId"
         }
       ],
       "api_surface": [
@@ -6727,12 +5982,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "statusId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.statusId"
         }
       ],
       "api_surface": [
@@ -6767,12 +6016,6 @@
           "summary": "Zoom query parameter keyword.",
           "maps_to": "query.keyword",
           "allow_empty": false
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
         }
       ],
       "api_surface": [
@@ -6807,12 +6050,6 @@
           "summary": "Zoom query parameter keyword.",
           "maps_to": "query.keyword",
           "allow_empty": false
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
         }
       ],
       "api_surface": [
@@ -6847,12 +6084,6 @@
           "summary": "Zoom query parameter keyword.",
           "maps_to": "query.keyword",
           "allow_empty": false
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
         }
       ],
       "api_surface": [
@@ -6890,12 +6121,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "variableGroupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.variableGroupId"
         }
       ],
       "api_surface": [
@@ -6923,12 +6148,6 @@
           "maps_to": "path.ipAddressBlockListRuleId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "ipAddressBlockListRuleId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.ipAddressBlockListRuleId"
         }
       ],
       "api_surface": [
@@ -6956,12 +6175,6 @@
           "maps_to": "path.phoneBlockListRuleId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "phoneBlockListRuleId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.phoneBlockListRuleId"
         }
       ],
       "api_surface": [
@@ -6999,12 +6212,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "contactListId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.contactListId"
         }
       ],
       "api_surface": [
@@ -7050,18 +6257,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "contactListId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.contactListId"
-        },
-        {
-          "name": "contactId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.contactId"
         }
       ],
       "api_surface": [
@@ -7117,18 +6312,6 @@
             "id",
             "email"
           ]
-        },
-        {
-          "name": "addressBookId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.addressBookId"
-        },
-        {
-          "name": "contactId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.contactId"
         }
       ],
       "api_surface": [
@@ -7166,12 +6349,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "dispositionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.dispositionId"
         }
       ],
       "api_surface": [
@@ -7236,12 +6413,6 @@
           "maps_to": "path.engagementId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
         }
       ],
       "api_surface": [
@@ -7269,12 +6440,6 @@
           "maps_to": "path.engagementId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
         }
       ],
       "api_surface": [
@@ -7302,12 +6467,6 @@
           "maps_to": "path.engagementId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
         }
       ],
       "api_surface": [
@@ -7343,18 +6502,6 @@
           "maps_to": "path.widgetId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "reportId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.reportId"
-        },
-        {
-          "name": "widgetId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.widgetId"
         }
       ],
       "api_surface": [
@@ -7392,12 +6539,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "inboxId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.inboxId"
         }
       ],
       "api_surface": [
@@ -7435,12 +6576,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "inboxId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.inboxId"
         }
       ],
       "api_surface": [
@@ -7513,18 +6648,6 @@
           "maps_to": "path.noteId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
-        },
-        {
-          "name": "noteId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.noteId"
         }
       ],
       "api_surface": [
@@ -7562,12 +6685,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "campaignId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.campaignId"
         }
       ],
       "api_surface": [
@@ -7605,12 +6722,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "queueId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.queueId"
         }
       ],
       "api_surface": [
@@ -7658,12 +6769,6 @@
             "inbound",
             "outbound"
           ]
-        },
-        {
-          "name": "queueId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.queueId"
         }
       ],
       "api_surface": [
@@ -7711,12 +6816,6 @@
             "inbound",
             "outbound"
           ]
-        },
-        {
-          "name": "queueId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.queueId"
         }
       ],
       "api_surface": [
@@ -7757,12 +6856,6 @@
           "summary": "Zoom query parameter bucket_id.",
           "maps_to": "query.bucket_id",
           "allow_empty": false
-        },
-        {
-          "name": "queueId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.queueId"
         }
       ],
       "api_surface": [
@@ -7800,12 +6893,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "queueId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.queueId"
         }
       ],
       "api_surface": [
@@ -7843,12 +6930,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "queueTemplateId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.queueTemplateId"
         }
       ],
       "api_surface": [
@@ -7886,12 +6967,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "roleId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.roleId"
         }
       ],
       "api_surface": [
@@ -7929,12 +7004,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "roleId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.roleId"
         }
       ],
       "api_surface": [
@@ -7972,12 +7041,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "dispositionSetId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.dispositionSetId"
         }
       ],
       "api_surface": [
@@ -8015,12 +7078,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "skillId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.skillId"
         }
       ],
       "api_surface": [
@@ -8058,12 +7115,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "skillCategoryId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.skillCategoryId"
         }
       ],
       "api_surface": [
@@ -8097,12 +7148,6 @@
           "type": "integer",
           "summary": "Zoom query parameter max_level.",
           "maps_to": "query.max_level"
-        },
-        {
-          "name": "teamId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.teamId"
         }
       ],
       "api_surface": [
@@ -8130,12 +7175,6 @@
           "maps_to": "path.teamId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "teamId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.teamId"
         }
       ],
       "api_surface": [
@@ -8163,12 +7202,6 @@
           "maps_to": "path.teamId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "teamId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.teamId"
         }
       ],
       "api_surface": [
@@ -8206,12 +7239,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "unitId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.unitId"
         }
       ],
       "api_surface": [
@@ -8239,12 +7266,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -8272,12 +7293,6 @@
           "maps_to": "path.variableLogId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "variableLogId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.variableLogId"
         }
       ],
       "api_surface": [
@@ -8766,12 +7781,6 @@
           "maps_to": "path.engagementId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
         }
       ],
       "api_surface": [
@@ -8816,12 +7825,6 @@
             "text",
             "proficiency"
           ]
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -8964,12 +7967,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "businessHourId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.businessHourId"
         }
       ],
       "api_surface": [
@@ -9007,12 +8004,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "businessHourId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.businessHourId"
         }
       ],
       "api_surface": [
@@ -9065,12 +8056,6 @@
           "maps_to": "path.contactId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "contactId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.contactId"
         }
       ],
       "api_surface": [
@@ -9108,12 +8093,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "contactListId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.contactListId"
         }
       ],
       "api_surface": [
@@ -9188,12 +8167,6 @@
           "maps_to": "path.dncListId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "dncListId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.dncListId"
         }
       ],
       "api_surface": [
@@ -9256,12 +8229,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "closureSetId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.closureSetId"
         }
       ],
       "api_surface": [
@@ -9299,12 +8266,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "closureSetId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.closureSetId"
         }
       ],
       "api_surface": [
@@ -9358,12 +8319,6 @@
           "maps_to": "path.contactId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "contactId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.contactId"
         }
       ],
       "api_surface": [
@@ -9453,12 +8408,6 @@
             "true",
             "false"
           ]
-        },
-        {
-          "name": "engagementId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.engagementId"
         }
       ],
       "api_surface": [
@@ -9544,12 +8493,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "flowId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.flowId"
         }
       ],
       "api_surface": [
@@ -9677,18 +8620,6 @@
           "summary": "Zoom query parameter to.",
           "maps_to": "query.to",
           "allow_empty": false
-        },
-        {
-          "name": "reportId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.reportId"
-        },
-        {
-          "name": "widgetId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.widgetId"
         }
       ],
       "api_surface": [
@@ -9744,12 +8675,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "inboxId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.inboxId"
         }
       ],
       "api_surface": [
@@ -9787,12 +8712,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "inboxId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.inboxId"
         }
       ],
       "api_surface": [
@@ -10100,12 +9019,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "queueId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.queueId"
         }
       ],
       "api_surface": [
@@ -10201,12 +9114,6 @@
           "summary": "Zoom query parameter timezone.",
           "maps_to": "query.timezone",
           "allow_empty": false
-        },
-        {
-          "name": "queueId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.queueId"
         }
       ],
       "api_surface": [
@@ -10373,12 +9280,6 @@
           "summary": "Zoom query parameter role_id.",
           "maps_to": "query.role_id",
           "allow_empty": false
-        },
-        {
-          "name": "regionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.regionId"
         }
       ],
       "api_surface": [
@@ -10531,12 +9432,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "skillId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.skillId"
         }
       ],
       "api_surface": [
@@ -10611,12 +9506,6 @@
           "maps_to": "path.teamId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "teamId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.teamId"
         }
       ],
       "api_surface": [
@@ -10677,12 +9566,6 @@
           "maps_to": "path.teamId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "teamId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.teamId"
         }
       ],
       "api_surface": [
@@ -10728,12 +9611,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -10785,12 +9662,6 @@
             "any",
             "both"
           ]
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -10862,12 +9733,6 @@
             "true",
             "false"
           ]
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -11174,12 +10039,6 @@
             "id",
             "name"
           ]
-        },
-        {
-          "name": "variableId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.variableId"
         }
       ],
       "api_surface": [
@@ -11263,12 +10122,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -11320,12 +10173,6 @@
             "all",
             "attendee"
           ]
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -11367,12 +10214,6 @@
           "summary": "Zoom query parameter to.",
           "maps_to": "query.to",
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -11400,12 +10241,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -11465,12 +10300,6 @@
           "summary": "Zoom query parameter session_id.",
           "maps_to": "query.session_id",
           "allow_empty": false
-        },
-        {
-          "name": "hubId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.hubId"
         }
       ],
       "api_surface": [
@@ -11498,12 +10327,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -11539,18 +10362,6 @@
           "maps_to": "path.customReportId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "customReportId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.customReportId"
         }
       ],
       "api_surface": [
@@ -11586,18 +10397,6 @@
           "maps_to": "path.accessLinkId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "accessLinkId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.accessLinkId"
         }
       ],
       "api_surface": [
@@ -11625,12 +10424,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -11658,12 +10451,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -11761,18 +10548,6 @@
           "maps_to": "path.sessionId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "sessionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.sessionId"
         }
       ],
       "api_surface": [
@@ -11800,12 +10575,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -11833,12 +10602,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -11874,18 +10637,6 @@
           "maps_to": "path.exhibitorId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "exhibitorId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.exhibitorId"
         }
       ],
       "api_surface": [
@@ -11913,12 +10664,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -11946,12 +10691,6 @@
           "maps_to": "path.hubId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "hubId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.hubId"
         }
       ],
       "api_surface": [
@@ -12016,12 +10755,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -12049,12 +10782,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -12090,18 +10817,6 @@
           "maps_to": "path.ticketTypeId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "ticketTypeId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.ticketTypeId"
         }
       ],
       "api_surface": [
@@ -12137,18 +10852,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "hubId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.hubId"
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -12184,18 +10887,6 @@
           "maps_to": "path.sessionId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "sessionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.sessionId"
         }
       ],
       "api_surface": [
@@ -12231,18 +10922,6 @@
           "maps_to": "path.sessionId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "sessionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.sessionId"
         }
       ],
       "api_surface": [
@@ -12278,18 +10957,6 @@
           "maps_to": "path.sessionId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "sessionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.sessionId"
         }
       ],
       "api_surface": [
@@ -12325,18 +10992,6 @@
           "maps_to": "path.sessionId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "sessionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.sessionId"
         }
       ],
       "api_surface": [
@@ -12372,18 +11027,6 @@
           "maps_to": "path.sessionId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "sessionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.sessionId"
         }
       ],
       "api_surface": [
@@ -12419,18 +11062,6 @@
           "maps_to": "path.speakerId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "speakerId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.speakerId"
         }
       ],
       "api_surface": [
@@ -12458,12 +11089,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -12499,18 +11124,6 @@
           "maps_to": "path.ticketId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "ticketId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.ticketId"
         }
       ],
       "api_surface": [
@@ -12559,12 +11172,6 @@
           "summary": "Zoom query parameter ticket_type_id.",
           "maps_to": "query.ticket_type_id",
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -12592,12 +11199,6 @@
           "maps_to": "path.videoId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "videoId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.videoId"
         }
       ],
       "api_surface": [
@@ -12633,18 +11234,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "hubId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.hubId"
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -12672,12 +11261,6 @@
           "maps_to": "path.hubId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "hubId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.hubId"
         }
       ],
       "api_surface": [
@@ -12733,18 +11316,6 @@
           "summary": "Zoom query parameter search_text.",
           "maps_to": "query.search_text",
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "emailTypeId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.emailTypeId"
         }
       ],
       "api_surface": [
@@ -12784,12 +11355,6 @@
             "sent",
             "deactivated"
           ]
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -12824,12 +11389,6 @@
           "summary": "Zoom query parameter email.",
           "maps_to": "query.email",
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -12864,12 +11423,6 @@
           "summary": "Zoom query parameter folder_id.",
           "maps_to": "query.folder_id",
           "allow_empty": false
-        },
-        {
-          "name": "hubId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.hubId"
         }
       ],
       "api_surface": [
@@ -12912,18 +11465,6 @@
           "summary": "Zoom query parameter email.",
           "maps_to": "query.email",
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "sessionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.sessionId"
         }
       ],
       "api_surface": [
@@ -12959,18 +11500,6 @@
           "maps_to": "path.sessionId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "sessionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.sessionId"
         }
       ],
       "api_surface": [
@@ -12998,12 +11527,6 @@
           "maps_to": "path.eventId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -13039,18 +11562,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "hubId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.hubId"
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -13093,18 +11604,6 @@
           "summary": "Zoom query parameter email.",
           "maps_to": "query.email",
           "allow_empty": false
-        },
-        {
-          "name": "hubId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.hubId"
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -13140,18 +11639,6 @@
           "maps_to": "path.sessionId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "sessionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.sessionId"
         }
       ],
       "api_surface": [
@@ -13187,18 +11674,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "hubId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.hubId"
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -13257,12 +11732,6 @@
           "summary": "Zoom query parameter mentioned_topic_id.",
           "maps_to": "query.mentioned_topic_id",
           "allow_empty": false
-        },
-        {
-          "name": "dealId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.dealId"
         }
       ],
       "api_surface": [
@@ -13290,12 +11759,6 @@
           "maps_to": "path.taskId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "taskId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.taskId"
         }
       ],
       "api_surface": [
@@ -13323,12 +11786,6 @@
           "maps_to": "path.conversationId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "conversationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.conversationId"
         }
       ],
       "api_surface": [
@@ -13372,12 +11829,6 @@
             "all"
           ],
           "required": true
-        },
-        {
-          "name": "conversationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.conversationId"
         }
       ],
       "api_surface": [
@@ -13405,12 +11856,6 @@
           "maps_to": "path.conversationId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "conversationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.conversationId"
         }
       ],
       "api_surface": [
@@ -13438,12 +11883,6 @@
           "maps_to": "path.conversationId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "conversationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.conversationId"
         }
       ],
       "api_surface": [
@@ -13471,12 +11910,6 @@
           "maps_to": "path.conversationId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "conversationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.conversationId"
         }
       ],
       "api_surface": [
@@ -13630,12 +12063,6 @@
           "maps_to": "path.dealId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "dealId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.dealId"
         }
       ],
       "api_surface": [
@@ -13663,12 +12090,6 @@
           "maps_to": "path.teamId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "teamId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.teamId"
         }
       ],
       "api_surface": [
@@ -13720,12 +12141,6 @@
           "type": "boolean",
           "summary": "Zoom query parameter create_by_self.",
           "maps_to": "query.create_by_self"
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -13996,12 +12411,6 @@
           "maps_to": "path.teamId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "teamId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.teamId"
         }
       ],
       "api_surface": [
@@ -14029,12 +12438,6 @@
           "maps_to": "path.teamId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "teamId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.teamId"
         }
       ],
       "api_surface": [
@@ -14140,12 +12543,6 @@
             "raw",
             "minimal"
           ]
-        },
-        {
-          "name": "draftId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.draftId"
         }
       ],
       "api_surface": [
@@ -14200,17 +12597,6 @@
           "summary": "Zoom query parameter metadataHeaders.",
           "maps_to": "query.metadataHeaders",
           "allow_empty": false
-        },
-        {
-          "name": "messageId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.messageId"
-        },
-        {
-          "name": "metadataHeaders",
-          "type": "string",
-          "maps_to": "query.metadataHeaders"
         }
       ],
       "api_surface": [
@@ -14254,18 +12640,6 @@
           "maps_to": "path.attachmentId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "messageId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.messageId"
-        },
-        {
-          "name": "attachmentId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.attachmentId"
         }
       ],
       "api_surface": [
@@ -14301,12 +12675,6 @@
           "maps_to": "path.filterId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "filterId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.filterId"
         }
       ],
       "api_surface": [
@@ -14360,17 +12728,6 @@
           "summary": "Zoom query parameter metadataHeaders.",
           "maps_to": "query.metadataHeaders",
           "allow_empty": false
-        },
-        {
-          "name": "threadId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.threadId"
-        },
-        {
-          "name": "metadataHeaders",
-          "type": "string",
-          "maps_to": "query.metadataHeaders"
         }
       ],
       "api_surface": [
@@ -14406,12 +12763,6 @@
           "maps_to": "path.labelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "labelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.labelId"
         }
       ],
       "api_surface": [
@@ -14474,12 +12825,6 @@
           "maps_to": "path.delegateEmail",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "delegateEmail",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.delegateEmail"
         }
       ],
       "api_surface": [
@@ -14547,11 +12892,6 @@
           "summary": "Zoom query parameter q.",
           "maps_to": "query.q",
           "allow_empty": false
-        },
-        {
-          "name": "includeSpamTrash",
-          "type": "boolean",
-          "maps_to": "query.includeSpamTrash"
         }
       ],
       "api_surface": [
@@ -14630,20 +12970,6 @@
           "summary": "Zoom query parameter q.",
           "maps_to": "query.q",
           "allow_empty": false
-        },
-        {
-          "name": "includeSpamTrash",
-          "type": "enum",
-          "values": [
-            "true",
-            "false"
-          ],
-          "maps_to": "query.includeSpamTrash"
-        },
-        {
-          "name": "labelIds",
-          "type": "string",
-          "maps_to": "query.labelIds"
         }
       ],
       "api_surface": [
@@ -14690,16 +13016,6 @@
           "name": "include-spam-trash",
           "type": "boolean",
           "summary": "Zoom query parameter includeSpamTrash.",
-          "maps_to": "query.includeSpamTrash"
-        },
-        {
-          "name": "labelIds",
-          "type": "string",
-          "maps_to": "query.labelIds"
-        },
-        {
-          "name": "includeSpamTrash",
-          "type": "boolean",
           "maps_to": "query.includeSpamTrash"
         }
       ],
@@ -14856,63 +13172,6 @@
           "summary": "Zoom query parameter labelId.",
           "maps_to": "query.labelId",
           "allow_empty": false
-        },
-        {
-          "name": "startHistoryId",
-          "type": "string",
-          "required": true,
-          "maps_to": "query.startHistoryId"
-        },
-        {
-          "name": "historyTypes",
-          "type": "enum",
-          "values": [
-            "labelAdded",
-            "labelRemoved",
-            "messageAdded",
-            "messageDeleted",
-            "messageUpdated",
-            "messageImported",
-            "messageImportedNew",
-            "settingAdded",
-            "settingUpdated",
-            "settingDeleted",
-            "delegateAdded",
-            "delegateDeleted",
-            "delegateUpdated",
-            "delegatorsAdded",
-            "delegatorsDeleted",
-            "delegatorsUpdated"
-          ],
-          "maps_to": "query.historyTypes"
-        },
-        {
-          "name": "excludeHistoryTypes",
-          "type": "enum",
-          "values": [
-            "labelAdded",
-            "labelRemoved",
-            "messageAdded",
-            "messageDeleted",
-            "messageUpdated",
-            "messageImported",
-            "messageImportedNew",
-            "settingAdded",
-            "settingUpdated",
-            "settingDeleted",
-            "delegateAdded",
-            "delegateDeleted",
-            "delegateUpdated",
-            "delegatorsAdded",
-            "delegatorsDeleted",
-            "delegatorsUpdated"
-          ],
-          "maps_to": "query.excludeHistoryTypes"
-        },
-        {
-          "name": "labelId",
-          "type": "string",
-          "maps_to": "query.labelId"
         }
       ],
       "api_surface": [
@@ -14976,12 +13235,6 @@
           "type": "integer",
           "summary": "Zoom query parameter status_code.",
           "maps_to": "query.status_code"
-        },
-        {
-          "name": "appId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.appId"
         }
       ],
       "api_surface": [
@@ -15009,12 +13262,6 @@
           "maps_to": "path.appId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "appId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.appId"
         }
       ],
       "api_surface": [
@@ -15042,12 +13289,6 @@
           "maps_to": "path.appId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "appId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.appId"
         }
       ],
       "api_surface": [
@@ -15112,12 +13353,6 @@
             "approved",
             "rejected"
           ]
-        },
-        {
-          "name": "appId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.appId"
         }
       ],
       "api_surface": [
@@ -15173,12 +13408,6 @@
             "active_requests",
             "past_requests"
           ]
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -15206,12 +13435,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -15334,12 +13557,6 @@
           "type": "integer",
           "summary": "Zoom query parameter retry_num.",
           "maps_to": "query.retry_num"
-        },
-        {
-          "name": "appId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.appId"
         }
       ],
       "api_surface": [
@@ -15425,12 +13642,6 @@
             "by_view",
             "by_download"
           ]
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -15472,12 +13683,6 @@
           "summary": "Zoom query parameter to.",
           "maps_to": "query.to",
           "allow_empty": false
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -15523,12 +13728,6 @@
           "maps_to": "path.meetingId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -15556,12 +13755,6 @@
           "maps_to": "path.meetingUUID",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "meetingUUID",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingUUID"
         }
       ],
       "api_surface": [
@@ -15622,12 +13815,6 @@
           "maps_to": "path.deviceId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "deviceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.deviceId"
         }
       ],
       "api_surface": [
@@ -15865,12 +14052,6 @@
           "maps_to": "path.meetingId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -15932,12 +14113,6 @@
           "summary": "Zoom path parameter webinarId.",
           "maps_to": "path.webinarId",
           "required": true
-        },
-        {
-          "name": "webinarId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.webinarId"
         }
       ],
       "api_surface": [
@@ -15964,12 +14139,6 @@
           "summary": "Zoom path parameter webinarId.",
           "maps_to": "path.webinarId",
           "required": true
-        },
-        {
-          "name": "webinarId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.webinarId"
         }
       ],
       "api_surface": [
@@ -16041,12 +14210,6 @@
           "maps_to": "path.zdmGroupId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "zdmGroupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.zdmGroupId"
         }
       ],
       "api_surface": [
@@ -16246,12 +14409,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -16279,12 +14436,6 @@
           "maps_to": "path.meetingId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16312,12 +14463,6 @@
           "maps_to": "path.meetingId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16345,12 +14490,6 @@
           "maps_to": "path.webinarId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "webinarId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.webinarId"
         }
       ],
       "api_surface": [
@@ -16378,12 +14517,6 @@
           "maps_to": "path.webinarId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "webinarId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.webinarId"
         }
       ],
       "api_surface": [
@@ -16437,12 +14570,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -16482,12 +14609,6 @@
           "type": "boolean",
           "summary": "Zoom query parameter show_previous_occurrences.",
           "maps_to": "query.show_previous_occurrences"
-        },
-        {
-          "name": "meetingId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16514,12 +14635,6 @@
           "summary": "Zoom path parameter meetingId.",
           "maps_to": "path.meetingId",
           "required": true
-        },
-        {
-          "name": "meetingId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16552,12 +14667,6 @@
           "type": "boolean",
           "summary": "Zoom query parameter bypass_waiting_room.",
           "maps_to": "query.bypass_waiting_room"
-        },
-        {
-          "name": "meetingId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16592,18 +14701,6 @@
           "maps_to": "path.pollId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "meetingId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.meetingId"
-        },
-        {
-          "name": "pollId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.pollId"
         }
       ],
       "api_surface": [
@@ -16636,12 +14733,6 @@
           "type": "boolean",
           "summary": "Zoom query parameter anonymous.",
           "maps_to": "query.anonymous"
-        },
-        {
-          "name": "meetingId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16679,12 +14770,6 @@
             "approved",
             "denied"
           ]
-        },
-        {
-          "name": "meetingId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16719,18 +14804,6 @@
           "maps_to": "path.registrantId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "meetingId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.meetingId"
-        },
-        {
-          "name": "registrantId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.registrantId"
         }
       ],
       "api_surface": [
@@ -16775,12 +14848,6 @@
             "approved",
             "denied"
           ]
-        },
-        {
-          "name": "meetingId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16807,12 +14874,6 @@
           "summary": "Zoom path parameter meetingId.",
           "maps_to": "path.meetingId",
           "required": true
-        },
-        {
-          "name": "meetingId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16839,12 +14900,6 @@
           "summary": "Zoom path parameter meetingId.",
           "maps_to": "path.meetingId",
           "required": true
-        },
-        {
-          "name": "meetingId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16880,12 +14935,6 @@
           "values": [
             "closed_caption_token"
           ]
-        },
-        {
-          "name": "meetingId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16913,12 +14962,6 @@
           "maps_to": "path.meetingId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16959,12 +15002,6 @@
           "summary": "Zoom query parameter to.",
           "maps_to": "query.to",
           "allow_empty": false
-        },
-        {
-          "name": "meetingId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -16991,12 +15028,6 @@
           "summary": "Zoom path parameter webinarId.",
           "maps_to": "path.webinarId",
           "required": true
-        },
-        {
-          "name": "webinarId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.webinarId"
         }
       ],
       "api_surface": [
@@ -17037,12 +15068,6 @@
           "type": "integer",
           "summary": "Zoom query parameter ttl.",
           "maps_to": "query.ttl"
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -17070,12 +15095,6 @@
           "maps_to": "path.meetingId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -17103,12 +15122,6 @@
           "maps_to": "path.meetingId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -17282,12 +15295,6 @@
           "maps_to": "path.meetingId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "meetingId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingId"
         }
       ],
       "api_surface": [
@@ -17366,12 +15373,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -17410,22 +15411,6 @@
             "2"
           ],
           "required": true
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
-        },
-        {
-          "name": "tspId",
-          "type": "enum",
-          "values": [
-            "1",
-            "2"
-          ],
-          "required": true,
-          "maps_to": "path.tspId"
         }
       ],
       "api_surface": [
@@ -17453,12 +15438,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -17499,12 +15478,6 @@
           "type": "boolean",
           "summary": "Zoom query parameter show_previous_occurrences.",
           "maps_to": "query.show_previous_occurrences"
-        },
-        {
-          "name": "webinarId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.webinarId"
         }
       ],
       "api_surface": [
@@ -17539,12 +15512,6 @@
           "summary": "Zoom query parameter occurrence_id.",
           "maps_to": "query.occurrence_id",
           "allow_empty": false
-        },
-        {
-          "name": "webinarId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.webinarId"
         }
       ],
       "api_surface": [
@@ -17579,18 +15546,6 @@
           "maps_to": "path.pollId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "webinarId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.webinarId"
-        },
-        {
-          "name": "pollId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.pollId"
         }
       ],
       "api_surface": [
@@ -17623,12 +15578,6 @@
           "type": "boolean",
           "summary": "Zoom query parameter anonymous.",
           "maps_to": "query.anonymous"
-        },
-        {
-          "name": "webinarId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.webinarId"
         }
       ],
       "api_surface": [
@@ -17680,12 +15629,6 @@
           "summary": "Zoom query parameter tracking_source_id.",
           "maps_to": "query.tracking_source_id",
           "allow_empty": false
-        },
-        {
-          "name": "webinarId",
-          "type": "integer",
-          "required": true,
-          "maps_to": "path.webinarId"
         }
       ],
       "api_surface": [
@@ -17713,12 +15656,6 @@
           "maps_to": "path.assetId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "assetId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.assetId"
         }
       ],
       "api_surface": [
@@ -17746,12 +15683,6 @@
           "maps_to": "path.workspaceId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "workspaceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.workspaceId"
         }
       ],
       "api_surface": [
@@ -17812,12 +15743,6 @@
           "type": "boolean",
           "summary": "Zoom query parameter enable_export_calendar_data.",
           "maps_to": "query.enable_export_calendar_data"
-        },
-        {
-          "name": "floorId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.floorId"
         }
       ],
       "api_surface": [
@@ -17923,12 +15848,6 @@
           "maps_to": "path.folderId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "folderId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.folderId"
         }
       ],
       "api_surface": [
@@ -17956,12 +15875,6 @@
           "maps_to": "path.contentId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "contentId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.contentId"
         }
       ],
       "api_surface": [
@@ -17989,12 +15902,6 @@
           "maps_to": "path.playlistId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "playlistId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.playlistId"
         }
       ],
       "api_surface": [
@@ -18022,12 +15929,6 @@
           "maps_to": "path.playlistId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "playlistId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.playlistId"
         }
       ],
       "api_surface": [
@@ -18063,18 +15964,6 @@
           "maps_to": "path.reservationId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "workspaceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.workspaceId"
-        },
-        {
-          "name": "reservationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.reservationId"
         }
       ],
       "api_surface": [
@@ -18129,12 +16018,6 @@
           "maps_to": "path.invitationId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "invitationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.invitationId"
         }
       ],
       "api_surface": [
@@ -18180,12 +16063,6 @@
           "maps_to": "path.locationId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "locationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.locationId"
         }
       ],
       "api_surface": [
@@ -18221,18 +16098,6 @@
           "maps_to": "path.neighborhoodId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "locationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.locationId"
-        },
-        {
-          "name": "neighborhoodId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.neighborhoodId"
         }
       ],
       "api_surface": [
@@ -18323,12 +16188,6 @@
           "maps_to": "path.workspaceId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "workspaceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.workspaceId"
         }
       ],
       "api_surface": [
@@ -18355,11 +16214,6 @@
           "summary": "Zoom path parameter userId.",
           "maps_to": "path.userId",
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -18403,12 +16257,6 @@
           "type": "integer",
           "summary": "Zoom query parameter ttl.",
           "maps_to": "query.ttl"
-        },
-        {
-          "name": "workspaceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.workspaceId"
         }
       ],
       "api_surface": [
@@ -18436,12 +16284,6 @@
           "maps_to": "path.contentId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "contentId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.contentId"
         }
       ],
       "api_surface": [
@@ -18469,12 +16311,6 @@
           "maps_to": "path.folderId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "folderId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.folderId"
         }
       ],
       "api_surface": [
@@ -18520,12 +16356,6 @@
           "maps_to": "path.locationId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "locationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.locationId"
         }
       ],
       "api_surface": [
@@ -18611,12 +16441,6 @@
             "AIR_PRESSURE",
             "AQI"
           ]
-        },
-        {
-          "name": "roomId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.roomId"
         }
       ],
       "api_surface": [
@@ -18712,12 +16536,6 @@
           "maps_to": "path.playlistId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "playlistId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.playlistId"
         }
       ],
       "api_surface": [
@@ -18784,12 +16602,6 @@
           "summary": "Zoom query parameter user_id.",
           "maps_to": "query.user_id",
           "allow_empty": false
-        },
-        {
-          "name": "workspaceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.workspaceId"
         }
       ],
       "api_surface": [
@@ -18836,18 +16648,6 @@
             "pre_checkin"
           ],
           "required": true
-        },
-        {
-          "name": "workspaceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.workspaceId"
-        },
-        {
-          "name": "reservationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.reservationId"
         }
       ],
       "api_surface": [
@@ -19020,12 +16820,6 @@
           "maps_to": "query.to",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -19053,12 +16847,6 @@
           "maps_to": "path.availabilityId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "availabilityId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.availabilityId"
         }
       ],
       "api_surface": [
@@ -19093,12 +16881,6 @@
           "summary": "Zoom query parameter user_id.",
           "maps_to": "query.user_id",
           "allow_empty": false
-        },
-        {
-          "name": "scheduleId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.scheduleId"
         }
       ],
       "api_surface": [
@@ -19134,18 +16916,6 @@
           "maps_to": "path.attendeeId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
-        },
-        {
-          "name": "attendeeId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.attendeeId"
         }
       ],
       "api_surface": [
@@ -19187,12 +16957,6 @@
           "summary": "Zoom query parameter team_id.",
           "maps_to": "query.team_id",
           "allow_empty": false
-        },
-        {
-          "name": "eventId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.eventId"
         }
       ],
       "api_surface": [
@@ -19220,12 +16984,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -19261,18 +17019,6 @@
           "maps_to": "path.responseId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "formId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.formId"
-        },
-        {
-          "name": "responseId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.responseId"
         }
       ],
       "api_surface": [
@@ -19374,12 +17120,6 @@
           "summary": "Zoom query parameter time_zone.",
           "maps_to": "query.time_zone",
           "allow_empty": false
-        },
-        {
-          "name": "scheduleId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.scheduleId"
         }
       ],
       "api_surface": [
@@ -19698,12 +17438,6 @@
           "maps_to": "path.groupId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "groupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.groupId"
         }
       ],
       "api_surface": [
@@ -19731,12 +17465,6 @@
           "maps_to": "path.groupId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "groupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.groupId"
         }
       ],
       "api_surface": [
@@ -19790,18 +17518,6 @@
           "maps_to": "path.collaborationDeviceId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
-        },
-        {
-          "name": "collaborationDeviceId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.collaborationDeviceId"
         }
       ],
       "api_surface": [
@@ -19829,12 +17545,6 @@
           "maps_to": "path.divisionId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "divisionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.divisionId"
         }
       ],
       "api_surface": [
@@ -19869,12 +17579,6 @@
           "summary": "Zoom query parameter option.",
           "maps_to": "query.option",
           "allow_empty": false
-        },
-        {
-          "name": "groupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.groupId"
         }
       ],
       "api_surface": [
@@ -19920,12 +17624,6 @@
           "summary": "Zoom query parameter custom_query_fields.",
           "maps_to": "query.custom_query_fields",
           "allow_empty": false
-        },
-        {
-          "name": "groupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.groupId"
         }
       ],
       "api_surface": [
@@ -19953,12 +17651,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -19994,18 +17686,6 @@
           "maps_to": "path.meetingTemplateId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
-        },
-        {
-          "name": "meetingTemplateId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.meetingTemplateId"
         }
       ],
       "api_surface": [
@@ -20033,12 +17713,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -20066,12 +17740,6 @@
           "maps_to": "path.groupId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "groupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.groupId"
         }
       ],
       "api_surface": [
@@ -20099,12 +17767,6 @@
           "maps_to": "path.groupId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "groupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.groupId"
         }
       ],
       "api_surface": [
@@ -20132,12 +17794,6 @@
           "maps_to": "path.groupId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "groupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.groupId"
         }
       ],
       "api_surface": [
@@ -20192,12 +17848,6 @@
           "values": [
             "webinar"
           ]
-        },
-        {
-          "name": "groupId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.groupId"
         }
       ],
       "api_surface": [
@@ -20225,12 +17875,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -20258,12 +17902,6 @@
           "maps_to": "path.divisionId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "divisionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.divisionId"
         }
       ],
       "api_surface": [
@@ -20327,12 +17965,6 @@
           "type": "boolean",
           "summary": "Zoom query parameter search_by_unique_id.",
           "maps_to": "query.search_by_unique_id"
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -20387,12 +18019,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -20420,12 +18046,6 @@
           "maps_to": "path.userId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -20477,12 +18097,6 @@
           "summary": "Zoom query parameter custom_query_fields.",
           "maps_to": "query.custom_query_fields",
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -20552,12 +18166,6 @@
           "summary": "Zoom query parameter meeting_id.",
           "maps_to": "query.meeting_id",
           "allow_empty": false
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -20630,12 +18238,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -20663,12 +18265,6 @@
           "maps_to": "path.videoId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "videoId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.videoId"
         }
       ],
       "api_surface": [
@@ -20736,12 +18332,6 @@
           "summary": "Zoom query parameter user_id.",
           "maps_to": "query.user_id",
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -20769,12 +18359,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -20802,12 +18386,6 @@
           "maps_to": "path.channelId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "channelId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.channelId"
         }
       ],
       "api_surface": [
@@ -20869,12 +18447,6 @@
           "maps_to": "path.playlistId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "playlistId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.playlistId"
         }
       ],
       "api_surface": [
@@ -20928,12 +18500,6 @@
           "maps_to": "path.storageLocationId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "storageLocationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.storageLocationId"
         }
       ],
       "api_surface": [
@@ -21044,12 +18610,6 @@
           "type": "integer",
           "summary": "Zoom query parameter ttl.",
           "maps_to": "query.ttl"
-        },
-        {
-          "name": "sessionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.sessionId"
         }
       ],
       "api_surface": [
@@ -21141,18 +18701,6 @@
             "past",
             "live"
           ]
-        },
-        {
-          "name": "sessionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.sessionId"
-        },
-        {
-          "name": "userId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.userId"
         }
       ],
       "api_surface": [
@@ -21400,18 +18948,6 @@
           "maps_to": "path.fileId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "whiteboardId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.whiteboardId"
-        },
-        {
-          "name": "fileId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.fileId"
         }
       ],
       "api_surface": [
@@ -21439,12 +18975,6 @@
           "maps_to": "path.taskId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "taskId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.taskId"
         }
       ],
       "api_surface": [
@@ -21499,12 +19029,6 @@
           "maps_to": "path.projectId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "projectId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.projectId"
         }
       ],
       "api_surface": [
@@ -21532,12 +19056,6 @@
           "maps_to": "path.whiteboardId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "whiteboardId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.whiteboardId"
         }
       ],
       "api_surface": [
@@ -21565,12 +19083,6 @@
           "maps_to": "path.whiteboardId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "whiteboardId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.whiteboardId"
         }
       ],
       "api_surface": [
@@ -21598,12 +19110,6 @@
           "maps_to": "path.classificationId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "classificationId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.classificationId"
         }
       ],
       "api_surface": [
@@ -21631,12 +19137,6 @@
           "maps_to": "path.projectId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "projectId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.projectId"
         }
       ],
       "api_surface": [
@@ -21664,12 +19164,6 @@
           "maps_to": "path.whiteboardId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "whiteboardId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.whiteboardId"
         }
       ],
       "api_surface": [
@@ -21697,12 +19191,6 @@
           "maps_to": "path.taskId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "taskId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.taskId"
         }
       ],
       "api_surface": [
@@ -21730,12 +19218,6 @@
           "maps_to": "path.taskId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "taskId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.taskId"
         }
       ],
       "api_surface": [
@@ -21838,12 +19320,6 @@
           "summary": "Zoom query parameter search_key.",
           "maps_to": "query.search_key",
           "allow_empty": false
-        },
-        {
-          "name": "projectId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.projectId"
         }
       ],
       "api_surface": [
@@ -21935,12 +19411,6 @@
           "maps_to": "path.seesionId",
           "required": true,
           "allow_empty": false
-        },
-        {
-          "name": "seesionId",
-          "type": "string",
-          "required": true,
-          "maps_to": "path.seesionId"
         }
       ],
       "api_surface": [

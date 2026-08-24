@@ -200,21 +200,51 @@ func TestSourceBackedOperationInventoryKeepsEveryContractVisible(t *testing.T) {
 // preserves every normalized operation fact used by the declaration inventory.
 func TestPinnedSourceCrosswalkAccountsForEveryIdentity(t *testing.T) {
 	var lock struct {
-		Connector string `json:"connector"`
-		Rest      struct {
-			SHA256          string `json:"sha256"`
-			Bytes           int64  `json:"bytes"`
+		SchemaVersion int    `json:"schema_version"`
+		Connector     string `json:"connector"`
+		Rest          struct {
+			Retrieval string   `json:"retrieval"`
+			OpenAPI   []string `json:"openapi"`
+			Coverage  *struct {
+				Level string `json:"level"`
+				Basis string `json:"basis"`
+			} `json:"coverage_confidence"`
 			SourceDocuments []struct {
-				SHA256 string `json:"sha256"`
-				Bytes  int64  `json:"bytes"`
+				ID                string `json:"id"`
+				Kind              string `json:"kind"`
+				ContentType       string `json:"content_type"`
+				UnavailableReason string `json:"unavailable_reason"`
+				Artifact          struct {
+					SourceURL     string `json:"source_url"`
+					SHA256        string `json:"sha256"`
+					Bytes         int64  `json:"bytes"`
+					OpenAPI       string `json:"openapi"`
+					IdentityQuery bool   `json:"identity_query"`
+				} `json:"artifact"`
+				PublishedSource struct {
+					SourceURL  string `json:"source_url"`
+					CaptureURL string `json:"capture_url"`
+					SHA256     string `json:"sha256"`
+					Bytes      int64  `json:"bytes"`
+					Adapter    string `json:"adapter"`
+				} `json:"published_source"`
+				Operations []struct {
+					ID             string `json:"id"`
+					Method         string `json:"method"`
+					Path           string `json:"path"`
+					SourceLocation string `json:"source_location"`
+					CitationURL    string `json:"citation_url"`
+				} `json:"operations"`
 			} `json:"source_documents"`
-			Operations []struct {
-				ID             string `json:"id"`
-				Method         string `json:"method"`
-				Path           string `json:"path"`
-				SourceLocation string `json:"source_location"`
-			} `json:"operations"`
+			Counts struct {
+				REST  int `json:"rest"`
+				Total int `json:"total"`
+			} `json:"-"`
 		} `json:"rest"`
+		Counts struct {
+			REST  int `json:"rest"`
+			Total int `json:"total"`
+		} `json:"counts"`
 	}
 	lockRaw, err := os.ReadFile(filepath.Join("sources", "zoom-operation-source-lock.json"))
 	if err != nil {
@@ -223,19 +253,55 @@ func TestPinnedSourceCrosswalkAccountsForEveryIdentity(t *testing.T) {
 	if err := json.Unmarshal(lockRaw, &lock); err != nil {
 		t.Fatalf("decode source lock: %v", err)
 	}
-	if lock.Connector != zoomBundleName || len(lock.Rest.SHA256) != 64 || lock.Rest.Bytes != 12127228 {
-		t.Fatalf("source lock identity = connector:%q digest:%q bytes:%d", lock.Connector, lock.Rest.SHA256, lock.Rest.Bytes)
+	if lock.SchemaVersion != 3 || lock.Connector != zoomBundleName || strings.TrimSpace(lock.Rest.Retrieval) == "" {
+		t.Fatalf("source lock v3 identity = version:%d connector:%q retrieval:%q", lock.SchemaVersion, lock.Connector, lock.Rest.Retrieval)
+	}
+	if lock.Rest.Coverage == nil || strings.TrimSpace(lock.Rest.Coverage.Level) == "" || strings.TrimSpace(lock.Rest.Coverage.Basis) == "" {
+		t.Fatal("rendered-reference lock must state non-empty coverage confidence")
+	}
+	if !reflect.DeepEqual(lock.Rest.OpenAPI, []string{"3.0.0"}) {
+		t.Errorf("source lock aggregate OpenAPI versions = %#v, want [3.0.0]", lock.Rest.OpenAPI)
 	}
 	if got := len(lock.Rest.SourceDocuments); got != 35 {
 		t.Errorf("source lock documents = %d, want 35", got)
 	}
-	if got := len(lock.Rest.Operations); got != 1937 {
-		t.Errorf("source lock operations = %d, want 1937", got)
-	}
-	for _, operation := range lock.Rest.Operations {
-		if operation.ID == "" || operation.Method == "" || operation.Path == "" || operation.SourceLocation == "" {
-			t.Errorf("source lock has incomplete operation identity: %+v", operation)
+	capturedDocuments := 0
+	capturedOperations := 0
+	accountsUnavailable := false
+	for _, document := range lock.Rest.SourceDocuments {
+		if document.ID == "accounts" {
+			accountsUnavailable = document.Kind == "unavailable" && len(document.Operations) == 0 &&
+				strings.Contains(document.UnavailableReason, "HTTP 404") &&
+				strings.Contains(document.UnavailableReason, "8,329") &&
+				strings.Contains(document.UnavailableReason, "805,789") &&
+				strings.Contains(document.UnavailableReason, "d8d650237496719594ca93a5aecacf368e71c4e30ac17eba46bd6f676a98319a") &&
+				strings.Contains(document.UnavailableReason, "historic blob search")
+			if !accountsUnavailable {
+				t.Errorf("accounts must be an explicit empty unavailable source, got %+v", document)
+			}
+			continue
 		}
+		capturedDocuments++
+		if document.ID == "" || document.Kind != "openapi" || document.ContentType != "" ||
+			document.Artifact.SourceURL != "https://developers.zoom.us/api-hub/"+document.ID+"/methods/endpoints.json" || len(document.Artifact.SHA256) != 64 || document.Artifact.Bytes <= 0 ||
+			document.Artifact.OpenAPI != "3.0.0" || document.Artifact.IdentityQuery ||
+			document.PublishedSource.SourceURL == "" || document.PublishedSource.CaptureURL == "" || document.PublishedSource.Adapter == "" ||
+			document.PublishedSource.SourceURL != document.Artifact.SourceURL || document.PublishedSource.CaptureURL != document.Artifact.SourceURL || document.PublishedSource.Adapter != "zoom-api-hub-openapi" ||
+			document.PublishedSource.SHA256 != document.Artifact.SHA256 || document.PublishedSource.Bytes != document.Artifact.Bytes {
+			t.Errorf("direct OpenAPI document %q lacks exact re-pin/provenance evidence: %+v", document.ID, document)
+		}
+		for _, operation := range document.Operations {
+			capturedOperations++
+			if operation.ID == "" || operation.Method == "" || operation.Path == "" || operation.SourceLocation == "" || operation.CitationURL != "" {
+				t.Errorf("source lock has incomplete rendered-reference operation identity: %+v", operation)
+			}
+		}
+	}
+	if !accountsUnavailable {
+		t.Fatal("accounts unavailability is not explicit")
+	}
+	if capturedDocuments != 34 || capturedOperations != 1871 || lock.Counts.REST != 1871 || lock.Counts.Total != 1871 {
+		t.Errorf("captured source inventory = docs:%d operations:%d counts:%+v, want 34/1871", capturedDocuments, capturedOperations, lock.Counts)
 	}
 
 	var crosswalk struct {
@@ -248,6 +314,7 @@ func TestPinnedSourceCrosswalkAccountsForEveryIdentity(t *testing.T) {
 		} `json:"accounting"`
 		SourceOperations []struct {
 			ID             string `json:"id"`
+			Module         string `json:"module"`
 			Method         string `json:"method"`
 			Path           string `json:"path"`
 			SourceLocation string `json:"source_location"`
@@ -269,6 +336,15 @@ func TestPinnedSourceCrosswalkAccountsForEveryIdentity(t *testing.T) {
 	}
 	if got, want := crosswalk.Accounting.SourceOperations, 1937; got != want {
 		t.Errorf("crosswalk source operations = %d, want %d", got, want)
+	}
+	accountsCrosswalk := 0
+	for _, operation := range crosswalk.SourceOperations {
+		if operation.Module == "accounts" {
+			accountsCrosswalk++
+		}
+	}
+	if accountsCrosswalk != 66 {
+		t.Errorf("historic accounts crosswalk identities = %d, want 66", accountsCrosswalk)
 	}
 	if got, want := crosswalk.Accounting.APISurfaceEndpoints, 1913; got != want {
 		t.Errorf("crosswalk api surface endpoints = %d, want %d", got, want)
@@ -331,8 +407,16 @@ func TestPinnedSourceCrosswalkAccountsForEveryIdentity(t *testing.T) {
 // foundation is still open, but an open gap cannot promote a merge-ready cell.
 func TestMissingFoundationGapRowsAreSourceLockedAndRollUp(t *testing.T) {
 	type sourceDocument struct {
-		SourceURL string `json:"source_url"`
-		SHA256    string `json:"sha256"`
+		ID                string `json:"id"`
+		Kind              string `json:"kind"`
+		UnavailableReason string `json:"unavailable_reason"`
+		Artifact          struct {
+			SourceURL string `json:"source_url"`
+			SHA256    string `json:"sha256"`
+		} `json:"artifact"`
+		Operations []struct {
+			ID string `json:"id"`
+		} `json:"operations"`
 	}
 	type sourceOperation struct {
 		ID        string `json:"id"`
@@ -377,8 +461,7 @@ func TestMissingFoundationGapRowsAreSourceLockedAndRollUp(t *testing.T) {
 	}
 	var lock struct {
 		Rest struct {
-			SourceDocuments []sourceDocument  `json:"source_documents"`
-			Operations      []sourceOperation `json:"operations"`
+			SourceDocuments []sourceDocument `json:"source_documents"`
 		} `json:"rest"`
 	}
 	var report struct {
@@ -416,12 +499,22 @@ func TestMissingFoundationGapRowsAreSourceLockedAndRollUp(t *testing.T) {
 		t.Fatalf("gap report connector = %q, want %q", report.Connector, zoomBundleName)
 	}
 	docHash := map[string]string{}
-	for _, document := range lock.Rest.SourceDocuments {
-		docHash[document.SourceURL] = document.SHA256
-	}
+	accountsUnavailable := false
 	operationByID := map[string]sourceOperation{}
-	for _, operation := range lock.Rest.Operations {
-		operationByID[operation.ID] = operation
+	for _, document := range lock.Rest.SourceDocuments {
+		if document.ID == "accounts" {
+			accountsUnavailable = document.Kind == "unavailable" && len(document.Operations) == 0 &&
+				strings.Contains(document.UnavailableReason, "HTTP 404") &&
+				strings.Contains(document.UnavailableReason, "d8d650237496719594ca93a5aecacf368e71c4e30ac17eba46bd6f676a98319a")
+			continue
+		}
+		docHash[document.Artifact.SourceURL] = document.Artifact.SHA256
+		for _, operation := range document.Operations {
+			operationByID[operation.ID] = sourceOperation{ID: operation.ID, Module: document.ID, SourceURL: document.Artifact.SourceURL}
+		}
+	}
+	if !accountsUnavailable {
+		t.Fatal("accounts source must remain an explicit unavailable capture")
 	}
 	catalogByID := map[string]catalogGap{}
 	for _, gap := range report.GapCatalog {
@@ -457,12 +550,18 @@ func TestMissingFoundationGapRowsAreSourceLockedAndRollUp(t *testing.T) {
 		if _, ok := catalogByID[row.GapID]; !ok {
 			t.Errorf("gap row %s references unknown catalog gap", key)
 		}
-		source, ok := operationByID[row.Operation.ID]
-		if !ok || source.Module != row.Operation.Module || source.SourceURL != row.Source.URL {
-			t.Errorf("gap row %s is not source-locked: %+v", key, row)
-		}
-		if got := docHash[row.Source.URL]; got == "" || got != row.Source.SHA256 || len(row.Source.Revision) == 0 {
-			t.Errorf("gap row %s lacks pinned document revision/hash: %+v", key, row.Source)
+		if row.Operation.Module == "accounts" {
+			if row.Source.URL != "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/accounts.json?slug=accounts" || row.Source.SHA256 != "d8d650237496719594ca93a5aecacf368e71c4e30ac17eba46bd6f676a98319a" {
+				t.Errorf("accounts unavailable gap row %s lacks the preserved historic identity: %+v", key, row.Source)
+			}
+		} else {
+			source, ok := operationByID[row.Operation.ID]
+			if !ok || source.Module != row.Operation.Module || source.SourceURL != row.Source.URL {
+				t.Errorf("gap row %s is not source-locked: %+v", key, row)
+			}
+			if got := docHash[row.Source.URL]; got == "" || got != row.Source.SHA256 || len(row.Source.Revision) == 0 {
+				t.Errorf("gap row %s lacks pinned document revision/hash: %+v", key, row.Source)
+			}
 		}
 		if len(row.Surfaces) == 0 || row.Evidence == "" {
 			t.Errorf("gap row %s lacks surfaces or runtime evidence", key)
@@ -1435,11 +1534,12 @@ func TestSevenSurfaceReadinessAccountsForEveryProviderIdentity(t *testing.T) {
 	}
 }
 
-// TestAcceptedLiveReadProofDoesNotOverstateCertification locks the distinction
-// between an accepted live observation and a certified cell. The matrix has no
-// operation-specific fixture projection yet, so fixture_tested must remain
-// false even though the bounded REST read has accepted live evidence.
-func TestAcceptedLiveReadProofDoesNotOverstateCertification(t *testing.T) {
+// TestHistoricalLiveReadProofDoesNotOverstateCertification keeps an accepted
+// historical observation from becoming current live certification. The matrix
+// has no operation-specific fixture projection, and the retained 2026-08-19
+// proof has no current certification-subject fingerprint, so fixture_tested
+// and live_tested must both remain false until a fresh matching proof exists.
+func TestHistoricalLiveReadProofDoesNotOverstateCertification(t *testing.T) {
 	raw, err := os.ReadFile("certification-matrix.json")
 	if err != nil {
 		t.Fatalf("read generated certification matrix: %v", err)
@@ -1461,8 +1561,8 @@ func TestAcceptedLiveReadProofDoesNotOverstateCertification(t *testing.T) {
 		if cell.FunctionKind != "operation:rest_read" {
 			continue
 		}
-		if !cell.LiveTested || len(cell.LiveEvidence) == 0 {
-			t.Fatal("operation:rest_read must retain its accepted bounded live proof")
+		if cell.LiveTested || len(cell.LiveEvidence) != 0 {
+			t.Fatal("operation:rest_read must not project historical evidence as a current live proof")
 		}
 		if cell.FixtureTested {
 			t.Fatal("operation:rest_read must remain uncertified until an operation-specific fixture projection exists")

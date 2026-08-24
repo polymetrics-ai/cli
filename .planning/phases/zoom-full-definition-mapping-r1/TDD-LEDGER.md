@@ -41,6 +41,47 @@ reverted and the original v2 lock restored byte-for-byte at SHA-256
 `2e102acffd89467374405829abd994714f994f237c4a38c4ad0d9a553c42c3f7` pending the separate attested
 mirror foundation.
 
+## Retained-artifact follow-up (2026-08-24)
+
+Red: the preserved v2 source lock cannot describe the landed retained-artifact
+contract. In particular, it cannot represent the independently established
+`accounts` source failure without pretending that the 8,329-byte HTTP 404 body
+is the historic 805,789-byte provider capture. A connector-local source-lock
+test must therefore require v3 document ownership, one `accounts` unavailable
+document with no operations, and 34 other rendered-reference documents whose
+raw captures remain eligible only for exact-byte retention.
+
+Green: the pre-retention v2 lock is copied byte-for-byte to
+`evidence/zoom-operation-source-lock.pre-retain.json` before conversion.
+The v3 lock records one empty `accounts` unavailable document and 34 eligible
+documents. The source-lock test proves the 1,871 retained current identities
+and keeps the 66 historic Accounts identities visible in the 1,937-operation
+crosswalk.
+
+Red: after `accounts` was excluded, exact-byte retention reached the historic
+`crc` Next-data URL and refused HTTP 404 without writing an artifact. The
+current CRC documentation page links to a direct first-party OpenAPI download;
+the no-persist probe observed HTTP 200, no redirect, `application/json`,
+124,863 bytes, SHA-256
+`00c1b70d48f9bf00ffd588ea1090d19a44de76f06a1617bccc563c1c75235aa9`,
+OpenAPI 3.0.0, and the identical 20 method/path/operation-ID inventory. The
+v3 test is changed to require that exact OpenAPI re-pin before the lock changes.
+
+Green: each of the 34 current `https://developers.zoom.us/api-hub/<module>/methods/endpoints.json`
+documents returned HTTP 200 without redirect as `application/json`, had OpenAPI
+3.0.0, and matched the preserved complete method/path/operation-ID inventory.
+The new v3 lock and `zoom-source-repin-report.json` carry every old/new digest
+and byte count. `source-retain` then wrote 34 digest-addressed artifacts
+(11,719,368 bytes) plus `zoom-retained-artifacts.json`. The report records all
+34 as retained and the Accounts document as unavailable.
+
+Terminal boundary: `go run ./cmd/connectorgen source-import zoom --check` and
+`go run ./cmd/connectorgen validate internal/connectors/defs/zoom --json` now
+refuse specifically at the declared Accounts unavailability. `surface-sync
+--check` refuses the resulting missing canonical descriptor. These are expected
+source-gap results; no provider fallback, error body, or descriptor synthesis
+is permitted.
+
 ## Declaration contract tests
 
 Red: `TestSourceBackedOperationInventoryKeepsEveryContractVisible` first observed zero source-backed
@@ -80,9 +121,10 @@ accepted REST-read live record alone has `fixture_tested=false` for `operation:r
 Green: `TestCertificationCandidatesDescribeOneBoundedReadAndDeferWrites` proves one authenticated
 self-read candidate plus all 204 explicitly unassessed mutation candidates. An isolated external
 proof run obtained a short-lived OAuth token in memory, returned HTTP 200 for both guarded GET
-exchanges, and imported a fingerprint-only `observed_operations` record. `TestAcceptedLiveReadProofDoesNotOverstateCertification`
-proves that live evidence stays uncertified until the shared matrix can project an exact
-operation-specific fixture. The recovery is logged as
+exchanges, and retained a fingerprint-only `observed_operations` record. The current certification
+subject correctly classifies that record as historical. `TestHistoricalLiveReadProofDoesNotOverstateCertification`
+proves that it cannot become current live evidence or certification until a fresh matching proof
+and an exact operation-specific fixture exist. The recovery is logged as
 `operation-specific-fixture-evidence-projection`; no auth, engine, generator, or status code was
 changed by this lane.
 
@@ -227,13 +269,12 @@ DELETE action retained a present optional field and omitted both absent record-d
 query fields through a safety-approved loopback request. See
 [`FOUNDATION-REHEARSAL.md`](FOUNDATION-REHEARSAL.md) for the command and constraints.
 
-Current-branch Red remains: the preserved Zoom branch does not contain that Foundation revision,
-so its connector-local lifecycle test remains an expected pre-I/O RED rather than a promoted
-fixture pass. After Foundation lands on `main`, rerun all three lifecycle fixture request-shape
-checks and then the built-binary lane-owned create/read-back/update/delete-cleanup proof after the
-final #4304 persisted App/CLI dispatch head. The seven-surface and reverse-ETL eligibility ledgers
-continue to account for 714 commands and all 206 typed actions; no certification is promoted by
-the rehearsal.
+Current-branch Green: after the optional-query Foundation reached `main`,
+`TestLaneOwnedMeetingLifecycleActionsAreClosedAndReachable` passed in 1.386s on 2026-08-24. This
+is fixture request-shape proof only; the required built-binary lane-owned
+create/read-back/update/delete-cleanup proof remains pending and no certification is promoted by
+the rehearsal. The seven-surface and reverse-ETL eligibility ledgers continue to account for 714
+commands and all 206 typed actions.
 
 ## Captain-required missing-foundation ledger
 
@@ -248,3 +289,45 @@ provider identity/digest against the pin, every catalog reference, a non-empty c
 closure check, exact fan-out, and `merge_ready_enabled=false` for each open row. It also verifies
 that no row calls an open shared gap disabled or non-applicable and that runtime CLI reachability is
 reported separately rather than overwritten.
+
+## Canonical command-flag reconciliation (2026-08-24)
+
+Red: the complete Zoom package gate reached the installed-CLI preflight sweep and found 391
+direct-read/reverse-ETL duplicate path mappings and 26 duplicate query mappings. Each duplicate
+retained a legacy camel-case flag beside the canonical source-derived kebab-case flag for the same
+`maps_to` target. The direct-read executor correctly refused the duplicate path target before the
+credential boundary, so these are reachability failures rather than a reason to label working
+provider commands partial.
+
+Green: keep the first, source-derived flag in every duplicate `maps_to` group (the one with the
+authoritative summary and validation metadata) and remove only the following legacy alias. The
+full Zoom package test must then reach `missing --credential` for every implemented command; no
+operation, command, action, availability state, or transport declaration is removed. `go test
+-count=1 -timeout 20m ./internal/connectors/defs/zoom` passed in 654.179s on 2026-08-24.
+The Zoom-scoped `certification-candidates --check` then correctly reported its command-derived
+artifact stale; regenerate it from the repaired surface and require the follow-up check to pass.
+Its dependent certification sweep likewise reports the expected derived drift and must be
+regenerated and checked in the same connector-scoped sequence.
+
+## Historical live-proof classification (2026-08-24)
+
+Red: `TestAcceptedLiveReadProofDoesNotOverstateCertification` required a 2026-08-19 bounded
+read record to project as current live evidence. That record has no current certification-subject
+fingerprint, so the shared classifier correctly retains it as historical and the generated cell is
+`live_tested=false` with no live-evidence pointer. Treating the old record as current would silently
+claim live certification across changed declarations and source projection.
+
+Green: the connector test asserts the current generated `operation:rest_read` cell remains
+implemented and fixture-uncertified, with no current live proof until the required fresh built-binary
+credentialed run produces a matching certification subject. Historical evidence remains retained on
+disk and is described as historical only.
+
+## Connector documentation catalog (2026-08-24)
+
+Red: `make docs-check` rejects the connector catalog after the Zoom documentation was corrected
+for the retained-source and certification boundaries. The generated catalog must not leave a stale
+command/count or proof claim in user-visible documentation.
+
+Green: run the documented local `pm docs generate` command, then require `make docs-check` to
+validate the regenerated catalog without changing a command declaration or certification state.
+`make docs-check` passed on 2026-08-24.

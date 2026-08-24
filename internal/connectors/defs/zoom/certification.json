@@ -50,13 +50,6 @@
           "default": "me"
         },
         {
-          "literal": "--userId"
-        },
-        {
-          "config_key": "userId",
-          "default": "me"
-        },
-        {
           "literal": "--json"
         }
       ],

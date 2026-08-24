@@ -560,4 +560,4 @@
 | `zoho-inventory` | [`icons/simple-icons/zoho-inventory.svg`](../icons/simple-icons/zoho-inventory.svg) | Zoho Inventory | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://www.zoho.com/inventory/api/v1/) | bundle definition |
 | `zoho-invoice` | [`icons/simple-icons/zoho-invoice.svg`](../icons/simple-icons/zoho-invoice.svg) | Zoho Invoice | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://www.zoho.com/invoice/api/v3/) | bundle definition |
 | `zonka-feedback` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Zonka Feedback | `api` | ga | check, catalog, read, write | 19 | 10 | [Documentation](https://developers.zonkafeedback.com/docs/api-and-webhooks) | bundle definition |
-| `zoom` | [`icons/zoom.svg`](../icons/zoom.svg) | Zoom | `api` | ga | check, catalog, read, write | 3 | 204 | [Documentation](https://developers.zoom.us/docs/api/) | bundle definition |
+| `zoom` | [`icons/zoom.svg`](../icons/zoom.svg) | Zoom | `api` | ga | check, catalog, read, write | 3 | 206 | [Documentation](https://developers.zoom.us/docs/api/) | bundle definition |

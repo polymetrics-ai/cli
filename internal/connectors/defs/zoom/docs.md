@@ -1,17 +1,16 @@
 # Overview
 
-Exposes source-backed Zoom API commands through the Zoom REST API. The current branch contains 712
-runnable commands: three preserved ETL streams, 505 direct reads, and 204 approval-gated typed
-write commands, including 185 guarded deletes. The 707 newly mapped endpoint rows are implemented
-pending certification; none is a certified claim. One bounded REST read has accepted live proof,
-but it remains uncertified until the matrix can project an operation-specific fixture.
+Exposes source-backed Zoom API commands through the Zoom REST API. The current branch contains 714
+runnable commands: three preserved ETL streams, 505 direct reads, and 206 approval-gated typed
+write commands, including 185 guarded deletes. The newly mapped endpoint rows are implemented
+pending certification; none is a certified claim. A bounded historical REST-read proof is retained,
+but it is not current live evidence until a fresh proof matches the current certification subject.
 
-The committed public source lock records 35 Zoom Developer Docs OpenAPI documents (12,127,228
-bytes and 1,937 REST operations), captured on 2026-08-19. The provider documents identify
-themselves as OpenAPI 3.0.0; `api_surface.json` deliberately retains its earlier OpenAPI 3.1.1
-ledger snapshot for inventory continuity. The committed crosswalk finds 1,911 exact ledger/source
-identities, 26 current-source-only operations, and two ledger-only Zoom Phone paths. Neither side
-is silently renamed or dropped.
+The committed v3 public source lock retains 34 current first-party Zoom OpenAPI documents
+(11,719,368 bytes and 1,871 current REST operations). The historic Accounts capture is explicitly
+unavailable: its dated URL returns HTTP 404 and no verified historic bytes exist. The crosswalk
+retains all 1,937 historical provider identities, including the 66 unavailable Accounts identities;
+neither side is silently renamed, dropped, or substituted with a synthetic artifact.
 
 `operations.json` retains the typed source-contract inventory (776 reads, 971 REST writes,
 including 311 DELETE contracts, and one bounded binary candidate). The command and action surface
@@ -72,7 +71,7 @@ Default pagination is cursor pagination: send `next_page_token` and take the nex
 
 ## Write actions & risks
 
-Read behavior is an external Zoom API read. All 204 typed write actions use plan → preview →
+Read behavior is an external Zoom API read. All 206 typed write actions use plan → preview →
 explicit approval → execute. The 185 DELETE actions also require destructive confirmation. The two
 fixture-backed warehouse destination actions remain useful examples:
 
@@ -82,9 +81,10 @@ fixture-backed warehouse destination actions remain useful examples:
   a third-party download URL.
 
 No newly mapped command is certified. A bounded authenticated `operation:rest_read` proof records
-two HTTP 200 exchanges with fingerprint-only evidence and `observed_operations` scope; it does not
-certify the operation because the current matrix has no operation-specific fixture projection.
-All 204 generated mutation candidates are explicitly unassessed/deferred on the typed destination
+two HTTP 200 exchanges with fingerprint-only `observed_operations` evidence, but its pre-current
+certification subject makes it historical rather than current live proof. A fresh matching proof
+also needs an operation-specific fixture projection before it can certify the operation.
+All 206 generated mutation candidates are explicitly unassessed/deferred on the typed destination
 foundation gap. `sources/zoom-declaration-disposition.json` supplies the per-operation status,
 evidence, fixed-vocabulary rejection reason, and recoverability record. It does not silently treat
 ordinary deletes as unsafe.
@@ -92,9 +92,9 @@ ordinary deletes as unsafe.
 ## Known limits
 
 - Batch default: `read_page_size=100`.
-- The current branch exposes 712 runnable commands. A separately delivered Wave 2 sub-PR owns 70
-  additional direct reads until its parent integration; this branch neither duplicates nor claims
-  those commands. Zoom provider-wide completeness is not claimed.
+- The current branch exposes 714 runnable commands. Zoom provider-wide completeness is not claimed:
+  documented operations without an established executable contract remain explicit source-traced
+  gaps rather than fabricated commands.
 - `sources/zoom-declaration-disposition.json` accounts for all 1,913 ledger rows and the 26
   source-only rows. It records 1,131 disabled ledger rows: 535 require paid provider entitlement,
   538 have a documented foundation gap, 54 are provider-deprecated, and two are schema-incompatible.
@@ -104,10 +104,12 @@ ordinary deletes as unsafe.
 - The bounded Clip download remains disabled: Zoom documents a 302 redirect but does not provide a
   provider-declared safe redirect host for the current binary contract. `sync_transport.json`
   declares the three preserved streams through the connector-neutral declarative source adapter.
-  Zoom does not declare a reverse-ETL transport destination: no connector-neutral typed destination
-  executor exists yet, and no action transport binding is invented as a substitute.
-- `operation-specific-fixture-evidence-projection` prevents the one accepted `operation:rest_read`
-  live proof from becoming a certified operation cell. The minimal foundation change is an exact
+  Zoom does not declare a reverse-ETL transport destination: the only exact source-field overlap
+  selects provider DELETE actions, and ordinary replay is refused at
+  `internal/app/issue_label_warehouse_transport.go:944`. No alternate non-delete action binding is
+  invented as a substitute.
+- `operation-specific-fixture-evidence-projection` prevents a fresh `operation:rest_read` live
+  proof from becoming a certified operation cell. The minimal foundation change is an exact
   direct-operation fixture/replay projection; a stream fixture is not substituted as evidence.
 - A bounded full live run passed the catalog, append ETL, and query read-back stages for Users and
   Meetings. It cannot publish those capability proofs yet because the shared harness unconditionally

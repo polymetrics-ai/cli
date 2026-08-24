@@ -176,6 +176,21 @@ when not enabled. Destructive, privileged, uncommon, binary, or not-live-certifi
 user-reachable whenever their established typed contract exists; only a named contract or executor
 limitation may keep an operation disabled.
 
+## Retained-source and command-surface follow-up (2026-08-24)
+
+The retained-source foundation is now available on `main`. Zoom re-pins 34 current first-party
+OpenAPI documents as exact connector-owned artifacts (11,719,368 bytes); the historic Accounts
+capture is explicitly `unavailable` because its dated capture URL returns HTTP 404 and no verified
+historic bytes exist. The lock records 1,871 current operations plus 66 historical Accounts
+identities in the crosswalk. This is a blocking source-projection gap, not a fabricated artifact or
+descriptor.
+
+The first full package gate also discovered stale generated flags: canonical source-derived flags
+had been added without removing legacy aliases, producing duplicate `maps_to` bindings that the
+runtime correctly rejects. The connector-local repair removes only those duplicate aliases, keeps
+each command implemented and user-reachable, and proves the no-credential boundary through the
+full Zoom package test.
+
 Before final delivery, fixture proof is insufficient. The connector additionally exposes the narrow
 source-backed Meeting create/update contracts required for the lane-owned reversible lifecycle.
 After merging the final updated #4304 head and
