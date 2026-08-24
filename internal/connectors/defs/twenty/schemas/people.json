@@ -1,0 +1,436 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Person",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt",
+  "properties": {
+    "attachments": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "avatarFile": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object"
+      }
+    },
+    "avatarUrl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "calendarEventParticipants": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "company": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    },
+    "deletedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "emails": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "primaryEmail": {},
+        "additionalEmails": {}
+      }
+    },
+    "id": {
+      "type": "string"
+    },
+    "jobTitle": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lastContactAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "lastContactBy": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastContactItemCalendarEvent": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastContactItemMessage": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastEmail": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastInboundAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "lastMeeting": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastOutboundAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "linkedinLink": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "primaryLinkLabel": {},
+        "primaryLinkUrl": {},
+        "secondaryLinks": {}
+      }
+    },
+    "listMemberships": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "messageParticipants": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "firstName": {},
+        "lastName": {}
+      }
+    },
+    "noteTargets": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "pdlBirthDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "pdlBirthYear": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "pdlCertifications": {},
+    "pdlEducation": {},
+    "pdlEnrichmentStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlExperience": {},
+    "pdlFacebookUrl": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "primaryLinkLabel": {},
+        "primaryLinkUrl": {},
+        "secondaryLinks": {}
+      }
+    },
+    "pdlGithubUrl": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "primaryLinkLabel": {},
+        "primaryLinkUrl": {},
+        "secondaryLinks": {}
+      }
+    },
+    "pdlHeadline": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlIndustry": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlInferredSalary": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlInterests": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "pdlJobOnetCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlJobRole": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlJobStartDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "pdlJobSummary": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlJobTitleClass": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlJobTitleSubRole": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlLanguages": {},
+    "pdlLastEnrichedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "pdlLikelihood": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "pdlLinkedinConnections": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "pdlLinkedinUsername": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlLocation": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "addressStreet1": {},
+        "addressStreet2": {},
+        "addressCity": {},
+        "addressState": {},
+        "addressCountry": {},
+        "addressPostcode": {},
+        "addressLat": {},
+        "addressLng": {}
+      }
+    },
+    "pdlLocationMetro": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlNameAliases": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "pdlProfiles": {},
+    "pdlRawPayload": {},
+    "pdlSeniority": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "pdlSex": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlSkills": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "pdlSummary": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pdlTwitterUrl": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "primaryLinkLabel": {},
+        "primaryLinkUrl": {},
+        "secondaryLinks": {}
+      }
+    },
+    "pdlYearsExperience": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "phones": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "primaryPhoneNumber": {},
+        "primaryPhoneCountryCode": {},
+        "primaryPhoneCallingCode": {},
+        "additionalPhones": {}
+      }
+    },
+    "pointOfContactForOpportunities": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "position": {
+      "type": "number"
+    },
+    "searchVector": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "taskTargets": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "timelineActivities": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    }
+  }
+}

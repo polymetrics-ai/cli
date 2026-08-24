@@ -1,0 +1,386 @@
+{
+  "schema_version": 1,
+  "ledger": "captain-required-missing-foundation-deliverable",
+  "connector": "twenty",
+  "snapshot": {
+    "provider_source": {
+      "url": "https://docs.twenty.com/developers/extend/api",
+      "repository_url": "https://github.com/twentyhq/twenty",
+      "revision": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7",
+      "revision_hash": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7"
+    },
+    "connector_source_hashes": {
+      "api_surface.json": "56349fd2f3f77c283425dd574f8476373f01acce49b946ac44a502d90710731e",
+      "operations.json": "a489c815907cef64d44c5c71f994fa9b874fc2a69c5807ba6ab1765b7231e198",
+      "streams.json": "100da1c2ac04e46a574016f06a28aa93f8c15c2f7fd2df2febc10ff4b258c8f3",
+      "writes.json": "5188fe0dea80e93471b476e91c75a33e2b6ca7fc8c9835144b87591acf7535f8",
+      "write_eligibility.json": "10185f600abb5e7bb7906a02f65d655cef0df52e553e46908cdc2baf38a7406d",
+      "cli_surface.json": "0f5037f58cb1735852d2a9164ef98c56d83f0a719221d65200f3161d811d4b54"
+    },
+    "source_locked_provider_operation_count": 168,
+    "dynamic_workspace_inventory_status": "not_started_blocked_on_nonempty_credential_input"
+  },
+  "membership_contract": {
+    "meaning": "Each operation set is exact at its pinned file SHA-256. The selector, identity field, and expected count are machine-checkable; a source hash or count change requires an explicit ledger update before any merge-ready verdict.",
+    "validator": "jq against the named connector source file, followed by sha256 comparison and count assertion"
+  },
+  "gap_rows": [
+    {
+      "gap_id": "foundation.credential-input.nonempty-stdin.v1",
+      "connector": "twenty",
+      "exact_provider_operation": {
+        "kind": "all_authenticated_standard_object_rest_operations",
+        "members_source": {
+          "file": "internal/connectors/defs/twenty/api_surface.json",
+          "sha256": "56349fd2f3f77c283425dd574f8476373f01acce49b946ac44a502d90710731e",
+          "selector": "$.endpoints[*]",
+          "identity": "method + ' ' + path",
+          "expected_count": 168
+        }
+      },
+      "provider_source": {
+        "url": "https://docs.twenty.com/developers/extend/api",
+        "revision": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7",
+        "hash": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7"
+      },
+      "affected_surfaces": ["etl", "reverse_etl", "direct_read", "direct_write", "binary_download", "binary_upload"],
+      "failing_validator_or_runtime_evidence": [
+        "built CLI twenty companies list against the dedicated loopback instance returned HTTP 403",
+        "credential-wire-audit selected one Twenty credential and its declared api_key decrypted to length 0; the declarative engine emitted Bearer without a token",
+        "internal/cli/cli.go runCredentials accepts io.ReadAll(stdin) after line-ending trim without rejecting empty input before App.AddCredential/vault persistence"
+      ],
+      "missing_provider_neutral_capability": "Reject empty --value-stdin credential input after newline normalization and before encrypted vault persistence.",
+      "fanout": {
+        "within_connector": {
+          "affected_operation_count": 168,
+          "merge_enabled_operation_count": 0
+        },
+        "cross_connector": {
+          "scope": "all pm credentials add --value-stdin consumers",
+          "deduplication_key": "shared-cli-nonempty-credential-input",
+          "status": "routed_to_shared_foundation; cross-connector portfolio audit remains required by that lane"
+        }
+      },
+      "owning_issue_or_lane": {
+        "issue": null,
+        "lane": "cli-nonempty-credential-input-r1",
+        "ownership_status": "routed_by_captain"
+      },
+      "status": "open",
+      "enabled_for_merge_verdict": false,
+      "exact_closure_verification": {
+        "required_tests": [
+          "non-empty stdin credential is accepted and encrypted",
+          "empty stdin credential is rejected before App.AddCredential/vault persistence",
+          "newline-only stdin credential is rejected before App.AddCredential/vault persistence"
+        ],
+        "required_live_proof": "A fresh disposable Twenty API key is supplied only through stdin/FD to the corrected built binary; credential-wire-audit reports a nonzero value and matching vault/wire hashes; built CLI companies list returns HTTP 200; an independent bearer request confirms the same bounded result count."
+      }
+    },
+    {
+      "gap_id": "foundation.workspace-schema.dynamic-inventory.v1",
+      "connector": "twenty",
+      "exact_provider_operation": {
+        "kind": "authenticated_disposable_workspace_schema_inventory",
+        "state": "unmaterialized_not_not_applicable",
+        "required_result_identity": "every provider-defined workspace object, field, operation, and application command returned by documented Twenty workspace schema surfaces",
+        "blocked_by_gap_id": "foundation.credential-input.nonempty-stdin.v1"
+      },
+      "provider_source": {
+        "url": "https://docs.twenty.com/developers/extend/api",
+        "revision": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7",
+        "hash": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7"
+      },
+      "affected_surfaces": ["etl", "reverse_etl", "direct_read", "direct_write", "binary_download", "binary_upload"],
+      "failing_validator_or_runtime_evidence": [
+        "no authenticated dynamic disposable-workspace schema inventory exists",
+        "the static 168-operation source lock cannot prove the actual tenant schema, generated CLI/help/website mapping, or discovered binary/direct-write surface",
+        "the credential foundation gap prevents the required authenticated inventory request"
+      ],
+      "missing_provider_neutral_capability": "Certification inventory collector that records a source/schema trace for dynamic provider objects and reconciles every discovered operation to declarations, installed CLI, generated help/manual, and website documentation without suppressing scope/tier/destructive operations.",
+      "fanout": {
+        "within_connector": {
+          "known_source_locked_operation_count": 168,
+          "dynamically_discovered_operation_count": 0,
+          "merge_enabled_operation_count": 0
+        },
+        "cross_connector": {
+          "scope": "all tenant-schema-generated connectors",
+          "deduplication_key": "dynamic-provider-schema-certification-inventory",
+          "status": "foundation-routing-required"
+        }
+      },
+      "owning_issue_or_lane": {
+        "issue": 277,
+        "lane": "cli-twenty-crm-gtm-parity-r1",
+        "ownership_status": "discovery-owned; provider-neutral closure owner must be routed before merge"
+      },
+      "status": "open",
+      "enabled_for_merge_verdict": false,
+      "exact_closure_verification": {
+        "required_artifact": "machine-readable inventory with provider source URL/revision/hash, object/field/operation identity, six-surface mapping, declaration path, CLI command, help/manual path, website path, and runtime safety metadata for every discovered member",
+        "required_live_proof": "Inventory uses the corrected credential only against the existing dedicated Twenty workspace. Every supported CRUD/application command uses lane-owned data, has independent provider read-back, and records cleanup. Binary cells retain provider transfer evidence or remain pending discovery, never N/A."
+      }
+    },
+    {
+      "gap_id": "foundation.structured-rest-body.declaration-bound.v1",
+      "connector": "twenty",
+      "exact_provider_operation": {
+        "kind": "json_body_write_actions",
+        "members_source": {
+          "file": "internal/connectors/defs/twenty/writes.json",
+          "sha256": "5188fe0dea80e93471b476e91c75a33e2b6ca7fc8c9835144b87591acf7535f8",
+          "selector": "$.actions[?(@.body_type == 'json')]",
+          "identity": "name",
+          "expected_count": 84
+        }
+      },
+      "provider_source": {
+        "url": "https://docs.twenty.com/developers/extend/api",
+        "revision": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7",
+        "hash": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7"
+      },
+      "affected_surfaces": ["reverse_etl", "direct_write"],
+      "failing_validator_or_runtime_evidence": [
+        "#4305 records that the installed command runner refuses nested REST request bodies",
+        "all 84 JSON-body Twenty write actions are declaration-accounted but cannot yet rely on a shared declaration-bound structured body materializer",
+        "static command reachability does not constitute installed structured-body execution"
+      ],
+      "missing_provider_neutral_capability": "Closed schema-aware structured JSON materialization shared by installed CLI writes and typed reverse-ETL actions, with declaration-owned route/content type/field mapping/limits and no raw-body escape hatch.",
+      "fanout": {
+        "within_connector": {
+          "affected_operation_count": 84,
+          "merge_enabled_operation_count": 0
+        },
+        "cross_connector": {
+          "scope": "all declaration-backed structured REST body consumers",
+          "deduplication_key": "structured-rest-body-materialization",
+          "status": "owned_by_4305"
+        }
+      },
+      "owning_issue_or_lane": {
+        "issue": 4305,
+        "lane": "issue-4305-structured-rest-body",
+        "ownership_status": "open"
+      },
+      "status": "open",
+      "enabled_for_merge_verdict": false,
+      "exact_closure_verification": {
+        "required_tests": [
+          "nested object and array inputs serialize only to the exact declaration-owned provider request",
+          "path/query/body fields cannot cross-bind and malformed, oversized, unknown, missing-required, or metadata-override input fails before transport I/O",
+          "approval/confirmation seals the exact structured payload and generated help/manual/schema exposes only typed fields"
+        ],
+        "required_twenty_proof": "Fresh built CLI and persisted App run a lane-owned structured create/update through the declared Twenty action, then independently read it from Twenty and remove it through the typed cleanup path."
+      }
+    },
+    {
+      "gap_id": "foundation.reverse-etl.persisted-action-multiplicity.v1",
+      "connector": "twenty",
+      "exact_provider_operation": {
+        "kind": "record_shaped_create_update_actions",
+        "members_source": {
+          "file": "internal/connectors/defs/twenty/write_eligibility.json",
+          "sha256": "10185f600abb5e7bb7906a02f65d655cef0df52e553e46908cdc2baf38a7406d",
+          "selector": "$.actions[?(@.disposition == 'eligible_pending_foundation_multiplicity')]",
+          "identity": "name",
+          "expected_count": 55
+        }
+      },
+      "provider_source": {
+        "url": "https://docs.twenty.com/developers/extend/api",
+        "revision": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7",
+        "hash": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7"
+      },
+      "affected_surfaces": ["reverse_etl"],
+      "failing_validator_or_runtime_evidence": [
+        "refreshed #4304 SHA d814875a902be684cb2a38b94f7a8077f66b70b1 is a local ancestor and persists a selected action, but DestinationTransportDescriptor.SourceBindingFor is keyed by source executor and stream and returns one shared mapping",
+        "write_eligibility.json records exactly 55 record-shaped actions pending action mapping multiplicity; those candidates require distinct input-to-field pairs from the same declarative_stream_source executor",
+        "go test -count=1 -timeout 20m ./internal/app -run '^Test(PersistedConnectionSelectsDeclarativeTypedDestinationAction|DeclarativeTypedDestinationSourceBindingsUseExactSelectedActionSchemaFields|DeclarativeTypedDestinationRefusesInvalidWorksetsBeforeProviderWrite)$' passed, establishing that selection is persisted and invalid mappings fail closed, but its synthetic multi-action fixture deliberately shares one mapping and does not establish per-action bindings",
+        "the installed App path has not selected and executed every provider-owned Twenty action with its own exact input mapping"
+      ],
+      "missing_provider_neutral_capability": "Persisted multi-action destination selection with independent exact input bindings, delivery facts, acknowledgement, and installed App/CLI dispatch for every named provider action.",
+      "fanout": {
+        "within_connector": {
+          "affected_operation_count": 55,
+          "merge_enabled_operation_count": 0
+        },
+        "cross_connector": {
+          "scope": "all declarative typed destinations needing more than one action per mode/source mapping",
+          "deduplication_key": "persisted-reverse-etl-action-multiplicity",
+      "status": "published_d814_insufficient_per_action_source_binding"
+        }
+      },
+      "owning_issue_or_lane": {
+        "issue": 4304,
+        "lane": "fm/cli-reverse-etl-destination-r1",
+    "ownership_status": "published head d814875a902be684cb2a38b94f7a8077f66b70b1 was merged locally and is insufficient; a provider-neutral per-action source-binding capability remains required"
+      },
+      "status": "open",
+      "enabled_for_merge_verdict": false,
+      "exact_closure_verification": {
+        "required_tests": [
+      "two actions sharing a source executor and stream but requiring different input mappings select their own persisted bindings",
+      "all 55 pending action identities select their own persisted binding",
+          "missing action, mismatched input field, duplicate action, and default-by-mode selection fail before provider I/O",
+          "per-action acknowledgement and delivery facts survive App reopen"
+        ],
+      "required_twenty_proof": "After a normal merge of the provider-neutral per-action source-binding foundation and ancestor proof, the rebuilt installed App/CLI executes each applicable lane-owned provider action through its named binding with provider read-back and cleanup."
+      }
+    },
+    {
+      "gap_id": "foundation.reverse-etl.array-envelope-delivery.v1",
+      "connector": "twenty",
+      "exact_provider_operation": {
+        "kind": "batch_array_envelope_actions",
+        "members_source": {
+          "file": "internal/connectors/defs/twenty/write_eligibility.json",
+          "sha256": "10185f600abb5e7bb7906a02f65d655cef0df52e553e46908cdc2baf38a7406d",
+          "selector": "$.actions[?(@.disposition == 'semantic_array_envelope_incompatible')]",
+          "identity": "name",
+          "expected_count": 28
+        }
+      },
+      "provider_source": {
+        "url": "https://docs.twenty.com/developers/extend/api",
+        "revision": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7",
+        "hash": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7"
+      },
+      "affected_surfaces": ["reverse_etl", "direct_write"],
+      "failing_validator_or_runtime_evidence": [
+        "write_eligibility.json records exactly 28 provider batch actions with source-traced POST routes, the provider-owned records envelope, a 60-record maximum, and a captain_option_c 0.3.1 foundation block",
+        "the current destination contract delivers one record and has no provider-neutral grouping/array-envelope acknowledgement contract",
+        "#4305 can materialize declared arrays but does not by itself prove source-record grouping into an exact batch envelope"
+      ],
+      "missing_provider_neutral_capability": "Declaration-bound reverse-ETL batch grouping that forms the exact provider-owned records array, preserves per-record accounting and idempotency, seals the complete envelope for approval, and records durable acknowledgement without raw HTTP input.",
+      "fanout": {
+        "within_connector": {
+          "affected_operation_count": 28,
+          "merge_enabled_operation_count": 0
+        },
+        "cross_connector": {
+          "scope": "all typed destinations with provider-owned array-envelope actions",
+          "deduplication_key": "reverse-etl-array-envelope-delivery",
+          "status": "foundation-routing-required"
+        }
+      },
+      "owning_issue_or_lane": {
+        "issue": null,
+        "lane": "0.3.1-foundation-planning",
+        "ownership_status": "captain option C: defer batch-action certification; do not solve or wait in Twenty 0.3.0"
+      },
+      "release_deferral": {
+        "decision": "captain_option_c",
+        "target_release": "0.3.1",
+        "blocks_0_3_0": false,
+        "scope": "application batch dispatch certification only; all 28 typed reverse-ETL commands remain implemented and CLI-reachable"
+      },
+      "status": "deferred_0_3_1",
+      "enabled_for_merge_verdict": false,
+      "exact_closure_verification": {
+        "required_tests": [
+          "declared maximum-size batch envelope succeeds with exact provider records array",
+          "empty, over-limit, malformed, cross-action, and post-approval-mutated batches fail before transport I/O",
+          "per-record acknowledgement and provider read-back account for every delivered element"
+        ],
+        "required_twenty_proof": "The rebuilt App/CLI creates only lane-owned records through each applicable Twenty batch action, independently reads every result, and cleans up every created record."
+      }
+    },
+    {
+      "gap_id": "foundation.reverse-etl.tombstone-workset.v1",
+      "connector": "twenty",
+      "exact_provider_operation": {
+        "kind": "typed_delete_actions",
+        "members_source": {
+          "file": "internal/connectors/defs/twenty/write_eligibility.json",
+          "sha256": "10185f600abb5e7bb7906a02f65d655cef0df52e553e46908cdc2baf38a7406d",
+          "selector": "$.actions[?(@.disposition == 'semantic_tombstone_incompatible')]",
+          "identity": "name",
+          "expected_count": 28
+        }
+      },
+      "provider_source": {
+        "url": "https://docs.twenty.com/developers/extend/api",
+        "revision": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7",
+        "hash": "e14694f4ff9ca51b791ba6b09639fed0944c5ad7"
+      },
+      "affected_surfaces": ["reverse_etl", "direct_write"],
+      "failing_validator_or_runtime_evidence": [
+        "write_eligibility.json records exactly 28 provider DELETE actions as tombstone_workset_incompatible",
+        "the current declarative typed destination explicitly refuses tombstones",
+        "typed direct CLI delete reachability is not reverse-ETL source-to-delete delivery and cannot close this gap"
+      ],
+      "missing_provider_neutral_capability": "Typed reverse-ETL tombstone workset delivery that preserves provider delete action identity, per-record confirmation/authorization, approval seal, durable acknowledgement, idempotency, and independently verified absence without a generic writer.",
+      "fanout": {
+        "within_connector": {
+          "affected_operation_count": 28,
+          "merge_enabled_operation_count": 0
+        },
+        "cross_connector": {
+          "scope": "all typed destinations with provider DELETE/tombstone actions",
+          "deduplication_key": "reverse-etl-tombstone-workset-delivery",
+          "status": "foundation-routing-required"
+        }
+      },
+      "owning_issue_or_lane": {
+        "issue": null,
+        "lane": "foundation-routing-required",
+        "ownership_status": "unassigned shared capability; do not solve in Twenty"
+      },
+      "status": "open",
+      "enabled_for_merge_verdict": false,
+      "exact_closure_verification": {
+        "required_tests": [
+          "typed tombstone plan/preview/approval/execute deletes only declared records",
+          "missing confirmation, scope mismatch, stale approval, replay, and unknown action fail before provider I/O",
+          "durable acknowledgement includes independent provider absence verification"
+        ],
+        "required_twenty_proof": "Every live delete targets only a record created by this lane, uses typed confirmation/authorization, and confirms absence through an independent Twenty read before cleanup evidence is accepted."
+      }
+    }
+  ],
+  "rollups": {
+    "per_batch": [
+      {
+        "batch_id": "twenty-standard-object-rest-source-lock-v1",
+        "source_locked_provider_operation_count": 168,
+        "open_gap_ids": [
+          "foundation.credential-input.nonempty-stdin.v1",
+          "foundation.workspace-schema.dynamic-inventory.v1",
+          "foundation.structured-rest-body.declaration-bound.v1",
+          "foundation.reverse-etl.persisted-action-multiplicity.v1",
+          "foundation.reverse-etl.array-envelope-delivery.v1",
+          "foundation.reverse-etl.tombstone-workset.v1"
+        ],
+        "enabled_for_merge_verdict_count": 0,
+        "merge_ready": false
+      },
+      {
+        "batch_id": "twenty-dynamic-disposable-workspace-inventory-v1",
+        "source_locked_provider_operation_count": 0,
+        "dynamically_discovered_provider_operation_count": 0,
+        "state": "blocked_not_not_applicable",
+        "blocking_gap_id": "foundation.credential-input.nonempty-stdin.v1",
+        "enabled_for_merge_verdict_count": 0,
+        "merge_ready": false
+      }
+    ],
+    "portfolio": {
+      "connectors": ["twenty"],
+      "deduplicated_open_gap_count": 6,
+      "known_provider_operation_count": 168,
+      "known_provider_operations_with_one_or_more_open_gap_count": 168,
+      "known_provider_operations_enabled_for_merge_verdict_count": 0,
+      "surface_rollup": {
+        "etl": {"known_operation_count": 28, "enabled_for_merge_verdict_count": 0, "state": "blocked"},
+        "reverse_etl": {"known_operation_count": 112, "enabled_for_merge_verdict_count": 0, "state": "blocked"},
+        "direct_read": {"known_operation_count": 28, "enabled_for_merge_verdict_count": 0, "state": "blocked"},
+        "direct_write": {"known_operation_count": 0, "enabled_for_merge_verdict_count": 0, "state": "pending_dynamic_inventory_not_not_applicable"},
+        "binary_download": {"known_operation_count": 0, "enabled_for_merge_verdict_count": 0, "state": "pending_dynamic_inventory_not_not_applicable"},
+        "binary_upload": {"known_operation_count": 0, "enabled_for_merge_verdict_count": 0, "state": "pending_dynamic_inventory_not_not_applicable"}
+      },
+      "merge_ready": false,
+    "merge_ready_blocker": "Every known provider operation has at least one open shared foundation gap; the refreshed destination foundation still lacks per-action source bindings, batch-envelope and tombstone delivery remain unassigned, and the dynamic workspace inventory plus all six surfaces remain incomplete."
+    }
+  }
+}

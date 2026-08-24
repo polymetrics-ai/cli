@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_messages_fixture_id",
+    "deliveryStatus": "Fixture deliveryStatus 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/messages/update_messages_fixture_id",
+    "body": {
+      "deliveryStatus": "Fixture deliveryStatus 1"
+    }
+  }
+}

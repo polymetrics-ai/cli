@@ -1,0 +1,18 @@
+{
+  "record": {
+    "records": [
+      {
+        "direction": "Fixture direction 1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/messageChannelMessageAssociations",
+    "body_exact": [
+      {
+        "direction": "Fixture direction 1"
+      }
+    ]
+  }
+}

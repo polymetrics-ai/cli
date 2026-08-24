@@ -1,0 +1,12 @@
+{
+  "record": {
+    "pageLayoutId": "pageLayoutId_fixture_1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/dashboards",
+    "body": {
+      "pageLayoutId": "pageLayoutId_fixture_1"
+    }
+  }
+}

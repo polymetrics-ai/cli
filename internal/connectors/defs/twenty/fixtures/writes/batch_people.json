@@ -1,0 +1,18 @@
+{
+  "record": {
+    "records": [
+      {
+        "avatarUrl": "https://example.invalid/avatarUrl/1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/people",
+    "body_exact": [
+      {
+        "avatarUrl": "https://example.invalid/avatarUrl/1"
+      }
+    ]
+  }
+}

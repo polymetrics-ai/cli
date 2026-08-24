@@ -155634,6 +155634,1211 @@
     }
   },
   {
+    "name": "twenty",
+    "display_name": "Twenty CRM",
+    "description": "Reads Twenty CRM companies, people, opportunities, notes, tasks, messages, calendar events, workflows, workspace members, and the rest of the 28-object workspace surface, and writes create/update/batch/delete mutations through the Twenty REST API.",
+    "integration_type": "api",
+    "docs_url": "https://docs.twenty.com/developers/extend/api",
+    "release_stage": "beta",
+    "capabilities": {
+      "check": true,
+      "catalog": true,
+      "read": true,
+      "write": true,
+      "query": false
+    },
+    "spec": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Twenty CRM Connection Specification",
+      "type": "object",
+      "required": [
+        "api_key"
+      ],
+      "properties": {
+        "api_key": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Twenty API key. Sent as Authorization: Bearer \u003cAPI_KEY\u003e on REST requests; sourced from environment variables or stdin and never logged."
+        },
+        "base_url": {
+          "type": "string",
+          "format": "uri",
+          "default": "https://api.twenty.com",
+          "description": "Twenty API base URL override for tests or self-hosted deployments."
+        },
+        "replication_start_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional RFC3339 lower bound for incremental streams that filter and order by createdAt or updatedAt. Stream wiring is deferred to S3; streams that support server-side createdAt/updatedAt filters will honor it."
+        }
+      }
+    },
+    "streams": [
+      {
+        "name": "attachments",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "blocklists",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "calendar_channel_event_associations",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "calendar_event_participants",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "calendar_events",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "call_recordings",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "companies",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "dashboards",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "message_campaigns",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "message_channel_message_association_message_folders",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "message_channel_message_associations",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "message_list_members",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "message_lists",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "message_participants",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "message_threads",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "messages",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "note_targets",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "notes",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "opportunities",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "people",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "task_targets",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "tasks",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "timeline_activities",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workflow_automated_triggers",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workflow_runs",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workflow_versions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workflows",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workspace_members",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "create_attachments",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/attachments",
+        "risk": "creates a Twenty attachments record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_attachments",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/attachments/{{ record.id }}",
+        "risk": "updates an existing Twenty attachments record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_attachments",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/attachments",
+        "risk": "bulk creates up to 60 Twenty attachments records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_blocklists",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/blocklists",
+        "risk": "creates a Twenty blocklists record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_blocklists",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/blocklists/{{ record.id }}",
+        "risk": "updates an existing Twenty blocklists record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_blocklists",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/blocklists",
+        "risk": "bulk creates up to 60 Twenty blocklists records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_calendar_channel_event_associations",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/calendarChannelEventAssociations",
+        "risk": "creates a Twenty calendar_channel_event_associations record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_calendar_channel_event_associations",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/calendarChannelEventAssociations/{{ record.id }}",
+        "risk": "updates an existing Twenty calendar_channel_event_associations record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_calendar_channel_event_associations",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/calendarChannelEventAssociations",
+        "risk": "bulk creates up to 60 Twenty calendar_channel_event_associations records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_calendar_event_participants",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/calendarEventParticipants",
+        "risk": "creates a Twenty calendar_event_participants record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_calendar_event_participants",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/calendarEventParticipants/{{ record.id }}",
+        "risk": "updates an existing Twenty calendar_event_participants record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_calendar_event_participants",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/calendarEventParticipants",
+        "risk": "bulk creates up to 60 Twenty calendar_event_participants records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_calendar_events",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/calendarEvents",
+        "risk": "creates a Twenty calendar_events record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_calendar_events",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/calendarEvents/{{ record.id }}",
+        "risk": "updates an existing Twenty calendar_events record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_calendar_events",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/calendarEvents",
+        "risk": "bulk creates up to 60 Twenty calendar_events records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_call_recordings",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/callRecordings",
+        "risk": "creates a Twenty call_recordings record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_call_recordings",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/callRecordings/{{ record.id }}",
+        "risk": "updates an existing Twenty call_recordings record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_call_recordings",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/callRecordings",
+        "risk": "bulk creates up to 60 Twenty call_recordings records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_companies",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/companies",
+        "risk": "creates a Twenty companies record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_companies",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/companies/{{ record.id }}",
+        "risk": "updates an existing Twenty companies record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_companies",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/companies",
+        "risk": "bulk creates up to 60 Twenty companies records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_dashboards",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/dashboards",
+        "risk": "creates a Twenty dashboards record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_dashboards",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/dashboards/{{ record.id }}",
+        "risk": "updates an existing Twenty dashboards record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_dashboards",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/dashboards",
+        "risk": "bulk creates up to 60 Twenty dashboards records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_message_campaigns",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/messageCampaigns",
+        "risk": "creates a Twenty message_campaigns record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_message_campaigns",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/messageCampaigns/{{ record.id }}",
+        "risk": "updates an existing Twenty message_campaigns record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_message_campaigns",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/messageCampaigns",
+        "risk": "bulk creates up to 60 Twenty message_campaigns records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_message_channel_message_association_message_folders",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/messageChannelMessageAssociationMessageFolders",
+        "risk": "creates a Twenty message_channel_message_association_message_folders record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_message_channel_message_association_message_folders",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/messageChannelMessageAssociationMessageFolders/{{ record.id }}",
+        "risk": "updates an existing Twenty message_channel_message_association_message_folders record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_message_channel_message_association_message_folders",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/messageChannelMessageAssociationMessageFolders",
+        "risk": "bulk creates up to 60 Twenty message_channel_message_association_message_folders records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_message_channel_message_associations",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/messageChannelMessageAssociations",
+        "risk": "creates a Twenty message_channel_message_associations record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_message_channel_message_associations",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/messageChannelMessageAssociations/{{ record.id }}",
+        "risk": "updates an existing Twenty message_channel_message_associations record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_message_channel_message_associations",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/messageChannelMessageAssociations",
+        "risk": "bulk creates up to 60 Twenty message_channel_message_associations records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_message_list_members",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/messageListMembers",
+        "risk": "creates a Twenty message_list_members record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_message_list_members",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/messageListMembers/{{ record.id }}",
+        "risk": "updates an existing Twenty message_list_members record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_message_list_members",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/messageListMembers",
+        "risk": "bulk creates up to 60 Twenty message_list_members records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_message_lists",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/messageLists",
+        "risk": "creates a Twenty message_lists record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_message_lists",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/messageLists/{{ record.id }}",
+        "risk": "updates an existing Twenty message_lists record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_message_lists",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/messageLists",
+        "risk": "bulk creates up to 60 Twenty message_lists records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_message_participants",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/messageParticipants",
+        "risk": "creates a Twenty message_participants record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_message_participants",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/messageParticipants/{{ record.id }}",
+        "risk": "updates an existing Twenty message_participants record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_message_participants",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/messageParticipants",
+        "risk": "bulk creates up to 60 Twenty message_participants records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_message_threads",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/messageThreads",
+        "risk": "creates a Twenty message_threads record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_message_threads",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/messageThreads/{{ record.id }}",
+        "risk": "updates an existing Twenty message_threads record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_message_threads",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/messageThreads",
+        "risk": "bulk creates up to 60 Twenty message_threads records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_messages",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/messages",
+        "risk": "creates a Twenty messages record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_messages",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/messages/{{ record.id }}",
+        "risk": "updates an existing Twenty messages record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_messages",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/messages",
+        "risk": "bulk creates up to 60 Twenty messages records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_note_targets",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/noteTargets",
+        "risk": "creates a Twenty note_targets record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_note_targets",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/noteTargets/{{ record.id }}",
+        "risk": "updates an existing Twenty note_targets record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_note_targets",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/noteTargets",
+        "risk": "bulk creates up to 60 Twenty note_targets records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_notes",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/notes",
+        "risk": "creates a Twenty notes record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_notes",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/notes/{{ record.id }}",
+        "risk": "updates an existing Twenty notes record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_notes",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/notes",
+        "risk": "bulk creates up to 60 Twenty notes records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_opportunities",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/opportunities",
+        "risk": "creates a Twenty opportunities record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_opportunities",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/opportunities/{{ record.id }}",
+        "risk": "updates an existing Twenty opportunities record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_opportunities",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/opportunities",
+        "risk": "bulk creates up to 60 Twenty opportunities records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_people",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/people",
+        "risk": "creates a Twenty people record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_people",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/people/{{ record.id }}",
+        "risk": "updates an existing Twenty people record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_people",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/people",
+        "risk": "bulk creates up to 60 Twenty people records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_task_targets",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/taskTargets",
+        "risk": "creates a Twenty task_targets record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_task_targets",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/taskTargets/{{ record.id }}",
+        "risk": "updates an existing Twenty task_targets record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_task_targets",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/taskTargets",
+        "risk": "bulk creates up to 60 Twenty task_targets records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_tasks",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/tasks",
+        "risk": "creates a Twenty tasks record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_tasks",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/tasks/{{ record.id }}",
+        "risk": "updates an existing Twenty tasks record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_tasks",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/tasks",
+        "risk": "bulk creates up to 60 Twenty tasks records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_timeline_activities",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/timelineActivities",
+        "risk": "creates a Twenty timeline_activities record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_timeline_activities",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/timelineActivities/{{ record.id }}",
+        "risk": "updates an existing Twenty timeline_activities record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_timeline_activities",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/timelineActivities",
+        "risk": "bulk creates up to 60 Twenty timeline_activities records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_workflow_automated_triggers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/workflowAutomatedTriggers",
+        "risk": "creates a Twenty workflow_automated_triggers record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_workflow_automated_triggers",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/workflowAutomatedTriggers/{{ record.id }}",
+        "risk": "updates an existing Twenty workflow_automated_triggers record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_workflow_automated_triggers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/workflowAutomatedTriggers",
+        "risk": "bulk creates up to 60 Twenty workflow_automated_triggers records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_workflow_runs",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/workflowRuns",
+        "risk": "creates a Twenty workflow_runs record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_workflow_runs",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/workflowRuns/{{ record.id }}",
+        "risk": "updates an existing Twenty workflow_runs record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_workflow_runs",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/workflowRuns",
+        "risk": "bulk creates up to 60 Twenty workflow_runs records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_workflow_versions",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/workflowVersions",
+        "risk": "creates a Twenty workflow_versions record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_workflow_versions",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/workflowVersions/{{ record.id }}",
+        "risk": "updates an existing Twenty workflow_versions record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_workflow_versions",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/workflowVersions",
+        "risk": "bulk creates up to 60 Twenty workflow_versions records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_workflows",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/workflows",
+        "risk": "creates a Twenty workflows record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_workflows",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/workflows/{{ record.id }}",
+        "risk": "updates an existing Twenty workflows record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_workflows",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/workflows",
+        "risk": "bulk creates up to 60 Twenty workflows records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "create_workspace_members",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/workspaceMembers",
+        "risk": "creates a Twenty workspace_members record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "update_workspace_members",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/rest/workspaceMembers/{{ record.id }}",
+        "risk": "updates an existing Twenty workspace_members record; external mutation; reverse ETL plan, preview, approval, execute required"
+      },
+      {
+        "name": "batch_workspace_members",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/batch/workspaceMembers",
+        "risk": "bulk creates up to 60 Twenty workspace_members records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      },
+      {
+        "name": "delete_attachments",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/attachments/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_blocklists",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/blocklists/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_calendar_channel_event_associations",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/calendarChannelEventAssociations/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_calendar_event_participants",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/calendarEventParticipants/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_calendar_events",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/calendarEvents/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_call_recordings",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/callRecordings/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_companies",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/companies/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_dashboards",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/dashboards/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_message_campaigns",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/messageCampaigns/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_message_channel_message_association_message_folders",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/messageChannelMessageAssociationMessageFolders/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_message_channel_message_associations",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/messageChannelMessageAssociations/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_message_list_members",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/messageListMembers/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_message_lists",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/messageLists/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_message_participants",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/messageParticipants/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_message_threads",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/messageThreads/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_messages",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/messages/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_note_targets",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/noteTargets/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_notes",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/notes/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_opportunities",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/opportunities/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_people",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/people/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_task_targets",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/taskTargets/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_tasks",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/tasks/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_timeline_activities",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/timelineActivities/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workflow_automated_triggers",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/workflowAutomatedTriggers/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workflow_runs",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/workflowRuns/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workflow_versions",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/workflowVersions/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workflows",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/workflows/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workspace_members",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/workspaceMembers/{{ record.id }}",
+        "risk": "destructive external deletion; typed confirmation required",
+        "confirm": "destructive"
+      }
+    ],
+    "risk": {
+      "read": "external Twenty CRM API read of CRM, messaging, calendar, workflow, and workspace-member data",
+      "write": "creates, updates, batch-writes, and deletes records across all 28 Twenty CRM REST objects",
+      "approval": "required for every create_\u003cobject\u003e, update_\u003cobject\u003e, batch_\u003cobject\u003e, and delete_\u003cobject\u003e action across the Twenty REST object surface; delete_\u003cobject\u003e actions additionally require typed --confirm destructive"
+    },
+    "icon": {
+      "id": "pm-sample",
+      "path": "icons/pm-sample.svg",
+      "source": "polymetrics",
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
+    }
+  },
+  {
     "name": "twilio",
     "display_name": "Twilio",
     "description": "Reads and writes Twilio public REST API v2010 resources through declarative JSON bundle streams and typed write actions.",
