@@ -1,0 +1,324 @@
+{
+  "purpose": "Mechanical input for the main-owned rendered-reference citation contract migration; this file reports the assigned source locks without rewriting them.",
+  "scope": "issue #4292 batches 8-10",
+  "source_lock_shape": "pre-foundation colliding schema_version 3",
+  "main_target": "cmd/connectorgen/sourceimport.go sourceImportLockV3",
+  "summary": {
+    "connectors": 30,
+    "documents": 915,
+    "documents_by_representation": {
+      "complete-rendered-reference": 889,
+      "machine-readable-spec": 26,
+      "unavailable": 0
+    },
+    "all_usable_documents_have_sha256_and_positive_byte_count": true,
+    "connectors_without_usable_source": [
+      "eventbrite",
+      "greenhouse",
+      "testrail"
+    ],
+    "connectors_with_empty_coverage_confidence_basis": []
+  },
+  "connectors": [
+    {
+      "connector": "adobe-commerce-magento",
+      "source_lock": "internal/connectors/defs/adobe-commerce-magento/sources/adobe-commerce-magento-operation-source-lock.json",
+      "state": "dynamic",
+      "representation": "complete-rendered-reference",
+      "documents": { "total": 1, "by_representation": { "complete-rendered-reference": 1 }, "by_content_type": { "text/html; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "amplitude",
+      "source_lock": "internal/connectors/defs/amplitude/sources/amplitude-operation-source-lock.json",
+      "state": "available",
+      "representation": "complete-rendered-reference",
+      "documents": { "total": 48, "by_representation": { "complete-rendered-reference": 48 }, "by_content_type": { "text/markdown; charset=utf-8": 47, "text/plain; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "ashby",
+      "source_lock": "internal/connectors/defs/ashby/sources/ashby-operation-source-lock.json",
+      "state": "available",
+      "representation": "complete-rendered-reference",
+      "documents": { "total": 194, "by_representation": { "complete-rendered-reference": 194 }, "by_content_type": { "application/json; charset=utf-8": 194 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "auth0",
+      "source_lock": "internal/connectors/defs/auth0/sources/auth0-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "application/json": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "brex",
+      "source_lock": "internal/connectors/defs/brex/sources/brex-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 10, "by_representation": { "machine-readable-spec": 10 }, "by_content_type": { "application/yaml": 10 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "calendly",
+      "source_lock": "internal/connectors/defs/calendly/sources/calendly-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "text/x-yaml; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "clickup-api",
+      "source_lock": "internal/connectors/defs/clickup-api/sources/clickup-api-operation-source-lock.json",
+      "state": "available",
+      "representation": "complete-rendered-reference",
+      "documents": { "total": 174, "by_representation": { "complete-rendered-reference": 174 }, "by_content_type": { "application/json; charset=utf-8": 174 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "coda",
+      "source_lock": "internal/connectors/defs/coda/sources/coda-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "application/json; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "commercetools",
+      "source_lock": "internal/connectors/defs/commercetools/sources/commercetools-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "text/plain; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "datadog",
+      "source_lock": "internal/connectors/defs/datadog/sources/datadog-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 2, "by_representation": { "machine-readable-spec": 2 }, "by_content_type": { "text/plain; charset=utf-8": 2 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "dbt",
+      "source_lock": "internal/connectors/defs/dbt/sources/dbt-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "text/plain; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "docuseal",
+      "source_lock": "internal/connectors/defs/docuseal/sources/docuseal-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "text/plain; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "dremio",
+      "source_lock": "internal/connectors/defs/dremio/sources/dremio-operation-source-lock.json",
+      "state": "available",
+      "representation": "complete-rendered-reference",
+      "documents": { "total": 19, "by_representation": { "complete-rendered-reference": 19 }, "by_content_type": { "text/html; charset=utf-8": 19 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "eventbrite",
+      "source_lock": "internal/connectors/defs/eventbrite/sources/eventbrite-operation-source-lock.json",
+      "state": "skipped",
+      "representation": "unavailable",
+      "documents": { "total": 0, "by_representation": {}, "by_content_type": {} },
+      "all_documents_have_sha256_and_positive_byte_count": null,
+      "coverage_confidence_basis_present": true,
+      "usable_source": false
+    },
+    {
+      "connector": "factorial",
+      "source_lock": "internal/connectors/defs/factorial/sources/factorial-operation-source-lock.json",
+      "state": "available",
+      "representation": "complete-rendered-reference",
+      "documents": { "total": 156, "by_representation": { "complete-rendered-reference": 156 }, "by_content_type": { "application/json; charset=utf-8": 156 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "firehydrant",
+      "source_lock": "internal/connectors/defs/firehydrant/sources/firehydrant-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "text/plain; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "greenhouse",
+      "source_lock": "internal/connectors/defs/greenhouse/sources/greenhouse-operation-source-lock.json",
+      "state": "skipped",
+      "representation": "unavailable",
+      "documents": { "total": 0, "by_representation": {}, "by_content_type": {} },
+      "all_documents_have_sha256_and_positive_byte_count": null,
+      "coverage_confidence_basis_present": true,
+      "usable_source": false
+    },
+    {
+      "connector": "hibob",
+      "source_lock": "internal/connectors/defs/hibob/sources/hibob-operation-source-lock.json",
+      "state": "available",
+      "representation": "complete-rendered-reference",
+      "documents": { "total": 208, "by_representation": { "complete-rendered-reference": 208 }, "by_content_type": { "application/json; charset=utf-8": 208 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "lever-hiring",
+      "source_lock": "internal/connectors/defs/lever-hiring/sources/lever-hiring-operation-source-lock.json",
+      "state": "available",
+      "representation": "complete-rendered-reference",
+      "documents": { "total": 1, "by_representation": { "complete-rendered-reference": 1 }, "by_content_type": { "text/html; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "looker",
+      "source_lock": "internal/connectors/defs/looker/sources/looker-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "text/plain; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "metabase",
+      "source_lock": "internal/connectors/defs/metabase/sources/metabase-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "text/plain; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "mode",
+      "source_lock": "internal/connectors/defs/mode/sources/mode-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "text/plain; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "okta",
+      "source_lock": "internal/connectors/defs/okta/sources/okta-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "text/plain; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "pagerduty",
+      "source_lock": "internal/connectors/defs/pagerduty/sources/pagerduty-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "text/plain; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "posthog",
+      "source_lock": "internal/connectors/defs/posthog/sources/posthog-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "application/vnd.oai.openapi; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "recharge",
+      "source_lock": "internal/connectors/defs/recharge/sources/recharge-operation-source-lock.json",
+      "state": "available",
+      "representation": "complete-rendered-reference",
+      "documents": { "total": 1, "by_representation": { "complete-rendered-reference": 1 }, "by_content_type": { "text/html; charset=utf-8": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "recruitee",
+      "source_lock": "internal/connectors/defs/recruitee/sources/recruitee-operation-source-lock.json",
+      "state": "available",
+      "representation": "complete-rendered-reference",
+      "documents": { "total": 1, "by_representation": { "complete-rendered-reference": 1 }, "by_content_type": { "text/html": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "testrail",
+      "source_lock": "internal/connectors/defs/testrail/sources/testrail-operation-source-lock.json",
+      "state": "skipped",
+      "representation": "unavailable",
+      "documents": { "total": 0, "by_representation": {}, "by_content_type": {} },
+      "all_documents_have_sha256_and_positive_byte_count": null,
+      "coverage_confidence_basis_present": true,
+      "usable_source": false
+    },
+    {
+      "connector": "workable",
+      "source_lock": "internal/connectors/defs/workable/sources/workable-operation-source-lock.json",
+      "state": "available",
+      "representation": "complete-rendered-reference",
+      "documents": { "total": 86, "by_representation": { "complete-rendered-reference": 86 }, "by_content_type": { "application/json; charset=utf-8": 86 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    },
+    {
+      "connector": "zoho-books",
+      "source_lock": "internal/connectors/defs/zoho-books/sources/zoho-books-operation-source-lock.json",
+      "state": "available",
+      "representation": "machine-readable-spec",
+      "documents": { "total": 1, "by_representation": { "machine-readable-spec": 1 }, "by_content_type": { "application/zip": 1 } },
+      "all_documents_have_sha256_and_positive_byte_count": true,
+      "coverage_confidence_basis_present": true,
+      "usable_source": true
+    }
+  ]
+}
