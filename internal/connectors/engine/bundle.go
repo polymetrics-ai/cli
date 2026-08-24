@@ -478,6 +478,10 @@ type WriteAction struct {
 	// covers APIs such as GitHub release uploads whose mutation endpoint is
 	// intentionally hosted away from the connector's ordinary REST origin.
 	BaseURL string `json:"base_url,omitempty"`
+	// AllowedBaseURLOrigins declares the only ordinary connector API origins
+	// whose credential may be used with this alternate action origin. It closes
+	// a public upload host from receiving a private/Enterprise API credential.
+	AllowedBaseURLOrigins []string `json:"allowed_base_url_origins,omitempty"`
 	// Route selects one HTTPBase.Routes declaration. It is the preferred
 	// declaration-owned routing path for reverse ETL and binary uploads;
 	// BaseURL remains only for existing legacy write declarations.
@@ -501,6 +505,9 @@ type WriteAction struct {
 	// their resolved values.
 	RedactFields []string `json:"redact_fields,omitempty"`
 	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload | binary_upload
+	// SuccessStatuses optionally narrows generic 2xx success to the exact
+	// provider receipt statuses the action declares.
+	SuccessStatuses []int `json:"success_statuses,omitempty"`
 	// BodyRequired forces an empty JSON object onto the wire when body construction
 	// resolves no fields. It is valid only for the default json body type.
 	BodyRequired bool                `json:"body_required,omitempty"`
@@ -2135,6 +2142,9 @@ func validateWriteBodies(actions []WriteAction) error {
 		if err := validateWriteActionBaseURL(i, action); err != nil {
 			return err
 		}
+		if err := validateWriteActionSuccessStatuses(i, action); err != nil {
+			return err
+		}
 		if action.BodyRequired && bodyType != "json" {
 			return fmt.Errorf("action %d (%q) body_required requires body_type json, got %q", i, action.Name, bodyType)
 		}
@@ -2246,15 +2256,49 @@ func containsWriteField(fields []string, wanted string) bool {
 const maxBinaryUploadBytes = int64(64 << 20)
 
 func validateWriteActionBaseURL(i int, action WriteAction) error {
-	if strings.TrimSpace(action.BaseURL) == "" {
-		return nil
+	if strings.TrimSpace(action.BaseURL) == "" && len(action.AllowedBaseURLOrigins) > 0 {
+		return fmt.Errorf("action %d (%q) allowed_base_url_origins requires base_url", i, action.Name)
 	}
-	if action.BaseURL != strings.TrimSpace(action.BaseURL) || strings.Contains(action.BaseURL, "{{") {
-		return fmt.Errorf("action %d (%q) base_url must be one fixed absolute origin", i, action.Name)
+	if strings.TrimSpace(action.BaseURL) != "" {
+		if action.BaseURL != strings.TrimSpace(action.BaseURL) || strings.Contains(action.BaseURL, "{{") {
+			return fmt.Errorf("action %d (%q) base_url must be one fixed absolute origin", i, action.Name)
+		}
+		if _, err := fixedHTTPOrigin(action.BaseURL); err != nil {
+			return fmt.Errorf("action %d (%q) base_url must be one fixed absolute HTTP origin", i, action.Name)
+		}
 	}
-	parsed, err := url.Parse(action.BaseURL)
+	seen := make(map[string]struct{}, len(action.AllowedBaseURLOrigins))
+	for _, raw := range action.AllowedBaseURLOrigins {
+		origin, err := fixedHTTPOrigin(raw)
+		if err != nil || raw != strings.TrimSpace(raw) || strings.Contains(raw, "{{") {
+			return fmt.Errorf("action %d (%q) allowed_base_url_origins entries must be fixed absolute HTTP origins", i, action.Name)
+		}
+		if _, duplicate := seen[origin]; duplicate {
+			return fmt.Errorf("action %d (%q) allowed_base_url_origins must not repeat %q", i, action.Name, raw)
+		}
+		seen[origin] = struct{}{}
+	}
+	return nil
+}
+
+func fixedHTTPOrigin(raw string) (string, error) {
+	parsed, err := url.Parse(raw)
 	if err != nil || parsed.Host == "" || (parsed.Scheme != "https" && parsed.Scheme != "http") || parsed.User != nil || parsed.RawQuery != "" || parsed.Fragment != "" || (parsed.Path != "" && parsed.Path != "/") {
-		return fmt.Errorf("action %d (%q) base_url must be one fixed absolute HTTP origin", i, action.Name)
+		return "", fmt.Errorf("not a fixed HTTP origin")
+	}
+	return strings.ToLower(parsed.Scheme) + "://" + strings.ToLower(parsed.Host), nil
+}
+
+func validateWriteActionSuccessStatuses(i int, action WriteAction) error {
+	seen := make(map[int]struct{}, len(action.SuccessStatuses))
+	for _, status := range action.SuccessStatuses {
+		if status < http.StatusOK || status >= http.StatusMultipleChoices {
+			return fmt.Errorf("action %d (%q) success_statuses entry %d must be a 2xx status", i, action.Name, status)
+		}
+		if _, duplicate := seen[status]; duplicate {
+			return fmt.Errorf("action %d (%q) success_statuses repeats %d", i, action.Name, status)
+		}
+		seen[status] = struct{}{}
 	}
 	return nil
 }

@@ -554,6 +554,9 @@ func BinaryUploadSourcesForWriteAction(action WriteAction) ([]connectors.BinaryU
 			MaxBytes:          action.BinaryUpload.MaxBytes,
 			AllowedMediaTypes: append([]string(nil), action.BinaryUpload.AllowedMediaTypes...),
 		})
+		if err := validateFixedUploadMediaPolicy(action.Name, action.BinaryUpload.AllowedMediaTypes); err != nil {
+			return nil, err
+		}
 	case "base64_upload":
 		if action.Base64Upload == nil {
 			return nil, fmt.Errorf("base64_upload spec is required")
@@ -563,6 +566,9 @@ func BinaryUploadSourcesForWriteAction(action WriteAction) ([]connectors.BinaryU
 			MaxBytes:          action.Base64Upload.MaxDecodedBytes,
 			AllowedMediaTypes: append([]string(nil), action.Base64Upload.AllowedMediaTypes...),
 		})
+		if err := validateFixedUploadMediaPolicy(action.Name, action.Base64Upload.AllowedMediaTypes); err != nil {
+			return nil, err
+		}
 	case "multipart":
 		if action.Multipart == nil {
 			return nil, fmt.Errorf("multipart spec is required")

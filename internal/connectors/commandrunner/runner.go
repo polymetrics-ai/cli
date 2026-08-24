@@ -60,6 +60,7 @@ type Result struct {
 type WriteCommand struct {
 	Connector string `json:"connector"`
 	Command   string `json:"command"`
+	Intent    string `json:"intent"`
 	Write     string `json:"write"`
 	// Operation is set only for a typed direct_write command. Write remains
 	// the plan action for backward-compatible reverse_etl command plans.
@@ -239,6 +240,7 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 	out := WriteCommand{
 		Connector:             connector.Name(),
 		Command:               command,
+		Intent:                cmd.Intent,
 		Write:                 cmd.Write,
 		MutationClass:         mutationClassOf(action),
 		TargetResource:        targetResourceOf(cmd),
@@ -324,6 +326,7 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 	return WriteCommand{
 		Connector:             connector.Name(),
 		Command:               command,
+		Intent:                cmd.Intent,
 		Write:                 cmd.Operation,
 		Operation:             cmd.Operation,
 		MutationClass:         metadata.MutationClass,

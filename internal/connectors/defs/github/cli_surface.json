@@ -44318,7 +44318,7 @@
           "path": "/repos/{owner}/{repo}/releases/{release_id}/assets"
         }
       ],
-      "notes": "GitHub release assets use a separate upload host and raw request body; no bounded binary-upload executor exists."
+      "notes": "The upstream gh release upload workflow can select multiple local files and clobber or label existing assets; those composite semantics remain unsupported. Use the one-file declaration-bound binary-upload command, releases assets upload, for bounded bytes, persisted preview, approval, and execute."
     },
     {
       "path": "release verify",

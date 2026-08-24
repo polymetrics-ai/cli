@@ -9198,6 +9198,12 @@
       "kind": "create",
       "method": "POST",
       "base_url": "https://uploads.github.com",
+      "allowed_base_url_origins": [
+        "https://api.github.com"
+      ],
+      "success_statuses": [
+        201
+      ],
       "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}/assets",
       "path_fields": [
         "release_id"
@@ -9210,6 +9216,9 @@
         "name": "{{ record.name }}"
       },
       "body_type": "binary_upload",
+      "redact_fields": [
+        "file_path"
+      ],
       "binary_upload": {
         "source_field": "file_path",
         "max_bytes": 67108864,

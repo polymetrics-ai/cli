@@ -2,6 +2,35 @@
 
 ## Planned gates
 
+## Review-remediation gates
+
+- [x] Red/green behavioral coverage for F-4343-01 through F-4343-05, F-4343-07, and F-4343-08 as
+  listed in `PLAN.md`; these replace the original overstated lifecycle claims.
+- [x] Separately authorized F-4343-06 public GitHub upload-host proof: plan, preview, approval,
+  exact `201`, byte/digest read-back, pre-I/O unsafe-input refusals, and complete cleanup.
+
+### Remediation execution evidence
+
+- [x] `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/engine -run '^TestGitHubReleaseAssetUpload_(InstalledCommandSendsExactBytes|RejectsEnterpriseCrossOriginBeforeIO|RequiresCreatedResponse|EnforcesDeclaredMediaPolicy|RejectsMissingChangedUnsafeOrOversizeFile|EmptyFileAndTerminalFailures)$' -count=1` — pass (3.452s). The double arms both public/Enterprise endpoints and asserts zero calls/authorization headers on cross-origin refusal; it also retains `200`/`202`/`204` receipts as failed outcomes and rejects an unenforceable media list before I/O.
+- [x] `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/commandrunner -run '^(TestBuildWriteCommandPlansOnlyDeclaredBinaryUploadActions|TestGitHubReleaseAssetUploadBuildsBoundBinaryPlan)$' -count=1` — pass (4.075s).
+- [x] `GOFLAGS='-p=3' go test -timeout 20m ./internal/app -run '^TestBinaryUploadConnectorCommandPersistsPreviewBeforeApproval$' -count=1` — pass (3.916s). This is the App public connector-command lifecycle: root-relative source, no path in state/output, no plan token, persisted preview token, changed-file zero-I/O refusal, exact bytes/SHA-256, and retained `201` receipt.
+- [x] Deliberate break: removing `binary_upload` from `planRequiresPersistedPreview` made that App test fail (3.229s); restored before all other checks.
+- [x] `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/bundleregistry -run '^TestGitHubReleaseUploadGuidanceKeepsTheCompositeAliasHonest$' -count=1` — pass (3.618s) after generated-doc refresh.
+
+### Authorized real-provider proof
+
+- [x] The `github-live-upload-proof` encrypted credential was used only in the disposable
+  `karthik-sivadas/pm-binary-upload-testbed` draft-release fixture. The public binary built from
+  this worktree completed plan → preview → approval-on-stdin → exact 32-byte upload to
+  `uploads.github.com`; its retained provider response is `201`.
+- [x] `gh-axi release download` read the named asset back independently; `cmp`, byte count, and
+  SHA-256 matched. `gh-axi release delete --yes` then removed the dedicated draft release and
+  asset, and `gh-axi release view` confirmed the tag was absent. The complete non-secret record
+  is `LIVE-PROOF.md`.
+- [x] The generic certification stage is intentionally still `not_live`: it has no safe input
+  contract to carry an upload transfer/read-back/cleanup proof, so this observed proof cannot
+  falsely promote a generated matrix cell.
+
 - [x] `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/engine` — pass (11.533s).
 - [x] `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/commandrunner` — pass (39.064s).
 - [x] `GOFLAGS='-p=3' go test -timeout 20m ./internal/connectors/certify` — pass (14.284s).
@@ -29,4 +58,6 @@
 
 ## Constraint
 
-No credentialed provider call is authorized for this task. Tests must use the existing declaration-bound fixture/provider doubles and assert actual byte transfer through that real application path. A missing live candidate is `not_live`, not a passing transfer assertion.
+The authorized provider proof is deliberately bounded to one disposable draft release and is not
+reused as a generic credential or matrix claim. A missing stage-specific transfer/read-back/cleanup
+contract remains `not_live`, never a passing transfer assertion.

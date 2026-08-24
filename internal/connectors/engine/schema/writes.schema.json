@@ -17,11 +17,17 @@
           "method": { "type": "string" },
           "path": { "type": "string" },
           "base_url": { "type": "string", "pattern": "^https?://[^/?#]+/?$" },
+          "allowed_base_url_origins": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "pattern": "^https?://[^/?#]+/?$" }
+          },
           "route": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
           "path_fields": { "type": "array", "items": { "type": "string" } },
           "query": { "type": "object" },
           "redact_fields": { "type": "array", "items": { "type": "string" } },
           "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql", "json_array", "multipart", "base64_upload", "binary_upload"] },
+          "success_statuses": { "type": "array", "minItems": 1, "items": { "type": "integer", "minimum": 200, "maximum": 299 } },
           "body_required": { "type": "boolean" },
           "body_fields": { "type": "array", "items": { "type": "string" } },
           "body_field": { "type": "string" },
