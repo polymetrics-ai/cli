@@ -1,0 +1,1775 @@
+{
+  "tagline": "Read Outreach REST API v2 records and safely plan typed Outreach mutations.",
+  "usage": "pm outreach <command> [flags]",
+  "source_cli": {
+    "name": "Outreach REST API v2",
+    "docs": "https://api.outreach.io/api/v2/schema/openapi.json",
+    "reference": "Pinned Outreach OpenAPI 3.0.3 and the public Custom Objects documentation audit.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "prospects",
+        "accounts",
+        "sequences",
+        "mailings",
+        "account-notes",
+        "account-note",
+        "account",
+        "audit-logs",
+        "batch-items",
+        "batch-item",
+        "batches",
+        "batch",
+        "call-dispositions",
+        "call-disposition",
+        "call-purposes",
+        "call-purpose",
+        "calls",
+        "call",
+        "compliance-requests",
+        "compliance-request",
+        "content-categories",
+        "content-category",
+        "content-category-memberships",
+        "content-category-membership",
+        "content-category-ownerships",
+        "duties",
+        "email-addresses",
+        "email-address",
+        "events",
+        "event",
+        "favorites",
+        "favorite",
+        "import",
+        "kaia-recordings",
+        "kaia-recording",
+        "mail-aliases",
+        "mail-alias",
+        "mailboxes",
+        "mailbox",
+        "mailing",
+        "opportunities",
+        "opportunity",
+        "opportunity-prospect-roles",
+        "opportunity-prospect-role",
+        "opportunity-stages",
+        "opportunity-stage",
+        "org-setting",
+        "personas",
+        "persona",
+        "phone-numbers",
+        "phone-number",
+        "products",
+        "product",
+        "profiles",
+        "profile",
+        "prospect-notes",
+        "prospect-note",
+        "prospect",
+        "purchases",
+        "purchase",
+        "recipients",
+        "recipient",
+        "roles",
+        "role",
+        "rulesets",
+        "ruleset",
+        "sequence-states",
+        "sequence-state",
+        "sequence-steps",
+        "sequence-step",
+        "sequence-templates",
+        "sequence-template",
+        "sequence",
+        "snippets",
+        "snippet",
+        "stages",
+        "stage",
+        "task-dispositions",
+        "task-disposition",
+        "task-priorities",
+        "task-priority",
+        "task-purposes",
+        "task-purpose",
+        "tasks",
+        "task",
+        "teams",
+        "team",
+        "templates",
+        "template",
+        "users",
+        "user",
+        "webhooks",
+        "webhook",
+        "schema-definitions",
+        "custom-object-records",
+        "custom-object-record"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Outreach request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "prospects list",
+      "summary": "Read Outreach Prospects as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "prospects",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/prospects"
+        }
+      ],
+      "examples": [
+        "pm outreach prospects list --json"
+      ]
+    },
+    {
+      "path": "accounts list",
+      "summary": "Read Outreach Accounts as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts"
+        }
+      ],
+      "examples": [
+        "pm outreach accounts list --json"
+      ]
+    },
+    {
+      "path": "sequences list",
+      "summary": "Read Outreach Sequences as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sequences",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/sequences"
+        }
+      ],
+      "examples": [
+        "pm outreach sequences list --json"
+      ]
+    },
+    {
+      "path": "mailings list",
+      "summary": "Read Outreach Mailings as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mailings",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/mailings"
+        }
+      ],
+      "examples": [
+        "pm outreach mailings list --json"
+      ]
+    },
+    {
+      "path": "account-notes list",
+      "summary": "Read Outreach Account Notes as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_notes",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accountNotes"
+        }
+      ],
+      "examples": [
+        "pm outreach account-notes list --json"
+      ]
+    },
+    {
+      "path": "account-note list",
+      "summary": "Read Outreach Account Note as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_note",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accountNotes/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach account-note list --json"
+      ]
+    },
+    {
+      "path": "account list",
+      "summary": "Read Outreach Account as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach account list --json"
+      ]
+    },
+    {
+      "path": "audit-logs list",
+      "summary": "Read Outreach Audit Logs as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "audit_logs",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/auditLogs"
+        }
+      ],
+      "examples": [
+        "pm outreach audit-logs list --json"
+      ]
+    },
+    {
+      "path": "batch-items list",
+      "summary": "Read Outreach Batch Items as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "batch_items",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/batchItems"
+        }
+      ],
+      "examples": [
+        "pm outreach batch-items list --json"
+      ]
+    },
+    {
+      "path": "batch-item list",
+      "summary": "Read Outreach Batch Item as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "batch_item",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/batchItems/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach batch-item list --json"
+      ]
+    },
+    {
+      "path": "batches list",
+      "summary": "Read Outreach Batches as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "batches",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/batches"
+        }
+      ],
+      "examples": [
+        "pm outreach batches list --json"
+      ]
+    },
+    {
+      "path": "batch list",
+      "summary": "Read Outreach Batch as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "batch",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/batches/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach batch list --json"
+      ]
+    },
+    {
+      "path": "call-dispositions list",
+      "summary": "Read Outreach Call Dispositions as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "call_dispositions",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/callDispositions"
+        }
+      ],
+      "examples": [
+        "pm outreach call-dispositions list --json"
+      ]
+    },
+    {
+      "path": "call-disposition list",
+      "summary": "Read Outreach Call Disposition as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "call_disposition",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/callDispositions/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach call-disposition list --json"
+      ]
+    },
+    {
+      "path": "call-purposes list",
+      "summary": "Read Outreach Call Purposes as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "call_purposes",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/callPurposes"
+        }
+      ],
+      "examples": [
+        "pm outreach call-purposes list --json"
+      ]
+    },
+    {
+      "path": "call-purpose list",
+      "summary": "Read Outreach Call Purpose as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "call_purpose",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/callPurposes/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach call-purpose list --json"
+      ]
+    },
+    {
+      "path": "calls list",
+      "summary": "Read Outreach Calls as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calls",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/calls"
+        }
+      ],
+      "examples": [
+        "pm outreach calls list --json"
+      ]
+    },
+    {
+      "path": "call list",
+      "summary": "Read Outreach Call as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "call",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/calls/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach call list --json"
+      ]
+    },
+    {
+      "path": "compliance-requests list",
+      "summary": "Read Outreach Compliance Requests as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "compliance_requests",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/complianceRequests"
+        }
+      ],
+      "examples": [
+        "pm outreach compliance-requests list --json"
+      ]
+    },
+    {
+      "path": "compliance-request list",
+      "summary": "Read Outreach Compliance Request as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "compliance_request",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/complianceRequests/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach compliance-request list --json"
+      ]
+    },
+    {
+      "path": "content-categories list",
+      "summary": "Read Outreach Content Categories as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "content_categories",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/contentCategories"
+        }
+      ],
+      "examples": [
+        "pm outreach content-categories list --json"
+      ]
+    },
+    {
+      "path": "content-category list",
+      "summary": "Read Outreach Content Category as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "content_category",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/contentCategories/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach content-category list --json"
+      ]
+    },
+    {
+      "path": "content-category-memberships list",
+      "summary": "Read Outreach Content Category Memberships as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "content_category_memberships",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/contentCategoryMemberships"
+        }
+      ],
+      "examples": [
+        "pm outreach content-category-memberships list --json"
+      ]
+    },
+    {
+      "path": "content-category-membership list",
+      "summary": "Read Outreach Content Category Membership as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "content_category_membership",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/contentCategoryMemberships/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach content-category-membership list --json"
+      ]
+    },
+    {
+      "path": "content-category-ownerships list",
+      "summary": "Read Outreach Content Category Ownerships as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "content_category_ownerships",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/contentCategoryOwnerships"
+        }
+      ],
+      "examples": [
+        "pm outreach content-category-ownerships list --json"
+      ]
+    },
+    {
+      "path": "duties list",
+      "summary": "Read Outreach Duties as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "duties",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/duties"
+        }
+      ],
+      "examples": [
+        "pm outreach duties list --json"
+      ]
+    },
+    {
+      "path": "email-addresses list",
+      "summary": "Read Outreach Email Addresses as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "email_addresses",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/emailAddresses"
+        }
+      ],
+      "examples": [
+        "pm outreach email-addresses list --json"
+      ]
+    },
+    {
+      "path": "email-address list",
+      "summary": "Read Outreach Email Address as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "email_address",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/emailAddresses/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach email-address list --json"
+      ]
+    },
+    {
+      "path": "events list",
+      "summary": "Read Outreach Events as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/events"
+        }
+      ],
+      "examples": [
+        "pm outreach events list --json"
+      ]
+    },
+    {
+      "path": "event list",
+      "summary": "Read Outreach Event as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/events/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach event list --json"
+      ]
+    },
+    {
+      "path": "favorites list",
+      "summary": "Read Outreach Favorites as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "favorites",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/favorites"
+        }
+      ],
+      "examples": [
+        "pm outreach favorites list --json"
+      ]
+    },
+    {
+      "path": "favorite list",
+      "summary": "Read Outreach Favorite as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "favorite",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/favorites/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach favorite list --json"
+      ]
+    },
+    {
+      "path": "import list",
+      "summary": "Read Outreach Import as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "import",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/imports/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach import list --json"
+      ]
+    },
+    {
+      "path": "kaia-recordings list",
+      "summary": "Read Outreach Kaia Recordings as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "kaia_recordings",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/kaiaRecordings"
+        }
+      ],
+      "examples": [
+        "pm outreach kaia-recordings list --json"
+      ]
+    },
+    {
+      "path": "kaia-recording list",
+      "summary": "Read Outreach Kaia Recording as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "kaia_recording",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/kaiaRecordings/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach kaia-recording list --json"
+      ]
+    },
+    {
+      "path": "mail-aliases list",
+      "summary": "Read Outreach Mail Aliases as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mail_aliases",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/mailAliases"
+        }
+      ],
+      "examples": [
+        "pm outreach mail-aliases list --json"
+      ]
+    },
+    {
+      "path": "mail-alias list",
+      "summary": "Read Outreach Mail Alias as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mail_alias",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/mailAliases/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach mail-alias list --json"
+      ]
+    },
+    {
+      "path": "mailboxes list",
+      "summary": "Read Outreach Mailboxes as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mailboxes",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/mailboxes"
+        }
+      ],
+      "examples": [
+        "pm outreach mailboxes list --json"
+      ]
+    },
+    {
+      "path": "mailbox list",
+      "summary": "Read Outreach Mailbox as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mailbox",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/mailboxes/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach mailbox list --json"
+      ]
+    },
+    {
+      "path": "mailing list",
+      "summary": "Read Outreach Mailing as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mailing",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/mailings/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach mailing list --json"
+      ]
+    },
+    {
+      "path": "opportunities list",
+      "summary": "Read Outreach Opportunities as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunities",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/opportunities"
+        }
+      ],
+      "examples": [
+        "pm outreach opportunities list --json"
+      ]
+    },
+    {
+      "path": "opportunity list",
+      "summary": "Read Outreach Opportunity as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunity",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/opportunities/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach opportunity list --json"
+      ]
+    },
+    {
+      "path": "opportunity-prospect-roles list",
+      "summary": "Read Outreach Opportunity Prospect Roles as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunity_prospect_roles",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/opportunityProspectRoles"
+        }
+      ],
+      "examples": [
+        "pm outreach opportunity-prospect-roles list --json"
+      ]
+    },
+    {
+      "path": "opportunity-prospect-role list",
+      "summary": "Read Outreach Opportunity Prospect Role as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunity_prospect_role",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/opportunityProspectRoles/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach opportunity-prospect-role list --json"
+      ]
+    },
+    {
+      "path": "opportunity-stages list",
+      "summary": "Read Outreach Opportunity Stages as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunity_stages",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/opportunityStages"
+        }
+      ],
+      "examples": [
+        "pm outreach opportunity-stages list --json"
+      ]
+    },
+    {
+      "path": "opportunity-stage list",
+      "summary": "Read Outreach Opportunity Stage as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunity_stage",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/opportunityStages/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach opportunity-stage list --json"
+      ]
+    },
+    {
+      "path": "org-setting list",
+      "summary": "Read Outreach Org Setting as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "org_setting",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/orgSettings/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach org-setting list --json"
+      ]
+    },
+    {
+      "path": "personas list",
+      "summary": "Read Outreach Personas as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "personas",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/personas"
+        }
+      ],
+      "examples": [
+        "pm outreach personas list --json"
+      ]
+    },
+    {
+      "path": "persona list",
+      "summary": "Read Outreach Persona as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "persona",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/personas/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach persona list --json"
+      ]
+    },
+    {
+      "path": "phone-numbers list",
+      "summary": "Read Outreach Phone Numbers as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "phone_numbers",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/phoneNumbers"
+        }
+      ],
+      "examples": [
+        "pm outreach phone-numbers list --json"
+      ]
+    },
+    {
+      "path": "phone-number list",
+      "summary": "Read Outreach Phone Number as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "phone_number",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/phoneNumbers/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach phone-number list --json"
+      ]
+    },
+    {
+      "path": "products list",
+      "summary": "Read Outreach Products as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/products"
+        }
+      ],
+      "examples": [
+        "pm outreach products list --json"
+      ]
+    },
+    {
+      "path": "product list",
+      "summary": "Read Outreach Product as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "product",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/products/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach product list --json"
+      ]
+    },
+    {
+      "path": "profiles list",
+      "summary": "Read Outreach Profiles as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "profiles",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/profiles"
+        }
+      ],
+      "examples": [
+        "pm outreach profiles list --json"
+      ]
+    },
+    {
+      "path": "profile list",
+      "summary": "Read Outreach Profile as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "profile",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/profiles/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach profile list --json"
+      ]
+    },
+    {
+      "path": "prospect-notes list",
+      "summary": "Read Outreach Prospect Notes as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "prospect_notes",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/prospectNotes"
+        }
+      ],
+      "examples": [
+        "pm outreach prospect-notes list --json"
+      ]
+    },
+    {
+      "path": "prospect-note list",
+      "summary": "Read Outreach Prospect Note as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "prospect_note",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/prospectNotes/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach prospect-note list --json"
+      ]
+    },
+    {
+      "path": "prospect list",
+      "summary": "Read Outreach Prospect as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "prospect",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/prospects/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach prospect list --json"
+      ]
+    },
+    {
+      "path": "purchases list",
+      "summary": "Read Outreach Purchases as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "purchases",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/purchases"
+        }
+      ],
+      "examples": [
+        "pm outreach purchases list --json"
+      ]
+    },
+    {
+      "path": "purchase list",
+      "summary": "Read Outreach Purchase as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "purchase",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/purchases/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach purchase list --json"
+      ]
+    },
+    {
+      "path": "recipients list",
+      "summary": "Read Outreach Recipients as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "recipients",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/recipients"
+        }
+      ],
+      "examples": [
+        "pm outreach recipients list --json"
+      ]
+    },
+    {
+      "path": "recipient list",
+      "summary": "Read Outreach Recipient as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "recipient",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/recipients/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach recipient list --json"
+      ]
+    },
+    {
+      "path": "roles list",
+      "summary": "Read Outreach Roles as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "roles",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/roles"
+        }
+      ],
+      "examples": [
+        "pm outreach roles list --json"
+      ]
+    },
+    {
+      "path": "role list",
+      "summary": "Read Outreach Role as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "role",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/roles/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach role list --json"
+      ]
+    },
+    {
+      "path": "rulesets list",
+      "summary": "Read Outreach Rulesets as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "rulesets",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/rulesets"
+        }
+      ],
+      "examples": [
+        "pm outreach rulesets list --json"
+      ]
+    },
+    {
+      "path": "ruleset list",
+      "summary": "Read Outreach Ruleset as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ruleset",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/rulesets/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach ruleset list --json"
+      ]
+    },
+    {
+      "path": "sequence-states list",
+      "summary": "Read Outreach Sequence States as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sequence_states",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/sequenceStates"
+        }
+      ],
+      "examples": [
+        "pm outreach sequence-states list --json"
+      ]
+    },
+    {
+      "path": "sequence-state list",
+      "summary": "Read Outreach Sequence State as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sequence_state",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/sequenceStates/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach sequence-state list --json"
+      ]
+    },
+    {
+      "path": "sequence-steps list",
+      "summary": "Read Outreach Sequence Steps as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sequence_steps",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/sequenceSteps"
+        }
+      ],
+      "examples": [
+        "pm outreach sequence-steps list --json"
+      ]
+    },
+    {
+      "path": "sequence-step list",
+      "summary": "Read Outreach Sequence Step as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sequence_step",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/sequenceSteps/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach sequence-step list --json"
+      ]
+    },
+    {
+      "path": "sequence-templates list",
+      "summary": "Read Outreach Sequence Templates as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sequence_templates",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/sequenceTemplates"
+        }
+      ],
+      "examples": [
+        "pm outreach sequence-templates list --json"
+      ]
+    },
+    {
+      "path": "sequence-template list",
+      "summary": "Read Outreach Sequence Template as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sequence_template",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/sequenceTemplates/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach sequence-template list --json"
+      ]
+    },
+    {
+      "path": "sequence list",
+      "summary": "Read Outreach Sequence as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sequence",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/sequences/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach sequence list --json"
+      ]
+    },
+    {
+      "path": "snippets list",
+      "summary": "Read Outreach Snippets as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "snippets",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/snippets"
+        }
+      ],
+      "examples": [
+        "pm outreach snippets list --json"
+      ]
+    },
+    {
+      "path": "snippet list",
+      "summary": "Read Outreach Snippet as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "snippet",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/snippets/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach snippet list --json"
+      ]
+    },
+    {
+      "path": "stages list",
+      "summary": "Read Outreach Stages as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stages",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/stages"
+        }
+      ],
+      "examples": [
+        "pm outreach stages list --json"
+      ]
+    },
+    {
+      "path": "stage list",
+      "summary": "Read Outreach Stage as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stage",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/stages/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach stage list --json"
+      ]
+    },
+    {
+      "path": "task-dispositions list",
+      "summary": "Read Outreach Task Dispositions as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "task_dispositions",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/taskDispositions"
+        }
+      ],
+      "examples": [
+        "pm outreach task-dispositions list --json"
+      ]
+    },
+    {
+      "path": "task-disposition list",
+      "summary": "Read Outreach Task Disposition as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "task_disposition",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/taskDispositions/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach task-disposition list --json"
+      ]
+    },
+    {
+      "path": "task-priorities list",
+      "summary": "Read Outreach Task Priorities as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "task_priorities",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/taskPriorities"
+        }
+      ],
+      "examples": [
+        "pm outreach task-priorities list --json"
+      ]
+    },
+    {
+      "path": "task-priority list",
+      "summary": "Read Outreach Task Priority as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "task_priority",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/taskPriorities/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach task-priority list --json"
+      ]
+    },
+    {
+      "path": "task-purposes list",
+      "summary": "Read Outreach Task Purposes as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "task_purposes",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/taskPurposes"
+        }
+      ],
+      "examples": [
+        "pm outreach task-purposes list --json"
+      ]
+    },
+    {
+      "path": "task-purpose list",
+      "summary": "Read Outreach Task Purpose as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "task_purpose",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/taskPurposes/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach task-purpose list --json"
+      ]
+    },
+    {
+      "path": "tasks list",
+      "summary": "Read Outreach Tasks as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/tasks"
+        }
+      ],
+      "examples": [
+        "pm outreach tasks list --json"
+      ]
+    },
+    {
+      "path": "task list",
+      "summary": "Read Outreach Task as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "task",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/tasks/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach task list --json"
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "Read Outreach Teams as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/teams"
+        }
+      ],
+      "examples": [
+        "pm outreach teams list --json"
+      ]
+    },
+    {
+      "path": "team list",
+      "summary": "Read Outreach Team as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/teams/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach team list --json"
+      ]
+    },
+    {
+      "path": "templates list",
+      "summary": "Read Outreach Templates as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/templates"
+        }
+      ],
+      "examples": [
+        "pm outreach templates list --json"
+      ]
+    },
+    {
+      "path": "template list",
+      "summary": "Read Outreach Template as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "template",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/templates/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach template list --json"
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "Read Outreach Users as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/users"
+        }
+      ],
+      "examples": [
+        "pm outreach users list --json"
+      ]
+    },
+    {
+      "path": "user list",
+      "summary": "Read Outreach User as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/users/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach user list --json"
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Read Outreach Webhooks as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/webhooks"
+        }
+      ],
+      "examples": [
+        "pm outreach webhooks list --json"
+      ]
+    },
+    {
+      "path": "webhook list",
+      "summary": "Read Outreach Webhook as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook",
+      "source_url": "https://api.outreach.io/api/v2/schema/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/webhooks/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach webhook list --json"
+      ]
+    },
+    {
+      "path": "schema-definitions list",
+      "summary": "Read Outreach Schema Definitions as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "schema_definitions",
+      "source_url": "https://developers.outreach.io/api/custom-objects",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/schema"
+        }
+      ],
+      "examples": [
+        "pm outreach schema-definitions list --json"
+      ]
+    },
+    {
+      "path": "custom-object-records list",
+      "summary": "Read Outreach Custom Object Records as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_object_records",
+      "source_url": "https://developers.outreach.io/api/custom-objects",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/customObjects/{objectName}"
+        }
+      ],
+      "examples": [
+        "pm outreach custom-object-records list --json"
+      ]
+    },
+    {
+      "path": "custom-object-record list",
+      "summary": "Read Outreach Custom Object Record as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_object_record",
+      "source_url": "https://developers.outreach.io/api/custom-objects",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/customObjects/{objectName}/{id}"
+        }
+      ],
+      "examples": [
+        "pm outreach custom-object-record list --json"
+      ]
+    }
+  ]
+}

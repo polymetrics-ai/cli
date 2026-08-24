@@ -65,10 +65,12 @@
         "conformance": "declarative_stream_transport/braze_fixture_source_v1"
       },
       "destination_transport": {
-        "state": "declared_foundation_available_pending_connector_app_cli_proof",
-        "declaration": "sync_transport.json",
-        "action": "update_content_block",
-        "foundation_sha": "609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57",
+        "state": "declaration-pending",
+        "declaration_pending": {
+          "id": "qualified-declarative-typed-destination-braze",
+          "evidence": "docs/sync-transport-definition.md:85-115 requires action-owned input_fields, per-record batch, keyed durable acknowledgement, and action-owned provider read-back. The prior declaration was removed because it selected rejected full_overwrite and carried no provider-evidenced receipt/read-back contract.",
+          "minimal_change": "Add a source-evidenced destination declaration only when one exact typed action has per-record batch, private receipt locator, provider-state read-back, conformance evidence, and a supported non-full-overwrite strategy."
+        },
         "provider_live_certification": "pending"
       }
     },
@@ -1080,8 +1082,8 @@
         },
         "reverse_etl": {
           "eligible_typed_action": true,
-          "state": "bound_foundation_available_pending_connector_app_cli_proof",
-          "evidence": "#4304 foundation 609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57 supplies persisted exact action selection and App/CLI dispatch; this connector still needs its installed App/CLI fixture path and provider-live certification remains pending."
+          "state": "eligible_declaration_pending",
+          "reason": "The closed declarative typed-destination contract rejects the prior branch-only declaration: it selected full_overwrite and lacked the action-owned per-record batch, provider receipt locator, and read-back conformance evidence. The direct typed write remains enabled; reverse ETL is connector-owned declaration work, not a foundation gap."
         }
       }
     },

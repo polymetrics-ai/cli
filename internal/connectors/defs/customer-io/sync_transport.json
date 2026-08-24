@@ -10,26 +10,5 @@
     "modes": ["full_overwrite", "full_append", "incremental_upsert"],
     "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
     "conformance": {"suite": "declarative_stream_transport", "run_id": "customer_io_fixture_source_v1"}
-  },
-  "destination_transport": {
-    "executor": {"family": "declarative_api", "id": "declarative_typed_destination"},
-    "eligible_actions": ["update_snippet"],
-    "modes": ["full_overwrite", "full_append", "incremental_upsert"],
-    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
-    "conformance": {"suite": "declarative_typed_destination", "run_id": "customer_io_update_snippet_fixture_v1"},
-    "acknowledgement": "durable_warehouse",
-    "apply_strategies": [
-      {"mode": "full_overwrite", "strategy": "replace", "action": "update_snippet"},
-      {"mode": "full_append", "strategy": "append", "action": "update_snippet"},
-      {"mode": "incremental_upsert", "strategy": "merge", "action": "update_snippet"}
-    ],
-    "source_bindings": [{
-      "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
-      "eligible_streams": ["snippets"],
-      "record_mapping": {"kind": "input_fields", "inputs": [
-        {"input": "name", "field": "name"},
-        {"input": "value", "field": "value"}
-      ]}
-    }]
   }
 }
