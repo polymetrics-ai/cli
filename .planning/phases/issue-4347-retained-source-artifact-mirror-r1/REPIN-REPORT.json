@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "decision_authority": "Firstmate inbox 002, 2026-08-24; this re-pin authorization is not attributable to the captain.",
+  "lock_preservation": {
+    "path": "internal/connectors/defs/github/sources/github-operation-source-lock.json",
+    "pre_change_git_blob": "bfcc0519bbbece3df81b254359384ae1c11b37e4",
+    "note": "The current-main GitHub source lock is tracked; its complete pre-change bytes remain recoverable as this Git object. Untracked lane locks were not touched."
+  },
+  "artifacts": [
+    {
+      "connector": "github",
+      "artifact": "rest-api-description",
+      "source_url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
+      "retrieved_at": "2026-08-24T07:02:03Z",
+      "http_status": 200,
+      "classification": "real provider OpenAPI 3.0.3 document",
+      "decision": "preserved",
+      "old": {
+        "bytes": 12920264,
+        "sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d"
+      },
+      "new": {
+        "bytes": 12920264,
+        "sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d"
+      },
+      "retained": true
+    },
+    {
+      "connector": "github",
+      "artifact": "ghec-graphql-schema",
+      "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
+      "retrieved_at": "2026-08-24T07:02:03Z",
+      "http_status": 200,
+      "classification": "real provider GraphQL schema: GraphQL directives, input declarations, and type declarations observed; not an error, redirect, or login response",
+      "decision": "re-pinned",
+      "old": {
+        "bytes": 1546421,
+        "sha256": "c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d"
+      },
+      "new": {
+        "bytes": 1551372,
+        "sha256": "30347e4f3bb975195f982351e55636ca03c76969c279980ca515a96ea7b40c3d"
+      },
+      "retained": true
+    }
+  ]
+}
