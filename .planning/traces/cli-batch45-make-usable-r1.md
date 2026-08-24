@@ -898,3 +898,25 @@ cannot proceed as specified. This is a pre-conversion evidence finding, not a fa
 all connector declarations remain unchanged. Await a delivery-owner choice between a 97-command
 read/ETL-only first wave, explicit authorization for a connector-local write/transport foundation,
 or a different source-backed write candidate.
+
+### Transport registration check — 2026-08-24
+
+The existing `declarative_api` **source** executor is generic: production composition scans every
+definition, registers the exact `declarative_stream_source` reference without selecting a connector
+by name, and admits an engine-backed connector whose `eligible_streams` exactly covers its declared
+streams. A connector-local source role can therefore use that executor without an engine change.
+
+The existing `declarative_api` **destination** executor is also generic in implementation, but it
+is not usable from `sync_transport.json` alone. The closed
+`declarative_typed_destination` adapter refuses admission unless the connector has, for every
+selected action, a provider-owned idempotency header, an action-owned bounded source binding, and
+a provider read-back contract coupled to its conformance evidence. Those are required to prevent a
+replayed mutation or a local receipt from posing as provider acknowledgement.
+
+The eight target bundles that contain `writes.json` have 390 actions in aggregate (Airtable 12,
+BambooHR 101, Buildkite 17, Mailchimp 148, Pipedrive 17, SonarCloud 8, Squarespace 2, Zendesk
+Support 90); **zero** declares `idempotency_key_header` and **zero** declares the required
+read-back contract. The other twelve target bundles have no write actions. This is a real missing
+provider-contract boundary, not a missing generic executor: writing only `sync_transport.json`
+would fail destination registration before credential resolution. No transport file or command
+surface was changed.
