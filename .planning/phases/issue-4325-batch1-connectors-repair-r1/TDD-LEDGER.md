@@ -123,6 +123,20 @@
   pending a shared, source-cited bounded-dynamic-body capability or a provider
   schema correction; no local schema inference is authorized.
 
+### 2026-08-24 Asana documentation-source audit
+
+- Rechecked every one of the 22 required-body routes against its official
+  endpoint page rather than treating the OpenAPI source as exhaustive. All 22
+  pages returned HTTP 200 and the provider-supported `.md` renderings are
+  pinned, with URLs, byte counts, SHA-256 values, and request/schema pointers,
+  in `internal/connectors/defs/asana/sources/asana-required-body-documentation-audit.md`.
+- Result: documentation resolves **0/22** to a bounded contract. Every page's
+  own OpenAPI definition still leaves its data root (or an `allOf` branch)
+  open; nine explicitly retain dynamic `custom_fields` maps and the other 13
+  have no `additionalProperties: false` closure. No page says its listed fields
+  are exhaustive. This is now a falsifiable two-source provider limitation,
+  not an inference from a failed fetch or a connector-local assertion.
+
 ## Jira red/green evidence
 
 - Red: `go run ./cmd/connectorgen source-import jira --check` exited 1 because
@@ -146,6 +160,31 @@
   is valid.
 
 ### 2026-08-24 Jira declared-and-deferred result
+
+- **Planned red:** add a focused runtime-preflight test for the three
+  `universal-avatar` image download commands. It must fail against the loaded
+  Jira bundle until each binary operation carries the exact provider success
+  status and image media contract.
+- **Planned green:** retain the source descriptor's `200` success status and
+  `image/png` / `image/svg+xml` media types on each of the three operation
+  declarations. This is a bounded provider response contract, not a new
+  endpoint or a relaxation of binary-download validation.
+- **Red result:** `TestJiraAvatarImageCommandsPassRuntimePreflight` failed with
+  `jira.universal_avatar_get_avatar_image_by_type requires non-empty declared
+  response content_types`; no request reached a provider.
+- **Green result:** after adding only the documented `200`, `image/png`, and
+  `image/svg+xml` contracts, the focused runtime-preflight test passed. A
+  rebuilt binary in an isolated no-credential project ran each of
+  `universal-avatar get-avatar-image-by-type --type project`,
+  `…by-id --type project --id 1`, and `…by-owner --type project --entity-id 1`
+  to exactly `error: missing --credential` (exit 1), rather than an operation
+  metadata refusal.
+- **Shared sweep observation:** the real all-bundle preflight sweep now reports
+  21 of 5,284 implemented commands failing; every remaining failure is the
+  independently-held Docker Hub debt. Jira contributes zero runtime-preflight
+  failures. Jira source import intentionally remains at 11 incomplete
+  semantic-POST action projections, and targeted validation reports 318
+  historic projection findings but zero avatar response-contract findings.
 
 - Red: current `go run ./cmd/connectorgen source-import jira --check` reported
   14 incomplete source-action contracts; current targeted validation reported

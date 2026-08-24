@@ -4073,6 +4073,24 @@ func TestEveryImplementedCommandPassesRuntimePreflight(t *testing.T) {
 	t.Fatal(b.String())
 }
 
+func TestJiraAvatarImageCommandsPassRuntimePreflight(t *testing.T) {
+	registry := bundleregistry.New()
+	connector, ok := registry.Get("jira")
+	if !ok {
+		t.Fatal("Jira connector is not registered")
+	}
+
+	for _, path := range []string{
+		"universal-avatar get-avatar-image-by-type",
+		"universal-avatar get-avatar-image-by-id",
+		"universal-avatar get-avatar-image-by-owner",
+	} {
+		if err := Preflight(connector, strings.Fields(path)); err != nil {
+			t.Fatalf("Preflight(%q): %v", path, err)
+		}
+	}
+}
+
 func TestRunStatusCheckPreservesFinalNon2xxMetadata(t *testing.T) {
 	connector := &fakeConnector{
 		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
