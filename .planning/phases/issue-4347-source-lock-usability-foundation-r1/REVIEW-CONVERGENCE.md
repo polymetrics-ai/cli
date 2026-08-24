@@ -66,3 +66,10 @@ No other blocker was found: retain-only validation, canonical/raw provenance
 ordering, no-replacement storage, bad-source classification, and exact-byte
 identity stayed intact. This finding starts the coordinated fix wave; any source
 change creates a new review SHA.
+
+## Coordinated fix wave and final review
+
+- **Red:** `go test -timeout 10m ./cmd/connectorgen -run '^TestSourceRetainReadsUppercaseLockDigestAfterRetention$'` failed with `retained source artifact provenance does not match source lock` after a successful retain.
+- **Green:** the retained-reader comparison now uses `strings.EqualFold` for the already validated hexadecimal lock digest. The red command, `go test -timeout 10m ./cmd/connectorgen -run '^(TestSourceRetain|TestSourceImportRetainedArtifactRejectsMissingAndMismatchedCopies)$'`, `go vet ./cmd/connectorgen`, and `go run ./cmd/connectorgen surface-sync --check` passed.
+- **Final code SHA:** `d73b2c69287bc5a2db9c2855448cf3ffbaad3dad`.
+- **Fresh-context verdict:** `ZERO-BLOCKER`. A separate, non-authoring reviewer inspected that exact SHA read-only, re-ran `go test -count=1 -timeout 10m ./cmd/connectorgen -run '^(TestSourceRetain.*|TestSourceImportRetainedArtifactRejectsMissingAndMismatchedCopies)$'` and `go vet ./cmd/connectorgen`, and reported both passing. It confirmed case-insensitive validated digest matching preserves normalized manifest records, byte/canonical identity checks, and the wrong-source/BOT-BLOCK boundary.
