@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_opportunities_fixture_id",
+    "closeDate": "2026-01-01T00:00:01Z"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/opportunities/update_opportunities_fixture_id",
+    "body": {
+      "closeDate": "2026-01-01T00:00:01Z"
+    }
+  }
+}
