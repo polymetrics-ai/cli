@@ -223,3 +223,49 @@ This exceeds the authorized bounded wave. No `writes.json`, `sync_transport.json
 shared-engine file was changed. The required decision is whether to open a separate, source-lock
 refresh/retention and per-action-evidence wave; without it, this task's honest Phase 2 result is
 zero new typed destinations.
+
+## Write-action fidelity correction — 2026-08-24
+
+Firstmate requested a correctness audit of Pipedrive, Squarespace, and Zendesk Support because the
+prior wording could imply that the verified sources refute their shipped write actions. That
+inference was wrong: the sources refute *typed-destination idempotency admission*, not the action
+method/path contracts. The per-action audit is in
+[`cli-batch45-make-usable-r1-write-action-audit.md`](cli-batch45-make-usable-r1-write-action-audit.md).
+
+- Pipedrive: 17/17 declared action method/path identities match the verified full OpenAPI source.
+- Squarespace: 2/2 match after the declaration's `base_url` `/1.0` prefix is applied.
+- Zendesk Support: 90/90 match after path-variable labels are compared by position; e.g. a
+  declaration's `{id}` is the source operation's typed resource identifier, not a different wire
+  segment.
+
+No source method/path contradiction was observed. A non-idempotent action may still make one
+provider-correct request; the engine disables its retries. Neither that fact nor source identity
+certifies every declared CLI row as binary-reachable, so the Phase 1 credential-boundary evidence
+is unchanged.
+
+Mailchimp has exactly 148 existing `writes.json` actions. A full source-contract review is 148
+action-level reviews, not a rough estimate: for each action, retain and digest-verify its own
+provider artifact; derive a provider-owned idempotency header, if one is actually declared; derive
+the write response's bounded receipt locator; identify a separately declared, bounded provider
+read-back operation and its input/response mapping; and then prove the candidate's exact source
+stream field mapping and delivery limits. The verified root Swagger artifact and the selected
+`put_lists_members` artifact declare no idempotency header; they do not prove every other
+action-specific artifact has the same absence.
+
+## Captain priority: source locks before surfaces — 2026-08-24
+
+Captain direction supersedes further Phase 2 transport work. The primary deliverable is now a
+twenty-connector source-lock inventory and remediation plan: record lock presence, old and new
+bytes/digests for every re-pin, the exact retained source/spec URL, and whether Context7
+documentation evidence was needed because a provider source is missing, broken, or prose-only.
+No transport, write-action, or parallel source-refresh implementation will be authored here. PR
+#4348 owns the source-retention foundation; re-pinning will consume that foundation after it lands.
+
+- `Red:` Existing parity locks prove only operation inventories for several connectors; some public
+  artifacts now drift and eBay/TikTok/Salesforce do not yet have a valid retained provider source.
+- `Green condition:` Every connector has an exact, provider-owned source URL and a retained,
+  hash-verifiable artifact or an explicit unavailable/source-evidence record. Context7 may supply
+  cited documentation discovery only; it cannot substitute for a retained provider artifact.
+- `Guard:` A changed artifact is reported as a re-pin with both old and new bytes/digests, never as
+  if it remained the old pin. No guessed documentation URL, operation, header, or transport is
+  accepted.
