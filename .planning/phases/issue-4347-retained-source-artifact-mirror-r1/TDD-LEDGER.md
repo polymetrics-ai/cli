@@ -1,0 +1,22 @@
+# Issue #4347 — TDD ledger
+
+## Red
+
+- `gofmt -w cmd/connectorgen/sourceimport_test.go && go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportRetainedArtifact' -count=1` failed before production changes. The exact compiler failures are five references to undefined `newSourceImportRetainedArtifactFetcher` at `sourceimport_test.go:708,729,742,772,806`.
+- The red suite has real importer assertions for an unreachable locked machine-readable source URL, absent retained copy, corrupt retained bytes, opaque rendered citation bytes, zip bundle bytes, and the named Elasticsearch-drift/Zoom-404 recovery paths. The Elasticsearch and Zoom fixtures are synthetic only because the actual historical bodies are absent; their URL/terminal-condition evidence is recorded in `CONTEXT.md`.
+- `gofmt -w cmd/connectorgen/sourceimport_test.go && go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportVersion2RequiresRawGraphQLArtifactAlongsideProjection$' -count=1` failed with `missing raw GraphQL artifact error = <nil>`. The v2 importer verified only the embedded GraphQL projection, leaving its separate raw schema hash unverified.
+- `gofmt -w cmd/connectorgen/sourceartifact_test.go && go test -timeout 20m ./cmd/connectorgen -run '^TestSourceRetain' -count=1` failed before production changes with undefined `runSourceRetainWithFetcher` and `sourceRetainLockArtifacts`. The red tests require a source-lock-preserving materializer, an exact-byte refusal, and retained rendered-reference/zip coverage.
+- `gofmt -w cmd/connectorgen/sourceimport_test.go && go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportRejectsSymlinkedSourcesDirectoryEvenInsideConnectorBundle$' -count=1` failed with an accepted in-bundle `sources` symlink. Resolving before inspecting had made a confined symlink look like an ordinary source directory.
+
+## Green
+
+- `gofmt -w cmd/connectorgen/sourceimport.go cmd/connectorgen/sourceimport_test.go && go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportRetainedArtifact' -count=1` passed in 1.087s after the retained reader was introduced and identity-query provenance was made part of the lock match.
+- `gofmt -w cmd/connectorgen/sourceimport.go cmd/connectorgen/sourceimport_test.go && go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImport' -count=1` passed in 1.727s after command-help/docs/cache-contract coverage was updated and the cache implementation was removed.
+- `gofmt -w cmd/connectorgen/sourceimport.go cmd/connectorgen/sourceimport_test.go && go test -timeout 20m ./cmd/connectorgen -run '^(TestSourceImportVersion2RequiresRawGraphQLArtifactAlongsideProjection|TestSourceImportVersion2UsesEmbeddedLockedGraphQLProjection)$' -count=1` passed in 1.086s after version-two import began verifying the separately retained raw GraphQL schema as well as its embedded projection.
+- `gofmt -w cmd/connectorgen/sourceartifact.go cmd/connectorgen/sourceartifact_test.go cmd/connectorgen/main.go && go test -timeout 20m ./cmd/connectorgen -run '^TestSourceRetain' -count=1` passed in 1.143s. The explicit maintenance command retains only lock-addressed byte/hash matches, leaves the lock bytes unchanged, records required provenance, and exercises machine-readable, rendered-reference, zip-bundle, mismatch, and bad-input paths.
+- `gofmt -w cmd/connectorgen/sourceimport.go cmd/connectorgen/sourceimport_test.go && go test -timeout 20m ./cmd/connectorgen -run '^(TestSourceImportRejectsSymlinkedSourcesDirectoryEvenInsideConnectorBundle|TestSourceImportCheckedInGitHubArtifactsAreRetainedAndLockVerified)$' -count=1` passed in 1.281s after the source directory itself was required to be a real directory before resolution. The checked-in GitHub test proves both manifest-record and raw-file identity checks with no provider call.
+
+## Refactor / review
+
+- The normal `source-import` command now constructs only the connector-owned retained reader. `--cache-dir` returns a usage error before loading or invoking an injected fetcher; its former persistent cache implementation was removed rather than left as a reachable fallback.
+- The reader derives `sources/artifacts/<lowercase-lock-sha256>.artifact` from the lock, bounds its read, rejects symlink directories/files, requires matching tracked provenance data, and compares raw bytes against the unchanged lock. Provenance cannot redirect the content-addressed path or replace lock identity.
