@@ -63,8 +63,8 @@ func TestOperationStatusCheckUsesDeclaredHEADWithoutJSONBody(t *testing.T) {
 		t.Fatalf("X-Provider-Status = %#v, want declared ordinary metadata", got)
 	}
 	// Engine results are immutable provider evidence. The commandrunner public
-	// boundary compares concrete configured credential values; it must not
-	// classify values from header spelling alone.
+	// boundary preserves provider values equal to configured credentials and
+	// never classifies a value from header spelling alone.
 	if cookie, ok := result.Headers["Set-Cookie"]; !ok || len(cookie.Values) != 1 || cookie.Values[0] != "transport-secret" {
 		t.Fatalf("Set-Cookie = %#v, want exact internal provider metadata", cookie)
 	}
@@ -73,7 +73,7 @@ func TestOperationStatusCheckUsesDeclaredHEADWithoutJSONBody(t *testing.T) {
 	}
 }
 
-func TestOperationStatusCheckMasksConfiguredResponseHeaderValues(t *testing.T) {
+func TestOperationStatusCheckPreservesConfiguredEqualResponseHeaderValues(t *testing.T) {
 	const credential = "configured-header-material"
 	const occurrenceID = "occurrence-9007199254740993"
 	const unconfiguredToken = "ghp_unconfigured_provider_token"
@@ -103,7 +103,7 @@ func TestOperationStatusCheckMasksConfiguredResponseHeaderValues(t *testing.T) {
 	if err != nil {
 		t.Fatalf("OperationStatusCheck: %v", err)
 	}
-	want := []string{"[masked]", occurrenceID, "[masked]", unconfiguredToken, "[masked]"}
+	want := []string{credential, occurrenceID, encoded, unconfiguredToken, credential}
 	if !reflect.DeepEqual(result.Headers["X-Provider-Metadata"].Values, want) {
 		t.Fatalf("header values = %#v, want %#v", result.Headers["X-Provider-Metadata"].Values, want)
 	}

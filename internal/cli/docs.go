@@ -938,8 +938,9 @@ DECLARATIVE TYPED DESTINATION TRANSPORT
   result in run.destination_results: record accounting plus every ordinary
   successful provider response field (status, headers, and body). Fields are
   not removed because they are rare, destructive, paid-tier-specific, or
-  unfamiliar. Concrete configured credential material is masked wherever it
-  occurs; provider-owned field names and ordinary values remain available.
+  unfamiliar. Provider-returned fields, keys, and values are preserved verbatim,
+  even when they equal configured credential bytes. System-generated plans,
+  logs, request diagnostics, and synthetic errors remain secret-taint-safe.
   If a later local receipt, acknowledgement, composition, or output step fails
   before checkpoint, the failed uncheckpointed run still retains ordered
   sanitized provider evidence. System-generated plans, logs, request
@@ -1431,10 +1432,9 @@ SECURITY
   declared in redact_fields. Engine direct-read, operation-direct-read, and binary-
   download executors preserve bounded HTTP URL/query/body diagnostics before
   downstream rendering. Persisted reverse-ETL output retains complete provider
-  results: concrete configured credential material is masked, while
-  provider-owned field names and ordinary values remain available.
-  System-generated plans, logs, request diagnostics, and synthetic errors
-  remain secret-taint-safe.
+  results: provider-returned fields, keys, and values remain verbatim even when
+  they equal configured credential bytes. System-generated plans, logs,
+  request diagnostics, and synthetic errors remain secret-taint-safe.
   Credential storage remains encrypted at rest.
 
 LEARN MORE
