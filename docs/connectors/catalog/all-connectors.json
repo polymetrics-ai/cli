@@ -172347,6 +172347,14 @@
         "confirm": "destructive"
       },
       {
+        "name": "delete_api_token",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/api/v2/api_tokens/{{ record.id }}",
+        "risk": "deletes a Zendesk API token; destructive external mutation requiring approval",
+        "confirm": "destructive"
+      },
+      {
         "name": "create_view",
         "kind": "create",
         "method": "POST",
