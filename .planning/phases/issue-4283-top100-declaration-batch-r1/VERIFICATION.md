@@ -491,3 +491,17 @@ pre-existing.
   evidence regressed`. The unchanged implemented declarations still fail the
   structural preflight; this is an unresolved foundation, not a passing local
   repair.
+
+## Authorized fixed-100 runtime-preflight correction — 2026-08-24
+
+- [ ] **Red:** add and run a focused `cmd/connectorgen` test proving the
+  metadata-only selector currently admits Docker Hub SCIM create/update despite
+  production runtime preflight refusing both commands.
+- [ ] **Green:** run that test after using `commandrunner.Preflight` in
+  operation-evidence eligibility; require disabled runtime plus
+  `runtime_reachability` gaps for both rows and no SCIM row in the would-be
+  fixed cohort.
+- [ ] **Regression:** run `go test -timeout 20m ./cmd/connectorgen`, generated
+  artifact checks, connector boundary, and `make verify`. Do not write or
+  commit a regenerated `operation-evidence-fixed-100.json`; report only the
+  corrected selector's prospective cohort.

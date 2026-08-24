@@ -20,6 +20,62 @@
 
 Captain clarification on 2026-08-19 defines this as a parity-declaration lane, not a certification lane: the one-connector certification rule does not constrain its declaration increments. This work makes no live certification claim, changes no engine/foundation code, and records every unavailable executor or unsafe/elevated operation as disabled with evidence. No files under `defs/github/` or `defs/zoom/` may change.
 
+## Authorized fixed-100 runtime-preflight correction — 2026-08-24
+
+### Decision and scope
+
+Firstmate authorized this evidence-projector defect correction in inbox item
+`010.msg`. The fixed-100 selector must use the production
+`commandrunner.Preflight` result for each implemented command it attributes to a
+source operation. A target plus `availability: implemented` metadata alone is
+not execution evidence.
+
+This is an inline/manual GSD execution: the required prompts were generated
+with `scripts/gsd prompt discuss-phase`, `plan-phase --tdd`, `execute-phase`,
+`verify-work`, and `code-review` for this issue. Compatible isolated GSD roles
+are unavailable and the canonical single-worker contract forbids role spawning.
+Skills loaded: `golang-how-to`, `golang-design-patterns`,
+`golang-structs-interfaces`, `golang-error-handling`, `golang-security`,
+`golang-safety`, and `golang-testing`.
+
+Only these production paths may change:
+
+- `cmd/connectorgen/operationevidence.go`; and
+- `cmd/connectorgen/operationevidence_test.go`.
+
+Do not change `internal/connectors/defs/dockerhub/**`, the Docker Hub source
+lock, `internal/connectors/engine/**`, the closed-body rule, or the checked-in
+fixed-100 reference. The final report may state the cohort the corrected
+selector *would* produce, but it must not regenerate or commit a new cohort
+until the captain decides the shipped baseline question.
+
+### Red
+
+Add a focused regression test that projects the checked-in Docker Hub SCIM
+operations and proves that the current metadata-only selector treats both as
+runtime-enabled and includes them in a would-be fixed cohort, despite the
+production `commandrunner.Preflight` refusal. The test must assert the desired
+observable behavior: both rows gain `runtime_reachability`, have runtime
+disabled, and are absent from `buildOperationEvidenceFixed100` output.
+
+### Green
+
+Replace the metadata-only runtime-enabled assignment with a helper that builds
+the same declarative connector used by the binary and invokes
+`commandrunner.Preflight` for every matching `availability: implemented`
+command. Preserve source/canonical/CLI/website/fixture/conformance evidence;
+only runtime eligibility becomes false when real preflight refuses a command.
+
+### Refactor and verification
+
+Keep the helper concrete and local; do not introduce a second interface or
+duplicate engine shape checks. Run the focused red/green test, the full
+`cmd/connectorgen` package, `go run ./cmd/connectorgen operation-evidence`
+without `--write-fixed-100` to produce an untracked temporary comparison only,
+the required generated/declaration checks, and `make verify` before any push.
+CLI help/manual/website output does not change because this alters evidence
+eligibility only; still check generated artifacts for drift.
+
 ## Current reachability supersession — 2026-08-20
 
 The later captain decision supersedes the preceding historical disabled-command

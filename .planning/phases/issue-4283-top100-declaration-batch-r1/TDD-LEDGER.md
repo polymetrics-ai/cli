@@ -820,3 +820,28 @@ partial placeholder is not a full-parity correction.
 shared engine code changes. The public document SHA-256 remains
 `99d9d53c...53d0756`; the unresolved recovery is a typed bounded open-object
 body capability.
+
+## Authorized fixed-100 runtime-preflight correction — 2026-08-24
+
+**Decision:** Firstmate's inbox item `010.msg` authorizes a focused correction
+to operation-evidence runtime eligibility. It does not authorize an engine
+change, a Docker Hub declaration/source-lock edit, or a regenerated checked-in
+fixed-100 reference.
+
+**Red (planned):** add a `cmd/connectorgen` regression test over the existing
+Docker Hub SCIM create and update source IDs. Before production code changes,
+it must fail because the evidence projector reports both rows runtime-enabled
+and includes them in `buildOperationEvidenceFixed100`, while the production
+commandrunner preflight refuses their source-declared open request bodies.
+
+**Green (planned):** route each matching implemented command through
+`commandrunner.Preflight` using the loaded declarative `engine.New` connector.
+The projected rows must report a `runtime_reachability` gap and disabled runtime
+for the two SCIM operations; the would-be cohort must omit them without any
+hand selection.
+
+**Refactor boundary:** do not duplicate the runtime's structured-body logic,
+do not expose raw bodies, and do not change the actual cohort baseline. Skills:
+`golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`,
+`golang-error-handling`, `golang-security`, `golang-safety`, and
+`golang-testing`.
