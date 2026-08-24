@@ -41,3 +41,7 @@ lock bytes were changed during this correction.
 The checked-in combined GitHub parity ledger has also been refreshed from the
 same unchanged lock, so all 274 GraphQL mutation rows now retain its source
 hash. No provider call or lock mutation occurred.
+
+The certification subject was regenerated from that same projection and now
+records its new fingerprint/source-projection digest; all downstream
+certification checks are current.

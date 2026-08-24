@@ -65,3 +65,7 @@ in `VERIFICATION.md`.
   source-derived GraphQL ledger rows are regenerated from the lock, so their
   per-row source hash cannot silently lag a documented re-pin. The canonical
   no-network refresh plus parity-artifact and frozen-identity tests are green.
+- **Resolved after post-ledger gate — certification subject:** its fingerprint
+  intentionally covers the source projection, so it was regenerated from the
+  unchanged lock and all certification checks prove its dependent artifacts
+  stayed current.
