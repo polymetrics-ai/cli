@@ -162,6 +162,9 @@ func commandSurfaceSection(surface *CommandSurface) GuideSection {
 		}
 		lines = append(lines, source)
 	}
+	if commandSurfaceHasPMExecutionLimits(surface) {
+		lines = append(lines, "PM execution policy "+RequestContractExecutionPolicyVersion+": each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.")
+	}
 	if len(surface.GlobalFlags) > 0 {
 		lines = append(lines, "Global flags:")
 		for _, flag := range surface.GlobalFlags {
@@ -281,6 +284,22 @@ func renderCommandSurfaceFlagName(flag CommandSurfaceFlag) string {
 		name += " (" + strings.Join(qualifiers, ", ") + ")"
 	}
 	return name
+}
+
+func commandSurfaceHasPMExecutionLimits(surface *CommandSurface) bool {
+	for _, flag := range surface.GlobalFlags {
+		if flag.MaxBytes > 0 && flag.MaxBytesOrigin == "pm_policy" && flag.MaxBytesPolicyVersion != "" {
+			return true
+		}
+	}
+	for _, command := range surface.Commands {
+		for _, flag := range command.Flags {
+			if flag.MaxBytes > 0 && flag.MaxBytesOrigin == "pm_policy" && flag.MaxBytesPolicyVersion != "" {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // commandSurfaceRenderedFlags returns the flags a command actually accepts.
