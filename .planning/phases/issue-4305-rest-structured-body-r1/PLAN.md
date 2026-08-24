@@ -41,6 +41,7 @@
 4. Red: add generated help/schema and downstream-contract expectations. Green: synchronize generators/docs while keeping opaque raw-body inputs absent.
 5. Refactor: preserve scalar/form/SCIM/binary/GitHub behavior with their existing focused regression suites; remove duplication only after all tests pass.
 6. Red: a synthetic `WriteAction.Query` with `{{ record.optional }}` and `omit_when_absent:true` still rejects its missing record value. Green: add a write-only resolver boundary that omits that exact absence while retaining config, secret, incremental, required-record, wrong-source, malformed, and explicit-value behavior.
+7. Red: a declared GraphQL direct-write error whose provider receipt echoes a configured base-URL value persists that value into plaintext `state.json`. Green: confine the persisted error-path projection so that plaintext state excludes the configured secret while the returned provider error's status, headers, and body remain verbatim. Do not add a general response-redaction layer or change CLI output.
 
 ## CLI help/manual/website parity
 
@@ -56,6 +57,7 @@
 - Inline/manual fallback: issue #4305 is not in the stale roadmap and the task forbids role spawning.
 - Loaded skills: golang-how-to, golang-cli, golang-testing, golang-error-handling, golang-security, golang-safety, golang-design-patterns, golang-structs-interfaces, and golang-documentation.
 - CI remediation additionally used no-mistakes (active validation-step boundary only), golang-troubleshooting, golang-lint, and golang-continuous-integration; pipeline control remained with the outer executor.
+- 2026-08-24 persistence remediation: Firstmate confirmed that `state.json` is plaintext JSON while the credential vault alone is AES-GCM encrypted. The GSD adapter prompts were executed inline because this issue is outside the active roadmap and the canonical contract forbids role spawning. The bounded follow-up uses golang-how-to, golang-testing, golang-error-handling, golang-security, golang-safety, golang-design-patterns, and golang-structs-interfaces.
 
 ## Commit checkpoints
 

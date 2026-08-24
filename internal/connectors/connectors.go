@@ -1075,6 +1075,80 @@ func SanitizeOperationDirectWriteResultForOutput(result OperationDirectWriteResu
 	return out
 }
 
+// SanitizeOperationDirectWriteResultForPlaintextState returns the narrow
+// persistence-only projection for a failed direct write. Provider output is
+// intentionally verbatim at the caller-facing boundary; this helper exists
+// because ReverseRun is also written to the unencrypted state.json file.
+//
+// Only concrete values supplied through the credential secret store are
+// withheld here. It is not a general response-redaction layer and must not be
+// used for CLI output or provider-result return values.
+func SanitizeOperationDirectWriteResultForPlaintextState(result OperationDirectWriteResult, secrets map[string]string) OperationDirectWriteResult {
+	out := SanitizeOperationDirectWriteResultForOutput(result, nil)
+	masked := configuredWriteResultSecrets(secrets)
+	if len(masked) == 0 {
+		return out
+	}
+	out.Headers = redactOperationResponseHeadersForPlaintextState(out.Headers, masked)
+	out.BodyRaw = redactProviderDiagnosticText(out.BodyRaw, masked)
+	out.Body = redactProviderOutputValueForPlaintextState(out.Body, masked)
+	if rawBody, ok := out.Body.(string); ok && result.BodyRaw != "" && rawBody == result.BodyRaw {
+		out.Body = out.BodyRaw
+	}
+	if out.GraphQL != nil {
+		for index := range out.GraphQL.Errors {
+			out.GraphQL.Errors[index].Message = redactProviderDiagnosticText(out.GraphQL.Errors[index].Message, masked)
+		}
+	}
+	return out
+}
+
+func redactOperationResponseHeadersForPlaintextState(headers map[string]OperationResponseHeader, secrets []string) map[string]OperationResponseHeader {
+	out := cloneProviderHeaders(headers)
+	for name, header := range out {
+		for index := range header.Values {
+			header.Values[index] = redactProviderDiagnosticText(header.Values[index], secrets)
+		}
+		out[name] = header
+	}
+	return out
+}
+
+func redactProviderOutputValueForPlaintextState(value any, secrets []string) any {
+	switch typed := value.(type) {
+	case string:
+		return redactProviderDiagnosticText(typed, secrets)
+	case json.Number:
+		redacted := redactProviderDiagnosticText(typed.String(), secrets)
+		if redacted == typed.String() {
+			return typed
+		}
+		return redacted
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, item := range typed {
+			out[key] = redactProviderOutputValueForPlaintextState(item, secrets)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for index, item := range typed {
+			out[index] = redactProviderOutputValueForPlaintextState(item, secrets)
+		}
+		return out
+	case []string:
+		out := make([]string, len(typed))
+		for index, item := range typed {
+			out[index] = redactProviderDiagnosticText(item, secrets)
+		}
+		return out
+	case []byte:
+		return []byte(redactProviderDiagnosticText(string(typed), secrets))
+	default:
+		return value
+	}
+}
+
 func cloneWriteProviderResponse(response WriteProviderResponse) WriteProviderResponse {
 	out := response
 	out.Headers = cloneProviderHeaders(response.Headers)

@@ -3181,8 +3181,7 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 	operationResult, writeErr := directWriter.OperationDirectWrite(ctx, operationRequest)
 	writeResult := connectors.WriteResult{RecordsWritten: 1}
 	if operationResult.Operation != "" {
-		safeOperationResult := connectors.SanitizeOperationDirectWriteResultForOutput(operationResult, runtime.Secrets)
-		run.OperationDirectWrite = &safeOperationResult
+		run.OperationDirectWrite = &operationResult
 	}
 	if writeErr != nil {
 		writeResult = connectors.WriteResult{RecordsFailed: 1}
@@ -3428,8 +3427,18 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	} else {
 		run.Status = "completed"
 	}
+	persistedRun := run
+	if run.OperationDirectWrite != nil {
+		var persistedOperationResult connectors.OperationDirectWriteResult
+		if writeErr != nil {
+			persistedOperationResult = connectors.SanitizeOperationDirectWriteResultForPlaintextState(*run.OperationDirectWrite, runtime.Secrets)
+		} else {
+			persistedOperationResult = connectors.SanitizeOperationDirectWriteResultForOutput(*run.OperationDirectWrite, nil)
+		}
+		persistedRun.OperationDirectWrite = &persistedOperationResult
+	}
 	_, persistErr := a.updateState(func(current state) (state, error) {
-		current.ReverseRuns = append(current.ReverseRuns, run)
+		current.ReverseRuns = append(current.ReverseRuns, persistedRun)
 		for i := range current.ReversePlans {
 			if current.ReversePlans[i].ID == planID && (current.ReversePlans[i].Status == "executing" || current.ReversePlans[i].Status == reversePlanStatusApprovalConsumptionUncertain) {
 				current.ReversePlans[i].Status = planStatus

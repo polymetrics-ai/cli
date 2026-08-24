@@ -9,8 +9,16 @@
 | Action reuse and approval | Typed actions have no shared structured-body construction or payload identity. | CLI and typed-action paths share the materializer and confirmation identity. | Separate actions cannot borrow fields; post-preview nested mutation is rejected before I/O. |
 | Surface and contract | Generated command surface has no typed representation for declared nested inputs. | Help/schema present declared typed inputs and lack any raw-body bypass. | Scalar/form/SCIM/binary/specialized GitHub focused tests retain outcome. |
 | Write query absence | `omit_when_absent` does not tolerate an absent `record.*` query value. | Only an object-form, source-locked query declaration can omit its own missing `record.*` value. | Required/undeclared/wrong-source/malformed values fail before I/O; config, secret, incremental, and explicit record values retain their established behavior. |
+| Plaintext error persistence | A declared GraphQL provider error can echo a configured base-URL value into plaintext `state.json`. | The sole error-path persistence projection excludes the configured secret before state write. | The returned provider error keeps its exact status, headers, and body; no generic output redaction or state encryption is introduced. |
 
 ## Actual evidence
+
+### 2026-08-24 — plaintext GraphQL application-error persistence red/green slice
+
+- Scope decision: Firstmate established that `state.json` is direct JSON serialization while only `internal/vault` is AES-GCM encrypted. An echoed configured base URL in state is therefore a genuine at-rest disclosure. The permitted repair is only the direct-write error persistence path; provider output must remain verbatim.
+- Red: `go test -timeout 20m ./internal/app -run '^TestGraphQLBaseURL(Secret|Config)ApplicationErrorDoesNotPersistEcho$' -count=1` failed on the protected PR head in `TestGraphQLBaseURLSecretApplicationErrorDoesNotPersistEcho`: `state.json persisted the base URL secret`.
+- Green: the same focused command passed after direct-write execution retained the original provider result for its caller and `finishReverseWriteWithErrorText` wrote a separate credential-secret-only clone only when persisting a failed direct write. The regression now proves plaintext state excludes the configured secret while the returned direct-write receipt and typed `*connsdk.HTTPError` preserve the exact provider status, header, and body.
+- Boundary: the new helper is explicitly `ForPlaintextState`, invoked only for a failed direct write. It does not alter CLI output, returned receipts, declaration-owned provider fields, success persistence, `state.json` encryption, or any other response path.
 
 ### 2026-08-20 — declaration-backed REST structured-body red checkpoint
 

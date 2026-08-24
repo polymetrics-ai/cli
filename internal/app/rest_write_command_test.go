@@ -866,7 +866,7 @@ func TestGraphQLBaseURLSecretApplicationErrorDoesNotPersistEcho(t *testing.T) {
 		if got := r.URL.Path; got != "/"+baseURLSecret+"/graphql" {
 			t.Fatalf("path = %q, want declared base URL segment", got)
 		}
-		w.Header().Set("X-Provider-Trace", "app-base-url-secret")
+		w.Header().Set("X-Provider-Trace", baseURLSecret)
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(responseBody))
 	}))
@@ -940,11 +940,18 @@ func TestGraphQLBaseURLSecretApplicationErrorDoesNotPersistEcho(t *testing.T) {
 	if strings.Contains(stateBytes(t, root), baseURLSecret) {
 		t.Fatal("state.json persisted the base URL secret")
 	}
+	if run.OperationDirectWrite == nil {
+		t.Fatal("RunReverseETL result did not retain the exact provider receipt")
+	}
+	trace, present := run.OperationDirectWrite.Headers["X-Provider-Trace"]
+	if run.OperationDirectWrite.Status != http.StatusOK || !present || len(trace.Values) != 1 || trace.Values[0] != baseURLSecret || run.OperationDirectWrite.BodyRaw != responseBody {
+		t.Fatal("RunReverseETL result did not retain the exact provider receipt")
+	}
 	var providerErr *connsdk.HTTPError
 	if !errors.As(err, &providerErr) {
 		t.Fatal("RunReverseETL error did not retain a provider response cause")
 	}
-	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != "app-base-url-secret" || providerErr.Body != responseBody {
+	if providerErr.Status != http.StatusOK || providerErr.Header.Get("X-Provider-Trace") != baseURLSecret || providerErr.Body != responseBody {
 		t.Fatal("RunReverseETL provider response did not retain exact status, headers, and body")
 	}
 }

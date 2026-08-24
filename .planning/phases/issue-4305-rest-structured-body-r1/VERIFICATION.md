@@ -2,6 +2,8 @@
 
 ## Required checks
 
+- [x] Focused configured-base-URL GraphQL application-error persistence regression: state excludes the configured secret while returned provider receipt remains verbatim.
+
 - [x] Targeted engine, commandrunner, and installed CLI tests with -timeout 20m.
 - [x] Existing scalar, form, SCIM, binary, and specialized GitHub focused regressions.
 - [x] go vet ./...
@@ -17,6 +19,11 @@
 ## Results
 
 ### Focused TDD and behavior checks
+
+### 2026-08-24 — plaintext configured-base-URL persistence follow-up
+
+- Red: `go test -timeout 20m ./internal/app -run '^TestGraphQLBaseURL(Secret|Config)ApplicationErrorDoesNotPersistEcho$' -count=1` failed at the plaintext state-file assertion before production edits.
+- Green: the same command passed after the persistence-only projection. It observes both required effects: `state.json` lacks the configured secret and the returned direct-write result plus typed provider error retain the exact provider receipt. No output/header/body redaction, truncation, or state-encryption change was made.
 
 - `go test -timeout 20m ./internal/connectors/engine -run 'Test(BuildWriteQueryOmitWhenAbsentScopesMissingRecordValuesToTheirDeclaredQuery|WriteActionRecordQueryRejectionsHappenBeforeProviderIO|WriteActionOptionalRecordQueryIsOmittedOrPreservedAtProvider|OperationDirectWriteStructuredRESTBody)' -count=1` — pass.
 - `go test -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner ./cmd/connectorgen ./internal/cli -run 'Test(OperationDirectWriteStructuredRESTBody|OperationStructuredJSONBodyPreflight|BuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody|GitHubUserDraftCommandBuildsFixedGraphQLMutation|Validate_CLISurfaceDirectWriteStructuredRESTBody|StructuredRESTBodyCommandHelpAndManual|ConnectorsManualDocumentsConnectorArchitectureAndGithubExamples)' -count=1` — pass.
