@@ -265,6 +265,34 @@
         }
       }
     },
+    "binary_upload_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["stage_name", "command", "args"],
+        "additionalProperties": false,
+        "properties": {
+          "stage_name": { "type": "string" },
+          "command": { "type": "string" },
+          "args": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "literal": { "type": "string" },
+                "config_key": { "type": "string" },
+                "default": { "type": "string" },
+                "omit_when_empty": { "type": "boolean" },
+                "when_config_key": { "type": "string" },
+                "connector": { "type": "boolean" },
+                "source_credential": { "type": "boolean" }
+              }
+            }
+          }
+        }
+      }
+    },
     "graphql": {
       "type": "object",
       "required": ["source_lock", "command_prefix", "schema_conformant_reason", "fixture_required_reason", "live_candidates"],

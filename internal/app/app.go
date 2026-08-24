@@ -266,6 +266,17 @@ func (a *App) ProjectDir() string { return a.projectDir }
 
 func (a *App) projectRoot() string { return filepath.Dir(a.projectDir) }
 
+// connectorCommandRuntime gives the public binary-upload command one
+// documented confinement root: the project root a caller invokes pm in. The
+// application's .polymetrics directory remains private state storage and is
+// never a path callers must know to provide upload bytes.
+func (a *App) connectorCommandRuntime(intent string, runtime connectors.RuntimeConfig) connectors.RuntimeConfig {
+	if intent == "binary_upload" {
+		runtime.ProjectDir = a.projectRoot()
+	}
+	return runtime
+}
+
 func (a *App) Registry() *connectors.Registry { return a.registry }
 
 func (a *App) Connectors() []connectors.Metadata {
@@ -2152,7 +2163,8 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	if name == "" {
 		name = strings.ReplaceAll(writeCommand.Command, " ", "_")
 	}
-	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, connector, writeCommand.Operation, writeCommand.Record)
+	runtime = a.connectorCommandRuntime(writeCommand.Intent, runtime)
+	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, connector, writeCommand.Operation, writeCommand.Intent, writeCommand.Write, writeCommand.Record)
 	if err != nil {
 		return ReversePlan{}, nil, err
 	}
@@ -2234,6 +2246,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		Mappings:                     map[string]string{},
 		ConnectorCommand:             writeCommand.Command,
 		ConnectorCommandPath:         append([]string(nil), req.Path...),
+		ConnectorCommandIntent:       writeCommand.Intent,
 		ConnectorCommandOperation:    writeCommand.Operation,
 		ConnectorCommandPathParams:   cloneStringMap(writeCommand.PathParams),
 		ConnectorCommandQuery:        cloneStringMap(writeCommand.Query),
@@ -2252,7 +2265,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		CreatedAt:                    created,
 		ExpiresAt:                    expires,
 	}
-	if strings.TrimSpace(writeCommand.ConfirmationChallenge) == "" && writeCommand.Operation == "" {
+	if strings.TrimSpace(writeCommand.ConfirmationChallenge) == "" && writeCommand.Operation == "" && writeCommand.Intent != "binary_upload" {
 		token, err := randomToken(18)
 		if err != nil {
 			return ReversePlan{}, nil, err
@@ -2273,6 +2286,11 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		}
 	} else if writeCommand.Preview != nil && a.confirmationChallengeForPlan(plan) != "" {
 		plan, err = a.persistDestructivePreview(plan, *writeCommand.Preview)
+		if err != nil {
+			return ReversePlan{}, nil, err
+		}
+	} else if writeCommand.Preview != nil && writeCommand.Intent == "binary_upload" {
+		plan, err = a.persistBinaryUploadPreview(plan, *writeCommand.Preview)
 		if err != nil {
 			return ReversePlan{}, nil, err
 		}
@@ -2378,7 +2396,8 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string, withhe
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, record)
+	runtime = a.connectorCommandRuntime(plan.ConnectorCommandIntent, runtime)
+	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, plan.ConnectorCommandIntent, plan.Action, record)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
@@ -2428,6 +2447,11 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string, withhe
 	}
 	if a.confirmationChallengeForPlan(plan) != "" {
 		plan, err = a.persistDestructivePreview(plan, preview)
+		if err != nil {
+			return ReversePlan{}, connectors.WritePreview{}, err
+		}
+	} else if plan.ConnectorCommandIntent == "binary_upload" {
+		plan, err = a.persistBinaryUploadPreview(plan, preview)
 		if err != nil {
 			return ReversePlan{}, connectors.WritePreview{}, err
 		}
@@ -2590,6 +2614,63 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 			stored.PreviewedAt = now
 			stored.ApprovalTokenHash = hashString(token)
 			stored.ApprovalGrant = &grant
+			stored.ApprovalConsumedAt = time.Time{}
+			current.ReversePlans[i] = stored
+			issued = stored
+			issued.ApprovalToken = token
+			return current, nil
+		}
+		return current, fmt.Errorf("reverse plan %q not found", plan.ID)
+	})
+	if err != nil {
+		return ReversePlan{}, err
+	}
+	a.state = updated
+	return issued, nil
+}
+
+// persistBinaryUploadPreview is deliberately narrower than the legacy generic
+// reverse-ETL path. binary_upload publicly promises plan → preview → approval
+// → execute, so its token must not exist until the exact declaration-bound
+// preview has been persisted. It uses the non-destructive direct-write token
+// model because a binary upload has no typed destructive confirmation or plan
+// seal, while still binding the token to this previewed plan state.
+func (a *App) persistBinaryUploadPreview(plan ReversePlan, preview connectors.WritePreview) (ReversePlan, error) {
+	if plan.ConnectorCommandIntent != "binary_upload" || plan.ConnectorCommandOperation != "" {
+		return ReversePlan{}, fmt.Errorf("reverse plan %q is not a binary-upload command", plan.ID)
+	}
+	if strings.TrimSpace(preview.Digest) == "" {
+		return ReversePlan{}, fmt.Errorf("connector preview for binary-upload plan %q has no digest", plan.ID)
+	}
+	if strings.TrimSpace(preview.ApprovalTarget.Connector) == "" || preview.ApprovalTarget.Connector != plan.DestinationConnector || preview.ApprovalTarget.Operation != plan.Action {
+		return ReversePlan{}, fmt.Errorf("connector preview for binary-upload plan %q has no matching approval target", plan.ID)
+	}
+	token, err := randomToken(18)
+	if err != nil {
+		return ReversePlan{}, err
+	}
+	now := time.Now().UTC()
+	var issued ReversePlan
+	updated, err := a.updateState(func(current state) (state, error) {
+		for i := range current.ReversePlans {
+			stored := current.ReversePlans[i]
+			if stored.ID != plan.ID {
+				continue
+			}
+			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+				return current, err
+			}
+			if err := a.previewabilityError(stored, now); err != nil {
+				return current, err
+			}
+			if stored.PlanHash != plan.PlanHash || stored.DestinationConnector != plan.DestinationConnector || stored.DestinationCredential != plan.DestinationCredential || stored.ConnectorCommandIntent != "binary_upload" || stored.Action != plan.Action {
+				return current, fmt.Errorf("reverse plan %q changed while its binary-upload preview was prepared", plan.ID)
+			}
+			stored.Status = "previewed"
+			stored.PreviewDigest = preview.Digest
+			stored.PreviewedAt = now
+			stored.ApprovalTokenHash = hashString(token)
+			stored.ApprovalGrant = nil
 			stored.ApprovalConsumedAt = time.Time{}
 			current.ReversePlans[i] = stored
 			issued = stored
@@ -2794,7 +2875,7 @@ func (a *App) confirmationChallengeForPlan(plan ReversePlan) string {
 }
 
 func (a *App) planRequiresPersistedPreview(plan ReversePlan) bool {
-	return plan.ConnectorCommandOperation != "" || isIssueLabelTransportMode(plan.Mode) || a.confirmationChallengeForPlan(plan) != ""
+	return plan.ConnectorCommandIntent == "binary_upload" || plan.ConnectorCommandOperation != "" || isIssueLabelTransportMode(plan.Mode) || a.confirmationChallengeForPlan(plan) != ""
 }
 
 func (a *App) validatePlanConfirmation(plan ReversePlan, got connectors.WriteConfirmation) error {
@@ -2984,7 +3065,7 @@ func (a *App) runAuthorizedBulkReversePlan(ctx context.Context, plan ReversePlan
 }
 
 func (a *App) validateDestructivePreview(ctx context.Context, writer connectors.Connector, plan ReversePlan, request connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
-	if a.confirmationPolicyForPlan(plan).Kind == "" {
+	if a.confirmationPolicyForPlan(plan).Kind == "" && plan.ConnectorCommandIntent != "binary_upload" {
 		return connectors.WritePreview{}, nil
 	}
 	dryRunner, ok := writer.(connectors.DryRunWriter)
@@ -3026,7 +3107,8 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	if err != nil {
 		return ReverseRun{}, err
 	}
-	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, record)
+	runtime = a.connectorCommandRuntime(plan.ConnectorCommandIntent, runtime)
+	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, plan.ConnectorCommandIntent, plan.Action, record)
 	if err != nil {
 		return ReverseRun{}, err
 	}

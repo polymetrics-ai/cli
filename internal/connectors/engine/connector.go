@@ -523,6 +523,83 @@ func (c *Connector) PreflightWriteAction(name string) error {
 	return ValidatePromotableRecordSchema(action.RecordSchema)
 }
 
+// PreflightBinaryUploadAction exposes the narrower public-upload contract to
+// commandrunner. It reuses the existing declarative write action and returns
+// only the source fields that the hand-rolled CLI may name; no caller-controlled
+// URL, body, media type, or byte limit crosses this boundary.
+func (c *Connector) PreflightBinaryUploadAction(name string) ([]connectors.BinaryUploadSource, error) {
+	action, err := findWriteAction(c.bundle, name)
+	if err != nil {
+		return nil, err
+	}
+	if err := c.PreflightWriteAction(name); err != nil {
+		return nil, err
+	}
+	return BinaryUploadSourcesForWriteAction(action)
+}
+
+// BinaryUploadSourcesForWriteAction returns only the declaration-owned file
+// fields a public binary_upload command can bind. Both commandrunner and the
+// static bundle gate use this function so no second shape of upload action can
+// become executable in one path only.
+func BinaryUploadSourcesForWriteAction(action WriteAction) ([]connectors.BinaryUploadSource, error) {
+	var sources []connectors.BinaryUploadSource
+	switch bodyTypeOf(action) {
+	case "binary_upload":
+		if action.BinaryUpload == nil {
+			return nil, fmt.Errorf("binary_upload spec is required")
+		}
+		sources = append(sources, connectors.BinaryUploadSource{
+			Field:             action.BinaryUpload.SourceField,
+			MaxBytes:          action.BinaryUpload.MaxBytes,
+			AllowedMediaTypes: append([]string(nil), action.BinaryUpload.AllowedMediaTypes...),
+		})
+		if err := validateFixedUploadMediaPolicy(action.Name, action.BinaryUpload.AllowedMediaTypes); err != nil {
+			return nil, err
+		}
+	case "base64_upload":
+		if action.Base64Upload == nil {
+			return nil, fmt.Errorf("base64_upload spec is required")
+		}
+		sources = append(sources, connectors.BinaryUploadSource{
+			Field:             action.Base64Upload.SourceField,
+			MaxBytes:          action.Base64Upload.MaxDecodedBytes,
+			AllowedMediaTypes: append([]string(nil), action.Base64Upload.AllowedMediaTypes...),
+		})
+		if err := validateFixedUploadMediaPolicy(action.Name, action.Base64Upload.AllowedMediaTypes); err != nil {
+			return nil, err
+		}
+	case "multipart":
+		if action.Multipart == nil {
+			return nil, fmt.Errorf("multipart spec is required")
+		}
+		for _, part := range action.Multipart.Parts {
+			if part.Type != "file" || !part.Required {
+				continue
+			}
+			sources = append(sources, connectors.BinaryUploadSource{
+				Field:             part.Field,
+				MaxBytes:          part.MaxBytes,
+				AllowedMediaTypes: append([]string(nil), part.AllowedMediaTypes...),
+			})
+		}
+	default:
+		return nil, fmt.Errorf("body_type %q is not a binary upload", bodyTypeOf(action))
+	}
+	if len(sources) == 0 {
+		return nil, fmt.Errorf("binary upload action requires at least one required file source")
+	}
+	for _, source := range sources {
+		if strings.TrimSpace(source.Field) == "" || source.MaxBytes <= 0 {
+			return nil, fmt.Errorf("binary upload source must declare its field and positive byte cap")
+		}
+		if len(source.AllowedMediaTypes) == 0 {
+			return nil, fmt.Errorf("binary upload source %q must declare allowed_media_types", source.Field)
+		}
+	}
+	return sources, nil
+}
+
 func writeActionConsumesNoRecord(action WriteAction) bool {
 	if bodyTypeOf(action) != "none" || len(action.PathFields) != 0 || strings.Contains(action.Path, "record.") {
 		return false
@@ -1048,7 +1125,7 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 
 func commandSurfaceHasWriteIntent(commands []connectors.CommandSurfaceCommand) bool {
 	for _, cmd := range commands {
-		if cmd.Intent == "reverse_etl" || cmd.Intent == "direct_write" {
+		if cmd.Intent == "reverse_etl" || cmd.Intent == "binary_upload" || cmd.Intent == "direct_write" {
 			return true
 		}
 	}
