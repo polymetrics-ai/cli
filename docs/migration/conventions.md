@@ -1695,6 +1695,11 @@ URL, capture identity, and provider operation ID; a document-qualified locked
 `id` is the descriptor source identity even when the provider repeats an
 `operationId` in another document.
 
+A parity lock can likewise retain a bounded query that it already stores, even
+though that older lock shape has no `identity_query` field. Retention records
+the fixed query as provenance and fetches no caller-supplied URL; it does not
+make that parity lock importable or relax source-import's v3 query rule.
+
 The retained-artifact manifest is provenance only and cannot alter lock
 identity. Every artifact record repeats the lock identity and `source_url`,
 names an RFC3339 `retrieved_at` value, records non-empty `license` and `terms`

@@ -250,6 +250,58 @@ func TestSourceRetainSupportsParitySourceLock(t *testing.T) {
 	}
 }
 
+func TestSourceRetainAllowsLockedParityQuery(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	artifact := []byte(`{"openapi":"3.0.3","info":{"title":"query fixture","version":"1"},"paths":{}}`)
+	digest := sha256.Sum256(artifact)
+	lockRaw, err := json.Marshal(map[string]any{
+		"schema_version": 1,
+		"connector":      "alpha",
+		"rest": map[string]any{
+			"source_url":       "https://fixtures.polymetrics.invalid/alpha.json?download",
+			"sha256":           hex.EncodeToString(digest[:]),
+			"bytes":            len(artifact),
+			"operation_counts": map[string]any{"get": 1},
+		},
+	})
+	if err != nil {
+		t.Fatalf("marshal parity query lock: %v", err)
+	}
+	sourcesDir := filepath.Join(defsRoot, "alpha", "sources")
+	if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+		t.Fatalf("create parity query source directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(sourcesDir, "alpha-parity-source-lock.json"), lockRaw, 0o644); err != nil {
+		t.Fatalf("write parity query source lock: %v", err)
+	}
+	var stdout, stderr bytes.Buffer
+	code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-24T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, sourceImportFetchFunc(func(_ context.Context, sourceURL string) ([]byte, error) {
+		if sourceURL != "https://fixtures.polymetrics.invalid/alpha.json?download" {
+			t.Fatalf("source-retain fetched %q, want exact locked query URL", sourceURL)
+		}
+		return artifact, nil
+	}))
+	if code != 0 {
+		t.Fatalf("source-retain exit = %d, want locked-query parity success; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestSourceRetainDoesNotMisclassifyExpectedHTMLWithLoginText(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	artifact := []byte("<!doctype html><html><body>documentation navigation sign in help</body></html>")
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/reference", artifact)
+	writeSourceRetainFixtureLock(t, defsRoot, lock)
+	var stdout, stderr bytes.Buffer
+	code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-24T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return artifact, nil
+	}))
+	if code != 0 || strings.Contains(stderr.String(), "wrong source") {
+		t.Fatalf("source-retain exit/stderr = %d/%q, want expected HTML source retained", code, stderr.String())
+	}
+}
+
 func TestSourceRetainVerifiesReorderedJSONByCanonicalIdentity(t *testing.T) {
 	t.Parallel()
 	defsRoot := t.TempDir()

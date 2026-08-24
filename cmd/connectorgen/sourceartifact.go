@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
@@ -296,6 +297,14 @@ func sourceRetainArtifactFromRaw(raw json.RawMessage) (sourceImportArtifact, boo
 	if artifact.SourceURL == "" && artifact.SHA256 == "" && artifact.Bytes == 0 {
 		return sourceImportArtifact{}, false, nil
 	}
+	// Parity locks predate the import-only identity_query field, but their URL
+	// is already connector-owned. Retention may preserve that fixed bounded
+	// query; source-import keeps its stricter versioned query admission.
+	if !artifact.IdentityQuery {
+		if parsed, parseErr := url.Parse(artifact.SourceURL); parseErr == nil && parsed.RawQuery != "" {
+			artifact.IdentityQuery = true
+		}
+	}
 	return artifact, true, nil
 }
 
@@ -362,10 +371,11 @@ func sourceRetainFetchIsWrongSource(err error) bool {
 
 func sourceRetainClassifyFetchedArtifact(raw []byte, artifact sourceImportArtifact) error {
 	lower := bytes.ToLower(bytes.TrimSpace(raw))
-	if (bytes.HasPrefix(lower, []byte("<!doctype html")) || bytes.HasPrefix(lower, []byte("<html"))) && (bytes.Contains(lower, []byte("login")) || bytes.Contains(lower, []byte("sign in")) || bytes.Contains(lower, []byte("sign-in"))) {
+	drasticallySmaller := int64(len(raw))*8 < artifact.Bytes
+	if drasticallySmaller && (bytes.HasPrefix(lower, []byte("<!doctype html")) || bytes.HasPrefix(lower, []byte("<html"))) && (bytes.Contains(lower, []byte("login")) || bytes.Contains(lower, []byte("sign in")) || bytes.Contains(lower, []byte("sign-in"))) {
 		return sourceRetainWrongSourceError{Reason: "received a login wall rather than the locked provider artifact"}
 	}
-	if int64(len(raw))*8 < artifact.Bytes {
+	if drasticallySmaller {
 		return sourceRetainWrongSourceError{Reason: fmt.Sprintf("received %d bytes where the lock records %d bytes; the URL likely resolves to a landing page or error response", len(raw), artifact.Bytes)}
 	}
 	return nil
