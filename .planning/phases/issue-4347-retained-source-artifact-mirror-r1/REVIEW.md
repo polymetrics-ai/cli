@@ -69,3 +69,8 @@ in `VERIFICATION.md`.
   intentionally covers the source projection, so it was regenerated from the
   unchanged lock and all certification checks prove its dependent artifacts
   stayed current.
+- **Resolved after CI operation-evidence check:** operation evidence consumes
+  the certification subject, so it was stale only because it was checked before
+  the subject refresh. Its canonical no-network regeneration changed its one
+  tracked snapshot; the renewed check and all following certification checks
+  are green.

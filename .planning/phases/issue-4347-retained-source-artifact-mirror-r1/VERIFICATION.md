@@ -72,6 +72,11 @@ error response remains irrecoverable and is never re-pinned.
 - CI caught one remaining frozen source-lock embed snapshot: `TestProductionEmbedPreservesGithubSourceLockBytes` expected the old lock SHA-256 after the documented GraphQL re-pin. Red reproduced locally; after the expected digest changed from `281b1cf…8fb6` to committed-lock `79f6eaf…f2c8`, `go test -timeout 20m ./internal/connectors/defs -run '^TestProductionEmbedPreservesGithubSourceLockBytes$' -count=1` passed in 1.260s and the source-import regression subset passed in 1.404s.
 - The next CI pass caught the only remaining generated projection of that re-pin: `.planning/phases/github-parity-extract-r1/GITHUB-COMBINED-OPERATION-LEDGER.json` retained the old GraphQL source hash. `node scripts/github-combined-operation-ledger.mjs --refresh` regenerated it from the unchanged lock without a provider request. `make github-parity-artifacts-check`, `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportPreservesFrozenGitHubArtifacts$' -count=1`, `go test -timeout 20m ./internal/connectors/defs -count=1`, and `go run ./cmd/connectorgen source-import github --check` all passed.
 - Proactive post-ledger gates found the one remaining downstream projection: `go run ./cmd/connectorgen certification-subject --check` reported stale. Running the canonical no-network `go run ./cmd/connectorgen certification-subject` updated only `internal/connectors/certifications/current-subject.json`; its check and certification matrix/candidates/sweep checks all passed. `make connectorgen-operation-evidence`, `make connector-canon-check`, and `make release-workflow-check` also passed.
+- The next CI run correctly found operation evidence was checked before that
+  subject refresh. Ran `go run ./cmd/connectorgen operation-evidence
+  --write-fixed-100`; it changed only `internal/connectors/operation-evidence.json`.
+  Its `--check`, the certification subject check, GitHub parity-artifacts check,
+  and certification matrix/candidates/sweep checks all passed afterward.
 
 ## Inline GSD lifecycle
 

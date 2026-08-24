@@ -45,3 +45,8 @@ hash. No provider call or lock mutation occurred.
 The certification subject was regenerated from that same projection and now
 records its new fingerprint/source-projection digest; all downstream
 certification checks are current.
+
+Operation evidence is the final dependent projection. It was regenerated after
+the certification subject, changing only its tracked snapshot; its check and
+the full source-lock/certification projection chain are current without a
+provider request or lock mutation.

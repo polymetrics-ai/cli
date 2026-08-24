@@ -13,6 +13,7 @@
 - CI red: `go test -timeout 20m ./internal/connectors/defs -run '^TestProductionEmbedPreservesGithubSourceLockBytes$' -count=1` failed with `79f6eaf…f2c8`, the actual immutable GitHub source-lock SHA-256 after the documented GraphQL re-pin, versus the stale expected `281b1cf…8fb6`. The test is the embed-byte regression proof and must name the committed lock identity.
 - CI red: `make github-parity-artifacts-check` failed because every combined GraphQL ledger row still carried the old source hash. `node scripts/github-combined-operation-ledger.mjs --refresh` is the canonical, no-network projection from the unchanged lock. The existing frozen-artifact test then red-failed with ledger SHA-256 `b2bc566…3391` versus its former `c4a904a…2de3` expectation.
 - Red: `go run ./cmd/connectorgen certification-subject --check` reported `current subject is stale`; its source-projection hash and overall fingerprint must change when the committed GitHub source-lock projection changes.
+- CI red: `go run ./cmd/connectorgen operation-evidence --check` reported that `internal/connectors/operation-evidence.json` had drifted after the certification subject changed. Operation evidence intentionally consumes that subject, so it must be regenerated after—not before—the subject projection.
 
 ## Green
 
@@ -26,6 +27,7 @@
 - `gofmt -w internal/connectors/defs/defs_test.go && go test -timeout 20m ./internal/connectors/defs -run '^TestProductionEmbedPreservesGithubSourceLockBytes$' -count=1` passed in 1.260s after the explicit source-lock embed snapshot changed to the documented re-pinned lock bytes. The test still compares embedded and disk bytes before it asserts the expected immutable digest.
 - `node scripts/github-combined-operation-ledger.mjs --refresh && make github-parity-artifacts-check && go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportPreservesFrozenGitHubArtifacts$' -count=1` passed. The ledger refresh read only the existing lock, retained its 1,525-operation counts, and propagated the new GraphQL source hash to all generated rows; the frozen-artifact regression pins the resulting `b2bc566…3391` ledger digest.
 - `go run ./cmd/connectorgen certification-subject && go run ./cmd/connectorgen certification-subject --check && make connectorgen-certification-matrix && make connectorgen-certification-candidates && make connectorgen-certification-sweep` passed. The regenerated subject records source projection SHA-256 `ecaa8f…3437` and fingerprint `04aa66…96b5`; dependent certification projections were already current.
+- `go run ./cmd/connectorgen operation-evidence --write-fixed-100 && go run ./cmd/connectorgen operation-evidence --check` passed. It changed only the subject-derived operation-evidence snapshot; `go run ./cmd/connectorgen certification-subject --check`, `make github-parity-artifacts-check`, and the certification matrix/candidates/sweep checks remained green.
 
 ## Refactor / review
 
