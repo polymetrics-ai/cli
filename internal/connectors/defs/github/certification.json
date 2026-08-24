@@ -5320,7 +5320,7 @@
   "mutation_generation": {
     "cohort": {
       "name": "fixture_required_mutations",
-      "command_count": 906,
+      "command_count": 905,
       "intents": [
         "direct_write",
         "reverse_etl"
@@ -5639,6 +5639,59 @@
         },
         {
           "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ]
+    }
+  ],
+  "binary_upload_candidates": [
+    {
+      "stage_name": "binary_upload_sweep_releases_assets_upload",
+      "command": "releases assets upload",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "releases"
+        },
+        {
+          "literal": "assets"
+        },
+        {
+          "literal": "upload"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--file-path",
+          "when_config_key": "binary_upload_file_path"
+        },
+        {
+          "config_key": "binary_upload_file_path",
+          "omit_when_empty": true
+        },
+        {
+          "literal": "--name",
+          "when_config_key": "binary_upload_name"
+        },
+        {
+          "config_key": "binary_upload_name",
+          "omit_when_empty": true
+        },
+        {
+          "literal": "--release-id",
+          "when_config_key": "binary_upload_release_id"
+        },
+        {
+          "config_key": "binary_upload_release_id",
+          "omit_when_empty": true
         },
         {
           "literal": "--json"

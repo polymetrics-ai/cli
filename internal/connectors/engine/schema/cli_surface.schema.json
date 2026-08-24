@@ -84,6 +84,7 @@
               "direct_read",
               "direct_write",
               "binary_download",
+              "binary_upload",
               "text_export",
               "status_check",
               "local_workflow",

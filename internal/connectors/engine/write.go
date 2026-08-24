@@ -106,11 +106,37 @@ func validateWriteActionRecord(action WriteAction, rec connectors.Record, schema
 }
 
 func validateWriteBody(action WriteAction, rec connectors.Record) error {
-	if bodyTypeOf(action) != "json_array" || len(action.BodySchema) == 0 {
-		return nil
+	switch bodyTypeOf(action) {
+	case "binary_upload":
+		if action.BinaryUpload != nil && action.BinaryUpload.AllowedMediaTypes != nil {
+			return validateFixedUploadMediaPolicy(action.Name, action.BinaryUpload.AllowedMediaTypes)
+		}
+	case "base64_upload":
+		if action.Base64Upload != nil && action.Base64Upload.AllowedMediaTypes != nil {
+			return validateFixedUploadMediaPolicy(action.Name, action.Base64Upload.AllowedMediaTypes)
+		}
+	case "json_array":
+		if len(action.BodySchema) == 0 {
+			return nil
+		}
+		_, err := buildJSONArrayPayload(action, rec)
+		return err
 	}
-	_, err := buildJSONArrayPayload(action, rec)
-	return err
+	return nil
+}
+
+// validateFixedUploadMediaPolicy ties a declared media allow-list to the only
+// media value the raw/base64 upload executors can actually guarantee. Without
+// this check an action could advertise image/png while DoBinaryLimited always
+// sends application/octet-stream.
+func validateFixedUploadMediaPolicy(actionName string, allowed []string) error {
+	for _, raw := range allowed {
+		mediaType, _, err := mime.ParseMediaType(raw)
+		if err == nil && strings.EqualFold(mediaType, "application/octet-stream") {
+			return nil
+		}
+	}
+	return fmt.Errorf("engine: write action %q allowed_media_types does not admit executor media application/octet-stream", actionName)
 }
 
 // DryRunWrite validates and prepares every record without a network call. Its
@@ -435,6 +461,9 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 				providerResponse, providerResponseErr := writeProviderResponse(response, recordIndex)
 				result.ProviderResponses = append(result.ProviderResponses, providerResponse)
 				responseErr = providerResponseErr
+				if responseErr == nil && err == nil {
+					responseErr = validateWriteActionSuccessStatus(step.action, response.Status)
+				}
 			}
 			if responseErr != nil {
 				result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
@@ -466,6 +495,18 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 		result.RecordsWritten++
 	}
 	return result, nil
+}
+
+func validateWriteActionSuccessStatus(action WriteAction, status int) error {
+	if len(action.SuccessStatuses) == 0 {
+		return nil
+	}
+	for _, allowed := range action.SuccessStatuses {
+		if status == allowed {
+			return nil
+		}
+	}
+	return fmt.Errorf("provider response status %d is not declared successful for write action %q", status, action.Name)
 }
 
 func preparedRequestMatchesExecution(current, approved PreparedRequest) bool {

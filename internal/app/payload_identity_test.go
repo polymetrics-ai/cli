@@ -109,7 +109,7 @@ func TestConnectorCommandPayloadIdentityHonorsDeclaredByteCap(t *testing.T) {
 		PayloadFileFields:   []string{"media"},
 		PayloadFileMaxBytes: map[string]int64{"media": 4},
 	}}
-	_, err := payloadIdentitiesForConnectorCommand(dir, connector, "acme.upload", connectors.Record{"media": "payload.bin"})
+	_, err := payloadIdentitiesForConnectorCommand(dir, connector, "acme.upload", "direct_write", "acme.upload", connectors.Record{"media": "payload.bin"})
 	if err == nil || !strings.Contains(err.Error(), "declared byte cap") {
 		t.Fatalf("payload identity error = %v, want declared-cap refusal", err)
 	}

@@ -1519,6 +1519,25 @@
       ]
     },
     {
+      "source_id": "github.rest.repos/upload-release-asset",
+      "source_sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
+      "canonical_method": "POST",
+      "canonical_path": "/repos/{owner}/{repo}/releases/{release_id}/assets",
+      "cli_paths": [
+        "release upload",
+        "releases assets upload"
+      ],
+      "website_paths": [
+        "releases assets upload"
+      ],
+      "fixture_paths": [
+        "fixtures/check.json"
+      ],
+      "classifications": [
+        "binary_upload"
+      ]
+    },
+    {
       "source_id": "github.graphql.mutation.addPullRequestReviewComment",
       "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
       "canonical_method": "POST",
@@ -1798,24 +1817,6 @@
       ],
       "website_paths": [
         "graphql mutation cancel-enterprise-member-invitation"
-      ],
-      "fixture_paths": [
-        "fixtures/check.json"
-      ],
-      "classifications": [
-        "direct_write"
-      ]
-    },
-    {
-      "source_id": "github.graphql.mutation.cancelSponsorship",
-      "source_sha256": "e33eae09efab2e384b251d483faf7e4fa4a80e663a3459f526d90379c7b64f3a",
-      "canonical_method": "POST",
-      "canonical_path": "/graphql",
-      "cli_paths": [
-        "graphql mutation cancel-sponsorship"
-      ],
-      "website_paths": [
-        "graphql mutation cancel-sponsorship"
       ],
       "fixture_paths": [
         "fixtures/check.json"
