@@ -535,6 +535,31 @@ func TestSourceProjectionDoesNotBlockReadForUnusedOptionalAmbiguousParameter(t *
 	}
 }
 
+func TestSourceProjectionDoesNotBlockReadForUnusedOptionalNonScalarParameter(t *testing.T) {
+	source := sourceOperationDescriptor{
+		Connector: "alpha", SourceID: "alpha.widgets.list", Method: "get", Path: "/orgs/{org}/widgets",
+		Request: sourceRequestDescriptor{
+			Path: []sourceParameterDescriptor{{Name: "org", Required: true, Schema: map[string]any{"type": "string"}}},
+			Query: []sourceParameterDescriptor{{Name: "has", Required: false, Schema: map[string]any{"oneOf": []any{
+				map[string]any{"type": "string"},
+				map[string]any{"type": "array", "items": map[string]any{"type": "string"}},
+			}}}},
+		},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{
+			Foundation: "cli-request-schema-foundation-r1",
+			Location:   "parameter has",
+			Reason:     "query parameter requires non-scalar serialization support",
+		}}},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{source}}
+	if blocked := sourceProjectionBlockedReadSources(result); len(blocked) != 0 {
+		t.Fatalf("unused optional non-scalar query parameter blocked executable read: %+v", blocked)
+	}
+	if reachable := sourceProjectionReachableReadSources(result); reachable[source.SourceID].SourceID != source.SourceID {
+		t.Fatalf("read with only an unused optional non-scalar parameter was not reachable: %+v", reachable)
+	}
+}
+
 func TestSourceProjectionDoesNotBlockReadForOmittedOptionalRequestBody(t *testing.T) {
 	source := sourceOperationDescriptor{
 		Connector: "alpha", SourceID: "alpha.widgets.get", Method: "get", Path: "/widgets/{id}",

@@ -49,3 +49,10 @@ in `VERIFICATION.md`.
   immutable unavailable reason. The new red/green regression proves that no
   retained-reader or provider path runs first; artifact-bearing locks retain
   the mandatory reader path.
+- **Resolved after CI regression — optional source schema gap wording:** the
+  read projection previously recognized only the old `oneOf` gap text as
+  non-blocking when the parameter was optional. Current-main calls the same
+  optional input non-scalar serialization, which wrongly downgraded 18 GitHub
+  reads. Requiredness is the actual safety boundary, so the implementation now
+  keys on the declaration and the new red/green test proves it. The complete
+  fresh-binary 633-route fixture and source inventory are green.

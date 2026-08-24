@@ -25,3 +25,11 @@ An all-unavailable v3 source lock now reaches its declared terminal cause
 without requiring a nonexistent retained-artifact manifest. This keeps Zoom
 accounts honestly irrecoverable (HTTP 404/no verified historic copy) while
 preserving mandatory retained copies for every actual source artifact.
+
+## Post-rollup projection repair
+
+Current-main schema generation renamed an optional parameter gap from `oneOf`
+to non-scalar serialization. Projection now decides whether a zero-filter read
+is executable from the source declaration's requiredness, restoring the 18
+valid GitHub direct reads. The complete local 633-route fresh-binary fixture,
+source inventory, and generator package suite are green.

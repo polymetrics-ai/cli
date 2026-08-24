@@ -62,6 +62,14 @@ error response remains irrecoverable and is never re-pinned.
   `content/docs/github-cli-surface.mdx`, `data/connectors.generated.json`,
   `lib/connectors.catalog.data.generated.json`, and `lib/docs.generated.ts`.
 
+## CI-regression repair after canonical projection
+
+- Red: `go test -timeout 20m ./cmd/connectorgen -run '^TestSourceProjectionDoesNotBlockReadForUnusedOptionalNonScalarParameter$' -count=1` failed because an optional `has` parameter with a non-scalar serialization gap blocked its otherwise field-complete GET route. Current-main schema generation changed the reason wording; the runner can correctly make the request when the filter is omitted.
+- Green: `go test -timeout 20m ./cmd/connectorgen -count=1` passed in 331.467s after source projection exempted every optional parameter schema gap, rather than only the prior `oneOf` wording. Required and non-parameter gaps remain blocking.
+- Canonical regeneration: `go run ./cmd/connectorgen source-import github`, `go run ./cmd/connectorgen source-import github --check`, `make connectorgen-surface-sync`, and `make connectorgen-validate` passed. The 18 accidental partial GitHub projections returned to their executable source-derived state; `go run ./cmd/pm skills generate --dir docs/skills --json`, `go run ./cmd/pm docs generate --dir docs/cli`, `(cd website && pnpm run gen:website-data)`, and `make docs-check` regenerated matching documentation.
+- CI regression proof: `go test -tags github_fixture_sweep -timeout 35m -count=1 -v ./internal/cli -run '^(TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture|TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture|TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture|TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture|TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle|TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip)$'` passed in 781.733s, including 97 generated candidates and all 633 released direct-read routes.
+- `go test -timeout 20m ./internal/connectors/certify -run '^TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints$' -count=1` passed in 1.733s. `go test -timeout 20m ./internal/cli -run '^TestSkillsGenerateMatchesTrackedSkills$' -count=1` passed in 6.561s. `git diff --check` passed.
+
 ## Inline GSD lifecycle
 
 - Resolved and applied inline due to the task's no-role-spawning contract: `scripts/gsd doctor`; `scripts/gsd sources discuss-phase`, `plan-phase`, `execute-phase`, `verify-work`, and `code-review`; `scripts/gsd prompt discuss-phase 4347`, `plan-phase 4347 --tdd`, `execute-phase 4347`, `verify-work 4347`, and `code-review 4347`.

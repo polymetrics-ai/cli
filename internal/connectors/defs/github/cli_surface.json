@@ -5891,7 +5891,7 @@
       "path": "agent-tasks list-tasks-for-repo",
       "summary": "List tasks for repository",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/agent-tasks/agent-tasks#list-tasks-for-repository",
       "flags": [],
@@ -5901,8 +5901,7 @@
           "path": "/agents/repos/{owner}/{repo}/tasks"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation agent-tasks/list-tasks-for-repo has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "agents add-selected-repo-to-org-secret",
@@ -8424,7 +8423,7 @@
       "path": "api-insights get-route-stats-by-actor",
       "summary": "Get route stats by actor",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/api-insights#get-route-stats-by-actor",
       "flags": [
@@ -8470,14 +8469,13 @@
           "path": "/orgs/{org}/insights/api/route-stats/{actor_type}/{actor_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation api-insights/get-route-stats-by-actor has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "api-insights get-subject-stats",
       "summary": "Get subject stats",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/api-insights#get-subject-stats",
       "flags": [
@@ -8502,8 +8500,7 @@
           "path": "/orgs/{org}/insights/api/subject-stats"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation api-insights/get-subject-stats has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "api-insights get-summary-stats",
@@ -8772,7 +8769,7 @@
       "path": "api-insights get-user-stats",
       "summary": "Get user stats",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/api-insights#get-user-stats",
       "flags": [
@@ -8804,8 +8801,7 @@
           "path": "/orgs/{org}/insights/api/user-stats/{user_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation api-insights/get-user-stats has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "app access_tokens create",
@@ -19565,7 +19561,7 @@
       "path": "dependabot list-alerts-for-enterprise",
       "summary": "List Dependabot alerts for an enterprise",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/alerts#list-dependabot-alerts-for-an-enterprise",
       "flags": [
@@ -19583,14 +19579,13 @@
           "path": "/enterprises/{enterprise}/dependabot/alerts"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/list-alerts-for-enterprise has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot list-alerts-for-org",
       "summary": "List Dependabot alerts for an organization",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/alerts#list-dependabot-alerts-for-an-organization",
       "flags": [
@@ -19608,8 +19603,7 @@
           "path": "/orgs/{org}/dependabot/alerts"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation dependabot/list-alerts-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot list-org-secrets",
@@ -33787,7 +33781,7 @@
       "path": "migrations get-status-for-authenticated-user",
       "summary": "Get a user migration status",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/migrations/users#get-a-user-migration-status",
       "flags": [
@@ -33805,14 +33799,13 @@
           "path": "/user/migrations/{migration_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation migrations/get-status-for-authenticated-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "migrations get-status-for-org",
       "summary": "Get an organization migration status",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/migrations/orgs#get-an-organization-migration-status",
       "flags": [
@@ -33837,8 +33830,7 @@
           "path": "/orgs/{org}/migrations/{migration_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation migrations/get-status-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "migrations list-for-authenticated-user",
@@ -33860,7 +33852,7 @@
       "path": "migrations list-for-org",
       "summary": "List organization migrations",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/migrations/orgs#list-organization-migrations",
       "flags": [
@@ -33878,8 +33870,7 @@
           "path": "/orgs/{org}/migrations"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation migrations/list-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "migrations list-repos-for-authenticated-user",
@@ -37421,7 +37412,7 @@
       "path": "orgs list-pat-grant-requests",
       "summary": "List requests to access organization resources with fine-grained personal access tokens",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/personal-access-tokens#list-requests-to-access-organization-resources-with-fine-grained-personal-access-tokens",
       "flags": [
@@ -37439,14 +37430,13 @@
           "path": "/orgs/{org}/personal-access-token-requests"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation orgs/list-pat-grant-requests has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "orgs list-pat-grants",
       "summary": "List fine-grained personal access tokens with access to organization resources",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/personal-access-tokens#list-fine-grained-personal-access-tokens-with-access-to-organization-resources",
       "flags": [
@@ -37464,8 +37454,7 @@
           "path": "/orgs/{org}/personal-access-tokens"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation orgs/list-pat-grants has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "orgs list-pending-invitations",
@@ -42678,7 +42667,7 @@
       "path": "projects get-org-item",
       "summary": "Get an item for an organization owned project",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/items#get-an-item-for-an-organization-owned-project",
       "flags": [
@@ -42710,14 +42699,13 @@
           "path": "/orgs/{org}/projectsV2/{project_number}/items/{item_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation projects/get-org-item has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "projects get-user-item",
       "summary": "Get an item for a user owned project",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/items#get-an-item-for-a-user-owned-project",
       "flags": [
@@ -42749,8 +42737,7 @@
           "path": "/users/{username}/projectsV2/{project_number}/items/{item_id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation projects/get-user-item has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "projects list-fields-for-org",
@@ -42866,7 +42853,7 @@
       "path": "projects list-items-for-org",
       "summary": "List items for an organization owned project",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/items#list-items-for-an-organization-owned-project",
       "flags": [
@@ -42891,14 +42878,13 @@
           "path": "/orgs/{org}/projectsV2/{project_number}/items"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation projects/list-items-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "projects list-items-for-user",
       "summary": "List items for a user owned project",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/items#list-items-for-a-user-owned-project",
       "flags": [
@@ -42923,14 +42909,13 @@
           "path": "/users/{username}/projectsV2/{project_number}/items"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation projects/list-items-for-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "projects list-view-items-for-org",
       "summary": "List items for an organization project view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/items#list-items-for-an-organization-project-view",
       "flags": [
@@ -42962,14 +42947,13 @@
           "path": "/orgs/{org}/projectsV2/{project_number}/views/{view_number}/items"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation projects/list-view-items-for-org has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "projects list-view-items-for-user",
       "summary": "List items for a user project view",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/items#list-items-for-a-user-project-view",
       "flags": [
@@ -43001,8 +42985,7 @@
           "path": "/users/{username}/projectsV2/{project_number}/views/{view_number}/items"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation projects/list-view-items-for-user has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "projects update-item-for-org",
@@ -48564,7 +48547,7 @@
       "path": "security-advisories list-global-advisories",
       "summary": "List global security advisories",
       "intent": "direct_read",
-      "availability": "partial",
+      "availability": "implemented",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/security-advisories/global-advisories#list-global-security-advisories",
       "flags": [],
@@ -48574,8 +48557,7 @@
           "path": "/advisories"
         }
       ],
-      "output_policy": "json_redacted",
-      "notes": "Blocked: locked source operation security-advisories/list-global-advisories has no declaration-owned executable stream, direct-read, binary, or status route."
+      "output_policy": "json_redacted"
     },
     {
       "path": "security-advisories list-org-repository-advisories",

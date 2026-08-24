@@ -3450,7 +3450,7 @@ func TestSourceImportPreservesFrozenGitHubArtifacts(t *testing.T) {
 		sha256 string
 	}{
 		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"), bytes: 3420025, sha256: "79f6eaf203394aabe7d2558d0f87a8100a7a084b2e39bd264f7773f235acf2c8"},
-		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-descriptor.json"), bytes: 43354021, sha256: "d1978c0c6fd0eb66e9fcd4d78d637864a6e486f558aaad1e51550bc43758b899"},
+		{path: filepath.Join("..", "..", "internal", "connectors", "defs", "github", "sources", "github-operation-descriptor.json"), bytes: 43355704, sha256: "69b23e5146480eb67f10c3ba65b45fc6fac466cfb8ae244953b19b8373f10062"},
 		{path: filepath.Join("..", "..", ".planning", "phases", "github-parity-extract-r1", "GITHUB-COMBINED-OPERATION-LEDGER.json"), bytes: 2553169, sha256: "c4a904a919f30065fcc8453c6689e1a3dcc7be5ac8e11a7154d310b334972de3"},
 	}
 	for _, check := range checks {
