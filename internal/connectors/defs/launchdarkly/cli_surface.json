@@ -370,9 +370,10 @@
       "path": "operations get-api-v2-auditlog",
       "summary": "Declared etl: GET /api/v2/auditlog.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
-      "notes": "Blocked: locked source operation launchdarkly.provider.getauditlogentries-33 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v2/auditlog is bound to the existing auditlog stream with its connector-owned schema and pagination contract.",
+      "stream": "auditlog"
     },
     {
       "path": "operations post-api-v2-auditlog",
@@ -1590,9 +1591,10 @@
       "path": "operations get-api-v2-members",
       "summary": "Declared etl: GET /api/v2/members.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
-      "notes": "Blocked: locked source operation launchdarkly.provider.getmembers-136 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v2/members is bound to the existing members stream with its connector-owned schema and pagination contract.",
+      "stream": "members"
     },
     {
       "path": "operations patch-api-v2-members",
@@ -1792,9 +1794,10 @@
       "path": "operations get-api-v2-projects",
       "summary": "Declared etl: GET /api/v2/projects.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
-      "notes": "Blocked: locked source operation launchdarkly.provider.getprojects-154 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v2/projects is bound to the existing projects stream with its connector-owned schema and pagination contract.",
+      "stream": "projects"
     },
     {
       "path": "operations post-api-v2-projects",
@@ -4726,17 +4729,19 @@
       "path": "operations get-api-v2-flags-project-key-2",
       "summary": "Declared etl: GET /api/v2/flags/{project_key}.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
-      "notes": "Blocked: locked source operation launchdarkly.local-api-surface.get-api-v2-flags-project-key-398 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v2/flags/{project_key} is bound to the existing flags stream with its connector-owned schema and pagination contract.",
+      "stream": "flags"
     },
     {
       "path": "operations get-api-v2-projects-project-key-environments-2",
       "summary": "Declared etl: GET /api/v2/projects/{project_key}/environments.",
       "intent": "etl",
-      "availability": "partial",
+      "availability": "implemented",
       "source_url": "https://app.launchdarkly.com/api/v2/openapi.json",
-      "notes": "Blocked: locked source operation launchdarkly.local-api-surface.get-api-v2-projects-project-key-environments-399 has no declaration-owned executable etl route."
+      "notes": "Provider GET /api/v2/projects/{project_key}/environments is bound to the existing environments stream with its connector-owned schema and pagination contract.",
+      "stream": "environments"
     }
   ]
 }
