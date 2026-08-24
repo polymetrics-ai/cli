@@ -2175,6 +2175,9 @@ func checkSourceProjection(fsys fs.FS, bundle engine.Bundle) []Finding {
 	if err != nil {
 		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, err.Error())}
 	}
+	if unavailable, exists := sourceImportUnavailableDocument(lock); exists {
+		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, sourceImportUnavailableFindingMessage(unavailable))}
+	}
 	descriptorPath := filepath.ToSlash(filepath.Join(bundle.Name, "sources", bundle.Name+"-operation-descriptor.json"))
 	descriptorRaw, err := fs.ReadFile(fsys, descriptorPath)
 	if err != nil {
@@ -2189,11 +2192,33 @@ func checkSourceProjection(fsys fs.FS, bundle engine.Bundle) []Finding {
 	return findings
 }
 
+func sourceImportUnavailableDocument(lock sourceImportLock) (sourceImportRESTDocument, bool) {
+	if lock.SchemaVersion != 3 {
+		return sourceImportRESTDocument{}, false
+	}
+	for _, document := range lock.Rest.SourceDocuments {
+		if document.isUnavailable() {
+			return document, true
+		}
+	}
+	return sourceImportRESTDocument{}, false
+}
+
+func sourceImportUnavailableFindingMessage(document sourceImportRESTDocument) string {
+	if document.PublishedSource.SourceURL != "" {
+		return fmt.Sprintf("source inventory is unavailable: document %q cites %s: %s", document.ID, document.PublishedSource.SourceURL, document.UnavailableReason)
+	}
+	return fmt.Sprintf("source inventory is unavailable: document %q: %s", document.ID, document.UnavailableReason)
+}
+
 func sourceProjectionFinding(connector, file, message string) Finding {
 	return Finding{Connector: connector, File: strings.TrimPrefix(file, connector+"/"), Rule: ruleSourceProjection, Message: message}
 }
 
 func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImportLock, descriptor sourceImportDescriptorDocument) []Finding {
+	if unavailable, exists := sourceImportUnavailableDocument(lock); exists {
+		return []Finding{sourceProjectionFinding(connector, file, sourceImportUnavailableFindingMessage(unavailable))}
+	}
 	wantSchemaVersion := 2
 	if lock.SchemaVersion == 3 {
 		wantSchemaVersion = 3
@@ -2209,20 +2234,32 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 	if lock.SchemaVersion == 3 {
 		for _, document := range lock.Rest.SourceDocuments {
 			for _, operation := range document.Operations {
+				form := document.sourceKind()
+				version := ""
+				if form == sourceImportDocumentKindOpenAPI {
+					if document.Artifact.Swagger != "" {
+						form = "swagger"
+						version = document.Artifact.Swagger
+					} else {
+						version = document.Artifact.OpenAPI
+					}
+				}
 				expected[operation.ID] = expectedSource{
 					source: sourceImportSource{
 						URL:                 document.Artifact.SourceURL,
 						SHA256:              strings.ToLower(document.Artifact.SHA256),
 						Bytes:               document.Artifact.Bytes,
 						Location:            operation.SourceLocation,
-						Form:                "openapi",
-						Version:             document.Artifact.OpenAPI,
+						Form:                form,
+						Version:             version,
 						DocumentID:          document.ID,
 						PublishedURL:        document.PublishedSource.SourceURL,
 						PublishedCaptureURL: document.PublishedSource.CaptureURL,
 						PublishedSHA256:     strings.ToLower(document.PublishedSource.SHA256),
 						PublishedBytes:      document.PublishedSource.Bytes,
 						PublishedAdapter:    document.PublishedSource.Adapter,
+						ContentType:         document.ContentType,
+						CitationURL:         operation.CitationURL,
 					},
 					providerOperationID: operation.OperationID,
 				}
@@ -2261,7 +2298,7 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 		if operation.Source.SHA256 != expectedOperation.source.SHA256 || operation.Source.Bytes != expectedOperation.source.Bytes || (expectedOperation.source.Location != "" && operation.Source.Location != expectedOperation.source.Location) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
 		}
-		if lock.SchemaVersion == 3 && (operation.ProviderOperationID != expectedOperation.providerOperationID || operation.Source.URL != expectedOperation.source.URL || operation.Source.Form != expectedOperation.source.Form || operation.Source.Version != expectedOperation.source.Version || operation.Source.DocumentID != expectedOperation.source.DocumentID || operation.Source.PublishedURL != expectedOperation.source.PublishedURL || operation.Source.PublishedCaptureURL != expectedOperation.source.PublishedCaptureURL || operation.Source.PublishedSHA256 != expectedOperation.source.PublishedSHA256 || operation.Source.PublishedBytes != expectedOperation.source.PublishedBytes || operation.Source.PublishedAdapter != expectedOperation.source.PublishedAdapter) {
+		if lock.SchemaVersion == 3 && (operation.ProviderOperationID != expectedOperation.providerOperationID || operation.Source.URL != expectedOperation.source.URL || operation.Source.Form != expectedOperation.source.Form || operation.Source.Version != expectedOperation.source.Version || operation.Source.DocumentID != expectedOperation.source.DocumentID || operation.Source.PublishedURL != expectedOperation.source.PublishedURL || operation.Source.PublishedCaptureURL != expectedOperation.source.PublishedCaptureURL || operation.Source.PublishedSHA256 != expectedOperation.source.PublishedSHA256 || operation.Source.PublishedBytes != expectedOperation.source.PublishedBytes || operation.Source.PublishedAdapter != expectedOperation.source.PublishedAdapter || operation.Source.ContentType != expectedOperation.source.ContentType || operation.Source.CitationURL != expectedOperation.source.CitationURL) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
 		}
 		if operation.Runtime.MergeBlocked != (len(operation.Runtime.Gaps) > 0) {
