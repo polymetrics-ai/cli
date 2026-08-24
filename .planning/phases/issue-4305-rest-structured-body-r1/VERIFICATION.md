@@ -4,6 +4,8 @@
 
 - [x] Focused configured-base-URL GraphQL application-error persistence regression: state excludes the configured secret while returned provider receipt remains verbatim.
 
+- [x] Focused credential-bearing `base_url` validation red/green regression: URI user-info and a query component reject through configuration validation; an ordinary endpoint URI remains accepted, including for source-locked fields that omit `format: uri`.
+
 - [x] Targeted engine, commandrunner, and installed CLI tests with -timeout 20m.
 - [x] Existing scalar, form, SCIM, binary, and specialized GitHub focused regressions.
 - [x] go vet ./...
@@ -12,13 +14,25 @@
 - [x] go run ./cmd/connectorgen surface-sync --check
 - [x] Generated help/manual/schema checks and applicable website parity check.
 - [x] Completion-tracked make connector-boundary.
-- [x] make verify.
+- [x] Fresh `make verify` after the credential-bearing `base_url` admission slice.
 - [x] git diff --check.
 - [x] Code-review evidence with actionable findings resolved.
 
 ## Results
 
 ### Focused TDD and behavior checks
+
+### 2026-08-24 — credential-bearing `base_url` input hardening
+
+- Red tests reproduced acceptance of URL user-info/query components for a schema-declared `base_url`, then reproduced that 29 format-omitted source declarations bypassed a format-only repair.
+- Green: `go test -timeout 20m ./internal/connectors/engine -count=1` passed. `go test -timeout 20m ./internal/app -count=1` passed in 393.089s under a completion-tracked session.
+- The app-level regression proves `AddCredential` rejects either unsafe URI shape before a credential appears in state and without echoing the rejected URL. The existing configured-base-URL GraphQL application-error regression remains unchanged and green; it uses an ordinary endpoint and confirms that input hardening does not supersede receipt persistence safety.
+
+### 2026-08-25 — completion-tracked whole-tree verification attempt
+
+- `make verify` progressed through formatting, tidy, vet, the complete `internal/app` package (1089.715s), and `internal/connectors/boundary` (1024.093s). It then failed only because the unrelated `internal/cli` package reached its repository-enforced 20-minute test timeout (1203.558s) while another lane's whole-tree suite was actively running on the shared host.
+- The changed packages themselves had already passed in full (`./internal/connectors/engine` and `./internal/app`). Once the competing run cleared, the clean retry `go test -timeout 20m ./internal/cli -count=1` passed in 519.864s.
+- This first whole-tree attempt remains incomplete rather than green; the clean CLI result removed the localized timeout concern. A second completion-tracked `make verify` rerun on the idle host passed with exit 0: complete tests (`internal/cli` 498.426s and connector-boundary 424.818s), build/docs/smoke, lint (0 issues), contract and source/generator checks, a clean 553-connector boundary report, release layout, and installed GitHub certification.
 
 ### 2026-08-24 — plaintext configured-base-URL persistence follow-up
 

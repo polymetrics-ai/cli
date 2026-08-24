@@ -1,7 +1,7 @@
 {
   "issue": 4305,
   "phase": "issue-4305-rest-structured-body-r1",
-  "status": "verified",
+  "status": "in_progress",
   "base_branch": "main",
   "working_branch": "fm/cli-rest-structured-body-r1",
   "manual_gsd_fallback": true,
@@ -14,6 +14,7 @@
     "approval-bound-structured-payload",
     "generated-surface-and-downstream-contract",
     "write-query-record-omit-when-absent",
-    "plaintext-configured-base-url-error-persistence"
+    "plaintext-configured-base-url-error-persistence",
+    "credential-bearing-base-url-input-rejection"
   ]
 }
