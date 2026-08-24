@@ -36,6 +36,17 @@ The brief's initial declarative inventory is stale:
 - Eight, rather than seven, bundles have `writes.json`: Airtable, BambooHR, Buildkite, Mailchimp, Pipedrive, SonarCloud, Squarespace, and Zendesk Support. All twenty lack `sync_transport.json`.
 - `TestEveryImplementedCommandPassesRuntimePreflight` succeeds for all 390 declared rows. It is structural evidence only. Built-binary credential-boundary probes independently confirmed 36 distinct Mailchimp commands and Zendesk Support's `streams tickets list`; the remaining 353 declared implemented rows are not counted as Phase 1 binary-certified usable.
 
+### Source-URL correction — 2026-08-24
+
+After approval of the initial map, Firstmate remeasured every locked URL and established that five
+of this cohort's recorded URLs resolve to **landing pages, not provider specifications**:
+**Google Analytics Data API, Linear, Mailchimp, QuickBooks, and Salesforce.** The counts and lane
+crosswalks marked `†` below are therefore historical observations from the checked-in lock, **not
+admissible provider-contract evidence for Phase 2**. No operation, `not_applicable` claim, source
+transition, or executable surface will be re-derived from any of those URLs while the source
+research wave establishes their correct replacements. In particular, retaining a byte-identical
+historical artifact does not make its landing-page URL a usable specification source.
+
 Notation below: `I` means declared `implemented`, `P` means declared `partial`, `S` means the source disposition crosswalk count, and `W` means a source-backed provider write candidate. `S` can include explicit local execution bindings; the source column remains the provider-operation total. `none classified` never claims a provider lacks a capability: the pinned lock simply does not establish a bounded binary contract.
 
 | Connector | Pinned source total | ETL | Reverse ETL | Direct read | Direct write | Binary download | Binary upload | Schedule | Flow |
@@ -45,15 +56,15 @@ Notation below: `I` means declared `implemented`, `P` means declared `partial`, 
 | Buildkite | 129 [source](https://buildkite.com/docs/apis/rest-api) | P6/S6 | —/W76 | P50/S50 | P76/S76 | 0; none classified | pending; none classified | system | system |
 | eBay Fulfillment | unknown; [official error-page evidence](https://developer.ebay.com/develop/api/fulfillment-api/release-notes) | P4/S? | —/W? | P4/S? | P3/S? | unknown | pending; source unavailable | system | system |
 | Fastly | 732 [source](https://www.fastly.com/documentation/downloads/fastly.collection.json) | P6/S6 | —/W389 | P337/S337 | P389/S389 | 0; none classified | pending; none classified | system | system |
-| Google Analytics Data API | 23 [source](https://analyticsdata.googleapis.com/$discovery/rest?version=v1) | P5/S5 | —/W16 | P7/S7 | P16/S16 | 0; none classified | pending; none classified | system | system |
+| Google Analytics Data API † | 23 [source](https://analyticsdata.googleapis.com/$discovery/rest?version=v1) | P5/S5 | —/W16 | P7/S7 | P16/S16 | 0; none classified | pending; none classified | system | system |
 | HubSpot | 3,118 [source](https://codeload.github.com/HubSpot/HubSpot-public-api-spec-collection/tar.gz/2bebde2dca45eaa1792931089c4e441c8e377594) | 0/S0 | —/W1,901 | P1,240/S1,217 | P1,901/S1,901 | 0/S32 `binary_read` | pending; 229 binary/multipart-tagged rows, direction not preserved | system | system |
 | LaunchDarkly | 397 [source](https://app.launchdarkly.com/api/v2/openapi.json) | P5/S5 | —/W205 | P189/S189 | P205/S205 | 0; none classified | pending; none classified | system | system |
-| Linear | 539 [source](https://studio.apollographql.com/public/Linear-API/variant/current/schema/reference) | P4/S4 | —/W373 | P166/S166 | P373/S373 | 0; none classified | pending; none classified | system | system |
-| Mailchimp | 295 [source](https://api.mailchimp.com/schema/3.0/Swagger.json) | I79/S79 | I148/W164 | I68+P12/S80 | P16/W164 | 0; none classified | pending; none classified | system | system |
+| Linear † | 539 [source](https://studio.apollographql.com/public/Linear-API/variant/current/schema/reference) | P4/S4 | —/W373 | P166/S166 | P373/S373 | 0; none classified | pending; none classified | system | system |
+| Mailchimp † | 295 [source](https://api.mailchimp.com/schema/3.0/Swagger.json) | I79/S79 | I148/W164 | I68+P12/S80 | P16/W164 | 0; none classified | pending; none classified | system | system |
 | Pinterest | 279 [source](https://developers.pinterest.com/docs/api/v5/introduction/) | P5/S5 | —/W135 | P144/S144 | P135/S135 | 0; none classified | pending; none classified | system | system |
 | Pipedrive | 213 [source](https://developers.pipedrive.com/docs/api/v1/openapi.yaml) | P21/S21 | —/W99 | P98/S98 | P99/S99 | 0; one explicit raw-binary download | pending; 12 binary/multipart-tagged rows, direction not preserved | system | system |
-| QuickBooks | 129 [source](https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json) | P5/S5 | —/W45 | P84/S84 | P45/S45 | 0; none classified | pending; none classified | system | system |
-| Salesforce | unknown; [dynamic resource index](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm) | P4/S? | —/W? | P3/S? | P3/S? | unknown | pending; source total is tenant-dynamic | system | system |
+| QuickBooks † | 129 [source](https://static.developer.intuit.com/JSONObjects/EntityJsonObject_v1.json) | P5/S5 | —/W45 | P84/S84 | P45/S45 | 0; none classified | pending; none classified | system | system |
+| Salesforce † | unknown; [dynamic resource index](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm) | P4/S? | —/W? | P3/S? | P3/S? | unknown | pending; source total is tenant-dynamic | system | system |
 | ShipStation | 47 [source](https://docs.shipstation.com/_bundle/apis/@shipstation-v1/openapi.json?download) | P4/S4 | —/W25 | P18/S18 | P25/S25 | 0; none classified | pending; none classified | system | system |
 | SonarCloud | 156 [source](https://sonarcloud.io/api/webservices/list) | P11/S11 | —/W87 | P59/S59 | P87/S87 | 0; none classified | pending; none classified | system | system |
 | Squarespace | 53 [source](https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json) | P8/S8 | —/W30 | P15/S15 | P30/S30 | 0; none classified | pending; one multipart image-upload row | system | system |
@@ -62,6 +73,10 @@ Notation below: `I` means declared `implemented`, `P` means declared `partial`, 
 | Zendesk Support | 629 [source](https://developer.zendesk.com/zendesk/oas.yaml) | I33/S33 | I62+P28/W294 | P308/S308 | P204/W294 | 0/S1 `binary_read` | pending; six binary/multipart-tagged rows, direction not preserved | system | system |
 
 `binary_upload` is pending globally: its intent is not on `main` and is supplied only by unmerged PR #4343. No row above asserts that it is currently implemented. The source tags identify potential later work; they do not invent a bounded input policy, media allow-list, size cap, or provider request shape.
+
+`†` The URL was subsequently proven to be a landing page rather than the provider specification
+the lock purported to cite. Its number and per-lane `S`/`W` values are retained only as Phase 1
+audit history; they must not be used to select or implement a Phase 2 surface.
 
 ### Schedule and flow are system-level surfaces
 
