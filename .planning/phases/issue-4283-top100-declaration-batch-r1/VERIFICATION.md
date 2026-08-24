@@ -494,9 +494,10 @@ pre-existing.
 
 ## Authorized fixed-100 runtime-preflight correction — 2026-08-24
 
-- [ ] **Red:** add and run a focused `cmd/connectorgen` test proving the
-  metadata-only selector currently admits Docker Hub SCIM create/update despite
-  production runtime preflight refusing both commands.
+- [x] **Red:** `go test -timeout 20m -count=1 -run
+  '^TestOperationEvidenceFixed100UsesRuntimePreflightForDockerHubSCIMWrites$'
+  ./cmd/connectorgen` proves the metadata-only selector currently admits Docker
+  Hub SCIM create/update despite production runtime preflight refusing both.
 - [ ] **Green:** run that test after using `commandrunner.Preflight` in
   operation-evidence eligibility; require disabled runtime plus
   `runtime_reachability` gaps for both rows and no SCIM row in the would-be

@@ -828,11 +828,12 @@ to operation-evidence runtime eligibility. It does not authorize an engine
 change, a Docker Hub declaration/source-lock edit, or a regenerated checked-in
 fixed-100 reference.
 
-**Red (planned):** add a `cmd/connectorgen` regression test over the existing
-Docker Hub SCIM create and update source IDs. Before production code changes,
-it must fail because the evidence projector reports both rows runtime-enabled
-and includes them in `buildOperationEvidenceFixed100`, while the production
-commandrunner preflight refuses their source-declared open request bodies.
+**Red:** `go test -timeout 20m -count=1 -run
+'^TestOperationEvidenceFixed100UsesRuntimePreflightForDockerHubSCIMWrites$'
+./cmd/connectorgen` fails before production code changes. It reports
+`dockerhub.rest.post_/v2/scim/2.0/Users` as runtime-enabled despite the
+commandrunner preflight refusal. The test continues to require the same result
+for the update operation and no SCIM row in the would-be fixed cohort.
 
 **Green (planned):** route each matching implemented command through
 `commandrunner.Preflight` using the loaded declarative `engine.New` connector.

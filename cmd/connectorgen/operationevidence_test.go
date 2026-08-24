@@ -12,6 +12,11 @@ import (
 
 const githubIssuesSourceID = "github.rest.issues/list-for-repo"
 
+var dockerHubSCIMWriteSourceIDs = []string{
+	"dockerhub.rest.post_/v2/scim/2.0/Users",
+	"dockerhub.rest.put_/v2/scim/2.0/Users/{id}",
+}
+
 func TestOperationEvidenceProjectsGitHubAcrossEveryEvidenceSurface(t *testing.T) {
 	root := operationEvidenceWorkspace(t)
 	artifact, _, stderr := runOperationEvidenceForTest(t, root, "")
@@ -61,6 +66,34 @@ func TestOperationEvidenceProjectsGitHubAcrossEveryEvidenceSurface(t *testing.T)
 	graphqlRow, found := artifact.row("github.graphql.mutation.createIpAllowListEntry")
 	if !found || !slices.Contains(graphqlRow.CLI.Paths, "graphql mutation create-ip-allow-list-entry") || graphqlRow.hasGap(operationEvidenceGapCLICommand) {
 		t.Fatalf("GraphQL acronym operation did not retain its exact command evidence: %+v", graphqlRow)
+	}
+}
+
+func TestOperationEvidenceFixed100UsesRuntimePreflightForDockerHubSCIMWrites(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	artifact, _, _ := runOperationEvidenceForTest(t, root, "")
+
+	for _, sourceID := range dockerHubSCIMWriteSourceIDs {
+		row, found := artifact.row(sourceID)
+		if !found {
+			t.Fatalf("operation evidence omitted Docker Hub SCIM row %q", sourceID)
+		}
+		if row.Runtime.Enabled {
+			t.Fatalf("Docker Hub SCIM row %q is runtime-enabled despite commandrunner preflight refusal: %+v", sourceID, row.Runtime)
+		}
+		if !row.hasGap(operationEvidenceGapRuntimeReachability) {
+			t.Fatalf("Docker Hub SCIM row %q gaps = %+v, want %q", sourceID, row.Gaps, operationEvidenceGapRuntimeReachability)
+		}
+	}
+
+	fixed, err := buildOperationEvidenceFixed100(artifact)
+	if err != nil {
+		t.Fatalf("build fixed-100 cohort: %v", err)
+	}
+	for _, row := range fixed.Rows {
+		if slices.Contains(dockerHubSCIMWriteSourceIDs, row.SourceID) {
+			t.Fatalf("would-be fixed cohort selected preflight-rejected Docker Hub SCIM row %q", row.SourceID)
+		}
 	}
 }
 
