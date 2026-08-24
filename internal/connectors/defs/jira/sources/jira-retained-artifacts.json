@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "jira",
+  "artifacts": [
+    {
+      "sha256": "e7136af43bf72cd4ea5ada91ec665b318b60008814122461d4436a43b6c732bf",
+      "bytes": 2456011,
+      "source_url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "retrieved_at": "2026-08-24T12:01:06Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "notion",
+  "artifacts": [
+    {
+      "sha256": "dee5763763b0b9fbad2aa8d5adb173ca350ec26dda557e658c5dbe9d2ea2f258",
+      "bytes": 1304814,
+      "source_url": "https://developers.notion.com/openapi.json",
+      "retrieved_at": "2026-08-24T11:55:22Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

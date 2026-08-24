@@ -310,8 +310,13 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter id",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter project",
-            "reason": "ambiguous request schema uses anyOf"
+            "reason": "query parameter requires non-scalar serialization support"
           }
         ]
       }
@@ -1121,8 +1126,18 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter environment",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter id",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter project",
-            "reason": "ambiguous request schema uses anyOf"
+            "reason": "query parameter requires non-scalar serialization support"
           }
         ]
       }
@@ -1925,7 +1940,14 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter environment",
+            "reason": "query parameter requires non-scalar serialization support"
+          }
+        ]
       }
     },
     {
@@ -2994,8 +3016,13 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter id",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter project",
-            "reason": "ambiguous request schema uses anyOf"
+            "reason": "query parameter requires non-scalar serialization support"
           }
         ]
       }
@@ -3787,7 +3814,14 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter environment",
+            "reason": "query parameter requires non-scalar serialization support"
+          }
+        ]
       }
     },
     {
@@ -11660,9 +11694,9 @@
         "merge_blocked": true,
         "gaps": [
           {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation listOrganizationEvents",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter field",
+            "reason": "query parameter requires non-scalar serialization support"
           }
         ]
       }
@@ -35639,9 +35673,9 @@
         "merge_blocked": true,
         "gaps": [
           {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation getOrganizationSessions",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter field",
+            "reason": "query parameter requires non-scalar serialization support"
           }
         ]
       }
@@ -36785,9 +36819,9 @@
         "merge_blocked": true,
         "gaps": [
           {
-            "foundation": "cli-request-schema-foundation-r1",
-            "location": "parameter project",
-            "reason": "unbounded request schema has no type"
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation getOrganizationStatsSummary",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
           }
         ]
       }
@@ -37120,8 +37154,8 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
-            "location": "parameter project",
-            "reason": "unbounded request schema has no type"
+            "location": "parameter groupBy",
+            "reason": "query parameter requires non-scalar serialization support"
           }
         ]
       }
@@ -38923,9 +38957,9 @@
         "merge_blocked": true,
         "gaps": [
           {
-            "foundation": "closed-source-operation-execution-foundation-r1",
-            "location": "source operation Retrieve Trace Item Statistics",
-            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter statsType",
+            "reason": "query parameter requires non-scalar serialization support"
           }
         ]
       }
@@ -76440,8 +76474,13 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter id",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter project",
-            "reason": "ambiguous request schema uses anyOf"
+            "reason": "query parameter requires non-scalar serialization support"
           },
           {
             "foundation": "cli-request-schema-foundation-r1",
@@ -78673,8 +78712,18 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter environment",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter id",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter project",
-            "reason": "ambiguous request schema uses anyOf"
+            "reason": "query parameter requires non-scalar serialization support"
           },
           {
             "foundation": "cli-request-schema-foundation-r1",
@@ -84309,8 +84358,13 @@
         "gaps": [
           {
             "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter id",
+            "reason": "query parameter requires non-scalar serialization support"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter project",
-            "reason": "ambiguous request schema uses anyOf"
+            "reason": "query parameter requires non-scalar serialization support"
           },
           {
             "foundation": "cli-request-schema-foundation-r1",
@@ -91472,43 +91526,103 @@
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
-      "location": "parameter project",
-      "reason": "ambiguous request schema uses anyOf"
+      "location": "parameter environment",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter environment",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter environment",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter environment",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter field",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter field",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter groupBy",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter id",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter id",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter id",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter id",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter id",
+      "reason": "query parameter requires non-scalar serialization support"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter id",
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter project",
-      "reason": "ambiguous request schema uses anyOf"
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter project",
-      "reason": "ambiguous request schema uses anyOf"
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter project",
-      "reason": "ambiguous request schema uses anyOf"
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter project",
-      "reason": "ambiguous request schema uses anyOf"
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter project",
-      "reason": "ambiguous request schema uses anyOf"
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter project",
-      "reason": "unbounded request schema has no type"
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
-      "location": "parameter project",
-      "reason": "unbounded request schema has no type"
+      "location": "parameter statsType",
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -91872,11 +91986,6 @@
     },
     {
       "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation Retrieve Trace Item Statistics",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
       "location": "source operation Retrieve a Service Hook",
       "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
     },
@@ -92012,7 +92121,7 @@
     },
     {
       "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation getOrganizationSessions",
+      "location": "source operation getOrganizationStatsSummary",
       "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
     },
     {
@@ -92133,11 +92242,6 @@
     {
       "foundation": "closed-source-operation-execution-foundation-r1",
       "location": "source operation listOrganizationEnvironments",
-      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "closed-source-operation-execution-foundation-r1",
-      "location": "source operation listOrganizationEvents",
       "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
     },
     {

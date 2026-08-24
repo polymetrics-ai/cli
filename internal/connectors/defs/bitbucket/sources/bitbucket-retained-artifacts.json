@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "bitbucket",
+  "artifacts": [
+    {
+      "sha256": "3dbfe6a80143511a287e58c21a193d3551ab5d41e8b60e65c1ae121b7000dec3",
+      "bytes": 1359673,
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "retrieved_at": "2026-08-24T11:55:22Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

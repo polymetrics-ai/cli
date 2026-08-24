@@ -7015,7 +7015,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter aliasId",
-            "reason": "ambiguous request schema uses oneOf"
+            "reason": "path parameter requires non-scalar serialization support"
           }
         ]
       }
@@ -31487,9 +31487,9 @@
         "merge_blocked": true,
         "gaps": [
           {
-            "foundation": "cli-request-schema-foundation-r1",
-            "location": "parameter provider",
-            "reason": "source schema has no type"
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation gitNamespaces",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
           }
         ]
       }
@@ -32328,9 +32328,9 @@
         "merge_blocked": true,
         "gaps": [
           {
-            "foundation": "cli-request-schema-foundation-r1",
-            "location": "parameter provider",
-            "reason": "source schema has no type"
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation searchRepo",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
           }
         ]
       }
@@ -58607,7 +58607,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter by",
-            "reason": "ambiguous request schema uses anyOf"
+            "reason": "query parameter requires non-scalar serialization support"
           }
         ]
       }
@@ -61636,7 +61636,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter by",
-            "reason": "ambiguous request schema uses anyOf"
+            "reason": "query parameter requires non-scalar serialization support"
           }
         ]
       }
@@ -154017,9 +154017,9 @@
         "merge_blocked": true,
         "gaps": [
           {
-            "foundation": "cli-request-schema-foundation-r1",
-            "location": "parameter strict",
-            "reason": "source schema has no type"
+            "foundation": "closed-source-operation-execution-foundation-r1",
+            "location": "source operation getDomainConfig",
+            "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
           }
         ]
       }
@@ -168161,27 +168161,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter idOrName",
-            "reason": "ambiguous request schema uses oneOf"
-          },
-          {
-            "foundation": "cli-request-schema-foundation-r1",
-            "location": "parameter order",
-            "reason": "source schema has no type"
-          },
-          {
-            "foundation": "cli-request-schema-foundation-r1",
-            "location": "parameter production",
-            "reason": "source schema has no type"
-          },
-          {
-            "foundation": "cli-request-schema-foundation-r1",
-            "location": "parameter redirects",
-            "reason": "source schema has no type"
-          },
-          {
-            "foundation": "cli-request-schema-foundation-r1",
-            "location": "parameter verified",
-            "reason": "source schema has no type"
+            "reason": "path parameter requires non-scalar serialization support"
           }
         ]
       }
@@ -176250,7 +176230,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"tokenClaims\": dynamic additionalProperties requires a typed gap"
+            "reason": "property \"tokenClaims\": unbounded request schema object has dynamic additionalProperties"
           }
         ]
       }
@@ -179378,7 +179358,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"environments\": dynamic additionalProperties requires a typed gap"
+            "reason": "property \"environments\": unbounded request schema object has dynamic additionalProperties"
           }
         ]
       }
@@ -203257,7 +203237,14 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "request body",
+            "reason": "property \"output\": unbounded request schema object has dynamic additionalProperties"
+          }
+        ]
       }
     },
     {
@@ -207237,7 +207224,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"defaultProjectJobs\": oneOf requires a typed gap"
+            "reason": "property \"defaultProjectJobs\": ambiguous request schema uses oneOf"
           }
         ]
       }
@@ -218885,7 +218872,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"connectConfigurations\": oneOf requires a typed gap"
+            "reason": "property \"connectConfigurations\": ambiguous request schema uses oneOf"
           }
         ]
       }
@@ -227699,7 +227686,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"authorizationDetails\": dynamic additionalProperties requires a typed gap"
+            "reason": "property \"authorizationDetails\": unbounded request schema object has dynamic additionalProperties"
           }
         ]
       }
@@ -228907,7 +228894,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"tokens\": property \"authorizationDetails\": dynamic additionalProperties requires a typed gap"
+            "reason": "property \"tokens\": property \"authorizationDetails\": unbounded request schema object has dynamic additionalProperties"
           }
         ]
       }
@@ -236646,7 +236633,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"revokePreviousAt\": oneOf requires a typed gap"
+            "reason": "property \"revokePreviousAt\": ambiguous request schema uses oneOf"
           }
         ]
       }
@@ -237615,7 +237602,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"tokenClaims\": dynamic additionalProperties requires a typed gap"
+            "reason": "property \"tokenClaims\": unbounded request schema object has dynamic additionalProperties"
           }
         ]
       }
@@ -238313,7 +238300,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"deliveryFormat\": source schema has no type"
+            "reason": "property \"headers\": unbounded request schema object has dynamic additionalProperties"
           }
         ]
       }
@@ -265595,7 +265582,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"joinedFrom\": property \"gitUserId\": oneOf requires a typed gap"
+            "reason": "property \"joinedFrom\": property \"gitUserId\": ambiguous request schema uses oneOf"
           }
         ]
       }
@@ -286436,17 +286423,17 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter forceNew",
-            "reason": "source schema has no type"
+            "reason": "query parameter requires non-scalar serialization support"
           },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter skipAutoDetectionConfirmation",
-            "reason": "source schema has no type"
+            "reason": "query parameter requires non-scalar serialization support"
           },
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"files\": oneOf requires a typed gap"
+            "reason": "property \"files\": ambiguous request schema uses oneOf"
           }
         ]
       }
@@ -287221,7 +287208,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "parameter id",
-            "reason": "ambiguous request schema uses oneOf"
+            "reason": "path parameter requires non-scalar serialization support"
           },
           {
             "foundation": "cli-request-schema-foundation-r1",
@@ -288154,7 +288141,19 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter 'content-Length'",
+            "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter 'x-Now-Size'",
+            "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+          }
+        ]
       }
     },
     {
@@ -291455,7 +291454,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"env\": dynamic additionalProperties requires a typed gap"
+            "reason": "property \"env\": unbounded request schema object has dynamic additionalProperties"
           }
         ]
       }
@@ -292773,7 +292772,14 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter 'x-Cwd'",
+            "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+          }
+        ]
       }
     },
     {
@@ -302777,7 +302783,14 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter 'x-Artifact-Client-Interactive'",
+            "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+          }
+        ]
       }
     },
     {
@@ -307873,7 +307886,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"environments\": dynamic additionalProperties requires a typed gap"
+            "reason": "property \"environments\": unbounded request schema object has dynamic additionalProperties"
           }
         ]
       }
@@ -309010,7 +309023,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"data\": property \"exclude\": dynamic additionalProperties requires a typed gap"
+            "reason": "property \"data\": property \"exclude\": unbounded request schema object has dynamic additionalProperties"
           }
         ]
       }
@@ -311936,7 +311949,7 @@
           {
             "foundation": "cli-request-schema-foundation-r1",
             "location": "request body",
-            "reason": "property \"logHeaders\": oneOf requires a typed gap"
+            "reason": "property \"logHeaders\": ambiguous request schema uses oneOf"
           }
         ]
       }
@@ -312573,7 +312586,24 @@
         ]
       },
       "runtime": {
-        "merge_blocked": false
+        "merge_blocked": true,
+        "gaps": [
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter 'content-Length'",
+            "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter 'x-Artifact-Client-Interactive'",
+            "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+          },
+          {
+            "foundation": "cli-request-schema-foundation-r1",
+            "location": "parameter 'x-Artifact-Duration'",
+            "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+          }
+        ]
       }
     },
     {
@@ -312841,73 +312871,73 @@
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter 'content-Length'",
+      "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter 'content-Length'",
+      "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter 'x-Artifact-Client-Interactive'",
+      "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter 'x-Artifact-Client-Interactive'",
+      "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter 'x-Artifact-Duration'",
+      "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter 'x-Cwd'",
+      "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "parameter 'x-Now-Size'",
+      "reason": "unbounded request header requires a compatibility-censused PM byte envelope"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter aliasId",
-      "reason": "ambiguous request schema uses oneOf"
+      "reason": "path parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter by",
-      "reason": "ambiguous request schema uses anyOf"
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter by",
-      "reason": "ambiguous request schema uses anyOf"
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter forceNew",
-      "reason": "source schema has no type"
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter id",
-      "reason": "ambiguous request schema uses oneOf"
+      "reason": "path parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter idOrName",
-      "reason": "ambiguous request schema uses oneOf"
-    },
-    {
-      "foundation": "cli-request-schema-foundation-r1",
-      "location": "parameter order",
-      "reason": "source schema has no type"
-    },
-    {
-      "foundation": "cli-request-schema-foundation-r1",
-      "location": "parameter production",
-      "reason": "source schema has no type"
-    },
-    {
-      "foundation": "cli-request-schema-foundation-r1",
-      "location": "parameter provider",
-      "reason": "source schema has no type"
-    },
-    {
-      "foundation": "cli-request-schema-foundation-r1",
-      "location": "parameter provider",
-      "reason": "source schema has no type"
-    },
-    {
-      "foundation": "cli-request-schema-foundation-r1",
-      "location": "parameter redirects",
-      "reason": "source schema has no type"
+      "reason": "path parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "parameter skipAutoDetectionConfirmation",
-      "reason": "source schema has no type"
-    },
-    {
-      "foundation": "cli-request-schema-foundation-r1",
-      "location": "parameter strict",
-      "reason": "source schema has no type"
-    },
-    {
-      "foundation": "cli-request-schema-foundation-r1",
-      "location": "parameter verified",
-      "reason": "source schema has no type"
+      "reason": "query parameter requires non-scalar serialization support"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -313002,7 +313032,7 @@
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"authorizationDetails\": dynamic additionalProperties requires a typed gap"
+      "reason": "property \"authorizationDetails\": unbounded request schema object has dynamic additionalProperties"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -313037,7 +313067,7 @@
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"connectConfigurations\": oneOf requires a typed gap"
+      "reason": "property \"connectConfigurations\": ambiguous request schema uses oneOf"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -313052,7 +313082,7 @@
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"data\": property \"exclude\": dynamic additionalProperties requires a typed gap"
+      "reason": "property \"data\": property \"exclude\": unbounded request schema object has dynamic additionalProperties"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -313067,7 +313097,7 @@
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"defaultProjectJobs\": oneOf requires a typed gap"
+      "reason": "property \"defaultProjectJobs\": ambiguous request schema uses oneOf"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -313092,12 +313122,7 @@
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"deliveryFormat\": source schema has no type"
-    },
-    {
-      "foundation": "cli-request-schema-foundation-r1",
-      "location": "request body",
-      "reason": "property \"env\": dynamic additionalProperties requires a typed gap"
+      "reason": "property \"env\": unbounded request schema object has dynamic additionalProperties"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -313137,12 +313162,12 @@
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"environments\": dynamic additionalProperties requires a typed gap"
+      "reason": "property \"environments\": unbounded request schema object has dynamic additionalProperties"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"environments\": dynamic additionalProperties requires a typed gap"
+      "reason": "property \"environments\": unbounded request schema object has dynamic additionalProperties"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -313162,7 +313187,7 @@
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"files\": oneOf requires a typed gap"
+      "reason": "property \"files\": ambiguous request schema uses oneOf"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -313172,17 +313197,22 @@
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
+      "reason": "property \"headers\": unbounded request schema object has dynamic additionalProperties"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "request body",
       "reason": "property \"items\": ambiguous request schema uses oneOf"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"joinedFrom\": property \"gitUserId\": oneOf requires a typed gap"
+      "reason": "property \"joinedFrom\": property \"gitUserId\": ambiguous request schema uses oneOf"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"logHeaders\": oneOf requires a typed gap"
+      "reason": "property \"logHeaders\": ambiguous request schema uses oneOf"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -313192,7 +313222,12 @@
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"revokePreviousAt\": oneOf requires a typed gap"
+      "reason": "property \"output\": unbounded request schema object has dynamic additionalProperties"
+    },
+    {
+      "foundation": "cli-request-schema-foundation-r1",
+      "location": "request body",
+      "reason": "property \"revokePreviousAt\": ambiguous request schema uses oneOf"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -313227,17 +313262,17 @@
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"tokenClaims\": dynamic additionalProperties requires a typed gap"
+      "reason": "property \"tokenClaims\": unbounded request schema object has dynamic additionalProperties"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"tokenClaims\": dynamic additionalProperties requires a typed gap"
+      "reason": "property \"tokenClaims\": unbounded request schema object has dynamic additionalProperties"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body",
-      "reason": "property \"tokens\": property \"authorizationDetails\": dynamic additionalProperties requires a typed gap"
+      "reason": "property \"tokens\": property \"authorizationDetails\": unbounded request schema object has dynamic additionalProperties"
     },
     {
       "foundation": "cli-request-schema-foundation-r1",
@@ -313721,6 +313756,11 @@
     },
     {
       "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation getDomainConfig",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
       "location": "source operation getDomainContactVerification",
       "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
     },
@@ -314066,6 +314106,11 @@
     },
     {
       "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation gitNamespaces",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
       "location": "source operation headByTeamSlugByProjectSlugByRepositoryNameBlobsByDigest",
       "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
     },
@@ -314262,6 +314307,11 @@
     {
       "foundation": "closed-source-operation-execution-foundation-r1",
       "location": "source operation readNetwork",
+      "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
+    },
+    {
+      "foundation": "closed-source-operation-execution-foundation-r1",
+      "location": "source operation searchRepo",
       "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
     },
     {

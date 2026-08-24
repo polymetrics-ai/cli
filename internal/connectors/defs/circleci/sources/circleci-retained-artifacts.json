@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "circleci",
+  "artifacts": [
+    {
+      "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07",
+      "bytes": 621321,
+      "source_url": "https://circleci.com/api/v2/openapi.json",
+      "retrieved_at": "2026-08-24T11:55:22Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

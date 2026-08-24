@@ -135,7 +135,7 @@
       "summary": "Planned bounded Bitbucket binary download command; blocked pending binary transfer foundation."
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} branch-restrictions {id}",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f6272616e63682d7265737472696374696f6e732f7b69647d",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -174,7 +174,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} commit {commit} approve",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f636f6d6d69742f7b636f6d6d69747d2f617070726f7665",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/approve",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -213,7 +213,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} commit {commit} comments {comment-id}",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f636f6d6d69742f7b636f6d6d69747d2f636f6d6d656e74732f7b636f6d6d656e745f69647d",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -410,7 +410,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} default-reviewers {target-username}",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f64656661756c742d7265766965776572732f7b7461726765745f757365726e616d657d",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -449,7 +449,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} deploy-keys {key-id}",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f6465706c6f792d6b6579732f7b6b65795f69647d",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -534,7 +534,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} downloads {filename}",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f646f776e6c6f6164732f7b66696c656e616d657d",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/downloads/{filename}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -612,7 +612,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} hooks {uid}",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f686f6f6b732f7b7569647d",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/hooks/{uid}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -651,7 +651,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} permissions-config groups {group-slug}",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f7065726d697373696f6e732d636f6e6669672f67726f7570732f7b67726f75705f736c75677d",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -690,7 +690,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} permissions-config users {selected-user-id}",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f7065726d697373696f6e732d636f6e6669672f75736572732f7b73656c65637465645f757365725f69647d",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1041,7 +1041,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} pullrequests {pull-request-id} approve",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f70756c6c72657175657374732f7b70756c6c5f726571756573745f69647d2f617070726f7665",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1079,7 +1079,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} pullrequests {pull-request-id} comments {comment-id}",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f70756c6c72657175657374732f7b70756c6c5f726571756573745f69647d2f636f6d6d656e74732f7b636f6d6d656e745f69647d",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1123,7 +1123,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} pullrequests {pull-request-id} comments {comment-id} resolve",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f70756c6c72657175657374732f7b70756c6c5f726571756573745f69647d2f636f6d6d656e74732f7b636f6d6d656e745f69647d2f7265736f6c7665",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1167,7 +1167,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} pullrequests {pull-request-id} request-changes",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f70756c6c72657175657374732f7b70756c6c5f726571756573745f69647d2f726571756573742d6368616e676573",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1205,7 +1205,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} pullrequests {pull-request-id} tasks {task-id}",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f70756c6c72657175657374732f7b70756c6c5f726571756573745f69647d2f7461736b732f7b7461736b5f69647d",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1302,7 +1302,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} refs branches {name}",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f726566732f6272616e636865732f7b6e616d657d",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/refs/branches/{name}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1341,7 +1341,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- repositories {workspace} {repo-slug} refs tags {name}",
+      "path": "api op-44454c455445202f7265706f7369746f726965732f7b776f726b73706163657d2f7b7265706f5f736c75677d2f726566732f746167732f7b6e616d657d",
       "summary": "DELETE /repositories/{workspace}/{repo_slug}/refs/tags/{name}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1380,7 +1380,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- snippets {workspace} {encoded-id}",
+      "path": "api op-44454c455445202f736e6970706574732f7b776f726b73706163657d2f7b656e636f6465645f69647d",
       "summary": "DELETE /snippets/{workspace}/{encoded_id}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1412,7 +1412,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- snippets {workspace} {encoded-id} comments {comment-id}",
+      "path": "api op-44454c455445202f736e6970706574732f7b776f726b73706163657d2f7b656e636f6465645f69647d2f636f6d6d656e74732f7b636f6d6d656e745f69647d",
       "summary": "DELETE /snippets/{workspace}/{encoded_id}/comments/{comment_id}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1450,7 +1450,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- snippets {workspace} {encoded-id} watch",
+      "path": "api op-44454c455445202f736e6970706574732f7b776f726b73706163657d2f7b656e636f6465645f69647d2f7761746368",
       "summary": "DELETE /snippets/{workspace}/{encoded_id}/watch",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1482,7 +1482,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- snippets {workspace} {encoded-id} {node-id}",
+      "path": "api op-44454c455445202f736e6970706574732f7b776f726b73706163657d2f7b656e636f6465645f69647d2f7b6e6f64655f69647d",
       "summary": "DELETE /snippets/{workspace}/{encoded_id}/{node_id}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1553,7 +1553,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- users {selected-user} gpg-keys {fingerprint}",
+      "path": "api op-44454c455445202f75736572732f7b73656c65637465645f757365727d2f6770672d6b6579732f7b66696e6765727072696e747d",
       "summary": "DELETE /users/{selected_user}/gpg-keys/{fingerprint}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1656,7 +1656,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- users {selected-user} ssh-keys {key-id}",
+      "path": "api op-44454c455445202f75736572732f7b73656c65637465645f757365727d2f7373682d6b6579732f7b6b65795f69647d",
       "summary": "DELETE /users/{selected_user}/ssh-keys/{key_id}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1688,7 +1688,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- workspaces {workspace} hooks {uid}",
+      "path": "api op-44454c455445202f776f726b7370616365732f7b776f726b73706163657d2f686f6f6b732f7b7569647d",
       "summary": "DELETE /workspaces/{workspace}/hooks/{uid}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1784,7 +1784,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- workspaces {workspace} projects {project-key}",
+      "path": "api op-44454c455445202f776f726b7370616365732f7b776f726b73706163657d2f70726f6a656374732f7b70726f6a6563745f6b65797d",
       "summary": "DELETE /workspaces/{workspace}/projects/{project_key}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1816,7 +1816,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- workspaces {workspace} projects {project-key} default-reviewers {selected-user}",
+      "path": "api op-44454c455445202f776f726b7370616365732f7b776f726b73706163657d2f70726f6a656374732f7b70726f6a6563745f6b65797d2f64656661756c742d7265766965776572732f7b73656c65637465645f757365727d",
       "summary": "DELETE /workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1855,7 +1855,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- workspaces {workspace} projects {project-key} deploy-keys {key-id}",
+      "path": "api op-44454c455445202f776f726b7370616365732f7b776f726b73706163657d2f70726f6a656374732f7b70726f6a6563745f6b65797d2f6465706c6f792d6b6579732f7b6b65795f69647d",
       "summary": "DELETE /workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1894,7 +1894,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- workspaces {workspace} projects {project-key} permissions-config groups {group-slug}",
+      "path": "api op-44454c455445202f776f726b7370616365732f7b776f726b73706163657d2f70726f6a656374732f7b70726f6a6563745f6b65797d2f7065726d697373696f6e732d636f6e6669672f67726f7570732f7b67726f75705f736c75677d",
       "summary": "DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
       "intent": "reverse_etl",
       "availability": "implemented",
@@ -1933,7 +1933,7 @@
       ]
     },
     {
-      "path": "api bitbucket.rest.delete- workspaces {workspace} projects {project-key} permissions-config users {selected-user-id}",
+      "path": "api op-44454c455445202f776f726b7370616365732f7b776f726b73706163657d2f70726f6a656374732f7b70726f6a6563745f6b65797d2f7065726d697373696f6e732d636f6e6669672f75736572732f7b73656c65637465645f757365725f69647d",
       "summary": "DELETE /workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
       "intent": "reverse_etl",
       "availability": "implemented",

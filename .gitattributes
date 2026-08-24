@@ -4,3 +4,7 @@ data/archive/cli-github-etl-reverse-etl-gap-map-r1/report.md -whitespace
 data/archive/cli-postgres-parity-issue-tree-r1/report.md -whitespace
 data/cli-cdc-bidirectional-changefeed-design-r1/report.md -whitespace
 data/cli-cdc-large-transaction-strategy-r1/report.md -whitespace
+
+# Retained provider artifacts are hash-locked raw bytes. Provider-published
+# whitespace must not be normalized or reported as a local source edit.
+internal/connectors/defs/**/sources/artifacts/*.artifact -whitespace

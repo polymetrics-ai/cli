@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "sentry",
+  "artifacts": [
+    {
+      "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
+      "bytes": 3868570,
+      "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+      "retrieved_at": "2026-08-24T11:55:22Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

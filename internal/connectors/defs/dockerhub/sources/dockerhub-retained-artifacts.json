@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "dockerhub",
+  "artifacts": [
+    {
+      "sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+      "bytes": 148322,
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "retrieved_at": "2026-08-24T11:55:22Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "connector": "vercel",
+  "artifacts": [
+    {
+      "sha256": "74cb7ff3dc0b89cc344b13ac9c6d5f1d9b7d7a9356cfd6b5a779da51fd43da28",
+      "bytes": 10463249,
+      "source_url": "https://openapi.vercel.sh/",
+      "retrieved_at": "2026-08-24T11:55:22Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}
