@@ -257,6 +257,41 @@
   get-worklogs-for-ids`—each exited 1 with exactly `error: missing
   --credential`. None was downgraded, deferred, or replaced by a write action.
 
+### 2026-08-24 captain-directed batch-one operation split
+
+- **Independent foundation measurement:** this branch contains 2,292
+  `reverse_etl` commands across 29 connectors, 1,999 `direct_read` commands
+  across 22, 658 `etl` commands across 36, 27 `binary_download` commands
+  across six, and 285 `direct_write` commands across two. These are this
+  branch's figures, not an attempt to reconcile concurrently changing lanes.
+  A real `TestEveryImplementedCommandPassesRuntimePreflight` sweep checked
+  5,262 implemented commands and found 21 failures, all Docker Hub; no other
+  batch-one connector failed runtime preflight.
+- **Measured source-operation denominator:** the ten current source locks
+  retain 4,341 provider REST operations. The three-way split is **767 already
+  runnable**, **1,666 declarable now**, and **1,908 genuinely blocked**. The
+  runnable number starts from exact source-to-command crosswalk bindings and
+  excludes Docker Hub's two crosswalk-bound commands that fail preflight. A
+  declarable operation has no source gap except
+  `closed-source-operation-execution-foundation-r1` and, where present, the
+  now-known-to-be-declaration-only
+  `source-cited-non-executable-mutation-foundation-r1`; it therefore needs
+  only a connector-owned action/CLI declaration. Every other source gap,
+  including an absent descriptor after an importer refusal, is counted blocked
+  until an existing declaration contract can represent it.
+- **Per connector (runnable / declarable / blocked):** Docker Hub 4 / 0 / 50;
+  Notion 42 / 0 / 7; Stripe 8 / 0 / 581; Bitbucket 50 / 136 / 111; GitLab 0 /
+  917 / 835; CircleCI 16 / 75 / 20; Sentry 3 / 144 / 76; Vercel 0 / 261 /
+  139; Asana 82 / 130 / 37; Jira 562 / 3 / 52. The Docker Hub, Notion, and
+  Stripe blocked counts are their respectively 54, 49, and 589 locked
+  operations less the still-working currently declared commands: each source
+  import is refused before a descriptor can be produced (dangling
+  `#/components/responses/team_repo`, descriptor-byte limit, and schema-depth
+  limit respectively).
+- **Sentry correction:** all 32 source-cited non-executable mutation
+  dispositions have provider-documented path fields (and no request body).
+  All 32 are declaration work, not a missing reverse-ETL or delete foundation.
+
 Every red/green command and its result is appended when it executes. No test is
 weakened or skipped to advance a row.
 
