@@ -29,3 +29,8 @@ test passed. This is a generated integration closure, not a hand-authored
 connector exception. Automated Claude/Copilot review remained unavailable due
 fleet defect `fm-gh-axi-projectcards-deprecation-r1`; Firstmate explicitly
 confirmed it is not a required check, so no automated review pass is claimed.
+
+The later #4346 main integration overlapped `sourceprojection.go` but merged
+without conflict. Full generator tests plus source-derived surface and skill
+checks passed on the combined tree; no hand resolution or projection rewrite
+was necessary.

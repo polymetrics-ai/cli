@@ -92,3 +92,10 @@ policy notice. Canonical skill regeneration changed only
 `docs/skills/pm-twenty/SKILL.md`; a second pass was byte-stable and the exact
 generated-tree test passed in 4.376s. PR #4345 must rerun its required checks on
 that repair before handoff.
+
+Firstmate then required the branch to absorb main `60f85ae94` after #4346.
+The merge was conflict-free despite overlapping `sourceprojection.go` changes.
+Canonical `surface-sync --check` found zero drift across 553 connectors, the
+tracked-skills equality test remained green in 4.942s, and the complete
+`cmd/connectorgen` package passed in 183.024s under `-p 2`. GitHub checks must
+settle again on the resulting merge head before the final rollup is reported.

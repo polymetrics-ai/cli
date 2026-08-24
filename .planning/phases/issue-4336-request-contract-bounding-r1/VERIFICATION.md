@@ -31,6 +31,10 @@
       regenerated only `docs/skills/pm-twenty/SKILL.md`, proved a second
       generator pass byte-stable, and passed
       `TestSkillsGenerateMatchesTrackedSkills` in 4.376s.
+- [x] After Firstmate's subsequent merge of `main` at `60f85ae94`, the exact
+      tracked-skills test passed in 4.942s, `surface-sync --check` reported zero
+      drift across 553 connectors, and full `cmd/connectorgen` passed in
+      183.024s with `GOFLAGS=-p=2`.
 - [x] Applicable individual `make verify` gates from AGENTS.md.
 - [x] `git diff --check origin/main...HEAD`.
 
@@ -43,7 +47,7 @@
 - [x] PR body records issue, Red/Green evidence, skills, gates, review status,
       and accepted no-mistakes record or explicit task prohibition.
 - [x] Pull request #4345 opened against `main`; API-reported base verified
-      `main` and the branch was updated through `43cda8924` as directed.
+      `main` and the branch was updated through `60f85ae94` as directed.
 - [ ] Required GitHub checks and automated review coverage complete.
 
 ## CLI help/manual/docs/website parity
