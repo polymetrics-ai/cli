@@ -101,9 +101,12 @@ dispositions and recoverability remain in `REJECTION-LIST.json`.
   request bodies. It must not expose raw JSON or a generic HTTP writer.
 
 The commands, pinned operation contracts, and API-surface entries remain
-declared. A partial candidate was rejected by immutable fixed-100 execution
-evidence, and adding `additionalProperties: false` in the connector would
-fabricate a provider restriction, so neither is an eligible repair.
+declared. Firstmate's 2026-08-24 decision explicitly declines an open-object
+body foundation and leaves the closed-body rule unchanged. The evidence selector
+now reports the two preflight-rejected commands as ineligible rather than using
+their declared metadata as execution proof. Adding
+`additionalProperties: false` in the connector would still fabricate a provider
+restriction, so no connector-local repair is eligible.
 
 ## e338cd301 source-lock refresh results
 

@@ -835,11 +835,19 @@ fixed-100 reference.
 commandrunner preflight refusal. The test continues to require the same result
 for the update operation and no SCIM row in the would-be fixed cohort.
 
-**Green (planned):** route each matching implemented command through
-`commandrunner.Preflight` using the loaded declarative `engine.New` connector.
-The projected rows must report a `runtime_reachability` gap and disabled runtime
-for the two SCIM operations; the would-be cohort must omit them without any
-hand selection.
+**Green:** `operationEvidenceRuntimePreflight` now constructs the same
+declarative connector as the binary and calls `commandrunner.Preflight` for
+each matching implemented command. The focused test passes: both SCIM rows are
+runtime-disabled with `runtime_reachability`, and the prospective 100-row cohort
+omits them without a hand-authored exception. Its measured connector counts are
+Asana 33, Bitbucket 1, CircleCI 1, Docker Hub 23, GitHub 39, and Jira 3.
+
+**Held generated gate:** the current checked-in branch cohort still contains
+the two now-ineligible SCIM rows. The broader
+`^TestOperationEvidenceFixed100` run correctly fails at
+`dockerhub.rest.post_/v2/scim/2.0/Users execution evidence regressed`. Per
+Firstmate's decision, do not regenerate or commit a replacement cohort pending
+the captain's shipped-baseline decision.
 
 **Refactor boundary:** do not duplicate the runtime's structured-body logic,
 do not expose raw bodies, and do not change the actual cohort baseline. Skills:

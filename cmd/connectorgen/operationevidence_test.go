@@ -90,9 +90,34 @@ func TestOperationEvidenceFixed100UsesRuntimePreflightForDockerHubSCIMWrites(t *
 	if err != nil {
 		t.Fatalf("build fixed-100 cohort: %v", err)
 	}
+	if len(fixed.Rows) != 100 {
+		t.Fatalf("would-be fixed cohort rows = %d, want 100", len(fixed.Rows))
+	}
+	connectorRows := make(map[string]int)
 	for _, row := range fixed.Rows {
 		if slices.Contains(dockerHubSCIMWriteSourceIDs, row.SourceID) {
 			t.Fatalf("would-be fixed cohort selected preflight-rejected Docker Hub SCIM row %q", row.SourceID)
+		}
+		connector, _, found := strings.Cut(row.SourceID, ".")
+		if !found || connector == "" {
+			t.Fatalf("fixed cohort source ID %q has no connector prefix", row.SourceID)
+		}
+		connectorRows[connector]++
+	}
+	wantConnectorRows := map[string]int{
+		"asana":     33,
+		"bitbucket": 1,
+		"circleci":  1,
+		"dockerhub": 23,
+		"github":    39,
+		"jira":      3,
+	}
+	if len(connectorRows) != len(wantConnectorRows) {
+		t.Fatalf("would-be fixed cohort connectors = %+v, want %+v", connectorRows, wantConnectorRows)
+	}
+	for connector, want := range wantConnectorRows {
+		if got := connectorRows[connector]; got != want {
+			t.Fatalf("would-be fixed cohort %q rows = %d, want %d; all rows = %+v", connector, got, want, connectorRows)
 		}
 	}
 }

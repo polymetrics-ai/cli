@@ -12,6 +12,7 @@ import (
 	"sort"
 	"strings"
 
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/conformance"
 	"polymetrics.ai/internal/connectors/engine"
 )
@@ -716,9 +717,14 @@ func projectOperationEvidenceRow(root, connector string, source operationEvidenc
 	if len(websiteCommands) == 0 {
 		row.addGap(operationEvidenceGapWebsiteRow, "canonical operation has no generated website command row")
 	}
-	row.Runtime.Enabled = len(targets.names()) > 0 && operationEvidenceHasEnabledCommand(commands)
+	runtimePreflightErr := operationEvidenceRuntimePreflight(bundle, commands)
+	row.Runtime.Enabled = len(targets.names()) > 0 && operationEvidenceHasEnabledCommand(commands) && runtimePreflightErr == nil
 	if !row.Runtime.Enabled {
-		row.addGap(operationEvidenceGapRuntimeReachability, "canonical operation has no enabled declaration-owned runtime command")
+		evidence := "canonical operation has no enabled declaration-owned runtime command"
+		if runtimePreflightErr != nil {
+			evidence += ": " + runtimePreflightErr.Error()
+		}
+		row.addGap(operationEvidenceGapRuntimeReachability, evidence)
 	}
 	row.Fixtures.Paths = operationEvidenceFixturePaths(root, connector, source, targets, commands)
 	if len(row.Fixtures.Paths) == 0 {
@@ -1033,6 +1039,23 @@ func operationEvidenceHasDirectCommand(commands []engine.CLICommand) bool {
 		}
 	}
 	return false
+}
+
+// operationEvidenceRuntimePreflight deliberately delegates to the binary's
+// command runner. A declared implemented command is evidence only when that
+// runner accepts its exact path; duplicating its executor/schema checks here
+// would let operation evidence drift from executable behavior.
+func operationEvidenceRuntimePreflight(bundle engine.Bundle, commands []engine.CLICommand) error {
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	for _, command := range commands {
+		if command.Availability != "implemented" {
+			continue
+		}
+		if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
+			return fmt.Errorf("command %q: %w", command.Path, err)
+		}
+	}
+	return nil
 }
 
 func operationEvidenceProof(report conformance.Report, targets operationEvidenceTargets, commands []engine.CLICommand) operationEvidenceConformance {

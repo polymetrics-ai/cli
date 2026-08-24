@@ -498,11 +498,14 @@ pre-existing.
   '^TestOperationEvidenceFixed100UsesRuntimePreflightForDockerHubSCIMWrites$'
   ./cmd/connectorgen` proves the metadata-only selector currently admits Docker
   Hub SCIM create/update despite production runtime preflight refusing both.
-- [ ] **Green:** run that test after using `commandrunner.Preflight` in
-  operation-evidence eligibility; require disabled runtime plus
-  `runtime_reachability` gaps for both rows and no SCIM row in the would-be
-  fixed cohort.
-- [ ] **Regression:** run `go test -timeout 20m ./cmd/connectorgen`, generated
-  artifact checks, connector boundary, and `make verify`. Do not write or
-  commit a regenerated `operation-evidence-fixed-100.json`; report only the
-  corrected selector's prospective cohort.
+- [x] **Green:** the focused test passes after operation evidence invokes
+  `commandrunner.Preflight`; both rows are runtime-disabled with
+  `runtime_reachability` and the prospective cohort contains no SCIM row. It
+  would contain Asana 33, Bitbucket 1, CircleCI 1, Docker Hub 23, GitHub 39,
+  and Jira 3 rows.
+- [ ] **Captain-gated regression:** `go test -timeout 20m -count=1 -run
+  '^TestOperationEvidenceFixed100' ./cmd/connectorgen` correctly stops at the
+  checked-in branch cohort's stale `dockerhub.rest.post_/v2/scim/2.0/Users`
+  row. Generated artifact checks, connector boundary, and `make verify` remain
+  held: do not write or commit a regenerated
+  `operation-evidence-fixed-100.json` until the shipped-baseline decision.
