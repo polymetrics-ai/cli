@@ -221,6 +221,20 @@ schemas, alter stream pagination, or change the shared engine. Each installed
 command must reach exactly `error: missing --credential` from a fresh,
 credential-free project.
 
+### Elasticsearch Administrative Metadata Direct-Read Slice
+
+The same pinned Elasticsearch OpenAPI document declares five more exact,
+parameterless JSON `GET` operations: `cat-help` at `/_cat`,
+`dangling-indices-list-dangling-indices` at `/_dangling`,
+`esql-list-queries` at `/_query/queries`, `get-script-context` at
+`/_script_context`, and `get-script-languages` at `/_script_language`.
+They require no request schema, body, path value, or pagination inference. The
+provider declares `manage` for the dangling-index and script metadata reads and
+`monitor_esql` for running-query metadata; those scopes are retained as
+operation metadata and never suppress the command. The connector-local slice
+adds only bounded 1 MiB `json_redacted` direct-read contracts, source/API
+bindings, and commands proven by the credential-preflight boundary.
+
 ## Captain Delivery Discipline — 2026-08-24
 
 The 4,535-operation declarable-now inventory is planning input, not delivered

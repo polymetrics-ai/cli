@@ -225,3 +225,27 @@ request schema using `allOf`. The refusal is emitted by
 `sourcePrepareSourceDocument` in `cmd/connectorgen/sourceimport.go:3376-3377`.
 It is independent of the five input-free reads above; no descriptor or schema
 was hand-authored to bypass it.
+
+## Elasticsearch Administrative Metadata Direct Reads — Red
+
+**Red:** the pinned Elasticsearch OpenAPI artifact declares `cat-help`,
+`dangling-indices-list-dangling-indices`, `esql-list-queries`,
+`get-script-context`, and `get-script-languages` as parameterless JSON GET
+operations. Their source/API-surface rows are declaration-pending, so no
+connector-owned typed contracts or installed commands can reach credential
+preflight. Provider-required privileges (`manage` and `monitor_esql`) are
+metadata, not a technical reason to keep these routes disabled.
+
+**Planned Green:** declare only the five exact source-bound 1 MiB
+`json_redacted` rest reads and preserve each stated cluster privilege in
+`auth_scopes`. A fresh built binary from five separate initialized projects
+with no credential must emit exactly `error: missing --credential` for every
+command, with no provider request.
+
+**Green:** all five contracts bind their exact source/API routes, including
+`manage` and `monitor_esql` as runtime metadata. The commandrunner preflight,
+Elasticsearch conformance, generated docs validation, and namespace/command
+help checks pass. A fresh binary from five separately initialized no-credential
+projects exits 1 with no stdout and exactly `error: missing --credential` for
+every command. Evidence:
+`evidence/elasticsearch-administrative-direct-read-command-proof-20260825.json`.

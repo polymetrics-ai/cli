@@ -15,12 +15,12 @@
         "missing": 0
       },
       "primary_runtime_reachability": {
-        "declaration-pending": 5072,
-        "implemented": 55
+        "declaration-pending": 5067,
+        "implemented": 60
       },
       "generated_cli_command": {
-        "declaration-pending": 4427,
-        "implemented": 661,
+        "declaration-pending": 4422,
+        "implemented": 666,
         "partial": 39
       },
       "website_row": {
@@ -525,14 +525,14 @@
       "represented": {
         "binary_download": 0,
         "binary_upload": 0,
-        "direct_read": 5,
+        "direct_read": 10,
         "direct_write": 0,
         "etl": 0
       },
       "missing": {
         "binary_download": 0,
         "binary_upload": 0,
-        "direct_read": 356,
+        "direct_read": 351,
         "direct_write": 482,
         "etl": 2
       },
@@ -549,7 +549,7 @@
         "orphan_installed_command_actions": 0,
         "application_dispatch": "not-applicable"
       },
-      "executable_commands": 5,
+      "executable_commands": 10,
       "captain_premerge_gate": {
         "provider_operations": 845,
         "source_trace": {
@@ -562,12 +562,12 @@
           "missing": 0
         },
         "primary_runtime_reachability": {
-          "declaration-pending": 840,
-          "implemented": 5
+          "declaration-pending": 835,
+          "implemented": 10
         },
         "generated_cli_command": {
-          "declaration-pending": 840,
-          "implemented": 5
+          "declaration-pending": 835,
+          "implemented": 10
         },
         "website_row": {
           "declaration-pending": 845

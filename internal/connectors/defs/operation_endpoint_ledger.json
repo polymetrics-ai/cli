@@ -1127,6 +1127,36 @@
       "path": "/_license/trial_status",
       "kind": "rest_read",
       "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_cat",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_dangling",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_query/queries",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_script_context",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/_script_language",
+      "kind": "rest_read",
+      "max_bytes": 1048576
     }
   ],
   "emailoctopus": [],

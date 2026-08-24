@@ -84,6 +84,90 @@
         "path": "/_license/trial_status",
         "max_bytes": 1048576
       }
+    },
+    {
+      "id": "elasticsearch.cat.help.get",
+      "kind": "rest_read",
+      "summary": "Get Elasticsearch CAT API help.",
+      "description": "Bounded direct read of the source-pinned cat-help operation. The provider declares no path-item or operation parameters and returns JSON CAT API help.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/_cat",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "elasticsearch.dangling.indices.list",
+      "kind": "rest_read",
+      "summary": "List Elasticsearch dangling indices.",
+      "description": "Bounded direct read of the source-pinned dangling-indices-list-dangling-indices operation. The provider declares no path-item or operation parameters and returns JSON dangling-index information.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["manage"],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/_dangling",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "elasticsearch.esql.queries.list",
+      "kind": "rest_read",
+      "summary": "List running Elasticsearch ES|QL queries.",
+      "description": "Bounded direct read of the source-pinned esql-list-queries operation. The provider declares no path-item or operation parameters and returns JSON running-query information.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["monitor_esql"],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/_query/queries",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "elasticsearch.script.contexts.list",
+      "kind": "rest_read",
+      "summary": "List Elasticsearch script contexts.",
+      "description": "Bounded direct read of the source-pinned get-script-context operation. The provider declares no path-item or operation parameters and returns JSON script-context information.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["manage"],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/_script_context",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "elasticsearch.script.languages.list",
+      "kind": "rest_read",
+      "summary": "List Elasticsearch script languages.",
+      "description": "Bounded direct read of the source-pinned get-script-languages operation. The provider declares no path-item or operation parameters and returns JSON script-language information.",
+      "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "auth_scopes": ["manage"],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/_script_language",
+        "max_bytes": 1048576
+      }
     }
   ]
 }

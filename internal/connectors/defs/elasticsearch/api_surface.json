@@ -379,14 +379,8 @@
     {
       "method": "GET",
       "path": "/_cat",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.cat-help; source_location=paths[\"/_cat\"].get"
+      "covered_by": {
+        "direct_read": "cat help get"
       }
     },
     {
@@ -1842,14 +1836,8 @@
     {
       "method": "GET",
       "path": "/_dangling",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.dangling-indices-list-dangling-indices; source_location=paths[\"/_dangling\"].get"
+      "covered_by": {
+        "direct_read": "dangling indices list"
       }
     },
     {
@@ -2362,14 +2350,8 @@
     {
       "method": "GET",
       "path": "/_query/queries",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.esql-list-queries; source_location=paths[\"/_query/queries\"].get"
+      "covered_by": {
+        "direct_read": "esql queries list"
       }
     },
     {
@@ -2622,27 +2604,15 @@
     {
       "method": "GET",
       "path": "/_script_context",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.get-script-context; source_location=paths[\"/_script_context\"].get"
+      "covered_by": {
+        "direct_read": "script contexts list"
       }
     },
     {
       "method": "GET",
       "path": "/_script_language",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published operation is source-locked but has no connector-owned typed operation/action contract or runnable command declaration.",
-        "source_url": "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/output/openapi/elasticsearch-openapi.json",
-        "notes": "classification=declaration-pending; source_id=elasticsearch.rest.get-script-languages; source_location=paths[\"/_script_language\"].get"
+      "covered_by": {
+        "direct_read": "script languages list"
       }
     },
     {
