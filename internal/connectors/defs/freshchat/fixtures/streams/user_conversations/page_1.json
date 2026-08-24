@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/synthetic-conformance-value/conversations",
+    "query": {
+      "page": "1",
+      "items_per_page": "50"
+    }
+  },
+  "read_query": {
+    "user_id": "synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "conversations": [
+        {
+          "id": "user_conversation_fixture_1",
+          "app_id": "app_fixture_1",
+          "channel_id": "channel_fixture_1",
+          "assigned_agent_id": "agent_fixture_1",
+          "assigned_group_id": "group_fixture_1",
+          "status": "new",
+          "priority": "low",
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-02T00:00:00.000Z",
+          "messages": [],
+          "properties": {}
+        }
+      ]
+    }
+  }
+}

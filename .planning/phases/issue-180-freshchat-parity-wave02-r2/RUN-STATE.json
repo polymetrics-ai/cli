@@ -1,0 +1,40 @@
+{
+  "phase": "issue-180-freshchat-parity-wave02-r2",
+  "status": "implementation_committed_ready",
+  "verificationPassed": true,
+  "ciGateAddressed": {
+    "check": "gsd-workflow-evidence",
+    "failure": "cmd/internal changed, but no GSD planning evidence changed",
+    "resolution": "added .planning/phases/issue-180-freshchat-parity-wave02-r2/ GSD/TDD evidence accompanying the fixture-only internal/ change"
+  },
+  "scope": {
+    "changeType": "fixture-only",
+    "addedFiles": [
+      "internal/connectors/defs/freshchat/fixtures/streams/agent_details/page_1.json",
+      "internal/connectors/defs/freshchat/fixtures/streams/agent_statuses/page_1.json",
+      "internal/connectors/defs/freshchat/fixtures/streams/business_hours_status/page_1.json",
+      "internal/connectors/defs/freshchat/fixtures/streams/conversation_detail/page_1.json",
+      "internal/connectors/defs/freshchat/fixtures/streams/conversation_fields/page_1.json",
+      "internal/connectors/defs/freshchat/fixtures/streams/conversation_messages/page_1.json",
+      "internal/connectors/defs/freshchat/fixtures/streams/historical_metrics/page_1.json",
+      "internal/connectors/defs/freshchat/fixtures/streams/instant_metrics/page_1.json",
+      "internal/connectors/defs/freshchat/fixtures/streams/outbound_messages/page_1.json",
+      "internal/connectors/defs/freshchat/fixtures/streams/report_status/page_1.json",
+      "internal/connectors/defs/freshchat/fixtures/streams/user_conversations/page_1.json",
+      "internal/connectors/defs/freshchat/fixtures/streams/user_details/page_1.json"
+    ],
+    "noGoCode": true,
+    "noSharedRuntime": true,
+    "otherConnectorsTouched": false
+  },
+  "verification": {
+    "connectorgenValidate": "passed: go run ./cmd/connectorgen validate internal/connectors/defs/freshchat (1 connector(s), 0 findings)",
+    "freshchatConformance": "passed: go test ./internal/connectors/conformance -run 'TestConformance/freshchat' -count=1 (18/18 streams read_fixture_nonempty)",
+    "cliGolden": "passed: go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1",
+    "gofmtVetBuild": "passed: gofmt, go vet ./..., go build ./cmd/pm",
+    "makeVerify": "passed: make verify (connector-boundary clean)",
+    "docsWebsite": "regenerated with zero diff; no commit needed"
+  },
+  "providerCalls": false,
+  "pushOrPr": false
+}
