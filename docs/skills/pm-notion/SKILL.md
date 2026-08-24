@@ -31,6 +31,10 @@ Reads and writes Notion pages, databases, data sources, blocks, comments, views,
 - base_url
 - max_pages
 - page_size
+- authorization_code (secret)
+- oauth_client_id (secret)
+- oauth_client_secret (secret)
+- refresh_token (secret)
 - token (secret)
 
 ## ETL Streams
@@ -254,6 +258,13 @@ Reads and writes Notion pages, databases, data sources, blocks, comments, views,
 - Help topics:
   - safety - Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.
   - pagination - Notion paginates with start_cursor/next_cursor and has_more; ETL streams follow the cursor to exhaustion within the configured page bounds.
+
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
 
 ## Commands
 

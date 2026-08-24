@@ -63,6 +63,13 @@ Reads Sentry projects, issues, error events, and releases through the Sentry RES
 - read risk: external Sentry API read of project, issue, event, and release data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual

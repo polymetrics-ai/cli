@@ -561,3 +561,59 @@ compatible Pi runtime and the canonical connector contract forbids role
 spawning. The reconciliation reuses the existing focused red/green checks;
 its terminal verification is the full `make verify` gate plus API read-back of
 PR #4294's `main` base.
+
+## Generated skills synchronization and Docker Hub preflight comparison — 2026-08-24
+
+### Decision and scope
+
+Firstmate classified `docs/skills` drift as an in-scope downstream artifact
+repair because the declaration batch changes the generated connector surface.
+Only generated `docs/skills/**` and delivery evidence may change. The two
+Docker Hub SCIM preflight failures are not assumed pre-existing: compare the
+same runtime-preflight test against a clean current `origin/main` tree before
+changing any SCIM declaration. Required skills reviewed: `golang-how-to`,
+`golang-testing`, and `golang-documentation`; `pm help skills` confirms the
+generator is metadata-only and credential-free.
+
+### Red
+
+`GOFLAGS=-p=3 make verify` reports tracked `docs/skills` drift and reports
+Docker Hub `scim user create`/`scim user update` preflight failures caused by
+source-derived request-schema `example` keywords.
+
+### Green plan
+
+1. Run `pm skills generate --dir docs/skills`, review the diff, and run the
+   exact generated-skills parity test.
+2. Export a disposable clean current-main tree inside this worktree, run the
+   same Docker Hub preflight test, compare it with this branch, and remove only
+   the agent-created temporary tree.
+3. If main fails identically, record a proven external finding and leave SCIM
+   untouched. Otherwise repair the branch regression before continuing.
+4. Re-run required local checks and obtain the PR CI/check plus mergeability
+   rollup before any delivery action.
+
+### Refactor boundary
+
+Do not regenerate source locks, reselect the fixed cohort, change shared
+runtime behavior, use credentials, or mask a command as partial to obtain a
+green preflight result.
+
+### Green result / required branch repair
+
+`GOFLAGS=-p=3 go run ./cmd/pm skills generate --dir docs/skills --json`
+changed exactly the ten Batch-1 connector skill files. Its parity gate passes:
+`GOFLAGS=-p=3 go test -timeout 20m -count=1 -run
+'^TestSkillsGenerateMatchesTrackedSkills$' ./internal/cli`.
+
+The exact preflight comparison disproves the prior pre-existing assumption:
+
+```text
+origin/main 3c394a0e: PASS  TestEveryImplementedCommandPassesRuntimePreflight
+branch 2e860dfe3:  FAIL  dockerhub scim user create/update
+                         unknown keyword "example" in source-derived body schemas
+```
+
+The branch must therefore merge current `origin/main` (never rebase) and then
+rerun the preflight. The temporary clean-main archive was moved to Trash after
+the check; no provider request or credential was used.

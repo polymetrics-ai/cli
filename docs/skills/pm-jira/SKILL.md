@@ -1962,6 +1962,13 @@ Reads and writes the full documented Jira Cloud platform REST API v3 surface: 61
   - authentication - Use pm credentials to store the Atlassian account email and API token. Never print stored tokens.
   - execution-model - ETL commands map to streams. Bounded direct reads map to documented GET and read-shaped POST operations. Reverse ETL commands map to approved write actions and keep plan, preview, approval, execute.
 
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual

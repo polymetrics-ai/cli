@@ -453,3 +453,20 @@
   device`; the shared data volume reported 6.5 GiB free. No external temporary
   data was deleted. Full package and repository gates remain pending a usable
   filesystem.
+
+## Generated skills and current-main SCIM comparison — 2026-08-24
+
+- [x] `GOFLAGS=-p=3 go run ./cmd/pm skills generate --dir docs/skills --json`
+  regenerated exactly the ten Batch-1 connector skills. The generator is
+  metadata-only; it reads no credential or provider API.
+- [x] `GOFLAGS=-p=3 go test -timeout 20m -count=1 -run
+  '^TestSkillsGenerateMatchesTrackedSkills$' ./internal/cli` passes.
+- [x] The exact command
+  `GOFLAGS=-p=3 go test -timeout 20m -count=1 -run
+  '^TestEveryImplementedCommandPassesRuntimePreflight$'
+  ./internal/connectors/commandrunner` passes from a clean
+  `origin/main` `3c394a0e` tree and fails from this branch for only Docker Hub
+  `scim user create` and `scim user update`, each on the unsupported
+  source-derived `example` schema keyword. The failure is therefore branch
+  specific and must be repaired by the required current-main merge, not marked
+  pre-existing.

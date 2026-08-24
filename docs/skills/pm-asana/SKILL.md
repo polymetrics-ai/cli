@@ -700,6 +700,13 @@ Reads implemented Asana project-management streams and executes typed, approval-
   - operation-ledger - The pinned OpenAPI ledger has 249 operations: 111 ETL/read, 125 reverse-ETL write, 3 direct/search, 1 file-upload input, 8 changefeed, and 1 disallowed batch wrapper.
   - shared-foundations - Provider search/query #2985 and CDC/changefeed #2986/#2988 remain blocked dependencies for planned commands.
 
+## Sync Transport
+
+- Source transport: declared
+- Destination transport: unsupported
+- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- Source executor: declarative_api/declarative_stream_source
+
 ## Commands
 
 ### Inspect as a manual

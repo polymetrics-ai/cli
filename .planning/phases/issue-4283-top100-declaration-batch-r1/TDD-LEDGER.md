@@ -769,3 +769,36 @@ fanout to 3,366 exact source operations and 491 typed actions. All rows remain
 open and not enabled; 28 unresolved action identities are visible F0/F1 rows,
 not fabricated source bindings. The batch rollup remains 10/100 and the
 portfolio rollup marks 90 connectors unmapped.
+
+## Generated skills synchronization and Docker Hub preflight comparison — 2026-08-24
+
+### Red
+
+`GOFLAGS=-p=3 make verify` reports that `pm skills generate` output differs
+from tracked `docs/skills`. The same aggregate run reports Docker Hub `scim
+user create` and `scim user update` as runtime-preflight failures because their
+source-derived request schemas retain unsupported `example` keywords.
+
+### Green plan
+
+- Regenerate only `docs/skills` with `pm skills generate --dir docs/skills`,
+  then run the exact tracked-output parity test.
+- Run `TestEveryImplementedCommandPassesRuntimePreflight` in a clean,
+  disposable current-main tree and compare the Docker Hub result to this
+  branch before changing any SCIM declaration.
+
+### Refactor boundary
+
+The generator repair must not alter connector facts. A current-main failure
+with the same operation IDs and schema refusal is required evidence before
+treating it as pre-existing.
+
+### Green result / branch regression
+
+The generator changed only the ten Batch-1 `docs/skills` files, and
+`TestSkillsGenerateMatchesTrackedSkills` passes. The clean current-main
+comparison at `origin/main` `3c394a0e` passes
+`TestEveryImplementedCommandPassesRuntimePreflight`; the same branch command
+fails for exactly Docker Hub `scim user create` and `scim user update` on the
+unsupported `example` keyword. This is a branch regression and requires the
+non-rewriting current-main merge before re-verification.
