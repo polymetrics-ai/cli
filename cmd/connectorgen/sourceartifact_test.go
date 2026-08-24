@@ -55,6 +55,36 @@ func TestSourceRetainWritesVerifiedMachineReadableArtifactWithoutChangingLock(t 
 	}
 }
 
+func TestSourceRetainReadsUppercaseLockDigestAfterRetention(t *testing.T) {
+	t.Parallel()
+	defsRoot := t.TempDir()
+	artifact := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
+	lock := sourceImportFixtureLock("alpha", "https://fixtures.polymetrics.invalid/alpha-openapi.yaml", artifact)
+	lock.Rest.SHA256 = strings.ToUpper(lock.Rest.SHA256)
+	writeSourceRetainFixtureLock(t, defsRoot, lock)
+
+	var stdout, stderr bytes.Buffer
+	code := runSourceRetainWithFetcher([]string{"source-retain", "alpha", "--defs", defsRoot, "--retrieved-at", "2026-08-24T07:02:03Z", "--license", "fixture-license", "--terms", "fixture-terms"}, &stdout, &stderr, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+		return artifact, nil
+	}))
+	if code != 0 {
+		t.Fatalf("source-retain exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+
+	sourcesDir := filepath.Join(defsRoot, "alpha", "sources")
+	fetcher, err := newSourceImportRetainedArtifactFetcher(sourcesDir, "alpha", defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("construct retained reader: %v", err)
+	}
+	got, err := fetcher.FetchArtifact(context.Background(), lock.Rest.sourceImportArtifact)
+	if err != nil {
+		t.Fatalf("read retained uppercase-digest artifact: %v", err)
+	}
+	if !bytes.Equal(got, artifact) {
+		t.Fatalf("retained uppercase-digest bytes = %q, want %q", got, artifact)
+	}
+}
+
 func TestSourceRetainRetainsRenderedReferenceAndBundleArtifacts(t *testing.T) {
 	t.Parallel()
 	renderedLockRaw, renderedArtifact := sourceImportV3RenderedReferenceLock(t, renderedReferenceCitationURL)

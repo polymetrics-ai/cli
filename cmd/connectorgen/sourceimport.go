@@ -8651,7 +8651,7 @@ func sourceRetainedArtifactRecordRawBytes(record sourceImportRetainedArtifactRec
 func sourceRetainedArtifactRecordMatches(record sourceImportRetainedArtifactRecord, artifact sourceImportArtifact) bool {
 	return record.SourceURL == artifact.SourceURL &&
 		record.IdentityQuery == artifact.IdentityQuery &&
-		record.SHA256 == artifact.SHA256 &&
+		strings.EqualFold(record.SHA256, artifact.SHA256) &&
 		record.Bytes == artifact.Bytes &&
 		sourceArtifactIdentity(sourceImportArtifact{Identity: record.Identity}) == sourceArtifactIdentity(artifact) &&
 		strings.EqualFold(record.CanonicalSHA256, artifact.CanonicalSHA256)
