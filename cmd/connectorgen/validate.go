@@ -910,7 +910,7 @@ func checkCLISurfaceFoundation(b engine.Bundle, index int, command engine.CLICom
 				Message:   fmt.Sprintf("command %d (%q) deferred foundation target must match exactly one api_surface endpoint", index, command.Path),
 			}}
 		}
-		path, err := commandrunner.CanonicalCommandPath(command.Path)
+		path, err := commandrunner.CommandPathSegments(command.Path)
 		if err != nil {
 			return []Finding{{
 				Connector: b.Name,

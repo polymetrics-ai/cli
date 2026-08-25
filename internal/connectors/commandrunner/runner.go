@@ -1182,11 +1182,11 @@ func commandPath(path []string) string {
 	return strings.Join(path, " ")
 }
 
-// CanonicalCommandPath parses a declaration-owned command path into the exact
+// CommandPathSegments parses a declaration-owned command path into the exact
 // segments commandrunner resolves. It rejects alternate whitespace spellings,
 // empty segments, and unsafe identifiers so a certification row cannot claim
 // a command that the runtime parser can never dispatch.
-func CanonicalCommandPath(raw string) ([]string, error) {
+func CommandPathSegments(raw string) ([]string, error) {
 	if raw == "" || raw != strings.TrimSpace(raw) {
 		return nil, fmt.Errorf("command path must be non-empty and trimmed")
 	}

@@ -416,7 +416,7 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 			add("destructive metadata lacks a reason")
 		}
 	}
-	commandPath, commandPathErr := commandrunner.CanonicalCommandPath(declaration.Command)
+	commandPath, commandPathErr := commandrunner.CommandPathSegments(declaration.Command)
 	if declaration.Command == "" {
 		add("has no discoverable command mapping")
 		return

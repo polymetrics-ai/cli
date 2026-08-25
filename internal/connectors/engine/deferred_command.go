@@ -305,7 +305,7 @@ func deferredCommandResolveBinding(b Bundle, target connectors.CommandFoundation
 		if method == "" {
 			method = "GET"
 		}
-		if !strings.EqualFold(method, target.Method) || canonicalCommandBindingPath(stream.Path) != target.Path {
+		if !strings.EqualFold(method, target.Method) || normalizeBindingPathTemplate(stream.Path) != target.Path {
 			return deferredResolvedBinding{}, fmt.Errorf("admitted stream binding resolves to a different provider target")
 		}
 		return deferredResolvedBinding{stream: &stream, exists: true}, nil
@@ -314,7 +314,7 @@ func deferredCommandResolveBinding(b Bundle, target connectors.CommandFoundation
 		if !ok {
 			return deferredResolvedBinding{}, nil
 		}
-		if !strings.EqualFold(action.Method, target.Method) || canonicalCommandBindingPath(action.Path) != target.Path {
+		if !strings.EqualFold(action.Method, target.Method) || normalizeBindingPathTemplate(action.Path) != target.Path {
 			return deferredResolvedBinding{}, fmt.Errorf("admitted write binding resolves to a different provider target")
 		}
 		return deferredResolvedBinding{action: &action, exists: true}, nil
@@ -342,13 +342,13 @@ func deferredCommandEndpointClaimedByAnotherBinding(b Bundle, target connectors.
 		if method == "" {
 			method = "GET"
 		}
-		if strings.EqualFold(method, target.Method) && canonicalCommandBindingPath(stream.Path) == target.Path &&
+		if strings.EqualFold(method, target.Method) && normalizeBindingPathTemplate(stream.Path) == target.Path &&
 			(target.Binding.Kind != connectors.CommandBindingStream || target.Binding.ID != stream.Name) {
 			return true
 		}
 	}
 	for _, action := range b.Writes {
-		if strings.EqualFold(action.Method, target.Method) && canonicalCommandBindingPath(action.Path) == target.Path &&
+		if strings.EqualFold(action.Method, target.Method) && normalizeBindingPathTemplate(action.Path) == target.Path &&
 			(target.Binding.Kind != connectors.CommandBindingWrite || target.Binding.ID != action.Name) {
 			return true
 		}

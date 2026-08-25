@@ -47,7 +47,7 @@ func ResolveImplementedCommandBinding(b Bundle, cmd connectors.CommandSurfaceCom
 		}
 		resolved = ResolvedCommandBinding{
 			Binding: connectors.CommandBindingIdentity{Kind: connectors.CommandBindingStream, ID: stream.Name},
-			Method:  method, Path: canonicalCommandBindingPath(stream.Path),
+			Method:  method, Path: normalizeBindingPathTemplate(stream.Path),
 		}
 	case cmd.Write != "":
 		action, ok := commandBindingWrite(b, cmd.Write)
@@ -57,7 +57,7 @@ func ResolveImplementedCommandBinding(b Bundle, cmd connectors.CommandSurfaceCom
 		resolved = ResolvedCommandBinding{
 			Binding:     connectors.CommandBindingIdentity{Kind: connectors.CommandBindingWrite, ID: action.Name},
 			Method:      strings.ToUpper(strings.TrimSpace(action.Method)),
-			Path:        canonicalCommandBindingPath(action.Path),
+			Path:        normalizeBindingPathTemplate(action.Path),
 			Destructive: DestructiveTargetForWrite(b.Name, action),
 		}
 	case cmd.Operation != "":
@@ -176,6 +176,6 @@ func commandBindingOperationEndpoint(operation OperationSpec) (string, string, e
 	}
 }
 
-func canonicalCommandBindingPath(path string) string {
+func normalizeBindingPathTemplate(path string) string {
 	return commandBindingTemplateRE.ReplaceAllString(path, `{$1}`)
 }
