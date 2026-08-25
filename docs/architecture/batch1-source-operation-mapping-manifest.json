@@ -1,7 +1,7 @@
 {
   "invariants": {
-    "declarable": 1666,
-    "deferred": 1908,
+    "declarable": 1663,
+    "deferred": 1910,
     "deferred_has_exactly_one_concrete_missing_component": true,
     "every_record_has_cli_path": true,
     "every_source_operation_exactly_once": true,
@@ -16,7 +16,7 @@
       "retained_bytes",
       "live_certification"
     ],
-    "runnable": 767,
+    "runnable": 768,
     "same_path_promotion": "implemented reaches the credential boundary; deferred returns typed missing_foundation; after the named component exists, the same path and arguments reach the credential boundary",
     "source_operations": 4341,
     "zero_denominator_forbidden": true
@@ -86,10 +86,92 @@
       "source_operations": 249
     },
     {
-      "declarable": 3,
-      "deferred": 52,
+      "declarable": 0,
+      "deferred": 54,
       "provider": "jira",
-      "runnable": 562,
+      "runnable": 563,
+      "source_operations": 617
+    }
+  ],
+  "materialization_counts": [
+    {
+      "current_nonrunnable_surface": 41,
+      "declaration_disposition_only": 0,
+      "manifest_reservation_only": 9,
+      "materialized_runnable": 4,
+      "provider": "dockerhub",
+      "source_operations": 54
+    },
+    {
+      "current_nonrunnable_surface": 4,
+      "declaration_disposition_only": 0,
+      "manifest_reservation_only": 3,
+      "materialized_runnable": 42,
+      "provider": "notion",
+      "source_operations": 49
+    },
+    {
+      "current_nonrunnable_surface": 0,
+      "declaration_disposition_only": 0,
+      "manifest_reservation_only": 581,
+      "materialized_runnable": 8,
+      "provider": "stripe",
+      "source_operations": 589
+    },
+    {
+      "current_nonrunnable_surface": 1,
+      "declaration_disposition_only": 0,
+      "manifest_reservation_only": 246,
+      "materialized_runnable": 50,
+      "provider": "bitbucket",
+      "source_operations": 297
+    },
+    {
+      "current_nonrunnable_surface": 0,
+      "declaration_disposition_only": 4,
+      "manifest_reservation_only": 1748,
+      "materialized_runnable": 0,
+      "provider": "gitlab",
+      "source_operations": 1752
+    },
+    {
+      "current_nonrunnable_surface": 24,
+      "declaration_disposition_only": 0,
+      "manifest_reservation_only": 71,
+      "materialized_runnable": 16,
+      "provider": "circleci",
+      "source_operations": 111
+    },
+    {
+      "current_nonrunnable_surface": 33,
+      "declaration_disposition_only": 0,
+      "manifest_reservation_only": 187,
+      "materialized_runnable": 3,
+      "provider": "sentry",
+      "source_operations": 223
+    },
+    {
+      "current_nonrunnable_surface": 0,
+      "declaration_disposition_only": 0,
+      "manifest_reservation_only": 400,
+      "materialized_runnable": 0,
+      "provider": "vercel",
+      "source_operations": 400
+    },
+    {
+      "current_nonrunnable_surface": 167,
+      "declaration_disposition_only": 0,
+      "manifest_reservation_only": 0,
+      "materialized_runnable": 82,
+      "provider": "asana",
+      "source_operations": 249
+    },
+    {
+      "current_nonrunnable_surface": 28,
+      "declaration_disposition_only": 0,
+      "manifest_reservation_only": 26,
+      "materialized_runnable": 563,
+      "provider": "jira",
       "source_operations": 617
     }
   ],
@@ -151761,10 +151843,10 @@
         "source": "manifest_reservation"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
+      "mapping_state": "deferred",
       "missing_implementation": {
         "component": "typed_input_schema",
-        "evidence": "internal/connectors/defs/jira/api_surface.json:2038: undefined; internal/connectors/defs/jira/sources/jira-operation-source-lock.json: paths paths[\"/rest/api/3/issue/{issueIdOrKey}/watchers\"].post.",
+        "evidence": "cmd/connectorgen/sourceprojection.go:1273-1275 rejects the source-required scalar JSON body; internal/connectors/defs/jira/sources/jira-operation-source-lock.json: paths paths[\"/rest/api/3/issue/{issueIdOrKey}/watchers\"].post.",
         "foundation": "typed-operation-contract-jira",
         "projection_prerequisite": {
           "kind": "runtime_deferred_command_projection",
@@ -165899,10 +165981,10 @@
         "source": "manifest_reservation"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
+      "mapping_state": "deferred",
       "missing_implementation": {
         "component": "typed_input_schema",
-        "evidence": "internal/connectors/defs/jira/api_surface.json:1508: undefined; internal/connectors/defs/jira/sources/jira-operation-source-lock.json: paths paths[\"/rest/api/3/group\"].delete.",
+        "evidence": "cmd/connectorgen/sourceprojection.go:1245-1251 and 1884-1932 can project only per-parameter requiredness, not the provider's at-least-one and mutual-exclusion query rule; internal/connectors/defs/jira/sources/jira-operation-source-lock.json: paths paths[\"/rest/api/3/group\"].delete.",
         "foundation": "typed-operation-contract-jira",
         "projection_prerequisite": {
           "kind": "runtime_deferred_command_projection",
@@ -166584,24 +166666,14 @@
         },
         "operation_key": "rest:delete:/rest/api/3/user/columns"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "reserved",
+        "current_availability": "implemented",
         "path": "api op-798e4bdcb516fc99a56c6b35b2bc97e67b65830a72dc867eeab1bb261c01b320",
-        "source": "manifest_reservation"
+        "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "typed_input_schema",
-        "evidence": "internal/connectors/defs/jira/api_surface.json:4634: undefined; internal/connectors/defs/jira/sources/jira-operation-source-lock.json: paths paths[\"/rest/api/3/user/columns\"].delete.",
-        "foundation": "typed-operation-contract-jira",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "jira",
       "record_key": "jira:jira.rest.resetUserColumns",
       "source": {

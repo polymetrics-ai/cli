@@ -14897,6 +14897,41 @@
       }
     },
     {
+      "name": "user_reset_user_columns",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/api/3/user/columns",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "accountId": {
+            "maxLength": 128,
+            "type": "string"
+          },
+          "username": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Jira DELETE on /rest/api/3/user/columns; changes site data.",
+      "body_type": "none",
+      "confirm": "destructive",
+      "query": {
+        "accountId": {
+          "template": "{{ record.accountId }}",
+          "omit_when_absent": true
+        },
+        "username": {
+          "template": "{{ record.username }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
       "name": "user_delete_user_property",
       "kind": "delete",
       "method": "DELETE",

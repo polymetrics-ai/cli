@@ -4091,6 +4091,60 @@ func TestJiraAvatarImageCommandsPassRuntimePreflight(t *testing.T) {
 	}
 }
 
+func TestJiraSourceCitedResetUserColumnsCommandPassesRuntimePreflight(t *testing.T) {
+	registry := bundleregistry.New()
+	connector, ok := registry.Get("jira")
+	if !ok {
+		t.Fatal("Jira connector is not registered")
+	}
+
+	const path = "api op-798e4bdcb516fc99a56c6b35b2bc97e67b65830a72dc867eeab1bb261c01b320"
+	if err := Preflight(connector, strings.Fields(path)); err != nil {
+		t.Fatalf("Preflight(%q): %v", path, err)
+	}
+
+	bundle, err := engine.Load(defs.FS, "jira")
+	if err != nil {
+		t.Fatalf("load Jira bundle: %v", err)
+	}
+	var action *engine.WriteAction
+	for index := range bundle.Writes {
+		if bundle.Writes[index].Name == "user_reset_user_columns" {
+			action = &bundle.Writes[index]
+			break
+		}
+	}
+	if action == nil {
+		t.Fatal("Jira reset-user-columns action is missing")
+	}
+	if action.Kind != "delete" || action.Method != http.MethodDelete || action.Path != "/rest/api/3/user/columns" {
+		t.Fatalf("reset-user-columns action = kind %q method %q path %q", action.Kind, action.Method, action.Path)
+	}
+	if action.BodyType != "none" || action.Delete != nil || action.Confirm != "destructive" {
+		t.Fatalf("reset-user-columns action body=%q delete=%#v confirm=%q, want no body/no idempotence claim/destructive confirmation", action.BodyType, action.Delete, action.Confirm)
+	}
+	if got, want := action.Query, map[string]engine.QueryParam{
+		"accountId": {Template: "{{ record.accountId }}", OmitWhenAbsent: true},
+		"username":  {Template: "{{ record.username }}", OmitWhenAbsent: true},
+	}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("reset-user-columns query = %#v, want %#v", got, want)
+	}
+	var schema struct {
+		AdditionalProperties bool `json:"additionalProperties"`
+		Required             []string
+		Properties           map[string]struct {
+			Type      string `json:"type"`
+			MaxLength int    `json:"maxLength"`
+		}
+	}
+	if err := json.Unmarshal(action.RecordSchema, &schema); err != nil {
+		t.Fatalf("unmarshal reset-user-columns record schema: %v", err)
+	}
+	if schema.AdditionalProperties || len(schema.Required) != 0 || len(schema.Properties) != 2 || schema.Properties["accountId"].Type != "string" || schema.Properties["accountId"].MaxLength != 128 || schema.Properties["username"].Type != "string" || schema.Properties["username"].MaxLength != 8192 {
+		t.Fatalf("reset-user-columns record schema = %#v, want closed optional accountId and username strings", schema)
+	}
+}
+
 func TestSentryCitedMutationCommandsPassRuntimePreflight(t *testing.T) {
 	registry := bundleregistry.New()
 	connector, ok := registry.Get("sentry")

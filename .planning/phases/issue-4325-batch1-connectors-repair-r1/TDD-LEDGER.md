@@ -12,6 +12,39 @@
 | Sentry declared-and-deferred mutations | `source-import sentry --check` passes 223 source operations, but `connectorgen validate internal/connectors/defs/sentry` reports 32 exact mutations with no executable action | A strict, source-cited mutation disposition exists for each of those 32; importer and validator accept the descriptor and it records only `source-cited-non-executable-mutation-foundation-r1` gaps | `source-import --check`, targeted validate, `surface-sync --check`, focused source-projection test, and credential-boundary command sweep | green except global surface-sync blocked by unrelated Asana 25-action gap |
 | Vercel surface discovery | `pm vercel` returns `unknown command`; an absent `cli_surface.json` means no command can be credential-bound | Report the required declaration-owned artifacts and source-bound operation set before any mutation mapping | Do not create a command surface as part of a disposition-only slice | pending captain report |
 | Asana/Jira declared-and-deferred mutations | Targeted validation reports the documented source mutations without complete actions | Exact cited disposition files retain those operations as merge-blocked runtime gaps without changing a working command | Same focused importer/validator and runtime sweep as Sentry | pending |
+| Jira scalar direct-write subset | The manifest-reserved reset path is unknown to real `commandrunner.Preflight` | That exact source-cited reset path passes preflight and reaches the no-credential boundary; schema and query map remain closed/source-derived | Focused commandrunner test, Jira importer/validator, surface-sync, binary probes | green for `resetUserColumns`; `removeGroup` remains held for conditional-query projection and `addWatcher` for scalar JSON body support |
+
+### 2026-08-25 Jira source-derived reset-user-columns execution
+
+- **Manual GSD execution:** `scripts/gsd prompt execute-phase 4325` was
+  resolved and this single-worker connector slice was executed inline because
+  the canonical contract forbids role spawning in the available runtime.
+- **Red:** before the connector-owned action/CLI declaration, real
+  `commandrunner.Preflight` rejected
+  `jira api op-798e4bdcb516fc99a56c6b35b2bc97e67b65830a72dc867eeab1bb261c01b320`
+  as `unknown command`.
+- **Green:**
+  `go test -timeout 20m ./internal/connectors/commandrunner -run
+  '^TestJiraSourceCitedResetUserColumnsCommandPassesRuntimePreflight$' -count=1`
+  passes. It asserts the exact DELETE endpoint, closed source-derived
+  `accountId`/`username` query schema, no body, destructive confirmation, and
+  real preflight. An isolated initialized-project built-binary probe reaches
+  exactly `error: missing --credential` without reading or storing a
+  credential.
+- **Source and surface evidence:** `go run ./cmd/connectorgen source-import
+  jira --check` verifies all 617 source operations. Targeted Jira validation
+  retains exactly 23 pre-existing unresolved source-bound gaps and has no
+  `resetUserColumns` finding. `pm connectors`, `pm connectors inspect jira
+  --json`, and the exact changed-command `--help` succeed; help lists only the
+  source-derived `--accountId` and `--username` inputs.
+- **Quality:** `go vet ./internal/connectors/commandrunner`, `go build
+  ./cmd/pm`, manifest invariant checks, and `git diff --check` pass.
+  `go run ./cmd/connectorgen surface-sync --check` remains blocked before Jira
+  by Docker Hub's missing canonical source descriptor. The complete
+  `internal/connectors/commandrunner` package otherwise reaches its known
+  global failure: 21 Docker Hub commands are still marked implemented without
+  executable source-backed operation metadata. No Jira result is inferred from
+  that unrelated failing package gate.
 
 ### 2026-08-24 Sentry declaration-only executable-action conversion
 
@@ -376,9 +409,9 @@
   A real `TestEveryImplementedCommandPassesRuntimePreflight` sweep checked
   5,262 implemented commands and found 21 failures, all Docker Hub; no other
   batch-one connector failed runtime preflight.
-- **Measured source-operation denominator:** the ten current source locks
-  retain 4,341 provider REST operations. The three-way split is **767 already
-  runnable**, **1,666 declarable now**, and **1,908 genuinely blocked**. The
+- **Canonical source-operation denominator:** the ten current source locks
+  retain 4,341 provider REST operations. The three-way split is **768 already
+  runnable**, **1,663 declarable now**, and **1,910 genuinely blocked**. The
   runnable number starts from exact source-to-command crosswalk bindings and
   excludes Docker Hub's two crosswalk-bound commands that fail preflight. A
   declarable operation has no source gap except
@@ -391,7 +424,7 @@
 - **Per connector (runnable / declarable / blocked):** Docker Hub 4 / 0 / 50;
   Notion 42 / 0 / 7; Stripe 8 / 0 / 581; Bitbucket 50 / 136 / 111; GitLab 0 /
   917 / 835; CircleCI 16 / 75 / 20; Sentry 3 / 144 / 76; Vercel 0 / 261 /
-  139; Asana 82 / 130 / 37; Jira 562 / 3 / 52. The Docker Hub, Notion, and
+  139; Asana 82 / 130 / 37; Jira 563 / 0 / 54. The Docker Hub, Notion, and
   Stripe blocked counts are their respectively 54, 49, and 589 locked
   operations less the still-working currently declared commands: each source
   import is refused before a descriptor can be produced (dangling
@@ -400,6 +433,22 @@
 - **Sentry correction:** all 32 source-cited non-executable mutation
   dispositions have provider-documented path fields (and no request body).
   All 32 are declaration work, not a missing reverse-ETL or delete foundation.
+
+- **2026-08-25 count reconciliation:** the previous `767 / 1,666 / 1,908`
+  measurement and the canonical `768 / 1,663 / 1,910` measurement retain the
+  same 4,341 source identities. The entire delta is Jira: (1)
+  `jira:jira.rest.resetUserColumns` moved declarable → runnable after its
+  source-derived DELETE action and exact CLI projection passed real preflight
+  and a credential-free binary probe; (2) `jira:jira.rest.removeGroup` moved
+  declarable → blocked because the provider's at-least-one/mutual-exclusion
+  query rule cannot be represented by
+  `sourceprojection.go:1245-1251,1884-1932`; (3)
+  `jira:jira.rest.addWatcher` moved declarable → blocked because its required
+  scalar JSON body is refused at `sourceprojection.go:1273-1275` and the
+  current writer has no scalar-body contract. The complete per-provider
+  actual-JSON/CLI versus manifest-only projection matrix is the independent
+  `materialization_counts` block in
+  `docs/architecture/batch1-source-operation-mapping-manifest.json`.
 
 Every red/green command and its result is appended when it executes. No test is
 weakened or skipped to advance a row.

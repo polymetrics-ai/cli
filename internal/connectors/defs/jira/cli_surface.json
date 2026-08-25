@@ -13840,6 +13840,30 @@
       ]
     },
     {
+      "path": "api op-798e4bdcb516fc99a56c6b35b2bc97e67b65830a72dc867eeab1bb261c01b320",
+      "summary": "Reset user default columns.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "user_reset_user_columns",
+      "source_url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "Jira DELETE on /rest/api/3/user/columns; changes site data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "accountId",
+          "type": "string",
+          "maps_to": "record.accountId",
+          "max_bytes": 512
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "record.username",
+          "max_bytes": 32768
+        }
+      ]
+    },
+    {
       "path": "user get-user-email",
       "summary": "Get user email.",
       "intent": "direct_read",

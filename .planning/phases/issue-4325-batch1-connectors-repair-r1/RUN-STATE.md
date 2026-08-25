@@ -55,6 +55,19 @@ The built baseline binary returned `error: unknown command "circleci"` (exit
   connector. The separate Asana, CircleCI, and Sentry attempts remain only in
   their named foundation-hold stashes.
 
+## Current connector slice (2026-08-25)
+
+- Target: Jira only; materialize exactly `resetUserColumns` at manifest-reserved
+  path `api op-798e4bdcb516fc99a56c6b35b2bc97e67b65830a72dc867eeab1bb261c01b320`
+  as a source-cited, closed, destructive reverse-ETL action.
+- Hold `removeGroup`: the provider makes every selector individually optional
+  but documents a 400 when a group is not supplied; the current action schema
+  has no source-derived conditional-query projection. Hold `addWatcher`: its
+  required `application/json` scalar string is unsupported by the object-only
+  JSON action executor at `internal/connectors/engine/write.go:674-692`. The
+  exact future paths are held in the independent mapping manifest; no local
+  conditional-query, scalar-body, or deferred-command projection is permitted.
+
 ## Jira red evidence
 
 - `go run ./cmd/connectorgen source-import jira --check` exited 1 because the

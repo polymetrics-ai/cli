@@ -4691,14 +4691,10 @@
     {
       "method": "DELETE",
       "path": "/rest/api/3/user/columns",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "the provider's published spec documents no bindable request field for this operation: no request body, no path variable and no required query parameter",
-        "source_url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-        "notes": "Named dependency: engine.PreflightWriteAction refuses a write whose record_schema admits only an empty object (engine/record_schema_promotion.go), correctly -- the action would plan a mutation with no inputs. Atlassian documents this operation's selector as optional query parameters only. Unblocks when the spec declares one required."
+      "covered_by": {
+        "writes": [
+          "user_reset_user_columns"
+        ]
       }
     },
     {

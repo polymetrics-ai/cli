@@ -37,8 +37,8 @@
   `golang-design-patterns`, `golang-structs-interfaces`, and
   `golang-documentation`.
 - GSD prompts resolved and executed inline: `discuss-phase 4325`,
-  `plan-phase 4325 --tdd`; `execute-phase`, `verify-work`, and `code-review`
-  will be resolved and recorded at their respective gates. Inline execution is
+  `plan-phase 4325 --tdd`, and `execute-phase 4325`. `verify-work` and
+  `code-review` remain pending the complete Batch 1 gate. Inline execution is
   required because compatible isolated runtime agents are unavailable and the
   canonical contract forbids role spawning.
 - CLI parity: this changes generated connector command surfaces. Verify the
@@ -217,3 +217,59 @@ source operation and marks the gap merge-blocked.
 - Never edit `internal/connectors/defs/github/rate_limits.json`.
 - Keep GitHub lock/descriptor bytes and SHA-256 unchanged; report measured
   values rather than claims.
+
+## Jira direct-write materialization slice (2026-08-25)
+
+This is one connector-only slice under Refs #4325. The independent mapping
+manifest identifies three source operations without a current CLI contract:
+
+| Source ID | Provider method/path | Pinned citation | Decision |
+| --- | --- | --- | --- |
+| `removeGroup` | `DELETE /rest/api/3/group` | `jira-operation-source-lock.json:1489-1495` | Defer: source says neither group selector is individually required, while its `400` response says a group name is required. |
+| `resetUserColumns` | `DELETE /rest/api/3/user/columns` | `jira-operation-source-lock.json:4567-4573` | Materialize: two scalar query inputs; no body. |
+| `addWatcher` | `POST /rest/api/3/issue/{issueIdOrKey}/watchers` | `jira-operation-source-lock.json:2011-2017` | Defer: required provider body is a JSON string. |
+
+All three retain the source URL, 2,456,011 bytes, SHA-256
+`e7136af43bf72cd4ea5ada91ec665b318b60008814122461d4436a43b6c732bf`, and
+exact OpenAPI locations in `sources/jira-operation-descriptor.json`. No
+operation is relabelled partial. Only `resetUserColumns` becomes an explicit,
+closed Jira reverse-ETL action contract with the existing plan → preview →
+approval → execute policy and destructive confirmation; no generic HTTP or
+write surface is introduced.
+
+`addWatcher` must not be approximated as an object body. Its source declares a
+required `application/json` scalar string, while the default JSON executor
+builds `map[string]any` (`internal/connectors/engine/write.go:674-692`) and
+`WriteAction` has no scalar-JSON body type
+(`internal/connectors/engine/bundle.go:507`). Its current
+`source-cited-non-executable-mutation-foundation-r1` gap is truthful. The
+mapping manifest reserves exact path
+`api op-bd7737be09f94f80d0b805cb85032ca567423145501ad839259182b48c939032`
+and requires `runtime_deferred_command_projection` with that same path; no
+implementation exists in `cmd/` or `internal/`.
+
+`removeGroup` has a separate source-completeness boundary. The pinned artifact
+for the same location says response `400` is returned when the group name is
+not specified, but OpenAPI marks both `groupname` and `groupId` individually
+optional (and both `swapGroup` alternatives optional). A closed record schema
+would need an at-least-one and mutual-exclusion rule over query fields; no
+declaration-owned action contract has that source-derived conditional-input
+projection. Do not guess one required field or send an empty destructive
+request. Its reserved manifest path remains unchanged until such a foundation
+exists.
+
+- **Red:** add a commandrunner preflight test for manifest-reserved
+  `api op-798e4bdcb516fc99a56c6b35b2bc97e67b65830a72dc867eeab1bb261c01b320`;
+  it is currently unknown. The no-credential probes for the reserved
+  `removeGroup` and `addWatcher` paths return unknown command (exit 2), proving
+  absent projections rather than provider failures.
+- **Green:** that same manifest-reserved path passes real preflight. Its action
+  schema is closed, includes only source-declared query fields, carries no
+  body, and a no-credential binary reaches `missing --credential`, never
+  unknown command.
+- **Hold:** leave `removeGroup` and `addWatcher` deferred until their shared
+  conditional-query and scalar-JSON/deferred-command foundations land; do not
+  add local shims.
+- **Quality:** focused commandrunner test, Jira importer/validator,
+  `surface-sync --check`, connector checks, build, probes, help/docs checks,
+  and serial `make verify` before a push.

@@ -43,22 +43,68 @@ claimed for the manifest itself.
 | Sentry | 3 | 144 | 76 | 223 |
 | Vercel | 0 | 261 | 139 | 400 |
 | Asana | 82 | 130 | 37 | 249 |
-| Jira | 562 | 3 | 52 | 617 |
-| **Total** | **767** | **1,666** | **1,908** | **4,341** |
+| Jira | 563 | 0 | 54 | 617 |
+| **Total** | **768** | **1,663** | **1,910** | **4,341** |
 
-The split is the independently measured source accounting in
+The split above is the canonical source accounting in
 `.planning/phases/issue-4325-batch1-connectors-repair-r1/TDD-LEDGER.md:379-398`.
-The 1,908 genuine gaps preserve the source-ledger evidence from
+The 1,910 genuine gaps preserve the source-ledger evidence from
 [the deferred-foundation matrix](batch1-deferred-foundation-matrix.md), while
 the record inventory itself comes directly from the ten current source locks.
 The manifest never has a zero denominator.
+
+### Count reconciliation (2026-08-25)
+
+The earlier working report, `767 / 1,666 / 1,908`, and this manifest's
+canonical `768 / 1,663 / 1,910` split have the same 4,341 source-lock rows.
+All movement is the following three Jira source identities; there is no
+denominator or provider-lock change.
+
+| Source record key | Earlier classification | Canonical classification | Count movement | Exact reason |
+| --- | --- | --- | --- | --- |
+| `jira:jira.rest.resetUserColumns` | declarable | runnable | declarable -1; runnable +1 | The source-derived `DELETE /rest/api/3/user/columns` action now exists in `writes.json` and its preserved manifest path exists in `cli_surface.json`; real preflight and the credential-free binary both reach `missing --credential`. |
+| `jira:jira.rest.removeGroup` | declarable | deferred | declarable -1; genuine gap +1 | `/rest/api/3/group` requires at least one selector and has mutual exclusions, while `sourceprojection.go:1245-1251,1884-1932` can represent only independently required query parameters. Materializing one selector or an empty DELETE would alter provider semantics. |
+| `jira:jira.rest.addWatcher` | declarable | deferred | declarable -1; genuine gap +1 | `/rest/api/3/issue/{issueIdOrKey}/watchers` requires a scalar JSON string; `sourceprojection.go:1273-1275` refuses it and the current JSON writer has no scalar-body contract. An object-body approximation would alter the source request. |
+
+`materialization_counts` in the JSON is the machine-readable companion to this
+reconciliation. It classifies every source operation without treating an
+existing but non-runnable declaration as materialized.
+
+## Actual connector materialization versus manifest projection
+
+The table below is derived from `records[*].intended_cli_path.source` and
+`declaration_state`, and is therefore an inventory of command identities, not
+a declaration count assertion. The exact command path and source operation
+for each row remain in the corresponding `records[]` element.
+
+| Provider | Materialized runnable JSON/CLI | Existing JSON/CLI path, not source-runnable | Declaration disposition only, no CLI path | Manifest-reservation-only projected | Source operations |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Docker Hub | 4 | 41 | 0 | 9 | 54 |
+| Notion | 42 | 4 | 0 | 3 | 49 |
+| Stripe | 8 | 0 | 0 | 581 | 589 |
+| Bitbucket | 50 | 1 | 0 | 246 | 297 |
+| GitLab | 0 | 0 | 4 | 1,748 | 1,752 |
+| CircleCI | 16 | 24 | 0 | 71 | 111 |
+| Sentry | 3 | 33 | 0 | 187 | 223 |
+| Vercel | 0 | 0 | 0 | 400 | 400 |
+| Asana | 82 | 167 | 0 | 0 | 249 |
+| Jira | 563 | 28 | 0 | 26 | 617 |
+| **Total** | **768** | **298** | **4** | **3,271** | **4,341** |
+
+“Materialized runnable” means the record has both
+`intended_cli_path.source: current_cli_surface` and
+`declaration_state: implemented`; only this column claims an actual connector
+JSON/CLI command. “Existing JSON/CLI path, not source-runnable” is deliberately
+separate: it preserves a current declaration path but does not claim that the
+source operation reaches the credential boundary. “Manifest-reservation-only”
+is a stable future command identity, not a generic HTTP surface.
 
 ## Exact JSON contract
 
 `schema_version` is `batch1-source-operation-mapping-manifest/v1`. The JSON
 contains `source_basis`, `record_schema`, `invariants`,
-`per_connector_counts`, and `records`. `records` is sorted by provider then
-independent source operation identity.
+`per_connector_counts`, `materialization_counts`, and `records`. `records` is
+sorted by provider then independent source operation identity.
 
 Every record has this shape:
 
@@ -70,7 +116,7 @@ Every record has this shape:
 | `lane` | Source-ledger parity lane for the operation. |
 | `canonical_target` | `rest:<lowercase-method>:<exact-provider-path>` plus the same endpoint as structured method/path. |
 | `intended_cli_path` | A nonempty, unique provider command path with the source of that mapping and its current availability. `manifest_reservation` is an exact future command projection, not an executable generic HTTP surface. |
-| `declaration_state` | `implemented` only for the 767 already runnable rows; otherwise `deferred`. |
+| `declaration_state` | `implemented` only for the 768 already runnable rows; otherwise `deferred`. |
 | `mapping_state` | `runnable`, `declarable`, or `deferred`. `declarable` means the current source shape needs connector-owned materialization, not a shared provider/importer fix. |
 | `missing_implementation` | Absent only when `declaration_state` is `implemented`; otherwise present exactly once, with one concrete component, source-cited foundation/evidence, and a machine-readable `projection_prerequisite`. |
 
@@ -110,11 +156,11 @@ does not depend on PR #4351 being merged.
 
 ## Materialization order
 
-The 1,666 `declarable` rows are the immediate connector-mapping queue. Their
+The 1,663 `declarable` rows are the immediate connector-mapping queue. Their
 manifest records already provide one source citation, lane, canonical target,
 path, and a concrete connector-owned component. Materialize a bounded
 connector slice by consuming those fields into the provider definition, then
-prove the matching command behavior from the table above. The 1,908 genuine
+prove the matching command behavior from the table above. The 1,910 genuine
 gaps use the same mapping and path but cannot become executable until their
 recorded component is present.
 
@@ -130,7 +176,7 @@ three transitions rather than only a declaration count:
 
 1. Read the provider source lock and manifest together; reject a missing,
    duplicate, mismatched, or empty-path record. Assert the expected nonzero
-   provider denominator and the aggregate `4,341 / 767 / 1,666 / 1,908`
+provider denominator and the aggregate `4,341 / 768 / 1,663 / 1,910`
    split.
 2. For every `implemented` record, run the built binary in its own
    credential-free project and assert the exact credential-boundary result;

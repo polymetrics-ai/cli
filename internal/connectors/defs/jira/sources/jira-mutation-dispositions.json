@@ -11,14 +11,6 @@
     },
     {
       "source": {
-        "source_id": "resetUserColumns",
-        "method": "DELETE",
-        "path": "/rest/api/3/user/columns"
-      },
-      "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "source": {
         "source_id": "DynamicModulesResource.removeModules_delete",
         "method": "DELETE",
         "path": "/rest/atlassian-connect/1/app/module/dynamic"
