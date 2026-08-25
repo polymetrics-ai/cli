@@ -57,10 +57,63 @@ secondary problem on a single operation.
 
 This is the same definition and denominator recorded in
 `.planning/phases/issue-4325-batch1-connectors-repair-r1/TDD-LEDGER.md:379-398`.
-It deliberately does not classify a row as blocked merely because it is a
-write, a delete, binary, or sensitive. Those are operation traits and may
-affect the contract needed to make a command runnable, but they are not a
-generic foundation reason.
+
+## Policy-only restrictions are declaration-first
+
+The following are policy/provenance attributes, never missing-foundation groups:
+`destructive_action`, delete, `reverse_etl`, risk, `blocked_by_default`,
+confirmation, approval, retained-source hash/bytes, and live certification.
+They cannot justify omitting a source declaration or discoverable command.
+
+An operation carrying any of those attributes remains declaration-first: it
+retains its source citation and command identity, then its primary group may
+name only a concrete absent component—an action binding, typed input/schema,
+CLI projection, executor, source citation, or actual provider-contract
+limitation. The current matrix audit found **zero** primary groups based on a
+policy-only restriction.
+
+GitHub is the behavioral positive control. `pm github repo delete` is an
+implemented DELETE workflow with plan, preview, approval-token stdin, typed
+destructive confirmation, and replay protection; the local test proves it
+sends no request before the gates, exactly one after, and none on replay. See
+`internal/cli/github_repo_delete_cli_test.go:14-152` and
+`internal/connectors/commandrunner/github_write_contract_test.go:181-203`.
+
+Stripe account deletion is the contrast: `DeleteAccountsAccount` is deferred
+because the source importer reaches Stripe's concrete reference-depth limit,
+not because the operation is destructive or high-risk. Once that descriptor
+exists, any remaining work is an operation-specific typed action/input/schema
+or CLI binding; the delete policy itself remains a declared restriction.
+
+## Mapping-lane handoff: Stripe accounts delete
+
+This is a plan, not an authorization to edit the Stripe definition before its
+shared foundations land.
+
+| Item | Exact handoff |
+| --- | --- |
+| Provider source record | `stripe.rest.DeleteAccountsAccount` / `DeleteAccountsAccount`: `DELETE /v1/accounts/{account}` at `paths["/v1/accounts/{account}"].delete` in [Stripe’s pinned OpenAPI source](https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json). |
+| Current deferred declaration | `internal/connectors/defs/stripe/sources/stripe-declaration-disposition.json` records `disabled; declaration-pending typed-operation-contract-stripe`; `api_surface.json:75-84` retains the source row. |
+| Endpoint-specific missing foundation | First, the importer’s concrete reference-depth refusal at `cmd/connectorgen/sourceimport.go:5572-5578` must be retained as an operation-level descriptor gap by `cli-provider-dialect-tolerance-foundation-r1`. Then `cli-declaration-admission-certification-r1` must admit the source-cited deferred declaration without calling it implemented. |
+| Planned deferred action, after both gates | In `writes.json`, declare `delete_account`: `kind: delete`, `DELETE /accounts/{{ record.account }}`, a closed record schema requiring non-empty `account`, and the existing typed destructive reverse-ETL policy. The policy is a restriction on the declaration, never the reason it was deferred. |
+| Planned CLI projection, after both gates | In `cli_surface.json`, declare `accounts delete`, `intent: reverse_etl`, `write: delete_account`, required `--account → record.account`, and endpoint `DELETE /v1/accounts/{account}`. It is `partial` only while its exact source-cited foundation blocks runtime admission; it becomes `implemented` only after the real action/operation preflight contract is complete. |
+| Ledger binding | Bind the exact source ID to the deferred action and command identity, retaining its source URL/location and deferred state. |
+
+Required regression evidence:
+
+1. In an isolated project, `pm stripe accounts delete` resolves to the declared
+   source-cited block while partial—never `unknown command`, and before
+   credential/provider I/O.
+2. Source declaration admission plus `connectorgen validate` joins the source
+   ID, DELETE method/path, official URL, and source location exactly once.
+3. Only a later executable promotion may expect the no-credential binary to
+   reach the credential boundary; it must not be promoted merely because a
+   delete action or policy field exists.
+
+The certification PR validates these invariants but does not own connector
+definitions. Until both shared foundations are review-ready and merged, this
+lane must not modify Stripe definitions, rebase, disturb preserved artifacts,
+or merge.
 
 ## Primary categories
 
@@ -95,22 +148,6 @@ complete provider location and every operation, not just these examples.
 | Action/write/transport declaration-only | 0 | — | Connectorgen source projection: `cmd/connectorgen/sourceprojection.go:213-240` | None: these are declarable-now rows, so excluding them preserves the measured split. |
 | Binary policy | 0 | — | Connectorgen CLI validation: `cmd/connectorgen/validate.go:2813-2842` | None: response media remains in the complete JSON records rather than being mislabelled as a separate foundation. |
 | Sensitive input | 0 | — | CLI validation: `cmd/connectorgen/validate.go:903-928`; engine bundle validator: `internal/connectors/engine/bundle.go:3177-3213` | None: source-declared sensitive traits are recorded per operation; no generic sensitive-input deferral is invented. |
-
-## Delete is not a deferred category
-
-GitHub is the positive control. `pm github repo delete` is an implemented,
-behaviorally tested DELETE workflow: its local test asserts no HTTP request at
-plan, preview, or unconfirmed execution; exactly one DELETE after human preview,
-approval-token stdin, and `--confirm destructive`; and no replay after the
-grant is spent. See `internal/cli/github_repo_delete_cli_test.go:14-152` and
-`internal/connectors/commandrunner/github_write_contract_test.go:181-203`.
-
-Therefore, this matrix never treats a delete as deferred simply because it is a
-delete. A deferred delete is grouped only by its concrete source/importer,
-route, typed action/body/schema, or other exact foundation. For example, Stripe
-account deletion remains under the Stripe reference-depth importer group here;
-it still needs a typed operation-specific destructive action and command binding
-after that importer can produce a complete descriptor.
 
 ## Complete operation data
 

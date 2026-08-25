@@ -52,6 +52,94 @@
     ],
     "split_evidence": "docs matrix is a projection of current source locks, source descriptors, declaration-disposition ledgers, and CLI surfaces; the underlying split is recorded in .planning/phases/issue-4325-batch1-connectors-repair-r1/TDD-LEDGER.md:379-398."
   },
+  "policy_only_restriction_invariant": {
+    "classification": "policy_only_declaration_first",
+    "rule": "destructive_action, delete, reverse_etl, risk, blocked_by_default, confirmation, approval, retained-source hash/bytes, and live certification are operation policy or provenance. They are never a missing-foundation group and never justify omitting a source declaration or discoverable command.",
+    "declaration_first": "A row carrying one or more policy-only restrictions must retain its source-cited declaration and discoverable command identity. Its primary group may name only a concrete missing component: action binding, typed input/schema, CLI projection, executor, source citation, or an actual provider-contract limitation.",
+    "audit_result": {
+      "invalid_primary_groups": 0,
+      "invalid_group_ids": []
+    },
+    "positive_control": {
+      "connector": "github",
+      "command": "pm github repo delete",
+      "meaning": "GitHub delete is implemented and behaviorally tested. Delete is not a missing foundation or a generic safety classification."
+    },
+    "contrast": {
+      "connector": "stripe",
+      "source_id": "stripe.rest.DeleteAccountsAccount",
+      "meaning": "Stripe account deletion is deferred by the concrete Stripe reference-depth source-importer refusal. Once a descriptor can be produced, any remaining work must be an operation-specific typed action/input/schema/CLI binding—not the fact that the operation deletes an account."
+    }
+  },
+  "mapping_lane_handoffs": [
+    {
+      "connector": "stripe",
+      "scope": "future source declaration and CLI projection only; no connector-definition change is authorized until the required shared foundations merge",
+      "source_record": {
+        "source_id": "stripe.rest.DeleteAccountsAccount",
+        "operation_id": "DeleteAccountsAccount",
+        "method": "DELETE",
+        "path": "/v1/accounts/{account}",
+        "official_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+        "source_location": "paths[\"/v1/accounts/{account}\"].delete",
+        "current_ledger": "internal/connectors/defs/stripe/sources/stripe-declaration-disposition.json"
+      },
+      "current_deferred_declaration": {
+        "api_surface": "internal/connectors/defs/stripe/api_surface.json:75-84",
+        "state": "disabled; declaration-pending typed-operation-contract-stripe",
+        "concrete_missing_component": "source importer reference-depth handling first; then an endpoint-specific typed action/input/schema and CLI binding",
+        "not_a_foundation_reason": ["delete", "destructive_action", "risk", "blocked_by_default", "confirmation", "approval", "live certification"]
+      },
+      "shared_prerequisites": [
+        {
+          "foundation": "cli-provider-dialect-tolerance-foundation-r1",
+          "gate": "retain Stripe's reference-depth source condition as an operation-level descriptor gap instead of aborting source import",
+          "current_owner_evidence": "cmd/connectorgen/sourceimport.go:5572-5578"
+        },
+        {
+          "foundation": "cli-declaration-admission-certification-r1",
+          "gate": "admit a source-cited deferred declaration without promoting it to an executable command",
+          "consumer_boundary": "the certification PR validates this invariant and does not own connector definitions"
+        }
+      ],
+      "planned_connector_declaration_after_prerequisites": {
+        "writes_action": {
+          "file": "internal/connectors/defs/stripe/writes.json",
+          "name": "delete_account",
+          "kind": "delete",
+          "method": "DELETE",
+          "path": "/accounts/{{ record.account }}",
+          "record_schema": "closed object requiring non-empty account and no undeclared properties",
+          "policy": "typed destructive confirmation and reverse-ETL plan/preview/approval/execute; these are declaration restrictions, not the foundation reason"
+        },
+        "cli_command": {
+          "file": "internal/connectors/defs/stripe/cli_surface.json",
+          "path": "accounts delete",
+          "intent": "reverse_etl",
+          "availability_before_runtime_admission": "partial with the exact source-cited foundation block",
+          "write": "delete_account",
+          "flag": "--account mapped to record.account and required",
+          "api_surface": {"method": "DELETE", "path": "/v1/accounts/{account}"}
+        },
+        "ledger_update": "bind the source ID to the named action and command identity while retaining deferred status until runtime admission is proven"
+      },
+      "required_regressions": [
+        {
+          "name": "Stripe deferred delete is discoverable",
+          "assertion": "an isolated pm stripe accounts delete invocation no longer returns unknown command; while availability is partial it returns the exact declared source-cited block before credential or provider I/O"
+        },
+        {
+          "name": "Stripe delete source identity is preserved",
+          "assertion": "source declaration admission and connectorgen validation join stripe.rest.DeleteAccountsAccount to DELETE /v1/accounts/{account}, its official URL, and source location exactly once"
+        },
+        {
+          "name": "Future executable promotion stays behavioral",
+          "assertion": "only after the action/operation preflight contract is complete may availability become implemented; then the isolated no-credential binary stops at the credential boundary rather than unknown command or a metadata refusal"
+        }
+      ],
+      "non_actions_now": ["do not edit stripe definitions", "do not rebase", "do not change preserved dirty artifacts", "do not merge"]
+    }
+  ],
   "classification_precedence": [
     "provider_source_importer",
     "cli_discovery_generation",
