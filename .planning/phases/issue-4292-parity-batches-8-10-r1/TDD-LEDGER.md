@@ -469,6 +469,21 @@
   (0), and Factorial 94 (0). The 853 unbound rows remain declaration-pending;
   no native execution behavior was converted into an operation contract.
 
+### Declaration-first direct-write cohort 05 — 2026-08-25
+
+- **Red:** Datadog, PagerDuty, Auth0, Okta, and FireHydrant had no
+  per-operation declaration-first inventory. Their large action counts make a
+  percentage claim especially unsafe: every source operation needs its own
+  action/CLI evidence or an explicit empty path.
+- **Green target:** generate those five Batch 10 maps from the committed
+  crosswalks and existing schemas. Elevated scopes and destructive operations
+  remain included with their normal safety metadata; neither may become an
+  omission or a foundation gap.
+- **Green:** Cohort 05 verifies 2,161 direct-write source rows: Datadog 989
+  (27 existing-schema CLI-bound), PagerDuty 254 (0), Auth0 270 (8), Okta 444
+  (429), and FireHydrant 204 (190). The 1,507 unbound rows are still
+  declaration-pending, including elevated and destructive operations.
+
 - The source lock carries `counts.total`, per-method and per-kind counts,
   source-document pins, and coverage basis. Dispositions use
   `operations_found`; no generated summary has `declared_percent`.
