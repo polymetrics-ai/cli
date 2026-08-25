@@ -84,6 +84,17 @@ reconciliation directive and is the current execution contract.
    path. Until that passes, record application deployment as pending rather
    than adding a local fallback.
 
+6. **Red/green — declaration-first direct-write cohorts:** before a source
+   operation is promoted into a new command, generate an exact per-operation
+   inventory from the committed crosswalk, disposition, typed action, and CLI
+   artifacts. Each row must retain its source identity, the existing intended
+   CLI path when a bounded typed action already owns one, its implementation
+   lane, and the exact deferred component. A missing typed action or command
+   remains `declaration-pending`; it never receives a guessed request body,
+   response, path, or CLI spelling. The current v3 source-certification
+   dependency is recorded uniformly as `source-lock-projection-gap`, without
+   rewriting locks or adding a compatibility shim.
+
 ## Task Delivery Header
 
 - Issue: Refs #4292 — chore(connectors): map parity batches 8, 9 and 10

@@ -402,6 +402,30 @@
   provider evidence; source certification remains blocked until that component
   lands.
 
+### Declaration-first direct-write cohort 01 — 2026-08-25
+
+- **Red:** no checked-in artifact named the source identity, current typed
+  action CLI path, implementation lane, and exact deferred component for a
+  bounded Batch 8 cohort. The existing aggregate ledgers prove source/action
+  counts but do not make promotion mechanical per provider operation.
+- **Green target:** a deterministic generator will derive the first five
+  Batch 8 connectors (Brex, Zoho Books, TestRail, Amplitude, and PostHog) from
+  their committed crosswalks and dispositions. It must preserve existing typed
+  action CLI paths verbatim, emit no path for an unmaterialized operation, and
+  name `source-lock-projection-gap` as the shared source-certification blocker.
+  TestRail must remain unavailable rather than becoming a zero-operation map.
+  The initial red run also proved that a missing `writes.json` is a meaningful
+  empty action set (PostHog), not a malformed connector or a license to infer
+  actions; the generator now makes that state explicit.
+- **Green:** `generate-declaration-first-cohort.mjs --check` now verifies the
+  checked-in machine map and human summary for 1,861 direct-write source rows:
+  Brex 49 (14 existing-schema CLI-bound), Zoho Books 579 (562), TestRail
+  unavailable, Amplitude 99 (12), and PostHog 1,134 (0). Every enumerable row
+  cites its exact source lock ID/location, reports only an already-declared
+  typed-action CLI path, records its connector-local lane, and carries the
+  same source-certification-only `source-lock-projection-gap`. The 1,273
+  remaining rows have no fabricated path or request contract.
+
 - The source lock carries `counts.total`, per-method and per-kind counts,
   source-document pins, and coverage basis. Dispositions use
   `operations_found`; no generated summary has `declared_percent`.
