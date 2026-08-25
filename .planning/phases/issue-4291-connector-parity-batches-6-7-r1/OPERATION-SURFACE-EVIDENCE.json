@@ -67226,18 +67226,20 @@
         "provider_version_evidence": "internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"records list\" binds pinned source operation zoho-bigin.rest.get.ModuleApiName11",
+        "contract": {
+          "execution_component": "internal/connectors/defs/zoho-bigin/streams.json stream \"records\"",
+          "transport_component": "internal/connectors/defs/zoho-bigin/sync_transport.json source_transport",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /{module_api_name}",
+          "citation_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+        },
         "api_surface_binding": {
           "stream": "records"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[11] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/get-records.html: displayed GET /{module_api_name}."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -67247,8 +67249,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_transport_declared",
+          "source_state": "enabled",
+          "execution_component": "streams.json:records"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -67260,9 +67263,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "records"
+            "stream": "records",
+            "path": "records list",
+            "source_cli_path": "GET /{module_api_name}"
           }
         }
       },
@@ -68457,18 +68462,20 @@
         "provider_version_evidence": "internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"notes list\" binds pinned source operation zoho-bigin.rest.get.Notes27",
+        "contract": {
+          "execution_component": "internal/connectors/defs/zoho-bigin/streams.json stream \"notes\"",
+          "transport_component": "internal/connectors/defs/zoho-bigin/sync_transport.json source_transport",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /Notes",
+          "citation_url": "https://www.bigin.com/developer/docs/apis/v2/get-notes.html"
+        },
         "api_surface_binding": {
           "stream": "notes"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[27] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/get-notes.html: displayed GET /Notes."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -68478,8 +68485,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_transport_declared",
+          "source_state": "enabled",
+          "execution_component": "streams.json:notes"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -68491,9 +68499,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "notes"
+            "stream": "notes",
+            "path": "notes list",
+            "source_cli_path": "GET /Notes"
           }
         }
       },
@@ -68841,18 +68851,20 @@
         "provider_version_evidence": "internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"fields list\" binds pinned source operation zoho-bigin.rest.get.SettingsFields32",
+        "contract": {
+          "execution_component": "internal/connectors/defs/zoho-bigin/streams.json stream \"fields\"",
+          "transport_component": "internal/connectors/defs/zoho-bigin/sync_transport.json source_transport",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /settings/fields",
+          "citation_url": "https://www.bigin.com/developer/docs/apis/v2/field-meta.html"
+        },
         "api_surface_binding": {
           "stream": "fields"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[32] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/field-meta.html: displayed GET /settings/fields."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -68862,8 +68874,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_transport_declared",
+          "source_state": "enabled",
+          "execution_component": "streams.json:fields"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -68875,9 +68888,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "fields"
+            "stream": "fields",
+            "path": "fields list",
+            "source_cli_path": "GET /settings/fields"
           }
         }
       },
@@ -68994,18 +69009,20 @@
         "provider_version_evidence": "internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"modules list\" binds pinned source operation zoho-bigin.rest.get.SettingsModules34",
+        "contract": {
+          "execution_component": "internal/connectors/defs/zoho-bigin/streams.json stream \"modules\"",
+          "transport_component": "internal/connectors/defs/zoho-bigin/sync_transport.json source_transport",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /settings/modules",
+          "citation_url": "https://www.bigin.com/developer/docs/apis/v2/use-access-token-api-request.html"
+        },
         "api_surface_binding": {
           "stream": "modules"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[34] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/use-access-token-api-request.html: displayed GET /settings/modules."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -69015,8 +69032,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_transport_declared",
+          "source_state": "enabled",
+          "execution_component": "streams.json:modules"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -69028,9 +69046,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "modules"
+            "stream": "modules",
+            "path": "modules list",
+            "source_cli_path": "GET /settings/modules"
           }
         }
       },
@@ -69378,18 +69398,20 @@
         "provider_version_evidence": "internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"tags list\" binds pinned source operation zoho-bigin.rest.get.SettingsTags39",
+        "contract": {
+          "execution_component": "internal/connectors/defs/zoho-bigin/streams.json stream \"tags\"",
+          "transport_component": "internal/connectors/defs/zoho-bigin/sync_transport.json source_transport",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /settings/tags",
+          "citation_url": "https://www.bigin.com/developer/docs/apis/v2/get-tag-list.html"
+        },
         "api_surface_binding": {
           "stream": "tags"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[39] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/get-tag-list.html: displayed GET /settings/tags."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -69399,8 +69421,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_transport_declared",
+          "source_state": "enabled",
+          "execution_component": "streams.json:tags"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -69412,9 +69435,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "tags"
+            "stream": "tags",
+            "path": "tags list",
+            "source_cli_path": "GET /settings/tags"
           }
         }
       },
@@ -69531,18 +69556,20 @@
         "provider_version_evidence": "internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: .rest.info_version"
       },
       "canonical_mapping": {
-        "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
-        "contract": null,
+        "source_state": "enabled",
+        "declaration_status": "enabled; runnable ETL command \"users list\" binds pinned source operation zoho-bigin.rest.get.Users41",
+        "contract": {
+          "execution_component": "internal/connectors/defs/zoho-bigin/streams.json stream \"users\"",
+          "transport_component": "internal/connectors/defs/zoho-bigin/sync_transport.json source_transport",
+          "source_document": "primary",
+          "source_kind": "rendered_reference",
+          "source_cli_path": "GET /users",
+          "citation_url": "https://www.bigin.com/developer/docs/apis/v2/get-users.html"
+        },
         "api_surface_binding": {
           "stream": "users"
         },
-        "rejection": {
-          "reason": "declaration-pending",
-          "recoverable": true,
-          "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[41] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/get-users.html: displayed GET /users."
-        }
+        "rejection": null
       },
       "surfaces": {
         "direct_read": {
@@ -69552,8 +69579,9 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "etl": {
-          "state": "source_transport_declared_or_pending",
-          "source_state": "disabled"
+          "state": "executable_stream_transport_declared",
+          "source_state": "enabled",
+          "execution_component": "streams.json:users"
         },
         "reverse_etl": {
           "state": "no_connector_owned_typed_action"
@@ -69565,9 +69593,11 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "generated_binding_present",
           "binding": {
-            "stream": "users"
+            "stream": "users",
+            "path": "users list",
+            "source_cli_path": "GET /users"
           }
         }
       },

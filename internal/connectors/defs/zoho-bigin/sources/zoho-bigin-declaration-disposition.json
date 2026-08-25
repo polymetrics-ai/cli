@@ -23,9 +23,9 @@
       "level": "complete_rendered_reference",
       "basis": "Retrieved every Bigin v2 reference page enumerated by the provider sitemap at https://www.bigin.com/sitemap.xml, including the separately hosted /bigin/bulk/v2 endpoint family; normalized regional host variants, illustrative module examples, and query parameter variants to provider endpoint templates."
     },
-    "enabled_operations": 6,
-    "enabled_percent": 8,
-    "disabled_operations": 69,
+    "enabled_operations": 12,
+    "enabled_percent": 16,
+    "disabled_operations": 63,
     "documented_deletes": 11,
     "enabled_deletes": 2,
     "parity_class_counts": [
@@ -56,13 +56,13 @@
     ],
     "stream_bindings": 6,
     "writes_actions": 6,
-    "terminal_commands": 6,
+    "terminal_commands": 12,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 69
+        "count": 63
       }
     ],
     "transport": {
@@ -83,22 +83,17 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-zoho-bigin",
       "typed-operation-contract-zoho-bigin"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-zoho-bigin",
-        "count": 6
-      },
       {
         "id": "typed-operation-contract-zoho-bigin",
         "count": 63
       }
     ],
-    "runnable_cli_surface_commands": 6,
+    "runnable_cli_surface_commands": 12,
     "typed_write_actions": 6,
-    "endpoint_bound_cli_commands": 6,
+    "endpoint_bound_cli_commands": 12,
     "endpoint_bound_typed_write_actions": 6
   },
   "ledger_dispositions": [
@@ -670,25 +665,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-zoho-bigin",
-          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[11] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/get-records.html: displayed GET /{module_api_name}.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/zoho-bigin/cli_surface.json: implemented ETL command \"records list\" binds GET /{module_api_name}; streams.json stream \"records\" and sync_transport.json source transport are declared execution components; the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[11] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/get-records.html: displayed GET /{module_api_name}."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
-        "contract": null
+        "status": "enabled; runnable ETL command \"records list\" binds pinned source operation zoho-bigin.rest.get.ModuleApiName11",
+        "command": {
+          "path": "records list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /{module_api_name}",
+          "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declared",
+            "evidence": "internal/connectors/defs/zoho-bigin/sync_transport.json declares declarative_stream_source eligibility for stream \"records\" with keyed source delivery and declarative_stream_transport/zoho_bigin_fixture_source_v1 conformance."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.bigin.com/sitemap.xml",
+          "citation_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+        }
       }
     },
     {
@@ -1386,25 +1389,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-zoho-bigin",
-          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[27] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/get-notes.html: displayed GET /Notes.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/zoho-bigin/cli_surface.json: implemented ETL command \"notes list\" binds GET /Notes; streams.json stream \"notes\" and sync_transport.json source transport are declared execution components; the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[27] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/get-notes.html: displayed GET /Notes."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
-        "contract": null
+        "status": "enabled; runnable ETL command \"notes list\" binds pinned source operation zoho-bigin.rest.get.Notes27",
+        "command": {
+          "path": "notes list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /Notes",
+          "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-notes.html"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declared",
+            "evidence": "internal/connectors/defs/zoho-bigin/sync_transport.json declares declarative_stream_source eligibility for stream \"notes\" with keyed source delivery and declarative_stream_transport/zoho_bigin_fixture_source_v1 conformance."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.bigin.com/sitemap.xml",
+          "citation_url": "https://www.bigin.com/developer/docs/apis/v2/get-notes.html"
+        }
       }
     },
     {
@@ -1607,25 +1618,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-zoho-bigin",
-          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[32] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/field-meta.html: displayed GET /settings/fields.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/zoho-bigin/cli_surface.json: implemented ETL command \"fields list\" binds GET /settings/fields; streams.json stream \"fields\" and sync_transport.json source transport are declared execution components; the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[32] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/field-meta.html: displayed GET /settings/fields."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
-        "contract": null
+        "status": "enabled; runnable ETL command \"fields list\" binds pinned source operation zoho-bigin.rest.get.SettingsFields32",
+        "command": {
+          "path": "fields list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /settings/fields",
+          "source_url": "https://www.bigin.com/developer/docs/apis/v2/field-meta.html"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declared",
+            "evidence": "internal/connectors/defs/zoho-bigin/sync_transport.json declares declarative_stream_source eligibility for stream \"fields\" with keyed source delivery and declarative_stream_transport/zoho_bigin_fixture_source_v1 conformance."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.bigin.com/sitemap.xml",
+          "citation_url": "https://www.bigin.com/developer/docs/apis/v2/field-meta.html"
+        }
       }
     },
     {
@@ -1693,25 +1712,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-zoho-bigin",
-          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[34] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/use-access-token-api-request.html: displayed GET /settings/modules.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/zoho-bigin/cli_surface.json: implemented ETL command \"modules list\" binds GET /settings/modules; streams.json stream \"modules\" and sync_transport.json source transport are declared execution components; the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[34] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/use-access-token-api-request.html: displayed GET /settings/modules."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
-        "contract": null
+        "status": "enabled; runnable ETL command \"modules list\" binds pinned source operation zoho-bigin.rest.get.SettingsModules34",
+        "command": {
+          "path": "modules list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /settings/modules",
+          "source_url": "https://www.bigin.com/developer/docs/apis/v2/use-access-token-api-request.html"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declared",
+            "evidence": "internal/connectors/defs/zoho-bigin/sync_transport.json declares declarative_stream_source eligibility for stream \"modules\" with keyed source delivery and declarative_stream_transport/zoho_bigin_fixture_source_v1 conformance."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.bigin.com/sitemap.xml",
+          "citation_url": "https://www.bigin.com/developer/docs/apis/v2/use-access-token-api-request.html"
+        }
       }
     },
     {
@@ -1914,25 +1941,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-zoho-bigin",
-          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[39] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/get-tag-list.html: displayed GET /settings/tags.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/zoho-bigin/cli_surface.json: implemented ETL command \"tags list\" binds GET /settings/tags; streams.json stream \"tags\" and sync_transport.json source transport are declared execution components; the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[39] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/get-tag-list.html: displayed GET /settings/tags."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
-        "contract": null
+        "status": "enabled; runnable ETL command \"tags list\" binds pinned source operation zoho-bigin.rest.get.SettingsTags39",
+        "command": {
+          "path": "tags list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /settings/tags",
+          "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-tag-list.html"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declared",
+            "evidence": "internal/connectors/defs/zoho-bigin/sync_transport.json declares declarative_stream_source eligibility for stream \"tags\" with keyed source delivery and declarative_stream_transport/zoho_bigin_fixture_source_v1 conformance."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.bigin.com/sitemap.xml",
+          "citation_url": "https://www.bigin.com/developer/docs/apis/v2/get-tag-list.html"
+        }
       }
     },
     {
@@ -2000,25 +2035,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-zoho-bigin",
-          "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[41] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/get-users.html: displayed GET /users.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/zoho-bigin/cli_surface.json: implemented ETL command \"users list\" binds GET /users; streams.json stream \"users\" and sync_transport.json source transport are declared execution components; the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/zoho-bigin/api_surface.json endpoints[41] is bound to the pinned provider operation; internal/connectors/defs/zoho-bigin/sources/zoho-bigin-operation-source-lock.json: https://www.bigin.com/developer/docs/apis/v2/get-users.html: displayed GET /users."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-zoho-bigin",
-        "contract": null
+        "status": "enabled; runnable ETL command \"users list\" binds pinned source operation zoho-bigin.rest.get.Users41",
+        "command": {
+          "path": "users list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /users",
+          "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-users.html"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declared",
+            "evidence": "internal/connectors/defs/zoho-bigin/sync_transport.json declares declarative_stream_source eligibility for stream \"users\" with keyed source delivery and declarative_stream_transport/zoho_bigin_fixture_source_v1 conformance."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://www.bigin.com/sitemap.xml",
+          "citation_url": "https://www.bigin.com/developer/docs/apis/v2/get-users.html"
+        }
       }
     },
     {
@@ -3669,6 +3712,7 @@
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
     "Direct writes remain direct_write operations. Reverse-ETL eligibility is a separate attribute and remains foundation-gapped because destination execution is GitHub issue-label bound.",
     "2026-08-20 reconciliation: source transport declares all 13 streams; delete_record is an exact destructive typed-destination proof and remains confirmation/approval governed. Every other typed action is explicitly eligible pending closed exact-action selection. Direct writes without typed actions are declaration-pending, not foundation or safety gaps.",
-    "2026-08-25 typed write CLI materialization: 6 source-backed action commands are installed with writes.json-owned input/method/path contracts; 0 actions remain explicit CLI declaration-pending because their record field contract cannot be represented faithfully by the established command flag vocabulary."
+    "2026-08-25 typed write CLI materialization: 6 source-backed action commands are installed with writes.json-owned input/method/path contracts; 0 actions remain explicit CLI declaration-pending because their record field contract cannot be represented faithfully by the established command flag vocabulary.",
+    "2026-08-26 source-bound ETL command materialization: enabled six distinct provider GET operations. The generic /{module_api_name} operation is represented once as records list; its configured-module aliases are not separate provider operations. Every command retains a source ID, rendered citation, route, streams.json execution component, and declared source transport."
   ]
 }

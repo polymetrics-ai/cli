@@ -172,17 +172,6 @@
     },
     {
       "method": "GET",
-      "path": "/{module_api_name}",
-      "provenance": {
-        "artifact": "zoho-bigin-v2-rendered-reference-2026-08-19",
-        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
-      },
-      "covered_by": {
-        "stream": "records"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/{module_api_name}/{contact_id}/{module_api_name}",
       "provenance": {
         "artifact": "zoho-bigin-v2-rendered-reference-2026-08-19",
@@ -1165,6 +1154,17 @@
       },
       "covered_by": {
         "stream": "calls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{module_api_name}",
+      "provenance": {
+        "artifact": "zoho-bigin-v2-rendered-reference-2026-08-19",
+        "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html"
+      },
+      "covered_by": {
+        "stream": "records"
       }
     }
   ]

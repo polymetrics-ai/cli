@@ -1,10 +1,10 @@
 {
-  "tagline": "Run zoho-bigin source-backed typed write plans.",
+  "tagline": "Read Zoho Bigin source-locked ETL records and run typed write plans.",
   "usage": "pm zoho-bigin <command> [flags]",
   "source_cli": {
-    "name": "zoho-bigin provider API",
-    "docs": "https://www.bigin.com/developer/docs/apis/v2/delete-records.html",
-    "reference": "Pinned source-disposition citations and connector-owned typed write contracts.",
+    "name": "Zoho Bigin provider API",
+    "docs": "https://www.bigin.com/developer/docs/apis/v2/get-records.html",
+    "reference": "Pinned rendered-reference source citations, stream declarations, and connector-owned typed write contracts.",
     "source": "provider_api"
   },
   "groups": [
@@ -18,6 +18,18 @@
         "delete record apply",
         "create note apply",
         "delete note apply"
+      ]
+    },
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "records",
+        "notes",
+        "fields",
+        "modules",
+        "tags",
+        "users"
       ]
     }
   ],
@@ -41,6 +53,11 @@
       "name": "json",
       "type": "boolean",
       "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
     }
   ],
   "commands": [
@@ -185,6 +202,101 @@
       "notes": "Pinned source operation zoho-bigin.rest.delete.ModuleApiNameRecordId1; writes.json action delete_record is the declared method/path/body execution component."
     },
     {
+      "path": "fields list",
+      "summary": "Read Fields as Zoho Bigin ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fields",
+      "source_cli_path": "GET /settings/fields",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/field-meta.html",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/fields"
+        }
+      ],
+      "examples": [
+        "pm zoho-bigin fields list --json"
+      ],
+      "notes": "Pinned source operation zoho-bigin.rest.get.SettingsFields32 from rendered source document primary; streams.json stream \"fields\" is the declared execution component."
+    },
+    {
+      "path": "modules list",
+      "summary": "Read Modules as Zoho Bigin ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "modules",
+      "source_cli_path": "GET /settings/modules",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/use-access-token-api-request.html",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/modules"
+        }
+      ],
+      "examples": [
+        "pm zoho-bigin modules list --json"
+      ],
+      "notes": "Pinned source operation zoho-bigin.rest.get.SettingsModules34 from rendered source document primary; streams.json stream \"modules\" is the declared execution component."
+    },
+    {
+      "path": "notes list",
+      "summary": "Read Notes as Zoho Bigin ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notes",
+      "source_cli_path": "GET /Notes",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-notes.html",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Notes"
+        }
+      ],
+      "examples": [
+        "pm zoho-bigin notes list --json"
+      ],
+      "notes": "Pinned source operation zoho-bigin.rest.get.Notes27 from rendered source document primary; streams.json stream \"notes\" is the declared execution component."
+    },
+    {
+      "path": "records list",
+      "summary": "Read Records as Zoho Bigin ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "records",
+      "source_cli_path": "GET /{module_api_name}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-records.html",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{module_api_name}"
+        }
+      ],
+      "examples": [
+        "pm zoho-bigin records list --json"
+      ],
+      "notes": "Pinned source operation zoho-bigin.rest.get.ModuleApiName11 from rendered source document primary; streams.json stream \"records\" is the declared execution component."
+    },
+    {
+      "path": "tags list",
+      "summary": "Read Tags as Zoho Bigin ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_cli_path": "GET /settings/tags",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-tag-list.html",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/settings/tags"
+        }
+      ],
+      "examples": [
+        "pm zoho-bigin tags list --json"
+      ],
+      "notes": "Pinned source operation zoho-bigin.rest.get.SettingsTags39 from rendered source document primary; streams.json stream \"tags\" is the declared execution component."
+    },
+    {
       "path": "update record apply",
       "summary": "Plan and execute the typed update record write action.",
       "intent": "reverse_etl",
@@ -261,6 +373,25 @@
         "pm zoho-bigin upsert record apply --json"
       ],
       "notes": "Pinned source operation zoho-bigin.rest.post.ModuleApiNameUpsert54; writes.json action upsert_record is the declared method/path/body execution component."
+    },
+    {
+      "path": "users list",
+      "summary": "Read Users as Zoho Bigin ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_cli_path": "GET /users",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/get-users.html",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "examples": [
+        "pm zoho-bigin users list --json"
+      ],
+      "notes": "Pinned source operation zoho-bigin.rest.get.Users41 from rendered source document primary; streams.json stream \"users\" is the declared execution component."
     }
   ]
 }

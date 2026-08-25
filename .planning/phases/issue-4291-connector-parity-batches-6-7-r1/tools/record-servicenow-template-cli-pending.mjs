@@ -12,6 +12,7 @@ const root = resolve(phase, "../../..");
 const connector = "service-now";
 const source = "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html";
 const file = resolve(root, "internal/connectors/defs", connector, "sources", `${connector}-declaration-disposition.json`);
+const apiFile = resolve(root, "internal/connectors/defs", connector, "api_surface.json");
 const evidenceFile = resolve(phase, "OPERATION-SURFACE-EVIDENCE.json");
 
 const pending = new Map([
@@ -76,6 +77,36 @@ disposition.notes = [
 ];
 await writeJSON(file, disposition);
 
+// One public Table API template may back the existing incident, user, and
+// group contracts. The plural coverage form is the canonical representation:
+// duplicate method/path rows collapse neither a provider operation nor any
+// typed action, while the CLI safety map can see every valid action.
+const apiSurface = await readJSON(apiFile);
+const sharedTemplateWrites = new Map([
+  ["POST /api/now/table/{table_name}", ["create_incident", "create_user", "create_group"]],
+  ["PATCH /api/now/table/{table_name}/{sys_id}", ["update_incident", "update_user", "update_group"]],
+]);
+for (const [key, targets] of sharedTemplateWrites) {
+  const [method, path] = key.split(" ");
+  const matching = apiSurface.endpoints.filter((endpoint) => endpoint.method === method && endpoint.path === path);
+  const observed = matching.map((endpoint) => endpoint.covered_by?.write).sort();
+  if (matching.length !== targets.length || JSON.stringify(observed) !== JSON.stringify([...targets].sort())) {
+    throw new Error(`${connector}:${key}: expected exactly the source-bound write projections ${targets.join(", ")}`);
+  }
+  const canonical = {
+    ...matching[0],
+    covered_by: { writes: targets },
+  };
+  let emitted = false;
+  apiSurface.endpoints = apiSurface.endpoints.flatMap((endpoint) => {
+    if (endpoint.method !== method || endpoint.path !== path) return [endpoint];
+    if (emitted) return [];
+    emitted = true;
+    return [canonical];
+  });
+}
+await writeJSON(apiFile, apiSurface);
+
 const evidence = await readJSON(evidenceFile);
 let evidenceChanged = 0;
 for (const row of evidence.rows) {
@@ -98,4 +129,4 @@ for (const row of evidence.rows) {
 if (evidenceChanged !== pending.size) throw new Error(`updated ${evidenceChanged} operation-evidence rows, expected ${pending.size}`);
 await writeJSON(evidenceFile, evidence);
 
-console.log(`recorded ${changed} ServiceNow fixed-template CLI declaration-pending rows`);
+console.log(`recorded ${changed} ServiceNow fixed-template CLI declaration-pending rows and normalized two shared template projections`);

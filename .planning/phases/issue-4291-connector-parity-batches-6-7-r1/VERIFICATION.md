@@ -645,6 +645,31 @@ foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
   connector declaration work rather than a foundation gap.
 - **No false command:** no CLI surface, schema, body, pagination, or provider call was fabricated. The
   source-disposition and operation-evidence assertions pass with `git diff --check`.
+
+## Zoho Bigin source-bound ETL cohort — 2026-08-26
+
+- **RED:** `pm zoho-bigin records list --json` was an unknown command even though six exact provider GET
+  operations had a source disposition row, an API-surface stream projection, an existing declared stream,
+  and a declared `declarative_stream_source` transport. The generic module route also has seven legacy
+  configured-module stream aliases; treating those aliases as extra source operations would inflate the
+  provider inventory.
+- **GREEN:** the installed surface now exposes exactly `records`, `notes`, `fields`, `modules`, `tags`, and
+  `users` list commands. Each is bound to its unique rendered-reference source operation/citation and its
+  `streams.json` stream. `records list` is the single command for documented `GET /{module_api_name}`;
+  configured module aliases remain existing stream projections only.
+- **Installed binary proof:** `go build -o /tmp/cli-map-batch67-r1-bigin-etl-proof ./cmd/pm` passed. In a
+  fresh initialized project, all six commands exited `1` with exactly `error: missing --credential` before
+  provider I/O. `TestEveryImplementedCommandPassesRuntimePreflight`,
+  `npm --prefix website run gen:website-data`, a six-row disposition/OPE assertion, and `git diff --check`
+  passed.
+- **Projection normalization:** Bigin keeps all eight existing generic-route stream projections but places
+  the canonical source-bound `records` projection last for the method/path safety lookup. ServiceNow's one
+  POST and one PATCH public template now use `covered_by.writes` for their incident/user/group typed actions;
+  this removes duplicate endpoint masking without changing a source operation or inventing a table schema.
+- **Known shared block:** `go run ./cmd/connectorgen validate` now reports exactly 20 source-projection
+  findings: 19 missing schema-v3 descriptors plus Outreach's legacy per-operation `source_url` parser
+  rejection. `surface-sync --check` stops at the same absent shared descriptor reader. No connector-local
+  workaround was introduced.
 # Stale typed-destination gap reconciliation — increment 1 (2026-08-20)
 
 - **RED:** The operation-evidence ledger exposed 1,111 direct-write rows that still named

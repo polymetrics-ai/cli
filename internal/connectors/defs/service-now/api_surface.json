@@ -47,7 +47,11 @@
         "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
       },
       "covered_by": {
-        "write": "create_incident"
+        "writes": [
+          "create_incident",
+          "create_user",
+          "create_group"
+        ]
       }
     },
     {
@@ -73,7 +77,11 @@
         "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
       },
       "covered_by": {
-        "write": "update_incident"
+        "writes": [
+          "update_incident",
+          "update_user",
+          "update_group"
+        ]
       }
     },
     {
@@ -107,50 +115,6 @@
       "path": "/api/now/table/{table_name}",
       "covered_by": {
         "stream": "groups"
-      },
-      "provenance": {
-        "artifact": "servicenow-zurich-table-api-2026-08-19",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/now/table/{table_name}",
-      "covered_by": {
-        "write": "create_user"
-      },
-      "provenance": {
-        "artifact": "servicenow-zurich-table-api-2026-08-19",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/now/table/{table_name}",
-      "covered_by": {
-        "write": "create_group"
-      },
-      "provenance": {
-        "artifact": "servicenow-zurich-table-api-2026-08-19",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/api/now/table/{table_name}/{sys_id}",
-      "covered_by": {
-        "write": "update_user"
-      },
-      "provenance": {
-        "artifact": "servicenow-zurich-table-api-2026-08-19",
-        "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/api/now/table/{table_name}/{sys_id}",
-      "covered_by": {
-        "write": "update_group"
       },
       "provenance": {
         "artifact": "servicenow-zurich-table-api-2026-08-19",

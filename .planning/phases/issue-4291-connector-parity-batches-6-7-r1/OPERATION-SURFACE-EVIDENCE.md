@@ -154,3 +154,17 @@ Copper's five source-backed search operations now explicitly state their intende
 legacy-hook-to-POST-stream execution component. The declared engine supports the needed method/body shape;
 the missing public request-body/query contract belongs in connector JSON. The rows remain
 `declaration-pending`, not `foundation-gap`, and no false GET command or API boundary expansion is present.
+
+## Increment 13 — Zoho Bigin source-bound ETL reachability
+
+Six exact source operations are now binary-reachable Bigin ETL commands: generic records, notes, fields,
+modules, tags, and users. The `GET /{module_api_name}` provider operation appears once as `records list`;
+the seven configured-module stream aliases remain legacy execution projections rather than invented source
+operations or extra CLI declarations. Every command retains its source ID, rendered-reference citation,
+method/path, stream binding, and declared source transport.
+
+Bigin's duplicate generic-route stream projections retain conformance coverage while the canonical records
+projection is the method/path safety target. ServiceNow's shared public POST/PATCH templates now declare
+their existing incident/user/group action contracts through `covered_by.writes`, which is the engine's
+explicit multi-action representation. The correction removes projection masking without changing a provider
+route, adding a generic executor, or inferring a customer-specific table schema.
