@@ -86,6 +86,27 @@ The built baseline binary returned `error: unknown command "circleci"` (exit
   interim stale operation references were removed because they named no
   operation executor; no local executor was introduced.
 
+## Current connector slice (2026-08-25, CircleCI reconciliation)
+
+- Target: 24 current CircleCI direct-write commands already marked
+  `availability: implemented` and bound to complete actions. The source
+  importer verifies all 111 operations and targeted validation returns zero
+  findings.
+- Scope: correct only their independent manifest classification after the
+  table-driven runtime preflight and binary evidence establish that the
+  existing command/action/source endpoint triples are real. Do not modify
+  CircleCI connector JSON in this reconciliation.
+- Outcome: `source-import circleci --check` verified 111 operations and
+  targeted validation returned zero findings. The table-driven runtime test
+  passes all 24 source ID / CLI path / action / method / endpoint tuples, and
+  a built binary in an isolated credential-free project returned exactly
+  `error: missing --credential` for every one. The red evidence corrected the
+  recorded action spelling to `remove_u_r_l_orb_allow_list_entry`; no CircleCI
+  declaration, source lock, executor, or secret-input policy was changed.
+- Manifest result: CircleCI is now `40 runnable / 51 declarable / 20 deferred`;
+  Batch 1 is `813 runnable / 1,618 declarable / 1,910 deferred` over the same
+  4,341 source operations. The 51 reservations and 20 genuine gaps remain.
+
 ## Jira red evidence
 
 - `go run ./cmd/connectorgen source-import jira --check` exited 1 because the

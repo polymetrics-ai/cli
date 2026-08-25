@@ -1,6 +1,6 @@
 {
   "invariants": {
-    "declarable": 1642,
+    "declarable": 1618,
     "deferred": 1910,
     "deferred_has_exactly_one_concrete_missing_component": true,
     "every_record_has_cli_path": true,
@@ -16,7 +16,7 @@
       "retained_bytes",
       "live_certification"
     ],
-    "runnable": 789,
+    "runnable": 813,
     "same_path_promotion": "implemented reaches the credential boundary; deferred returns typed missing_foundation; after the named component exists, the same path and arguments reach the credential boundary",
     "source_operations": 4341,
     "zero_denominator_forbidden": true
@@ -58,10 +58,10 @@
       "source_operations": 1752
     },
     {
-      "declarable": 75,
+      "declarable": 51,
       "deferred": 20,
       "provider": "circleci",
-      "runnable": 16,
+      "runnable": 40,
       "source_operations": 111
     },
     {
@@ -135,10 +135,10 @@
       "source_operations": 1752
     },
     {
-      "current_nonrunnable_surface": 24,
+      "current_nonrunnable_surface": 0,
       "declaration_disposition_only": 0,
       "manifest_reservation_only": 71,
-      "materialized_runnable": 16,
+      "materialized_runnable": 40,
       "provider": "circleci",
       "source_operations": 111
     },
@@ -111584,24 +111584,14 @@
         },
         "operation_key": "rest:delete:/org/{orgID}/oidc-custom-claims"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "delete org claims apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/org/{orgID}/oidc-custom-claims\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.DeleteOrgClaims",
       "source": {
@@ -111625,24 +111615,14 @@
         },
         "operation_key": "rest:delete:/org/{orgID}/project/{projectID}/oidc-custom-claims"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "delete project claims apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/org/{orgID}/project/{projectID}/oidc-custom-claims\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.DeleteProjectClaims",
       "source": {
@@ -112158,24 +112138,14 @@
         },
         "operation_key": "rest:put:/context/{context_id}/environment-variable/{env_var_name}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "add environment variable to context apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/context/{context_id}/environment-variable/{env_var_name}\"].put.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.addEnvironmentVariableToContext",
       "source": {
@@ -112199,24 +112169,14 @@
         },
         "operation_key": "rest:post:/workflow/{id}/approve/{approval_request_id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "approve pending approval job by id apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/workflow/{id}/approve/{approval_request_id}\"].post.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.approvePendingApprovalJobById",
       "source": {
@@ -112240,24 +112200,14 @@
         },
         "operation_key": "rest:post:/jobs/{job-id}/cancel"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "cancel job by job i d apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/jobs/{job-id}/cancel\"].post.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.cancelJobByJobID",
       "source": {
@@ -112322,24 +112272,14 @@
         },
         "operation_key": "rest:post:/workflow/{id}/cancel"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "cancel workflow apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/workflow/{id}/cancel\"].post.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.cancelWorkflow",
       "source": {
@@ -112476,24 +112416,14 @@
         },
         "operation_key": "rest:post:/context/{context_id}/restrictions"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "create context restriction apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/context/{context_id}/restrictions\"].post.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.createContextRestriction",
       "source": {
@@ -112589,24 +112519,14 @@
         },
         "operation_key": "rest:post:/organizations/{org_id}/groups"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "create organization group apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/organizations/{org_id}/groups\"].post.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.createOrganizationGroup",
       "source": {
@@ -112866,24 +112786,14 @@
         },
         "operation_key": "rest:post:/organizations/{org_id}/usage_export_job"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "create usage export apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/organizations/{org_id}/usage_export_job\"].post.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.createUsageExport",
       "source": {
@@ -112907,24 +112817,14 @@
         },
         "operation_key": "rest:post:/webhook"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "create webhook apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/webhook\"].post.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.createWebhook",
       "source": {
@@ -112979,24 +112879,14 @@
         },
         "operation_key": "rest:delete:/context/{context_id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "delete context apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/context/{context_id}\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.deleteContext",
       "source": {
@@ -113020,24 +112910,14 @@
         },
         "operation_key": "rest:delete:/context/{context_id}/restrictions/{restriction_id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "delete context restriction apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/context/{context_id}/restrictions/{restriction_id}\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.deleteContextRestriction",
       "source": {
@@ -113092,24 +112972,14 @@
         },
         "operation_key": "rest:delete:/context/{context_id}/environment-variable/{env_var_name}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "delete environment variable from context apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/context/{context_id}/environment-variable/{env_var_name}\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.deleteEnvironmentVariableFromContext",
       "source": {
@@ -113133,24 +113003,14 @@
         },
         "operation_key": "rest:delete:/organizations/{org_id}/groups/{group_id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "delete group apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/organizations/{org_id}/groups/{group_id}\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.deleteGroup",
       "source": {
@@ -113174,24 +113034,14 @@
         },
         "operation_key": "rest:delete:/organization/{org-slug-or-id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "delete organization apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/organization/{org-slug-or-id}\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.deleteOrganization",
       "source": {
@@ -113215,24 +113065,14 @@
         },
         "operation_key": "rest:delete:/otel/exporters/{otel_exporter_id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "delete otel exporter apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/otel/exporters/{otel_exporter_id}\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.deleteOtelExporter",
       "source": {
@@ -113256,24 +113096,14 @@
         },
         "operation_key": "rest:delete:/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "delete pipeline definition apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.deletePipelineDefinition",
       "source": {
@@ -113297,24 +113127,14 @@
         },
         "operation_key": "rest:delete:/project/{project-slug}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "delete project by slug apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/project/{project-slug}\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.deleteProjectBySlug",
       "source": {
@@ -113369,24 +113189,14 @@
         },
         "operation_key": "rest:delete:/projects/{project_id}/triggers/{trigger_id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "delete trigger apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/projects/{project_id}/triggers/{trigger_id}\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.deleteTrigger",
       "source": {
@@ -113410,24 +113220,14 @@
         },
         "operation_key": "rest:delete:/webhook/{webhook_id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "delete webhook apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/webhook/{webhook_id}\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.deleteWebhook",
       "source": {
@@ -115534,24 +115334,14 @@
         },
         "operation_key": "rest:patch:/project/{provider}/{organization}/{project}/settings"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "patch project settings apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/project/{provider}/{organization}/{project}/settings\"].patch.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.patchProjectSettings",
       "source": {
@@ -115575,24 +115365,14 @@
         },
         "operation_key": "rest:delete:/organization/{org-slug-or-id}/url-orb-allow-list/{allow-list-entry-id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "remove u r l orb allow list entry apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/organization/{org-slug-or-id}/url-orb-allow-list/{allow-list-entry-id}\"].delete.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.removeURLOrbAllowListEntry",
       "source": {
@@ -115780,24 +115560,14 @@
         },
         "operation_key": "rest:patch:/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "update pipeline definition apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}\"].patch.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.updatePipelineDefinition",
       "source": {
@@ -115893,24 +115663,14 @@
         },
         "operation_key": "rest:put:/webhook/{webhook_id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "update webhook apply",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/circleci/cli_surface.json is absent. internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json: paths paths[\"/webhook/{webhook_id}\"].put.",
-        "foundation": "cli-surface-missing-circleci",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "circleci",
       "record_key": "circleci:circleci.rest.updateWebhook",
       "source": {

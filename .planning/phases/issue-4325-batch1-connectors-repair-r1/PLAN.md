@@ -313,3 +313,31 @@ only input authority:
   generated paths—pass real preflight. The only post-import Asana validation
   findings are the unchanged 24 source-bound request-schema gaps on other
   implemented operations.
+
+## CircleCI mapping reconciliation cohort (2026-08-25)
+
+This is a ledger correction, not a new command surface. Current CircleCI
+source import verifies all 111 source operations and targeted validation has
+zero findings. The manifest nevertheless marks 24 existing
+`current_cli_surface` direct-write commands as declarable/action-binding even
+though their CLI entries are `implemented`, each names a complete write action,
+and the action method/path equals its pinned source operation.
+
+- **Red:** the source-to-manifest reconciliation reports 24 rows where the
+  manifest says `declarable` but the existing command/action/endpoint triple
+  is complete. The prior manifest count (`16 runnable / 75 declarable / 20
+  deferred`) therefore understates what actually runs.
+- **Green:** a table-driven real-preflight regression covers all 24 exact
+  source ID / CLI path / write action / method/path tuples. Only after that
+  passes, promote those existing rows to runnable and make one new canonical
+  denominator split. No CircleCI JSON contract, source lock, action, flag, or
+  executor is invented or altered in this cohort.
+- **Boundary:** keep the 51 manifest-reserved CLI projections and 20 genuine
+  gaps deferred. The secret-input foundation remains unrelated to these 24
+  already executable commands and is not bypassed.
+- **Green result:** the focused `commandrunner` regression passes all 24
+  tuples; an isolated built binary returns exactly `error: missing
+  --credential` for all 24. Its red run corrected the evidence-only action
+  spelling for `removeURLOrbAllowListEntry` to
+  `remove_u_r_l_orb_allow_list_entry`. The manifest moves the 24 rows to
+  runnable without changing CircleCI JSON, a source lock, or an executor.

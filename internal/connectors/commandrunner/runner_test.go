@@ -4220,6 +4220,117 @@ func TestAsanaSourceCitedNoBodyMutationCommandsPassRuntimePreflight(t *testing.T
 	}
 }
 
+// TestCircleCISourceCitedImplementedWriteCommandsPassRuntimePreflight keeps the
+// Batch 1 ledger tied to behavior: these source operations already have an
+// implemented CLI path, the exact named declarative action, and the source
+// endpoint. Preflight is deliberately the runtime path, rather than a second
+// copy of its admission rules in the mapping ledger.
+func TestCircleCISourceCitedImplementedWriteCommandsPassRuntimePreflight(t *testing.T) {
+	type mutation struct {
+		sourceID   string
+		command    string
+		action     string
+		method     string
+		sourcePath string
+	}
+	mutations := []mutation{
+		{sourceID: "DeleteOrgClaims", command: "delete org claims apply", action: "delete_org_claims", method: http.MethodDelete, sourcePath: "/org/{orgID}/oidc-custom-claims"},
+		{sourceID: "DeleteProjectClaims", command: "delete project claims apply", action: "delete_project_claims", method: http.MethodDelete, sourcePath: "/org/{orgID}/project/{projectID}/oidc-custom-claims"},
+		{sourceID: "addEnvironmentVariableToContext", command: "add environment variable to context apply", action: "add_environment_variable_to_context", method: http.MethodPut, sourcePath: "/context/{context_id}/environment-variable/{env_var_name}"},
+		{sourceID: "approvePendingApprovalJobById", command: "approve pending approval job by id apply", action: "approve_pending_approval_job_by_id", method: http.MethodPost, sourcePath: "/workflow/{id}/approve/{approval_request_id}"},
+		{sourceID: "cancelJobByJobID", command: "cancel job by job i d apply", action: "cancel_job_by_job_i_d", method: http.MethodPost, sourcePath: "/jobs/{job-id}/cancel"},
+		{sourceID: "cancelWorkflow", command: "cancel workflow apply", action: "cancel_workflow", method: http.MethodPost, sourcePath: "/workflow/{id}/cancel"},
+		{sourceID: "createContextRestriction", command: "create context restriction apply", action: "create_context_restriction", method: http.MethodPost, sourcePath: "/context/{context_id}/restrictions"},
+		{sourceID: "createOrganizationGroup", command: "create organization group apply", action: "create_organization_group", method: http.MethodPost, sourcePath: "/organizations/{org_id}/groups"},
+		{sourceID: "createUsageExport", command: "create usage export apply", action: "create_usage_export", method: http.MethodPost, sourcePath: "/organizations/{org_id}/usage_export_job"},
+		{sourceID: "createWebhook", command: "create webhook apply", action: "create_webhook", method: http.MethodPost, sourcePath: "/webhook"},
+		{sourceID: "deleteContext", command: "delete context apply", action: "delete_context", method: http.MethodDelete, sourcePath: "/context/{context_id}"},
+		{sourceID: "deleteContextRestriction", command: "delete context restriction apply", action: "delete_context_restriction", method: http.MethodDelete, sourcePath: "/context/{context_id}/restrictions/{restriction_id}"},
+		{sourceID: "deleteEnvironmentVariableFromContext", command: "delete environment variable from context apply", action: "delete_environment_variable_from_context", method: http.MethodDelete, sourcePath: "/context/{context_id}/environment-variable/{env_var_name}"},
+		{sourceID: "deleteGroup", command: "delete group apply", action: "delete_group", method: http.MethodDelete, sourcePath: "/organizations/{org_id}/groups/{group_id}"},
+		{sourceID: "deleteOrganization", command: "delete organization apply", action: "delete_organization", method: http.MethodDelete, sourcePath: "/organization/{org-slug-or-id}"},
+		{sourceID: "deleteOtelExporter", command: "delete otel exporter apply", action: "delete_otel_exporter", method: http.MethodDelete, sourcePath: "/otel/exporters/{otel_exporter_id}"},
+		{sourceID: "deletePipelineDefinition", command: "delete pipeline definition apply", action: "delete_pipeline_definition", method: http.MethodDelete, sourcePath: "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}"},
+		{sourceID: "deleteProjectBySlug", command: "delete project by slug apply", action: "delete_project_by_slug", method: http.MethodDelete, sourcePath: "/project/{project-slug}"},
+		{sourceID: "deleteTrigger", command: "delete trigger apply", action: "delete_trigger", method: http.MethodDelete, sourcePath: "/projects/{project_id}/triggers/{trigger_id}"},
+		{sourceID: "deleteWebhook", command: "delete webhook apply", action: "delete_webhook", method: http.MethodDelete, sourcePath: "/webhook/{webhook_id}"},
+		{sourceID: "patchProjectSettings", command: "patch project settings apply", action: "patch_project_settings", method: http.MethodPatch, sourcePath: "/project/{provider}/{organization}/{project}/settings"},
+		{sourceID: "removeURLOrbAllowListEntry", command: "remove u r l orb allow list entry apply", action: "remove_u_r_l_orb_allow_list_entry", method: http.MethodDelete, sourcePath: "/organization/{org-slug-or-id}/url-orb-allow-list/{allow-list-entry-id}"},
+		{sourceID: "updatePipelineDefinition", command: "update pipeline definition apply", action: "update_pipeline_definition", method: http.MethodPatch, sourcePath: "/projects/{project_id}/pipeline-definitions/{pipeline_definition_id}"},
+		{sourceID: "updateWebhook", command: "update webhook apply", action: "update_webhook", method: http.MethodPut, sourcePath: "/webhook/{webhook_id}"},
+	}
+
+	registry := bundleregistry.New()
+	connector, ok := registry.Get("circleci")
+	if !ok {
+		t.Fatal("CircleCI connector is not registered")
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		t.Fatal("CircleCI connector has no command surface")
+	}
+	commands := make(map[string]connectors.CommandSurfaceCommand, len(provider.CommandSurface().Commands))
+	for _, command := range provider.CommandSurface().Commands {
+		commands[command.Path] = command
+	}
+	bundle, err := engine.Load(defs.FS, "circleci")
+	if err != nil {
+		t.Fatalf("load CircleCI bundle: %v", err)
+	}
+	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actions[action.Name] = action
+	}
+
+	writePathForSource := func(sourcePath string) string {
+		var path strings.Builder
+		for remaining := sourcePath; remaining != ""; {
+			start := strings.IndexByte(remaining, '{')
+			if start < 0 {
+				path.WriteString(remaining)
+				break
+			}
+			path.WriteString(remaining[:start])
+			remaining = remaining[start+1:]
+			end := strings.IndexByte(remaining, '}')
+			if end < 0 {
+				t.Fatalf("source endpoint %q has an unclosed path variable", sourcePath)
+			}
+			path.WriteString("{{ record.")
+			path.WriteString(remaining[:end])
+			path.WriteString(" }}")
+			remaining = remaining[end+1:]
+		}
+		return path.String()
+	}
+
+	for _, tc := range mutations {
+		t.Run(tc.sourceID, func(t *testing.T) {
+			command, found := commands[tc.command]
+			if !found {
+				t.Fatalf("source operation %q is missing command %q", tc.sourceID, tc.command)
+			}
+			if command.Availability != "implemented" || command.Intent != "reverse_etl" || command.Write != tc.action {
+				t.Fatalf("command %q = availability=%q intent=%q write=%q, want implemented reverse_etl %q", tc.command, command.Availability, command.Intent, command.Write, tc.action)
+			}
+			wantEndpoint := []connectors.CommandSurfaceEndpointRef{{Method: tc.method, Path: tc.sourcePath}}
+			if !reflect.DeepEqual(command.APISurface, wantEndpoint) {
+				t.Fatalf("command %q api surface = %#v, want %#v", tc.command, command.APISurface, wantEndpoint)
+			}
+			if err := Preflight(connector, strings.Fields(tc.command)); err != nil {
+				t.Fatalf("Preflight(%q): %v", tc.command, err)
+			}
+			action, found := actions[tc.action]
+			if !found {
+				t.Fatalf("source operation %q is missing action %q", tc.sourceID, tc.action)
+			}
+			if action.Method != tc.method || action.Path != writePathForSource(tc.sourcePath) {
+				t.Fatalf("action %q = method=%q path=%q, want source endpoint %s %s", tc.action, action.Method, action.Path, tc.method, tc.sourcePath)
+			}
+		})
+	}
+}
+
 func TestSentryCitedMutationCommandsPassRuntimePreflight(t *testing.T) {
 	registry := bundleregistry.New()
 	connector, ok := registry.Get("sentry")
