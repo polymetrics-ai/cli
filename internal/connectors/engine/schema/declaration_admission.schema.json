@@ -46,11 +46,16 @@
           },
           "foundation_gap": {
             "type": "object",
-            "required": ["id", "reason"],
+            "required": ["id", "reason", "component", "evidence"],
             "additionalProperties": false,
             "properties": {
               "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
-              "reason": { "type": "string", "minLength": 1 }
+              "reason": { "type": "string", "minLength": 1 },
+              "component": {
+                "type": "string",
+                "enum": ["typed_write_action", "typed_record_schema", "typed_request_body", "typed_response_descriptor", "binary_transfer_binding", "source_importer", "runtime_executor", "idempotency_contract", "conformance_fixture"]
+              },
+              "evidence": { "type": "string", "minLength": 1 }
             }
           },
           "destructive": {

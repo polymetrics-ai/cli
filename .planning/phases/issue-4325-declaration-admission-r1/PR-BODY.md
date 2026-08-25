@@ -14,6 +14,9 @@ without converting connector-owned definitions or claiming live certification.
   `system/missing_foundation` refusal, while retaining existing implemented
   runtime preflight behavior.
 - Added focused red/green tests and certificate-separation documentation.
+- Deferred source rows now name a bounded missing implementation component and
+  its evidence; a policy-only block is rejected while the declared command
+  remains discoverable and returns its named missing foundation.
 - Added GitHub `label delete` as the implemented destructive green control:
   endpoint-specific missing action contracts are deferred, not delete
   operations as a class.
@@ -30,6 +33,9 @@ blocked source mapping with no action or command binding. See
   hashes, generated connector evidence, or Batch-1 connector definitions.
 - Source-lock, surface-sync, runtime preflight, credential-bound binary proof,
   and live certification remain strict and separate.
+- Per captain clarification 007, individual provider declarations and CLI
+  projections remain in their mapping lane; this PR commits only generic
+  admission semantics and regression infrastructure.
 
 ## TDD and GSD Evidence
 

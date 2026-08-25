@@ -15,6 +15,11 @@
 - Deferred command metadata is projected into the command surface and rejected
   by `commandrunner` with the typed `system/missing_foundation` classification
   before an executor can perform provider I/O.
+- A deferred source declaration now requires a bounded missing implementation
+  component and non-empty evidence. `blocked_by_default`, lane/method,
+  destructive/risk, approval/confirmation, retained source data, and live
+  certification are not valid components, so a policy-only block is rejected
+  while its command must stay discoverable.
 - GitHub's implemented `label delete` action is the destructive green control:
   its source-cited declaration is admitted and the actual commandrunner
   preflight succeeds. Deferred state is therefore endpoint-specific rather
@@ -22,16 +27,20 @@
 - No `internal/connectors/defs/<connector>` file changed. Existing
   source-lock, surface-sync, runtime-preflight, certification, and live-proof
   gates remain independent and were exercised below where hermetic.
+- Captain clarification 007 keeps the separately started Stripe mapping files
+  unstaged for `cli-batch1-repair-r1`; they are not part of this PR's commit
+  range or certificate claim.
 
 ## Commands and results
 
 | Command | Result |
 | --- | --- |
 | `go test -timeout 20m ./cmd/connectorgen -run '^TestDeclarationAdmission'` | pass |
+| `go test -timeout 20m ./cmd/connectorgen -run '^(TestDeclarationAdmission|TestCheckCLISurfaceEndpointCoverageAllowsDeclarationBoundDeferredCommand)$'` | pass |
 | `go test -timeout 20m ./cmd/connectorgen -run '^TestDeclarationAdmissionAdmitsGitHubImplementedDeleteControl$'` | pass |
 | `go test -timeout 20m ./internal/connectors/commandrunner -run '^TestPreflightDeferredCommandReturnsNamedFoundationBeforeExecutor$'` | pass |
 | `go test -timeout 20m ./internal/connectors/engine -run '^TestCommandSurfaceProjectsDeferredFoundationGap$'` | pass |
-| `go test -timeout 20m ./cmd/connectorgen` | pass (153.707s including the GitHub implemented-delete control) |
+| `go test -timeout 20m ./cmd/connectorgen` | pass (153.562s including component/evidence admission regressions) |
 | Fresh local project, no credential: `pm github label delete --json` | exit 1, `missing --credential`; command dispatches without provider I/O |
 | Fresh local project, no credential: `pm stripe accounts delete --json` | exit 2, `unknown command "accounts delete"`; no generic account-delete projection or provider I/O |
 | `go test -timeout 20m ./internal/connectors/commandrunner` | pass |
@@ -60,3 +69,10 @@ This changes the internal `connectorgen` generator command, not the shipped
 updated. `docs/cli/**`, website docs, generated `pm` manual/help, bare `pm`
 namespace behavior, and shell completion are not applicable; no files in those
 surfaces changed. `make docs-check-no-build` passed.
+
+After captain clarification 007, a later local rerun of
+`make docs-check-no-build` reports only that the preserved *unstaged*
+`internal/connectors/defs/stripe/cli_surface.json` makes the Stripe manual
+stale. This PR must not run the corresponding generator or commit its output;
+the mapping lane owns both. The committed generic diff has no Stripe definition
+or generated manual change, and `make connector-canon-check` remains green.

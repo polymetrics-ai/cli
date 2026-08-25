@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -10,6 +11,7 @@ import (
 
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/failures"
 )
 
 func TestDeclarationAdmissionAcceptsRunnableReadAndExplicitDeferrals(t *testing.T) {
@@ -121,6 +123,33 @@ func TestDeclarationAdmissionRejectsCompletenessAndBindingDefects(t *testing.T) 
 			},
 			want: "foundation gap",
 		},
+		{
+			name: "deferred foundation has no implementation evidence",
+			edit: func(document *declarationAdmissionDocument, _ *engine.Bundle) {
+				for index := range document.Declarations {
+					if document.Declarations[index].State == declarationAdmissionStateDeferred {
+						document.Declarations[index].Foundation.Evidence = ""
+						break
+					}
+				}
+			},
+			want: "specific missing implementation component",
+		},
+		{
+			name: "stale typed write action foundation",
+			edit: func(document *declarationAdmissionDocument, bundle *engine.Bundle) {
+				for index := range document.Declarations {
+					if document.Declarations[index].SourceID != "create-widget" {
+						continue
+					}
+					document.Declarations[index].Foundation.Component = "typed_write_action"
+					document.Declarations[index].Foundation.Evidence = "writes.json has no create-widget action"
+					break
+				}
+				bundle.Writes = append(bundle.Writes, engine.WriteAction{Name: "create_widget", Method: "POST", Path: "/v1/widgets"})
+			},
+			want: "typed_write_action foundation is stale",
+		},
 	}
 
 	for _, testCase := range tests {
@@ -146,7 +175,10 @@ func TestDeclarationAdmissionAcceptsCompleteZeroRunnableConnector(t *testing.T) 
 	for index := range document.Declarations {
 		if document.Declarations[index].State == declarationAdmissionStateImplemented {
 			document.Declarations[index].State = declarationAdmissionStateDeferred
-			document.Declarations[index].Foundation = &declarationAdmissionFoundation{ID: "read_runtime_foundation", Reason: "read runtime binding is intentionally pending"}
+			document.Declarations[index].Foundation = &declarationAdmissionFoundation{
+				ID: "read_runtime_foundation", Reason: "read runtime binding is intentionally pending",
+				Component: "runtime_executor", Evidence: "direct-read executor binding has not been implemented",
+			}
 			bundle.CLISurface.Commands[index].Availability = declarationAdmissionStateDeferred
 			bundle.CLISurface.Commands[index].Foundation = &engine.CommandFoundation{ID: "read_runtime_foundation", Reason: "read runtime binding is intentionally pending"}
 		}
@@ -193,6 +225,53 @@ func TestDeclarationAdmissionAdmitsGitHubImplementedDeleteControl(t *testing.T) 
 	if err := commandrunner.Preflight(engine.New(bundle, nil), []string{"label", "delete"}); err != nil {
 		t.Fatalf("GitHub label delete runtime preflight: %v", err)
 	}
+}
+
+func TestDeclarationAdmissionDeferredDeleteIsDiscoverable(t *testing.T) {
+	bundle, document := declarationAdmissionFixture()
+	if findings := declarationAdmissionFindings(bundle, document); len(findings) != 0 {
+		t.Fatalf("deferred declaration findings = %+v, want none", findings)
+	}
+	command, matches := declarationAdmissionCommand(bundle, "widgets delete")
+	if matches != 1 || command.Availability != declarationAdmissionStateDeferred || command.Foundation == nil {
+		t.Fatalf("deferred delete command = %+v (matches=%d), want one deferred foundation command", command, matches)
+	}
+	err := commandrunner.Preflight(engine.New(bundle, nil), []string{"widgets", "delete"})
+	var blocked *commandrunner.BlockedCommandError
+	if !errors.As(err, &blocked) || blocked.Failure == nil {
+		t.Fatalf("deferred delete preflight = %v, want typed blocked missing-foundation error", err)
+	}
+	if blocked.Failure.Code() != "missing_foundation" || blocked.Failure.Domain() != failures.DomainSystem || command.Foundation.ID == "" {
+		t.Fatalf("deferred delete foundation = %+v, want system/missing_foundation with named gap", blocked)
+	}
+}
+
+func TestDeclarationAdmissionRejectsPolicyOnlyDeferredFoundation(t *testing.T) {
+	bundle, document := declarationAdmissionFixture()
+	for index := range document.Declarations {
+		if document.Declarations[index].State != declarationAdmissionStateDeferred {
+			continue
+		}
+		document.Declarations[index].Foundation = &declarationAdmissionFoundation{
+			ID: "blocked_by_default", Reason: "operation is blocked by default", Component: "blocked_by_default", Evidence: "api_surface policy",
+		}
+		bundle.CLISurface.Commands[index].Foundation = &engine.CommandFoundation{ID: "blocked_by_default", Reason: "operation is blocked by default"}
+		break
+	}
+	raw, err := json.Marshal(document)
+	if err != nil {
+		t.Fatalf("marshal policy-only declaration: %v", err)
+	}
+	if err := engine.ValidateDeclarationAdmission(raw); err == nil {
+		t.Fatal("policy-only foundation passed declaration-admission schema")
+	}
+	findings := declarationAdmissionFindings(bundle, document)
+	for _, finding := range findings {
+		if strings.Contains(finding.Message, "specific missing implementation component") {
+			return
+		}
+	}
+	t.Fatalf("policy-only deferred foundation findings = %+v, want specific-component refusal", findings)
 }
 
 func TestDeclarationAdmissionCommandReportsMachineReadableCleanResult(t *testing.T) {
@@ -323,15 +402,15 @@ func declarationAdmissionFixture() (engine.Bundle, declarationAdmissionDocument)
 		CLISurface: &engine.CLISurface{Commands: commands},
 	}
 	rows := []struct {
-		id, method, sourcePath, command, lane, state, foundationID, foundationReason string
-		destructive                                                                  *declarationAdmissionDestructive
+		id, method, sourcePath, command, lane, state, foundationID, foundationReason, foundationComponent, foundationEvidence string
+		destructive                                                                                                           *declarationAdmissionDestructive
 	}{
-		{"list-widgets", "GET", "/widgets", "widgets list", declarationAdmissionLaneDirectRead, declarationAdmissionStateImplemented, "", "", nil},
-		{"create-widget", "POST", "/widgets", "widgets create", declarationAdmissionLaneReverseETL, declarationAdmissionStateDeferred, "write_plan_foundation", "write plan compiler is not available", nil},
-		{"delete-widget", "DELETE", "/widgets/{id}", "widgets delete", declarationAdmissionLaneReverseETL, declarationAdmissionStateDeferred, "delete_plan_foundation", "delete plan compiler is not available", &declarationAdmissionDestructive{Kind: "delete", Reason: "provider operation deletes a widget"}},
-		{"download-widget", "GET", "/widgets/{id}/archive", "widgets download", declarationAdmissionLaneBinaryDownload, declarationAdmissionStateDeferred, "binary_download_foundation", "binary response binding is not available", nil},
-		{"upload-widget", "POST", "/widgets/{id}/archive", "widgets upload", declarationAdmissionLaneBinaryUpload, declarationAdmissionStateDeferred, "binary_upload_foundation", "binary request binding is not available", nil},
-		{"patch-widget", "PATCH", "/widgets/{id}", "widgets descriptor", declarationAdmissionLaneDirectWrite, declarationAdmissionStateDeferred, "source_descriptor_importer", "provider descriptor importer cannot yet represent this request", nil},
+		{"list-widgets", "GET", "/widgets", "widgets list", declarationAdmissionLaneDirectRead, declarationAdmissionStateImplemented, "", "", "", "", nil},
+		{"create-widget", "POST", "/widgets", "widgets create", declarationAdmissionLaneReverseETL, declarationAdmissionStateDeferred, "write_plan_foundation", "write plan compiler is not available", "runtime_executor", "reverse-ETL plan compiler has no widget binding", nil},
+		{"delete-widget", "DELETE", "/widgets/{id}", "widgets delete", declarationAdmissionLaneReverseETL, declarationAdmissionStateDeferred, "delete_plan_foundation", "delete plan compiler is not available", "runtime_executor", "reverse-ETL plan compiler has no widget delete binding", &declarationAdmissionDestructive{Kind: "delete", Reason: "provider operation deletes a widget"}},
+		{"download-widget", "GET", "/widgets/{id}/archive", "widgets download", declarationAdmissionLaneBinaryDownload, declarationAdmissionStateDeferred, "binary_download_foundation", "binary response binding is not available", "binary_transfer_binding", "binary response binding has not been implemented", nil},
+		{"upload-widget", "POST", "/widgets/{id}/archive", "widgets upload", declarationAdmissionLaneBinaryUpload, declarationAdmissionStateDeferred, "binary_upload_foundation", "binary request binding is not available", "binary_transfer_binding", "binary request binding has not been implemented", nil},
+		{"patch-widget", "PATCH", "/widgets/{id}", "widgets descriptor", declarationAdmissionLaneDirectWrite, declarationAdmissionStateDeferred, "source_descriptor_importer", "provider descriptor importer cannot yet represent this request", "source_importer", "provider descriptor importer cannot represent the operation", nil},
 	}
 	document := declarationAdmissionDocument{SchemaVersion: declarationAdmissionSchemaVersion, Connector: "acme"}
 	for _, row := range rows {
@@ -344,7 +423,9 @@ func declarationAdmissionFixture() (engine.Bundle, declarationAdmissionDocument)
 			Canonical: declarationAdmissionEndpoint{Method: row.method, Path: "/v1" + row.sourcePath}, Destructive: row.destructive,
 		}
 		if row.foundationID != "" {
-			declaration.Foundation = &declarationAdmissionFoundation{ID: row.foundationID, Reason: row.foundationReason}
+			declaration.Foundation = &declarationAdmissionFoundation{
+				ID: row.foundationID, Reason: row.foundationReason, Component: row.foundationComponent, Evidence: row.foundationEvidence,
+			}
 		}
 		document.Declarations = append(document.Declarations, declaration)
 	}

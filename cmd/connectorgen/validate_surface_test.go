@@ -57,6 +57,23 @@ func TestCheckCLISurfaceEndpointCoverageAllowsSourceBoundPartialRead(t *testing.
 	}
 }
 
+func TestCheckCLISurfaceEndpointCoverageAllowsDeclarationBoundDeferredCommand(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "acme",
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: "DELETE", Path: "/widgets/{id}", Operation: &engine.SurfaceOperation{Status: "blocked"},
+		}}},
+	}
+	command := engine.CLICommand{
+		Path: "widgets delete", Intent: "reverse_etl", Availability: declarationAdmissionStateDeferred,
+		APISurface: []engine.CLISurfaceEndpointRef{{Method: "DELETE", Path: "/widgets/{id}"}},
+		Foundation: &engine.CommandFoundation{ID: "typed_write_action", Reason: "the endpoint has no typed write action"},
+	}
+	if findings := checkCLISurfaceEndpointCoverage(bundle, 0, command, cliSurfaceEndpointStates(bundle.Surface)); len(findings) != 0 {
+		t.Fatalf("deferred declaration command must retain its cited blocked endpoint: %+v", findings)
+	}
+}
+
 // A fixed GraphQL query is a read even though its shared transport is POST.
 // The executable source root must therefore not let a connector claim
 // capabilities.read=false merely because the REST-specific check only looked

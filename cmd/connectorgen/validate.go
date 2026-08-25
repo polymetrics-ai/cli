@@ -2480,7 +2480,7 @@ func checkCLISurfaceEndpointCoverage(
 			})
 			continue
 		}
-		if sourceBoundPartialReadCommand(cmd) {
+		if sourceBoundPartialReadCommand(cmd) || declarationBoundDeferredCommand(cmd) {
 			continue
 		}
 		if cmd.Operation != "" && slices.Contains(state.coveredBy.OperationTargets(), cmd.Operation) {
@@ -2535,6 +2535,17 @@ func sourceBoundPartialReadCommand(cmd engine.CLICommand) bool {
 	return cmd.Availability == "partial" && cmd.Intent == "direct_read" &&
 		strings.HasPrefix(cmd.Notes, "Blocked: locked source operation ") &&
 		strings.Contains(cmd.Notes, "declaration-owned executable")
+}
+
+// declarationBoundDeferredCommand is a source-admission command that is
+// deliberately unroutable until its named implementation foundation exists.
+// Its cited API endpoint remains discoverable; treating the endpoint's policy,
+// method, risk, or current runtime coverage as grounds to hide the command
+// would lose the declaration it was added to preserve. The admission checker
+// separately requires a specific evidenced component for this state.
+func declarationBoundDeferredCommand(cmd engine.CLICommand) bool {
+	return cmd.Availability == declarationAdmissionStateDeferred && cmd.Foundation != nil &&
+		strings.TrimSpace(cmd.Foundation.ID) != "" && strings.TrimSpace(cmd.Foundation.Reason) != ""
 }
 
 func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceEndpointState {

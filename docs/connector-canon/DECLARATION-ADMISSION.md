@@ -22,6 +22,16 @@ runtime then refuses that command with a typed missing-foundation error before
 provider I/O. A connector with no runnable operations is complete when every
 source operation is deferred this way.
 
+A deferred declaration is a claim about a missing *implementation component*,
+not a policy label. Its admission-sidecar `foundation_gap` records a bounded
+component (for example `typed_write_action`, `typed_record_schema`,
+`source_importer`, or `runtime_executor`) plus evidence naming the absent
+piece. The command surface carries the same gap ID/reason for its typed runtime
+refusal. Method, operation lane, destructive/risk marker,
+`blocked_by_default`, confirmation or approval policy, source retention/hash,
+and certification state are not foundation components. They cannot hide a
+cited source operation or its discoverable command.
+
 `deferred` is endpoint-specific missing-foundation state, not a classification
 for operation kinds. In particular, an implemented delete remains implemented
 when its declared delete action and runtime binding exist; GitHub's `label

@@ -64,8 +64,10 @@ type declarationAdmissionEndpoint struct {
 }
 
 type declarationAdmissionFoundation struct {
-	ID     string `json:"id"`
-	Reason string `json:"reason"`
+	ID        string `json:"id"`
+	Reason    string `json:"reason"`
+	Component string `json:"component"`
+	Evidence  string `json:"evidence"`
 }
 
 type declarationAdmissionDestructive struct {
@@ -304,6 +306,11 @@ func declarationAdmissionCheckRow(findings *[]Finding, bundle engine.Bundle, fil
 			add("implemented declaration has no valid runtime binding")
 		}
 	case declarationAdmissionStateDeferred:
+		if !declarationAdmissionFoundationSpecific(declaration.Foundation) {
+			add("deferred declaration requires a specific missing implementation component with evidence")
+		} else if message := declarationAdmissionFoundationEvidenceFinding(bundle, declaration, declaration.Foundation); message != "" {
+			add(message)
+		}
 		if !declarationAdmissionFoundationMatches(declaration.Foundation, command.Foundation) {
 			add("deferred declaration requires the same named foundation gap on its command")
 		}
@@ -387,7 +394,41 @@ func declarationAdmissionSurfaceHasEndpoint(surface *engine.APISurface, endpoint
 }
 
 func declarationAdmissionFoundationMatches(declaration *declarationAdmissionFoundation, command *engine.CommandFoundation) bool {
-	return declaration != nil && command != nil && strings.TrimSpace(declaration.ID) != "" && strings.TrimSpace(declaration.Reason) != "" && declaration.ID == command.ID && declaration.Reason == command.Reason
+	return declarationAdmissionFoundationSpecific(declaration) && command != nil && declaration.ID == command.ID && declaration.Reason == command.Reason
+}
+
+func declarationAdmissionFoundationSpecific(foundation *declarationAdmissionFoundation) bool {
+	return foundation != nil && strings.TrimSpace(foundation.ID) != "" && strings.TrimSpace(foundation.Reason) != "" &&
+		declarationAdmissionFoundationComponentValid(foundation.Component) && strings.TrimSpace(foundation.Evidence) != ""
+}
+
+// declarationAdmissionFoundationComponentValid accepts missing runtime pieces,
+// never a provider policy, operation kind, source-retention choice, or a live
+// certification state. Those facts can explain risk, but cannot remove a
+// cited source operation from the declaration and command surface.
+func declarationAdmissionFoundationComponentValid(component string) bool {
+	switch component {
+	case "typed_write_action", "typed_record_schema", "typed_request_body", "typed_response_descriptor",
+		"binary_transfer_binding", "source_importer", "runtime_executor", "idempotency_contract", "conformance_fixture":
+		return true
+	default:
+		return false
+	}
+}
+
+func declarationAdmissionFoundationEvidenceFinding(bundle engine.Bundle, declaration declarationAdmissionDeclaration, foundation *declarationAdmissionFoundation) string {
+	if foundation.Component != "typed_write_action" {
+		return ""
+	}
+	if declaration.Lane != declarationAdmissionLaneReverseETL && declaration.Lane != declarationAdmissionLaneBinaryUpload {
+		return "typed_write_action foundation does not apply to this lane"
+	}
+	for _, action := range bundle.Writes {
+		if strings.EqualFold(action.Method, declaration.Canonical.Method) && declarationAdmissionActionPath(action.Path) == declaration.Canonical.Path {
+			return "typed_write_action foundation is stale: a declared write action already maps to the canonical endpoint"
+		}
+	}
+	return ""
 }
 
 func declarationAdmissionImplementedBinding(bundle engine.Bundle, command engine.CLICommand, lane string, endpoint declarationAdmissionEndpoint) bool {

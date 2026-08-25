@@ -36,6 +36,14 @@ delete` action. Documentation states that only an endpoint's named missing
 foundation can defer it; delete and destructive operations are not generically
 deferred.
 
+Captain clarification 007 supersedes a subsequent Stripe conversion request.
+This PR now reviews only generic admission semantics: a deferred sidecar row
+must name a bounded missing implementation component plus evidence, and a
+deferred command may cite its blocked endpoint without claiming executable
+coverage. The started Stripe CLI/source declaration files remain deliberately
+unstaged for `cli-batch1-repair-r1`; no connector-owned mapping change appears
+in this PR's committed diff.
+
 ## Automated review route
 
 The direct PR targets `main`. Its route is `claude_auto`: opening a non-draft
