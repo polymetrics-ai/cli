@@ -35,6 +35,19 @@ without converting connector-owned definitions or claiming live certification.
   preflight, while retaining the existing omission of full `api_surface.json`.
   App planning now preflights before credentials, oversized foundation metadata
   remains typed, and the public CLI preserves `missing_foundation`.
+- Made source-operation uniqueness provenance-only and binding uniqueness a
+  separate invariant, so changing a local binding cannot hide a duplicate
+  provider row.
+- Kept canonical provider identities separate from physical runtime endpoints,
+  with closed named equivalence for declared base paths/placeholders, registered
+  hooks, GraphQL `POST /graphql` transport, queries, suffixes, and operation
+  annotations. Arbitrary method/path substitution fails closed.
+- Required deferred rows to fail the real implemented commandrunner preflight
+  before an executor-specific foundation gap is accepted; runnable GitHub
+  delete and GraphQL read/write controls cannot be relabelled deferred.
+- Classified the compact runtime declaration ledger exactly in the production
+  embed inventory and added a real Outreach `/api/v2` ETL/destructive no-I/O
+  integration gate without changing the Outreach bundle.
 
 The accompanying investigation records the exact distinction: GitHub's cited
 `label delete` endpoint has a typed delete action, CLI binding, fixture, and
@@ -79,6 +92,12 @@ blocked source mapping with no action or command binding. See
   projection suites pass, including the exact-SHA DA-001/002/003/004/005/006/
   010/011 repairs; repository-wide vet/build, tidy, lint, agent-contract, and
   GSD evidence checks are recorded in verification.
+- R2 exact head `f97dede07`: all 477 connectorgen tests/examples pass across
+  deterministic shards; engine, commandrunner, connector, definitions, Notion
+  hook, app, and CLI packages pass; the fleet census proves 243 non-GraphQL and
+  4 GraphQL aliases; real Outreach passes; boundary reports 322 files / 553
+  connectors / 0 findings; exact-head vet, lint, build, docs, smoke, admission,
+  surface-sync, release, and GSD workflow gates pass.
 
 The aggregate `go test -timeout 20m ./...` and serial `make verify` are left
 to CI, per the repository’s per-command-timeout guidance. Full commands and

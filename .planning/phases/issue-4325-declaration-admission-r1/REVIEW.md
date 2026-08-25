@@ -106,6 +106,53 @@ in this PR's committed diff.
    and identity remain exact, while the command projection retains the cited
    provider endpoint. The complete implemented-preflight and CLI suites pass.
 
+## Independent R2 audit disposition (2026-08-26)
+
+1. **DA-002 accepted — provenance-only uniqueness.** Runtime binding fields
+   were incorrectly part of the source-operation duplicate key, so changing a
+   binding could disguise one repeated provider row. Source URL, exact document
+   location, protocol, raw operation ID, method, and canonical provider
+   operation/endpoint now form the provenance key. Binding uniqueness is
+   checked separately in both authoring admission and the compact runtime
+   ledger. Regressions cover one duplicate provenance row under different
+   bindings and one binding claimed by distinct source rows.
+2. **DA-003 accepted — fail-closed endpoint equivalence.** The resolver no
+   longer substitutes the command endpoint unconditionally. It keeps canonical
+   and transport endpoints separately and accepts only named proofs for exact,
+   declared base path, positional placeholders, registered hook transport,
+   GraphQL operation-to-`POST /graphql`, absolute URL/query normalization,
+   provider suffix, and closed operation annotation transformations. Negative
+   stream, write, REST, and binary aliases fail. The clean real-bundle census
+   proves all 243 non-GraphQL aliases plus all 4 GraphQL aliases; Notion's hook
+   and GitHub GraphQL have explicit positive coverage.
+3. **DA-004 accepted — real stale-deferral preflight.** Commandrunner clones
+   the exact deferred row to implemented form and invokes the same implemented
+   preflight helper used by normal dispatch before considering a missing
+   foundation. Runnable GitHub label delete and GraphQL read/write controls are
+   rejected as stale for every valid component. Components are executor-
+   specific: response descriptors require REST/binary operations, source
+   importers require unbound direct operations, and idempotency policy is not a
+   missing executor foundation.
+4. **DA-012 accepted — exact production inventory.** The one compact
+   `declaration_admission_sources.json` root artifact is classified exactly as
+   `runtime_declaration_target_ledger`, with deterministic byte attribution.
+   Full API surfaces and build-time declaration/source catalogs remain outside
+   the runtime embed inventory.
+5. **Captain Outreach integration gate accepted.** The test loads the real
+   Outreach bundle and synthesizes only its absent CLI discovery projection.
+   Its existing `/api/v2/prospects` ETL stream and destructive
+   `/api/v2/accounts/{id}` delete pass admission, canonical/transport
+   resolution, and no-I/O commandrunner preflight without modifying Outreach.
+6. **Local boundary finding accepted and fixed.** The provider-policy scanner
+   matched `cal-com` inside the neutral local name `canonicalComparable`. The
+   variable is now `declaredComparable`; no boundary exception was added, and
+   the exact-head whole-tree scan reports 0 findings.
+
+No unresolved local or R2 findings remain on code SHA `f97dede07`. The
+certificate proves complete source-cited six-lane declaration independently
+of runnable count: an unavailable operation must remain present and deferred
+with its named exact foundation, while stale or falsely implemented rows fail.
+
 ## Automated review route
 
 The direct PR targets `main` and is already open. Its original route was

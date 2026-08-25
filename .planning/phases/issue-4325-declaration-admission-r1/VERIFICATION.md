@@ -155,3 +155,54 @@ After captain clarification 007, a later local rerun of
 stale. This PR must not run the corresponding generator or commit its output;
 the mapping lane owns both. The committed generic diff has no Stripe definition
 or generated manual change, and `make connector-canon-check` remains green.
+
+## R2 exact-head closure (2026-08-26)
+
+The independent R2 audit's four High findings are closed on clean code SHA
+`f97dede0741313bd4661baa1da6c021f568167d8`. Source-operation uniqueness is
+now provenance-only while binding uniqueness is an independent invariant;
+canonical provider identity and physical transport are retained separately and
+related only by closed named proofs; a deferred command must fail the real
+implemented commandrunner preflight before its executor-specific missing
+foundation can be accepted; and the compact production ledger has exactly one
+inventory class with deterministic byte attribution.
+
+This is also the proof required by captain steer 015. Admission completeness is
+independent of runnable count: every source-cited operation in any of the six
+lanes must have one declared row, while an unavailable operation may remain
+discoverable and explicitly `deferred` with its exact missing foundation. A
+complete zero-runnable connector therefore passes; omission, false
+implementation, or stale deferral fails. Runtime/preflight, credential-bound,
+and live certificates remain separate and were not weakened.
+
+| Exact clean-head command | Result |
+| --- | --- |
+| `go test -count=1 -timeout 20m ./cmd/connectorgen -run 'TestImplementedCommandEndpointEquivalenceCoversExactFleet\|TestDeclarationAdmissionOutreachRealConnectorIntegrationGate' -v` | pass; 243 non-GraphQL aliases, 4 GraphQL aliases, and real Outreach ETL/destructive projections |
+| Four deterministic exact-name shards over `go test ./cmd/connectorgen -list '^(Test\|Example)'` | pass; all 477 tests/examples (`188.823s`, `56.415s`, `90.003s`, `75.841s`) |
+| `go test -count=1 -timeout 20m ./internal/connectors/engine` | pass (`19.148s`) |
+| `go test -count=1 -timeout 20m ./internal/connectors/commandrunner` | pass (`30.479s`) |
+| `go test -count=1 -timeout 20m ./internal/connectors` | pass (`3.917s`) |
+| `go test -count=1 -timeout 20m ./internal/connectors/defs` | pass (`6.480s`) |
+| `go test -count=1 -timeout 20m ./internal/connectors/hooks/notion` | pass (`4.395s`) |
+| `go test -count=1 -timeout 20m ./internal/app` | pass (`318.334s`) |
+| `go test -count=1 -timeout 20m ./internal/cli` | pass (`575.419s`) |
+| `go vet ./...`; `make lint` | pass; lint reports 0 issues |
+| `go build -o ./pm ./cmd/pm`; `make tidy-check`; `make docs-check-no-build`; `make smoke-no-build` | pass; exact-head binary, module state, connector docs, and ETL/reverse-ETL smoke |
+| `make connectorgen-declaration-admission`; `make connectorgen-surface-sync` | pass; 1 connector/source row with 0 findings, and 553 connectors with 0 drift |
+| `make connector-boundary` | pass; 322 files, 553 connectors, 0 findings |
+| `make release-workflow-check` | pass; pinned dependencies, target parity, tooling, size/layout, and installed GitHub archive proof |
+| `scripts/verify-gsd-workflow origin/main` | pass; implementation changes have GSD/TDD evidence |
+| `git diff --exit-code`; `git status --short` | pass; detached exact-head verification tree clean |
+
+The unsplit exact-head `go test -count=1 -timeout 20m ./cmd/connectorgen`
+attempt was externally terminated with exit 143 after more than three minutes
+and no test failure, before Go's timeout. The complete 477-name inventory was
+therefore partitioned by list index modulo four and every shard passed. The
+aggregate `go test ./...` and serial `make verify` remain intentionally delegated
+to CI under the repository's explicit per-command-timeout guidance; all
+applicable constituent gates were run locally.
+
+The boundary analyzer initially flagged the neutral local name
+`canonicalComparable` because normalized text contained the provider token
+`cal-com`. It was renamed to `declaredComparable`; no exception was added, and
+the exact-head whole-tree boundary rerun passed.
