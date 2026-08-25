@@ -68,6 +68,24 @@ The built baseline binary returned `error: unknown command "circleci"` (exit
   exact future paths are held in the independent mapping manifest; no local
   conditional-query, scalar-body, or deferred-command projection is permitted.
 
+## Current connector slice (2026-08-25, Asana)
+
+- Target: the 21 source-cited Asana no-body mutations listed in
+  `PLAN.md`'s Asana cohort. Each existing planned command retains its current
+  CLI path; a connector-owned action can be complete only when source import
+  derives its closed path/query record contract.
+- Red observed: `go run ./cmd/connectorgen source-import asana --check`
+  reports descriptor drift with `writes=0 cli=0`; importing refreshes only the
+  source summaries, verifies all 249 provider operations on the rerun, and
+  creates no action/CLI contract by itself.
+- Boundaries: do not add a schema, executor, idempotency, missing-status, or
+  provider-scope approximation. The 24 existing Asana request-schema gaps and
+  all other deferred manifest rows remain source-cited as-is.
+- Result: source import projects 21 write and 21 CLI updates; all 21 existing
+  canonical commands now pass real preflight through a no-body action. The
+  interim stale operation references were removed because they named no
+  operation executor; no local executor was introduced.
+
 ## Jira red evidence
 
 - `go run ./cmd/connectorgen source-import jira --check` exited 1 because the

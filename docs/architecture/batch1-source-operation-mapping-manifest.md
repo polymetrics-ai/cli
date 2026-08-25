@@ -42,9 +42,9 @@ claimed for the manifest itself.
 | CircleCI | 16 | 75 | 20 | 111 |
 | Sentry | 3 | 144 | 76 | 223 |
 | Vercel | 0 | 261 | 139 | 400 |
-| Asana | 82 | 130 | 37 | 249 |
+| Asana | 103 | 109 | 37 | 249 |
 | Jira | 563 | 0 | 54 | 617 |
-| **Total** | **768** | **1,663** | **1,910** | **4,341** |
+| **Total** | **789** | **1,642** | **1,910** | **4,341** |
 
 The split above is the canonical source accounting in
 `.planning/phases/issue-4325-batch1-connectors-repair-r1/TDD-LEDGER.md:379-398`.
@@ -55,16 +55,24 @@ The manifest never has a zero denominator.
 
 ### Count reconciliation (2026-08-25)
 
-The earlier working report, `767 / 1,666 / 1,908`, and this manifest's
-canonical `768 / 1,663 / 1,910` split have the same 4,341 source-lock rows.
-All movement is the following three Jira source identities; there is no
-denominator or provider-lock change.
+The initial working report, `767 / 1,666 / 1,908`, and the current canonical
+`789 / 1,642 / 1,910` split have the same 4,341 source-lock rows. There is no
+denominator or provider-lock change. The Jira rows below were the first
+reconciliation, producing the interim `768 / 1,663 / 1,910` split.
 
 | Source record key | Earlier classification | Canonical classification | Count movement | Exact reason |
 | --- | --- | --- | --- | --- |
 | `jira:jira.rest.resetUserColumns` | declarable | runnable | declarable -1; runnable +1 | The source-derived `DELETE /rest/api/3/user/columns` action now exists in `writes.json` and its preserved manifest path exists in `cli_surface.json`; real preflight and the credential-free binary both reach `missing --credential`. |
 | `jira:jira.rest.removeGroup` | declarable | deferred | declarable -1; genuine gap +1 | `/rest/api/3/group` requires at least one selector and has mutual exclusions, while `sourceprojection.go:1245-1251,1884-1932` can represent only independently required query parameters. Materializing one selector or an empty DELETE would alter provider semantics. |
 | `jira:jira.rest.addWatcher` | declarable | deferred | declarable -1; genuine gap +1 | `/rest/api/3/issue/{issueIdOrKey}/watchers` requires a scalar JSON string; `sourceprojection.go:1273-1275` refuses it and the current JSON writer has no scalar-body contract. An object-body approximation would alter the source request. |
+
+The second reconciliation promotes 21 Asana source identities from declarable
+to runnable: `approveAccessRequest`, `rejectAccessRequest`, and the 19
+no-body DELETE source IDs listed in the Asana cohort plan. Each has one
+source-declared `*_gid` path parameter; the DELETEs also retain optional
+`opt_pretty`. Their existing canonical CLI paths now bind a source-projected
+no-body action, rather than a planned operation executor. This is
+`runnable +21; declarable -21`; deferred remains 1,910.
 
 `materialization_counts` in the JSON is the machine-readable companion to this
 reconciliation. It classifies every source operation without treating an
@@ -87,9 +95,9 @@ for each row remain in the corresponding `records[]` element.
 | CircleCI | 16 | 24 | 0 | 71 | 111 |
 | Sentry | 3 | 33 | 0 | 187 | 223 |
 | Vercel | 0 | 0 | 0 | 400 | 400 |
-| Asana | 82 | 167 | 0 | 0 | 249 |
+| Asana | 103 | 146 | 0 | 0 | 249 |
 | Jira | 563 | 28 | 0 | 26 | 617 |
-| **Total** | **768** | **298** | **4** | **3,271** | **4,341** |
+| **Total** | **789** | **277** | **4** | **3,271** | **4,341** |
 
 “Materialized runnable” means the record has both
 `intended_cli_path.source: current_cli_surface` and
@@ -116,7 +124,7 @@ Every record has this shape:
 | `lane` | Source-ledger parity lane for the operation. |
 | `canonical_target` | `rest:<lowercase-method>:<exact-provider-path>` plus the same endpoint as structured method/path. |
 | `intended_cli_path` | A nonempty, unique provider command path with the source of that mapping and its current availability. `manifest_reservation` is an exact future command projection, not an executable generic HTTP surface. |
-| `declaration_state` | `implemented` only for the 768 already runnable rows; otherwise `deferred`. |
+| `declaration_state` | `implemented` only for the 789 already runnable rows; otherwise `deferred`. |
 | `mapping_state` | `runnable`, `declarable`, or `deferred`. `declarable` means the current source shape needs connector-owned materialization, not a shared provider/importer fix. |
 | `missing_implementation` | Absent only when `declaration_state` is `implemented`; otherwise present exactly once, with one concrete component, source-cited foundation/evidence, and a machine-readable `projection_prerequisite`. |
 
@@ -156,7 +164,7 @@ does not depend on PR #4351 being merged.
 
 ## Materialization order
 
-The 1,663 `declarable` rows are the immediate connector-mapping queue. Their
+The 1,642 `declarable` rows are the immediate connector-mapping queue. Their
 manifest records already provide one source citation, lane, canonical target,
 path, and a concrete connector-owned component. Materialize a bounded
 connector slice by consuming those fields into the provider definition, then
@@ -176,7 +184,7 @@ three transitions rather than only a declaration count:
 
 1. Read the provider source lock and manifest together; reject a missing,
    duplicate, mismatched, or empty-path record. Assert the expected nonzero
-provider denominator and the aggregate `4,341 / 768 / 1,663 / 1,910`
+provider denominator and the aggregate `4,341 / 789 / 1,642 / 1,910`
    split.
 2. For every `implemented` record, run the built binary in its own
    credential-free project and assert the exact credential-boundary result;

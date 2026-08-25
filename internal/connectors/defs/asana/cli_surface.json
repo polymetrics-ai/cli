@@ -462,26 +462,19 @@
     },
     {
       "path": "access-requests approve-access-request",
-      "summary": "Planned fixed-target Asana mutation: Approve an access request.",
+      "summary": "Approve an access request.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "approve_access_request",
+      "availability": "implemented",
       "source_cli_path": "POST /access_requests/{access_request_gid}/approve",
       "source_url": "https://developers.asana.com/reference/approveaccessrequest",
       "flags": [
         {
           "name": "access-request-gid",
-          "type": "string",
           "summary": "Asana path parameter `access_request_gid`.",
-          "maps_to": "record.access_request_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "confirm",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.access_request_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -491,31 +484,24 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "approve_access_request"
     },
     {
       "path": "access-requests reject-access-request",
-      "summary": "Planned fixed-target Asana mutation: Reject an access request.",
+      "summary": "Reject an access request.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "reject_access_request",
+      "availability": "implemented",
       "source_cli_path": "POST /access_requests/{access_request_gid}/reject",
       "source_url": "https://developers.asana.com/reference/rejectaccessrequest",
       "flags": [
         {
           "name": "access-request-gid",
-          "type": "string",
           "summary": "Asana path parameter `access_request_gid`.",
-          "maps_to": "record.access_request_gid",
-          "allow_empty": false
-        },
-        {
-          "name": "confirm",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.access_request_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -525,8 +511,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "reject_access_request"
     },
     {
       "path": "agents get-agents-for-workspace",
@@ -696,26 +682,24 @@
     },
     {
       "path": "allocations delete-allocation",
-      "summary": "Planned fixed-target Asana mutation: Delete an allocation.",
+      "summary": "Delete an allocation.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_allocation",
+      "availability": "implemented",
       "source_cli_path": "DELETE /allocations/{allocation_gid}",
       "source_url": "https://developers.asana.com/reference/deleteallocation",
       "flags": [
         {
           "name": "allocation-gid",
-          "type": "string",
           "summary": "Asana path parameter `allocation_gid`.",
+          "type": "string",
           "maps_to": "record.allocation_gid",
-          "allow_empty": false
+          "required": true,
+          "max_bytes": 32768
         },
         {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -725,8 +709,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_allocation"
     },
     {
       "path": "allocations get-allocations",
@@ -805,26 +789,24 @@
     },
     {
       "path": "attachments delete-attachment",
-      "summary": "Planned fixed-target Asana mutation: Delete an attachment.",
+      "summary": "Delete an attachment.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_attachment",
+      "availability": "implemented",
       "source_cli_path": "DELETE /attachments/{attachment_gid}",
       "source_url": "https://developers.asana.com/reference/deleteattachment",
       "flags": [
         {
           "name": "attachment-gid",
-          "type": "string",
           "summary": "Asana path parameter `attachment_gid`.",
+          "type": "string",
           "maps_to": "record.attachment_gid",
-          "allow_empty": false
+          "required": true,
+          "max_bytes": 32768
         },
         {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -834,8 +816,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_attachment"
     },
     {
       "path": "attachments get-attachments-for-object",
@@ -1050,26 +1032,24 @@
     },
     {
       "path": "budgets delete-budget",
-      "summary": "Planned fixed-target Asana mutation: Delete a budget.",
+      "summary": "Delete a budget.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_budget",
+      "availability": "implemented",
       "source_cli_path": "DELETE /budgets/{budget_gid}",
       "source_url": "https://developers.asana.com/reference/deletebudget",
       "flags": [
         {
           "name": "budget-gid",
-          "type": "string",
           "summary": "Asana path parameter `budget_gid`.",
+          "type": "string",
           "maps_to": "record.budget_gid",
-          "allow_empty": false
+          "required": true,
+          "max_bytes": 32768
         },
         {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -1079,8 +1059,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_budget"
     },
     {
       "path": "custom-field-settings get-custom-field-settings-for-project",
@@ -1271,26 +1251,24 @@
     },
     {
       "path": "custom-fields delete-custom-field",
-      "summary": "Planned fixed-target Asana mutation: Delete a custom field.",
+      "summary": "Delete a custom field.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_custom_field",
+      "availability": "implemented",
       "source_cli_path": "DELETE /custom_fields/{custom_field_gid}",
       "source_url": "https://developers.asana.com/reference/deletecustomfield",
       "flags": [
         {
           "name": "custom-field-gid",
-          "type": "string",
           "summary": "Asana path parameter `custom_field_gid`.",
+          "type": "string",
           "maps_to": "record.custom_field_gid",
-          "allow_empty": false
+          "required": true,
+          "max_bytes": 32768
         },
         {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -1300,8 +1278,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_custom_field"
     },
     {
       "path": "custom-fields list",
@@ -1776,26 +1754,24 @@
     },
     {
       "path": "goals delete-goal",
-      "summary": "Planned fixed-target Asana mutation: Delete a goal.",
+      "summary": "Delete a goal.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_goal",
+      "availability": "implemented",
       "source_cli_path": "DELETE /goals/{goal_gid}",
       "source_url": "https://developers.asana.com/reference/deletegoal",
       "flags": [
         {
           "name": "goal-gid",
-          "type": "string",
           "summary": "Asana path parameter `goal_gid`.",
+          "type": "string",
           "maps_to": "record.goal_gid",
-          "allow_empty": false
+          "required": true,
+          "max_bytes": 32768
         },
         {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -1805,8 +1781,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_goal"
     },
     {
       "path": "goals get-goals",
@@ -2275,26 +2251,24 @@
     },
     {
       "path": "memberships delete-membership",
-      "summary": "Planned fixed-target Asana mutation: Delete a membership.",
+      "summary": "Delete a membership.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_membership",
+      "availability": "implemented",
       "source_cli_path": "DELETE /memberships/{membership_gid}",
       "source_url": "https://developers.asana.com/reference/deletemembership",
       "flags": [
         {
           "name": "membership-gid",
-          "type": "string",
           "summary": "Asana path parameter `membership_gid`.",
+          "type": "string",
           "maps_to": "record.membership_gid",
-          "allow_empty": false
+          "required": true,
+          "max_bytes": 32768
         },
         {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -2304,8 +2278,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_membership"
     },
     {
       "path": "ooo-entries get-ooo-entry",
@@ -2379,26 +2353,24 @@
     },
     {
       "path": "ooo-entries delete-ooo-entry",
-      "summary": "Planned fixed-target Asana mutation: Delete an OOO entry.",
+      "summary": "Delete an OOO entry.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_ooo_entry",
+      "availability": "implemented",
       "source_cli_path": "DELETE /ooo_entries/{ooo_entry_gid}",
       "source_url": "https://developers.asana.com/reference/deleteoooentry",
       "flags": [
         {
           "name": "ooo-entry-gid",
-          "type": "string",
           "summary": "Asana path parameter `ooo_entry_gid`.",
+          "type": "string",
           "maps_to": "record.ooo_entry_gid",
-          "allow_empty": false
+          "required": true,
+          "max_bytes": 32768
         },
         {
-          "name": "confirm",
-          "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -2408,8 +2380,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_ooo_entry"
     },
     {
       "path": "ooo-entries get-ooo-entries",
@@ -2684,26 +2656,24 @@
     },
     {
       "path": "portfolios delete-portfolio",
-      "summary": "Planned fixed-target Asana mutation: Delete a portfolio.",
+      "summary": "Delete a portfolio.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_portfolio",
+      "availability": "implemented",
       "source_cli_path": "DELETE /portfolios/{portfolio_gid}",
       "source_url": "https://developers.asana.com/reference/deleteportfolio",
       "flags": [
         {
-          "name": "portfolio-gid",
-          "type": "string",
-          "summary": "Asana path parameter `portfolio_gid`.",
-          "maps_to": "record.portfolio_gid",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         },
         {
-          "name": "confirm",
+          "name": "portfolio-gid",
+          "summary": "Asana path parameter `portfolio_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.portfolio_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -2713,8 +2683,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_portfolio"
     },
     {
       "path": "portfolios get-items-for-portfolio",
@@ -3094,26 +3064,24 @@
     },
     {
       "path": "project-briefs delete-project-brief",
-      "summary": "Planned fixed-target Asana mutation: Delete a project brief.",
+      "summary": "Delete a project brief.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_project_brief",
+      "availability": "implemented",
       "source_cli_path": "DELETE /project_briefs/{project_brief_gid}",
       "source_url": "https://developers.asana.com/reference/deleteprojectbrief",
       "flags": [
         {
-          "name": "project-brief-gid",
-          "type": "string",
-          "summary": "Asana path parameter `project_brief_gid`.",
-          "maps_to": "record.project_brief_gid",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         },
         {
-          "name": "confirm",
+          "name": "project-brief-gid",
+          "summary": "Asana path parameter `project_brief_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.project_brief_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -3123,8 +3091,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_project_brief"
     },
     {
       "path": "project-briefs create-project-brief",
@@ -3358,26 +3326,24 @@
     },
     {
       "path": "project-statuses delete-project-status",
-      "summary": "Planned fixed-target Asana mutation: Delete a project status.",
+      "summary": "Delete a project status.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_project_status",
+      "availability": "implemented",
       "source_cli_path": "DELETE /project_statuses/{project_status_gid}",
       "source_url": "https://developers.asana.com/reference/deleteprojectstatus",
       "flags": [
         {
-          "name": "project-status-gid",
-          "type": "string",
-          "summary": "Asana path parameter `project_status_gid`.",
-          "maps_to": "record.project_status_gid",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         },
         {
-          "name": "confirm",
+          "name": "project-status-gid",
+          "summary": "Asana path parameter `project_status_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.project_status_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -3387,8 +3353,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_project_status"
     },
     {
       "path": "project-statuses list",
@@ -3477,26 +3443,24 @@
     },
     {
       "path": "project-templates delete-project-template",
-      "summary": "Planned fixed-target Asana mutation: Delete a project template.",
+      "summary": "Delete a project template.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_project_template",
+      "availability": "implemented",
       "source_cli_path": "DELETE /project_templates/{project_template_gid}",
       "source_url": "https://developers.asana.com/reference/deleteprojecttemplate",
       "flags": [
         {
-          "name": "project-template-gid",
-          "type": "string",
-          "summary": "Asana path parameter `project_template_gid`.",
-          "maps_to": "record.project_template_gid",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         },
         {
-          "name": "confirm",
+          "name": "project-template-gid",
+          "summary": "Asana path parameter `project_template_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.project_template_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -3506,8 +3470,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_project_template"
     },
     {
       "path": "project-templates get-project-templates",
@@ -4400,26 +4364,24 @@
     },
     {
       "path": "rates delete-rate",
-      "summary": "Planned fixed-target Asana mutation: Delete a rate.",
+      "summary": "Delete a rate.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_rate",
+      "availability": "implemented",
       "source_cli_path": "DELETE /rates/{rate_gid}",
       "source_url": "https://developers.asana.com/reference/deleterate",
       "flags": [
         {
-          "name": "rate-gid",
-          "type": "string",
-          "summary": "Asana path parameter `rate_gid`.",
-          "maps_to": "record.rate_gid",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         },
         {
-          "name": "confirm",
+          "name": "rate-gid",
+          "summary": "Asana path parameter `rate_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.rate_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -4429,8 +4391,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_rate"
     },
     {
       "path": "reactions get-reactions-on-object",
@@ -4566,26 +4528,24 @@
     },
     {
       "path": "roles delete-role",
-      "summary": "Planned fixed-target Asana mutation: Delete a role.",
+      "summary": "Delete a role.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_role",
+      "availability": "implemented",
       "source_cli_path": "DELETE /roles/{role_gid}",
       "source_url": "https://developers.asana.com/reference/deleterole",
       "flags": [
         {
-          "name": "role-gid",
-          "type": "string",
-          "summary": "Asana path parameter `role_gid`.",
-          "maps_to": "record.role_gid",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         },
         {
-          "name": "confirm",
+          "name": "role-gid",
+          "summary": "Asana path parameter `role_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.role_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -4595,8 +4555,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_role"
     },
     {
       "path": "rules trigger-rule",
@@ -4905,26 +4865,24 @@
     },
     {
       "path": "status-updates delete-status",
-      "summary": "Planned fixed-target Asana mutation: Delete a status update.",
+      "summary": "Delete a status update.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_status",
+      "availability": "implemented",
       "source_cli_path": "DELETE /status_updates/{status_update_gid}",
       "source_url": "https://developers.asana.com/reference/deletestatus",
       "flags": [
         {
-          "name": "status-update-gid",
-          "type": "string",
-          "summary": "Asana path parameter `status_update_gid`.",
-          "maps_to": "record.status_update_gid",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         },
         {
-          "name": "confirm",
+          "name": "status-update-gid",
+          "summary": "Asana path parameter `status_update_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.status_update_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -4934,8 +4892,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_status"
     },
     {
       "path": "status-updates get-statuses-for-object",
@@ -5052,26 +5010,24 @@
     },
     {
       "path": "stories delete-story",
-      "summary": "Planned fixed-target Asana mutation: Delete a story.",
+      "summary": "Delete a story.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_story",
+      "availability": "implemented",
       "source_cli_path": "DELETE /stories/{story_gid}",
       "source_url": "https://developers.asana.com/reference/deletestory",
       "flags": [
         {
-          "name": "story-gid",
-          "type": "string",
-          "summary": "Asana path parameter `story_gid`.",
-          "maps_to": "record.story_gid",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         },
         {
-          "name": "confirm",
+          "name": "story-gid",
+          "summary": "Asana path parameter `story_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.story_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -5081,8 +5037,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_story"
     },
     {
       "path": "stories list",
@@ -5505,26 +5461,24 @@
     },
     {
       "path": "task-templates delete-task-template",
-      "summary": "Planned fixed-target Asana mutation: Delete a task template.",
+      "summary": "Delete a task template.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_task_template",
+      "availability": "implemented",
       "source_cli_path": "DELETE /task_templates/{task_template_gid}",
       "source_url": "https://developers.asana.com/reference/deletetasktemplate",
       "flags": [
         {
-          "name": "task-template-gid",
-          "type": "string",
-          "summary": "Asana path parameter `task_template_gid`.",
-          "maps_to": "record.task_template_gid",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         },
         {
-          "name": "confirm",
+          "name": "task-template-gid",
+          "summary": "Asana path parameter `task_template_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.task_template_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -5534,8 +5488,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_task_template"
     },
     {
       "path": "task-templates instantiate-task",
@@ -6901,26 +6855,24 @@
     },
     {
       "path": "time-tracking-categories delete-time-tracking-category",
-      "summary": "Planned fixed-target Asana mutation: Delete a time tracking category.",
+      "summary": "Delete a time tracking category.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_time_tracking_category",
+      "availability": "implemented",
       "source_cli_path": "DELETE /time_tracking_categories/{time_tracking_category_gid}",
       "source_url": "https://developers.asana.com/reference/deletetimetrackingcategory",
       "flags": [
         {
-          "name": "time-tracking-category-gid",
-          "type": "string",
-          "summary": "Asana path parameter `time_tracking_category_gid`.",
-          "maps_to": "record.time_tracking_category_gid",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         },
         {
-          "name": "confirm",
+          "name": "time-tracking-category-gid",
+          "summary": "Asana path parameter `time_tracking_category_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.time_tracking_category_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -6930,8 +6882,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_time_tracking_category"
     },
     {
       "path": "time-tracking-categories get-time-tracking-entries-for-time-tracking-category",
@@ -7150,26 +7102,24 @@
     },
     {
       "path": "time-tracking-entries delete-time-tracking-entry",
-      "summary": "Planned fixed-target Asana mutation: Delete a time tracking entry.",
+      "summary": "Delete a time tracking entry.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_time_tracking_entry",
+      "availability": "implemented",
       "source_cli_path": "DELETE /time_tracking_entries/{time_tracking_entry_gid}",
       "source_url": "https://developers.asana.com/reference/deletetimetrackingentry",
       "flags": [
         {
-          "name": "time-tracking-entry-gid",
-          "type": "string",
-          "summary": "Asana path parameter `time_tracking_entry_gid`.",
-          "maps_to": "record.time_tracking_entry_gid",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         },
         {
-          "name": "confirm",
+          "name": "time-tracking-entry-gid",
+          "summary": "Asana path parameter `time_tracking_entry_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.time_tracking_entry_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -7179,8 +7129,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_time_tracking_entry"
     },
     {
       "path": "time-tracking-entries get-time-tracking-entries",
@@ -7726,26 +7676,24 @@
     },
     {
       "path": "webhooks delete-webhook",
-      "summary": "Planned fixed-target Asana mutation: Delete a webhook.",
+      "summary": "Delete a webhook.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "delete_webhook",
+      "availability": "implemented",
       "source_cli_path": "DELETE /webhooks/{webhook_gid}",
       "source_url": "https://developers.asana.com/reference/deletewebhook",
       "flags": [
         {
-          "name": "webhook-gid",
-          "type": "string",
-          "summary": "Asana path parameter `webhook_gid`.",
-          "maps_to": "record.webhook_gid",
-          "allow_empty": false
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         },
         {
-          "name": "confirm",
+          "name": "webhook-gid",
+          "summary": "Asana path parameter `webhook_gid`.",
           "type": "string",
-          "summary": "Typed confirmation challenge; destructive operations require `destructive`.",
-          "maps_to": "approval.confirm",
-          "allow_empty": false
+          "maps_to": "record.webhook_gid",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [
@@ -7755,8 +7703,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "notes": "Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "write": "delete_webhook"
     },
     {
       "path": "workspace-memberships get-workspace-membership",

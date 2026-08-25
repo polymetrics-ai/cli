@@ -273,3 +273,43 @@ exists.
 - **Quality:** focused commandrunner test, Jira importer/validator,
   `surface-sync --check`, connector checks, build, probes, help/docs checks,
   and serial `make verify` before a push.
+
+## Asana no-body mutation materialization cohort (2026-08-25)
+
+This connector-owned cohort consumes exactly the 21 Asana source operations
+that are already mapped as `declarable` with
+`missing_implementation.component: action_binding`. Each has exactly one
+required string path parameter, no request body, and, for the 19 DELETEs, an
+optional boolean `opt_pretty` query parameter. The source descriptor is the
+only input authority:
+`internal/connectors/defs/asana/sources/asana-operation-descriptor.json`.
+
+| Source IDs | Method/body shape | Existing canonical CLI paths | Decision |
+| --- | --- | --- | --- |
+| `approveAccessRequest`, `rejectAccessRequest` | POST, required `access_request_gid`, no body | `access-requests approve-access-request`, `access-requests reject-access-request` | Bind source-derived no-body actions and retain the existing paths. |
+| `deleteAllocation`, `deleteAttachment`, `deleteBudget`, `deleteCustomField`, `deleteGoal`, `deleteMembership`, `deleteOooEntry`, `deletePortfolio`, `deleteProjectBrief`, `deleteProjectStatus`, `deleteProjectTemplate`, `deleteRate`, `deleteRole`, `deleteStatus`, `deleteStory`, `deleteTaskTemplate`, `deleteTimeTrackingCategory`, `deleteTimeTrackingEntry`, `deleteWebhook` | DELETE, one required `*_gid`, optional `opt_pretty`, no body | Existing `<resource> delete-<resource>` paths in `cli_surface.json` | Bind source-derived no-body delete actions and retain the existing paths. |
+
+- **Red:** `go run ./cmd/connectorgen source-import asana --check` reports
+  descriptor drift (`writes=0 cli=0`), and the planned commands do not pass
+  real `commandrunner.Preflight` because they have no named executable action.
+- **Green:** each existing canonical command is `implemented`, references its
+  matching action, carries only importer-projected path/query flags, and passes
+  real preflight. The importer verifies all 249 source operations without
+  generating a second command path; the source disposition is removed only for
+  an operation after its complete action and implemented command exist.
+- **Hard boundaries:** all 21 actions use `body_type: none`; do not invent
+  idempotence, missing-status, request schemas, dynamic bodies, provider
+  scopes, or a generic write surface. The 24 separate existing Asana
+  source-bound request-schema gaps remain intact and no working command is
+  downgraded.
+- **Quality:** one table-driven commandrunner regression names every source
+  ID/action/path triplet; source-import/check, targeted validation,
+  `surface-sync --check`, credential-free binary probes, help/inspection,
+  vet/build, and `git diff --check` record the real result. Full `make verify`
+  remains required before any future push.
+- **Green result:** source import refreshed its 249 operation descriptor with
+  summaries, then projected exactly 21 write and 21 CLI field updates after
+  the action bindings were supplied. The canonical existing paths—not new
+  generated paths—pass real preflight. The only post-import Asana validation
+  findings are the unchanged 24 source-bound request-schema gaps on other
+  implemented operations.

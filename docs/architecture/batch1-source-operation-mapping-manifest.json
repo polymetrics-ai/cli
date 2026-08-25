@@ -1,6 +1,6 @@
 {
   "invariants": {
-    "declarable": 1663,
+    "declarable": 1642,
     "deferred": 1910,
     "deferred_has_exactly_one_concrete_missing_component": true,
     "every_record_has_cli_path": true,
@@ -16,7 +16,7 @@
       "retained_bytes",
       "live_certification"
     ],
-    "runnable": 768,
+    "runnable": 789,
     "same_path_promotion": "implemented reaches the credential boundary; deferred returns typed missing_foundation; after the named component exists, the same path and arguments reach the credential boundary",
     "source_operations": 4341,
     "zero_denominator_forbidden": true
@@ -79,10 +79,10 @@
       "source_operations": 400
     },
     {
-      "declarable": 130,
+      "declarable": 109,
       "deferred": 37,
       "provider": "asana",
-      "runnable": 82,
+      "runnable": 103,
       "source_operations": 249
     },
     {
@@ -159,10 +159,10 @@
       "source_operations": 400
     },
     {
-      "current_nonrunnable_surface": 167,
+      "current_nonrunnable_surface": 146,
       "declaration_disposition_only": 0,
       "manifest_reservation_only": 0,
-      "materialized_runnable": 82,
+      "materialized_runnable": 103,
       "provider": "asana",
       "source_operations": 249
     },
@@ -190,7 +190,7 @@
     ],
     "missing_implementation": "required exactly once when declaration_state is deferred; component is one of source_descriptor, typed_input_schema, action_binding, cli_projection, executor_binding, source_citation, provider_contract and never policy/provenance",
     "provider": "one of dockerhub, notion, stripe, bitbucket, gitlab, circleci, sentry, vercel, asana, jira",
-    "record_key": "\u003cprovider\u003e:\u003csource.operation_id\u003e; unique source-lock identity",
+    "record_key": "<provider>:<source.operation_id>; unique source-lock identity",
     "source": "independent provider operation identity and pinned source citation"
   },
   "records": [
@@ -141974,24 +141974,14 @@
         },
         "operation_key": "rest:post:/access_requests/{access_request_gid}/approve"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "access-requests approve-access-request",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:459: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/access_requests/{access_request_gid}/approve\"].post.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.approveAccessRequest",
       "source": {
@@ -143220,24 +143210,14 @@
         },
         "operation_key": "rest:delete:/allocations/{allocation_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "allocations delete-allocation",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:693: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/allocations/{allocation_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteAllocation",
       "source": {
@@ -143261,24 +143241,14 @@
         },
         "operation_key": "rest:delete:/attachments/{attachment_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "attachments delete-attachment",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:802: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/attachments/{attachment_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteAttachment",
       "source": {
@@ -143302,24 +143272,14 @@
         },
         "operation_key": "rest:delete:/budgets/{budget_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "budgets delete-budget",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:1047: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/budgets/{budget_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteBudget",
       "source": {
@@ -143343,24 +143303,14 @@
         },
         "operation_key": "rest:delete:/custom_fields/{custom_field_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "custom-fields delete-custom-field",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:1593: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/custom_fields/{custom_field_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteCustomField",
       "source": {
@@ -143384,24 +143334,14 @@
         },
         "operation_key": "rest:delete:/goals/{goal_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "goals delete-goal",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:2245: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/goals/{goal_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteGoal",
       "source": {
@@ -143425,24 +143365,14 @@
         },
         "operation_key": "rest:delete:/memberships/{membership_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "memberships delete-membership",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:2839: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/memberships/{membership_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteMembership",
       "source": {
@@ -143466,24 +143396,14 @@
         },
         "operation_key": "rest:delete:/ooo_entries/{ooo_entry_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "ooo-entries delete-ooo-entry",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:2940: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/ooo_entries/{ooo_entry_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteOooEntry",
       "source": {
@@ -143507,24 +143427,14 @@
         },
         "operation_key": "rest:delete:/portfolios/{portfolio_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "portfolios delete-portfolio",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:3347: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/portfolios/{portfolio_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deletePortfolio",
       "source": {
@@ -143579,24 +143489,14 @@
         },
         "operation_key": "rest:delete:/project_briefs/{project_brief_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "project-briefs delete-project-brief",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:3777: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/project_briefs/{project_brief_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteProjectBrief",
       "source": {
@@ -143620,24 +143520,14 @@
         },
         "operation_key": "rest:delete:/project_statuses/{project_status_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "project-statuses delete-project-status",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:4044: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/project_statuses/{project_status_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteProjectStatus",
       "source": {
@@ -143661,24 +143551,14 @@
         },
         "operation_key": "rest:delete:/project_templates/{project_template_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "project-templates delete-project-template",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:4184: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/project_templates/{project_template_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteProjectTemplate",
       "source": {
@@ -143702,24 +143582,14 @@
         },
         "operation_key": "rest:delete:/rates/{rate_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "rates delete-rate",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:5480: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/rates/{rate_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteRate",
       "source": {
@@ -143743,24 +143613,14 @@
         },
         "operation_key": "rest:delete:/roles/{role_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "roles delete-role",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:5646: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/roles/{role_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteRole",
       "source": {
@@ -143815,24 +143675,14 @@
         },
         "operation_key": "rest:delete:/status_updates/{status_update_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "status-updates delete-status",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:5989: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/status_updates/{status_update_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteStatus",
       "source": {
@@ -143856,24 +143706,14 @@
         },
         "operation_key": "rest:delete:/stories/{story_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "stories delete-story",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:6167: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/stories/{story_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteStory",
       "source": {
@@ -143959,24 +143799,14 @@
         },
         "operation_key": "rest:delete:/task_templates/{task_template_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "task-templates delete-task-template",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:6640: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/task_templates/{task_template_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteTaskTemplate",
       "source": {
@@ -144000,24 +143830,14 @@
         },
         "operation_key": "rest:delete:/time_tracking_categories/{time_tracking_category_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "time-tracking-categories delete-time-tracking-category",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:8325: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/time_tracking_categories/{time_tracking_category_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteTimeTrackingCategory",
       "source": {
@@ -144041,24 +143861,14 @@
         },
         "operation_key": "rest:delete:/time_tracking_entries/{time_tracking_entry_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "time-tracking-entries delete-time-tracking-entry",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:8620: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/time_tracking_entries/{time_tracking_entry_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteTimeTrackingEntry",
       "source": {
@@ -144082,24 +143892,14 @@
         },
         "operation_key": "rest:delete:/webhooks/{webhook_gid}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "webhooks delete-webhook",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:9196: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/webhooks/{webhook_gid}\"].delete.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.deleteWebhook",
       "source": {
@@ -149037,24 +148837,14 @@
         },
         "operation_key": "rest:post:/access_requests/{access_request_gid}/reject"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
-        "current_availability": "planned",
+        "current_availability": "implemented",
         "path": "access-requests reject-access-request",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "internal/connectors/defs/asana/cli_surface.json:493: command availability is planned; internal/connectors/defs/asana/sources/asana-operation-source-lock.json: paths paths[\"/access_requests/{access_request_gid}/reject\"].post.",
-        "foundation": "command-availability-asana",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "asana",
       "record_key": "asana:asana.rest.rejectAccessRequest",
       "source": {
@@ -170499,7 +170289,7 @@
   "schema_version": "batch1-source-operation-mapping-manifest/v1",
   "scope": "Interim independent denominator and command-mapping handoff. This is not a connector declaration sidecar and does not materialize a provider request or write.",
   "source_basis": {
-    "authoritative_inventory": "the ten connector source locks under internal/connectors/defs/\u003cprovider\u003e/sources/*-operation-source-lock.json",
+    "authoritative_inventory": "the ten connector source locks under internal/connectors/defs/<provider>/sources/*-operation-source-lock.json",
     "does_not_depend_on": [
       "cli-declaration-admission-certification-r1",
       "PR #4351"

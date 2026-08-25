@@ -13,6 +13,34 @@
 | Vercel surface discovery | `pm vercel` returns `unknown command`; an absent `cli_surface.json` means no command can be credential-bound | Report the required declaration-owned artifacts and source-bound operation set before any mutation mapping | Do not create a command surface as part of a disposition-only slice | pending captain report |
 | Asana/Jira declared-and-deferred mutations | Targeted validation reports the documented source mutations without complete actions | Exact cited disposition files retain those operations as merge-blocked runtime gaps without changing a working command | Same focused importer/validator and runtime sweep as Sentry | pending |
 | Jira scalar direct-write subset | The manifest-reserved reset path is unknown to real `commandrunner.Preflight` | That exact source-cited reset path passes preflight and reaches the no-credential boundary; schema and query map remain closed/source-derived | Focused commandrunner test, Jira importer/validator, surface-sync, binary probes | green for `resetUserColumns`; `removeGroup` remains held for conditional-query projection and `addWatcher` for scalar JSON body support |
+| Asana no-body mutation cohort | 21 source-cited planned commands have no action binding and do not pass real preflight | Each keeps its existing canonical path, is bound to a no-body source-derived action, and reaches credential preflight; 24 unrelated source-schema gaps remain | Table-driven commandrunner regression; importer/check; targeted validation; surface/help probes | green for all 21 actions; global gates remain pending |
+
+### 2026-08-25 Asana no-body mutation execution
+
+- **Red:** the 21 existing planned commands each stopped at their planned
+  operation executor. After the action bindings first changed availability,
+  the same red test exposed the stale `operation` claims as absent executors;
+  those claims were removed rather than replaced with a local executor.
+- **Green:** `source-import asana` projects exactly 21 write and 21 CLI updates
+  from the pinned 249-operation source descriptor. `go run ./cmd/connectorgen
+  source-import asana --check` passes, and
+  `TestAsanaSourceCitedNoBodyMutationCommandsPassRuntimePreflight` passes all
+  21 canonical existing paths. Each action has one source-required path field,
+  `body_type: none`, destructive confirmation, and only source-derived
+  `opt_pretty` where declared.
+- **Honest remainder:** targeted validation still reports exactly 24 existing
+  source-bound gaps on other implemented create/update operations. No one is
+  downgraded, no open request body is closed locally, and no missing-status or
+  idempotence claim was added to the DELETE actions.
+- **Verification:** `go vet ./internal/connectors/commandrunner`, `go build
+  ./cmd/pm`, `pm connectors inspect asana --json`, the changed command help,
+  manifest/action/CLI/API jq invariants, and `git diff --check` pass. A built
+  binary in an isolated initialized project exercised all 21 paths with a
+  harmless required path value; every one exited 1 with exactly
+  `error: missing --credential`. The full commandrunner package has 21 known
+  Docker Hub failures out of 5,316 implemented commands and no Asana failure;
+  `surface-sync --check` stops first at Docker Hub's missing canonical source
+  descriptor. No full `make verify` or push was attempted.
 
 ### 2026-08-25 Jira source-derived reset-user-columns execution
 
@@ -410,8 +438,8 @@
   5,262 implemented commands and found 21 failures, all Docker Hub; no other
   batch-one connector failed runtime preflight.
 - **Canonical source-operation denominator:** the ten current source locks
-  retain 4,341 provider REST operations. The three-way split is **768 already
-  runnable**, **1,663 declarable now**, and **1,910 genuinely blocked**. The
+  retain 4,341 provider REST operations. The three-way split is **789 already
+  runnable**, **1,642 declarable now**, and **1,910 genuinely blocked**. The
   runnable number starts from exact source-to-command crosswalk bindings and
   excludes Docker Hub's two crosswalk-bound commands that fail preflight. A
   declarable operation has no source gap except
@@ -424,7 +452,7 @@
 - **Per connector (runnable / declarable / blocked):** Docker Hub 4 / 0 / 50;
   Notion 42 / 0 / 7; Stripe 8 / 0 / 581; Bitbucket 50 / 136 / 111; GitLab 0 /
   917 / 835; CircleCI 16 / 75 / 20; Sentry 3 / 144 / 76; Vercel 0 / 261 /
-  139; Asana 82 / 130 / 37; Jira 563 / 0 / 54. The Docker Hub, Notion, and
+  139; Asana 103 / 109 / 37; Jira 563 / 0 / 54. The Docker Hub, Notion, and
   Stripe blocked counts are their respectively 54, 49, and 589 locked
   operations less the still-working currently declared commands: each source
   import is refused before a descriptor can be produced (dangling
@@ -434,9 +462,10 @@
   dispositions have provider-documented path fields (and no request body).
   All 32 are declaration work, not a missing reverse-ETL or delete foundation.
 
-- **2026-08-25 count reconciliation:** the previous `767 / 1,666 / 1,908`
-  measurement and the canonical `768 / 1,663 / 1,910` measurement retain the
-  same 4,341 source identities. The entire delta is Jira: (1)
+- **2026-08-25 count reconciliation:** the earlier `767 / 1,666 / 1,908`
+  measurement, the interim Jira `768 / 1,663 / 1,910` measurement, and the
+  current `789 / 1,642 / 1,910` measurement retain the same 4,341 source
+  identities. The first delta is Jira: (1)
   `jira:jira.rest.resetUserColumns` moved declarable → runnable after its
   source-derived DELETE action and exact CLI projection passed real preflight
   and a credential-free binary probe; (2) `jira:jira.rest.removeGroup` moved
@@ -449,6 +478,11 @@
   actual-JSON/CLI versus manifest-only projection matrix is the independent
   `materialization_counts` block in
   `docs/architecture/batch1-source-operation-mapping-manifest.json`.
+- **Asana promotion:** the 21 action-binding rows for `approveAccessRequest`,
+  `rejectAccessRequest`, and 19 source-declared no-body DELETEs now use their
+  existing CLI paths and source-projected action contracts. This is exactly
+  runnable +21 / declarable -21; the remaining 24 Asana validation findings
+  are unchanged source-bound request-schema gaps, not missing actions.
 
 Every red/green command and its result is appended when it executes. No test is
 weakened or skipped to advance a row.

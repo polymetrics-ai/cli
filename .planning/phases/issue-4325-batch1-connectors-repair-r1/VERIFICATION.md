@@ -31,6 +31,10 @@
       `missing --credential`;
       source-cited `removeGroup` and `addWatcher` remain deferred without
       connector-local conditional-query or scalar-body approximations.
+- [x] Asana no-body mutation cohort: 21 existing canonical command paths bind
+      source-derived no-body actions and pass the table-driven real-preflight
+      regression; targeted validation retains only 24 unrelated existing
+      request-schema gaps.
 
 ## 2026-08-25 Jira slice disposition
 
@@ -43,6 +47,18 @@ source descriptor, and the full commandrunner package has 21 existing Docker
 Hub runtime-preflight failures. No full `make verify` or push was attempted:
 the current instruction prohibits pushing and the Issue 4325 Batch 1 gate is
 not yet green.
+
+## 2026-08-25 Asana cohort disposition
+
+`go run ./cmd/connectorgen source-import asana --check` verifies all 249
+source operations. The 21 promoted no-body actions pass the focused real
+preflight test and a built-binary, isolated credential-free probe for every
+one reaches exactly `error: missing --credential`. Targeted validation has
+exactly 24 unrelated existing source-bound request-schema findings. Vet,
+build, inspection, changed-command help, manifest/action/CLI/API invariants,
+and `git diff --check` pass. The only package/global blockers remain the 21
+Docker Hub preflight failures and its missing canonical source descriptor in
+`surface-sync --check`.
 
 ## Release checks
 

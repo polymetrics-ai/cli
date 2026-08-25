@@ -4145,6 +4145,81 @@ func TestJiraSourceCitedResetUserColumnsCommandPassesRuntimePreflight(t *testing
 	}
 }
 
+func TestAsanaSourceCitedNoBodyMutationCommandsPassRuntimePreflight(t *testing.T) {
+	type mutation struct {
+		sourceID  string
+		command   string
+		action    string
+		kind      string
+		method    string
+		path      string
+		pathField string
+		query     bool
+	}
+	mutations := []mutation{
+		{sourceID: "approveAccessRequest", command: "access-requests approve-access-request", action: "approve_access_request", kind: "update", method: http.MethodPost, path: "/access_requests/{{ record.access_request_gid }}/approve", pathField: "access_request_gid"},
+		{sourceID: "rejectAccessRequest", command: "access-requests reject-access-request", action: "reject_access_request", kind: "update", method: http.MethodPost, path: "/access_requests/{{ record.access_request_gid }}/reject", pathField: "access_request_gid"},
+		{sourceID: "deleteAllocation", command: "allocations delete-allocation", action: "delete_allocation", kind: "delete", method: http.MethodDelete, path: "/allocations/{{ record.allocation_gid }}", pathField: "allocation_gid", query: true},
+		{sourceID: "deleteAttachment", command: "attachments delete-attachment", action: "delete_attachment", kind: "delete", method: http.MethodDelete, path: "/attachments/{{ record.attachment_gid }}", pathField: "attachment_gid", query: true},
+		{sourceID: "deleteBudget", command: "budgets delete-budget", action: "delete_budget", kind: "delete", method: http.MethodDelete, path: "/budgets/{{ record.budget_gid }}", pathField: "budget_gid", query: true},
+		{sourceID: "deleteCustomField", command: "custom-fields delete-custom-field", action: "delete_custom_field", kind: "delete", method: http.MethodDelete, path: "/custom_fields/{{ record.custom_field_gid }}", pathField: "custom_field_gid", query: true},
+		{sourceID: "deleteGoal", command: "goals delete-goal", action: "delete_goal", kind: "delete", method: http.MethodDelete, path: "/goals/{{ record.goal_gid }}", pathField: "goal_gid", query: true},
+		{sourceID: "deleteMembership", command: "memberships delete-membership", action: "delete_membership", kind: "delete", method: http.MethodDelete, path: "/memberships/{{ record.membership_gid }}", pathField: "membership_gid", query: true},
+		{sourceID: "deleteOooEntry", command: "ooo-entries delete-ooo-entry", action: "delete_ooo_entry", kind: "delete", method: http.MethodDelete, path: "/ooo_entries/{{ record.ooo_entry_gid }}", pathField: "ooo_entry_gid", query: true},
+		{sourceID: "deletePortfolio", command: "portfolios delete-portfolio", action: "delete_portfolio", kind: "delete", method: http.MethodDelete, path: "/portfolios/{{ record.portfolio_gid }}", pathField: "portfolio_gid", query: true},
+		{sourceID: "deleteProjectBrief", command: "project-briefs delete-project-brief", action: "delete_project_brief", kind: "delete", method: http.MethodDelete, path: "/project_briefs/{{ record.project_brief_gid }}", pathField: "project_brief_gid", query: true},
+		{sourceID: "deleteProjectStatus", command: "project-statuses delete-project-status", action: "delete_project_status", kind: "delete", method: http.MethodDelete, path: "/project_statuses/{{ record.project_status_gid }}", pathField: "project_status_gid", query: true},
+		{sourceID: "deleteProjectTemplate", command: "project-templates delete-project-template", action: "delete_project_template", kind: "delete", method: http.MethodDelete, path: "/project_templates/{{ record.project_template_gid }}", pathField: "project_template_gid", query: true},
+		{sourceID: "deleteRate", command: "rates delete-rate", action: "delete_rate", kind: "delete", method: http.MethodDelete, path: "/rates/{{ record.rate_gid }}", pathField: "rate_gid", query: true},
+		{sourceID: "deleteRole", command: "roles delete-role", action: "delete_role", kind: "delete", method: http.MethodDelete, path: "/roles/{{ record.role_gid }}", pathField: "role_gid", query: true},
+		{sourceID: "deleteStatus", command: "status-updates delete-status", action: "delete_status", kind: "delete", method: http.MethodDelete, path: "/status_updates/{{ record.status_update_gid }}", pathField: "status_update_gid", query: true},
+		{sourceID: "deleteStory", command: "stories delete-story", action: "delete_story", kind: "delete", method: http.MethodDelete, path: "/stories/{{ record.story_gid }}", pathField: "story_gid", query: true},
+		{sourceID: "deleteTaskTemplate", command: "task-templates delete-task-template", action: "delete_task_template", kind: "delete", method: http.MethodDelete, path: "/task_templates/{{ record.task_template_gid }}", pathField: "task_template_gid", query: true},
+		{sourceID: "deleteTimeTrackingCategory", command: "time-tracking-categories delete-time-tracking-category", action: "delete_time_tracking_category", kind: "delete", method: http.MethodDelete, path: "/time_tracking_categories/{{ record.time_tracking_category_gid }}", pathField: "time_tracking_category_gid", query: true},
+		{sourceID: "deleteTimeTrackingEntry", command: "time-tracking-entries delete-time-tracking-entry", action: "delete_time_tracking_entry", kind: "delete", method: http.MethodDelete, path: "/time_tracking_entries/{{ record.time_tracking_entry_gid }}", pathField: "time_tracking_entry_gid", query: true},
+		{sourceID: "deleteWebhook", command: "webhooks delete-webhook", action: "delete_webhook", kind: "delete", method: http.MethodDelete, path: "/webhooks/{{ record.webhook_gid }}", pathField: "webhook_gid", query: true},
+	}
+
+	registry := bundleregistry.New()
+	connector, ok := registry.Get("asana")
+	if !ok {
+		t.Fatal("Asana connector is not registered")
+	}
+	bundle, err := engine.Load(defs.FS, "asana")
+	if err != nil {
+		t.Fatalf("load Asana bundle: %v", err)
+	}
+	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actions[action.Name] = action
+	}
+
+	for _, tc := range mutations {
+		t.Run(tc.sourceID, func(t *testing.T) {
+			if err := Preflight(connector, strings.Fields(tc.command)); err != nil {
+				t.Fatalf("Preflight(%q): %v", tc.command, err)
+			}
+			action, found := actions[tc.action]
+			if !found {
+				t.Fatalf("source operation %q is missing action %q", tc.sourceID, tc.action)
+			}
+			if action.Kind != tc.kind || action.Method != tc.method || action.Path != tc.path || action.BodyType != "none" || action.Confirm != "destructive" {
+				t.Fatalf("action %q = kind=%q method=%q path=%q body=%q confirm=%q", tc.action, action.Kind, action.Method, action.Path, action.BodyType, action.Confirm)
+			}
+			if !reflect.DeepEqual(action.PathFields, []string{tc.pathField}) {
+				t.Fatalf("action %q path fields = %#v, want %#v", tc.action, action.PathFields, []string{tc.pathField})
+			}
+			wantQuery := map[string]engine.QueryParam(nil)
+			if tc.query {
+				wantQuery = map[string]engine.QueryParam{"opt_pretty": {Template: "{{ record.opt_pretty }}", OmitWhenAbsent: true}}
+			}
+			if !reflect.DeepEqual(action.Query, wantQuery) {
+				t.Fatalf("action %q query = %#v, want %#v", tc.action, action.Query, wantQuery)
+			}
+		})
+	}
+}
+
 func TestSentryCitedMutationCommandsPassRuntimePreflight(t *testing.T) {
 	registry := bundleregistry.New()
 	connector, ok := registry.Get("sentry")

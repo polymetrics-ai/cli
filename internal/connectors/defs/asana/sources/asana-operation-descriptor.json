@@ -6,6 +6,7 @@
       "protocol": "rest",
       "source_id": "deleteAllocation",
       "operation_id": "deleteAllocation",
+      "summary": "Delete an allocation",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -415,22 +416,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteAllocation at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/allocations/{allocation_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteAllocation",
-            "method": "DELETE",
-            "path": "/allocations/{allocation_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -438,6 +424,7 @@
       "protocol": "rest",
       "source_id": "deleteAttachment",
       "operation_id": "deleteAttachment",
+      "summary": "Delete an attachment",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -801,22 +788,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteAttachment at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/attachments/{attachment_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteAttachment",
-            "method": "DELETE",
-            "path": "/attachments/{attachment_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -824,6 +796,7 @@
       "protocol": "rest",
       "source_id": "deleteBudget",
       "operation_id": "deleteBudget",
+      "summary": "Delete a budget",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -1233,22 +1206,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteBudget at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/budgets/{budget_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteBudget",
-            "method": "DELETE",
-            "path": "/budgets/{budget_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -1256,6 +1214,7 @@
       "protocol": "rest",
       "source_id": "deleteCustomField",
       "operation_id": "deleteCustomField",
+      "summary": "Delete a custom field",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -1617,22 +1576,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteCustomField at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/custom_fields/{custom_field_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteCustomField",
-            "method": "DELETE",
-            "path": "/custom_fields/{custom_field_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -1640,6 +1584,7 @@
       "protocol": "rest",
       "source_id": "deleteGoal",
       "operation_id": "deleteGoal",
+      "summary": "Delete a goal",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -2049,22 +1994,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteGoal at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/goals/{goal_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteGoal",
-            "method": "DELETE",
-            "path": "/goals/{goal_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -2072,6 +2002,7 @@
       "protocol": "rest",
       "source_id": "deleteMembership",
       "operation_id": "deleteMembership",
+      "summary": "Delete a membership",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -2433,22 +2364,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteMembership at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/memberships/{membership_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteMembership",
-            "method": "DELETE",
-            "path": "/memberships/{membership_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -2456,6 +2372,7 @@
       "protocol": "rest",
       "source_id": "deleteOooEntry",
       "operation_id": "deleteOooEntry",
+      "summary": "Delete an OOO entry",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -2819,22 +2736,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteOooEntry at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/ooo_entries/{ooo_entry_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteOooEntry",
-            "method": "DELETE",
-            "path": "/ooo_entries/{ooo_entry_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -2842,6 +2744,7 @@
       "protocol": "rest",
       "source_id": "deletePortfolio",
       "operation_id": "deletePortfolio",
+      "summary": "Delete a portfolio",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -3203,22 +3106,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deletePortfolio at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/portfolios/{portfolio_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deletePortfolio",
-            "method": "DELETE",
-            "path": "/portfolios/{portfolio_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -3226,6 +3114,7 @@
       "protocol": "rest",
       "source_id": "deleteProjectBrief",
       "operation_id": "deleteProjectBrief",
+      "summary": "Delete a project brief",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -3587,22 +3476,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteProjectBrief at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_briefs/{project_brief_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteProjectBrief",
-            "method": "DELETE",
-            "path": "/project_briefs/{project_brief_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -3610,6 +3484,7 @@
       "protocol": "rest",
       "source_id": "deleteProjectStatus",
       "operation_id": "deleteProjectStatus",
+      "summary": "Delete a project status",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -3971,22 +3846,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteProjectStatus at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_statuses/{project_status_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteProjectStatus",
-            "method": "DELETE",
-            "path": "/project_statuses/{project_status_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -3994,6 +3854,7 @@
       "protocol": "rest",
       "source_id": "deleteProjectTemplate",
       "operation_id": "deleteProjectTemplate",
+      "summary": "Delete a project template",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -4403,22 +4264,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteProjectTemplate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_templates/{project_template_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteProjectTemplate",
-            "method": "DELETE",
-            "path": "/project_templates/{project_template_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -4426,6 +4272,7 @@
       "protocol": "rest",
       "source_id": "deleteProject",
       "operation_id": "deleteProject",
+      "summary": "Delete a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -4797,6 +4644,7 @@
       "protocol": "rest",
       "source_id": "deleteRate",
       "operation_id": "deleteRate",
+      "summary": "Delete a rate",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -5206,22 +5054,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteRate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/rates/{rate_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteRate",
-            "method": "DELETE",
-            "path": "/rates/{rate_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -5229,6 +5062,7 @@
       "protocol": "rest",
       "source_id": "deleteRole",
       "operation_id": "deleteRole",
+      "summary": "Delete a role",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -5592,22 +5426,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteRole at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/roles/{role_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteRole",
-            "method": "DELETE",
-            "path": "/roles/{role_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -5615,6 +5434,7 @@
       "protocol": "rest",
       "source_id": "deleteSection",
       "operation_id": "deleteSection",
+      "summary": "Delete a section",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -5984,6 +5804,7 @@
       "protocol": "rest",
       "source_id": "deleteStatus",
       "operation_id": "deleteStatus",
+      "summary": "Delete a status update",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -6345,22 +6166,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteStatus at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/status_updates/{status_update_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteStatus",
-            "method": "DELETE",
-            "path": "/status_updates/{status_update_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -6368,6 +6174,7 @@
       "protocol": "rest",
       "source_id": "deleteStory",
       "operation_id": "deleteStory",
+      "summary": "Delete a story",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -6731,22 +6538,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteStory at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/stories/{story_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteStory",
-            "method": "DELETE",
-            "path": "/stories/{story_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -6754,6 +6546,7 @@
       "protocol": "rest",
       "source_id": "deleteTag",
       "operation_id": "deleteTag",
+      "summary": "Delete a tag",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -7123,6 +6916,7 @@
       "protocol": "rest",
       "source_id": "deleteTaskTemplate",
       "operation_id": "deleteTaskTemplate",
+      "summary": "Delete a task template",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -7532,22 +7326,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteTaskTemplate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/task_templates/{task_template_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteTaskTemplate",
-            "method": "DELETE",
-            "path": "/task_templates/{task_template_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -7555,6 +7334,7 @@
       "protocol": "rest",
       "source_id": "deleteTask",
       "operation_id": "deleteTask",
+      "summary": "Delete a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -7926,6 +7706,7 @@
       "protocol": "rest",
       "source_id": "deleteTimeTrackingCategory",
       "operation_id": "deleteTimeTrackingCategory",
+      "summary": "Delete a time tracking category",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -8289,22 +8070,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteTimeTrackingCategory at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/time_tracking_categories/{time_tracking_category_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteTimeTrackingCategory",
-            "method": "DELETE",
-            "path": "/time_tracking_categories/{time_tracking_category_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -8312,6 +8078,7 @@
       "protocol": "rest",
       "source_id": "deleteTimeTrackingEntry",
       "operation_id": "deleteTimeTrackingEntry",
+      "summary": "Delete a time tracking entry",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -8721,22 +8488,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteTimeTrackingEntry at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/time_tracking_entries/{time_tracking_entry_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteTimeTrackingEntry",
-            "method": "DELETE",
-            "path": "/time_tracking_entries/{time_tracking_entry_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -8744,6 +8496,7 @@
       "protocol": "rest",
       "source_id": "deleteWebhook",
       "operation_id": "deleteWebhook",
+      "summary": "Delete a webhook",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -9107,22 +8860,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation deleteWebhook at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/webhooks/{webhook_gid}\"].delete",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "deleteWebhook",
-            "method": "DELETE",
-            "path": "/webhooks/{webhook_gid}"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -9130,6 +8868,7 @@
       "protocol": "rest",
       "source_id": "getAccessRequests",
       "operation_id": "getAccessRequests",
+      "summary": "Get access requests",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -9663,6 +9402,7 @@
       "protocol": "rest",
       "source_id": "getAgent",
       "operation_id": "getAgent",
+      "summary": "Get an agent",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -10202,6 +9942,7 @@
       "protocol": "rest",
       "source_id": "getAllocations",
       "operation_id": "getAllocations",
+      "summary": "Get multiple allocations",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -10871,6 +10612,7 @@
       "protocol": "rest",
       "source_id": "getAllocation",
       "operation_id": "getAllocation",
+      "summary": "Get an allocation",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -11475,6 +11217,7 @@
       "protocol": "rest",
       "source_id": "getAttachmentsForObject",
       "operation_id": "getAttachmentsForObject",
+      "summary": "Get attachments from an object",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -11958,6 +11701,7 @@
       "protocol": "rest",
       "source_id": "getAttachment",
       "operation_id": "getAttachment",
+      "summary": "Get an attachment",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -12760,6 +12504,7 @@
       "protocol": "rest",
       "source_id": "getBudgets",
       "operation_id": "getBudgets",
+      "summary": "Get all budgets",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -13385,6 +13130,7 @@
       "protocol": "rest",
       "source_id": "getBudget",
       "operation_id": "getBudget",
+      "summary": "Get a budget",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -14041,6 +13787,7 @@
       "protocol": "rest",
       "source_id": "getCustomField",
       "operation_id": "getCustomField",
+      "summary": "Get a custom field",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -15164,6 +14911,7 @@
       "protocol": "rest",
       "source_id": "getCustomTypes",
       "operation_id": "getCustomTypes",
+      "summary": "Get all custom types associated with an object",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -15698,6 +15446,7 @@
       "protocol": "rest",
       "source_id": "getCustomType",
       "operation_id": "getCustomType",
+      "summary": "Get a custom type",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -16183,6 +15932,7 @@
       "protocol": "rest",
       "source_id": "getEvents",
       "operation_id": "getEvents",
+      "summary": "Get events on a resource",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -16809,6 +16559,7 @@
       "protocol": "rest",
       "source_id": "getGoalRelationships",
       "operation_id": "getGoalRelationships",
+      "summary": "Get goal relationships",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -17331,6 +17082,7 @@
       "protocol": "rest",
       "source_id": "getGoalRelationship",
       "operation_id": "getGoalRelationship",
+      "summary": "Get a goal relationship",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -17879,6 +17631,7 @@
       "protocol": "rest",
       "source_id": "getGoals",
       "operation_id": "getGoals",
+      "summary": "Get goals",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -18595,6 +18348,7 @@
       "protocol": "rest",
       "source_id": "getGoal",
       "operation_id": "getGoal",
+      "summary": "Get a goal",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -20682,6 +20436,7 @@
       "protocol": "rest",
       "source_id": "getCustomFieldSettingsForGoal",
       "operation_id": "getCustomFieldSettingsForGoal",
+      "summary": "Get a goal's custom fields",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -21973,6 +21728,7 @@
       "protocol": "rest",
       "source_id": "getParentGoalsForGoal",
       "operation_id": "getParentGoalsForGoal",
+      "summary": "Get parent goals from a goal",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -22592,6 +22348,7 @@
       "protocol": "rest",
       "source_id": "getStoriesForGoal",
       "operation_id": "getStoriesForGoal",
+      "summary": "Get stories from a goal",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -23235,6 +22992,7 @@
       "protocol": "rest",
       "source_id": "getJob",
       "operation_id": "getJob",
+      "summary": "Get a job by id",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -23903,6 +23661,7 @@
       "protocol": "rest",
       "source_id": "getMemberships",
       "operation_id": "getMemberships",
+      "summary": "Get multiple memberships",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -25176,6 +24935,7 @@
       "protocol": "rest",
       "source_id": "getMembership",
       "operation_id": "getMembership",
+      "summary": "Get a membership",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -26403,6 +26163,7 @@
       "protocol": "rest",
       "source_id": "getOooEntries",
       "operation_id": "getOooEntries",
+      "summary": "Get OOO entries for a user",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -26965,6 +26726,7 @@
       "protocol": "rest",
       "source_id": "getOooEntry",
       "operation_id": "getOooEntry",
+      "summary": "Get an OOO entry",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -27452,6 +27214,7 @@
       "protocol": "rest",
       "source_id": "getOrganizationExport",
       "operation_id": "getOrganizationExport",
+      "summary": "Get details on an org export request",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -27917,6 +27680,7 @@
       "protocol": "rest",
       "source_id": "getPortfolioMemberships",
       "operation_id": "getPortfolioMemberships",
+      "summary": "Get multiple portfolio memberships",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -28456,6 +28220,7 @@
       "protocol": "rest",
       "source_id": "getPortfolioMembership",
       "operation_id": "getPortfolioMembership",
+      "summary": "Get a portfolio membership",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -28930,6 +28695,7 @@
       "protocol": "rest",
       "source_id": "getPortfolios",
       "operation_id": "getPortfolios",
+      "summary": "Get multiple portfolios",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -29503,6 +29269,7 @@
       "protocol": "rest",
       "source_id": "getPortfolio",
       "operation_id": "getPortfolio",
+      "summary": "Get a portfolio",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -31359,6 +31126,7 @@
       "protocol": "rest",
       "source_id": "getCustomFieldSettingsForPortfolio",
       "operation_id": "getCustomFieldSettingsForPortfolio",
+      "summary": "Get a portfolio's custom fields",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -32650,6 +32418,7 @@
       "protocol": "rest",
       "source_id": "getItemsForPortfolio",
       "operation_id": "getItemsForPortfolio",
+      "summary": "Get portfolio items",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -33144,6 +32913,7 @@
       "protocol": "rest",
       "source_id": "getPortfolioMembershipsForPortfolio",
       "operation_id": "getPortfolioMembershipsForPortfolio",
+      "summary": "Get memberships from a portfolio",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -33676,6 +33446,7 @@
       "protocol": "rest",
       "source_id": "getProjectPortfolioSettingsForPortfolio",
       "operation_id": "getProjectPortfolioSettingsForPortfolio",
+      "summary": "Get project portfolio settings for a portfolio",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -34211,6 +33982,7 @@
       "protocol": "rest",
       "source_id": "getProjectBrief",
       "operation_id": "getProjectBrief",
+      "summary": "Get a project brief",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -34937,6 +34709,7 @@
       "protocol": "rest",
       "source_id": "getProjectMembership",
       "operation_id": "getProjectMembership",
+      "summary": "Get a project membership",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -35489,6 +35262,7 @@
       "protocol": "rest",
       "source_id": "getProjectPortfolioSetting",
       "operation_id": "getProjectPortfolioSetting",
+      "summary": "Get a project portfolio setting",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -35990,6 +35764,7 @@
       "protocol": "rest",
       "source_id": "getProjectStatus",
       "operation_id": "getProjectStatus",
+      "summary": "Get a project status",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -36516,6 +36291,7 @@
       "protocol": "rest",
       "source_id": "getProjectTemplates",
       "operation_id": "getProjectTemplates",
+      "summary": "Get multiple project templates",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -37001,6 +36777,7 @@
       "protocol": "rest",
       "source_id": "getProjectTemplate",
       "operation_id": "getProjectTemplate",
+      "summary": "Get a project template",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -37604,6 +37381,7 @@
       "protocol": "rest",
       "source_id": "getProjects",
       "operation_id": "getProjects",
+      "summary": "Get multiple projects",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -38203,6 +37981,7 @@
       "protocol": "rest",
       "source_id": "getProject",
       "operation_id": "getProject",
+      "summary": "Get a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -40453,6 +40232,7 @@
       "protocol": "rest",
       "source_id": "getCustomFieldSettingsForProject",
       "operation_id": "getCustomFieldSettingsForProject",
+      "summary": "Get a project's custom fields",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -41744,6 +41524,7 @@
       "protocol": "rest",
       "source_id": "getProjectMembershipsForProject",
       "operation_id": "getProjectMembershipsForProject",
+      "summary": "Get memberships from a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -42275,6 +42056,7 @@
       "protocol": "rest",
       "source_id": "getProjectPortfolioSettingsForProject",
       "operation_id": "getProjectPortfolioSettingsForProject",
+      "summary": "Get project portfolio settings for a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -42810,6 +42592,7 @@
       "protocol": "rest",
       "source_id": "getProjectStatusesForProject",
       "operation_id": "getProjectStatusesForProject",
+      "summary": "Get statuses from a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -43283,6 +43066,7 @@
       "protocol": "rest",
       "source_id": "getSectionsForProject",
       "operation_id": "getSectionsForProject",
+      "summary": "Get sections in a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -43752,6 +43536,7 @@
       "protocol": "rest",
       "source_id": "getTaskCountsForProject",
       "operation_id": "getTaskCountsForProject",
+      "summary": "Get task count of a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -44184,6 +43969,7 @@
       "protocol": "rest",
       "source_id": "getTasksForProject",
       "operation_id": "getTasksForProject",
+      "summary": "Get tasks from a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -44793,6 +44579,7 @@
       "protocol": "rest",
       "source_id": "getRates",
       "operation_id": "getRates",
+      "summary": "Get multiple rates",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -45538,6 +45325,7 @@
       "protocol": "rest",
       "source_id": "getRate",
       "operation_id": "getRate",
+      "summary": "Get a rate",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -46096,6 +45884,7 @@
       "protocol": "rest",
       "source_id": "getReactionsOnObject",
       "operation_id": "getReactionsOnObject",
+      "summary": "Get reactions with an emoji base on an object.",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -46564,6 +46353,7 @@
       "protocol": "rest",
       "source_id": "getRoles",
       "operation_id": "getRoles",
+      "summary": "Get multiple roles",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -47082,6 +46872,7 @@
       "protocol": "rest",
       "source_id": "getRole",
       "operation_id": "getRole",
+      "summary": "Get a role",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -47769,6 +47560,7 @@
       "protocol": "rest",
       "source_id": "getSection",
       "operation_id": "getSection",
+      "summary": "Get a section",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -48259,6 +48051,7 @@
       "protocol": "rest",
       "source_id": "getTasksForSection",
       "operation_id": "getTasksForSection",
+      "summary": "Get tasks from a section",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -48868,6 +48661,7 @@
       "protocol": "rest",
       "source_id": "getStatusesForObject",
       "operation_id": "getStatusesForObject",
+      "summary": "Get status updates from an object",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -49378,6 +49172,7 @@
       "protocol": "rest",
       "source_id": "getStatus",
       "operation_id": "getStatus",
+      "summary": "Get a status update",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -50112,6 +49907,7 @@
       "protocol": "rest",
       "source_id": "getStory",
       "operation_id": "getStory",
+      "summary": "Get a story",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -52111,6 +51907,7 @@
       "protocol": "rest",
       "source_id": "getTags",
       "operation_id": "getTags",
+      "summary": "Get multiple tags",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -52577,6 +52374,7 @@
       "protocol": "rest",
       "source_id": "getTag",
       "operation_id": "getTag",
+      "summary": "Get a tag",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -53119,6 +52917,7 @@
       "protocol": "rest",
       "source_id": "getTasksForTag",
       "operation_id": "getTasksForTag",
+      "summary": "Get tasks from a tag",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -53720,6 +53519,7 @@
       "protocol": "rest",
       "source_id": "getTaskTemplates",
       "operation_id": "getTaskTemplates",
+      "summary": "Get multiple task templates",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -54160,6 +53960,7 @@
       "protocol": "rest",
       "source_id": "getTaskTemplate",
       "operation_id": "getTaskTemplate",
+      "summary": "Get a task template",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -55143,6 +54944,7 @@
       "protocol": "rest",
       "source_id": "getTasks",
       "operation_id": "getTasks",
+      "summary": "Get multiple tasks",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -55779,6 +55581,7 @@
       "protocol": "rest",
       "source_id": "getTask",
       "operation_id": "getTask",
+      "summary": "Get a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -57784,6 +57587,7 @@
       "protocol": "rest",
       "source_id": "getDependenciesForTask",
       "operation_id": "getDependenciesForTask",
+      "summary": "Get dependencies from a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -58433,6 +58237,7 @@
       "protocol": "rest",
       "source_id": "getDependentsForTask",
       "operation_id": "getDependentsForTask",
+      "summary": "Get dependents from a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -59082,6 +58887,7 @@
       "protocol": "rest",
       "source_id": "getProjectsForTask",
       "operation_id": "getProjectsForTask",
+      "summary": "Get projects a task is in",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -59673,6 +59479,7 @@
       "protocol": "rest",
       "source_id": "getStoriesForTask",
       "operation_id": "getStoriesForTask",
+      "summary": "Get stories from a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -60316,6 +60123,7 @@
       "protocol": "rest",
       "source_id": "getSubtasksForTask",
       "operation_id": "getSubtasksForTask",
+      "summary": "Get subtasks from a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -60917,6 +60725,7 @@
       "protocol": "rest",
       "source_id": "getTagsForTask",
       "operation_id": "getTagsForTask",
+      "summary": "Get a task's tags",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -61391,6 +61200,7 @@
       "protocol": "rest",
       "source_id": "getTimeTrackingEntriesForTask",
       "operation_id": "getTimeTrackingEntriesForTask",
+      "summary": "Get time tracking entries for a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -61983,6 +61793,7 @@
       "protocol": "rest",
       "source_id": "getTeamMemberships",
       "operation_id": "getTeamMemberships",
+      "summary": "Get team memberships",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -62524,6 +62335,7 @@
       "protocol": "rest",
       "source_id": "getTeamMembership",
       "operation_id": "getTeamMembership",
+      "summary": "Get a team membership",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -63007,6 +62819,7 @@
       "protocol": "rest",
       "source_id": "getTeam",
       "operation_id": "getTeam",
+      "summary": "Get a team",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -64421,6 +64234,7 @@
       "protocol": "rest",
       "source_id": "getCustomFieldSettingsForTeam",
       "operation_id": "getCustomFieldSettingsForTeam",
+      "summary": "Get a team's custom fields",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -65665,6 +65479,7 @@
       "protocol": "rest",
       "source_id": "getProjectTemplatesForTeam",
       "operation_id": "getProjectTemplatesForTeam",
+      "summary": "Get a team's project templates",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -66143,6 +65958,7 @@
       "protocol": "rest",
       "source_id": "getProjectsForTeam",
       "operation_id": "getProjectsForTeam",
+      "summary": "Get a team's projects",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -66742,6 +66558,7 @@
       "protocol": "rest",
       "source_id": "getTeamMembershipsForTeam",
       "operation_id": "getTeamMembershipsForTeam",
+      "summary": "Get memberships from a team",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -67275,6 +67092,7 @@
       "protocol": "rest",
       "source_id": "getUsersForTeam",
       "operation_id": "getUsersForTeam",
+      "summary": "Get users in a team",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -67738,6 +67556,7 @@
       "protocol": "rest",
       "source_id": "getTimePeriods",
       "operation_id": "getTimePeriods",
+      "summary": "Get time periods",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -68251,6 +68070,7 @@
       "protocol": "rest",
       "source_id": "getTimePeriod",
       "operation_id": "getTimePeriod",
+      "summary": "Get a time period",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -68762,6 +68582,7 @@
       "protocol": "rest",
       "source_id": "getTimeTrackingCategories",
       "operation_id": "getTimeTrackingCategories",
+      "summary": "Get time tracking categories for a workspace",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -69260,6 +69081,7 @@
       "protocol": "rest",
       "source_id": "getTimeTrackingCategory",
       "operation_id": "getTimeTrackingCategory",
+      "summary": "Get a time tracking category",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -69715,6 +69537,7 @@
       "protocol": "rest",
       "source_id": "getTimeTrackingEntriesForTimeTrackingCategory",
       "operation_id": "getTimeTrackingEntriesForTimeTrackingCategory",
+      "summary": "Get time tracking entries for a time tracking category",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -70325,6 +70148,7 @@
       "protocol": "rest",
       "source_id": "getTimeTrackingEntries",
       "operation_id": "getTimeTrackingEntries",
+      "summary": "Get multiple time tracking entries",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -71022,6 +70846,7 @@
       "protocol": "rest",
       "source_id": "getTimeTrackingEntry",
       "operation_id": "getTimeTrackingEntry",
+      "summary": "Get a time tracking entry",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -71671,6 +71496,7 @@
       "protocol": "rest",
       "source_id": "getTimesheetApprovalStatuses",
       "operation_id": "getTimesheetApprovalStatuses",
+      "summary": "Get multiple timesheet approval statuses",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -72257,6 +72083,7 @@
       "protocol": "rest",
       "source_id": "getTimesheetApprovalStatus",
       "operation_id": "getTimesheetApprovalStatus",
+      "summary": "Get a timesheet approval status",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -72768,6 +72595,7 @@
       "protocol": "rest",
       "source_id": "getUserTaskList",
       "operation_id": "getUserTaskList",
+      "summary": "Get a user task list",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -73248,6 +73076,7 @@
       "protocol": "rest",
       "source_id": "getTasksForUserTaskList",
       "operation_id": "getTasksForUserTaskList",
+      "summary": "Get tasks from a user task list",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -73857,6 +73686,7 @@
       "protocol": "rest",
       "source_id": "getUsers",
       "operation_id": "getUsers",
+      "summary": "Get multiple users",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -74359,6 +74189,7 @@
       "protocol": "rest",
       "source_id": "getUser",
       "operation_id": "getUser",
+      "summary": "Get a user",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -75171,6 +75002,7 @@
       "protocol": "rest",
       "source_id": "getFavoritesForUser",
       "operation_id": "getFavoritesForUser",
+      "summary": "Get a user's favorites",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -75662,6 +75494,7 @@
       "protocol": "rest",
       "source_id": "getTeamMembershipsForUser",
       "operation_id": "getTeamMembershipsForUser",
+      "summary": "Get memberships from a user",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -76203,6 +76036,7 @@
       "protocol": "rest",
       "source_id": "getTeamsForUser",
       "operation_id": "getTeamsForUser",
+      "summary": "Get teams for a user",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -76743,6 +76577,7 @@
       "protocol": "rest",
       "source_id": "getUserTaskListForUser",
       "operation_id": "getUserTaskListForUser",
+      "summary": "Get a user's task list",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -77231,6 +77066,7 @@
       "protocol": "rest",
       "source_id": "getWorkspaceMembershipsForUser",
       "operation_id": "getWorkspaceMembershipsForUser",
+      "summary": "Get workspace memberships for a user",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -77755,6 +77591,7 @@
       "protocol": "rest",
       "source_id": "getWebhooks",
       "operation_id": "getWebhooks",
+      "summary": "Get multiple webhooks",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -78378,6 +78215,7 @@
       "protocol": "rest",
       "source_id": "getWebhook",
       "operation_id": "getWebhook",
+      "summary": "Get a webhook",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -78944,6 +78782,7 @@
       "protocol": "rest",
       "source_id": "getWorkspaceMembership",
       "operation_id": "getWorkspaceMembership",
+      "summary": "Get a workspace membership",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -79564,6 +79403,7 @@
       "protocol": "rest",
       "source_id": "getWorkspaces",
       "operation_id": "getWorkspaces",
+      "summary": "Get multiple workspaces",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -80016,6 +79856,7 @@
       "protocol": "rest",
       "source_id": "getWorkspace",
       "operation_id": "getWorkspace",
+      "summary": "Get a workspace",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -80459,6 +80300,7 @@
       "protocol": "rest",
       "source_id": "getAgentsForWorkspace",
       "operation_id": "getAgentsForWorkspace",
+      "summary": "Get a list of agents in a workspace",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -80944,6 +80786,7 @@
       "protocol": "rest",
       "source_id": "getAiStudioRuns",
       "operation_id": "getAiStudioRuns",
+      "summary": "Get AI Studio credit utilization",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -81605,6 +81448,7 @@
       "protocol": "rest",
       "source_id": "getAiStudioSeats",
       "operation_id": "getAiStudioSeats",
+      "summary": "Get AI Studio seats",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -82174,6 +82018,7 @@
       "protocol": "rest",
       "source_id": "getAuditLogEvents",
       "operation_id": "getAuditLogEvents",
+      "summary": "Get audit log events",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -82813,6 +82658,7 @@
       "protocol": "rest",
       "source_id": "getCustomFieldsForWorkspace",
       "operation_id": "getCustomFieldsForWorkspace",
+      "summary": "Get a workspace's custom fields",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -83986,6 +83832,7 @@
       "protocol": "rest",
       "source_id": "getWorkspaceEvents",
       "operation_id": "getWorkspaceEvents",
+      "summary": "Get workspace events",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -84541,6 +84388,7 @@
       "protocol": "rest",
       "source_id": "getProjectsForWorkspace",
       "operation_id": "getProjectsForWorkspace",
+      "summary": "Get all projects in a workspace",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -85140,6 +84988,7 @@
       "protocol": "rest",
       "source_id": "searchProjectsForWorkspace",
       "operation_id": "searchProjectsForWorkspace",
+      "summary": "Search projects in a workspace",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -85979,6 +85828,7 @@
       "protocol": "rest",
       "source_id": "getTagsForWorkspace",
       "operation_id": "getTagsForWorkspace",
+      "summary": "Get tags in a workspace",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -86453,6 +86303,7 @@
       "protocol": "rest",
       "source_id": "getTaskForCustomID",
       "operation_id": "getTaskForCustomID",
+      "summary": "Get a task for a given custom ID",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -88330,6 +88181,7 @@
       "protocol": "rest",
       "source_id": "searchTasksForWorkspace",
       "operation_id": "searchTasksForWorkspace",
+      "summary": "Search tasks in a workspace",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -89353,6 +89205,7 @@
       "protocol": "rest",
       "source_id": "getTeamsForWorkspace",
       "operation_id": "getTeamsForWorkspace",
+      "summary": "Get teams in a workspace",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -89885,6 +89738,7 @@
       "protocol": "rest",
       "source_id": "typeaheadForWorkspace",
       "operation_id": "typeaheadForWorkspace",
+      "summary": "Get objects via typeahead",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -90360,6 +90214,7 @@
       "protocol": "rest",
       "source_id": "getUsersForWorkspace",
       "operation_id": "getUsersForWorkspace",
+      "summary": "Get users in a workspace or organization",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -90823,6 +90678,7 @@
       "protocol": "rest",
       "source_id": "getUserForWorkspace",
       "operation_id": "getUserForWorkspace",
+      "summary": "Get a user in a workspace or organization",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -91635,6 +91491,7 @@
       "protocol": "rest",
       "source_id": "getWorkspaceMembershipsForWorkspace",
       "operation_id": "getWorkspaceMembershipsForWorkspace",
+      "summary": "Get the workspace memberships for a workspace",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -91927,6 +91784,7 @@
       "protocol": "rest",
       "source_id": "createAccessRequest",
       "operation_id": "createAccessRequest",
+      "summary": "Create an access request",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -92437,6 +92295,7 @@
       "protocol": "rest",
       "source_id": "approveAccessRequest",
       "operation_id": "approveAccessRequest",
+      "summary": "Approve an access request",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -92786,22 +92645,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation approveAccessRequest at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/access_requests/{access_request_gid}/approve\"].post",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "approveAccessRequest",
-            "method": "POST",
-            "path": "/access_requests/{access_request_gid}/approve"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -92809,6 +92653,7 @@
       "protocol": "rest",
       "source_id": "rejectAccessRequest",
       "operation_id": "rejectAccessRequest",
+      "summary": "Reject an access request",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -93158,22 +93003,7 @@
         ]
       },
       "runtime": {
-        "merge_blocked": true,
-        "gaps": [
-          {
-            "foundation": "source-cited-non-executable-mutation-foundation-r1",
-            "location": "source operation rejectAccessRequest at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/access_requests/{access_request_gid}/reject\"].post",
-            "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-          }
-        ],
-        "non_executable_mutation": {
-          "source": {
-            "source_id": "rejectAccessRequest",
-            "method": "POST",
-            "path": "/access_requests/{access_request_gid}/reject"
-          },
-          "reason": "provider-cited mutation has no complete declaration-owned executable action and CLI union"
-        }
+        "merge_blocked": false
       }
     },
     {
@@ -93181,6 +93011,7 @@
       "protocol": "rest",
       "source_id": "createAllocation",
       "operation_id": "createAllocation",
+      "summary": "Create an allocation",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -93872,6 +93703,7 @@
       "protocol": "rest",
       "source_id": "createAttachmentForObject",
       "operation_id": "createAttachmentForObject",
+      "summary": "Upload an attachment",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -94477,6 +94309,7 @@
       "protocol": "rest",
       "source_id": "createBatchRequest",
       "operation_id": "createBatchRequest",
+      "summary": "Submit parallel requests",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -94988,6 +94821,7 @@
       "protocol": "rest",
       "source_id": "createBudget",
       "operation_id": "createBudget",
+      "summary": "Create a budget",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -95727,6 +95561,7 @@
       "protocol": "rest",
       "source_id": "createCustomField",
       "operation_id": "createCustomField",
+      "summary": "Create a custom field",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -97422,6 +97257,7 @@
       "protocol": "rest",
       "source_id": "createEnumOptionForCustomField",
       "operation_id": "createEnumOptionForCustomField",
+      "summary": "Create an enum option",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -97918,6 +97754,7 @@
       "protocol": "rest",
       "source_id": "insertEnumOptionForCustomField",
       "operation_id": "insertEnumOptionForCustomField",
+      "summary": "Reorder a custom field's enum",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -98383,6 +98220,7 @@
       "protocol": "rest",
       "source_id": "createGraphExport",
       "operation_id": "createGraphExport",
+      "summary": "Initiate a graph export",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -98834,6 +98672,7 @@
       "protocol": "rest",
       "source_id": "createResourceExport",
       "operation_id": "createResourceExport",
+      "summary": "Initiate a resource export",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -99385,6 +99224,7 @@
       "protocol": "rest",
       "source_id": "createGoal",
       "operation_id": "createGoal",
+      "summary": "Create a goal",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -101583,6 +101423,7 @@
       "protocol": "rest",
       "source_id": "addCustomFieldSettingForGoal",
       "operation_id": "addCustomFieldSettingForGoal",
+      "summary": "Add a custom field to a goal",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -103365,6 +103206,7 @@
       "protocol": "rest",
       "source_id": "addFollowers",
       "operation_id": "addFollowers",
+      "summary": "Add a collaborator to a goal",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -105483,6 +105325,7 @@
       "protocol": "rest",
       "source_id": "addSupportingRelationship",
       "operation_id": "addSupportingRelationship",
+      "summary": "Add a supporting goal relationship",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -106073,6 +105916,7 @@
       "protocol": "rest",
       "source_id": "removeCustomFieldSettingForGoal",
       "operation_id": "removeCustomFieldSettingForGoal",
+      "summary": "Remove a custom field from a goal",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -106473,6 +106317,7 @@
       "protocol": "rest",
       "source_id": "removeFollowers",
       "operation_id": "removeFollowers",
+      "summary": "Remove a collaborator from a goal",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -108591,6 +108436,7 @@
       "protocol": "rest",
       "source_id": "removeSupportingRelationship",
       "operation_id": "removeSupportingRelationship",
+      "summary": "Removes a supporting goal relationship",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -108989,6 +108835,7 @@
       "protocol": "rest",
       "source_id": "createGoalMetric",
       "operation_id": "createGoalMetric",
+      "summary": "Create a goal metric",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -111176,6 +111023,7 @@
       "protocol": "rest",
       "source_id": "updateGoalMetric",
       "operation_id": "updateGoalMetric",
+      "summary": "Update a goal metric",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -113300,6 +113148,7 @@
       "protocol": "rest",
       "source_id": "createStoryForGoal",
       "operation_id": "createStoryForGoal",
+      "summary": "Create a story on a goal",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -115380,6 +115229,7 @@
       "protocol": "rest",
       "source_id": "createMembership",
       "operation_id": "createMembership",
+      "summary": "Create a membership",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -116647,6 +116497,7 @@
       "protocol": "rest",
       "source_id": "createOooEntry",
       "operation_id": "createOooEntry",
+      "summary": "Create an OOO entry",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -117202,6 +117053,7 @@
       "protocol": "rest",
       "source_id": "createOrganizationExport",
       "operation_id": "createOrganizationExport",
+      "summary": "Create an organization export request",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -117683,6 +117535,7 @@
       "protocol": "rest",
       "source_id": "createPortfolio",
       "operation_id": "createPortfolio",
+      "summary": "Create a portfolio",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -119652,6 +119505,7 @@
       "protocol": "rest",
       "source_id": "addCustomFieldSettingForPortfolio",
       "operation_id": "addCustomFieldSettingForPortfolio",
+      "summary": "Add a custom field to a portfolio",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -121434,6 +121288,7 @@
       "protocol": "rest",
       "source_id": "addItemForPortfolio",
       "operation_id": "addItemForPortfolio",
+      "summary": "Add a portfolio item",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -121844,6 +121699,7 @@
       "protocol": "rest",
       "source_id": "addMembersForPortfolio",
       "operation_id": "addMembersForPortfolio",
+      "summary": "Add users to a portfolio",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -123725,6 +123581,7 @@
       "protocol": "rest",
       "source_id": "duplicatePortfolio",
       "operation_id": "duplicatePortfolio",
+      "summary": "Duplicate a portfolio",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -124427,6 +124284,7 @@
       "protocol": "rest",
       "source_id": "removeCustomFieldSettingForPortfolio",
       "operation_id": "removeCustomFieldSettingForPortfolio",
+      "summary": "Remove a custom field from a portfolio",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -124827,6 +124685,7 @@
       "protocol": "rest",
       "source_id": "removeItemForPortfolio",
       "operation_id": "removeItemForPortfolio",
+      "summary": "Remove a portfolio item",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -125227,6 +125086,7 @@
       "protocol": "rest",
       "source_id": "removeMembersForPortfolio",
       "operation_id": "removeMembersForPortfolio",
+      "summary": "Remove users from a portfolio",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -127108,6 +126968,7 @@
       "protocol": "rest",
       "source_id": "instantiateProject",
       "operation_id": "instantiateProject",
+      "summary": "Instantiate a project from a project template",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -127869,6 +127730,7 @@
       "protocol": "rest",
       "source_id": "createProject",
       "operation_id": "createProject",
+      "summary": "Create a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -131392,6 +131254,7 @@
       "protocol": "rest",
       "source_id": "addCustomFieldSettingForProject",
       "operation_id": "addCustomFieldSettingForProject",
+      "summary": "Add a custom field to a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -133246,6 +133109,7 @@
       "protocol": "rest",
       "source_id": "addFollowersForProject",
       "operation_id": "addFollowersForProject",
+      "summary": "Add followers to a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -135521,6 +135385,7 @@
       "protocol": "rest",
       "source_id": "addMembersForProject",
       "operation_id": "addMembersForProject",
+      "summary": "Add users to a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -137796,6 +137661,7 @@
       "protocol": "rest",
       "source_id": "duplicateProject",
       "operation_id": "duplicateProject",
+      "summary": "Duplicate a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -138520,6 +138386,7 @@
       "protocol": "rest",
       "source_id": "createProjectBrief",
       "operation_id": "createProjectBrief",
+      "summary": "Create a project brief",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -139121,6 +138988,7 @@
       "protocol": "rest",
       "source_id": "createProjectStatusForProject",
       "operation_id": "createProjectStatusForProject",
+      "summary": "Create a project status",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -139716,6 +139584,7 @@
       "protocol": "rest",
       "source_id": "removeCustomFieldSettingForProject",
       "operation_id": "removeCustomFieldSettingForProject",
+      "summary": "Remove a custom field from a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -140116,6 +139985,7 @@
       "protocol": "rest",
       "source_id": "removeFollowersForProject",
       "operation_id": "removeFollowersForProject",
+      "summary": "Remove followers from a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -142391,6 +142261,7 @@
       "protocol": "rest",
       "source_id": "removeMembersForProject",
       "operation_id": "removeMembersForProject",
+      "summary": "Remove users from a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -144666,6 +144537,7 @@
       "protocol": "rest",
       "source_id": "projectSaveAsTemplate",
       "operation_id": "projectSaveAsTemplate",
+      "summary": "Create a project template from a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -145375,6 +145247,7 @@
       "protocol": "rest",
       "source_id": "createSectionForProject",
       "operation_id": "createSectionForProject",
+      "summary": "Create a section in a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -145902,6 +145775,7 @@
       "protocol": "rest",
       "source_id": "insertSectionForProject",
       "operation_id": "insertSectionForProject",
+      "summary": "Move or Insert sections",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -146310,6 +146184,7 @@
       "protocol": "rest",
       "source_id": "createRate",
       "operation_id": "createRate",
+      "summary": "Create a rate",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -146913,6 +146788,7 @@
       "protocol": "rest",
       "source_id": "createRole",
       "operation_id": "createRole",
+      "summary": "Create a role",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -147843,6 +147719,7 @@
       "protocol": "rest",
       "source_id": "triggerRule",
       "operation_id": "triggerRule",
+      "summary": "Trigger a rule",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -148293,6 +148170,7 @@
       "protocol": "rest",
       "source_id": "addTaskForSection",
       "operation_id": "addTaskForSection",
+      "summary": "Add task to section",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -148703,6 +148581,7 @@
       "protocol": "rest",
       "source_id": "createStatusForObject",
       "operation_id": "createStatusForObject",
+      "summary": "Create a status update",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -149554,6 +149433,7 @@
       "protocol": "rest",
       "source_id": "createTag",
       "operation_id": "createTag",
+      "summary": "Create a tag",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -150193,6 +150073,7 @@
       "protocol": "rest",
       "source_id": "instantiateTask",
       "operation_id": "instantiateTask",
+      "summary": "Instantiate a task from a task template",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -150883,6 +150764,7 @@
       "protocol": "rest",
       "source_id": "createTask",
       "operation_id": "createTask",
+      "summary": "Create a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -153461,6 +153343,7 @@
       "protocol": "rest",
       "source_id": "addDependenciesForTask",
       "operation_id": "addDependenciesForTask",
+      "summary": "Set dependencies for a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -153914,6 +153797,7 @@
       "protocol": "rest",
       "source_id": "addDependentsForTask",
       "operation_id": "addDependentsForTask",
+      "summary": "Set dependents for a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -154368,6 +154252,7 @@
       "protocol": "rest",
       "source_id": "addFollowersForTask",
       "operation_id": "addFollowersForTask",
+      "summary": "Add followers to a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -156406,6 +156291,7 @@
       "protocol": "rest",
       "source_id": "addProjectForTask",
       "operation_id": "addProjectForTask",
+      "summary": "Add a project to a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -156824,6 +156710,7 @@
       "protocol": "rest",
       "source_id": "addTagForTask",
       "operation_id": "addTagForTask",
+      "summary": "Add a tag to a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -157224,6 +157111,7 @@
       "protocol": "rest",
       "source_id": "duplicateTask",
       "operation_id": "duplicateTask",
+      "summary": "Duplicate a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -157924,6 +157812,7 @@
       "protocol": "rest",
       "source_id": "removeDependenciesForTask",
       "operation_id": "removeDependenciesForTask",
+      "summary": "Unlink dependencies from a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -158377,6 +158266,7 @@
       "protocol": "rest",
       "source_id": "removeDependentsForTask",
       "operation_id": "removeDependentsForTask",
+      "summary": "Unlink dependents from a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -158831,6 +158721,7 @@
       "protocol": "rest",
       "source_id": "removeFollowerForTask",
       "operation_id": "removeFollowerForTask",
+      "summary": "Remove followers from a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -160869,6 +160760,7 @@
       "protocol": "rest",
       "source_id": "removeProjectForTask",
       "operation_id": "removeProjectForTask",
+      "summary": "Remove a project from a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -161269,6 +161161,7 @@
       "protocol": "rest",
       "source_id": "removeTagForTask",
       "operation_id": "removeTagForTask",
+      "summary": "Remove a tag from a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -161669,6 +161562,7 @@
       "protocol": "rest",
       "source_id": "setParentForTask",
       "operation_id": "setParentForTask",
+      "summary": "Set the parent of a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -163711,6 +163605,7 @@
       "protocol": "rest",
       "source_id": "createStoryForTask",
       "operation_id": "createStoryForTask",
+      "summary": "Create a story on a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -165791,6 +165686,7 @@
       "protocol": "rest",
       "source_id": "createSubtaskForTask",
       "operation_id": "createSubtaskForTask",
+      "summary": "Create a subtask",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -168378,6 +168274,7 @@
       "protocol": "rest",
       "source_id": "createTimeTrackingEntry",
       "operation_id": "createTimeTrackingEntry",
+      "summary": "Create a time tracking entry",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -169133,6 +169030,7 @@
       "protocol": "rest",
       "source_id": "createTeam",
       "operation_id": "createTeam",
+      "summary": "Create a team",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -170669,6 +170567,7 @@
       "protocol": "rest",
       "source_id": "addUserForTeam",
       "operation_id": "addUserForTeam",
+      "summary": "Add a user to a team",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -171175,6 +171074,7 @@
       "protocol": "rest",
       "source_id": "createProjectForTeam",
       "operation_id": "createProjectForTeam",
+      "summary": "Create a project in a team",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -174707,6 +174607,7 @@
       "protocol": "rest",
       "source_id": "removeUserForTeam",
       "operation_id": "removeUserForTeam",
+      "summary": "Remove a user from a team",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -175103,6 +175004,7 @@
       "protocol": "rest",
       "source_id": "createTimeTrackingCategory",
       "operation_id": "createTimeTrackingCategory",
+      "summary": "Create a time tracking category",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -175614,6 +175516,7 @@
       "protocol": "rest",
       "source_id": "createTimesheetApprovalStatus",
       "operation_id": "createTimesheetApprovalStatus",
+      "summary": "Create a timesheet approval status",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -176212,6 +176115,7 @@
       "protocol": "rest",
       "source_id": "createWebhook",
       "operation_id": "createWebhook",
+      "summary": "Establish a webhook",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -176855,6 +176759,7 @@
       "protocol": "rest",
       "source_id": "addUserForWorkspace",
       "operation_id": "addUserForWorkspace",
+      "summary": "Add a user to a workspace or organization",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -177364,6 +177269,7 @@
       "protocol": "rest",
       "source_id": "createProjectForWorkspace",
       "operation_id": "createProjectForWorkspace",
+      "summary": "Create a project in a workspace",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -180896,6 +180802,7 @@
       "protocol": "rest",
       "source_id": "removeUserForWorkspace",
       "operation_id": "removeUserForWorkspace",
+      "summary": "Remove a user from a workspace or organization",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -181292,6 +181199,7 @@
       "protocol": "rest",
       "source_id": "createTagForWorkspace",
       "operation_id": "createTagForWorkspace",
+      "summary": "Create a tag in a workspace",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -181934,6 +181842,7 @@
       "protocol": "rest",
       "source_id": "updateAllocation",
       "operation_id": "updateAllocation",
+      "summary": "Update an allocation",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -182573,6 +182482,7 @@
       "protocol": "rest",
       "source_id": "updateBudget",
       "operation_id": "updateBudget",
+      "summary": "Update a budget",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -183359,6 +183269,7 @@
       "protocol": "rest",
       "source_id": "updateCustomField",
       "operation_id": "updateCustomField",
+      "summary": "Update a custom field",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -185037,6 +184948,7 @@
       "protocol": "rest",
       "source_id": "updateEnumOption",
       "operation_id": "updateEnumOption",
+      "summary": "Update an enum option",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -185514,6 +185426,7 @@
       "protocol": "rest",
       "source_id": "updateGoalRelationship",
       "operation_id": "updateGoalRelationship",
+      "summary": "Update a goal relationship",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -186228,6 +186141,7 @@
       "protocol": "rest",
       "source_id": "updateGoal",
       "operation_id": "updateGoal",
+      "summary": "Update a goal",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -188395,6 +188309,7 @@
       "protocol": "rest",
       "source_id": "updateMembership",
       "operation_id": "updateMembership",
+      "summary": "Update a membership",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -189640,6 +189555,7 @@
       "protocol": "rest",
       "source_id": "updateOooEntry",
       "operation_id": "updateOooEntry",
+      "summary": "Update an OOO entry",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -190173,6 +190089,7 @@
       "protocol": "rest",
       "source_id": "updatePortfolio",
       "operation_id": "updatePortfolio",
+      "summary": "Update a portfolio",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -192152,6 +192069,7 @@
       "protocol": "rest",
       "source_id": "updateProjectBrief",
       "operation_id": "updateProjectBrief",
+      "summary": "Update a project brief",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -192705,6 +192623,7 @@
       "protocol": "rest",
       "source_id": "updateProjectPortfolioSetting",
       "operation_id": "updateProjectPortfolioSetting",
+      "summary": "Update a project portfolio setting",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -193230,6 +193149,7 @@
       "protocol": "rest",
       "source_id": "updateProject",
       "operation_id": "updateProject",
+      "summary": "Update a project",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -196757,6 +196677,7 @@
       "protocol": "rest",
       "source_id": "updateRate",
       "operation_id": "updateRate",
+      "summary": "Update a rate",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -197354,6 +197275,7 @@
       "protocol": "rest",
       "source_id": "updateRole",
       "operation_id": "updateRole",
+      "summary": "Update a role",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -198277,6 +198199,7 @@
       "protocol": "rest",
       "source_id": "updateSection",
       "operation_id": "updateSection",
+      "summary": "Update a section",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -198804,6 +198727,7 @@
       "protocol": "rest",
       "source_id": "updateStory",
       "operation_id": "updateStory",
+      "summary": "Update a story",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -200884,6 +200808,7 @@
       "protocol": "rest",
       "source_id": "updateTag",
       "operation_id": "updateTag",
+      "summary": "Update a tag",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -201506,6 +201431,7 @@
       "protocol": "rest",
       "source_id": "updateTask",
       "operation_id": "updateTask",
+      "summary": "Update a task",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -204069,6 +203995,7 @@
       "protocol": "rest",
       "source_id": "updateTeam",
       "operation_id": "updateTeam",
+      "summary": "Update a team",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -205614,6 +205541,7 @@
       "protocol": "rest",
       "source_id": "updateTimeTrackingCategory",
       "operation_id": "updateTimeTrackingCategory",
+      "summary": "Update a time tracking category",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -206130,6 +206058,7 @@
       "protocol": "rest",
       "source_id": "updateTimeTrackingEntry",
       "operation_id": "updateTimeTrackingEntry",
+      "summary": "Update a time tracking entry",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -206885,6 +206814,7 @@
       "protocol": "rest",
       "source_id": "updateTimesheetApprovalStatus",
       "operation_id": "updateTimesheetApprovalStatus",
+      "summary": "Update a timesheet approval status",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -207483,6 +207413,7 @@
       "protocol": "rest",
       "source_id": "updateUser",
       "operation_id": "updateUser",
+      "summary": "Update a user",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -208353,6 +208284,7 @@
       "protocol": "rest",
       "source_id": "updateWebhook",
       "operation_id": "updateWebhook",
+      "summary": "Update a webhook",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -208985,6 +208917,7 @@
       "protocol": "rest",
       "source_id": "updateWorkspace",
       "operation_id": "updateWorkspace",
+      "summary": "Update a workspace",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -209465,6 +209398,7 @@
       "protocol": "rest",
       "source_id": "updateUserForWorkspace",
       "operation_id": "updateUserForWorkspace",
+      "summary": "Update a user in a workspace or organization",
       "source": {
         "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
         "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
@@ -211822,111 +211756,6 @@
       "foundation": "closed-source-operation-execution-foundation-r1",
       "location": "source operation typeaheadForWorkspace",
       "reason": "locked provider operation has no field-complete declaration-owned executable stream, direct-read, binary, or status route"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation approveAccessRequest at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/access_requests/{access_request_gid}/approve\"].post",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteAllocation at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/allocations/{allocation_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteAttachment at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/attachments/{attachment_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteBudget at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/budgets/{budget_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteCustomField at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/custom_fields/{custom_field_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteGoal at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/goals/{goal_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteMembership at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/memberships/{membership_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteOooEntry at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/ooo_entries/{ooo_entry_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deletePortfolio at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/portfolios/{portfolio_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteProjectBrief at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_briefs/{project_brief_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteProjectStatus at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_statuses/{project_status_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteProjectTemplate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/project_templates/{project_template_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteRate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/rates/{rate_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteRole at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/roles/{role_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteStatus at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/status_updates/{status_update_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteStory at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/stories/{story_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteTaskTemplate at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/task_templates/{task_template_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteTimeTrackingCategory at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/time_tracking_categories/{time_tracking_category_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteTimeTrackingEntry at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/time_tracking_entries/{time_tracking_entry_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation deleteWebhook at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/webhooks/{webhook_gid}\"].delete",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
-    },
-    {
-      "foundation": "source-cited-non-executable-mutation-foundation-r1",
-      "location": "source operation rejectAccessRequest at https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml#paths[\"/access_requests/{access_request_gid}/reject\"].post",
-      "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action and CLI union"
     }
   ]
 }
