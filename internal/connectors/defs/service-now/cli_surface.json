@@ -1,0 +1,211 @@
+{
+  "tagline": "Run service-now source-backed typed write plans.",
+  "usage": "pm service-now <command> [flags]",
+  "source_cli": {
+    "name": "service-now provider API",
+    "docs": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+    "reference": "Pinned source-disposition citations and connector-owned typed write contracts.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "writes",
+      "title": "Typed write plans",
+      "commands": [
+        "create incident apply",
+        "update incident apply"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the service-now request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    }
+  ],
+  "commands": [
+    {
+      "path": "create incident apply",
+      "summary": "Plan and execute the typed create incident write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_incident",
+      "source_cli_path": "POST /api/now/table/{table_name}",
+      "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+      "flags": [
+        {
+          "name": "assigned_to",
+          "summary": "Optional assigned to record field.",
+          "maps_to": "record.assigned_to",
+          "type": "string"
+        },
+        {
+          "name": "assignment_group",
+          "summary": "Optional assignment group record field.",
+          "maps_to": "record.assignment_group",
+          "type": "string"
+        },
+        {
+          "name": "caller_id",
+          "summary": "Optional caller id record field.",
+          "maps_to": "record.caller_id",
+          "type": "string"
+        },
+        {
+          "name": "category",
+          "summary": "Optional category record field.",
+          "maps_to": "record.category",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "summary": "Optional description record field.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "impact",
+          "summary": "Optional impact record field.",
+          "maps_to": "record.impact",
+          "type": "string"
+        },
+        {
+          "name": "priority",
+          "summary": "Optional priority record field.",
+          "maps_to": "record.priority",
+          "type": "string"
+        },
+        {
+          "name": "short_description",
+          "summary": "Optional short description record field.",
+          "maps_to": "record.short_description",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "summary": "Optional state record field.",
+          "maps_to": "record.state",
+          "type": "string"
+        },
+        {
+          "name": "urgency",
+          "summary": "Optional urgency record field.",
+          "maps_to": "record.urgency",
+          "type": "string"
+        }
+      ],
+      "risk": "creates a new incident record; low-risk external mutation (a new ticket), no approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/now/table/{table_name}"
+        }
+      ],
+      "examples": [
+        "pm service-now create incident apply --json"
+      ],
+      "notes": "Pinned source operation service-now.table_api.post.2; writes.json action create_incident is the declared method/path/body execution component."
+    },
+    {
+      "path": "update incident apply",
+      "summary": "Plan and execute the typed update incident write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_incident",
+      "source_cli_path": "PATCH /api/now/table/{table_name}/{sys_id}",
+      "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+      "flags": [
+        {
+          "name": "assigned_to",
+          "summary": "Optional assigned to record field.",
+          "maps_to": "record.assigned_to",
+          "type": "string"
+        },
+        {
+          "name": "assignment_group",
+          "summary": "Optional assignment group record field.",
+          "maps_to": "record.assignment_group",
+          "type": "string"
+        },
+        {
+          "name": "category",
+          "summary": "Optional category record field.",
+          "maps_to": "record.category",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "summary": "Optional description record field.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "impact",
+          "summary": "Optional impact record field.",
+          "maps_to": "record.impact",
+          "type": "string"
+        },
+        {
+          "name": "priority",
+          "summary": "Optional priority record field.",
+          "maps_to": "record.priority",
+          "type": "string"
+        },
+        {
+          "name": "short_description",
+          "summary": "Optional short description record field.",
+          "maps_to": "record.short_description",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "summary": "Optional state record field.",
+          "maps_to": "record.state",
+          "type": "string"
+        },
+        {
+          "name": "sys_id",
+          "summary": "Required sys id record field.",
+          "maps_to": "record.sys_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "urgency",
+          "summary": "Optional urgency record field.",
+          "maps_to": "record.urgency",
+          "type": "string"
+        }
+      ],
+      "risk": "mutates an existing incident's recorded fields (only fields present in the submitted record are changed; ServiceNow's Table API PATCH/PUT both modify only the submitted fields, never the whole record) by sys_id",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/now/table/{table_name}/{sys_id}"
+        }
+      ],
+      "examples": [
+        "pm service-now update incident apply --json"
+      ],
+      "notes": "Pinned source operation service-now.table_api.patch.4; writes.json action update_incident is the declared method/path/body execution component."
+    }
+  ]
+}

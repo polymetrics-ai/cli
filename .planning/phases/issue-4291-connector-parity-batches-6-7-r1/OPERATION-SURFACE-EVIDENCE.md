@@ -138,3 +138,12 @@ source citations/routes and `writes.json` execution contracts. The binary proof 
 four bounded clean-project runs and stops at credential preflight; neither a live write nor a provider-live
 certification occurred. The actions remain direct-write capabilities; no reverse-ETL destination is claimed
 without the action-specific durable acknowledgement/read-back transport facts required by the sync contract.
+
+## Increment 11 — ServiceNow fixed-template reachability
+
+The two source-crosswalked Table API action instances (`create_incident` and `update_incident`) now have
+source-cited typed CLI plans and binary credential-preflight proof. The remaining fixed GET/PUT/DELETE
+templates are explicitly deferred with their intended command path, lane, source route, and exact missing
+component. This preserves the provider's six-operation fixed template inventory and its dynamic-schema
+constraint: customer table names, field dictionaries, and ACLs are not fabricated as finite source
+operations or used as a safety-based omission.

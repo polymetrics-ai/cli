@@ -219128,8 +219128,12 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending runnable-command-binding-service-now",
-        "contract": null,
+        "declaration_status": "disabled; declaration-pending intended etl CLI command \"tables list\"",
+        "contract": {
+          "execution_component": "internal/connectors/defs/service-now/streams.json: fixed incidents/users/groups aliases do not expose the documented table_name template as one closed user-selected stream",
+          "source_cli_path": "GET /api/now/table/{table_name}",
+          "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
+        },
         "api_surface_binding": {
           "stream": "incidents"
         },
@@ -219161,10 +219165,12 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "binding_not_enabled",
+          "state": "declaration_pending_source_template_contract",
           "binding": {
-            "stream": "incidents"
-          }
+            "intended_path": "tables list",
+            "intent": "etl"
+          },
+          "reason": "The provider table_name, record schema, and ACL-visible fields are instance-dependent. Add a connector-owned dynamic-table selection and schema-discovery contract before making the generic template executable; no engine gap is claimed."
         }
       },
       "generated_projections": {
@@ -219204,8 +219210,12 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending typed-operation-contract-service-now",
-        "contract": null,
+        "declaration_status": "disabled; declaration-pending intended direct_read CLI command \"tables get\"",
+        "contract": {
+          "execution_component": "internal/connectors/defs/service-now/operations.json: absent fixed direct-read operation contract for the table_name/sys_id template",
+          "source_cli_path": "GET /api/now/table/{table_name}/{sys_id}",
+          "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
+        },
         "api_surface_binding": null,
         "rejection": {
           "reason": "declaration-pending",
@@ -219241,7 +219251,12 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "no_generated_binding"
+          "state": "declaration_pending_source_template_contract",
+          "binding": {
+            "intended_path": "tables get",
+            "intent": "direct_read"
+          },
+          "reason": "A direct command needs a fixed table identity plus source-backed request/response schema. The public template cannot supply a finite instance table schema, so this remains connector declaration work."
         }
       },
       "generated_projections": {
@@ -219281,9 +219296,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the fixed provider operation template",
+        "declaration_status": "enabled; typed direct-write action create_incident is reachable through implemented CLI command \"create incident apply\"",
         "contract": {
-          "write": "create_incident"
+          "write": "create_incident",
+          "cli_path": "create incident apply",
+          "source_cli_path": "POST /api/now/table/{table_name}",
+          "execution_component": "internal/connectors/defs/service-now/writes.json action create_incident"
         },
         "api_surface_binding": {
           "write": "create_incident"
@@ -219316,7 +219334,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_incident"
+            "write": "create_incident",
+            "path": "create incident apply",
+            "source_cli_path": "POST /api/now/table/{table_name}"
           }
         }
       },
@@ -219357,8 +219377,12 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending typed-operation-contract-service-now",
-        "contract": null,
+        "declaration_status": "disabled; declaration-pending intended reverse_etl CLI command \"tables replace apply\"",
+        "contract": {
+          "execution_component": "internal/connectors/defs/service-now/writes.json: no typed replace action for the table_name/sys_id template",
+          "source_cli_path": "PUT /api/now/table/{table_name}/{sys_id}",
+          "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
+        },
         "api_surface_binding": null,
         "rejection": {
           "reason": "declaration-pending",
@@ -219394,7 +219418,12 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "no_generated_binding"
+          "state": "declaration_pending_source_template_contract",
+          "binding": {
+            "intended_path": "tables replace apply",
+            "intent": "reverse_etl"
+          },
+          "reason": "Add a connector-owned typed action only for a source-backed fixed table/schema selection; do not infer customer field contracts from the public template."
         }
       },
       "generated_projections": {
@@ -219434,9 +219463,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the fixed provider operation template",
+        "declaration_status": "enabled; typed direct-write action update_incident is reachable through implemented CLI command \"update incident apply\"",
         "contract": {
-          "write": "update_incident"
+          "write": "update_incident",
+          "cli_path": "update incident apply",
+          "source_cli_path": "PATCH /api/now/table/{table_name}/{sys_id}",
+          "execution_component": "internal/connectors/defs/service-now/writes.json action update_incident"
         },
         "api_surface_binding": {
           "write": "update_incident"
@@ -219469,7 +219501,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_incident"
+            "write": "update_incident",
+            "path": "update incident apply",
+            "source_cli_path": "PATCH /api/now/table/{table_name}/{sys_id}"
           }
         }
       },
@@ -219510,8 +219544,12 @@
       },
       "canonical_mapping": {
         "source_state": "disabled",
-        "declaration_status": "disabled; declaration-pending typed-operation-contract-service-now",
-        "contract": null,
+        "declaration_status": "disabled; declaration-pending intended reverse_etl CLI command \"tables delete apply\"",
+        "contract": {
+          "execution_component": "internal/connectors/defs/service-now/writes.json: no typed delete action for the table_name/sys_id template",
+          "source_cli_path": "DELETE /api/now/table/{table_name}/{sys_id}",
+          "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
+        },
         "api_surface_binding": null,
         "rejection": {
           "reason": "declaration-pending",
@@ -219547,7 +219585,12 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "no_generated_binding"
+          "state": "declaration_pending_source_template_contract",
+          "binding": {
+            "intended_path": "tables delete apply",
+            "intent": "reverse_etl"
+          },
+          "reason": "Add a connector-owned typed action only for a source-backed fixed table/schema selection. Destructive confirmation is execution metadata, not a reason to omit the documented DELETE template."
         }
       },
       "generated_projections": {

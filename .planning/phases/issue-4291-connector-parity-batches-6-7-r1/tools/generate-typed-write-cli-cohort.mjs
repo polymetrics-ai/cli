@@ -11,7 +11,8 @@ import { resolve } from "node:path";
 const phase = resolve(import.meta.dirname, "..");
 const root = resolve(phase, "../../..");
 const defaultCohort = ["close-com", "zoho-bigin", "braze", "customer-io", "chargebee"];
-const cohort = process.argv.slice(2);
+const sourceBoundOnly = process.argv.includes("--source-bound-only");
+const cohort = process.argv.slice(2).filter((arg) => arg !== "--source-bound-only");
 if (cohort.length === 0) {
   cohort.push(...defaultCohort);
 }
@@ -50,7 +51,8 @@ function routeSegments(path) {
 // can include that base's fixed path prefix (for example /api/v2) and naturally
 // give path variables provider names rather than the action record names. The
 // disposition's existing covered_by.write relation is the precise mapping;
-// this check only refuses a different action-relative static route.
+// this check only refuses a different action-relative static route. A provider
+// template variable may resolve to a connector-owned fixed resource selection.
 function sameProviderRoute(actionPath, sourcePath) {
   const action = routeSegments(actionPath);
   const source = routeSegments(sourcePath);
@@ -58,7 +60,7 @@ function sameProviderRoute(actionPath, sourcePath) {
     return false;
   }
   const suffix = source.slice(source.length - action.length);
-  return action.every((segment, index) => segment === suffix[index]);
+  return action.every((segment, index) => segment === suffix[index] || suffix[index] === "{}" || segment === "{}");
 }
 
 function cliFlagForProperty(name, schema, required) {
@@ -199,6 +201,9 @@ for (const connector of cohort) {
   const deferred = [];
   for (const action of writes.actions) {
     const rows = sourceRowsByAction.get(action.name) ?? [];
+    if (rows.length === 0 && sourceBoundOnly) {
+      continue;
+    }
     if (rows.length !== 1) {
       throw new Error(`${connector}:${action.name}: expected exactly one exact source-disposition write row, found ${rows.length}`);
     }
@@ -217,7 +222,7 @@ for (const connector of cohort) {
     generated.push(result.command);
     commandEvidence.set(`${connector}:${sourceRow.source.source_id}`, { action, sourceRow, command: result.command });
   }
-  if (generated.length + deferred.length !== writes.actions.length) {
+  if (!sourceBoundOnly && generated.length + deferred.length !== writes.actions.length) {
     throw new Error(`${connector}: action accounting is incomplete`);
   }
   connectorDocuments.set(connector, { definitionRoot, dispositionFile, disposition, cli, generated, deferred });

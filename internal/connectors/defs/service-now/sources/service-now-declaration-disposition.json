@@ -68,7 +68,7 @@
     ],
     "stream_bindings": 1,
     "writes_actions": 6,
-    "terminal_commands": 0,
+    "terminal_commands": 2,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
@@ -108,9 +108,9 @@
         "count": 3
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 2,
     "typed_write_actions": 6,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 2,
     "endpoint_bound_typed_write_actions": 2
   },
   "ledger_dispositions": [
@@ -147,12 +147,22 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The fixed platform operation is documented; no exact connector-local runnable declaration binds it.",
+        "detail": "The provider table_name, record schema, and ACL-visible fields are instance-dependent. Add a connector-owned dynamic-table selection and schema-discovery contract before making the generic template executable; no engine gap is claimed.",
         "evidence": "internal/connectors/defs/service-now/sources/service-now-operation-source-lock.json: rest.operations[0] pins the fixed Table API template; its table schema is instance-dependent."
       },
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-service-now",
-        "contract": null
+        "status": "disabled; declaration-pending intended etl CLI command \"tables list\"",
+        "contract": null,
+        "command": {
+          "state": "declaration-pending",
+          "intended_path": "tables list",
+          "intent": "etl",
+          "lane": "etl",
+          "source_cli_path": "GET /api/now/table/{table_name}",
+          "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+          "execution_component": "internal/connectors/defs/service-now/streams.json: fixed incidents/users/groups aliases do not expose the documented table_name template as one closed user-selected stream",
+          "reason": "The provider table_name, record schema, and ACL-visible fields are instance-dependent. Add a connector-owned dynamic-table selection and schema-discovery contract before making the generic template executable; no engine gap is claimed."
+        }
       }
     },
     {
@@ -192,12 +202,22 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The fixed platform operation is documented; no exact connector-local runnable declaration binds it.",
+        "detail": "A direct command needs a fixed table identity plus source-backed request/response schema. The public template cannot supply a finite instance table schema, so this remains connector declaration work.",
         "evidence": "internal/connectors/defs/service-now/sources/service-now-operation-source-lock.json: rest.operations[1] pins the fixed Table API template; its table schema is instance-dependent."
       },
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-service-now",
-        "contract": null
+        "status": "disabled; declaration-pending intended direct_read CLI command \"tables get\"",
+        "contract": null,
+        "command": {
+          "state": "declaration-pending",
+          "intended_path": "tables get",
+          "intent": "direct_read",
+          "lane": "direct_read",
+          "source_cli_path": "GET /api/now/table/{table_name}/{sys_id}",
+          "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+          "execution_component": "internal/connectors/defs/service-now/operations.json: absent fixed direct-read operation contract for the table_name/sys_id template",
+          "reason": "A direct command needs a fixed table identity plus source-backed request/response schema. The public template cannot supply a finite instance table schema, so this remains connector declaration work."
+        }
       }
     },
     {
@@ -223,11 +243,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-owned typed action binds this fixed provider operation template."
+        "evidence": "internal/connectors/defs/service-now/cli_surface.json: implemented command \"create incident apply\" binds typed write action create_incident to POST /api/now/table/{table_name}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_incident"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the fixed provider operation template",
+        "status": "enabled; typed direct-write action create_incident is reachable through implemented CLI command \"create incident apply\"",
         "contract": {
           "write": "create_incident"
         },
@@ -235,6 +258,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create incident apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_incident",
+          "source_cli_path": "POST /api/now/table/{table_name}",
+          "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
         }
       }
     },
@@ -275,16 +306,26 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The fixed platform operation is documented; no exact connector-local runnable declaration binds it.",
+        "detail": "Add a connector-owned typed action only for a source-backed fixed table/schema selection; do not infer customer field contracts from the public template.",
         "evidence": "internal/connectors/defs/service-now/sources/service-now-operation-source-lock.json: rest.operations[3] pins the fixed Table API template; its table schema is instance-dependent."
       },
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "status": "disabled; declaration-pending intended reverse_etl CLI command \"tables replace apply\"",
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
           "state": "declaration-pending",
           "reason": "No connector-owned typed writes.json action yet binds this exact fixed provider template. This is an unauthored connector declaration, not a foundation gap or safety exclusion."
+        },
+        "command": {
+          "state": "declaration-pending",
+          "intended_path": "tables replace apply",
+          "intent": "reverse_etl",
+          "lane": "direct_write",
+          "source_cli_path": "PUT /api/now/table/{table_name}/{sys_id}",
+          "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+          "execution_component": "internal/connectors/defs/service-now/writes.json: no typed replace action for the table_name/sys_id template",
+          "reason": "Add a connector-owned typed action only for a source-backed fixed table/schema selection; do not infer customer field contracts from the public template."
         }
       }
     },
@@ -311,11 +352,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "A connector-owned typed action binds this fixed provider operation template."
+        "evidence": "internal/connectors/defs/service-now/cli_surface.json: implemented command \"update incident apply\" binds typed write action update_incident to PATCH /api/now/table/{table_name}/{sys_id}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_incident"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the fixed provider operation template",
+        "status": "enabled; typed direct-write action update_incident is reachable through implemented CLI command \"update incident apply\"",
         "contract": {
           "write": "update_incident"
         },
@@ -323,6 +367,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "The closed declarative typed-destination contract rejects the prior branch-only declaration: it selected full_overwrite and lacked the action-owned per-record batch, provider receipt locator, and read-back conformance evidence. The direct typed write remains enabled; reverse ETL is connector-owned declaration work, not a foundation gap."
+        },
+        "command": {
+          "path": "update incident apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_incident",
+          "source_cli_path": "PATCH /api/now/table/{table_name}/{sys_id}",
+          "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html"
         }
       }
     },
@@ -363,16 +415,26 @@
       "rejection": {
         "reason": "declaration-pending",
         "recoverable": true,
-        "detail": "The fixed platform operation is documented; no exact connector-local runnable declaration binds it.",
+        "detail": "Add a connector-owned typed action only for a source-backed fixed table/schema selection. Destructive confirmation is execution metadata, not a reason to omit the documented DELETE template.",
         "evidence": "internal/connectors/defs/service-now/sources/service-now-operation-source-lock.json: rest.operations[5] pins the fixed Table API template; its table schema is instance-dependent."
       },
       "declaration": {
-        "status": "disabled; declaration-pending typed-operation-contract-service-now",
+        "status": "disabled; declaration-pending intended reverse_etl CLI command \"tables delete apply\"",
         "contract": null,
         "reverse_etl": {
           "eligible_typed_action": false,
           "state": "declaration-pending",
           "reason": "No connector-owned typed writes.json action yet binds this exact fixed provider template. This is an unauthored connector declaration, not a foundation gap or safety exclusion."
+        },
+        "command": {
+          "state": "declaration-pending",
+          "intended_path": "tables delete apply",
+          "intent": "reverse_etl",
+          "lane": "direct_write",
+          "source_cli_path": "DELETE /api/now/table/{table_name}/{sys_id}",
+          "source_url": "https://www.servicenow.com/docs/bundle/zurich-api-reference/page/integrate/inbound-rest/concept/c_TableAPI.html",
+          "execution_component": "internal/connectors/defs/service-now/writes.json: no typed delete action for the table_name/sys_id template",
+          "reason": "Add a connector-owned typed action only for a source-backed fixed table/schema selection. Destructive confirmation is execution metadata, not a reason to omit the documented DELETE template."
         }
       }
     }
@@ -382,7 +444,9 @@
     "The Table API operation count is the fixed public platform-template count only. It is not a fabricated count of target-instance tables or fields.",
     "Direct writes are direct_write. Their reverse-ETL eligibility is a separate foundation-gapped attribute until #4303 provides the connector-neutral typed destination executor.",
     "No transport binding is declared in this map.",
-    "2026-08-20 reconciliation: source transport declares incidents, users, and groups; update_incident is the exact typed-destination proof. typed_action_eligibility accounts for all six table-specific actions without inventing an instance-dependent provider operation identity. The two unmapped fixed templates remain declaration-pending."
+    "2026-08-20 reconciliation: source transport declares incidents, users, and groups; update_incident is the exact typed-destination proof. typed_action_eligibility accounts for all six table-specific actions without inventing an instance-dependent provider operation identity. The two unmapped fixed templates remain declaration-pending.",
+    "2026-08-25 typed write CLI materialization: 2 source-backed action commands are installed with writes.json-owned input/method/path contracts; 0 actions remain explicit CLI declaration-pending because their record field contract cannot be represented faithfully by the established command flag vocabulary.",
+    "2026-08-25 ServiceNow template CLI pending mapping: the fixed GET/PUT/DELETE templates retain intended command paths and concrete missing components. Instance table names, fields, and ACLs stay dynamic-schema declaration work; no customer operation identity is invented."
   ],
   "typed_action_eligibility": [
     {

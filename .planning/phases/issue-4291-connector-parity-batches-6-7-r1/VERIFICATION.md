@@ -613,6 +613,24 @@ foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
   directories are intentionally unstaged and unchanged by this cohort. Global `connectorgen validate` and
   `surface-sync --check` remain blocked at the shared v3 source-descriptor reader / held legacy citation
   parser before connector surface comparison; no workaround was added.
+
+## ServiceNow fixed-template CLI cohort — 2026-08-26
+
+- **RED:** source-bound `create_incident` and `update_incident` actions had no command surface. The
+  provider boundary is six fixed Table API method templates, while actual table names, schemas, and ACLs
+  are instance-dependent; treating the connector's user/group aliases as independent provider operations
+  would have invented public-source coverage.
+- **GREEN:** `pm service-now create incident apply` and `pm service-now update incident apply` are now
+  implemented typed write-plan commands. Their source paths retain the documented
+  `{table_name}` templates, while `writes.json` owns the fixed `incident` action contract and typed fields.
+  The commandrunner sweep and a fresh built binary both stop at exactly `error: missing --credential` for
+  the two paths; no provider request or mutation was made. `npm --prefix website run gen:website-data` and
+  `git diff --check` passed.
+- **Explicit remaining templates:** the operation record now names `tables list`, `tables get`, `tables
+  replace apply`, and `tables delete apply`, each with lane, source citation, and its concrete absent
+  connector component. The public GET/PUT/DELETE templates are therefore not omitted or called unsafe;
+  they are declaration-pending until a source-backed fixed table selection/schema/action exists. No engine
+  gap or dynamic customer schema was invented.
 # Stale typed-destination gap reconciliation — increment 1 (2026-08-20)
 
 - **RED:** The operation-evidence ledger exposed 1,111 direct-write rows that still named
