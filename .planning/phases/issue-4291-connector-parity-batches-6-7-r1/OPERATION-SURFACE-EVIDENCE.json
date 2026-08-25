@@ -1178,9 +1178,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_contact is reachable through implemented CLI command \"delete contact apply\"",
         "contract": {
-          "write": "delete_contact"
+          "write": "delete_contact",
+          "cli_path": "delete contact apply",
+          "source_cli_path": "DELETE /contact/{id}/",
+          "execution_component": "internal/connectors/defs/close-com/writes.json action delete_contact"
         },
         "api_surface_binding": {
           "write": "delete_contact"
@@ -1213,7 +1216,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_contact"
+            "write": "delete_contact",
+            "path": "delete contact apply",
+            "source_cli_path": "DELETE /contact/{id}/"
           }
         }
       },
@@ -2332,9 +2337,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_lead is reachable through implemented CLI command \"delete lead apply\"",
         "contract": {
-          "write": "delete_lead"
+          "write": "delete_lead",
+          "cli_path": "delete lead apply",
+          "source_cli_path": "DELETE /lead/{id}/",
+          "execution_component": "internal/connectors/defs/close-com/writes.json action delete_lead"
         },
         "api_surface_binding": {
           "write": "delete_lead"
@@ -2367,7 +2375,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_lead"
+            "write": "delete_lead",
+            "path": "delete lead apply",
+            "source_cli_path": "DELETE /lead/{id}/"
           }
         }
       },
@@ -2485,9 +2495,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_opportunity is reachable through implemented CLI command \"delete opportunity apply\"",
         "contract": {
-          "write": "delete_opportunity"
+          "write": "delete_opportunity",
+          "cli_path": "delete opportunity apply",
+          "source_cli_path": "DELETE /opportunity/{id}/",
+          "execution_component": "internal/connectors/defs/close-com/writes.json action delete_opportunity"
         },
         "api_surface_binding": {
           "write": "delete_opportunity"
@@ -2520,7 +2533,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_opportunity"
+            "write": "delete_opportunity",
+            "path": "delete opportunity apply",
+            "source_cli_path": "DELETE /opportunity/{id}/"
           }
         }
       },
@@ -3793,9 +3808,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_task is reachable through implemented CLI command \"delete task apply\"",
         "contract": {
-          "write": "delete_task"
+          "write": "delete_task",
+          "cli_path": "delete task apply",
+          "source_cli_path": "DELETE /task/{id}/",
+          "execution_component": "internal/connectors/defs/close-com/writes.json action delete_task"
         },
         "api_surface_binding": {
           "write": "delete_task"
@@ -3828,7 +3846,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_task"
+            "write": "delete_task",
+            "path": "delete task apply",
+            "source_cli_path": "DELETE /task/{id}/"
           }
         }
       },
@@ -15769,9 +15789,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_contact is reachable through implemented CLI command \"create contact apply\"",
         "contract": {
-          "write": "create_contact"
+          "write": "create_contact",
+          "cli_path": "create contact apply",
+          "source_cli_path": "POST /contact/",
+          "execution_component": "internal/connectors/defs/close-com/writes.json action create_contact"
         },
         "api_surface_binding": {
           "write": "create_contact"
@@ -15804,7 +15827,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_contact"
+            "write": "create_contact",
+            "path": "create contact apply",
+            "source_cli_path": "POST /contact/"
           }
         }
       },
@@ -17231,9 +17256,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_lead is reachable through implemented CLI command \"create lead apply\"",
         "contract": {
-          "write": "create_lead"
+          "write": "create_lead",
+          "cli_path": "create lead apply",
+          "source_cli_path": "POST /lead/",
+          "execution_component": "internal/connectors/defs/close-com/writes.json action create_lead"
         },
         "api_surface_binding": {
           "write": "create_lead"
@@ -17266,7 +17294,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_lead"
+            "write": "create_lead",
+            "path": "create lead apply",
+            "source_cli_path": "POST /lead/"
           }
         }
       },
@@ -17461,9 +17491,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_opportunity is reachable through implemented CLI command \"create opportunity apply\"",
         "contract": {
-          "write": "create_opportunity"
+          "write": "create_opportunity",
+          "cli_path": "create opportunity apply",
+          "source_cli_path": "POST /opportunity/",
+          "execution_component": "internal/connectors/defs/close-com/writes.json action create_opportunity"
         },
         "api_surface_binding": {
           "write": "create_opportunity"
@@ -17496,7 +17529,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_opportunity"
+            "write": "create_opportunity",
+            "path": "create opportunity apply",
+            "source_cli_path": "POST /opportunity/"
           }
         }
       },
@@ -19308,9 +19343,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_task is reachable through implemented CLI command \"create task apply\"",
         "contract": {
-          "write": "create_task"
+          "write": "create_task",
+          "cli_path": "create task apply",
+          "source_cli_path": "POST /task/",
+          "execution_component": "internal/connectors/defs/close-com/writes.json action create_task"
         },
         "api_surface_binding": {
           "write": "create_task"
@@ -19343,7 +19381,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_task"
+            "write": "create_task",
+            "path": "create task apply",
+            "source_cli_path": "POST /task/"
           }
         }
       },
@@ -20308,9 +20348,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_contact is reachable through implemented CLI command \"update contact apply\"",
         "contract": {
-          "write": "update_contact"
+          "write": "update_contact",
+          "cli_path": "update contact apply",
+          "source_cli_path": "PUT /contact/{id}/",
+          "execution_component": "internal/connectors/defs/close-com/writes.json action update_contact"
         },
         "api_surface_binding": {
           "write": "update_contact"
@@ -20343,7 +20386,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_contact"
+            "write": "update_contact",
+            "path": "update contact apply",
+            "source_cli_path": "PUT /contact/{id}/"
           }
         }
       },
@@ -21462,9 +21507,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_lead is reachable through implemented CLI command \"update lead apply\"",
         "contract": {
-          "write": "update_lead"
+          "write": "update_lead",
+          "cli_path": "update lead apply",
+          "source_cli_path": "PUT /lead/{id}/",
+          "execution_component": "internal/connectors/defs/close-com/writes.json action update_lead"
         },
         "api_surface_binding": {
           "write": "update_lead"
@@ -21497,7 +21545,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_lead"
+            "write": "update_lead",
+            "path": "update lead apply",
+            "source_cli_path": "PUT /lead/{id}/"
           }
         }
       },
@@ -21769,9 +21819,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_opportunity is reachable through implemented CLI command \"update opportunity apply\"",
         "contract": {
-          "write": "update_opportunity"
+          "write": "update_opportunity",
+          "cli_path": "update opportunity apply",
+          "source_cli_path": "PUT /opportunity/{id}/",
+          "execution_component": "internal/connectors/defs/close-com/writes.json action update_opportunity"
         },
         "api_surface_binding": {
           "write": "update_opportunity"
@@ -21804,7 +21857,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_opportunity"
+            "write": "update_opportunity",
+            "path": "update opportunity apply",
+            "source_cli_path": "PUT /opportunity/{id}/"
           }
         }
       },
@@ -23000,9 +23055,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_task is reachable through implemented CLI command \"update task apply\"",
         "contract": {
-          "write": "update_task"
+          "write": "update_task",
+          "cli_path": "update task apply",
+          "source_cli_path": "PUT /task/{id}/",
+          "execution_component": "internal/connectors/defs/close-com/writes.json action update_task"
         },
         "api_surface_binding": {
           "write": "update_task"
@@ -23035,7 +23093,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_task"
+            "write": "update_task",
+            "path": "update task apply",
+            "source_cli_path": "PUT /task/{id}/"
           }
         }
       },
@@ -65544,9 +65604,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_record is reachable through implemented CLI command \"delete record apply\"",
         "contract": {
-          "write": "delete_record"
+          "write": "delete_record",
+          "cli_path": "delete record apply",
+          "source_cli_path": "DELETE /{module_api_name}/{record_id}",
+          "execution_component": "internal/connectors/defs/zoho-bigin/writes.json action delete_record"
         },
         "api_surface_binding": {
           "write": "delete_record"
@@ -65579,7 +65642,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_record"
+            "write": "delete_record",
+            "path": "delete record apply",
+            "source_cli_path": "DELETE /{module_api_name}/{record_id}"
           }
         }
       },
@@ -65851,9 +65916,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_note is reachable through implemented CLI command \"delete note apply\"",
         "contract": {
-          "write": "delete_note"
+          "write": "delete_note",
+          "cli_path": "delete note apply",
+          "source_cli_path": "DELETE /{module_api_name}/{record_id}/Notes/{note_id}",
+          "execution_component": "internal/connectors/defs/zoho-bigin/writes.json action delete_note"
         },
         "api_surface_binding": {
           "write": "delete_note"
@@ -65886,7 +65954,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_note"
+            "write": "delete_note",
+            "path": "delete note apply",
+            "source_cli_path": "DELETE /{module_api_name}/{record_id}/Notes/{note_id}"
           }
         }
       },
@@ -68770,9 +68840,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_record is reachable through implemented CLI command \"create record apply\"",
         "contract": {
-          "write": "create_record"
+          "write": "create_record",
+          "cli_path": "create record apply",
+          "source_cli_path": "POST /{module_api_name}",
+          "execution_component": "internal/connectors/defs/zoho-bigin/writes.json action create_record"
         },
         "api_surface_binding": {
           "write": "create_record"
@@ -68805,7 +68878,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_record"
+            "write": "create_record",
+            "path": "create record apply",
+            "source_cli_path": "POST /{module_api_name}"
           }
         }
       },
@@ -69231,9 +69306,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_note is reachable through implemented CLI command \"create note apply\"",
         "contract": {
-          "write": "create_note"
+          "write": "create_note",
+          "cli_path": "create note apply",
+          "source_cli_path": "POST /{module_api_name}/{record_id}/Notes",
+          "execution_component": "internal/connectors/defs/zoho-bigin/writes.json action create_note"
         },
         "api_surface_binding": {
           "write": "create_note"
@@ -69266,7 +69344,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_note"
+            "write": "create_note",
+            "path": "create note apply",
+            "source_cli_path": "POST /{module_api_name}/{record_id}/Notes"
           }
         }
       },
@@ -69615,9 +69695,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action upsert_record is reachable through implemented CLI command \"upsert record apply\"",
         "contract": {
-          "write": "upsert_record"
+          "write": "upsert_record",
+          "cli_path": "upsert record apply",
+          "source_cli_path": "POST /{module_api_name}/upsert",
+          "execution_component": "internal/connectors/defs/zoho-bigin/writes.json action upsert_record"
         },
         "api_surface_binding": {
           "write": "upsert_record"
@@ -69650,7 +69733,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "upsert_record"
+            "write": "upsert_record",
+            "path": "upsert record apply",
+            "source_cli_path": "POST /{module_api_name}/upsert"
           }
         }
       },
@@ -70461,9 +70546,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_record is reachable through implemented CLI command \"update record apply\"",
         "contract": {
-          "write": "update_record"
+          "write": "update_record",
+          "cli_path": "update record apply",
+          "source_cli_path": "PUT /{module_api_name}",
+          "execution_component": "internal/connectors/defs/zoho-bigin/writes.json action update_record"
         },
         "api_surface_binding": {
           "write": "update_record"
@@ -70496,7 +70584,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_record"
+            "write": "update_record",
+            "path": "update record apply",
+            "source_cli_path": "PUT /{module_api_name}"
           }
         }
       },
@@ -98447,9 +98537,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_catalog is reachable through implemented CLI command \"create catalog apply\"",
         "contract": {
-          "write": "create_catalog"
+          "write": "create_catalog",
+          "cli_path": "create catalog apply",
+          "source_cli_path": "POST /catalogs",
+          "execution_component": "internal/connectors/defs/braze/writes.json action create_catalog"
         },
         "api_surface_binding": {
           "write": "create_catalog"
@@ -98482,7 +98575,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_catalog"
+            "write": "create_catalog",
+            "path": "create catalog apply",
+            "source_cli_path": "POST /catalogs"
           }
         }
       },
@@ -98523,9 +98618,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_catalog is reachable through implemented CLI command \"delete catalog apply\"",
         "contract": {
-          "write": "delete_catalog"
+          "write": "delete_catalog",
+          "cli_path": "delete catalog apply",
+          "source_cli_path": "DELETE /catalogs/{catalog_name}",
+          "execution_component": "internal/connectors/defs/braze/writes.json action delete_catalog"
         },
         "api_surface_binding": {
           "write": "delete_catalog"
@@ -98558,7 +98656,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_catalog"
+            "write": "delete_catalog",
+            "path": "delete catalog apply",
+            "source_cli_path": "DELETE /catalogs/{catalog_name}"
           }
         }
       },
@@ -98676,9 +98776,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_catalog_items is reachable through implemented CLI command \"create catalog items apply\"",
         "contract": {
-          "write": "create_catalog_items"
+          "write": "create_catalog_items",
+          "cli_path": "create catalog items apply",
+          "source_cli_path": "POST /catalogs/{catalog_name}/items",
+          "execution_component": "internal/connectors/defs/braze/writes.json action create_catalog_items"
         },
         "api_surface_binding": {
           "write": "create_catalog_items"
@@ -98711,7 +98814,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_catalog_items"
+            "write": "create_catalog_items",
+            "path": "create catalog items apply",
+            "source_cli_path": "POST /catalogs/{catalog_name}/items"
           }
         }
       },
@@ -98829,9 +98934,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_catalog_items is reachable through implemented CLI command \"update catalog items apply\"",
         "contract": {
-          "write": "update_catalog_items"
+          "write": "update_catalog_items",
+          "cli_path": "update catalog items apply",
+          "source_cli_path": "PATCH /catalogs/{catalog_name}/items",
+          "execution_component": "internal/connectors/defs/braze/writes.json action update_catalog_items"
         },
         "api_surface_binding": {
           "write": "update_catalog_items"
@@ -98864,7 +98972,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_catalog_items"
+            "write": "update_catalog_items",
+            "path": "update catalog items apply",
+            "source_cli_path": "PATCH /catalogs/{catalog_name}/items"
           }
         }
       },
@@ -99213,9 +99323,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_catalog_item is reachable through implemented CLI command \"update catalog item apply\"",
         "contract": {
-          "write": "update_catalog_item"
+          "write": "update_catalog_item",
+          "cli_path": "update catalog item apply",
+          "source_cli_path": "PATCH /catalogs/{catalog_name}/items/{item_id}",
+          "execution_component": "internal/connectors/defs/braze/writes.json action update_catalog_item"
         },
         "api_surface_binding": {
           "write": "update_catalog_item"
@@ -99248,7 +99361,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_catalog_item"
+            "write": "update_catalog_item",
+            "path": "update catalog item apply",
+            "source_cli_path": "PATCH /catalogs/{catalog_name}/items/{item_id}"
           }
         }
       },
@@ -99289,9 +99404,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_catalog_item is reachable through implemented CLI command \"delete catalog item apply\"",
         "contract": {
-          "write": "delete_catalog_item"
+          "write": "delete_catalog_item",
+          "cli_path": "delete catalog item apply",
+          "source_cli_path": "DELETE /catalogs/{catalog_name}/items/{item_id}",
+          "execution_component": "internal/connectors/defs/braze/writes.json action delete_catalog_item"
         },
         "api_surface_binding": {
           "write": "delete_catalog_item"
@@ -99324,7 +99442,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_catalog_item"
+            "write": "delete_catalog_item",
+            "path": "delete catalog item apply",
+            "source_cli_path": "DELETE /catalogs/{catalog_name}/items/{item_id}"
           }
         }
       },
@@ -99365,9 +99485,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_content_block is reachable through implemented CLI command \"create content block apply\"",
         "contract": {
-          "write": "create_content_block"
+          "write": "create_content_block",
+          "cli_path": "create content block apply",
+          "source_cli_path": "POST /content_blocks/create",
+          "execution_component": "internal/connectors/defs/braze/writes.json action create_content_block"
         },
         "api_surface_binding": {
           "write": "create_content_block"
@@ -99400,7 +99523,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_content_block"
+            "write": "create_content_block",
+            "path": "create content block apply",
+            "source_cli_path": "POST /content_blocks/create"
           }
         }
       },
@@ -99598,9 +99723,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_content_block is reachable through implemented CLI command \"update content block apply\"",
         "contract": {
-          "write": "update_content_block"
+          "write": "update_content_block",
+          "cli_path": "update content block apply",
+          "source_cli_path": "POST /content_blocks/update",
+          "execution_component": "internal/connectors/defs/braze/writes.json action update_content_block"
         },
         "api_surface_binding": {
           "write": "update_content_block"
@@ -99633,7 +99761,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_content_block"
+            "write": "update_content_block",
+            "path": "update content block apply",
+            "source_cli_path": "POST /content_blocks/update"
           }
         }
       },
@@ -99751,9 +99881,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_email_blocklist is reachable through implemented CLI command \"create email blocklist apply\"",
         "contract": {
-          "write": "create_email_blocklist"
+          "write": "create_email_blocklist",
+          "cli_path": "create email blocklist apply",
+          "source_cli_path": "POST /email/blocklist",
+          "execution_component": "internal/connectors/defs/braze/writes.json action create_email_blocklist"
         },
         "api_surface_binding": {
           "write": "create_email_blocklist"
@@ -99786,7 +99919,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_email_blocklist"
+            "write": "create_email_blocklist",
+            "path": "create email blocklist apply",
+            "source_cli_path": "POST /email/blocklist"
           }
         }
       },
@@ -99827,9 +99962,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action remove_email_hard_bounce is reachable through implemented CLI command \"remove email hard bounce apply\"",
         "contract": {
-          "write": "remove_email_hard_bounce"
+          "write": "remove_email_hard_bounce",
+          "cli_path": "remove email hard bounce apply",
+          "source_cli_path": "POST /email/bounce/remove",
+          "execution_component": "internal/connectors/defs/braze/writes.json action remove_email_hard_bounce"
         },
         "api_surface_binding": {
           "write": "remove_email_hard_bounce"
@@ -99862,7 +100000,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "remove_email_hard_bounce"
+            "write": "remove_email_hard_bounce",
+            "path": "remove email hard bounce apply",
+            "source_cli_path": "POST /email/bounce/remove"
           }
         }
       },
@@ -99983,9 +100123,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action remove_email_spam is reachable through implemented CLI command \"remove email spam apply\"",
         "contract": {
-          "write": "remove_email_spam"
+          "write": "remove_email_spam",
+          "cli_path": "remove email spam apply",
+          "source_cli_path": "POST /email/spam/remove",
+          "execution_component": "internal/connectors/defs/braze/writes.json action remove_email_spam"
         },
         "api_surface_binding": {
           "write": "remove_email_spam"
@@ -100018,7 +100161,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "remove_email_spam"
+            "write": "remove_email_spam",
+            "path": "remove email spam apply",
+            "source_cli_path": "POST /email/spam/remove"
           }
         }
       },
@@ -100059,9 +100204,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action set_email_subscription_status is reachable through implemented CLI command \"set email subscription status apply\"",
         "contract": {
-          "write": "set_email_subscription_status"
+          "write": "set_email_subscription_status",
+          "cli_path": "set email subscription status apply",
+          "source_cli_path": "POST /email/status",
+          "execution_component": "internal/connectors/defs/braze/writes.json action set_email_subscription_status"
         },
         "api_surface_binding": {
           "write": "set_email_subscription_status"
@@ -100094,7 +100242,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "set_email_subscription_status"
+            "write": "set_email_subscription_status",
+            "path": "set email subscription status apply",
+            "source_cli_path": "POST /email/status"
           }
         }
       },
@@ -101311,9 +101461,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action send_message is reachable through implemented CLI command \"send message apply\"",
         "contract": {
-          "write": "send_message"
+          "write": "send_message",
+          "cli_path": "send message apply",
+          "source_cli_path": "POST /messages/send",
+          "execution_component": "internal/connectors/defs/braze/writes.json action send_message"
         },
         "api_surface_binding": {
           "write": "send_message"
@@ -101346,7 +101499,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "send_message"
+            "write": "send_message",
+            "path": "send message apply",
+            "source_cli_path": "POST /messages/send"
           }
         }
       },
@@ -101387,9 +101542,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_preference_center is reachable through implemented CLI command \"create preference center apply\"",
         "contract": {
-          "write": "create_preference_center"
+          "write": "create_preference_center",
+          "cli_path": "create preference center apply",
+          "source_cli_path": "POST /preference_center/v1",
+          "execution_component": "internal/connectors/defs/braze/writes.json action create_preference_center"
         },
         "api_surface_binding": {
           "write": "create_preference_center"
@@ -101422,7 +101580,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_preference_center"
+            "write": "create_preference_center",
+            "path": "create preference center apply",
+            "source_cli_path": "POST /preference_center/v1"
           }
         }
       },
@@ -101620,9 +101780,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_preference_center is reachable through implemented CLI command \"update preference center apply\"",
         "contract": {
-          "write": "update_preference_center"
+          "write": "update_preference_center",
+          "cli_path": "update preference center apply",
+          "source_cli_path": "PUT /preference_center/v1/{PreferenceCenterExternalID}",
+          "execution_component": "internal/connectors/defs/braze/writes.json action update_preference_center"
         },
         "api_surface_binding": {
           "write": "update_preference_center"
@@ -101655,7 +101818,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_preference_center"
+            "write": "update_preference_center",
+            "path": "update preference center apply",
+            "source_cli_path": "PUT /preference_center/v1/{PreferenceCenterExternalID}"
           }
         }
       },
@@ -102940,9 +103105,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action remove_sms_invalid_phone_numbers is reachable through implemented CLI command \"remove sms invalid phone numbers apply\"",
         "contract": {
-          "write": "remove_sms_invalid_phone_numbers"
+          "write": "remove_sms_invalid_phone_numbers",
+          "cli_path": "remove sms invalid phone numbers apply",
+          "source_cli_path": "POST /sms/invalid_phone_numbers/remove",
+          "execution_component": "internal/connectors/defs/braze/writes.json action remove_sms_invalid_phone_numbers"
         },
         "api_surface_binding": {
           "write": "remove_sms_invalid_phone_numbers"
@@ -102975,7 +103143,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "remove_sms_invalid_phone_numbers"
+            "write": "remove_sms_invalid_phone_numbers",
+            "path": "remove sms invalid phone numbers apply",
+            "source_cli_path": "POST /sms/invalid_phone_numbers/remove"
           }
         }
       },
@@ -103170,9 +103340,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action set_subscription_status_v2 is reachable through implemented CLI command \"set subscription status v2 apply\"",
         "contract": {
-          "write": "set_subscription_status_v2"
+          "write": "set_subscription_status_v2",
+          "cli_path": "set subscription status v2 apply",
+          "source_cli_path": "POST /v2/subscription/status/set",
+          "execution_component": "internal/connectors/defs/braze/writes.json action set_subscription_status_v2"
         },
         "api_surface_binding": {
           "write": "set_subscription_status_v2"
@@ -103205,7 +103378,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "set_subscription_status_v2"
+            "write": "set_subscription_status_v2",
+            "path": "set subscription status v2 apply",
+            "source_cli_path": "POST /v2/subscription/status/set"
           }
         }
       },
@@ -103480,9 +103655,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_email_template is reachable through implemented CLI command \"create email template apply\"",
         "contract": {
-          "write": "create_email_template"
+          "write": "create_email_template",
+          "cli_path": "create email template apply",
+          "source_cli_path": "POST /templates/email/create",
+          "execution_component": "internal/connectors/defs/braze/writes.json action create_email_template"
         },
         "api_surface_binding": {
           "write": "create_email_template"
@@ -103515,7 +103693,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_email_template"
+            "write": "create_email_template",
+            "path": "create email template apply",
+            "source_cli_path": "POST /templates/email/create"
           }
         }
       },
@@ -103556,9 +103736,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_email_template is reachable through implemented CLI command \"update email template apply\"",
         "contract": {
-          "write": "update_email_template"
+          "write": "update_email_template",
+          "cli_path": "update email template apply",
+          "source_cli_path": "POST /templates/email/update",
+          "execution_component": "internal/connectors/defs/braze/writes.json action update_email_template"
         },
         "api_surface_binding": {
           "write": "update_email_template"
@@ -103591,7 +103774,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_email_template"
+            "write": "update_email_template",
+            "path": "update email template apply",
+            "source_cli_path": "POST /templates/email/update"
           }
         }
       },
@@ -103709,9 +103894,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_user_alias is reachable through implemented CLI command \"create user alias apply\"",
         "contract": {
-          "write": "create_user_alias"
+          "write": "create_user_alias",
+          "cli_path": "create user alias apply",
+          "source_cli_path": "POST /users/alias/new",
+          "execution_component": "internal/connectors/defs/braze/writes.json action create_user_alias"
         },
         "api_surface_binding": {
           "write": "create_user_alias"
@@ -103744,7 +103932,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_user_alias"
+            "write": "create_user_alias",
+            "path": "create user alias apply",
+            "source_cli_path": "POST /users/alias/new"
           }
         }
       },
@@ -103785,9 +103975,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_user_alias is reachable through implemented CLI command \"update user alias apply\"",
         "contract": {
-          "write": "update_user_alias"
+          "write": "update_user_alias",
+          "cli_path": "update user alias apply",
+          "source_cli_path": "POST /users/alias/update",
+          "execution_component": "internal/connectors/defs/braze/writes.json action update_user_alias"
         },
         "api_surface_binding": {
           "write": "update_user_alias"
@@ -103820,7 +104013,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_user_alias"
+            "write": "update_user_alias",
+            "path": "update user alias apply",
+            "source_cli_path": "POST /users/alias/update"
           }
         }
       },
@@ -103861,9 +104056,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_users is reachable through implemented CLI command \"delete users apply\"",
         "contract": {
-          "write": "delete_users"
+          "write": "delete_users",
+          "cli_path": "delete users apply",
+          "source_cli_path": "POST /users/delete",
+          "execution_component": "internal/connectors/defs/braze/writes.json action delete_users"
         },
         "api_surface_binding": {
           "write": "delete_users"
@@ -103896,7 +104094,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_users"
+            "write": "delete_users",
+            "path": "delete users apply",
+            "source_cli_path": "POST /users/delete"
           }
         }
       },
@@ -104168,9 +104368,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action remove_user_external_ids is reachable through implemented CLI command \"remove user external ids apply\"",
         "contract": {
-          "write": "remove_user_external_ids"
+          "write": "remove_user_external_ids",
+          "cli_path": "remove user external ids apply",
+          "source_cli_path": "POST /users/external_ids/remove",
+          "execution_component": "internal/connectors/defs/braze/writes.json action remove_user_external_ids"
         },
         "api_surface_binding": {
           "write": "remove_user_external_ids"
@@ -104203,7 +104406,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "remove_user_external_ids"
+            "write": "remove_user_external_ids",
+            "path": "remove user external ids apply",
+            "source_cli_path": "POST /users/external_ids/remove"
           }
         }
       },
@@ -104244,9 +104449,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action rename_user_external_ids is reachable through implemented CLI command \"rename user external ids apply\"",
         "contract": {
-          "write": "rename_user_external_ids"
+          "write": "rename_user_external_ids",
+          "cli_path": "rename user external ids apply",
+          "source_cli_path": "POST /users/external_ids/rename",
+          "execution_component": "internal/connectors/defs/braze/writes.json action rename_user_external_ids"
         },
         "api_surface_binding": {
           "write": "rename_user_external_ids"
@@ -104279,7 +104487,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "rename_user_external_ids"
+            "write": "rename_user_external_ids",
+            "path": "rename user external ids apply",
+            "source_cli_path": "POST /users/external_ids/rename"
           }
         }
       },
@@ -104320,9 +104530,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action identify_users is reachable through implemented CLI command \"identify users apply\"",
         "contract": {
-          "write": "identify_users"
+          "write": "identify_users",
+          "cli_path": "identify users apply",
+          "source_cli_path": "POST /users/identify",
+          "execution_component": "internal/connectors/defs/braze/writes.json action identify_users"
         },
         "api_surface_binding": {
           "write": "identify_users"
@@ -104355,7 +104568,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "identify_users"
+            "write": "identify_users",
+            "path": "identify users apply",
+            "source_cli_path": "POST /users/identify"
           }
         }
       },
@@ -104396,9 +104611,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action merge_users is reachable through implemented CLI command \"merge users apply\"",
         "contract": {
-          "write": "merge_users"
+          "write": "merge_users",
+          "cli_path": "merge users apply",
+          "source_cli_path": "POST /users/merge",
+          "execution_component": "internal/connectors/defs/braze/writes.json action merge_users"
         },
         "api_surface_binding": {
           "write": "merge_users"
@@ -104431,7 +104649,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "merge_users"
+            "write": "merge_users",
+            "path": "merge users apply",
+            "source_cli_path": "POST /users/merge"
           }
         }
       },
@@ -104472,9 +104692,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action track_users is reachable through implemented CLI command \"track users apply\"",
         "contract": {
-          "write": "track_users"
+          "write": "track_users",
+          "cli_path": "track users apply",
+          "source_cli_path": "POST /users/track",
+          "execution_component": "internal/connectors/defs/braze/writes.json action track_users"
         },
         "api_surface_binding": {
           "write": "track_users"
@@ -104507,7 +104730,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "track_users"
+            "write": "track_users",
+            "path": "track users apply",
+            "source_cli_path": "POST /users/track"
           }
         }
       },
@@ -104548,9 +104773,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action trigger_campaign_send is reachable through implemented CLI command \"trigger campaign send apply\"",
         "contract": {
-          "write": "trigger_campaign_send"
+          "write": "trigger_campaign_send",
+          "cli_path": "trigger campaign send apply",
+          "source_cli_path": "POST /campaigns/trigger/send",
+          "execution_component": "internal/connectors/defs/braze/writes.json action trigger_campaign_send"
         },
         "api_surface_binding": {
           "write": "trigger_campaign_send"
@@ -104583,7 +104811,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "trigger_campaign_send"
+            "write": "trigger_campaign_send",
+            "path": "trigger campaign send apply",
+            "source_cli_path": "POST /campaigns/trigger/send"
           }
         }
       },
@@ -104855,9 +105085,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action trigger_canvas_send is reachable through implemented CLI command \"trigger canvas send apply\"",
         "contract": {
-          "write": "trigger_canvas_send"
+          "write": "trigger_canvas_send",
+          "cli_path": "trigger canvas send apply",
+          "source_cli_path": "POST /canvas/trigger/send",
+          "execution_component": "internal/connectors/defs/braze/writes.json action trigger_canvas_send"
         },
         "api_surface_binding": {
           "write": "trigger_canvas_send"
@@ -104890,7 +105123,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "trigger_canvas_send"
+            "write": "trigger_canvas_send",
+            "path": "trigger canvas send apply",
+            "source_cli_path": "POST /canvas/trigger/send"
           }
         }
       },
@@ -106009,9 +106244,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_reporting_webhook is reachable through implemented CLI command \"delete reporting webhook apply\"",
         "contract": {
-          "write": "delete_reporting_webhook"
+          "write": "delete_reporting_webhook",
+          "cli_path": "delete reporting webhook apply",
+          "source_cli_path": "DELETE /v1/reporting_webhooks/{webhook_id}",
+          "execution_component": "internal/connectors/defs/customer-io/writes.json action delete_reporting_webhook"
         },
         "api_surface_binding": {
           "write": "delete_reporting_webhook"
@@ -106044,7 +106282,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_reporting_webhook"
+            "write": "delete_reporting_webhook",
+            "path": "delete reporting webhook apply",
+            "source_cli_path": "DELETE /v1/reporting_webhooks/{webhook_id}"
           }
         }
       },
@@ -106085,9 +106325,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_manual_segment is reachable through implemented CLI command \"delete manual segment apply\"",
         "contract": {
-          "write": "delete_manual_segment"
+          "write": "delete_manual_segment",
+          "cli_path": "delete manual segment apply",
+          "source_cli_path": "DELETE /v1/segments/{segment_id}",
+          "execution_component": "internal/connectors/defs/customer-io/writes.json action delete_manual_segment"
         },
         "api_surface_binding": {
           "write": "delete_manual_segment"
@@ -106120,7 +106363,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_manual_segment"
+            "write": "delete_manual_segment",
+            "path": "delete manual segment apply",
+            "source_cli_path": "DELETE /v1/segments/{segment_id}"
           }
         }
       },
@@ -106161,9 +106406,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_snippet is reachable through implemented CLI command \"delete snippet apply\"",
         "contract": {
-          "write": "delete_snippet"
+          "write": "delete_snippet",
+          "cli_path": "delete snippet apply",
+          "source_cli_path": "DELETE /v1/snippets/{snippet_name}",
+          "execution_component": "internal/connectors/defs/customer-io/writes.json action delete_snippet"
         },
         "api_surface_binding": {
           "write": "delete_snippet"
@@ -106196,7 +106444,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_snippet"
+            "write": "delete_snippet",
+            "path": "delete snippet apply",
+            "source_cli_path": "DELETE /v1/snippets/{snippet_name}"
           }
         }
       },
@@ -113985,9 +114235,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action trigger_broadcast is reachable through implemented CLI command \"trigger broadcast apply\"",
         "contract": {
-          "write": "trigger_broadcast"
+          "write": "trigger_broadcast",
+          "cli_path": "trigger broadcast apply",
+          "source_cli_path": "POST /v1/campaigns/{broadcast_id}/triggers",
+          "execution_component": "internal/connectors/defs/customer-io/writes.json action trigger_broadcast"
         },
         "api_surface_binding": {
           "write": "trigger_broadcast"
@@ -114020,7 +114273,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "trigger_broadcast"
+            "write": "trigger_broadcast",
+            "path": "trigger broadcast apply",
+            "source_cli_path": "POST /v1/campaigns/{broadcast_id}/triggers"
           }
         }
       },
@@ -115832,9 +116087,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_reporting_webhook is reachable through implemented CLI command \"create reporting webhook apply\"",
         "contract": {
-          "write": "create_reporting_webhook"
+          "write": "create_reporting_webhook",
+          "cli_path": "create reporting webhook apply",
+          "source_cli_path": "POST /v1/reporting_webhooks",
+          "execution_component": "internal/connectors/defs/customer-io/writes.json action create_reporting_webhook"
         },
         "api_surface_binding": {
           "write": "create_reporting_webhook"
@@ -115867,7 +116125,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_reporting_webhook"
+            "write": "create_reporting_webhook",
+            "path": "create reporting webhook apply",
+            "source_cli_path": "POST /v1/reporting_webhooks"
           }
         }
       },
@@ -115908,9 +116168,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_manual_segment is reachable through implemented CLI command \"create manual segment apply\"",
         "contract": {
-          "write": "create_manual_segment"
+          "write": "create_manual_segment",
+          "cli_path": "create manual segment apply",
+          "source_cli_path": "POST /v1/segments",
+          "execution_component": "internal/connectors/defs/customer-io/writes.json action create_manual_segment"
         },
         "api_surface_binding": {
           "write": "create_manual_segment"
@@ -115943,7 +116206,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_manual_segment"
+            "write": "create_manual_segment",
+            "path": "create manual segment apply",
+            "source_cli_path": "POST /v1/segments"
           }
         }
       },
@@ -115984,7 +116249,7 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled typed direct-write action send_email; executable CLI declaration-pending",
         "contract": {
           "write": "send_email"
         },
@@ -116017,10 +116282,12 @@
           "state": "not_mapped_for_this_provider_operation"
         },
         "executable_cli": {
-          "state": "generated_binding_present",
+          "state": "declaration_pending_typed_action_cli_contract",
           "binding": {
-            "write": "send_email"
-          }
+            "write": "send_email",
+            "intended_path": "send email apply"
+          },
+          "reason": "record field transactional_message_id has no single declared type"
         }
       },
       "generated_projections": {
@@ -116368,9 +116635,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_snippet is reachable through implemented CLI command \"create snippet apply\"",
         "contract": {
-          "write": "create_snippet"
+          "write": "create_snippet",
+          "cli_path": "create snippet apply",
+          "source_cli_path": "POST /v1/snippets",
+          "execution_component": "internal/connectors/defs/customer-io/writes.json action create_snippet"
         },
         "api_surface_binding": {
           "write": "create_snippet"
@@ -116403,7 +116673,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_snippet"
+            "write": "create_snippet",
+            "path": "create snippet apply",
+            "source_cli_path": "POST /v1/snippets"
           }
         }
       },
@@ -117676,9 +117948,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_reporting_webhook is reachable through implemented CLI command \"update reporting webhook apply\"",
         "contract": {
-          "write": "update_reporting_webhook"
+          "write": "update_reporting_webhook",
+          "cli_path": "update reporting webhook apply",
+          "source_cli_path": "PUT /v1/reporting_webhooks/{webhook_id}",
+          "execution_component": "internal/connectors/defs/customer-io/writes.json action update_reporting_webhook"
         },
         "api_surface_binding": {
           "write": "update_reporting_webhook"
@@ -117711,7 +117986,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_reporting_webhook"
+            "write": "update_reporting_webhook",
+            "path": "update reporting webhook apply",
+            "source_cli_path": "PUT /v1/reporting_webhooks/{webhook_id}"
           }
         }
       },
@@ -117752,9 +118029,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_snippet is reachable through implemented CLI command \"update snippet apply\"",
         "contract": {
-          "write": "update_snippet"
+          "write": "update_snippet",
+          "cli_path": "update snippet apply",
+          "source_cli_path": "PUT /v1/snippets",
+          "execution_component": "internal/connectors/defs/customer-io/writes.json action update_snippet"
         },
         "api_surface_binding": {
           "write": "update_snippet"
@@ -117787,7 +118067,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_snippet"
+            "write": "update_snippet",
+            "path": "update snippet apply",
+            "source_cli_path": "PUT /v1/snippets"
           }
         }
       },
@@ -243134,9 +243416,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_comment is reachable through implemented CLI command \"create comment apply\"",
         "contract": {
-          "write": "create_comment"
+          "write": "create_comment",
+          "cli_path": "create comment apply",
+          "source_cli_path": "POST /v2/comments",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action create_comment"
         },
         "api_surface_binding": {
           "write": "create_comment"
@@ -243169,7 +243454,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_comment"
+            "write": "create_comment",
+            "path": "create comment apply",
+            "source_cli_path": "POST /v2/comments"
           }
         }
       },
@@ -243210,9 +243497,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_comment is reachable through implemented CLI command \"delete comment apply\"",
         "contract": {
-          "write": "delete_comment"
+          "write": "delete_comment",
+          "cli_path": "delete comment apply",
+          "source_cli_path": "POST /v2/comments/{comment-id}/delete",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action delete_comment"
         },
         "api_surface_binding": {
           "write": "delete_comment"
@@ -243245,7 +243535,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_comment"
+            "write": "delete_comment",
+            "path": "delete comment apply",
+            "source_cli_path": "POST /v2/comments/{comment-id}/delete"
           }
         }
       },
@@ -243979,9 +244271,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_coupon is reachable through implemented CLI command \"delete coupon apply\"",
         "contract": {
-          "write": "delete_coupon"
+          "write": "delete_coupon",
+          "cli_path": "delete coupon apply",
+          "source_cli_path": "POST /v2/coupons/{coupon-id}/delete",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action delete_coupon"
         },
         "api_surface_binding": {
           "write": "delete_coupon"
@@ -244014,7 +244309,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_coupon"
+            "write": "delete_coupon",
+            "path": "delete coupon apply",
+            "source_cli_path": "POST /v2/coupons/{coupon-id}/delete"
           }
         }
       },
@@ -244132,9 +244429,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_coupon is reachable through implemented CLI command \"update coupon apply\"",
         "contract": {
-          "write": "update_coupon"
+          "write": "update_coupon",
+          "cli_path": "update coupon apply",
+          "source_cli_path": "POST /v2/coupons/{coupon-id}/update_for_items",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action update_coupon"
         },
         "api_surface_binding": {
           "write": "update_coupon"
@@ -244167,7 +244467,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_coupon"
+            "write": "update_coupon",
+            "path": "update coupon apply",
+            "source_cli_path": "POST /v2/coupons/{coupon-id}/update_for_items"
           }
         }
       },
@@ -244285,9 +244587,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_coupon is reachable through implemented CLI command \"create coupon apply\"",
         "contract": {
-          "write": "create_coupon"
+          "write": "create_coupon",
+          "cli_path": "create coupon apply",
+          "source_cli_path": "POST /v2/coupons/create_for_items",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action create_coupon"
         },
         "api_surface_binding": {
           "write": "create_coupon"
@@ -244320,7 +244625,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_coupon"
+            "write": "create_coupon",
+            "path": "create coupon apply",
+            "source_cli_path": "POST /v2/coupons/create_for_items"
           }
         }
       },
@@ -244361,9 +244668,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_credit_note is reachable through implemented CLI command \"create credit note apply\"",
         "contract": {
-          "write": "create_credit_note"
+          "write": "create_credit_note",
+          "cli_path": "create credit note apply",
+          "source_cli_path": "POST /v2/credit_notes",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action create_credit_note"
         },
         "api_surface_binding": {
           "write": "create_credit_note"
@@ -244396,7 +244706,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_credit_note"
+            "write": "create_credit_note",
+            "path": "create credit note apply",
+            "source_cli_path": "POST /v2/credit_notes"
           }
         }
       },
@@ -245053,9 +245365,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action void_credit_note is reachable through implemented CLI command \"void credit note apply\"",
         "contract": {
-          "write": "void_credit_note"
+          "write": "void_credit_note",
+          "cli_path": "void credit note apply",
+          "source_cli_path": "POST /v2/credit_notes/{credit-note-id}/void",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action void_credit_note"
         },
         "api_surface_binding": {
           "write": "void_credit_note"
@@ -245088,7 +245403,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "void_credit_note"
+            "write": "void_credit_note",
+            "path": "void credit note apply",
+            "source_cli_path": "POST /v2/credit_notes/{credit-note-id}/void"
           }
         }
       },
@@ -245899,9 +246216,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_customer is reachable through implemented CLI command \"create customer apply\"",
         "contract": {
-          "write": "create_customer"
+          "write": "create_customer",
+          "cli_path": "create customer apply",
+          "source_cli_path": "POST /v2/customers",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action create_customer"
         },
         "api_surface_binding": {
           "write": "create_customer"
@@ -245934,7 +246254,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_customer"
+            "write": "create_customer",
+            "path": "create customer apply",
+            "source_cli_path": "POST /v2/customers"
           }
         }
       },
@@ -245975,9 +246297,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_customer is reachable through implemented CLI command \"update customer apply\"",
         "contract": {
-          "write": "update_customer"
+          "write": "update_customer",
+          "cli_path": "update customer apply",
+          "source_cli_path": "POST /v2/customers/{customer-id}",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action update_customer"
         },
         "api_surface_binding": {
           "write": "update_customer"
@@ -246010,7 +246335,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_customer"
+            "write": "update_customer",
+            "path": "update customer apply",
+            "source_cli_path": "POST /v2/customers/{customer-id}"
           }
         }
       },
@@ -246975,9 +247302,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_customer is reachable through implemented CLI command \"delete customer apply\"",
         "contract": {
-          "write": "delete_customer"
+          "write": "delete_customer",
+          "cli_path": "delete customer apply",
+          "source_cli_path": "POST /v2/customers/{customer-id}/delete",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action delete_customer"
         },
         "api_surface_binding": {
           "write": "delete_customer"
@@ -247010,7 +247340,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_customer"
+            "write": "delete_customer",
+            "path": "delete customer apply",
+            "source_cli_path": "POST /v2/customers/{customer-id}/delete"
           }
         }
       },
@@ -247667,9 +247999,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_subscription is reachable through implemented CLI command \"create subscription apply\"",
         "contract": {
-          "write": "create_subscription"
+          "write": "create_subscription",
+          "cli_path": "create subscription apply",
+          "source_cli_path": "POST /v2/customers/{customer-id}/subscription_for_items",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action create_subscription"
         },
         "api_surface_binding": {
           "write": "create_subscription"
@@ -247702,7 +248037,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_subscription"
+            "write": "create_subscription",
+            "path": "create subscription apply",
+            "source_cli_path": "POST /v2/customers/{customer-id}/subscription_for_items"
           }
         }
       },
@@ -254057,9 +254394,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action collect_payment_for_invoice is reachable through implemented CLI command \"collect payment for invoice apply\"",
         "contract": {
-          "write": "collect_payment_for_invoice"
+          "write": "collect_payment_for_invoice",
+          "cli_path": "collect payment for invoice apply",
+          "source_cli_path": "POST /v2/invoices/{invoice-id}/collect_payment",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action collect_payment_for_invoice"
         },
         "api_surface_binding": {
           "write": "collect_payment_for_invoice"
@@ -254092,7 +254432,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "collect_payment_for_invoice"
+            "write": "collect_payment_for_invoice",
+            "path": "collect payment for invoice apply",
+            "source_cli_path": "POST /v2/invoices/{invoice-id}/collect_payment"
           }
         }
       },
@@ -255519,9 +255861,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action void_invoice is reachable through implemented CLI command \"void invoice apply\"",
         "contract": {
-          "write": "void_invoice"
+          "write": "void_invoice",
+          "cli_path": "void invoice apply",
+          "source_cli_path": "POST /v2/invoices/{invoice-id}/void",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action void_invoice"
         },
         "api_surface_binding": {
           "write": "void_invoice"
@@ -255554,7 +255899,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "void_invoice"
+            "write": "void_invoice",
+            "path": "void invoice apply",
+            "source_cli_path": "POST /v2/invoices/{invoice-id}/void"
           }
         }
       },
@@ -256134,9 +256481,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_item_family is reachable through implemented CLI command \"create item family apply\"",
         "contract": {
-          "write": "create_item_family"
+          "write": "create_item_family",
+          "cli_path": "create item family apply",
+          "source_cli_path": "POST /v2/item_families",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action create_item_family"
         },
         "api_surface_binding": {
           "write": "create_item_family"
@@ -256169,7 +256519,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_item_family"
+            "write": "create_item_family",
+            "path": "create item family apply",
+            "source_cli_path": "POST /v2/item_families"
           }
         }
       },
@@ -256210,9 +256562,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_item_family is reachable through implemented CLI command \"update item family apply\"",
         "contract": {
-          "write": "update_item_family"
+          "write": "update_item_family",
+          "cli_path": "update item family apply",
+          "source_cli_path": "POST /v2/item_families/{item-family-id}",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action update_item_family"
         },
         "api_surface_binding": {
           "write": "update_item_family"
@@ -256245,7 +256600,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_item_family"
+            "write": "update_item_family",
+            "path": "update item family apply",
+            "source_cli_path": "POST /v2/item_families/{item-family-id}"
           }
         }
       },
@@ -256286,9 +256643,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_item_family is reachable through implemented CLI command \"delete item family apply\"",
         "contract": {
-          "write": "delete_item_family"
+          "write": "delete_item_family",
+          "cli_path": "delete item family apply",
+          "source_cli_path": "POST /v2/item_families/{item-family-id}/delete",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action delete_item_family"
         },
         "api_surface_binding": {
           "write": "delete_item_family"
@@ -256321,7 +256681,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_item_family"
+            "write": "delete_item_family",
+            "path": "delete item family apply",
+            "source_cli_path": "POST /v2/item_families/{item-family-id}/delete"
           }
         }
       },
@@ -256362,9 +256724,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_item_price is reachable through implemented CLI command \"create item price apply\"",
         "contract": {
-          "write": "create_item_price"
+          "write": "create_item_price",
+          "cli_path": "create item price apply",
+          "source_cli_path": "POST /v2/item_prices",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action create_item_price"
         },
         "api_surface_binding": {
           "write": "create_item_price"
@@ -256397,7 +256762,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_item_price"
+            "write": "create_item_price",
+            "path": "create item price apply",
+            "source_cli_path": "POST /v2/item_prices"
           }
         }
       },
@@ -256438,9 +256805,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_item_price is reachable through implemented CLI command \"update item price apply\"",
         "contract": {
-          "write": "update_item_price"
+          "write": "update_item_price",
+          "cli_path": "update item price apply",
+          "source_cli_path": "POST /v2/item_prices/{item-price-id}",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action update_item_price"
         },
         "api_surface_binding": {
           "write": "update_item_price"
@@ -256473,7 +256843,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_item_price"
+            "write": "update_item_price",
+            "path": "update item price apply",
+            "source_cli_path": "POST /v2/item_prices/{item-price-id}"
           }
         }
       },
@@ -256514,9 +256886,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_item_price is reachable through implemented CLI command \"delete item price apply\"",
         "contract": {
-          "write": "delete_item_price"
+          "write": "delete_item_price",
+          "cli_path": "delete item price apply",
+          "source_cli_path": "POST /v2/item_prices/{item-price-id}/delete",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action delete_item_price"
         },
         "api_surface_binding": {
           "write": "delete_item_price"
@@ -256549,7 +256924,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_item_price"
+            "write": "delete_item_price",
+            "path": "delete item price apply",
+            "source_cli_path": "POST /v2/item_prices/{item-price-id}/delete"
           }
         }
       },
@@ -256667,9 +257044,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_item is reachable through implemented CLI command \"create item apply\"",
         "contract": {
-          "write": "create_item"
+          "write": "create_item",
+          "cli_path": "create item apply",
+          "source_cli_path": "POST /v2/items",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action create_item"
         },
         "api_surface_binding": {
           "write": "create_item"
@@ -256702,7 +257082,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_item"
+            "write": "create_item",
+            "path": "create item apply",
+            "source_cli_path": "POST /v2/items"
           }
         }
       },
@@ -256743,9 +257125,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_item is reachable through implemented CLI command \"update item apply\"",
         "contract": {
-          "write": "update_item"
+          "write": "update_item",
+          "cli_path": "update item apply",
+          "source_cli_path": "POST /v2/items/{item-id}",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action update_item"
         },
         "api_surface_binding": {
           "write": "update_item"
@@ -256778,7 +257163,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_item"
+            "write": "update_item",
+            "path": "update item apply",
+            "source_cli_path": "POST /v2/items/{item-id}"
           }
         }
       },
@@ -256896,9 +257283,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_item is reachable through implemented CLI command \"delete item apply\"",
         "contract": {
-          "write": "delete_item"
+          "write": "delete_item",
+          "cli_path": "delete item apply",
+          "source_cli_path": "POST /v2/items/{item-id}/delete",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action delete_item"
         },
         "api_surface_binding": {
           "write": "delete_item"
@@ -256931,7 +257321,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_item"
+            "write": "delete_item",
+            "path": "delete item apply",
+            "source_cli_path": "POST /v2/items/{item-id}/delete"
           }
         }
       },
@@ -258204,9 +258596,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_order is reachable through implemented CLI command \"create order apply\"",
         "contract": {
-          "write": "create_order"
+          "write": "create_order",
+          "cli_path": "create order apply",
+          "source_cli_path": "POST /v2/orders",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action create_order"
         },
         "api_surface_binding": {
           "write": "create_order"
@@ -258239,7 +258634,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_order"
+            "write": "create_order",
+            "path": "create order apply",
+            "source_cli_path": "POST /v2/orders"
           }
         }
       },
@@ -258280,9 +258677,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_order is reachable through implemented CLI command \"update order apply\"",
         "contract": {
-          "write": "update_order"
+          "write": "update_order",
+          "cli_path": "update order apply",
+          "source_cli_path": "POST /v2/orders/{order-id}",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action update_order"
         },
         "api_surface_binding": {
           "write": "update_order"
@@ -258315,7 +258715,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_order"
+            "write": "update_order",
+            "path": "update order apply",
+            "source_cli_path": "POST /v2/orders/{order-id}"
           }
         }
       },
@@ -258433,9 +258835,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action cancel_order is reachable through implemented CLI command \"cancel order apply\"",
         "contract": {
-          "write": "cancel_order"
+          "write": "cancel_order",
+          "cli_path": "cancel order apply",
+          "source_cli_path": "POST /v2/orders/{order-id}/cancel",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action cancel_order"
         },
         "api_surface_binding": {
           "write": "cancel_order"
@@ -258468,7 +258873,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "cancel_order"
+            "write": "cancel_order",
+            "path": "cancel order apply",
+            "source_cli_path": "POST /v2/orders/{order-id}/cancel"
           }
         }
       },
@@ -259279,9 +259686,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_payment_source is reachable through implemented CLI command \"delete payment source apply\"",
         "contract": {
-          "write": "delete_payment_source"
+          "write": "delete_payment_source",
+          "cli_path": "delete payment source apply",
+          "source_cli_path": "POST /v2/payment_sources/{cust-payment-source-id}/delete",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action delete_payment_source"
         },
         "api_surface_binding": {
           "write": "delete_payment_source"
@@ -259314,7 +259724,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_payment_source"
+            "write": "delete_payment_source",
+            "path": "delete payment source apply",
+            "source_cli_path": "POST /v2/payment_sources/{cust-payment-source-id}/delete"
           }
         }
       },
@@ -259894,9 +260306,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_card_payment_source is reachable through implemented CLI command \"create card payment source apply\"",
         "contract": {
-          "write": "create_card_payment_source"
+          "write": "create_card_payment_source",
+          "cli_path": "create card payment source apply",
+          "source_cli_path": "POST /v2/payment_sources/create_card",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action create_card_payment_source"
         },
         "api_surface_binding": {
           "write": "create_card_payment_source"
@@ -259929,7 +260344,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_card_payment_source"
+            "write": "create_card_payment_source",
+            "path": "create card payment source apply",
+            "source_cli_path": "POST /v2/payment_sources/create_card"
           }
         }
       },
@@ -262742,9 +263159,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action add_promotional_credit is reachable through implemented CLI command \"add promotional credit apply\"",
         "contract": {
-          "write": "add_promotional_credit"
+          "write": "add_promotional_credit",
+          "cli_path": "add promotional credit apply",
+          "source_cli_path": "POST /v2/promotional_credits/add",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action add_promotional_credit"
         },
         "api_surface_binding": {
           "write": "add_promotional_credit"
@@ -262777,7 +263197,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "add_promotional_credit"
+            "write": "add_promotional_credit",
+            "path": "add promotional credit apply",
+            "source_cli_path": "POST /v2/promotional_credits/add"
           }
         }
       },
@@ -262818,9 +263240,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action deduct_promotional_credit is reachable through implemented CLI command \"deduct promotional credit apply\"",
         "contract": {
-          "write": "deduct_promotional_credit"
+          "write": "deduct_promotional_credit",
+          "cli_path": "deduct promotional credit apply",
+          "source_cli_path": "POST /v2/promotional_credits/deduct",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action deduct_promotional_credit"
         },
         "api_surface_binding": {
           "write": "deduct_promotional_credit"
@@ -262853,7 +263278,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "deduct_promotional_credit"
+            "write": "deduct_promotional_credit",
+            "path": "deduct promotional credit apply",
+            "source_cli_path": "POST /v2/promotional_credits/deduct"
           }
         }
       },
@@ -265358,9 +265785,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action cancel_subscription is reachable through implemented CLI command \"cancel subscription apply\"",
         "contract": {
-          "write": "cancel_subscription"
+          "write": "cancel_subscription",
+          "cli_path": "cancel subscription apply",
+          "source_cli_path": "POST /v2/subscriptions/{subscription-id}/cancel_for_items",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action cancel_subscription"
         },
         "api_surface_binding": {
           "write": "cancel_subscription"
@@ -265393,7 +265823,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "cancel_subscription"
+            "write": "cancel_subscription",
+            "path": "cancel subscription apply",
+            "source_cli_path": "POST /v2/subscriptions/{subscription-id}/cancel_for_items"
           }
         }
       },
@@ -267667,9 +268099,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_subscription is reachable through implemented CLI command \"update subscription apply\"",
         "contract": {
-          "write": "update_subscription"
+          "write": "update_subscription",
+          "cli_path": "update subscription apply",
+          "source_cli_path": "POST /v2/subscriptions/{subscription-id}/update_for_items",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action update_subscription"
         },
         "api_surface_binding": {
           "write": "update_subscription"
@@ -267702,7 +268137,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_subscription"
+            "write": "update_subscription",
+            "path": "update subscription apply",
+            "source_cli_path": "POST /v2/subscriptions/{subscription-id}/update_for_items"
           }
         }
       },
@@ -269745,9 +270182,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_virtual_bank_account is reachable through implemented CLI command \"create virtual bank account apply\"",
         "contract": {
-          "write": "create_virtual_bank_account"
+          "write": "create_virtual_bank_account",
+          "cli_path": "create virtual bank account apply",
+          "source_cli_path": "POST /v2/virtual_bank_accounts",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action create_virtual_bank_account"
         },
         "api_surface_binding": {
           "write": "create_virtual_bank_account"
@@ -269780,7 +270220,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_virtual_bank_account"
+            "write": "create_virtual_bank_account",
+            "path": "create virtual bank account apply",
+            "source_cli_path": "POST /v2/virtual_bank_accounts"
           }
         }
       },
@@ -269821,9 +270263,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_virtual_bank_account is reachable through implemented CLI command \"delete virtual bank account apply\"",
         "contract": {
-          "write": "delete_virtual_bank_account"
+          "write": "delete_virtual_bank_account",
+          "cli_path": "delete virtual bank account apply",
+          "source_cli_path": "POST /v2/virtual_bank_accounts/{virtual-bank-account-id}/delete",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action delete_virtual_bank_account"
         },
         "api_surface_binding": {
           "write": "delete_virtual_bank_account"
@@ -269856,7 +270301,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_virtual_bank_account"
+            "write": "delete_virtual_bank_account",
+            "path": "delete virtual bank account apply",
+            "source_cli_path": "POST /v2/virtual_bank_accounts/{virtual-bank-account-id}/delete"
           }
         }
       },
@@ -270128,9 +270575,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action create_webhook_endpoint is reachable through implemented CLI command \"create webhook endpoint apply\"",
         "contract": {
-          "write": "create_webhook_endpoint"
+          "write": "create_webhook_endpoint",
+          "cli_path": "create webhook endpoint apply",
+          "source_cli_path": "POST /v2/webhook_endpoints",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action create_webhook_endpoint"
         },
         "api_surface_binding": {
           "write": "create_webhook_endpoint"
@@ -270163,7 +270613,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "create_webhook_endpoint"
+            "write": "create_webhook_endpoint",
+            "path": "create webhook endpoint apply",
+            "source_cli_path": "POST /v2/webhook_endpoints"
           }
         }
       },
@@ -270204,9 +270656,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action update_webhook_endpoint is reachable through implemented CLI command \"update webhook endpoint apply\"",
         "contract": {
-          "write": "update_webhook_endpoint"
+          "write": "update_webhook_endpoint",
+          "cli_path": "update webhook endpoint apply",
+          "source_cli_path": "POST /v2/webhook_endpoints/{webhook-endpoint-id}",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action update_webhook_endpoint"
         },
         "api_surface_binding": {
           "write": "update_webhook_endpoint"
@@ -270239,7 +270694,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "update_webhook_endpoint"
+            "write": "update_webhook_endpoint",
+            "path": "update webhook endpoint apply",
+            "source_cli_path": "POST /v2/webhook_endpoints/{webhook-endpoint-id}"
           }
         }
       },
@@ -270280,9 +270737,12 @@
       },
       "canonical_mapping": {
         "source_state": "enabled",
-        "declaration_status": "enabled; runnable typed write action binds the pinned source contract",
+        "declaration_status": "enabled; typed direct-write action delete_webhook_endpoint is reachable through implemented CLI command \"delete webhook endpoint apply\"",
         "contract": {
-          "write": "delete_webhook_endpoint"
+          "write": "delete_webhook_endpoint",
+          "cli_path": "delete webhook endpoint apply",
+          "source_cli_path": "POST /v2/webhook_endpoints/{webhook-endpoint-id}/delete",
+          "execution_component": "internal/connectors/defs/chargebee/writes.json action delete_webhook_endpoint"
         },
         "api_surface_binding": {
           "write": "delete_webhook_endpoint"
@@ -270315,7 +270775,9 @@
         "executable_cli": {
           "state": "generated_binding_present",
           "binding": {
-            "write": "delete_webhook_endpoint"
+            "write": "delete_webhook_endpoint",
+            "path": "delete webhook endpoint apply",
+            "source_cli_path": "POST /v2/webhook_endpoints/{webhook-endpoint-id}/delete"
           }
         }
       },

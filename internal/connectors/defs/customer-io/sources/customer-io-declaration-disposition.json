@@ -56,7 +56,7 @@
     ],
     "stream_bindings": 16,
     "writes_actions": 10,
-    "terminal_commands": 16,
+    "terminal_commands": 25,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
@@ -91,9 +91,9 @@
         "count": 140
       }
     ],
-    "runnable_cli_surface_commands": 16,
+    "runnable_cli_surface_commands": 25,
     "typed_write_actions": 10,
-    "endpoint_bound_cli_commands": 16,
+    "endpoint_bound_cli_commands": 25,
     "endpoint_bound_typed_write_actions": 10
   },
   "ledger_dispositions": [
@@ -670,11 +670,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented command \"delete reporting webhook apply\" binds typed write action delete_reporting_webhook to DELETE /v1/reporting_webhooks/{webhook_id}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_reporting_webhook"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_reporting_webhook is reachable through implemented CLI command \"delete reporting webhook apply\"",
         "contract": {
           "write": "delete_reporting_webhook"
         },
@@ -682,6 +685,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete reporting webhook apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_reporting_webhook",
+          "source_cli_path": "DELETE /v1/reporting_webhooks/{webhook_id}",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
         }
       }
     },
@@ -708,11 +719,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented command \"delete manual segment apply\" binds typed write action delete_manual_segment to DELETE /v1/segments/{segment_id}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_manual_segment"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_manual_segment is reachable through implemented CLI command \"delete manual segment apply\"",
         "contract": {
           "write": "delete_manual_segment"
         },
@@ -720,6 +734,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete manual segment apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_manual_segment",
+          "source_cli_path": "DELETE /v1/segments/{segment_id}",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
         }
       }
     },
@@ -746,11 +768,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented command \"delete snippet apply\" binds typed write action delete_snippet to DELETE /v1/snippets/{snippet_name}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_snippet"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_snippet is reachable through implemented CLI command \"delete snippet apply\"",
         "contract": {
           "write": "delete_snippet"
         },
@@ -758,6 +783,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete snippet apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_snippet",
+          "source_cli_path": "DELETE /v1/snippets/{snippet_name}",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
         }
       }
     },
@@ -5358,11 +5391,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented command \"trigger broadcast apply\" binds typed write action trigger_broadcast to POST /v1/campaigns/{broadcast_id}/triggers; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "trigger_broadcast"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action trigger_broadcast is reachable through implemented CLI command \"trigger broadcast apply\"",
         "contract": {
           "write": "trigger_broadcast"
         },
@@ -5370,6 +5406,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "trigger broadcast apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "trigger_broadcast",
+          "source_cli_path": "POST /v1/campaigns/{broadcast_id}/triggers",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
         }
       }
     },
@@ -6546,11 +6590,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented command \"create reporting webhook apply\" binds typed write action create_reporting_webhook to POST /v1/reporting_webhooks; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_reporting_webhook"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_reporting_webhook is reachable through implemented CLI command \"create reporting webhook apply\"",
         "contract": {
           "write": "create_reporting_webhook"
         },
@@ -6558,6 +6605,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create reporting webhook apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_reporting_webhook",
+          "source_cli_path": "POST /v1/reporting_webhooks",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
         }
       }
     },
@@ -6584,11 +6639,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented command \"create manual segment apply\" binds typed write action create_manual_segment to POST /v1/segments; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_manual_segment"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_manual_segment is reachable through implemented CLI command \"create manual segment apply\"",
         "contract": {
           "write": "create_manual_segment"
         },
@@ -6596,6 +6654,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create manual segment apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_manual_segment",
+          "source_cli_path": "POST /v1/segments",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
         }
       }
     },
@@ -6626,7 +6692,7 @@
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled typed direct-write action send_email; executable CLI declaration-pending",
         "contract": {
           "write": "send_email"
         },
@@ -6634,6 +6700,16 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "state": "declaration-pending",
+          "intended_path": "send email apply",
+          "intent": "reverse_etl",
+          "write": "send_email",
+          "source_cli_path": "POST /v1/send/email",
+          "source_url": "https://docs.customer.io/files/journeys-app.json",
+          "execution_component": "internal/connectors/defs/customer-io/writes.json action send_email",
+          "reason": "record field transactional_message_id has no single declared type"
         }
       }
     },
@@ -6860,11 +6936,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented command \"create snippet apply\" binds typed write action create_snippet to POST /v1/snippets; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_snippet"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_snippet is reachable through implemented CLI command \"create snippet apply\"",
         "contract": {
           "write": "create_snippet"
         },
@@ -6872,6 +6951,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create snippet apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_snippet",
+          "source_cli_path": "POST /v1/snippets",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
         }
       }
     },
@@ -7698,11 +7785,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented command \"update reporting webhook apply\" binds typed write action update_reporting_webhook to PUT /v1/reporting_webhooks/{webhook_id}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_reporting_webhook"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_reporting_webhook is reachable through implemented CLI command \"update reporting webhook apply\"",
         "contract": {
           "write": "update_reporting_webhook"
         },
@@ -7710,6 +7800,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update reporting webhook apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_reporting_webhook",
+          "source_cli_path": "PUT /v1/reporting_webhooks/{webhook_id}",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
         }
       }
     },
@@ -7736,11 +7834,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/customer-io/cli_surface.json: implemented command \"update snippet apply\" binds typed write action update_snippet to PUT /v1/snippets; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_snippet"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_snippet is reachable through implemented CLI command \"update snippet apply\"",
         "contract": {
           "write": "update_snippet"
         },
@@ -7748,6 +7849,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "The closed declarative typed-destination contract rejects the prior branch-only declaration: it selected full_overwrite and lacked the action-owned per-record batch, provider receipt locator, and read-back conformance evidence. The direct typed write remains enabled; reverse ETL is connector-owned declaration work, not a foundation gap."
+        },
+        "command": {
+          "path": "update snippet apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_snippet",
+          "source_cli_path": "PUT /v1/snippets",
+          "source_url": "https://docs.customer.io/files/journeys-app.json"
         }
       }
     },
@@ -7859,6 +7968,7 @@
     "Direct writes remain direct_write operations. Reverse-ETL eligibility is separate and depends on each connector-owned source mapping and conformance record.",
     "Reverse-ETL eligibility is explicit for all 10 typed actions: update_snippet is the connector one source-bound declarative_typed_destination proof; nine ordinary typed actions are declaration-pending exact source mappings and conformance. Unauthored direct writes are declaration-pending, not foundation gaps.",
     "Foundation 609f23bb3861ba7bc2ef1f7bc5246f5751cf9e57 supplies persisted App/CLI dispatch; this connector still needs its installed App/CLI fixture path, and provider-live certification remains pending.",
-    "2026-08-25 declaration-first ETL command materialization: enabled 16 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
+    "2026-08-25 declaration-first ETL command materialization: enabled 16 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists.",
+    "2026-08-25 typed write CLI materialization: 9 source-backed action commands are installed with writes.json-owned input/method/path contracts; 1 actions remain explicit CLI declaration-pending because its record field contract cannot be represented faithfully by the established command flag vocabulary."
   ]
 }

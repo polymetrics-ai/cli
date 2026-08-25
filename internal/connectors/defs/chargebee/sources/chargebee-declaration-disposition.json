@@ -56,7 +56,7 @@
     ],
     "stream_bindings": 32,
     "writes_actions": 36,
-    "terminal_commands": 32,
+    "terminal_commands": 68,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
@@ -91,9 +91,9 @@
         "count": 459
       }
     ],
-    "runnable_cli_surface_commands": 32,
+    "runnable_cli_surface_commands": 68,
     "typed_write_actions": 36,
-    "endpoint_bound_cli_commands": 32,
+    "endpoint_bound_cli_commands": 68,
     "endpoint_bound_typed_write_actions": 36
   },
   "ledger_dispositions": [
@@ -8098,11 +8098,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"create comment apply\" binds typed write action create_comment to POST /v2/comments; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_comment"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_comment is reachable through implemented CLI command \"create comment apply\"",
         "contract": {
           "write": "create_comment"
         },
@@ -8110,6 +8113,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create comment apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_comment",
+          "source_cli_path": "POST /v2/comments",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -8136,11 +8147,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"delete comment apply\" binds typed write action delete_comment to POST /v2/comments/{comment-id}/delete; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_comment"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_comment is reachable through implemented CLI command \"delete comment apply\"",
         "contract": {
           "write": "delete_comment"
         },
@@ -8148,6 +8162,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete comment apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_comment",
+          "source_cli_path": "POST /v2/comments/{comment-id}/delete",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -8624,11 +8646,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"delete coupon apply\" binds typed write action delete_coupon to POST /v2/coupons/{coupon-id}/delete; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_coupon"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_coupon is reachable through implemented CLI command \"delete coupon apply\"",
         "contract": {
           "write": "delete_coupon"
         },
@@ -8636,6 +8661,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete coupon apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_coupon",
+          "source_cli_path": "POST /v2/coupons/{coupon-id}/delete",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -8712,11 +8745,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"update coupon apply\" binds typed write action update_coupon to POST /v2/coupons/{coupon-id}/update_for_items; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_coupon"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_coupon is reachable through implemented CLI command \"update coupon apply\"",
         "contract": {
           "write": "update_coupon"
         },
@@ -8724,6 +8760,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update coupon apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_coupon",
+          "source_cli_path": "POST /v2/coupons/{coupon-id}/update_for_items",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -8800,11 +8844,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"create coupon apply\" binds typed write action create_coupon to POST /v2/coupons/create_for_items; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_coupon"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_coupon is reachable through implemented CLI command \"create coupon apply\"",
         "contract": {
           "write": "create_coupon"
         },
@@ -8812,6 +8859,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create coupon apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_coupon",
+          "source_cli_path": "POST /v2/coupons/create_for_items",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -8838,11 +8893,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"create credit note apply\" binds typed write action create_credit_note to POST /v2/credit_notes; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_credit_note"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_credit_note is reachable through implemented CLI command \"create credit note apply\"",
         "contract": {
           "write": "create_credit_note"
         },
@@ -8850,6 +8908,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create credit note apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_credit_note",
+          "source_cli_path": "POST /v2/credit_notes",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -9276,11 +9342,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"void credit note apply\" binds typed write action void_credit_note to POST /v2/credit_notes/{credit-note-id}/void; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "void_credit_note"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action void_credit_note is reachable through implemented CLI command \"void credit note apply\"",
         "contract": {
           "write": "void_credit_note"
         },
@@ -9288,6 +9357,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "void credit note apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "void_credit_note",
+          "source_cli_path": "POST /v2/credit_notes/{credit-note-id}/void",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -9814,11 +9891,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"create customer apply\" binds typed write action create_customer to POST /v2/customers; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_customer"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_customer is reachable through implemented CLI command \"create customer apply\"",
         "contract": {
           "write": "create_customer"
         },
@@ -9826,6 +9906,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create customer apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_customer",
+          "source_cli_path": "POST /v2/customers",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -9852,11 +9940,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"update customer apply\" binds typed write action update_customer to POST /v2/customers/{customer-id}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_customer"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_customer is reachable through implemented CLI command \"update customer apply\"",
         "contract": {
           "write": "update_customer"
         },
@@ -9864,6 +9955,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "The closed declarative typed-destination contract rejects the prior branch-only declaration: it selected full_overwrite and lacked the action-owned per-record batch, provider receipt locator, and read-back conformance evidence. The direct typed write remains enabled; reverse ETL is connector-owned declaration work, not a foundation gap."
+        },
+        "command": {
+          "path": "update customer apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_customer",
+          "source_cli_path": "POST /v2/customers/{customer-id}",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -10490,11 +10589,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"delete customer apply\" binds typed write action delete_customer to POST /v2/customers/{customer-id}/delete; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_customer"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_customer is reachable through implemented CLI command \"delete customer apply\"",
         "contract": {
           "write": "delete_customer"
         },
@@ -10502,6 +10604,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete customer apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_customer",
+          "source_cli_path": "POST /v2/customers/{customer-id}/delete",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -10928,11 +11038,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"create subscription apply\" binds typed write action create_subscription to POST /v2/customers/{customer-id}/subscription_for_items; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_subscription"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_subscription is reachable through implemented CLI command \"create subscription apply\"",
         "contract": {
           "write": "create_subscription"
         },
@@ -10940,6 +11053,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create subscription apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_subscription",
+          "source_cli_path": "POST /v2/customers/{customer-id}/subscription_for_items",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -15066,11 +15187,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"collect payment for invoice apply\" binds typed write action collect_payment_for_invoice to POST /v2/invoices/{invoice-id}/collect_payment; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "collect_payment_for_invoice"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action collect_payment_for_invoice is reachable through implemented CLI command \"collect payment for invoice apply\"",
         "contract": {
           "write": "collect_payment_for_invoice"
         },
@@ -15078,6 +15202,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "collect payment for invoice apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "collect_payment_for_invoice",
+          "source_cli_path": "POST /v2/invoices/{invoice-id}/collect_payment",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -16004,11 +16136,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"void invoice apply\" binds typed write action void_invoice to POST /v2/invoices/{invoice-id}/void; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "void_invoice"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action void_invoice is reachable through implemented CLI command \"void invoice apply\"",
         "contract": {
           "write": "void_invoice"
         },
@@ -16016,6 +16151,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "void invoice apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "void_invoice",
+          "source_cli_path": "POST /v2/invoices/{invoice-id}/void",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -16392,11 +16535,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"create item family apply\" binds typed write action create_item_family to POST /v2/item_families; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_item_family"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_item_family is reachable through implemented CLI command \"create item family apply\"",
         "contract": {
           "write": "create_item_family"
         },
@@ -16404,6 +16550,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create item family apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_item_family",
+          "source_cli_path": "POST /v2/item_families",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -16430,11 +16584,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"update item family apply\" binds typed write action update_item_family to POST /v2/item_families/{item-family-id}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_item_family"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_item_family is reachable through implemented CLI command \"update item family apply\"",
         "contract": {
           "write": "update_item_family"
         },
@@ -16442,6 +16599,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update item family apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_item_family",
+          "source_cli_path": "POST /v2/item_families/{item-family-id}",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -16468,11 +16633,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"delete item family apply\" binds typed write action delete_item_family to POST /v2/item_families/{item-family-id}/delete; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_item_family"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_item_family is reachable through implemented CLI command \"delete item family apply\"",
         "contract": {
           "write": "delete_item_family"
         },
@@ -16480,6 +16648,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete item family apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_item_family",
+          "source_cli_path": "POST /v2/item_families/{item-family-id}/delete",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -16506,11 +16682,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"create item price apply\" binds typed write action create_item_price to POST /v2/item_prices; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_item_price"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_item_price is reachable through implemented CLI command \"create item price apply\"",
         "contract": {
           "write": "create_item_price"
         },
@@ -16518,6 +16697,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create item price apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_item_price",
+          "source_cli_path": "POST /v2/item_prices",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -16544,11 +16731,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"update item price apply\" binds typed write action update_item_price to POST /v2/item_prices/{item-price-id}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_item_price"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_item_price is reachable through implemented CLI command \"update item price apply\"",
         "contract": {
           "write": "update_item_price"
         },
@@ -16556,6 +16746,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update item price apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_item_price",
+          "source_cli_path": "POST /v2/item_prices/{item-price-id}",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -16582,11 +16780,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"delete item price apply\" binds typed write action delete_item_price to POST /v2/item_prices/{item-price-id}/delete; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_item_price"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_item_price is reachable through implemented CLI command \"delete item price apply\"",
         "contract": {
           "write": "delete_item_price"
         },
@@ -16594,6 +16795,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete item price apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_item_price",
+          "source_cli_path": "POST /v2/item_prices/{item-price-id}/delete",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -16670,11 +16879,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"create item apply\" binds typed write action create_item to POST /v2/items; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_item"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_item is reachable through implemented CLI command \"create item apply\"",
         "contract": {
           "write": "create_item"
         },
@@ -16682,6 +16894,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create item apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_item",
+          "source_cli_path": "POST /v2/items",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -16708,11 +16928,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"update item apply\" binds typed write action update_item to POST /v2/items/{item-id}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_item"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_item is reachable through implemented CLI command \"update item apply\"",
         "contract": {
           "write": "update_item"
         },
@@ -16720,6 +16943,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update item apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_item",
+          "source_cli_path": "POST /v2/items/{item-id}",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -16796,11 +17027,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"delete item apply\" binds typed write action delete_item to POST /v2/items/{item-id}/delete; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_item"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_item is reachable through implemented CLI command \"delete item apply\"",
         "contract": {
           "write": "delete_item"
         },
@@ -16808,6 +17042,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete item apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_item",
+          "source_cli_path": "POST /v2/items/{item-id}/delete",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -17634,11 +17876,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"create order apply\" binds typed write action create_order to POST /v2/orders; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_order"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_order is reachable through implemented CLI command \"create order apply\"",
         "contract": {
           "write": "create_order"
         },
@@ -17646,6 +17891,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create order apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_order",
+          "source_cli_path": "POST /v2/orders",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -17672,11 +17925,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"update order apply\" binds typed write action update_order to POST /v2/orders/{order-id}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_order"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_order is reachable through implemented CLI command \"update order apply\"",
         "contract": {
           "write": "update_order"
         },
@@ -17684,6 +17940,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update order apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_order",
+          "source_cli_path": "POST /v2/orders/{order-id}",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -17760,11 +18024,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"cancel order apply\" binds typed write action cancel_order to POST /v2/orders/{order-id}/cancel; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "cancel_order"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action cancel_order is reachable through implemented CLI command \"cancel order apply\"",
         "contract": {
           "write": "cancel_order"
         },
@@ -17772,6 +18039,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "cancel order apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "cancel_order",
+          "source_cli_path": "POST /v2/orders/{order-id}/cancel",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -18298,11 +18573,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"delete payment source apply\" binds typed write action delete_payment_source to POST /v2/payment_sources/{cust-payment-source-id}/delete; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_payment_source"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_payment_source is reachable through implemented CLI command \"delete payment source apply\"",
         "contract": {
           "write": "delete_payment_source"
         },
@@ -18310,6 +18588,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete payment source apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_payment_source",
+          "source_cli_path": "POST /v2/payment_sources/{cust-payment-source-id}/delete",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -18686,11 +18972,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"create card payment source apply\" binds typed write action create_card_payment_source to POST /v2/payment_sources/create_card; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_card_payment_source"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_card_payment_source is reachable through implemented CLI command \"create card payment source apply\"",
         "contract": {
           "write": "create_card_payment_source"
         },
@@ -18698,6 +18987,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create card payment source apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_card_payment_source",
+          "source_cli_path": "POST /v2/payment_sources/create_card",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -20524,11 +20821,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"add promotional credit apply\" binds typed write action add_promotional_credit to POST /v2/promotional_credits/add; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "add_promotional_credit"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action add_promotional_credit is reachable through implemented CLI command \"add promotional credit apply\"",
         "contract": {
           "write": "add_promotional_credit"
         },
@@ -20536,6 +20836,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "add promotional credit apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "add_promotional_credit",
+          "source_cli_path": "POST /v2/promotional_credits/add",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -20562,11 +20870,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"deduct promotional credit apply\" binds typed write action deduct_promotional_credit to POST /v2/promotional_credits/deduct; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "deduct_promotional_credit"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action deduct_promotional_credit is reachable through implemented CLI command \"deduct promotional credit apply\"",
         "contract": {
           "write": "deduct_promotional_credit"
         },
@@ -20574,6 +20885,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "deduct promotional credit apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "deduct_promotional_credit",
+          "source_cli_path": "POST /v2/promotional_credits/deduct",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -22200,11 +22519,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"cancel subscription apply\" binds typed write action cancel_subscription to POST /v2/subscriptions/{subscription-id}/cancel_for_items; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "cancel_subscription"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action cancel_subscription is reachable through implemented CLI command \"cancel subscription apply\"",
         "contract": {
           "write": "cancel_subscription"
         },
@@ -22212,6 +22534,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "cancel subscription apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "cancel_subscription",
+          "source_cli_path": "POST /v2/subscriptions/{subscription-id}/cancel_for_items",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -23688,11 +24018,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"update subscription apply\" binds typed write action update_subscription to POST /v2/subscriptions/{subscription-id}/update_for_items; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_subscription"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_subscription is reachable through implemented CLI command \"update subscription apply\"",
         "contract": {
           "write": "update_subscription"
         },
@@ -23700,6 +24033,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update subscription apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_subscription",
+          "source_cli_path": "POST /v2/subscriptions/{subscription-id}/update_for_items",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -25026,11 +25367,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"create virtual bank account apply\" binds typed write action create_virtual_bank_account to POST /v2/virtual_bank_accounts; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_virtual_bank_account"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_virtual_bank_account is reachable through implemented CLI command \"create virtual bank account apply\"",
         "contract": {
           "write": "create_virtual_bank_account"
         },
@@ -25038,6 +25382,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create virtual bank account apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_virtual_bank_account",
+          "source_cli_path": "POST /v2/virtual_bank_accounts",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -25064,11 +25416,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"delete virtual bank account apply\" binds typed write action delete_virtual_bank_account to POST /v2/virtual_bank_accounts/{virtual-bank-account-id}/delete; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_virtual_bank_account"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_virtual_bank_account is reachable through implemented CLI command \"delete virtual bank account apply\"",
         "contract": {
           "write": "delete_virtual_bank_account"
         },
@@ -25076,6 +25431,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete virtual bank account apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_virtual_bank_account",
+          "source_cli_path": "POST /v2/virtual_bank_accounts/{virtual-bank-account-id}/delete",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -25252,11 +25615,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"create webhook endpoint apply\" binds typed write action create_webhook_endpoint to POST /v2/webhook_endpoints; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_webhook_endpoint"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_webhook_endpoint is reachable through implemented CLI command \"create webhook endpoint apply\"",
         "contract": {
           "write": "create_webhook_endpoint"
         },
@@ -25264,6 +25630,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create webhook endpoint apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_webhook_endpoint",
+          "source_cli_path": "POST /v2/webhook_endpoints",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -25290,11 +25664,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"update webhook endpoint apply\" binds typed write action update_webhook_endpoint to POST /v2/webhook_endpoints/{webhook-endpoint-id}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_webhook_endpoint"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_webhook_endpoint is reachable through implemented CLI command \"update webhook endpoint apply\"",
         "contract": {
           "write": "update_webhook_endpoint"
         },
@@ -25302,6 +25679,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update webhook endpoint apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_webhook_endpoint",
+          "source_cli_path": "POST /v2/webhook_endpoints/{webhook-endpoint-id}",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     },
@@ -25328,11 +25713,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/chargebee/cli_surface.json: implemented command \"delete webhook endpoint apply\" binds typed write action delete_webhook_endpoint to POST /v2/webhook_endpoints/{webhook-endpoint-id}/delete; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_webhook_endpoint"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_webhook_endpoint is reachable through implemented CLI command \"delete webhook endpoint apply\"",
         "contract": {
           "write": "delete_webhook_endpoint"
         },
@@ -25340,6 +25728,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete webhook endpoint apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_webhook_endpoint",
+          "source_cli_path": "POST /v2/webhook_endpoints/{webhook-endpoint-id}/delete",
+          "source_url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_sdk_spec.json"
         }
       }
     }
@@ -25350,6 +25746,7 @@
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
     "Direct writes remain direct_write operations. Reverse-ETL eligibility is a separate attribute and remains foundation-gapped because destination execution is GitHub issue-label bound.",
     "2026-08-20 reconciliation: source transport declares all 32 streams; update_customer is the exact typed-destination proof. Every other typed action is explicitly eligible pending closed exact-action selection. Direct writes without typed actions are declaration-pending, not foundation or safety gaps.",
-    "2026-08-25 declaration-first ETL command materialization: enabled 32 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
+    "2026-08-25 declaration-first ETL command materialization: enabled 32 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists.",
+    "2026-08-25 typed write CLI materialization: 36 source-backed action commands are installed with writes.json-owned input/method/path contracts; 0 actions remain explicit CLI declaration-pending because their record field contract cannot be represented faithfully by the established command flag vocabulary."
   ]
 }

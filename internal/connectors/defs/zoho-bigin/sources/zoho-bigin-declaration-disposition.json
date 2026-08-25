@@ -56,7 +56,7 @@
     ],
     "stream_bindings": 6,
     "writes_actions": 6,
-    "terminal_commands": 0,
+    "terminal_commands": 6,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
@@ -96,9 +96,9 @@
         "count": 63
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 6,
     "typed_write_actions": 6,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 6,
     "endpoint_bound_typed_write_actions": 6
   },
   "ledger_dispositions": [
@@ -175,11 +175,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/zoho-bigin/cli_surface.json: implemented command \"delete record apply\" binds typed write action delete_record to DELETE /{module_api_name}/{record_id}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_record"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_record is reachable through implemented CLI command \"delete record apply\"",
         "contract": {
           "write": "delete_record"
         },
@@ -187,6 +190,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "The closed declarative typed-destination contract rejects the prior branch-only declaration: it selected full_overwrite and lacked the action-owned per-record batch, provider receipt locator, and read-back conformance evidence. The direct typed write remains enabled; reverse ETL is connector-owned declaration work, not a foundation gap."
+        },
+        "command": {
+          "path": "delete record apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_record",
+          "source_cli_path": "DELETE /{module_api_name}/{record_id}",
+          "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-records.html"
         }
       }
     },
@@ -363,11 +374,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/zoho-bigin/cli_surface.json: implemented command \"delete note apply\" binds typed write action delete_note to DELETE /{module_api_name}/{record_id}/Notes/{note_id}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_note"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_note is reachable through implemented CLI command \"delete note apply\"",
         "contract": {
           "write": "delete_note"
         },
@@ -375,6 +389,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete note apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_note",
+          "source_cli_path": "DELETE /{module_api_name}/{record_id}/Notes/{note_id}",
+          "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-notes.html"
         }
       }
     },
@@ -2067,11 +2089,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/zoho-bigin/cli_surface.json: implemented command \"create record apply\" binds typed write action create_record to POST /{module_api_name}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_record"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_record is reachable through implemented CLI command \"create record apply\"",
         "contract": {
           "write": "create_record"
         },
@@ -2079,6 +2104,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create record apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_record",
+          "source_cli_path": "POST /{module_api_name}",
+          "source_url": "https://www.bigin.com/developer/docs/apis/v2/insert-records.html"
         }
       }
     },
@@ -2355,11 +2388,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/zoho-bigin/cli_surface.json: implemented command \"create note apply\" binds typed write action create_note to POST /{module_api_name}/{record_id}/Notes; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_note"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_note is reachable through implemented CLI command \"create note apply\"",
         "contract": {
           "write": "create_note"
         },
@@ -2367,6 +2403,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create note apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_note",
+          "source_cli_path": "POST /{module_api_name}/{record_id}/Notes",
+          "source_url": "https://www.bigin.com/developer/docs/apis/v2/create-notes.html"
         }
       }
     },
@@ -2593,11 +2637,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/zoho-bigin/cli_surface.json: implemented command \"upsert record apply\" binds typed write action upsert_record to POST /{module_api_name}/upsert; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "upsert_record"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action upsert_record is reachable through implemented CLI command \"upsert record apply\"",
         "contract": {
           "write": "upsert_record"
         },
@@ -2605,6 +2652,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "upsert record apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "upsert_record",
+          "source_cli_path": "POST /{module_api_name}/upsert",
+          "source_url": "https://www.bigin.com/developer/docs/apis/v2/upsert-records.html"
         }
       }
     },
@@ -3131,11 +3186,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/zoho-bigin/cli_surface.json: implemented command \"update record apply\" binds typed write action update_record to PUT /{module_api_name}; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_record"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_record is reachable through implemented CLI command \"update record apply\"",
         "contract": {
           "write": "update_record"
         },
@@ -3143,6 +3201,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update record apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_record",
+          "source_cli_path": "PUT /{module_api_name}",
+          "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-records.html"
         }
       }
     },
@@ -3602,6 +3668,7 @@
     "Complete six-class source-locked map regenerated from the provider complete rendered provider reference; every 75 pinned operation has exactly one primary parity class.",
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
     "Direct writes remain direct_write operations. Reverse-ETL eligibility is a separate attribute and remains foundation-gapped because destination execution is GitHub issue-label bound.",
-    "2026-08-20 reconciliation: source transport declares all 13 streams; delete_record is an exact destructive typed-destination proof and remains confirmation/approval governed. Every other typed action is explicitly eligible pending closed exact-action selection. Direct writes without typed actions are declaration-pending, not foundation or safety gaps."
+    "2026-08-20 reconciliation: source transport declares all 13 streams; delete_record is an exact destructive typed-destination proof and remains confirmation/approval governed. Every other typed action is explicitly eligible pending closed exact-action selection. Direct writes without typed actions are declaration-pending, not foundation or safety gaps.",
+    "2026-08-25 typed write CLI materialization: 6 source-backed action commands are installed with writes.json-owned input/method/path contracts; 0 actions remain explicit CLI declaration-pending because their record field contract cannot be represented faithfully by the established command flag vocabulary."
   ]
 }

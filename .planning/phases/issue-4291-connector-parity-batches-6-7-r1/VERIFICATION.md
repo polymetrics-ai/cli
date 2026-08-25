@@ -568,6 +568,30 @@ foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
   rerun, 69-row operation-evidence assertion, and `git diff --check` all passed. The only remaining
   global generated-check block is the shared source-lock v3 descriptor reader; no lock rewrite or
   connector-local workaround was added.
+
+## Typed direct-write CLI cohort — 2026-08-25
+
+- **RED:** Close, Zoho Bigin, Braze, Customer.io, and Chargebee had 93 exact source-bound typed actions
+  reported as enabled direct writes, but no CLI command referenced any action. This made the prior
+  `generated_binding_present` evidence false.
+- **GREEN:** `generate-typed-write-cli-cohort.mjs` has materialized 92 implemented write-plan commands:
+  Close (12), Zoho Bigin (6), Braze (29), Customer.io (9), and Chargebee (36). It reads only
+  `writes.json` for typed record fields, method, connector-relative path, risk, and confirmation; then
+  cross-checks the existing exact `covered_by.write` source disposition before adding the command,
+  citation, canonical source route, and source action ID. Provider version prefixes and provider-vs-record
+  parameter names are not guessed: their pre-existing source-disposition relation is retained while the
+  fixed action remains the execution authority.
+- **Explicit pending action:** Customer.io `send_email` remains `declaration-pending` for CLI binding.
+  Its `writes.json` record schema leaves `transactional_message_id` untyped, so no scalar or structured
+  flag can carry it faithfully. The exact source row, intended `send email apply` path, `writes.json`
+  action, and missing field contract are recorded; this is connector declaration work, not a foundation
+  gap or a silently omitted command.
+- **Installed binary proof:** `go build -o /tmp/cli-map-batch67-r1-write-cohort-proof ./cmd/pm` succeeded.
+  In fresh initialized projects all 92 paths reached exactly `error: missing --credential`: Close (12),
+  Zoho Bigin (6), Customer.io (9), Braze (29), and Chargebee (36). `go test -timeout 20m
+  ./internal/connectors/commandrunner -run '^TestEveryImplementedCommandPassesRuntimePreflight$'
+  -count=1`, `npm --prefix website run gen:website-data`, the 92-command/one-pending evidence assertions,
+  and `git diff --check` passed. No provider call, credential, mutation, or live certification occurred.
 # Stale typed-destination gap reconciliation — increment 1 (2026-08-20)
 
 - **RED:** The operation-evidence ledger exposed 1,111 direct-write rows that still named

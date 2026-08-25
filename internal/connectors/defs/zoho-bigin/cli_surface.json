@@ -1,0 +1,266 @@
+{
+  "tagline": "Run zoho-bigin source-backed typed write plans.",
+  "usage": "pm zoho-bigin <command> [flags]",
+  "source_cli": {
+    "name": "zoho-bigin provider API",
+    "docs": "https://www.bigin.com/developer/docs/apis/v2/delete-records.html",
+    "reference": "Pinned source-disposition citations and connector-owned typed write contracts.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "writes",
+      "title": "Typed write plans",
+      "commands": [
+        "create record apply",
+        "update record apply",
+        "upsert record apply",
+        "delete record apply",
+        "create note apply",
+        "delete note apply"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the zoho-bigin request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    }
+  ],
+  "commands": [
+    {
+      "path": "create note apply",
+      "summary": "Plan and execute the typed create note write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_note",
+      "source_cli_path": "POST /{module_api_name}/{record_id}/Notes",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/create-notes.html",
+      "flags": [
+        {
+          "name": "data",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true,
+          "type": "json"
+        },
+        {
+          "name": "parent_id",
+          "summary": "Required parent id record field.",
+          "maps_to": "record.parent_id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "attaches one or more notes to an existing record in config.module_name; low-risk external mutation, no approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/{record_id}/Notes"
+        }
+      ],
+      "examples": [
+        "pm zoho-bigin create note apply --json"
+      ],
+      "notes": "Pinned source operation zoho-bigin.rest.post.ModuleApiNameRecordIdNotes49; writes.json action create_note is the declared method/path/body execution component."
+    },
+    {
+      "path": "create record apply",
+      "summary": "Plan and execute the typed create record write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_record",
+      "source_cli_path": "POST /{module_api_name}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/insert-records.html",
+      "flags": [
+        {
+          "name": "data",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true,
+          "type": "json"
+        },
+        {
+          "name": "trigger",
+          "summary": "Optional trigger record field.",
+          "maps_to": "record.trigger",
+          "type": "string_array"
+        }
+      ],
+      "risk": "creates one or more new records in config.module_name; external mutation, approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{module_api_name}"
+        }
+      ],
+      "examples": [
+        "pm zoho-bigin create record apply --json"
+      ],
+      "notes": "Pinned source operation zoho-bigin.rest.post.ModuleApiName43; writes.json action create_record is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete note apply",
+      "summary": "Plan and execute the typed delete note write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_note",
+      "source_cli_path": "DELETE /{module_api_name}/{record_id}/Notes/{note_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-notes.html",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "parent_id",
+          "summary": "Required parent id record field.",
+          "maps_to": "record.parent_id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "permanently deletes a single note from a record in config.module_name; external mutation, approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/{module_api_name}/{record_id}/Notes/{note_id}"
+        }
+      ],
+      "examples": [
+        "pm zoho-bigin delete note apply --json"
+      ],
+      "notes": "Pinned source operation zoho-bigin.rest.delete.ModuleApiNameRecordIdNotesNoteId5; writes.json action delete_note is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete record apply",
+      "summary": "Plan and execute the typed delete record write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_record",
+      "source_cli_path": "DELETE /{module_api_name}/{record_id}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/delete-records.html",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "permanently deletes a single record from config.module_name; external mutation, approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/{module_api_name}/{record_id}"
+        }
+      ],
+      "examples": [
+        "pm zoho-bigin delete record apply --json"
+      ],
+      "notes": "Pinned source operation zoho-bigin.rest.delete.ModuleApiNameRecordId1; writes.json action delete_record is the declared method/path/body execution component."
+    },
+    {
+      "path": "update record apply",
+      "summary": "Plan and execute the typed update record write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_record",
+      "source_cli_path": "PUT /{module_api_name}",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/update-records.html",
+      "flags": [
+        {
+          "name": "data",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true,
+          "type": "json"
+        },
+        {
+          "name": "trigger",
+          "summary": "Optional trigger record field.",
+          "maps_to": "record.trigger",
+          "type": "string_array"
+        }
+      ],
+      "risk": "overwrites the named fields of one or more existing records in config.module_name; external mutation, approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/{module_api_name}"
+        }
+      ],
+      "examples": [
+        "pm zoho-bigin update record apply --json"
+      ],
+      "notes": "Pinned source operation zoho-bigin.rest.put.ModuleApiName65; writes.json action update_record is the declared method/path/body execution component."
+    },
+    {
+      "path": "upsert record apply",
+      "summary": "Plan and execute the typed upsert record write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upsert_record",
+      "source_cli_path": "POST /{module_api_name}/upsert",
+      "source_url": "https://www.bigin.com/developer/docs/apis/v2/upsert-records.html",
+      "flags": [
+        {
+          "name": "data",
+          "summary": "Required data record field.",
+          "maps_to": "record.data",
+          "required": true,
+          "type": "json"
+        },
+        {
+          "name": "duplicate_check_fields",
+          "summary": "Optional duplicate check fields record field.",
+          "maps_to": "record.duplicate_check_fields",
+          "type": "string_array"
+        },
+        {
+          "name": "trigger",
+          "summary": "Optional trigger record field.",
+          "maps_to": "record.trigger",
+          "type": "string_array"
+        }
+      ],
+      "risk": "inserts a new record in config.module_name if no match is found on duplicate_check_fields, otherwise overwrites the matched existing record's submitted fields; external mutation, approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/{module_api_name}/upsert"
+        }
+      ],
+      "examples": [
+        "pm zoho-bigin upsert record apply --json"
+      ],
+      "notes": "Pinned source operation zoho-bigin.rest.post.ModuleApiNameUpsert54; writes.json action upsert_record is the declared method/path/body execution component."
+    }
+  ]
+}

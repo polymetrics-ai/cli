@@ -27,6 +27,24 @@
         "custom-fields-contact",
         "custom-fields-opportunity"
       ]
+    },
+    {
+      "id": "writes",
+      "title": "Typed write plans",
+      "commands": [
+        "create lead apply",
+        "update lead apply",
+        "delete lead apply",
+        "create contact apply",
+        "update contact apply",
+        "delete contact apply",
+        "create opportunity apply",
+        "update opportunity apply",
+        "delete opportunity apply",
+        "create task apply",
+        "update task apply",
+        "delete task apply"
+      ]
     }
   ],
   "global_flags": [
@@ -58,23 +76,23 @@
   ],
   "commands": [
     {
-      "path": "leads list",
-      "summary": "Read Leads as Close-com ETL records.",
+      "path": "activities list",
+      "summary": "Read Activities as Close-com ETL records.",
       "intent": "etl",
       "availability": "implemented",
-      "stream": "leads",
-      "source_cli_path": "GET /lead/",
+      "stream": "activities",
+      "source_cli_path": "GET /activity/",
       "source_url": "https://api.close.com/api/openapi.json",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/lead/"
+          "path": "/activity/"
         }
       ],
       "examples": [
-        "pm close-com leads list --json"
+        "pm close-com activities list --json"
       ],
-      "notes": "Pinned source operation close-com.rest.get.LeadsList141 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation close-com.rest.get.ActivitiesList52 from source document primary; streams.json is the declared execution component."
     },
     {
       "path": "contacts list",
@@ -96,80 +114,458 @@
       "notes": "Pinned source operation close-com.rest.get.ContactsList100 from source document primary; streams.json is the declared execution component."
     },
     {
-      "path": "opportunities list",
-      "summary": "Read Opportunities as Close-com ETL records.",
-      "intent": "etl",
+      "path": "create contact apply",
+      "summary": "Plan and execute the typed create contact write action.",
+      "intent": "reverse_etl",
       "availability": "implemented",
-      "stream": "opportunities",
-      "source_cli_path": "GET /opportunity/",
+      "write": "create_contact",
+      "source_cli_path": "POST /contact/",
       "source_url": "https://api.close.com/api/openapi.json",
+      "flags": [
+        {
+          "name": "emails",
+          "summary": "Optional emails record field.",
+          "maps_to": "record.emails",
+          "type": "json"
+        },
+        {
+          "name": "lead_id",
+          "summary": "Required lead id record field.",
+          "maps_to": "record.lead_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "phones",
+          "summary": "Optional phones record field.",
+          "maps_to": "record.phones",
+          "type": "json"
+        },
+        {
+          "name": "title",
+          "summary": "Optional title record field.",
+          "maps_to": "record.title",
+          "type": "string"
+        },
+        {
+          "name": "urls",
+          "summary": "Optional urls record field.",
+          "maps_to": "record.urls",
+          "type": "json"
+        }
+      ],
+      "risk": "external mutation; creates a live Close contact under a lead; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
       "api_surface": [
         {
-          "method": "GET",
+          "method": "POST",
+          "path": "/contact/"
+        }
+      ],
+      "examples": [
+        "pm close-com create contact apply --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.post.ContactsCreate204; writes.json action create_contact is the declared method/path/body execution component."
+    },
+    {
+      "path": "create lead apply",
+      "summary": "Plan and execute the typed create lead write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_lead",
+      "source_cli_path": "POST /lead/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "flags": [
+        {
+          "name": "contacts",
+          "summary": "Optional contacts record field.",
+          "maps_to": "record.contacts",
+          "type": "json"
+        },
+        {
+          "name": "description",
+          "summary": "Optional description record field.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "status_id",
+          "summary": "Optional status id record field.",
+          "maps_to": "record.status_id",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "summary": "Optional url record field.",
+          "maps_to": "record.url",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; creates a live Close lead; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lead/"
+        }
+      ],
+      "examples": [
+        "pm close-com create lead apply --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.post.LeadsCreate223; writes.json action create_lead is the declared method/path/body execution component."
+    },
+    {
+      "path": "create opportunity apply",
+      "summary": "Plan and execute the typed create opportunity write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_opportunity",
+      "source_cli_path": "POST /opportunity/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "flags": [
+        {
+          "name": "confidence",
+          "summary": "Optional confidence record field.",
+          "maps_to": "record.confidence",
+          "type": "integer"
+        },
+        {
+          "name": "contact_id",
+          "summary": "Optional contact id record field.",
+          "maps_to": "record.contact_id",
+          "type": "string"
+        },
+        {
+          "name": "lead_id",
+          "summary": "Required lead id record field.",
+          "maps_to": "record.lead_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "note",
+          "summary": "Optional note record field.",
+          "maps_to": "record.note",
+          "type": "string"
+        },
+        {
+          "name": "status_id",
+          "summary": "Optional status id record field.",
+          "maps_to": "record.status_id",
+          "type": "string"
+        },
+        {
+          "name": "user_id",
+          "summary": "Optional user id record field.",
+          "maps_to": "record.user_id",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "summary": "Optional value record field.",
+          "maps_to": "record.value",
+          "type": "number"
+        },
+        {
+          "name": "value_period",
+          "summary": "Optional value period record field.",
+          "maps_to": "record.value_period",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; creates a live Close opportunity under a lead; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
           "path": "/opportunity/"
         }
       ],
       "examples": [
-        "pm close-com opportunities list --json"
+        "pm close-com create opportunity apply --json"
       ],
-      "notes": "Pinned source operation close-com.rest.get.OpportunitiesList145 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation close-com.rest.post.OpportunitiesCreate226; writes.json action create_opportunity is the declared method/path/body execution component."
     },
     {
-      "path": "activities list",
-      "summary": "Read Activities as Close-com ETL records.",
-      "intent": "etl",
+      "path": "create task apply",
+      "summary": "Plan and execute the typed create task write action.",
+      "intent": "reverse_etl",
       "availability": "implemented",
-      "stream": "activities",
-      "source_cli_path": "GET /activity/",
+      "write": "create_task",
+      "source_cli_path": "POST /task/",
       "source_url": "https://api.close.com/api/openapi.json",
-      "api_surface": [
+      "flags": [
         {
-          "method": "GET",
-          "path": "/activity/"
+          "name": "_type",
+          "summary": "Required  type record field.",
+          "maps_to": "record._type",
+          "required": true,
+          "type": "enum",
+          "values": [
+            "lead"
+          ]
+        },
+        {
+          "name": "assigned_to",
+          "summary": "Optional assigned to record field.",
+          "maps_to": "record.assigned_to",
+          "type": "string"
+        },
+        {
+          "name": "contact_id",
+          "summary": "Optional contact id record field.",
+          "maps_to": "record.contact_id",
+          "type": "string"
+        },
+        {
+          "name": "due_date",
+          "summary": "Optional due date record field.",
+          "maps_to": "record.due_date",
+          "type": "string"
+        },
+        {
+          "name": "is_complete",
+          "summary": "Optional is complete record field.",
+          "maps_to": "record.is_complete",
+          "type": "boolean"
+        },
+        {
+          "name": "lead_id",
+          "summary": "Required lead id record field.",
+          "maps_to": "record.lead_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "text",
+          "summary": "Required text record field.",
+          "maps_to": "record.text",
+          "required": true,
+          "type": "string"
         }
       ],
-      "examples": [
-        "pm close-com activities list --json"
-      ],
-      "notes": "Pinned source operation close-com.rest.get.ActivitiesList52 from source document primary; streams.json is the declared execution component."
-    },
-    {
-      "path": "users list",
-      "summary": "Read Users as Close-com ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "users",
-      "source_cli_path": "GET /user/",
-      "source_url": "https://api.close.com/api/openapi.json",
+      "risk": "external mutation; creates a live Close task on a lead; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
       "api_surface": [
         {
-          "method": "GET",
-          "path": "/user/"
-        }
-      ],
-      "examples": [
-        "pm close-com users list --json"
-      ],
-      "notes": "Pinned source operation close-com.rest.get.UsersList184 from source document primary; streams.json is the declared execution component."
-    },
-    {
-      "path": "tasks list",
-      "summary": "Read Tasks as Close-com ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "tasks",
-      "source_cli_path": "GET /task/",
-      "source_url": "https://api.close.com/api/openapi.json",
-      "api_surface": [
-        {
-          "method": "GET",
+          "method": "POST",
           "path": "/task/"
         }
       ],
       "examples": [
-        "pm close-com tasks list --json"
+        "pm close-com create task apply --json"
       ],
-      "notes": "Pinned source operation close-com.rest.get.TasksList181 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation close-com.rest.post.TasksCreate250; writes.json action create_task is the declared method/path/body execution component."
+    },
+    {
+      "path": "custom-fields-contact list",
+      "summary": "Read Custom Fields Contact as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields_contact",
+      "source_cli_path": "GET /custom_field/contact/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_field/contact/"
+        }
+      ],
+      "examples": [
+        "pm close-com custom-fields-contact list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.CustomFieldsContactList107 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "custom-fields-lead list",
+      "summary": "Read Custom Fields Lead as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields_lead",
+      "source_cli_path": "GET /custom_field/lead/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_field/lead/"
+        }
+      ],
+      "examples": [
+        "pm close-com custom-fields-lead list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.CustomFieldsLeadList111 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "custom-fields-opportunity list",
+      "summary": "Read Custom Fields Opportunity as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields_opportunity",
+      "source_cli_path": "GET /custom_field/opportunity/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_field/opportunity/"
+        }
+      ],
+      "examples": [
+        "pm close-com custom-fields-opportunity list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.CustomFieldsOpportunityList113 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the typed delete contact write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact",
+      "source_cli_path": "DELETE /contact/{id}/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; irreversibly deletes a live Close contact; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contact/{id}/"
+        }
+      ],
+      "examples": [
+        "pm close-com delete contact apply --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.delete.ContactsDelete15; writes.json action delete_contact is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete lead apply",
+      "summary": "Plan and execute the typed delete lead write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_lead",
+      "source_cli_path": "DELETE /lead/{id}/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; irreversibly deletes a live Close lead and its contacts/opportunities; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/lead/{id}/"
+        }
+      ],
+      "examples": [
+        "pm close-com delete lead apply --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.delete.LeadsDelete30; writes.json action delete_lead is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete opportunity apply",
+      "summary": "Plan and execute the typed delete opportunity write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_opportunity",
+      "source_cli_path": "DELETE /opportunity/{id}/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; irreversibly deletes a live Close opportunity; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/opportunity/{id}/"
+        }
+      ],
+      "examples": [
+        "pm close-com delete opportunity apply --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.delete.OpportunitiesDelete32; writes.json action delete_opportunity is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete task apply",
+      "summary": "Plan and execute the typed delete task write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_task",
+      "source_cli_path": "DELETE /task/{id}/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; irreversibly deletes a live Close task; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/task/{id}/"
+        }
+      ],
+      "examples": [
+        "pm close-com delete task apply --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.delete.TasksDelete49; writes.json action delete_task is the declared method/path/body execution component."
+    },
+    {
+      "path": "groups list",
+      "summary": "Read Groups as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_cli_path": "GET /group/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/group/"
+        }
+      ],
+      "examples": [
+        "pm close-com groups list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.GroupsList137 from source document primary; streams.json is the declared execution component."
     },
     {
       "path": "lead-statuses list",
@@ -189,6 +585,44 @@
         "pm close-com lead-statuses list --json"
       ],
       "notes": "Pinned source operation close-com.rest.get.LeadStatusesList177 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "leads list",
+      "summary": "Read Leads as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leads",
+      "source_cli_path": "GET /lead/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lead/"
+        }
+      ],
+      "examples": [
+        "pm close-com leads list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.LeadsList141 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "opportunities list",
+      "summary": "Read Opportunities as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunities",
+      "source_cli_path": "GET /opportunity/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunity/"
+        }
+      ],
+      "examples": [
+        "pm close-com opportunities list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.OpportunitiesList145 from source document primary; streams.json is the declared execution component."
     },
     {
       "path": "opportunity-statuses list",
@@ -248,80 +682,276 @@
       "notes": "Pinned source operation close-com.rest.get.RolesList161 from source document primary; streams.json is the declared execution component."
     },
     {
-      "path": "groups list",
-      "summary": "Read Groups as Close-com ETL records.",
+      "path": "tasks list",
+      "summary": "Read Tasks as Close-com ETL records.",
       "intent": "etl",
       "availability": "implemented",
-      "stream": "groups",
-      "source_cli_path": "GET /group/",
+      "stream": "tasks",
+      "source_cli_path": "GET /task/",
       "source_url": "https://api.close.com/api/openapi.json",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/group/"
+          "path": "/task/"
         }
       ],
       "examples": [
-        "pm close-com groups list --json"
+        "pm close-com tasks list --json"
       ],
-      "notes": "Pinned source operation close-com.rest.get.GroupsList137 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation close-com.rest.get.TasksList181 from source document primary; streams.json is the declared execution component."
     },
     {
-      "path": "custom-fields-lead list",
-      "summary": "Read Custom Fields Lead as Close-com ETL records.",
-      "intent": "etl",
+      "path": "update contact apply",
+      "summary": "Plan and execute the typed update contact write action.",
+      "intent": "reverse_etl",
       "availability": "implemented",
-      "stream": "custom_fields_lead",
-      "source_cli_path": "GET /custom_field/lead/",
+      "write": "update_contact",
+      "source_cli_path": "PUT /contact/{id}/",
       "source_url": "https://api.close.com/api/openapi.json",
+      "flags": [
+        {
+          "name": "emails",
+          "summary": "Optional emails record field.",
+          "maps_to": "record.emails",
+          "type": "json"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Optional name record field.",
+          "maps_to": "record.name",
+          "type": "string"
+        },
+        {
+          "name": "phones",
+          "summary": "Optional phones record field.",
+          "maps_to": "record.phones",
+          "type": "json"
+        },
+        {
+          "name": "title",
+          "summary": "Optional title record field.",
+          "maps_to": "record.title",
+          "type": "string"
+        },
+        {
+          "name": "urls",
+          "summary": "Optional urls record field.",
+          "maps_to": "record.urls",
+          "type": "json"
+        }
+      ],
+      "risk": "external mutation; overwrites a live Close contact's fields; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
       "api_surface": [
         {
-          "method": "GET",
-          "path": "/custom_field/lead/"
+          "method": "PUT",
+          "path": "/contact/{id}/"
         }
       ],
       "examples": [
-        "pm close-com custom-fields-lead list --json"
+        "pm close-com update contact apply --json"
       ],
-      "notes": "Pinned source operation close-com.rest.get.CustomFieldsLeadList111 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation close-com.rest.put.ContactsUpdate263; writes.json action update_contact is the declared method/path/body execution component."
     },
     {
-      "path": "custom-fields-contact list",
-      "summary": "Read Custom Fields Contact as Close-com ETL records.",
-      "intent": "etl",
+      "path": "update lead apply",
+      "summary": "Plan and execute the typed update lead write action.",
+      "intent": "reverse_etl",
       "availability": "implemented",
-      "stream": "custom_fields_contact",
-      "source_cli_path": "GET /custom_field/contact/",
+      "write": "update_lead",
+      "source_cli_path": "PUT /lead/{id}/",
       "source_url": "https://api.close.com/api/openapi.json",
+      "flags": [
+        {
+          "name": "description",
+          "summary": "Optional description record field.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Optional name record field.",
+          "maps_to": "record.name",
+          "type": "string"
+        },
+        {
+          "name": "status_id",
+          "summary": "Optional status id record field.",
+          "maps_to": "record.status_id",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "summary": "Optional url record field.",
+          "maps_to": "record.url",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; overwrites a live Close lead's fields; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
       "api_surface": [
         {
-          "method": "GET",
-          "path": "/custom_field/contact/"
+          "method": "PUT",
+          "path": "/lead/{id}/"
         }
       ],
       "examples": [
-        "pm close-com custom-fields-contact list --json"
+        "pm close-com update lead apply --json"
       ],
-      "notes": "Pinned source operation close-com.rest.get.CustomFieldsContactList107 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation close-com.rest.put.LeadsUpdate278; writes.json action update_lead is the declared method/path/body execution component."
     },
     {
-      "path": "custom-fields-opportunity list",
-      "summary": "Read Custom Fields Opportunity as Close-com ETL records.",
+      "path": "update opportunity apply",
+      "summary": "Plan and execute the typed update opportunity write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_opportunity",
+      "source_cli_path": "PUT /opportunity/{id}/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "flags": [
+        {
+          "name": "confidence",
+          "summary": "Optional confidence record field.",
+          "maps_to": "record.confidence",
+          "type": "integer"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "note",
+          "summary": "Optional note record field.",
+          "maps_to": "record.note",
+          "type": "string"
+        },
+        {
+          "name": "status_id",
+          "summary": "Optional status id record field.",
+          "maps_to": "record.status_id",
+          "type": "string"
+        },
+        {
+          "name": "user_id",
+          "summary": "Optional user id record field.",
+          "maps_to": "record.user_id",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "summary": "Optional value record field.",
+          "maps_to": "record.value",
+          "type": "number"
+        },
+        {
+          "name": "value_period",
+          "summary": "Optional value period record field.",
+          "maps_to": "record.value_period",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; overwrites a live Close opportunity's fields; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/opportunity/{id}/"
+        }
+      ],
+      "examples": [
+        "pm close-com update opportunity apply --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.put.OpportunitiesUpdate282; writes.json action update_opportunity is the declared method/path/body execution component."
+    },
+    {
+      "path": "update task apply",
+      "summary": "Plan and execute the typed update task write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_task",
+      "source_cli_path": "PUT /task/{id}/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "flags": [
+        {
+          "name": "assigned_to",
+          "summary": "Optional assigned to record field.",
+          "maps_to": "record.assigned_to",
+          "type": "string"
+        },
+        {
+          "name": "due_date",
+          "summary": "Optional due date record field.",
+          "maps_to": "record.due_date",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "is_complete",
+          "summary": "Optional is complete record field.",
+          "maps_to": "record.is_complete",
+          "type": "boolean"
+        },
+        {
+          "name": "text",
+          "summary": "Optional text record field.",
+          "maps_to": "record.text",
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; overwrites a live Close task's fields; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/task/{id}/"
+        }
+      ],
+      "examples": [
+        "pm close-com update task apply --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.put.TasksUpdate298; writes.json action update_task is the declared method/path/body execution component."
+    },
+    {
+      "path": "users list",
+      "summary": "Read Users as Close-com ETL records.",
       "intent": "etl",
       "availability": "implemented",
-      "stream": "custom_fields_opportunity",
-      "source_cli_path": "GET /custom_field/opportunity/",
+      "stream": "users",
+      "source_cli_path": "GET /user/",
       "source_url": "https://api.close.com/api/openapi.json",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/custom_field/opportunity/"
+          "path": "/user/"
         }
       ],
       "examples": [
-        "pm close-com custom-fields-opportunity list --json"
+        "pm close-com users list --json"
       ],
-      "notes": "Pinned source operation close-com.rest.get.CustomFieldsOpportunityList113 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation close-com.rest.get.UsersList184 from source document primary; streams.json is the declared execution component."
     }
   ]
 }

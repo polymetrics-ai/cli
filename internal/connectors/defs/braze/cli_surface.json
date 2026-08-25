@@ -34,6 +34,41 @@
         "preference-centers",
         "scheduled-broadcasts"
       ]
+    },
+    {
+      "id": "writes",
+      "title": "Typed write plans",
+      "commands": [
+        "track users apply",
+        "identify users apply",
+        "delete users apply",
+        "merge users apply",
+        "create user alias apply",
+        "update user alias apply",
+        "remove user external ids apply",
+        "rename user external ids apply",
+        "set subscription status v2 apply",
+        "create catalog apply",
+        "delete catalog apply",
+        "create catalog items apply",
+        "update catalog items apply",
+        "update catalog item apply",
+        "delete catalog item apply",
+        "create content block apply",
+        "update content block apply",
+        "create email template apply",
+        "update email template apply",
+        "create email blocklist apply",
+        "remove email hard bounce apply",
+        "remove email spam apply",
+        "set email subscription status apply",
+        "remove sms invalid phone numbers apply",
+        "create preference center apply",
+        "update preference center apply",
+        "send message apply",
+        "trigger campaign send apply",
+        "trigger canvas send apply"
+      ]
     }
   ],
   "global_flags": [
@@ -65,63 +100,6 @@
   ],
   "commands": [
     {
-      "path": "campaigns list",
-      "summary": "Read Campaigns as Braze ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "campaigns",
-      "source_cli_path": "GET /campaigns/list",
-      "source_url": "https://www.braze.com/docs/api/home/",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/campaigns/list"
-        }
-      ],
-      "examples": [
-        "pm braze campaigns list --json"
-      ],
-      "notes": "Pinned source operation braze.rest.get.CampaignsList0 from source document primary; streams.json is the declared execution component."
-    },
-    {
-      "path": "canvases list",
-      "summary": "Read Canvases as Braze ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "canvases",
-      "source_cli_path": "GET /canvas/list",
-      "source_url": "https://www.braze.com/docs/api/home/",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/canvas/list"
-        }
-      ],
-      "examples": [
-        "pm braze canvases list --json"
-      ],
-      "notes": "Pinned source operation braze.rest.get.CanvasList3 from source document primary; streams.json is the declared execution component."
-    },
-    {
-      "path": "segments list",
-      "summary": "Read Segments as Braze ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "segments",
-      "source_cli_path": "GET /segments/list",
-      "source_url": "https://www.braze.com/docs/api/home/",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/segments/list"
-        }
-      ],
-      "examples": [
-        "pm braze segments list --json"
-      ],
-      "notes": "Pinned source operation braze.rest.get.SegmentsList59 from source document primary; streams.json is the declared execution component."
-    },
-    {
       "path": "campaign-details list",
       "summary": "Read Campaign Details as Braze ETL records.",
       "intent": "etl",
@@ -141,23 +119,23 @@
       "notes": "Pinned source operation braze.rest.get.CampaignsDetails1 from source document primary; streams.json is the declared execution component."
     },
     {
-      "path": "canvas-details list",
-      "summary": "Read Canvas Details as Braze ETL records.",
+      "path": "campaigns list",
+      "summary": "Read Campaigns as Braze ETL records.",
       "intent": "etl",
       "availability": "implemented",
-      "stream": "canvas_details",
-      "source_cli_path": "GET /canvas/details",
+      "stream": "campaigns",
+      "source_cli_path": "GET /campaigns/list",
       "source_url": "https://www.braze.com/docs/api/home/",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/canvas/details"
+          "path": "/campaigns/list"
         }
       ],
       "examples": [
-        "pm braze canvas-details list --json"
+        "pm braze campaigns list --json"
       ],
-      "notes": "Pinned source operation braze.rest.get.CanvasDetails4 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation braze.rest.get.CampaignsList0 from source document primary; streams.json is the declared execution component."
     },
     {
       "path": "canvas-data-summary list",
@@ -179,23 +157,42 @@
       "notes": "Pinned source operation braze.rest.get.CanvasDataSummary6 from source document primary; streams.json is the declared execution component."
     },
     {
-      "path": "segment-details list",
-      "summary": "Read Segment Details as Braze ETL records.",
+      "path": "canvas-details list",
+      "summary": "Read Canvas Details as Braze ETL records.",
       "intent": "etl",
       "availability": "implemented",
-      "stream": "segment_details",
-      "source_cli_path": "GET /segments/details",
+      "stream": "canvas_details",
+      "source_cli_path": "GET /canvas/details",
       "source_url": "https://www.braze.com/docs/api/home/",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/segments/details"
+          "path": "/canvas/details"
         }
       ],
       "examples": [
-        "pm braze segment-details list --json"
+        "pm braze canvas-details list --json"
       ],
-      "notes": "Pinned source operation braze.rest.get.SegmentsDetails60 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation braze.rest.get.CanvasDetails4 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "canvases list",
+      "summary": "Read Canvases as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "canvases",
+      "source_cli_path": "GET /canvas/list",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/canvas/list"
+        }
+      ],
+      "examples": [
+        "pm braze canvases list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.CanvasList3 from source document primary; streams.json is the declared execution component."
     },
     {
       "path": "catalogs list",
@@ -236,42 +233,425 @@
       "notes": "Pinned source operation braze.rest.get.ContentBlocksList22 from source document primary; streams.json is the declared execution component."
     },
     {
-      "path": "email-templates list",
-      "summary": "Read Email Templates as Braze ETL records.",
-      "intent": "etl",
+      "path": "create catalog apply",
+      "summary": "Plan and execute the typed create catalog write action.",
+      "intent": "reverse_etl",
       "availability": "implemented",
-      "stream": "email_templates",
-      "source_cli_path": "GET /templates/email/list",
+      "write": "create_catalog",
+      "source_cli_path": "POST /catalogs",
       "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "catalogs",
+          "summary": "Required catalogs record field.",
+          "maps_to": "record.catalogs",
+          "required": true,
+          "type": "json"
+        }
+      ],
+      "risk": "creates a new catalog container with a fixed field schema; low-risk additive mutation, no approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
       "api_surface": [
         {
-          "method": "GET",
-          "path": "/templates/email/list"
+          "method": "POST",
+          "path": "/catalogs"
         }
       ],
       "examples": [
-        "pm braze email-templates list --json"
+        "pm braze create catalog apply --json"
       ],
-      "notes": "Pinned source operation braze.rest.get.TemplatesEmailList72 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation braze.rest.post.Catalogs8; writes.json action create_catalog is the declared method/path/body execution component."
     },
     {
-      "path": "feed-cards list",
-      "summary": "Read Feed Cards as Braze ETL records.",
-      "intent": "etl",
+      "path": "create catalog items apply",
+      "summary": "Plan and execute the typed create catalog items write action.",
+      "intent": "reverse_etl",
       "availability": "implemented",
-      "stream": "feed_cards",
-      "source_cli_path": "GET /feed/list",
+      "write": "create_catalog_items",
+      "source_cli_path": "POST /catalogs/{catalog_name}/items",
       "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "catalog_name",
+          "summary": "Required catalog name record field.",
+          "maps_to": "record.catalog_name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "items",
+          "summary": "Required items record field.",
+          "maps_to": "record.items",
+          "required": true,
+          "type": "json"
+        }
+      ],
+      "risk": "adds new rows (up to 50 per request per Braze's documented limit) to an existing catalog; low-risk additive mutation, no approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
       "api_surface": [
         {
-          "method": "GET",
-          "path": "/feed/list"
+          "method": "POST",
+          "path": "/catalogs/{catalog_name}/items"
         }
       ],
       "examples": [
-        "pm braze feed-cards list --json"
+        "pm braze create catalog items apply --json"
       ],
-      "notes": "Pinned source operation braze.rest.get.FeedList35 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation braze.rest.post.CatalogsCatalogNameItems11; writes.json action create_catalog_items is the declared method/path/body execution component."
+    },
+    {
+      "path": "create content block apply",
+      "summary": "Plan and execute the typed create content block write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_content_block",
+      "source_cli_path": "POST /content_blocks/create",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "content",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "summary": "Optional description record field.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "summary": "Optional state record field.",
+          "maps_to": "record.state",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "summary": "Optional tags record field.",
+          "maps_to": "record.tags",
+          "type": "string_array"
+        }
+      ],
+      "risk": "creates a new reusable email Content Block; low-risk additive mutation, no approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/content_blocks/create"
+        }
+      ],
+      "examples": [
+        "pm braze create content block apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.ContentBlocksCreate20; writes.json action create_content_block is the declared method/path/body execution component."
+    },
+    {
+      "path": "create email blocklist apply",
+      "summary": "Plan and execute the typed create email blocklist write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_email_blocklist",
+      "source_cli_path": "POST /email/blocklist",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "email",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true,
+          "type": "string_array"
+        }
+      ],
+      "risk": "permanently blocklists email addresses from ever receiving Braze email again for this workspace; Braze's own docs note blocklisting cannot be undone via the API (requires a support request to reverse)",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/email/blocklist"
+        }
+      ],
+      "examples": [
+        "pm braze create email blocklist apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.EmailBlocklist25; writes.json action create_email_blocklist is the declared method/path/body execution component."
+    },
+    {
+      "path": "create email template apply",
+      "summary": "Plan and execute the typed create email template write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_email_template",
+      "source_cli_path": "POST /templates/email/create",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "body",
+          "summary": "Required body record field.",
+          "maps_to": "record.body",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "plaintext_body",
+          "summary": "Optional plaintext body record field.",
+          "maps_to": "record.plaintext_body",
+          "type": "string"
+        },
+        {
+          "name": "preheader",
+          "summary": "Optional preheader record field.",
+          "maps_to": "record.preheader",
+          "type": "string"
+        },
+        {
+          "name": "should_inline_css",
+          "summary": "Optional should inline css record field.",
+          "maps_to": "record.should_inline_css",
+          "type": "boolean"
+        },
+        {
+          "name": "subject",
+          "summary": "Required subject record field.",
+          "maps_to": "record.subject",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "summary": "Optional tags record field.",
+          "maps_to": "record.tags",
+          "type": "string_array"
+        },
+        {
+          "name": "template_name",
+          "summary": "Required template name record field.",
+          "maps_to": "record.template_name",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "creates a new reusable email template; low-risk additive mutation, no approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/templates/email/create"
+        }
+      ],
+      "examples": [
+        "pm braze create email template apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.TemplatesEmailCreate73; writes.json action create_email_template is the declared method/path/body execution component."
+    },
+    {
+      "path": "create preference center apply",
+      "summary": "Plan and execute the typed create preference center write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_preference_center",
+      "source_cli_path": "POST /preference_center/v1",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "confirmation_page_html",
+          "summary": "Required confirmation page html record field.",
+          "maps_to": "record.confirmation_page_html",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "summary": "Optional options record field.",
+          "maps_to": "record.options",
+          "type": "json"
+        },
+        {
+          "name": "preference_center_page_html",
+          "summary": "Required preference center page html record field.",
+          "maps_to": "record.preference_center_page_html",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "preference_center_title",
+          "summary": "Required preference center title record field.",
+          "maps_to": "record.preference_center_title",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "summary": "Optional state record field.",
+          "maps_to": "record.state",
+          "type": "string"
+        }
+      ],
+      "risk": "publishes a new customer-facing preference center page (a live, externally-reachable URL once active); low-risk additive mutation but review the submitted HTML before use since it is served to end users verbatim",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/preference_center/v1"
+        }
+      ],
+      "examples": [
+        "pm braze create preference center apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.PreferenceCenterV146; writes.json action create_preference_center is the declared method/path/body execution component."
+    },
+    {
+      "path": "create user alias apply",
+      "summary": "Plan and execute the typed create user alias write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user_alias",
+      "source_cli_path": "POST /users/alias/new",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "user_aliases",
+          "summary": "Required user aliases record field.",
+          "maps_to": "record.user_aliases",
+          "required": true,
+          "type": "json"
+        }
+      ],
+      "risk": "creates new alias identifiers for existing (or new anonymous) user profiles; low-risk additive mutation, no approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/alias/new"
+        }
+      ],
+      "examples": [
+        "pm braze create user alias apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.UsersAliasNew76; writes.json action create_user_alias is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete catalog apply",
+      "summary": "Plan and execute the typed delete catalog write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_catalog",
+      "source_cli_path": "DELETE /catalogs/{catalog_name}",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "catalog_name",
+          "summary": "Required catalog name record field.",
+          "maps_to": "record.catalog_name",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "permanently deletes a catalog and every item it contains; any campaign/Canvas/Connected Content template referencing this catalog by name starts failing to resolve",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/catalogs/{catalog_name}"
+        }
+      ],
+      "examples": [
+        "pm braze delete catalog apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.delete.CatalogsCatalogName9; writes.json action delete_catalog is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete catalog item apply",
+      "summary": "Plan and execute the typed delete catalog item write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_catalog_item",
+      "source_cli_path": "DELETE /catalogs/{catalog_name}/items/{item_id}",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "catalog_name",
+          "summary": "Required catalog name record field.",
+          "maps_to": "record.catalog_name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "item_id",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "permanently removes a single row from a catalog; any Connected Content template or campaign personalization referencing this item_id starts returning no match",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/catalogs/{catalog_name}/items/{item_id}"
+        }
+      ],
+      "examples": [
+        "pm braze delete catalog item apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.delete.CatalogsCatalogNameItemsItemId19; writes.json action delete_catalog_item is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete users apply",
+      "summary": "Plan and execute the typed delete users write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_users",
+      "source_cli_path": "POST /users/delete",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "braze_ids",
+          "summary": "Optional braze ids record field.",
+          "maps_to": "record.braze_ids",
+          "type": "string_array"
+        },
+        {
+          "name": "external_ids",
+          "summary": "Optional external ids record field.",
+          "maps_to": "record.external_ids",
+          "type": "string_array"
+        },
+        {
+          "name": "user_aliases",
+          "summary": "Optional user aliases record field.",
+          "maps_to": "record.user_aliases",
+          "type": "json"
+        }
+      ],
+      "risk": "permanently and irreversibly deletes user profiles and all their associated data (attributes, event/purchase history, message engagement); Braze does not offer an undelete path",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/delete"
+        }
+      ],
+      "examples": [
+        "pm braze delete users apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.UsersDelete78; writes.json action delete_users is the declared method/path/body execution component."
     },
     {
       "path": "email-hard-bounces list",
@@ -293,6 +673,25 @@
       "notes": "Pinned source operation braze.rest.get.EmailHardBounces27 from source document primary; streams.json is the declared execution component."
     },
     {
+      "path": "email-templates list",
+      "summary": "Read Email Templates as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "email_templates",
+      "source_cli_path": "GET /templates/email/list",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/templates/email/list"
+        }
+      ],
+      "examples": [
+        "pm braze email-templates list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.TemplatesEmailList72 from source document primary; streams.json is the declared execution component."
+    },
+    {
       "path": "email-unsubscribes list",
       "summary": "Read Email Unsubscribes as Braze ETL records.",
       "intent": "etl",
@@ -312,23 +711,70 @@
       "notes": "Pinned source operation braze.rest.get.EmailUnsubscribes30 from source document primary; streams.json is the declared execution component."
     },
     {
-      "path": "sms-invalid-phone-numbers list",
-      "summary": "Read Sms Invalid Phone Numbers as Braze ETL records.",
+      "path": "feed-cards list",
+      "summary": "Read Feed Cards as Braze ETL records.",
       "intent": "etl",
       "availability": "implemented",
-      "stream": "sms_invalid_phone_numbers",
-      "source_cli_path": "GET /sms/invalid_phone_numbers",
+      "stream": "feed_cards",
+      "source_cli_path": "GET /feed/list",
       "source_url": "https://www.braze.com/docs/api/home/",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/sms/invalid_phone_numbers"
+          "path": "/feed/list"
         }
       ],
       "examples": [
-        "pm braze sms-invalid-phone-numbers list --json"
+        "pm braze feed-cards list --json"
       ],
-      "notes": "Pinned source operation braze.rest.get.SmsInvalidPhoneNumbers65 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation braze.rest.get.FeedList35 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "identify users apply",
+      "summary": "Plan and execute the typed identify users write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "identify_users",
+      "source_cli_path": "POST /users/identify",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "aliases_to_identify",
+          "summary": "Optional aliases to identify record field.",
+          "maps_to": "record.aliases_to_identify",
+          "type": "json"
+        },
+        {
+          "name": "emails_to_identify",
+          "summary": "Optional emails to identify record field.",
+          "maps_to": "record.emails_to_identify",
+          "type": "json"
+        },
+        {
+          "name": "merge_behavior",
+          "summary": "Optional merge behavior record field.",
+          "maps_to": "record.merge_behavior",
+          "type": "string"
+        },
+        {
+          "name": "phone_numbers_to_identify",
+          "summary": "Optional phone numbers to identify record field.",
+          "maps_to": "record.phone_numbers_to_identify",
+          "type": "json"
+        }
+      ],
+      "risk": "converts an anonymous/aliased user profile into an identified one and can merge attribute/behavior history onto the target identified profile; merge_behavior: merge combines the two profiles' full history irreversibly",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/identify"
+        }
+      ],
+      "examples": [
+        "pm braze identify users apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.UsersIdentify84; writes.json action identify_users is the declared method/path/body execution component."
     },
     {
       "path": "kpi-dau list",
@@ -407,23 +853,34 @@
       "notes": "Pinned source operation braze.rest.get.KpiUninstallsDataSeries39 from source document primary; streams.json is the declared execution component."
     },
     {
-      "path": "sessions list",
-      "summary": "Read Sessions as Braze ETL records.",
-      "intent": "etl",
+      "path": "merge users apply",
+      "summary": "Plan and execute the typed merge users write action.",
+      "intent": "reverse_etl",
       "availability": "implemented",
-      "stream": "sessions",
-      "source_cli_path": "GET /sessions/data_series",
+      "write": "merge_users",
+      "source_cli_path": "POST /users/merge",
       "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "merge_updates",
+          "summary": "Required merge updates record field.",
+          "maps_to": "record.merge_updates",
+          "required": true,
+          "type": "json"
+        }
+      ],
+      "risk": "irreversibly merges one user profile's full history into another and deletes the source profile identifier; up to 50 merge pairs per request per Braze's documented limit",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
       "api_surface": [
         {
-          "method": "GET",
-          "path": "/sessions/data_series"
+          "method": "POST",
+          "path": "/users/merge"
         }
       ],
       "examples": [
-        "pm braze sessions list --json"
+        "pm braze merge users apply --json"
       ],
-      "notes": "Pinned source operation braze.rest.get.SessionsDataSeries64 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation braze.rest.post.UsersMerge85; writes.json action merge_users is the declared method/path/body execution component."
     },
     {
       "path": "preference-centers list",
@@ -445,6 +902,156 @@
       "notes": "Pinned source operation braze.rest.get.PreferenceCenterV1List47 from source document primary; streams.json is the declared execution component."
     },
     {
+      "path": "remove email hard bounce apply",
+      "summary": "Plan and execute the typed remove email hard bounce write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_email_hard_bounce",
+      "source_cli_path": "POST /email/bounce/remove",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "email",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "clears an email address's hard-bounced status, allowing future sends to resume; use only after confirming the underlying delivery issue is actually resolved, or the address will likely hard-bounce again and harm sender reputation",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/email/bounce/remove"
+        }
+      ],
+      "examples": [
+        "pm braze remove email hard bounce apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.EmailBounceRemove26; writes.json action remove_email_hard_bounce is the declared method/path/body execution component."
+    },
+    {
+      "path": "remove email spam apply",
+      "summary": "Plan and execute the typed remove email spam write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_email_spam",
+      "source_cli_path": "POST /email/spam/remove",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "email",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "clears an email address's spam-complaint status, allowing future sends to resume; reversing a genuine spam complaint risks another complaint and further sender-reputation damage",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/email/spam/remove"
+        }
+      ],
+      "examples": [
+        "pm braze remove email spam apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.EmailSpamRemove28; writes.json action remove_email_spam is the declared method/path/body execution component."
+    },
+    {
+      "path": "remove sms invalid phone numbers apply",
+      "summary": "Plan and execute the typed remove sms invalid phone numbers write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_sms_invalid_phone_numbers",
+      "source_cli_path": "POST /sms/invalid_phone_numbers/remove",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "phone_numbers",
+          "summary": "Required phone numbers record field.",
+          "maps_to": "record.phone_numbers",
+          "required": true,
+          "type": "string_array"
+        }
+      ],
+      "risk": "clears the invalid-number flag for phone numbers, allowing future SMS/MMS sends to resume; use only after confirming the number can actually receive messages again, or it will likely be re-flagged and waste sending budget",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/sms/invalid_phone_numbers/remove"
+        }
+      ],
+      "examples": [
+        "pm braze remove sms invalid phone numbers apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.SmsInvalidPhoneNumbersRemove66; writes.json action remove_sms_invalid_phone_numbers is the declared method/path/body execution component."
+    },
+    {
+      "path": "remove user external ids apply",
+      "summary": "Plan and execute the typed remove user external ids write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_user_external_ids",
+      "source_cli_path": "POST /users/external_ids/remove",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "external_ids",
+          "summary": "Required external ids record field.",
+          "maps_to": "record.external_ids",
+          "required": true,
+          "type": "string_array"
+        }
+      ],
+      "risk": "detaches an external_id from its user profile, converting that profile to anonymous; the profile itself is not deleted but becomes unreachable by the removed identifier",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/external_ids/remove"
+        }
+      ],
+      "examples": [
+        "pm braze remove user external ids apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.UsersExternalIdsRemove82; writes.json action remove_user_external_ids is the declared method/path/body execution component."
+    },
+    {
+      "path": "rename user external ids apply",
+      "summary": "Plan and execute the typed rename user external ids write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "rename_user_external_ids",
+      "source_cli_path": "POST /users/external_ids/rename",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "external_id_renames",
+          "summary": "Required external id renames record field.",
+          "maps_to": "record.external_id_renames",
+          "required": true,
+          "type": "json"
+        }
+      ],
+      "risk": "renames a user's external_id; any external system correlating users by the old id stops matching after this runs",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/external_ids/rename"
+        }
+      ],
+      "examples": [
+        "pm braze rename user external ids apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.UsersExternalIdsRename83; writes.json action rename_user_external_ids is the declared method/path/body execution component."
+    },
+    {
       "path": "scheduled-broadcasts list",
       "summary": "Read Scheduled Broadcasts as Braze ETL records.",
       "intent": "etl",
@@ -462,6 +1069,695 @@
         "pm braze scheduled-broadcasts list --json"
       ],
       "notes": "Pinned source operation braze.rest.get.MessagesScheduledBroadcasts44 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "segment-details list",
+      "summary": "Read Segment Details as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segment_details",
+      "source_cli_path": "GET /segments/details",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments/details"
+        }
+      ],
+      "examples": [
+        "pm braze segment-details list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.SegmentsDetails60 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "segments list",
+      "summary": "Read Segments as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segments",
+      "source_cli_path": "GET /segments/list",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments/list"
+        }
+      ],
+      "examples": [
+        "pm braze segments list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.SegmentsList59 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "send message apply",
+      "summary": "Plan and execute the typed send message write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "send_message",
+      "source_cli_path": "POST /messages/send",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "audience",
+          "summary": "Optional audience record field.",
+          "maps_to": "record.audience",
+          "type": "json"
+        },
+        {
+          "name": "broadcast",
+          "summary": "Optional broadcast record field.",
+          "maps_to": "record.broadcast",
+          "type": "string"
+        },
+        {
+          "name": "campaign_id",
+          "summary": "Optional campaign id record field.",
+          "maps_to": "record.campaign_id",
+          "type": "string"
+        },
+        {
+          "name": "external_user_ids",
+          "summary": "Optional external user ids record field.",
+          "maps_to": "record.external_user_ids",
+          "type": "string_array"
+        },
+        {
+          "name": "messages",
+          "summary": "Required messages record field.",
+          "maps_to": "record.messages",
+          "required": true,
+          "type": "json"
+        },
+        {
+          "name": "override_frequency_capping",
+          "summary": "Optional override frequency capping record field.",
+          "maps_to": "record.override_frequency_capping",
+          "type": "string"
+        },
+        {
+          "name": "recipient_subscription_state",
+          "summary": "Optional recipient subscription state record field.",
+          "maps_to": "record.recipient_subscription_state",
+          "type": "string"
+        },
+        {
+          "name": "segment_id",
+          "summary": "Optional segment id record field.",
+          "maps_to": "record.segment_id",
+          "type": "string"
+        },
+        {
+          "name": "send_id",
+          "summary": "Optional send id record field.",
+          "maps_to": "record.send_id",
+          "type": "string"
+        },
+        {
+          "name": "user_aliases",
+          "summary": "Optional user aliases record field.",
+          "maps_to": "record.user_aliases",
+          "type": "json"
+        }
+      ],
+      "risk": "immediately sends a live message (push/email/SMS/webhook/Content Card) to the specified users, segment, or broadcast audience; irreversible once dispatched and the single riskiest write this connector exposes — always confirm the audience scope (segment_id/audience filter vs. an explicit small external_user_ids list) before use",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/messages/send"
+        }
+      ],
+      "examples": [
+        "pm braze send message apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.MessagesSend45; writes.json action send_message is the declared method/path/body execution component."
+    },
+    {
+      "path": "sessions list",
+      "summary": "Read Sessions as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sessions",
+      "source_cli_path": "GET /sessions/data_series",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sessions/data_series"
+        }
+      ],
+      "examples": [
+        "pm braze sessions list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.SessionsDataSeries64 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "set email subscription status apply",
+      "summary": "Plan and execute the typed set email subscription status write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_email_subscription_status",
+      "source_cli_path": "POST /email/status",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "email",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "subscription_state",
+          "summary": "Required subscription state record field.",
+          "maps_to": "record.subscription_state",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "changes a single email address's global subscription state (subscribed/unsubscribed/opted_in); setting unsubscribed stops all future non-transactional email to that address",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/email/status"
+        }
+      ],
+      "examples": [
+        "pm braze set email subscription status apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.EmailStatus29; writes.json action set_email_subscription_status is the declared method/path/body execution component."
+    },
+    {
+      "path": "set subscription status v2 apply",
+      "summary": "Plan and execute the typed set subscription status v2 write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_subscription_status_v2",
+      "source_cli_path": "POST /v2/subscription/status/set",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "subscription_groups",
+          "summary": "Required subscription groups record field.",
+          "maps_to": "record.subscription_groups",
+          "required": true,
+          "type": "json"
+        }
+      ],
+      "risk": "opts users into or out of an email/SMS subscription group in bulk (up to 50 groups x 50 identifiers per Braze's documented limit); setting subscription_state to unsubscribed on a transactional-adjacent group can stop legally-required or expected communications reaching those users",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/subscription/status/set"
+        }
+      ],
+      "examples": [
+        "pm braze set subscription status v2 apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.V2SubscriptionStatusSet69; writes.json action set_subscription_status_v2 is the declared method/path/body execution component."
+    },
+    {
+      "path": "sms-invalid-phone-numbers list",
+      "summary": "Read Sms Invalid Phone Numbers as Braze ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sms_invalid_phone_numbers",
+      "source_cli_path": "GET /sms/invalid_phone_numbers",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sms/invalid_phone_numbers"
+        }
+      ],
+      "examples": [
+        "pm braze sms-invalid-phone-numbers list --json"
+      ],
+      "notes": "Pinned source operation braze.rest.get.SmsInvalidPhoneNumbers65 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "track users apply",
+      "summary": "Plan and execute the typed track users write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "track_users",
+      "source_cli_path": "POST /users/track",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "attributes",
+          "summary": "Optional attributes record field.",
+          "maps_to": "record.attributes",
+          "type": "json"
+        },
+        {
+          "name": "events",
+          "summary": "Optional events record field.",
+          "maps_to": "record.events",
+          "type": "json"
+        },
+        {
+          "name": "purchases",
+          "summary": "Optional purchases record field.",
+          "maps_to": "record.purchases",
+          "type": "json"
+        }
+      ],
+      "risk": "records user attribute/event/purchase data in bulk (up to 75 events/attributes/purchases per request per Braze's documented limit); an external user_id or user_alias in the record is the ONLY way Braze correlates the update to a user, so a mistargeted identifier silently attaches data to the wrong (or a newly-created) user profile",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/track"
+        }
+      ],
+      "examples": [
+        "pm braze track users apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.UsersTrack86; writes.json action track_users is the declared method/path/body execution component."
+    },
+    {
+      "path": "trigger campaign send apply",
+      "summary": "Plan and execute the typed trigger campaign send write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "trigger_campaign_send",
+      "source_cli_path": "POST /campaigns/trigger/send",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "audience",
+          "summary": "Optional audience record field.",
+          "maps_to": "record.audience",
+          "type": "json"
+        },
+        {
+          "name": "broadcast",
+          "summary": "Optional broadcast record field.",
+          "maps_to": "record.broadcast",
+          "type": "boolean"
+        },
+        {
+          "name": "campaign_id",
+          "summary": "Required campaign id record field.",
+          "maps_to": "record.campaign_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "recipients",
+          "summary": "Optional recipients record field.",
+          "maps_to": "record.recipients",
+          "type": "json"
+        },
+        {
+          "name": "send_id",
+          "summary": "Optional send id record field.",
+          "maps_to": "record.send_id",
+          "type": "string"
+        },
+        {
+          "name": "trigger_properties",
+          "summary": "Optional trigger properties record field.",
+          "maps_to": "record.trigger_properties",
+          "type": "json"
+        }
+      ],
+      "risk": "immediately dispatches an existing API-triggered campaign to the specified recipients/audience; irreversible once dispatched, always confirm the recipients/audience scope before use",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns/trigger/send"
+        }
+      ],
+      "examples": [
+        "pm braze trigger campaign send apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.CampaignsTriggerSend87; writes.json action trigger_campaign_send is the declared method/path/body execution component."
+    },
+    {
+      "path": "trigger canvas send apply",
+      "summary": "Plan and execute the typed trigger canvas send write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "trigger_canvas_send",
+      "source_cli_path": "POST /canvas/trigger/send",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "audience",
+          "summary": "Optional audience record field.",
+          "maps_to": "record.audience",
+          "type": "json"
+        },
+        {
+          "name": "broadcast",
+          "summary": "Optional broadcast record field.",
+          "maps_to": "record.broadcast",
+          "type": "boolean"
+        },
+        {
+          "name": "canvas_entry_properties",
+          "summary": "Optional canvas entry properties record field.",
+          "maps_to": "record.canvas_entry_properties",
+          "type": "json"
+        },
+        {
+          "name": "canvas_id",
+          "summary": "Required canvas id record field.",
+          "maps_to": "record.canvas_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "recipients",
+          "summary": "Optional recipients record field.",
+          "maps_to": "record.recipients",
+          "type": "json"
+        }
+      ],
+      "risk": "immediately enters the specified recipients/audience into an existing API-triggered Canvas; irreversible once dispatched, always confirm the recipients/audience scope before use",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/canvas/trigger/send"
+        }
+      ],
+      "examples": [
+        "pm braze trigger canvas send apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.CanvasTriggerSend91; writes.json action trigger_canvas_send is the declared method/path/body execution component."
+    },
+    {
+      "path": "update catalog item apply",
+      "summary": "Plan and execute the typed update catalog item write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_catalog_item",
+      "source_cli_path": "PATCH /catalogs/{catalog_name}/items/{item_id}",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "catalog_name",
+          "summary": "Required catalog name record field.",
+          "maps_to": "record.catalog_name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "item_id",
+          "summary": "Required item id record field.",
+          "maps_to": "record.item_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "items",
+          "summary": "Required items record field.",
+          "maps_to": "record.items",
+          "required": true,
+          "type": "json"
+        }
+      ],
+      "risk": "partially updates a single existing catalog row; any Connected Content template or campaign personalization reading this catalog reflects the new value on its next fetch",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/catalogs/{catalog_name}/items/{item_id}"
+        }
+      ],
+      "examples": [
+        "pm braze update catalog item apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.patch.CatalogsCatalogNameItemsItemId18; writes.json action update_catalog_item is the declared method/path/body execution component."
+    },
+    {
+      "path": "update catalog items apply",
+      "summary": "Plan and execute the typed update catalog items write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_catalog_items",
+      "source_cli_path": "PATCH /catalogs/{catalog_name}/items",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "catalog_name",
+          "summary": "Required catalog name record field.",
+          "maps_to": "record.catalog_name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "items",
+          "summary": "Required items record field.",
+          "maps_to": "record.items",
+          "required": true,
+          "type": "json"
+        }
+      ],
+      "risk": "partially updates existing catalog rows in bulk by their id field; any Connected Content template or campaign personalization reading this catalog reflects the new values on its next fetch",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/catalogs/{catalog_name}/items"
+        }
+      ],
+      "examples": [
+        "pm braze update catalog items apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.patch.CatalogsCatalogNameItems13; writes.json action update_catalog_items is the declared method/path/body execution component."
+    },
+    {
+      "path": "update content block apply",
+      "summary": "Plan and execute the typed update content block write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_content_block",
+      "source_cli_path": "POST /content_blocks/update",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "content",
+          "summary": "Optional content record field.",
+          "maps_to": "record.content",
+          "type": "string"
+        },
+        {
+          "name": "content_block_id",
+          "summary": "Required content block id record field.",
+          "maps_to": "record.content_block_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "summary": "Optional description record field.",
+          "maps_to": "record.description",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Optional name record field.",
+          "maps_to": "record.name",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "summary": "Optional state record field.",
+          "maps_to": "record.state",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "summary": "Optional tags record field.",
+          "maps_to": "record.tags",
+          "type": "string_array"
+        }
+      ],
+      "risk": "mutates an existing Content Block's markup/text; changes are reflected in EVERY campaign/Canvas/template that includes this block on their next send, including already-scheduled sends",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/content_blocks/update"
+        }
+      ],
+      "examples": [
+        "pm braze update content block apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.ContentBlocksUpdate23; writes.json action update_content_block is the declared method/path/body execution component."
+    },
+    {
+      "path": "update email template apply",
+      "summary": "Plan and execute the typed update email template write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_email_template",
+      "source_cli_path": "POST /templates/email/update",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "body",
+          "summary": "Optional body record field.",
+          "maps_to": "record.body",
+          "type": "string"
+        },
+        {
+          "name": "email_template_id",
+          "summary": "Required email template id record field.",
+          "maps_to": "record.email_template_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "plaintext_body",
+          "summary": "Optional plaintext body record field.",
+          "maps_to": "record.plaintext_body",
+          "type": "string"
+        },
+        {
+          "name": "preheader",
+          "summary": "Optional preheader record field.",
+          "maps_to": "record.preheader",
+          "type": "string"
+        },
+        {
+          "name": "should_inline_css",
+          "summary": "Optional should inline css record field.",
+          "maps_to": "record.should_inline_css",
+          "type": "boolean"
+        },
+        {
+          "name": "subject",
+          "summary": "Optional subject record field.",
+          "maps_to": "record.subject",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "summary": "Optional tags record field.",
+          "maps_to": "record.tags",
+          "type": "string_array"
+        },
+        {
+          "name": "template_name",
+          "summary": "Optional template name record field.",
+          "maps_to": "record.template_name",
+          "type": "string"
+        }
+      ],
+      "risk": "mutates an existing email template's subject/body; changes are reflected in EVERY campaign using this template on its next send, including already-scheduled sends",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/templates/email/update"
+        }
+      ],
+      "examples": [
+        "pm braze update email template apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.TemplatesEmailUpdate74; writes.json action update_email_template is the declared method/path/body execution component."
+    },
+    {
+      "path": "update preference center apply",
+      "summary": "Plan and execute the typed update preference center write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_preference_center",
+      "source_cli_path": "PUT /preference_center/v1/{PreferenceCenterExternalID}",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "confirmation_page_html",
+          "summary": "Required confirmation page html record field.",
+          "maps_to": "record.confirmation_page_html",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "options",
+          "summary": "Optional options record field.",
+          "maps_to": "record.options",
+          "type": "json"
+        },
+        {
+          "name": "preference_center_external_id",
+          "summary": "Required preference center external id record field.",
+          "maps_to": "record.preference_center_external_id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "preference_center_page_html",
+          "summary": "Required preference center page html record field.",
+          "maps_to": "record.preference_center_page_html",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "preference_center_title",
+          "summary": "Required preference center title record field.",
+          "maps_to": "record.preference_center_title",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "overwrites an already-live, externally-reachable preference center page's HTML/title; visible to any end user who visits the page immediately after this runs",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/preference_center/v1/{PreferenceCenterExternalID}"
+        }
+      ],
+      "examples": [
+        "pm braze update preference center apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.put.PreferenceCenterV1PreferenceCenterExternalID49; writes.json action update_preference_center is the declared method/path/body execution component."
+    },
+    {
+      "path": "update user alias apply",
+      "summary": "Plan and execute the typed update user alias write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user_alias",
+      "source_cli_path": "POST /users/alias/update",
+      "source_url": "https://www.braze.com/docs/api/home/",
+      "flags": [
+        {
+          "name": "alias_updates",
+          "summary": "Required alias updates record field.",
+          "maps_to": "record.alias_updates",
+          "required": true,
+          "type": "json"
+        }
+      ],
+      "risk": "renames an existing alias identifier on a user profile; any external system correlating users by the old alias_name stops matching after this runs",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/alias/update"
+        }
+      ],
+      "examples": [
+        "pm braze update user alias apply --json"
+      ],
+      "notes": "Pinned source operation braze.rest.post.UsersAliasUpdate77; writes.json action update_user_alias is the declared method/path/body execution component."
     }
   ]
 }

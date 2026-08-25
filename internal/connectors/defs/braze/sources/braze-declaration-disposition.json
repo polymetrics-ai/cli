@@ -47,7 +47,7 @@
     ],
     "stream_bindings": 21,
     "writes_actions": 29,
-    "terminal_commands": 21,
+    "terminal_commands": 50,
     "live_certification": "pending",
     "gap_ids": [],
     "foundation_gaps": [],
@@ -83,9 +83,9 @@
         "count": 45
       }
     ],
-    "runnable_cli_surface_commands": 21,
+    "runnable_cli_surface_commands": 50,
     "typed_write_actions": 29,
-    "endpoint_bound_cli_commands": 21,
+    "endpoint_bound_cli_commands": 50,
     "endpoint_bound_typed_write_actions": 29
   },
   "source_only_dispositions": [],
@@ -94,7 +94,8 @@
     "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
     "Typed write actions remain direct_write. Their reverse-ETL eligibility is a separate destination capability blocked by the connector-neutral executor gap; no transport binding or action was invented.",
     "2026-08-20 reconciliation: source transport declares all 21 current fixture streams; update_content_block is the exact typed-destination proof. The source inventory remains unproven pending public provider inventory recovery. Every other typed action is explicitly eligible pending closed exact-action selection; direct writes without typed actions are declaration-pending.",
-    "2026-08-25 declaration-first ETL command materialization: enabled 21 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
+    "2026-08-25 declaration-first ETL command materialization: enabled 21 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists.",
+    "2026-08-25 typed write CLI materialization: 29 source-backed action commands are installed with writes.json-owned input/method/path contracts; 0 actions remain explicit CLI declaration-pending because their record field contract cannot be represented faithfully by the established command flag vocabulary."
   ],
   "ledger_dispositions": [
     {
@@ -492,14 +493,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[8] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"create catalog apply\" binds typed write action create_catalog to POST /catalogs; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "create_catalog"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_catalog is reachable through implemented CLI command \"create catalog apply\"",
         "contract": {
           "write": "create_catalog"
         },
@@ -507,6 +508,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create catalog apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_catalog",
+          "source_cli_path": "POST /catalogs",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -533,14 +542,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[9] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"delete catalog apply\" binds typed write action delete_catalog to DELETE /catalogs/{catalog_name}; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "delete_catalog"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_catalog is reachable through implemented CLI command \"delete catalog apply\"",
         "contract": {
           "write": "delete_catalog"
         },
@@ -548,6 +557,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete catalog apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_catalog",
+          "source_cli_path": "DELETE /catalogs/{catalog_name}",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -613,14 +630,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[11] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"create catalog items apply\" binds typed write action create_catalog_items to POST /catalogs/{catalog_name}/items; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "create_catalog_items"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_catalog_items is reachable through implemented CLI command \"create catalog items apply\"",
         "contract": {
           "write": "create_catalog_items"
         },
@@ -628,6 +645,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create catalog items apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_catalog_items",
+          "source_cli_path": "POST /catalogs/{catalog_name}/items",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -698,14 +723,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[13] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"update catalog items apply\" binds typed write action update_catalog_items to PATCH /catalogs/{catalog_name}/items; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "update_catalog_items"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_catalog_items is reachable through implemented CLI command \"update catalog items apply\"",
         "contract": {
           "write": "update_catalog_items"
         },
@@ -713,6 +738,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update catalog items apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_catalog_items",
+          "source_cli_path": "PATCH /catalogs/{catalog_name}/items",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -910,14 +943,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[18] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"update catalog item apply\" binds typed write action update_catalog_item to PATCH /catalogs/{catalog_name}/items/{item_id}; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "update_catalog_item"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_catalog_item is reachable through implemented CLI command \"update catalog item apply\"",
         "contract": {
           "write": "update_catalog_item"
         },
@@ -925,6 +958,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update catalog item apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_catalog_item",
+          "source_cli_path": "PATCH /catalogs/{catalog_name}/items/{item_id}",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -951,14 +992,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[19] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"delete catalog item apply\" binds typed write action delete_catalog_item to DELETE /catalogs/{catalog_name}/items/{item_id}; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "delete_catalog_item"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_catalog_item is reachable through implemented CLI command \"delete catalog item apply\"",
         "contract": {
           "write": "delete_catalog_item"
         },
@@ -966,6 +1007,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete catalog item apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_catalog_item",
+          "source_cli_path": "DELETE /catalogs/{catalog_name}/items/{item_id}",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -992,14 +1041,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[20] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"create content block apply\" binds typed write action create_content_block to POST /content_blocks/create; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "create_content_block"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_content_block is reachable through implemented CLI command \"create content block apply\"",
         "contract": {
           "write": "create_content_block"
         },
@@ -1007,6 +1056,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create content block apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_content_block",
+          "source_cli_path": "POST /content_blocks/create",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -1121,14 +1178,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[23] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"update content block apply\" binds typed write action update_content_block to POST /content_blocks/update; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "update_content_block"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_content_block is reachable through implemented CLI command \"update content block apply\"",
         "contract": {
           "write": "update_content_block"
         },
@@ -1136,6 +1193,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "The closed declarative typed-destination contract rejects the prior branch-only declaration: it selected full_overwrite and lacked the action-owned per-record batch, provider receipt locator, and read-back conformance evidence. The direct typed write remains enabled; reverse ETL is connector-owned declaration work, not a foundation gap."
+        },
+        "command": {
+          "path": "update content block apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_content_block",
+          "source_cli_path": "POST /content_blocks/update",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -1206,14 +1271,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[25] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"create email blocklist apply\" binds typed write action create_email_blocklist to POST /email/blocklist; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "create_email_blocklist"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_email_blocklist is reachable through implemented CLI command \"create email blocklist apply\"",
         "contract": {
           "write": "create_email_blocklist"
         },
@@ -1221,6 +1286,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create email blocklist apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_email_blocklist",
+          "source_cli_path": "POST /email/blocklist",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -1247,14 +1320,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[26] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"remove email hard bounce apply\" binds typed write action remove_email_hard_bounce to POST /email/bounce/remove; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "remove_email_hard_bounce"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action remove_email_hard_bounce is reachable through implemented CLI command \"remove email hard bounce apply\"",
         "contract": {
           "write": "remove_email_hard_bounce"
         },
@@ -1262,6 +1335,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "remove email hard bounce apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "remove_email_hard_bounce",
+          "source_cli_path": "POST /email/bounce/remove",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -1337,14 +1418,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[28] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"remove email spam apply\" binds typed write action remove_email_spam to POST /email/spam/remove; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "remove_email_spam"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action remove_email_spam is reachable through implemented CLI command \"remove email spam apply\"",
         "contract": {
           "write": "remove_email_spam"
         },
@@ -1352,6 +1433,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "remove email spam apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "remove_email_spam",
+          "source_cli_path": "POST /email/spam/remove",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -1378,14 +1467,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[29] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"set email subscription status apply\" binds typed write action set_email_subscription_status to POST /email/status; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "set_email_subscription_status"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action set_email_subscription_status is reachable through implemented CLI command \"set email subscription status apply\"",
         "contract": {
           "write": "set_email_subscription_status"
         },
@@ -1393,6 +1482,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "set email subscription status apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "set_email_subscription_status",
+          "source_cli_path": "POST /email/status",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -2094,14 +2191,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[45] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"send message apply\" binds typed write action send_message to POST /messages/send; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "send_message"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action send_message is reachable through implemented CLI command \"send message apply\"",
         "contract": {
           "write": "send_message"
         },
@@ -2109,6 +2206,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "send message apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "send_message",
+          "source_cli_path": "POST /messages/send",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -2135,14 +2240,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[46] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"create preference center apply\" binds typed write action create_preference_center to POST /preference_center/v1; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "create_preference_center"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_preference_center is reachable through implemented CLI command \"create preference center apply\"",
         "contract": {
           "write": "create_preference_center"
         },
@@ -2150,6 +2255,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create preference center apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_preference_center",
+          "source_cli_path": "POST /preference_center/v1",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -2264,14 +2377,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[49] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"update preference center apply\" binds typed write action update_preference_center to PUT /preference_center/v1/{PreferenceCenterExternalID}; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "update_preference_center"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_preference_center is reachable through implemented CLI command \"update preference center apply\"",
         "contract": {
           "write": "update_preference_center"
         },
@@ -2279,6 +2392,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update preference center apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_preference_center",
+          "source_cli_path": "PUT /preference_center/v1/{PreferenceCenterExternalID}",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -2989,14 +3110,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[66] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"remove sms invalid phone numbers apply\" binds typed write action remove_sms_invalid_phone_numbers to POST /sms/invalid_phone_numbers/remove; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "remove_sms_invalid_phone_numbers"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action remove_sms_invalid_phone_numbers is reachable through implemented CLI command \"remove sms invalid phone numbers apply\"",
         "contract": {
           "write": "remove_sms_invalid_phone_numbers"
         },
@@ -3004,6 +3125,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "remove sms invalid phone numbers apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "remove_sms_invalid_phone_numbers",
+          "source_cli_path": "POST /sms/invalid_phone_numbers/remove",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -3113,14 +3242,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[69] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"set subscription status v2 apply\" binds typed write action set_subscription_status_v2 to POST /v2/subscription/status/set; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "set_subscription_status_v2"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action set_subscription_status_v2 is reachable through implemented CLI command \"set subscription status v2 apply\"",
         "contract": {
           "write": "set_subscription_status_v2"
         },
@@ -3128,6 +3257,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "set subscription status v2 apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "set_subscription_status_v2",
+          "source_cli_path": "POST /v2/subscription/status/set",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -3281,14 +3418,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[73] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"create email template apply\" binds typed write action create_email_template to POST /templates/email/create; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "create_email_template"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_email_template is reachable through implemented CLI command \"create email template apply\"",
         "contract": {
           "write": "create_email_template"
         },
@@ -3296,6 +3433,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create email template apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_email_template",
+          "source_cli_path": "POST /templates/email/create",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -3322,14 +3467,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[74] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"update email template apply\" binds typed write action update_email_template to POST /templates/email/update; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "update_email_template"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_email_template is reachable through implemented CLI command \"update email template apply\"",
         "contract": {
           "write": "update_email_template"
         },
@@ -3337,6 +3482,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update email template apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_email_template",
+          "source_cli_path": "POST /templates/email/update",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -3407,14 +3560,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[76] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"create user alias apply\" binds typed write action create_user_alias to POST /users/alias/new; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "create_user_alias"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_user_alias is reachable through implemented CLI command \"create user alias apply\"",
         "contract": {
           "write": "create_user_alias"
         },
@@ -3422,6 +3575,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create user alias apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_user_alias",
+          "source_cli_path": "POST /users/alias/new",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -3448,14 +3609,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[77] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"update user alias apply\" binds typed write action update_user_alias to POST /users/alias/update; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "update_user_alias"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_user_alias is reachable through implemented CLI command \"update user alias apply\"",
         "contract": {
           "write": "update_user_alias"
         },
@@ -3463,6 +3624,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update user alias apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_user_alias",
+          "source_cli_path": "POST /users/alias/update",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -3489,14 +3658,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[78] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"delete users apply\" binds typed write action delete_users to POST /users/delete; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "delete_users"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_users is reachable through implemented CLI command \"delete users apply\"",
         "contract": {
           "write": "delete_users"
         },
@@ -3504,6 +3673,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete users apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_users",
+          "source_cli_path": "POST /users/delete",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -3662,14 +3839,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[82] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"remove user external ids apply\" binds typed write action remove_user_external_ids to POST /users/external_ids/remove; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "remove_user_external_ids"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action remove_user_external_ids is reachable through implemented CLI command \"remove user external ids apply\"",
         "contract": {
           "write": "remove_user_external_ids"
         },
@@ -3677,6 +3854,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "remove user external ids apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "remove_user_external_ids",
+          "source_cli_path": "POST /users/external_ids/remove",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -3703,14 +3888,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[83] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"rename user external ids apply\" binds typed write action rename_user_external_ids to POST /users/external_ids/rename; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "rename_user_external_ids"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action rename_user_external_ids is reachable through implemented CLI command \"rename user external ids apply\"",
         "contract": {
           "write": "rename_user_external_ids"
         },
@@ -3718,6 +3903,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "rename user external ids apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "rename_user_external_ids",
+          "source_cli_path": "POST /users/external_ids/rename",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -3744,14 +3937,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[84] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"identify users apply\" binds typed write action identify_users to POST /users/identify; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "identify_users"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action identify_users is reachable through implemented CLI command \"identify users apply\"",
         "contract": {
           "write": "identify_users"
         },
@@ -3759,6 +3952,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "identify users apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "identify_users",
+          "source_cli_path": "POST /users/identify",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -3785,14 +3986,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[85] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"merge users apply\" binds typed write action merge_users to POST /users/merge; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "merge_users"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action merge_users is reachable through implemented CLI command \"merge users apply\"",
         "contract": {
           "write": "merge_users"
         },
@@ -3800,6 +4001,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "merge users apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "merge_users",
+          "source_cli_path": "POST /users/merge",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -3826,14 +4035,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[86] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"track users apply\" binds typed write action track_users to POST /users/track; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "track_users"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action track_users is reachable through implemented CLI command \"track users apply\"",
         "contract": {
           "write": "track_users"
         },
@@ -3841,6 +4050,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "track users apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "track_users",
+          "source_cli_path": "POST /users/track",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -3867,14 +4084,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[87] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"trigger campaign send apply\" binds typed write action trigger_campaign_send to POST /campaigns/trigger/send; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "trigger_campaign_send"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action trigger_campaign_send is reachable through implemented CLI command \"trigger campaign send apply\"",
         "contract": {
           "write": "trigger_campaign_send"
         },
@@ -3882,6 +4099,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "trigger campaign send apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "trigger_campaign_send",
+          "source_cli_path": "POST /campaigns/trigger/send",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },
@@ -4040,14 +4265,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "internal/connectors/defs/braze/api_surface.json endpoints[91] has a runnable typed write action binding for the pinned source operation.",
+        "evidence": "internal/connectors/defs/braze/cli_surface.json: implemented command \"trigger canvas send apply\" binds typed write action trigger_canvas_send to POST /canvas/trigger/send; writes.json remains the fixed request/body contract.",
         "contract": {
           "write": "trigger_canvas_send"
         }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action trigger_canvas_send is reachable through implemented CLI command \"trigger canvas send apply\"",
         "contract": {
           "write": "trigger_canvas_send"
         },
@@ -4055,6 +4280,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "trigger canvas send apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "trigger_canvas_send",
+          "source_cli_path": "POST /canvas/trigger/send",
+          "source_url": "https://www.braze.com/docs/api/home/"
         }
       }
     },

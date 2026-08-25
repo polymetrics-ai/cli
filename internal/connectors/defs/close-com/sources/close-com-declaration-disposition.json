@@ -56,7 +56,7 @@
     ],
     "stream_bindings": 14,
     "writes_actions": 12,
-    "terminal_commands": 14,
+    "terminal_commands": 26,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
@@ -91,9 +91,9 @@
         "count": 274
       }
     ],
-    "runnable_cli_surface_commands": 14,
+    "runnable_cli_surface_commands": 26,
     "typed_write_actions": 12,
-    "endpoint_bound_cli_commands": 14,
+    "endpoint_bound_cli_commands": 26,
     "endpoint_bound_typed_write_actions": 12
   },
   "ledger_dispositions": [
@@ -870,11 +870,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented command \"delete contact apply\" binds typed write action delete_contact to DELETE /contact/{id}/; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_contact"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_contact is reachable through implemented CLI command \"delete contact apply\"",
         "contract": {
           "write": "delete_contact"
         },
@@ -882,6 +885,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete contact apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_contact",
+          "source_cli_path": "DELETE /contact/{id}/",
+          "source_url": "https://api.close.com/api/openapi.json"
         }
       }
     },
@@ -1608,11 +1619,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented command \"delete lead apply\" binds typed write action delete_lead to DELETE /lead/{id}/; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_lead"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_lead is reachable through implemented CLI command \"delete lead apply\"",
         "contract": {
           "write": "delete_lead"
         },
@@ -1620,6 +1634,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete lead apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_lead",
+          "source_cli_path": "DELETE /lead/{id}/",
+          "source_url": "https://api.close.com/api/openapi.json"
         }
       }
     },
@@ -1696,11 +1718,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented command \"delete opportunity apply\" binds typed write action delete_opportunity to DELETE /opportunity/{id}/; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_opportunity"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_opportunity is reachable through implemented CLI command \"delete opportunity apply\"",
         "contract": {
           "write": "delete_opportunity"
         },
@@ -1708,6 +1733,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete opportunity apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_opportunity",
+          "source_cli_path": "DELETE /opportunity/{id}/",
+          "source_url": "https://api.close.com/api/openapi.json"
         }
       }
     },
@@ -2534,11 +2567,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented command \"delete task apply\" binds typed write action delete_task to DELETE /task/{id}/; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "delete_task"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action delete_task is reachable through implemented CLI command \"delete task apply\"",
         "contract": {
           "write": "delete_task"
         },
@@ -2546,6 +2582,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "delete task apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "delete_task",
+          "source_cli_path": "DELETE /task/{id}/",
+          "source_url": "https://api.close.com/api/openapi.json"
         }
       }
     },
@@ -9643,11 +9687,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented command \"create contact apply\" binds typed write action create_contact to POST /contact/; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_contact"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_contact is reachable through implemented CLI command \"create contact apply\"",
         "contract": {
           "write": "create_contact"
         },
@@ -9655,6 +9702,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create contact apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_contact",
+          "source_cli_path": "POST /contact/",
+          "source_url": "https://api.close.com/api/openapi.json"
         }
       }
     },
@@ -10581,11 +10636,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented command \"create lead apply\" binds typed write action create_lead to POST /lead/; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_lead"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_lead is reachable through implemented CLI command \"create lead apply\"",
         "contract": {
           "write": "create_lead"
         },
@@ -10593,6 +10651,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create lead apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_lead",
+          "source_cli_path": "POST /lead/",
+          "source_url": "https://api.close.com/api/openapi.json"
         }
       }
     },
@@ -10719,11 +10785,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented command \"create opportunity apply\" binds typed write action create_opportunity to POST /opportunity/; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_opportunity"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_opportunity is reachable through implemented CLI command \"create opportunity apply\"",
         "contract": {
           "write": "create_opportunity"
         },
@@ -10731,6 +10800,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create opportunity apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_opportunity",
+          "source_cli_path": "POST /opportunity/",
+          "source_url": "https://api.close.com/api/openapi.json"
         }
       }
     },
@@ -11907,11 +11984,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented command \"create task apply\" binds typed write action create_task to POST /task/; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "create_task"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action create_task is reachable through implemented CLI command \"create task apply\"",
         "contract": {
           "write": "create_task"
         },
@@ -11919,6 +11999,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "create task apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "create_task",
+          "source_cli_path": "POST /task/",
+          "source_url": "https://api.close.com/api/openapi.json"
         }
       }
     },
@@ -12545,11 +12633,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented command \"update contact apply\" binds typed write action update_contact to PUT /contact/{id}/; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_contact"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_contact is reachable through implemented CLI command \"update contact apply\"",
         "contract": {
           "write": "update_contact"
         },
@@ -12557,6 +12648,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update contact apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_contact",
+          "source_cli_path": "PUT /contact/{id}/",
+          "source_url": "https://api.close.com/api/openapi.json"
         }
       }
     },
@@ -13283,11 +13382,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented command \"update lead apply\" binds typed write action update_lead to PUT /lead/{id}/; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_lead"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_lead is reachable through implemented CLI command \"update lead apply\"",
         "contract": {
           "write": "update_lead"
         },
@@ -13295,6 +13397,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "The closed declarative typed-destination contract rejects the prior branch-only declaration: it selected full_overwrite and lacked the action-owned per-record batch, provider receipt locator, and read-back conformance evidence. The direct typed write remains enabled; reverse ETL is connector-owned declaration work, not a foundation gap."
+        },
+        "command": {
+          "path": "update lead apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_lead",
+          "source_cli_path": "PUT /lead/{id}/",
+          "source_url": "https://api.close.com/api/openapi.json"
         }
       }
     },
@@ -13471,11 +13581,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented command \"update opportunity apply\" binds typed write action update_opportunity to PUT /opportunity/{id}/; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_opportunity"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_opportunity is reachable through implemented CLI command \"update opportunity apply\"",
         "contract": {
           "write": "update_opportunity"
         },
@@ -13483,6 +13596,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update opportunity apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_opportunity",
+          "source_cli_path": "PUT /opportunity/{id}/",
+          "source_url": "https://api.close.com/api/openapi.json"
         }
       }
     },
@@ -14259,11 +14380,14 @@
       "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "The connector-owned executable declaration is bound to this exact pinned source operation."
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented command \"update task apply\" binds typed write action update_task to PUT /task/{id}/; writes.json remains the fixed request/body contract.",
+        "contract": {
+          "write": "update_task"
+        }
       },
       "rejection": null,
       "declaration": {
-        "status": "enabled; runnable typed write action binds the pinned source contract",
+        "status": "enabled; typed direct-write action update_task is reachable through implemented CLI command \"update task apply\"",
         "contract": {
           "write": "update_task"
         },
@@ -14271,6 +14395,14 @@
           "eligible_typed_action": true,
           "state": "eligible_declaration_pending",
           "reason": "#4304 exact persisted action selection is available; this connector still needs the action-specific source mapping, fixture, and conformance evidence."
+        },
+        "command": {
+          "path": "update task apply",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "write": "update_task",
+          "source_cli_path": "PUT /task/{id}/",
+          "source_url": "https://api.close.com/api/openapi.json"
         }
       }
     },
@@ -14331,6 +14463,7 @@
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
     "Direct writes remain direct_write operations. Reverse-ETL eligibility is a separate attribute and remains foundation-gapped because destination execution is GitHub issue-label bound.",
     "2026-08-20 reconciliation: source transport declares all 14 streams; update_lead is the exact typed-destination proof. Every other typed action is explicitly eligible pending closed exact-action selection. Direct writes without a typed action are declaration-pending, not a foundation or safety gap.",
-    "2026-08-25 declaration-first ETL command materialization: enabled 14 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
+    "2026-08-25 declaration-first ETL command materialization: enabled 14 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists.",
+    "2026-08-25 typed write CLI materialization: 12 source-backed action commands are installed with writes.json-owned input/method/path contracts; 0 actions remain explicit CLI declaration-pending because their record field contract cannot be represented faithfully by the established command flag vocabulary."
   ]
 }

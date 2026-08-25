@@ -116,3 +116,17 @@ The current portfolio split is **807 enabled**, **3,119 declaration-pending**, *
 **1 provider-contract-unavailable**. The pending state is not a safety, privilege, destructive, or live-
 certification exclusion. It is either connector declaration work with its exact execution component named,
 or the common schema-v3 source-projection reader prerequisite for global generated checks.
+
+## Increment 9 — typed direct-write command reachability
+
+The 92 installed typed action plans correct a prior evidence-only claim: Close (12), Zoho Bigin (6),
+Braze (29), Customer.io (9), and Chargebee (36) now have command paths, record-field flags, provider
+method/route citations, and `writes.json` execution components. They are direct-write capabilities whose
+separate reverse-ETL destination cells remain declaration-pending until an exact destination declaration,
+mode, acknowledgement, read-back, conformance evidence, and execution test exist.
+
+Customer.io's documented `send_email` action is not omitted: it records the intended `send email apply`
+path and its typed-action component as CLI declaration-pending because `transactional_message_id` has no
+type in the existing `writes.json` schema. Supplying an arbitrary body or choosing a type would violate the
+declared-contract boundary. Provider-live certification remains pending for every action in this credential-
+free lane.

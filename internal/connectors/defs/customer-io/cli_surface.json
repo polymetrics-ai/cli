@@ -29,6 +29,21 @@
         "workspaces",
         "collections"
       ]
+    },
+    {
+      "id": "writes",
+      "title": "Typed write plans",
+      "commands": [
+        "create snippet apply",
+        "update snippet apply",
+        "delete snippet apply",
+        "create reporting webhook apply",
+        "update reporting webhook apply",
+        "delete reporting webhook apply",
+        "create manual segment apply",
+        "delete manual segment apply",
+        "trigger broadcast apply"
+      ]
     }
   ],
   "global_flags": [
@@ -60,61 +75,23 @@
   ],
   "commands": [
     {
-      "path": "campaigns list",
-      "summary": "Read Campaigns as Customer-io ETL records.",
+      "path": "activities list",
+      "summary": "Read Activities as Customer-io ETL records.",
       "intent": "etl",
       "availability": "implemented",
-      "stream": "campaigns",
-      "source_cli_path": "GET /v1/campaigns",
+      "stream": "activities",
+      "source_cli_path": "GET /v1/activities",
       "source_url": "https://docs.customer.io/files/journeys-app.json",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/v1/campaigns"
+          "path": "/v1/activities"
         }
       ],
       "examples": [
-        "pm customer-io campaigns list --json"
+        "pm customer-io activities list --json"
       ],
-      "notes": "Pinned source operation customer-io.rest.get.ListCampaigns30 from source document primary; streams.json is the declared execution component."
-    },
-    {
-      "path": "newsletters list",
-      "summary": "Read Newsletters as Customer-io ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "newsletters",
-      "source_cli_path": "GET /v1/newsletters",
-      "source_url": "https://docs.customer.io/files/journeys-app.json",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v1/newsletters"
-        }
-      ],
-      "examples": [
-        "pm customer-io newsletters list --json"
-      ],
-      "notes": "Pinned source operation customer-io.rest.get.ListNewsletters74 from source document primary; streams.json is the declared execution component."
-    },
-    {
-      "path": "segments list",
-      "summary": "Read Segments as Customer-io ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "segments",
-      "source_cli_path": "GET /v1/segments",
-      "source_url": "https://docs.customer.io/files/journeys-app.json",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v1/segments"
-        }
-      ],
-      "examples": [
-        "pm customer-io segments list --json"
-      ],
-      "notes": "Pinned source operation customer-io.rest.get.ListSegments92 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation customer-io.rest.get.ListActivities14 from source document primary; streams.json is the declared execution component."
     },
     {
       "path": "broadcasts list",
@@ -136,42 +113,261 @@
       "notes": "Pinned source operation customer-io.rest.get.ListBroadcasts19 from source document primary; streams.json is the declared execution component."
     },
     {
-      "path": "activities list",
-      "summary": "Read Activities as Customer-io ETL records.",
+      "path": "campaigns list",
+      "summary": "Read Campaigns as Customer-io ETL records.",
       "intent": "etl",
       "availability": "implemented",
-      "stream": "activities",
-      "source_cli_path": "GET /v1/activities",
+      "stream": "campaigns",
+      "source_cli_path": "GET /v1/campaigns",
       "source_url": "https://docs.customer.io/files/journeys-app.json",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/v1/activities"
+          "path": "/v1/campaigns"
         }
       ],
       "examples": [
-        "pm customer-io activities list --json"
+        "pm customer-io campaigns list --json"
       ],
-      "notes": "Pinned source operation customer-io.rest.get.ListActivities14 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation customer-io.rest.get.ListCampaigns30 from source document primary; streams.json is the declared execution component."
     },
     {
-      "path": "messages list",
-      "summary": "Read Messages as Customer-io ETL records.",
+      "path": "collections list",
+      "summary": "Read Collections as Customer-io ETL records.",
       "intent": "etl",
       "availability": "implemented",
-      "stream": "messages",
-      "source_cli_path": "GET /v1/messages",
+      "stream": "collections",
+      "source_cli_path": "GET /v1/collections",
       "source_url": "https://docs.customer.io/files/journeys-app.json",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/v1/messages"
+          "path": "/v1/collections"
         }
       ],
       "examples": [
-        "pm customer-io messages list --json"
+        "pm customer-io collections list --json"
       ],
-      "notes": "Pinned source operation customer-io.rest.get.ListMessages71 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation customer-io.rest.get.GetCollections43 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "create manual segment apply",
+      "summary": "Plan and execute the typed create manual segment write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_manual_segment",
+      "source_cli_path": "POST /v1/segments",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "segment",
+          "summary": "Required segment record field.",
+          "maps_to": "record.segment",
+          "required": true,
+          "type": "json"
+        }
+      ],
+      "risk": "external mutation; creates a new manual segment in the live workspace",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/segments"
+        }
+      ],
+      "examples": [
+        "pm customer-io create manual segment apply --json"
+      ],
+      "notes": "Pinned source operation customer-io.rest.post.CreateManSegment139; writes.json action create_manual_segment is the declared method/path/body execution component."
+    },
+    {
+      "path": "create reporting webhook apply",
+      "summary": "Plan and execute the typed create reporting webhook write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_reporting_webhook",
+      "source_cli_path": "POST /v1/reporting_webhooks",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "disabled",
+          "summary": "Optional disabled record field.",
+          "maps_to": "record.disabled",
+          "type": "boolean"
+        },
+        {
+          "name": "endpoint",
+          "summary": "Required endpoint record field.",
+          "maps_to": "record.endpoint",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "events",
+          "summary": "Required events record field.",
+          "maps_to": "record.events",
+          "required": true,
+          "type": "string_array"
+        },
+        {
+          "name": "full_resolution",
+          "summary": "Optional full resolution record field.",
+          "maps_to": "record.full_resolution",
+          "type": "boolean"
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "with_content",
+          "summary": "Optional with content record field.",
+          "maps_to": "record.with_content",
+          "type": "boolean"
+        }
+      ],
+      "risk": "external mutation; registers a new reporting webhook that will deliver live workspace event data to the given endpoint URL",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/reporting_webhooks"
+        }
+      ],
+      "examples": [
+        "pm customer-io create reporting webhook apply --json"
+      ],
+      "notes": "Pinned source operation customer-io.rest.post.CreateWebhook138; writes.json action create_reporting_webhook is the declared method/path/body execution component."
+    },
+    {
+      "path": "create snippet apply",
+      "summary": "Plan and execute the typed create snippet write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_snippet",
+      "source_cli_path": "POST /v1/snippets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; creates a reusable content snippet referenced by live messages/newsletters",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/snippets"
+        }
+      ],
+      "examples": [
+        "pm customer-io create snippet apply --json"
+      ],
+      "notes": "Pinned source operation customer-io.rest.post.CreateSnippet145; writes.json action create_snippet is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete manual segment apply",
+      "summary": "Plan and execute the typed delete manual segment write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_manual_segment",
+      "source_cli_path": "DELETE /v1/segments/{segment_id}",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "integer"
+        }
+      ],
+      "risk": "external mutation; permanently removes a manual segment; irreversible, any campaign/newsletter targeting it loses that audience slice immediately; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/segments/{segment_id}"
+        }
+      ],
+      "examples": [
+        "pm customer-io delete manual segment apply --json"
+      ],
+      "notes": "Pinned source operation customer-io.rest.delete.DeleteManSegment12; writes.json action delete_manual_segment is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete reporting webhook apply",
+      "summary": "Plan and execute the typed delete reporting webhook write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_reporting_webhook",
+      "source_cli_path": "DELETE /v1/reporting_webhooks/{webhook_id}",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "integer"
+        }
+      ],
+      "risk": "external mutation; permanently removes a reporting webhook; event delivery to its target URL stops immediately; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/reporting_webhooks/{webhook_id}"
+        }
+      ],
+      "examples": [
+        "pm customer-io delete reporting webhook apply --json"
+      ],
+      "notes": "Pinned source operation customer-io.rest.delete.DeleteWebhook11; writes.json action delete_reporting_webhook is the declared method/path/body execution component."
+    },
+    {
+      "path": "delete snippet apply",
+      "summary": "Plan and execute the typed delete snippet write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_snippet",
+      "source_cli_path": "DELETE /v1/snippets/{snippet_name}",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; permanently removes a snippet; irreversible, breaks any message/newsletter still referencing it; approval required",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/snippets/{snippet_name}"
+        }
+      ],
+      "examples": [
+        "pm customer-io delete snippet apply --json"
+      ],
+      "notes": "Pinned source operation customer-io.rest.delete.DeleteSnippet13; writes.json action delete_snippet is the declared method/path/body execution component."
     },
     {
       "path": "exports list",
@@ -193,23 +389,42 @@
       "notes": "Pinned source operation customer-io.rest.get.ListExports65 from source document primary; streams.json is the declared execution component."
     },
     {
-      "path": "transactional list",
-      "summary": "Read Transactional as Customer-io ETL records.",
+      "path": "messages list",
+      "summary": "Read Messages as Customer-io ETL records.",
       "intent": "etl",
       "availability": "implemented",
-      "stream": "transactional",
-      "source_cli_path": "GET /v1/transactional",
+      "stream": "messages",
+      "source_cli_path": "GET /v1/messages",
       "source_url": "https://docs.customer.io/files/journeys-app.json",
       "api_surface": [
         {
           "method": "GET",
-          "path": "/v1/transactional"
+          "path": "/v1/messages"
         }
       ],
       "examples": [
-        "pm customer-io transactional list --json"
+        "pm customer-io messages list --json"
       ],
-      "notes": "Pinned source operation customer-io.rest.get.ListTransactional104 from source document primary; streams.json is the declared execution component."
+      "notes": "Pinned source operation customer-io.rest.get.ListMessages71 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "newsletters list",
+      "summary": "Read Newsletters as Customer-io ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "newsletters",
+      "source_cli_path": "GET /v1/newsletters",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/newsletters"
+        }
+      ],
+      "examples": [
+        "pm customer-io newsletters list --json"
+      ],
+      "notes": "Pinned source operation customer-io.rest.get.ListNewsletters74 from source document primary; streams.json is the declared execution component."
     },
     {
       "path": "object-types list",
@@ -248,6 +463,25 @@
         "pm customer-io reporting-webhooks list --json"
       ],
       "notes": "Pinned source operation customer-io.rest.get.ListWebhooks90 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "segments list",
+      "summary": "Read Segments as Customer-io ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segments",
+      "source_cli_path": "GET /v1/segments",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/segments"
+        }
+      ],
+      "examples": [
+        "pm customer-io segments list --json"
+      ],
+      "notes": "Pinned source operation customer-io.rest.get.ListSegments92 from source document primary; streams.json is the declared execution component."
     },
     {
       "path": "sender-identities list",
@@ -326,6 +560,185 @@
       "notes": "Pinned source operation customer-io.rest.get.GetTopics103 from source document primary; streams.json is the declared execution component."
     },
     {
+      "path": "transactional list",
+      "summary": "Read Transactional as Customer-io ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactional",
+      "source_cli_path": "GET /v1/transactional",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/transactional"
+        }
+      ],
+      "examples": [
+        "pm customer-io transactional list --json"
+      ],
+      "notes": "Pinned source operation customer-io.rest.get.ListTransactional104 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "trigger broadcast apply",
+      "summary": "Plan and execute the typed trigger broadcast write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "trigger_broadcast",
+      "source_cli_path": "POST /v1/campaigns/{broadcast_id}/triggers",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "broadcast_id",
+          "summary": "Required broadcast id record field.",
+          "maps_to": "record.broadcast_id",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "name": "data",
+          "summary": "Optional data record field.",
+          "maps_to": "record.data",
+          "type": "json"
+        },
+        {
+          "name": "email_add_duplicates",
+          "summary": "Optional email add duplicates record field.",
+          "maps_to": "record.email_add_duplicates",
+          "type": "boolean"
+        },
+        {
+          "name": "email_ignore_missing",
+          "summary": "Optional email ignore missing record field.",
+          "maps_to": "record.email_ignore_missing",
+          "type": "boolean"
+        },
+        {
+          "name": "id_ignore_missing",
+          "summary": "Optional id ignore missing record field.",
+          "maps_to": "record.id_ignore_missing",
+          "type": "boolean"
+        }
+      ],
+      "risk": "triggers a live API-triggered broadcast to its default audience; sends real messages to recipients, irreversible once delivered",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/campaigns/{broadcast_id}/triggers"
+        }
+      ],
+      "examples": [
+        "pm customer-io trigger broadcast apply --json"
+      ],
+      "notes": "Pinned source operation customer-io.rest.post.TriggerBroadcast114; writes.json action trigger_broadcast is the declared method/path/body execution component."
+    },
+    {
+      "path": "update reporting webhook apply",
+      "summary": "Plan and execute the typed update reporting webhook write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_reporting_webhook",
+      "source_cli_path": "PUT /v1/reporting_webhooks/{webhook_id}",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "disabled",
+          "summary": "Optional disabled record field.",
+          "maps_to": "record.disabled",
+          "type": "boolean"
+        },
+        {
+          "name": "endpoint",
+          "summary": "Required endpoint record field.",
+          "maps_to": "record.endpoint",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "events",
+          "summary": "Required events record field.",
+          "maps_to": "record.events",
+          "required": true,
+          "type": "string_array"
+        },
+        {
+          "name": "full_resolution",
+          "summary": "Optional full resolution record field.",
+          "maps_to": "record.full_resolution",
+          "type": "boolean"
+        },
+        {
+          "name": "id",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "with_content",
+          "summary": "Optional with content record field.",
+          "maps_to": "record.with_content",
+          "type": "boolean"
+        }
+      ],
+      "risk": "external mutation; changes a live reporting webhook's target endpoint/event selection or enables/disables delivery",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/reporting_webhooks/{webhook_id}"
+        }
+      ],
+      "examples": [
+        "pm customer-io update reporting webhook apply --json"
+      ],
+      "notes": "Pinned source operation customer-io.rest.put.UpdateWebhook162; writes.json action update_reporting_webhook is the declared method/path/body execution component."
+    },
+    {
+      "path": "update snippet apply",
+      "summary": "Plan and execute the typed update snippet write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_snippet",
+      "source_cli_path": "PUT /v1/snippets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "flags": [
+        {
+          "name": "name",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "risk": "external mutation; overwrites the content of a live snippet, changing every message/newsletter that references it",
+      "approval": "reverse ETL writes require plan, preview, approval, execute",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/snippets"
+        }
+      ],
+      "examples": [
+        "pm customer-io update snippet apply --json"
+      ],
+      "notes": "Pinned source operation customer-io.rest.put.UpdateSnippets163; writes.json action update_snippet is the declared method/path/body execution component."
+    },
+    {
       "path": "workspaces list",
       "summary": "Read Workspaces as Customer-io ETL records.",
       "intent": "etl",
@@ -343,25 +756,6 @@
         "pm customer-io workspaces list --json"
       ],
       "notes": "Pinned source operation customer-io.rest.get.ListWorkspaces111 from source document primary; streams.json is the declared execution component."
-    },
-    {
-      "path": "collections list",
-      "summary": "Read Collections as Customer-io ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "collections",
-      "source_cli_path": "GET /v1/collections",
-      "source_url": "https://docs.customer.io/files/journeys-app.json",
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v1/collections"
-        }
-      ],
-      "examples": [
-        "pm customer-io collections list --json"
-      ],
-      "notes": "Pinned source operation customer-io.rest.get.GetCollections43 from source document primary; streams.json is the declared execution component."
     }
   ]
 }
