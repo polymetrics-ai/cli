@@ -15,6 +15,10 @@
 - Deferred command metadata is projected into the command surface and rejected
   by `commandrunner` with the typed `system/missing_foundation` classification
   before an executor can perform provider I/O.
+- GitHub's implemented `label delete` action is the destructive green control:
+  its source-cited declaration is admitted and the actual commandrunner
+  preflight succeeds. Deferred state is therefore endpoint-specific rather
+  than a generic delete/destructive classification.
 - No `internal/connectors/defs/<connector>` file changed. Existing
   source-lock, surface-sync, runtime-preflight, certification, and live-proof
   gates remain independent and were exercised below where hermetic.
@@ -24,9 +28,12 @@
 | Command | Result |
 | --- | --- |
 | `go test -timeout 20m ./cmd/connectorgen -run '^TestDeclarationAdmission'` | pass |
+| `go test -timeout 20m ./cmd/connectorgen -run '^TestDeclarationAdmissionAdmitsGitHubImplementedDeleteControl$'` | pass |
 | `go test -timeout 20m ./internal/connectors/commandrunner -run '^TestPreflightDeferredCommandReturnsNamedFoundationBeforeExecutor$'` | pass |
 | `go test -timeout 20m ./internal/connectors/engine -run '^TestCommandSurfaceProjectsDeferredFoundationGap$'` | pass |
-| `go test -timeout 20m ./cmd/connectorgen` | pass (142.046s after the final write-binding regression fix) |
+| `go test -timeout 20m ./cmd/connectorgen` | pass (153.707s including the GitHub implemented-delete control) |
+| Fresh local project, no credential: `pm github label delete --json` | exit 1, `missing --credential`; command dispatches without provider I/O |
+| Fresh local project, no credential: `pm stripe accounts delete --json` | exit 2, `unknown command "accounts delete"`; no generic account-delete projection or provider I/O |
 | `go test -timeout 20m ./internal/connectors/commandrunner` | pass |
 | `go test -timeout 20m ./internal/connectors` | pass |
 | `go test -timeout 20m ./internal/connectors/engine` | pass (13.447s) |

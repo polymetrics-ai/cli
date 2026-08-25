@@ -22,6 +22,13 @@ runtime then refuses that command with a typed missing-foundation error before
 provider I/O. A connector with no runnable operations is complete when every
 source operation is deferred this way.
 
+`deferred` is endpoint-specific missing-foundation state, not a classification
+for operation kinds. In particular, an implemented delete remains implemented
+when its declared delete action and runtime binding exist; GitHub's `label
+delete` is the admission/runtime regression control. A missing action contract
+for a specific endpoint must be named as that endpoint's foundation gap rather
+than treating deletes or destructive operations as generically deferred.
+
 Admission does **not** require retained source bytes, a hash, a request body,
 or a typed schema. Those belong to source-lock/import, materialization, and
 runtime contracts. It also does not certify runtime reachability, credentials,

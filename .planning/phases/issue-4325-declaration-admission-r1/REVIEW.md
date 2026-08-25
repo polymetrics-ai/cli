@@ -30,6 +30,12 @@ Two implementation findings were corrected before this review record:
 
 No unresolved local findings remain.
 
+Captain clarification was applied after the initial PR: the regression suite
+now loads the actual GitHub bundle and admits/preflights its implemented `label
+delete` action. Documentation states that only an endpoint's named missing
+foundation can defer it; delete and destructive operations are not generically
+deferred.
+
 ## Automated review route
 
 The direct PR targets `main`. Its route is `claude_auto`: opening a non-draft

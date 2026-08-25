@@ -14,6 +14,15 @@ without converting connector-owned definitions or claiming live certification.
   `system/missing_foundation` refusal, while retaining existing implemented
   runtime preflight behavior.
 - Added focused red/green tests and certificate-separation documentation.
+- Added GitHub `label delete` as the implemented destructive green control:
+  endpoint-specific missing action contracts are deferred, not delete
+  operations as a class.
+
+The accompanying investigation records the exact distinction: GitHub's cited
+`label delete` endpoint has a typed delete action, CLI binding, fixture, and
+runtime-preflight control; Stripe's `/v1/accounts/{account}` is an existing
+blocked source mapping with no action or command binding. See
+`DELETE-CONTROL-AND-STRIPE-INVESTIGATION.md`.
 
 ## Scope and Safety
 

@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -152,6 +153,45 @@ func TestDeclarationAdmissionAcceptsCompleteZeroRunnableConnector(t *testing.T) 
 	}
 	if findings := declarationAdmissionFindings(bundle, document); len(findings) != 0 {
 		t.Fatalf("zero-runnable deferred connector findings = %+v, want none", findings)
+	}
+}
+
+func TestDeclarationAdmissionAdmitsGitHubImplementedDeleteControl(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("repository root: %v", err)
+	}
+	bundle, err := engine.Load(os.DirFS(filepath.Join(root, "internal", "connectors", "defs")), "github")
+	if err != nil {
+		t.Fatalf("load GitHub bundle: %v", err)
+	}
+	document := declarationAdmissionDocument{
+		SchemaVersion: declarationAdmissionSchemaVersion,
+		Connector:     "github",
+		SourceOperations: []declarationAdmissionSourceOperation{{
+			ID:                  "github.rest.issues.delete-label",
+			SourceURL:           "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json",
+			Location:            `paths["/repos/{owner}/{repo}/labels/{name}"].delete`,
+			ProviderOperationID: "issues/delete-label",
+			Method:              "DELETE",
+			Path:                "/repos/{owner}/{repo}/labels/{name}",
+		}},
+		Declarations: []declarationAdmissionDeclaration{{
+			SourceID:  "github.rest.issues.delete-label",
+			Lane:      declarationAdmissionLaneReverseETL,
+			Command:   "label delete",
+			State:     declarationAdmissionStateImplemented,
+			Canonical: declarationAdmissionEndpoint{Method: "DELETE", Path: "/repos/{owner}/{repo}/labels/{name}"},
+			Destructive: &declarationAdmissionDestructive{
+				Kind: "delete", Reason: "deletes a repository label and its existing issue metadata",
+			},
+		}},
+	}
+	if findings := declarationAdmissionFindings(bundle, document); len(findings) != 0 {
+		t.Fatalf("GitHub implemented delete findings = %+v, want none", findings)
+	}
+	if err := commandrunner.Preflight(engine.New(bundle, nil), []string{"label", "delete"}); err != nil {
+		t.Fatalf("GitHub label delete runtime preflight: %v", err)
 	}
 }
 
