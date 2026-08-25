@@ -441,6 +441,20 @@
   (0), and Dremio 31 (10). All 5 connectors remain enumerable; the 590
   non-action-backed rows retain `declaration-pending` and no invented path.
 
+### Declaration-first direct-write cohort 03 — 2026-08-25
+
+- **Red:** Coda, ClickUp, Calendly, Greenhouse, and Lever had no mechanical
+  per-operation promotion map. The cohort selector must use the physical
+  definition keys `clickup-api` and `lever-hiring`; substituting display names
+  would silently read a different or absent bundle.
+- **Green target:** generate the closed source/action/CLI map for those five
+  Batch 9 bundles. Greenhouse must preserve its unavailable source state, and
+  no missing body or path contract may be filled by a command-name heuristic.
+- **Green:** Cohort 03 verifies 238 enumerable direct-write rows: Coda 58
+  (8 existing-schema CLI-bound), ClickUp 107 (20), Calendly 22 (8), and Lever
+  51 (14); Greenhouse remains unavailable. The 188 unbound rows stay
+  declaration-pending with no generated command spelling.
+
 - The source lock carries `counts.total`, per-method and per-kind counts,
   source-document pins, and coverage basis. Dispositions use
   `operations_found`; no generated summary has `declared_percent`.
