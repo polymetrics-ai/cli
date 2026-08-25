@@ -1,0 +1,13 @@
+{
+  "record": {
+    "meetingId": 987654321
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/meetings/987654321"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

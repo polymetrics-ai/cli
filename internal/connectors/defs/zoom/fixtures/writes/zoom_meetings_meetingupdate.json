@@ -1,0 +1,25 @@
+{
+  "record": {
+    "meeting_id": 987654321,
+    "topic": "fixture-lane-owned-meeting-updated",
+    "start_time": "2026-09-01T10:30:00Z",
+    "duration": 45,
+    "timezone": "UTC",
+    "agenda": "Fixture-only updated Zoom Meeting lifecycle contract."
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/meetings/987654321",
+    "body": {
+      "topic": "fixture-lane-owned-meeting-updated",
+      "start_time": "2026-09-01T10:30:00Z",
+      "duration": 45,
+      "timezone": "UTC",
+      "agenda": "Fixture-only updated Zoom Meeting lifecycle contract."
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

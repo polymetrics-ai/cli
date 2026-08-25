@@ -87,31 +87,23 @@
       },
       {
         "function_kind": "capability:write",
-        "applicable": false,
-        "declared": false,
-        "implemented": false,
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": [],
-        "live_evidence": [],
-        "not_applicable": {
-          "code": "no_declared_write_actions",
-          "reason": "connector \"zoom\" has no declared writes.json actions; the shared engine Write method is unavailable for this bundle"
-        }
+        "live_evidence": []
       },
       {
         "function_kind": "operation:binary_download",
-        "applicable": false,
-        "declared": false,
-        "implemented": false,
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": [],
-        "live_evidence": [],
-        "not_applicable": {
-          "code": "operation_kind_not_declared",
-          "reason": "connector \"zoom\" does not declare operation kind \"binary_download\""
-        }
+        "live_evidence": []
       },
       {
         "function_kind": "operation:browser_open",
@@ -227,17 +219,13 @@
       },
       {
         "function_kind": "operation:rest_read",
-        "applicable": false,
-        "declared": false,
-        "implemented": false,
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": [],
-        "live_evidence": [],
-        "not_applicable": {
-          "code": "operation_kind_not_declared",
-          "reason": "connector \"zoom\" does not declare operation kind \"rest_read\""
-        }
+        "live_evidence": []
       },
       {
         "function_kind": "operation:rest_status",
@@ -255,17 +243,13 @@
       },
       {
         "function_kind": "operation:rest_write",
-        "applicable": false,
-        "declared": false,
-        "implemented": false,
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": [],
-        "live_evidence": [],
-        "not_applicable": {
-          "code": "operation_kind_not_declared",
-          "reason": "connector \"zoom\" does not declare operation kind \"rest_write\""
-        }
+        "live_evidence": []
       },
       {
         "function_kind": "operation:stream_etl",
@@ -544,17 +528,13 @@
       },
       {
         "workflow_kind": "reverse_etl",
-        "applicable": false,
-        "declared": false,
-        "implemented": false,
+        "applicable": true,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
-        "fixture_evidence": [],
-        "live_evidence": [],
-        "not_applicable": {
-          "code": "connector_capability_not_applicable",
-          "reason": "connector \"zoom\" has no applicable capability:write capability for workflow \"reverse_etl\""
-        }
+        "fixture_evidence": null,
+        "live_evidence": []
       },
       {
         "workflow_kind": "schedule",
@@ -636,8 +616,8 @@
         "sync_mode": "full_overwrite",
         "primitive": "api_read_into_warehouse",
         "applicable": true,
-        "declared": false,
-        "implemented": false,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": [],
@@ -688,8 +668,8 @@
         "sync_mode": "full_append",
         "primitive": "api_read_into_warehouse",
         "applicable": true,
-        "declared": false,
-        "implemented": false,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": [],
@@ -792,8 +772,8 @@
         "sync_mode": "incremental_upsert",
         "primitive": "api_read_into_warehouse",
         "applicable": true,
-        "declared": false,
-        "implemented": false,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": [],
@@ -844,8 +824,8 @@
         "sync_mode": "incremental_dedupe",
         "primitive": "api_read_into_warehouse",
         "applicable": true,
-        "declared": false,
-        "implemented": false,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": [],
@@ -896,8 +876,8 @@
         "sync_mode": "incremental_dedupe_history",
         "primitive": "api_read_into_warehouse",
         "applicable": true,
-        "declared": false,
-        "implemented": false,
+        "declared": true,
+        "implemented": true,
         "fixture_tested": false,
         "live_tested": false,
         "fixture_evidence": [],
@@ -1018,7 +998,7 @@
       {
         "role": "api_destination",
         "applicable": true,
-        "declared": false,
+        "declared": true,
         "implemented": false
       },
       {

@@ -1,0 +1,44 @@
+{
+  "record": {
+    "download_url": "https://files.example.invalid/fixture-interaction.mp3",
+    "direction": "inbound",
+    "disposition": "fixture-disposition",
+    "interaction_info": {
+      "channel_type": "voice",
+      "agent_email": "fixture-agent@example.invalid",
+      "agent_id": "fixture-agent-id",
+      "consumer_name": "fixture-consumer",
+      "from": "+15550000001",
+      "to": "+15550000002"
+    },
+    "primary_language": "en-US",
+    "queue_id": "fixture-queue",
+    "start_time": "2026-08-08T09:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/qm/interactions",
+    "body": {
+      "download_url": "https://files.example.invalid/fixture-interaction.mp3",
+      "direction": "inbound",
+      "disposition": "fixture-disposition",
+      "interaction_info": {
+        "channel_type": "voice",
+        "agent_email": "fixture-agent@example.invalid",
+        "agent_id": "fixture-agent-id",
+        "consumer_name": "fixture-consumer",
+        "from": "+15550000001",
+        "to": "+15550000002"
+      },
+      "primary_language": "en-US",
+      "queue_id": "fixture-queue",
+      "start_time": "2026-08-08T09:00:00Z"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "interaction_id": "fixture-created-interaction"
+    }
+  }
+}

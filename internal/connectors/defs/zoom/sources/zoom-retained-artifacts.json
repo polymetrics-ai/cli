@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "connector": "zoom",
+  "artifacts": [
+    {
+      "sha256": "00c1b70d48f9bf00ffd588ea1090d19a44de76f06a1617bccc563c1c75235aa9",
+      "bytes": 124863,
+      "source_url": "https://developers.zoom.us/api-hub/crc/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "0f2a71be1c05624b4fc762bf920bc83b76e8b0988fa30a5fa76c9dbae292e9c9",
+      "bytes": 2629,
+      "source_url": "https://developers.zoom.us/api-hub/customer-managed-keys-hybrid/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "13707faf89f7ee71b78ad0f80458c54c438ec130a52c58539b46a35e74108b8d",
+      "bytes": 76718,
+      "source_url": "https://developers.zoom.us/api-hub/clips/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "1628da8135ee28ce38c7e654a8c34aec7ae52dfc8286996e6466a8c797192ab8",
+      "bytes": 135157,
+      "source_url": "https://developers.zoom.us/api-hub/number-management/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "1836aa422a241bf25e7db860f94fbf096639ec35cd9a5dd463a7d5d0ff07fc39",
+      "bytes": 191445,
+      "source_url": "https://developers.zoom.us/api-hub/video-sdk/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "1cf96de3c910773f013fecd55660f4bee636634f9e03c914ce8bf60bfd4b7c06",
+      "bytes": 177696,
+      "source_url": "https://developers.zoom.us/api-hub/calendar/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "1df641c1310d2d0e808434e4f1d6a3f1de864e362a89b344bfeb4edb66c0d062",
+      "bytes": 2434597,
+      "source_url": "https://developers.zoom.us/api-hub/phone/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "2401a9866c043448b504a7285a640e5974c0f322df99b5b12ddd189d51acd7cd",
+      "bytes": 89199,
+      "source_url": "https://developers.zoom.us/api-hub/video-management/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "33f8cf49e515929ded3c4a36d0e2cf3cf1cb3a0656800d8fccca986f1509ed3b",
+      "bytes": 172697,
+      "source_url": "https://developers.zoom.us/api-hub/scim2/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "38c24a3589e28008eaf6c1bbee9048feb8d4c6a1d3413dfff26f8caee6e0dffe",
+      "bytes": 169504,
+      "source_url": "https://developers.zoom.us/api-hub/scheduler/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "3f35458bba020eda9f509a9d3f4908d4dbec7145493d10a95e3f287ef4a2eb87",
+      "bytes": 168386,
+      "source_url": "https://developers.zoom.us/api-hub/whiteboard/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "4009ddd8a26ff40b3160c3dfcfa60a98fc3786b30213d5fb98699b87411bb94f",
+      "bytes": 18845,
+      "source_url": "https://developers.zoom.us/api-hub/healthcare/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "4f080f55eb5352214ac8eed2f9e1d97a7d99e674326a2efa27b262b39df3a3cc",
+      "bytes": 535472,
+      "source_url": "https://developers.zoom.us/api-hub/rooms/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "6133f0fc8c2249d32d426613694f9ecd7d1bb7d34190f9f841094e4a1a5ec0ac",
+      "bytes": 576669,
+      "source_url": "https://developers.zoom.us/api-hub/commerce/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "6ba31fc712e72ffb079c59d4ca36cd46019e896fa369e0dca934cbc5361a56d4",
+      "bytes": 16853,
+      "source_url": "https://developers.zoom.us/api-hub/cobrowse-sdk/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "705a7e32d9776759414e5b1122ac7af013b3441a7ed3ba539950dc1146aa11cf",
+      "bytes": 50952,
+      "source_url": "https://developers.zoom.us/api-hub/quality-management/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "7322123a79e05eb72c44f28a0c6e4a3084ab0445f7993d8551ac32b8a3ed4f34",
+      "bytes": 7051,
+      "source_url": "https://developers.zoom.us/api-hub/ai-companion/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "814156bd1adaab5d132688e1f28ee3dd09cc18e267001ca07cb9b2ed4eb455e9",
+      "bytes": 499580,
+      "source_url": "https://developers.zoom.us/api-hub/chat/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "854900bfcad0eaf5d9680fb4890e4e14d42de8f75acd241c5c80bcb921e7f7f7",
+      "bytes": 83777,
+      "source_url": "https://developers.zoom.us/api-hub/tasks/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "87c7b84514f4e2dfc3842df93808dbd8ba1e0d3f223c528369a9e386e2af3dbe",
+      "bytes": 191157,
+      "source_url": "https://developers.zoom.us/api-hub/canvas/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "93da64b09d8bff57a80620a8c793ceb45fc3f06a31d39af184553973ec84fbff",
+      "bytes": 9111,
+      "source_url": "https://developers.zoom.us/api-hub/my-notes/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "bb5cdea42f0b6f5edb767399f04022bf3f99eb0cdee71216092178aa3a1a183c",
+      "bytes": 500586,
+      "source_url": "https://developers.zoom.us/api-hub/events/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "bed2fb83bf7f6726219bc7ff8ab4eaf70146ee85a5791d7f3a9328926cf9aeed",
+      "bytes": 317745,
+      "source_url": "https://developers.zoom.us/api-hub/iq/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "c3f874d73565e7b83ed6355734314db2d7e94fb992ab500eb3c55d117e662437",
+      "bytes": 124298,
+      "source_url": "https://developers.zoom.us/api-hub/workforce-management/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "ca5c91a5998bd6f637f7789d3277d10ef4af9a68fbd1cd1318589778916371df",
+      "bytes": 90802,
+      "source_url": "https://developers.zoom.us/api-hub/virtual-agent/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "cf2a9486d946d4c94da31c3beddffa6b7c1708f1b7233484b9b664ed836ab29d",
+      "bytes": 31937,
+      "source_url": "https://developers.zoom.us/api-hub/qss/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "d2ba7fbde74f929aa97ee48bb6fded2428685985064896020cb3287cdf62ab65",
+      "bytes": 97885,
+      "source_url": "https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "ddff6d1051a9fed3eeeda9a52c10d606b36b1828f4e504cbafbd0672935ca8c5",
+      "bytes": 641119,
+      "source_url": "https://developers.zoom.us/api-hub/users/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "e172b7e6e1728d0f512a7022509a18cab44c0a7161e24035a61a36cba89bccd2",
+      "bytes": 111128,
+      "source_url": "https://developers.zoom.us/api-hub/marketplace/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "edafc930eca1e8af4933e86a2af2337cdf521d20d08a8914c751d5e3a26c71b6",
+      "bytes": 1196455,
+      "source_url": "https://developers.zoom.us/api-hub/meetings/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "ef4eb9900f08dc6f0e36e3e23362cf3462f683ba7d15996390268a457e29ccc1",
+      "bytes": 2550278,
+      "source_url": "https://developers.zoom.us/api-hub/contact-center/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "f0175eb5032817bd01c54d27dc1dcd432900889e4d9de231985869ec5a669bfa",
+      "bytes": 18042,
+      "source_url": "https://developers.zoom.us/api-hub/chatbot/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "f0dbf2ea33f7fde0bf489fa30e9e0083b9142545e2fdbc4524cdd7ba59053aff",
+      "bytes": 205681,
+      "source_url": "https://developers.zoom.us/api-hub/mail/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    },
+    {
+      "sha256": "ff6c0105f191117989137ad808f9662eebc19f3f9126421dcab2383326052b66",
+      "bytes": 101054,
+      "source_url": "https://developers.zoom.us/api-hub/auto-dialer/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "license": "undetermined",
+      "terms": "undetermined"
+    }
+  ]
+}

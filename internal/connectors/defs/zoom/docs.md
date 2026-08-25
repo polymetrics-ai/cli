@@ -1,14 +1,22 @@
 # Overview
 
-Reads Zoom users, meetings, and webinars through the Zoom REST API.
+Exposes source-backed Zoom API commands through the Zoom REST API. The current branch contains 714
+runnable commands: three preserved ETL streams, 505 direct reads, and 206 approval-gated typed
+write commands, including 185 guarded deletes. The newly mapped endpoint rows are implemented
+pending certification; none is a certified claim. A bounded historical REST-read proof is retained,
+but it is not current live evidence until a fresh proof matches the current certification subject.
 
-The provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1
-reference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build
-`2026-08-03T14-58-19-06-00`. Wave 1 exposes only the three existing stream-backed reads:
-`pm zoom users list`, `pm zoom meetings list`, and `pm zoom webinars list`.
+The committed v3 public source lock retains 34 current first-party Zoom OpenAPI documents
+(11,719,368 bytes and 1,871 current REST operations). The historic Accounts capture is explicitly
+unavailable: its dated URL returns HTTP 404 and no verified historic bytes exist. The crosswalk
+retains all 1,937 historical provider identities, including the 66 unavailable Accounts identities;
+neither side is silently renamed, dropped, or substituted with a synthetic artifact.
 
-No Zoom write action is implemented in this slice. The remaining provider operations stay explicitly
-disposed in `api_surface.json`; the ledger is not a claim that those operations are executable.
+`operations.json` retains the typed source-contract inventory (776 reads, 971 REST writes,
+including 311 DELETE contracts, and one bounded binary candidate). The command and action surface
+is derived from the same pinned contracts and bound to exact `api_surface.json` endpoints. Provider
+OAuth scope requirements are command metadata: an insufficient token receives Zoom's provider 403,
+not a locally disabled command.
 
 Service API documentation: https://developers.zoom.us/docs/api/.
 
@@ -63,26 +71,61 @@ Default pagination is cursor pagination: send `next_page_token` and take the nex
 
 ## Write actions & risks
 
-This Wave 1 connector surface is read-only. Read behavior: external Zoom API read of user,
-meeting, and webinar data.
+Read behavior is an external Zoom API read. All 206 typed write actions use plan → preview →
+explicit approval → execute. The 185 DELETE actions also require destructive confirmation. The two
+fixture-backed warehouse destination actions remain useful examples:
 
-The provider inventory records 1,032 documented writes, but none is a declared Zoom write action.
-The 997 write operations classified as implementable now remain blocked on connector-local typed
-request contracts, safety/approval evidence, and fixtures; that is not a shared runtime blocker.
-The 12 provider-restricted writes remain unavailable pending the corresponding Zoom account
-entitlement. Future writes must use the existing plan → preview → explicit approval → execute path;
-destructive operations additionally require the typed confirmation gate.
+- `pm zoom healthcare clinical-notes update` updates a clinical note completion status. The note
+  identifier is redacted in write errors.
+- `pm zoom quality-management interactions create` imports a Quality Management interaction from
+  a third-party download URL.
+
+No newly mapped command is certified. A bounded authenticated `operation:rest_read` proof records
+two HTTP 200 exchanges with fingerprint-only `observed_operations` evidence, but its pre-current
+certification subject makes it historical rather than current live proof. A fresh matching proof
+also needs an operation-specific fixture projection before it can certify the operation.
+All 206 generated mutation candidates are explicitly unassessed/deferred on the typed destination
+foundation gap. `sources/zoom-declaration-disposition.json` supplies the per-operation status,
+evidence, fixed-vocabulary rejection reason, and recoverability record. It does not silently treat
+ordinary deletes as unsafe.
 
 ## Known limits
 
 - Batch default: `read_page_size=100`.
-- Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes).
-- Executable today: 3 stream-backed GET operations (`users`, `meetings`, `webinars`).
-- Pending connector-local delivery: 1,839 operations (842 reads and 997 writes) have no shared
-  foundation blocker, but still need bounded Zoom-specific contracts, schemas, safety evidence, and
-  fixtures before they can become commands.
-- Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one
-  Meeting audit trail, and four Phone blocked-list routes) remain blocked until Zoom enables the
-  corresponding product/account capability.
-- Justified exclusions: 54 provider-deprecated operations remain recorded as `deprecated` ledger
-  evidence and are not implemented.
+- The current branch exposes 714 runnable commands. Zoom provider-wide completeness is not claimed:
+  documented operations without an established executable contract remain explicit source-traced
+  gaps rather than fabricated commands.
+- `sources/zoom-declaration-disposition.json` accounts for all 1,913 ledger rows and the 26
+  source-only rows. It records 1,131 disabled ledger rows: 535 require paid provider entitlement,
+  538 have a documented foundation gap, 54 are provider-deprecated, and two are schema-incompatible.
+- The remaining 471 JSON-body writes need a typed root-body input contract. Twenty-five operation
+  contracts need array-query encoding. The 34 multipart uploads remain deferred on the bounded `file_upload`
+  executor gap (G12); unsupported legacy extension fields are not coerced into a substitute.
+- The bounded Clip download remains disabled: Zoom documents a 302 redirect but does not provide a
+  provider-declared safe redirect host for the current binary contract. `sync_transport.json`
+  declares the three preserved streams through the connector-neutral declarative source adapter.
+  Zoom does not declare a reverse-ETL transport destination: the only exact source-field overlap
+  selects provider DELETE actions, and ordinary replay is refused at
+  `internal/app/issue_label_warehouse_transport.go:944`. No alternate non-delete action binding is
+  invented as a substitute.
+- `operation-specific-fixture-evidence-projection` prevents a fresh `operation:rest_read` live
+  proof from becoming a certified operation cell. The minimal foundation change is an exact
+  direct-operation fixture/replay projection; a stream fixture is not substituted as evidence.
+- A bounded full live run passed the catalog, append ETL, and query read-back stages for Users and
+  Meetings. It cannot publish those capability proofs yet because the shared harness unconditionally
+  reports its obsolete definition-fixture stage as skipped/failing, aggregates unrelated stream
+  refusals into one report, and invokes flow/schedule checks when Zoom declares no executable flow
+  pair. These are `definition-fixture-conformance-certification-stage`,
+  `capability-scoped-live-evidence-publication`, and `schedule-roundtrip-source-only-skip` foundation
+  gaps; their remedies preserve all-or-nothing full-parity semantics and do not promote a connector
+  from partial stage proof.
+- The pinned Users and Meetings OpenAPI response schemas declare durable creation timestamps for all
+  three preserved streams: `user_created_at`/`created_at` for users and `created_at` for meetings
+  and webinars. The connector projects those exact provider fields as `created_at` and declares
+  that field as its cursor; it does not infer a watermark. The bounded Webinar probe returned
+  HTTP 400 with Zoom error code 200: the Webinar plan is missing and must be subscribed/enabled for
+  the user. It remains a runnable command for entitled accounts but is explicitly uncertified for
+  this account with `requires-paid-tier` evidence; the account identifier is redacted.
+- Foundation-gap detail, source evidence, exact code locations, minimal remedies, and recoverability
+  are recorded in `sources/zoom-foundation-gaps.json`. No auth, engine, or certification-scope code
+  is changed by this connector lane.

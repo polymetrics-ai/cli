@@ -1,0 +1,24 @@
+{
+  "issue": 4265,
+  "phase": "zoom-full-definition-mapping-r1",
+  "base": "31bfe62eb",
+  "state": "definition-derived-awaiting-full-verification",
+  "source_lock": {
+    "modules": 35,
+    "source_operations": 1937,
+    "ledger_endpoints": 1913,
+    "blocked_ledger_operations": 1908,
+    "exact_ledger_matches": 1911,
+    "unmatched_ledger_operations": 2,
+    "source_only_operations": 26
+  },
+  "declaration": {
+    "operation_inventory": 1748,
+    "rest_reads": 776,
+    "rest_writes": 971,
+    "deletes": 311,
+    "warehouse_actions": 2,
+    "sync_transport": "intentionally absent: executor and conformance gap"
+  },
+  "certification": "Zoom was admitted to scope centrally after this branch began; generated matrix records fixture proof, while all live certification remains pending"
+}

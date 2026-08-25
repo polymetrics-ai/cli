@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "provider_refusals": [
+    {
+      "command": "webinars list",
+      "provider_status": 400,
+      "reason": "Bounded live certification on 2026-08-19 received HTTP 400, Zoom error code 200: Webinar plan is missing. Subscribe to the Webinar plan and enable webinars for the user before this action can run; the provider's account identifier is redacted."
+    }
+  ]
+}

@@ -1,0 +1,739 @@
+{
+  "schema_version": 1,
+  "decision_authority": "Firstmate inbox 002, 2026-08-24; this re-pin authorization is not attributable to the captain.",
+  "lock_preservation": {
+    "path": "internal/connectors/defs/zoom/sources/zoom-operation-source-lock.json",
+    "pre_change_backup": ".planning/phases/zoom-full-definition-mapping-r1/evidence/zoom-operation-source-lock.pre-retain.json",
+    "pre_change_sha256": "2e102acffd89467374405829abd994714f994f237c4a38c4ad0d9a553c42c3f7"
+  },
+  "artifacts": [
+    {
+      "connector": "zoom",
+      "artifact": "accounts",
+      "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/accounts.json?slug=accounts",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "decision": "unavailable",
+      "classification": "historic Next-data artifact unavailable; terminal error response is not a provider document",
+      "old": {
+        "bytes": 805789,
+        "sha256": "d8d650237496719594ca93a5aecacf368e71c4e30ac17eba46bd6f676a98319a"
+      },
+      "retained": false,
+      "evidence": "HTTP 404 with 8,329-byte error body; failed historic blob search found no verified copy"
+    },
+    {
+      "connector": "zoom",
+      "artifact": "ai-companion",
+      "source_url": "https://developers.zoom.us/api-hub/ai-companion/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/ai-companion.json?slug=ai-companion",
+        "bytes": 6691,
+        "sha256": "c676e65ad0cc49d57e1d12271dd5170e59b5e82655aacc965d0a9f79c7686567"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/ai-companion/methods/endpoints.json",
+        "bytes": 7051,
+        "sha256": "7322123a79e05eb72c44f28a0c6e4a3084ab0445f7993d8551ac32b8a3ed4f34"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "ai-services",
+      "source_url": "https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/ai-services.json?slug=ai-services",
+        "bytes": 97316,
+        "sha256": "99bfe9969b9044d34f201540ee1cfc51adf80c0970e70cc1b8bd537bf0fcd37c"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json",
+        "bytes": 97885,
+        "sha256": "d2ba7fbde74f929aa97ee48bb6fded2428685985064896020cb3287cdf62ab65"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "auto-dialer",
+      "source_url": "https://developers.zoom.us/api-hub/auto-dialer/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/auto-dialer.json?slug=auto-dialer",
+        "bytes": 98538,
+        "sha256": "c0fb4f77ec515f8957512fefd1904b3a033586d6a8f0e2956afd9a30f2ce7f78"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/auto-dialer/methods/endpoints.json",
+        "bytes": 101054,
+        "sha256": "ff6c0105f191117989137ad808f9662eebc19f3f9126421dcab2383326052b66"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "calendar",
+      "source_url": "https://developers.zoom.us/api-hub/calendar/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/calendar.json?slug=calendar",
+        "bytes": 171687,
+        "sha256": "9b220ea2d18b9cebf0c990badffb0ffc7bf1aa2632b95f7a787ac63ca9563360"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/calendar/methods/endpoints.json",
+        "bytes": 177696,
+        "sha256": "1cf96de3c910773f013fecd55660f4bee636634f9e03c914ce8bf60bfd4b7c06"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "canvas",
+      "source_url": "https://developers.zoom.us/api-hub/canvas/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/canvas.json?slug=canvas",
+        "bytes": 183584,
+        "sha256": "cef64852302dc83282b40ad92e92fe2d2b96a15c81b82443e4fa5965785146fe"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/canvas/methods/endpoints.json",
+        "bytes": 191157,
+        "sha256": "87c7b84514f4e2dfc3842df93808dbd8ba1e0d3f223c528369a9e386e2af3dbe"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "chat",
+      "source_url": "https://developers.zoom.us/api-hub/chat/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/chat.json?slug=chat",
+        "bytes": 474412,
+        "sha256": "9231f1985ddba08c1ad07b3c482ab8fc9f272d371f1de8cab092063695953d29"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/chat/methods/endpoints.json",
+        "bytes": 499580,
+        "sha256": "814156bd1adaab5d132688e1f28ee3dd09cc18e267001ca07cb9b2ed4eb455e9"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "chatbot",
+      "source_url": "https://developers.zoom.us/api-hub/chatbot/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/chatbot.json?slug=chatbot",
+        "bytes": 17742,
+        "sha256": "c0142777b9f66c026819450b6c3a040748dfafacb72140357f10f9433cc5cdb4"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/chatbot/methods/endpoints.json",
+        "bytes": 18042,
+        "sha256": "f0175eb5032817bd01c54d27dc1dcd432900889e4d9de231985869ec5a669bfa"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "clips",
+      "source_url": "https://developers.zoom.us/api-hub/clips/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/clips.json?slug=clips",
+        "bytes": 72396,
+        "sha256": "f484aefdae780a13676c994dcf9339cda61929aba4073a9d2cde579a6d8c7327"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/clips/methods/endpoints.json",
+        "bytes": 76718,
+        "sha256": "13707faf89f7ee71b78ad0f80458c54c438ec130a52c58539b46a35e74108b8d"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "cobrowse-sdk",
+      "source_url": "https://developers.zoom.us/api-hub/cobrowse-sdk/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/cobrowse-sdk.json?slug=cobrowse-sdk",
+        "bytes": 16626,
+        "sha256": "7854895b95c9ac82be53c4310c586876789c8fc0c032812f38afcb923f0b8e39"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/cobrowse-sdk/methods/endpoints.json",
+        "bytes": 16853,
+        "sha256": "6ba31fc712e72ffb079c59d4ca36cd46019e896fa369e0dca934cbc5361a56d4"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "commerce",
+      "source_url": "https://developers.zoom.us/api-hub/commerce/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/commerce.json?slug=commerce",
+        "bytes": 572494,
+        "sha256": "9b37c7ceb9c32cc1347fddc97d6a370adc83a3927c182c557e728a4f5668b24f"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/commerce/methods/endpoints.json",
+        "bytes": 576669,
+        "sha256": "6133f0fc8c2249d32d426613694f9ecd7d1bb7d34190f9f841094e4a1a5ec0ac"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "contact-center",
+      "source_url": "https://developers.zoom.us/api-hub/contact-center/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/contact-center.json?slug=contact-center",
+        "bytes": 2492474,
+        "sha256": "6c2086181ffc4211fbc27ba062a5a0609b69f49e2783dfafd1653bafa6902c3b"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/contact-center/methods/endpoints.json",
+        "bytes": 2550278,
+        "sha256": "ef4eb9900f08dc6f0e36e3e23362cf3462f683ba7d15996390268a457e29ccc1"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "crc",
+      "source_url": "https://developers.zoom.us/api-hub/crc/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/crc.json?slug=crc",
+        "bytes": 121352,
+        "sha256": "0560df13af89febcc8d0e75c38cee59f66e29dbbe8cbb193ea16742a5b0999b4"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/crc/methods/endpoints.json",
+        "bytes": 124863,
+        "sha256": "00c1b70d48f9bf00ffd588ea1090d19a44de76f06a1617bccc563c1c75235aa9"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "customer-managed-keys-hybrid",
+      "source_url": "https://developers.zoom.us/api-hub/customer-managed-keys-hybrid/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/customer-managed-keys-hybrid.json?slug=customer-managed-keys-hybrid",
+        "bytes": 2459,
+        "sha256": "9699298bbf1762c674421f8cdb0687c612b41e0ea9155966038e03d122a37835"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/customer-managed-keys-hybrid/methods/endpoints.json",
+        "bytes": 2629,
+        "sha256": "0f2a71be1c05624b4fc762bf920bc83b76e8b0988fa30a5fa76c9dbae292e9c9"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "events",
+      "source_url": "https://developers.zoom.us/api-hub/events/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/events.json?slug=events",
+        "bytes": 468800,
+        "sha256": "a53798695fd6085c4a300200564c4fa5d4c82aac269167b5ea7b2a777bc756fe"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/events/methods/endpoints.json",
+        "bytes": 500586,
+        "sha256": "bb5cdea42f0b6f5edb767399f04022bf3f99eb0cdee71216092178aa3a1a183c"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "healthcare",
+      "source_url": "https://developers.zoom.us/api-hub/healthcare/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/healthcare.json?slug=healthcare",
+        "bytes": 17693,
+        "sha256": "706677b35824a79fb48a7ebebd9c3c1e7e29a4eb9db41fbf2086cc624f345ba3"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/healthcare/methods/endpoints.json",
+        "bytes": 18845,
+        "sha256": "4009ddd8a26ff40b3160c3dfcfa60a98fc3786b30213d5fb98699b87411bb94f"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "iq",
+      "source_url": "https://developers.zoom.us/api-hub/iq/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/iq.json?slug=iq",
+        "bytes": 303952,
+        "sha256": "e338ed54c7842fb64b2c56b4983f47ea27728a7b9cea6e2456c01d49cebd9070"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/iq/methods/endpoints.json",
+        "bytes": 317745,
+        "sha256": "bed2fb83bf7f6726219bc7ff8ab4eaf70146ee85a5791d7f3a9328926cf9aeed"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "mail",
+      "source_url": "https://developers.zoom.us/api-hub/mail/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/mail.json?slug=mail",
+        "bytes": 196627,
+        "sha256": "beb3d115bc4e0ae534d07724522c16e73aa931c2d33efddf2f6d63e6b86efae8"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/mail/methods/endpoints.json",
+        "bytes": 205681,
+        "sha256": "f0dbf2ea33f7fde0bf489fa30e9e0083b9142545e2fdbc4524cdd7ba59053aff"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "marketplace",
+      "source_url": "https://developers.zoom.us/api-hub/marketplace/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/marketplace.json?slug=marketplace",
+        "bytes": 106427,
+        "sha256": "6d12133257c3f703e503e332cb557c8df3bbac90766ac5ddae97f7fe5c054671"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/marketplace/methods/endpoints.json",
+        "bytes": 111128,
+        "sha256": "e172b7e6e1728d0f512a7022509a18cab44c0a7161e24035a61a36cba89bccd2"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "meetings",
+      "source_url": "https://developers.zoom.us/api-hub/meetings/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/meetings.json?slug=meetings",
+        "bytes": 1149230,
+        "sha256": "b0a048ee975e032066fa58b055bdc4ca273ba56fa5d17bb48b90486e63d8e897"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/meetings/methods/endpoints.json",
+        "bytes": 1196455,
+        "sha256": "edafc930eca1e8af4933e86a2af2337cdf521d20d08a8914c751d5e3a26c71b6"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "my-notes",
+      "source_url": "https://developers.zoom.us/api-hub/my-notes/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/my-notes.json?slug=my-notes",
+        "bytes": 8670,
+        "sha256": "142c70c7dc1f1fcb47bc2216e9d03892d57b5f8153d02e33b5c609aa6d45bd30"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/my-notes/methods/endpoints.json",
+        "bytes": 9111,
+        "sha256": "93da64b09d8bff57a80620a8c793ceb45fc3f06a31d39af184553973ec84fbff"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "number-management",
+      "source_url": "https://developers.zoom.us/api-hub/number-management/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/number-management.json?slug=number-management",
+        "bytes": 129670,
+        "sha256": "10e5a1fcc3713ddc6cfb3a2dc6fc14ba1f10746a31c0b79a69340c93e91ba525"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/number-management/methods/endpoints.json",
+        "bytes": 135157,
+        "sha256": "1628da8135ee28ce38c7e654a8c34aec7ae52dfc8286996e6466a8c797192ab8"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "phone",
+      "source_url": "https://developers.zoom.us/api-hub/phone/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/phone.json?slug=phone",
+        "bytes": 2340192,
+        "sha256": "8da5d0f5920693dbb2f2fc041d8a589ea803f748cec3f9d09195246dd4312e00"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/phone/methods/endpoints.json",
+        "bytes": 2434597,
+        "sha256": "1df641c1310d2d0e808434e4f1d6a3f1de864e362a89b344bfeb4edb66c0d062"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "qss",
+      "source_url": "https://developers.zoom.us/api-hub/qss/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/qss.json?slug=qss",
+        "bytes": 31130,
+        "sha256": "955deca38c4719ef2e0bd5d327784337b8fb3bc9276c10eb17391b15d47644af"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/qss/methods/endpoints.json",
+        "bytes": 31937,
+        "sha256": "cf2a9486d946d4c94da31c3beddffa6b7c1708f1b7233484b9b664ed836ab29d"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "quality-management",
+      "source_url": "https://developers.zoom.us/api-hub/quality-management/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/quality-management.json?slug=quality-management",
+        "bytes": 48950,
+        "sha256": "a5bfee49fdd73bac3eb6376741f076d61b4b70563eaba26d3b85fc912df3804a"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/quality-management/methods/endpoints.json",
+        "bytes": 50952,
+        "sha256": "705a7e32d9776759414e5b1122ac7af013b3441a7ed3ba539950dc1146aa11cf"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "rooms",
+      "source_url": "https://developers.zoom.us/api-hub/rooms/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/rooms.json?slug=rooms",
+        "bytes": 514198,
+        "sha256": "f4752480101dd7d1b950b95689cd424caa36447fa59968f73e2c78c6fdfbb732"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/rooms/methods/endpoints.json",
+        "bytes": 535472,
+        "sha256": "4f080f55eb5352214ac8eed2f9e1d97a7d99e674326a2efa27b262b39df3a3cc"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "scheduler",
+      "source_url": "https://developers.zoom.us/api-hub/scheduler/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/scheduler.json?slug=scheduler",
+        "bytes": 163166,
+        "sha256": "5c85f73e33816dae8687aa0ef00f1327b4c3563bb27f06597d7fdde665c8a44f"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/scheduler/methods/endpoints.json",
+        "bytes": 169504,
+        "sha256": "38c24a3589e28008eaf6c1bbee9048feb8d4c6a1d3413dfff26f8caee6e0dffe"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "scim2",
+      "source_url": "https://developers.zoom.us/api-hub/scim2/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/scim2.json?slug=scim2",
+        "bytes": 172063,
+        "sha256": "066aaae4ea6d8e76fef24cbc92899657f62ce9923e08260e45d9eb91b21b2a8d"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/scim2/methods/endpoints.json",
+        "bytes": 172697,
+        "sha256": "33f8cf49e515929ded3c4a36d0e2cf3cf1cb3a0656800d8fccca986f1509ed3b"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "tasks",
+      "source_url": "https://developers.zoom.us/api-hub/tasks/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/tasks.json?slug=tasks",
+        "bytes": 79096,
+        "sha256": "b8af6c295d74ae2d038ece109cb30f72154ac72d029cf1bc46c01ae27a708cec"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/tasks/methods/endpoints.json",
+        "bytes": 83777,
+        "sha256": "854900bfcad0eaf5d9680fb4890e4e14d42de8f75acd241c5c80bcb921e7f7f7"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "users",
+      "source_url": "https://developers.zoom.us/api-hub/users/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/users.json?slug=users",
+        "bytes": 629071,
+        "sha256": "9dd9491b580d85469975ec5469217ebb91ce3ae4d90ae9613d245d90bc47431e"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/users/methods/endpoints.json",
+        "bytes": 641119,
+        "sha256": "ddff6d1051a9fed3eeeda9a52c10d606b36b1828f4e504cbafbd0672935ca8c5"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "video-management",
+      "source_url": "https://developers.zoom.us/api-hub/video-management/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/video-management.json?slug=video-management",
+        "bytes": 80481,
+        "sha256": "fec40c1597923922273c2769f02a0ad514f62289667f7ea4ffc4ecb7ba106bb7"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/video-management/methods/endpoints.json",
+        "bytes": 89199,
+        "sha256": "2401a9866c043448b504a7285a640e5974c0f322df99b5b12ddd189d51acd7cd"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "video-sdk",
+      "source_url": "https://developers.zoom.us/api-hub/video-sdk/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/video-sdk.json?slug=video-sdk",
+        "bytes": 190572,
+        "sha256": "33c862da5a2c7d68adb81639eaf9882f88ad0d57536c1199bbc9c39c733fab81"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/video-sdk/methods/endpoints.json",
+        "bytes": 191445,
+        "sha256": "1836aa422a241bf25e7db860f94fbf096639ec35cd9a5dd463a7d5d0ff07fc39"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "virtual-agent",
+      "source_url": "https://developers.zoom.us/api-hub/virtual-agent/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/virtual-agent.json?slug=virtual-agent",
+        "bytes": 88327,
+        "sha256": "c2ac209fa09e4ce13c5b739926810e68a50aea0cd048738e2150f4c874229e81"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/virtual-agent/methods/endpoints.json",
+        "bytes": 90802,
+        "sha256": "ca5c91a5998bd6f637f7789d3277d10ef4af9a68fbd1cd1318589778916371df"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "whiteboard",
+      "source_url": "https://developers.zoom.us/api-hub/whiteboard/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/whiteboard.json?slug=whiteboard",
+        "bytes": 154774,
+        "sha256": "997b34b7dcc74b0dd740349985b28786fc28b4712d07546fd7ad71833442e09e"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/whiteboard/methods/endpoints.json",
+        "bytes": 168386,
+        "sha256": "3f35458bba020eda9f509a9d3f4908d4dbec7145493d10a95e3f287ef4a2eb87"
+      },
+      "retained": true
+    },
+    {
+      "connector": "zoom",
+      "artifact": "workforce-management",
+      "source_url": "https://developers.zoom.us/api-hub/workforce-management/methods/endpoints.json",
+      "retrieved_at": "2026-08-24T12:15:50Z",
+      "http_status": 200,
+      "redirect": "none",
+      "classification": "real first-party OpenAPI 3.0.0 document; complete method/path/operation-ID inventory exactly matches the preserved source lock",
+      "decision": "re-pinned",
+      "old": {
+        "source_url": "https://developers.zoom.us/_next/data/2026-08-17T14-01-06-06-00/docs/api/workforce-management.json?slug=workforce-management",
+        "bytes": 120579,
+        "sha256": "b885223017a79a4c492079449b5208c88ea1079575592e5d4767d8a899c56631"
+      },
+      "new": {
+        "source_url": "https://developers.zoom.us/api-hub/workforce-management/methods/endpoints.json",
+        "bytes": 124298,
+        "sha256": "c3f874d73565e7b83ed6355734314db2d7e94fb992ab500eb3c55d117e662437"
+      },
+      "retained": true
+    }
+  ]
+}

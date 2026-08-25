@@ -1,0 +1,155 @@
+{
+  "schema_version": 2,
+  "connector": "zoom",
+  "generated_at": "2026-08-19T11:45:00Z",
+  "operation_row_ledger": {
+    "path": "sources/zoom-missing-foundation-gaps.json",
+    "contract": "Deduplicated provider-neutral catalog plus exact source-locked operation rows, fan-out, source-module batches, and portfolio rollup.",
+    "merge_ready_rule": "Every open operation row has merge_ready_enabled=false; runtime CLI reachability is recorded independently and is never rewritten as disabled or not-applicable."
+  },
+  "source_basis": {
+    "source_lock": "sources/zoom-operation-source-lock.json",
+    "crosswalk": "sources/zoom-operation-crosswalk.json",
+    "api_surface": "api_surface.json",
+    "source_operations": 1937,
+    "api_surface_endpoints": 1913,
+    "exact_source_to_surface": 1911,
+    "source_only": 26,
+    "surface_only": 2
+  },
+  "gaps": [
+    {
+      "id": "operation-backed-rest-write-api-surface-coverage",
+      "tracking": "#4281",
+      "evidence": [
+        "internal/connectors/engine/bundle.go:679-721 only admits covered_by.operations for fixed GraphQL operation kinds, rejecting REST rest_write coverage.",
+        "cmd/connectorgen/validate.go:696-721 repeats the REST operation coverage restriction."
+      ],
+      "minimal_change": "Admit an exact REST rest_write operation identity, method, path, policy, and request-contract binding without treating it as a GraphQL operation.",
+      "recoverable": true,
+      "affected_count": 0,
+      "applicable_source_contract_count": 971,
+      "applicable_delete_contract_count": 311,
+      "primary_rejection_count": 0,
+      "restricted_additional_count": 396,
+      "alternate_typed_write_actions": 202
+    },
+    {
+      "id": "rest-write-root-json-input",
+      "tracking": null,
+      "evidence": [
+        "internal/connectors/commandrunner/runner.go:1372-1430 permits a literal root body override only for direct reads, not reverse-ETL REST writes.",
+        "internal/connectors/engine/direct_write.go:616-635 builds a body from declared dotted record fields; the pinned Zoom contracts do not carry closed root body schemas for these writes."
+      ],
+      "minimal_change": "Retain provider-derived closed request body schemas and admit a typed root JSON input only when that schema validates, without adding a generic raw HTTP body escape hatch.",
+      "recoverable": true,
+      "affected_count": 469,
+      "applicable_source_contract_count": 469,
+      "primary_rejection_count": 469
+    },
+    {
+      "id": "rest-query-array-encoding",
+      "tracking": null,
+      "evidence": [
+        "internal/connectors/commandrunner/runner.go:1543-1548 stringifies array flag values instead of preserving the provider's declared query serialization.",
+        "The pinned Zoom source contracts identify 25 non-paid read or write operations with array query parameters; no array wire format was inferred."
+      ],
+      "minimal_change": "Carry provider-derived array query serialization and encode only that declared style at the REST transport boundary.",
+      "recoverable": true,
+      "affected_count": 32,
+      "applicable_source_contract_count": 32,
+      "primary_rejection_count": 32
+    },
+    {
+      "id": "file-upload-executor",
+      "tracking": "G12",
+      "evidence": [
+        "internal/connectors/engine/bundle.go:2745-2753 validates file_upload metadata but no connector command executor is registered for file_upload.",
+        "internal/connectors/engine/schema/operations.schema.json:139-168 cannot express the legacy multipart.parts[].allowed_file_extensions field."
+      ],
+      "minimal_change": "Register a bounded file_upload executor and support provider-backed extension policy only if it is enforced at execution time.",
+      "recoverable": true,
+      "affected_count": 34,
+      "applicable_source_contract_count": 34
+    },
+    {
+      "id": "binary-redirect-origin-contract",
+      "tracking": null,
+      "evidence": [
+        "Zoom source clips Download a clip documents an HTTP 302 redirect to the actual download location.",
+        "internal/connectors/engine/schema/operations.schema.json:90-169 has no per-operation server_url or bearer_redirect field.",
+        "internal/connectors/engine/binary_read_test.go:581-615 enforces cross-host allowlisting; the public source does not declare a safe redirect host."
+      ],
+      "minimal_change": "Support an evidence-backed per-operation origin and redirect policy that preserves credential safety and allowlists provider-issued redirect hosts.",
+      "recoverable": true,
+      "affected_count": 1,
+      "applicable_source_contract_count": 1
+    },
+    {
+      "id": "write-optional-record-query",
+      "tracking": "#4305",
+      "evidence": [
+        "internal/connectors/engine/read.go:771-785 resolves write query templates through the shared optional-query helper, while :1338-1348 treats only config, secrets, and incremental references as omittable.",
+        "The documented Zoom Delete a meeting action declares occurrence_id as an optional record-derived query input. The lane-owned fixture fails before I/O when a regular meeting correctly has no occurrence_id."
+      ],
+      "minimal_change": "Permit buildWriteQuery to omit only an unresolved exact record reference when its query entry explicitly sets omit_when_absent and that record path is declared by the action's source-locked record_schema; keep every other missing or invalid input a hard pre-I/O error.",
+      "recoverable": true,
+      "affected_count": 1,
+      "applicable_source_contract_count": 1,
+      "primary_rejection_count": 1
+    },
+    {
+      "id": "operation-specific-fixture-evidence-projection",
+    "tracking": null,
+    "evidence": [
+      "cmd/connectorgen/certificationmatrix.go:1308-1352 projects fixture evidence only for capability:check, capability:read, and capability:write; every operation-kind cell falls through to fixture_tested=false.",
+      "The accepted Zoom observed-operations record proves one operation:rest_read live exchange, but the matrix cannot certify it without an operation-specific replay fixture projection."
+    ],
+    "minimal_change": "Project a connector-owned direct-operation fixture and conformance assertion to the matching operation kind, retaining exact command/operation identity rather than treating a stream fixture as generic operation evidence.",
+    "recoverable": true,
+    "affected_count": 776,
+      "applicable_source_contract_count": 776,
+      "live_proven_candidate_count": 1,
+      "primary_rejection_count": 0
+    },
+    {
+      "id": "definition-fixture-conformance-certification-stage",
+      "tracking": null,
+      "evidence": [
+        "internal/connectors/certify/stages_source.go:811-814 always records fixture_conformance as passed=false with the obsolete noDefsBundleReason, although Zoom has connector-owned fixtures and the bundle validates them locally.",
+        "The bounded Zoom full live run therefore cannot be an accepted report even when its exact source ETL stages and query read-back pass."
+      ],
+      "minimal_change": "Replace the wave0 constant stage with a connector-neutral declaration-fixture conformance runner over defs.FS; pass only when the declared connector fixtures execute, and retain an explicit unavailable result where no fixture contract exists.",
+      "recoverable": true,
+      "affected_count": 3,
+      "applicable_source_contract_count": 3,
+      "primary_rejection_count": 0
+    },
+    {
+      "id": "capability-scoped-live-evidence-publication",
+      "tracking": null,
+      "evidence": [
+        "internal/connectors/certify/stages_source.go:673-695 runs every stream's read, flow, and schedule lifecycle in a full sweep; Zoom's entitled users and meetings stages pass while Webinar is a paid-tier refusal.",
+        "internal/connectors/certify/stages_source.go:431 makes Report.Passed depend on every stage, and external evidence import accepts only a passing report. The successful bounded source stages therefore cannot publish a capability:read proof with their already-passing fixtures."
+      ],
+      "minimal_change": "Preserve all-or-nothing full-report and full-parity semantics, but publish a separately keyed, fingerprint-only capability-stage evidence record only when that exact declared stream, fixture contract, and bounded live stage passed; unrelated stream refusals must remain visible and cannot promote a broader connector claim.",
+      "recoverable": true,
+      "affected_count": 2,
+      "applicable_source_contract_count": 3,
+      "primary_rejection_count": 0
+    },
+    {
+      "id": "schedule-roundtrip-source-only-skip",
+      "tracking": null,
+      "evidence": [
+        "internal/connectors/certify/stages_source.go:690-694 runs flow and schedule round-trips for every full-sweep source stream.",
+        "Zoom declares a narrow source/destination pair, but has no declared flow fixture or schedule round-trip contract; its full run must record that absent optional surface as non-applicable instead of attempting schedule creation."
+      ],
+      "minimal_change": "When a connector lacks a declared executable flow fixture or schedule contract, mark flow and schedule round-trip stages non-applicable before invoking schedule creation; retain failures for connectors that do declare the required surface.",
+      "recoverable": true,
+      "affected_count": 3,
+      "applicable_source_contract_count": 3,
+      "primary_rejection_count": 0
+    }
+  ]
+}

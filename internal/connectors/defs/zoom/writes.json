@@ -1,0 +1,6919 @@
+{
+  "actions": [
+    {
+      "name": "update_clinical_note",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/clinical_notes/notes/{{ record.note_id }}",
+      "path_fields": [
+        "note_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "note_id": {
+            "type": "string",
+            "description": "Clinical note identifier used only in the fixed request path."
+          },
+          "is_note_completed": {
+            "type": "boolean",
+            "description": "Whether the clinical note is marked completed."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "note_id",
+          "is_note_completed"
+        ]
+      },
+      "redact_fields": [
+        "note_id"
+      ],
+      "risk": "high: mutates a patient's clinical note completion status; requires reverse ETL approval"
+    },
+    {
+      "name": "create_quality_management_interaction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/qm/interactions",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "download_url": {
+            "type": "string",
+            "description": "Third-party download URL for the interaction media."
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "inbound",
+              "outbound"
+            ],
+            "description": "Call direction."
+          },
+          "disposition": {
+            "type": "string",
+            "description": "Disposition name."
+          },
+          "interaction_info": {
+            "type": "object",
+            "properties": {
+              "channel_type": {
+                "type": "string",
+                "enum": [
+                  "video",
+                  "voice"
+                ],
+                "description": "Interaction channel."
+              },
+              "agent_email": {
+                "type": "string",
+                "description": "Agent email address."
+              },
+              "agent_id": {
+                "type": "string",
+                "description": "Agent Zoom user ID."
+              },
+              "consumer_name": {
+                "type": "string",
+                "description": "Consumer name."
+              },
+              "from": {
+                "type": "string",
+                "description": "Caller phone number in E.164 format."
+              },
+              "to": {
+                "type": "string",
+                "description": "Recipient phone number in E.164 format."
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "channel_type"
+            ]
+          },
+          "primary_language": {
+            "type": "string",
+            "enum": [
+              "en-GB",
+              "en-US",
+              "ar",
+              "da-DK",
+              "de-DE",
+              "es-ES",
+              "es-MX",
+              "fr-CA",
+              "fr-FR",
+              "it-IT",
+              "ja",
+              "ko-KR",
+              "nl-NL",
+              "pt-BR",
+              "pt-PT",
+              "ru",
+              "zh-CN",
+              "zh-HK"
+            ],
+            "description": "Optional primary transcription language."
+          },
+          "queue_id": {
+            "type": "string",
+            "description": "Contact Center queue ID."
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Interaction start time as RFC3339."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "download_url"
+        ]
+      },
+      "redact_fields": [
+        "download_url",
+        "interaction_info"
+      ],
+      "risk": "high: imports a third-party interaction into Zoom Quality Management; requires reverse ETL approval"
+    },
+    {
+      "name": "zoom_accounts_canceldatarequest",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/data_requests/requests/{{ record.requestId }}",
+      "path_fields": [
+        "requestId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "requestId"
+        ]
+      },
+      "risk": "high: Cancel data deletion request",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_accounts_deleterole",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/roles/{{ record.roleId }}",
+      "path_fields": [
+        "roleId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "roleId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "roleId"
+        ]
+      },
+      "risk": "high: Delete a role",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_accounts_delvb",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/accounts/{{ record.accountId }}/settings/virtual_backgrounds",
+      "path_fields": [
+        "accountId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string"
+          },
+          "file_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "accountId"
+        ]
+      },
+      "risk": "high: Delete virtual background files",
+      "query": {
+        "file_ids": {
+          "template": "{{ record.file_ids }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_accounts_informationbarriersdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/information_barriers/policies/{{ record.policyId }}",
+      "path_fields": [
+        "policyId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "policyId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "policyId"
+        ]
+      },
+      "risk": "high: Remove an Information Barrier policy",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_ai_services_cancelbatchjob",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/aiservices/scribe/jobs/{{ record.jobId }}",
+      "path_fields": [
+        "jobId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "jobId"
+        ]
+      },
+      "risk": "high: Cancel Batch Job",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_ai_services_cancelbatchsummarizerjob",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/aiservices/summarizer/jobs/{{ record.jobId }}",
+      "path_fields": [
+        "jobId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "jobId"
+        ]
+      },
+      "risk": "high: Cancel Batch Summarizer Job",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_ai_services_cancelbatchtranslatorjob",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/aiservices/translator/jobs/{{ record.jobId }}",
+      "path_fields": [
+        "jobId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "jobId"
+        ]
+      },
+      "risk": "high: Cancel Batch Translator Job",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_auto_dialer_deletecalllist",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/dialer/call-lists/{{ record.callListId }}",
+      "path_fields": [
+        "callListId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "callListId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "callListId"
+        ]
+      },
+      "risk": "high: Delete Call List",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_auto_dialer_deleteprospect",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/dialer/call-lists/{{ record.callListId }}/prospects/{{ record.prospectId }}",
+      "path_fields": [
+        "callListId",
+        "prospectId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "callListId": {
+            "type": "string"
+          },
+          "prospectId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "callListId",
+          "prospectId"
+        ]
+      },
+      "risk": "high: Delete Prospect",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_calendar_deleteacl",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/calendars/{{ record.calId }}/acl/{{ record.aclId }}",
+      "path_fields": [
+        "calId",
+        "aclId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "calId": {
+            "type": "string"
+          },
+          "aclId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "calId",
+          "aclId"
+        ]
+      },
+      "risk": "high: Delete an existing ACL rule",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_calendar_deletecalendar",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/calendars/{{ record.calId }}",
+      "path_fields": [
+        "calId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "calId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "calId"
+        ]
+      },
+      "risk": "high: Delete a calendar owned by a user",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_calendar_deletecalendarlist",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/calendars/users/{{ record.userIdentifier }}/calendarList/{{ record.calendarId }}",
+      "path_fields": [
+        "userIdentifier",
+        "calendarId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "userIdentifier": {
+            "type": "string"
+          },
+          "calendarId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userIdentifier",
+          "calendarId"
+        ]
+      },
+      "risk": "high: Delete an existing calendar from the user's own calendarList",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_calendar_deleteevent",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/calendars/{{ record.calId }}/events/{{ record.eventId }}",
+      "path_fields": [
+        "calId",
+        "eventId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "calId": {
+            "type": "string"
+          },
+          "eventId": {
+            "type": "string"
+          },
+          "sendUpdates": {
+            "type": "string",
+            "enum": [
+              "all",
+              "externalOnly",
+              "none"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "calId",
+          "eventId"
+        ]
+      },
+      "risk": "high: Delete an existing event from the specified calendar",
+      "query": {
+        "sendUpdates": {
+          "template": "{{ record.sendUpdates }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_calendar_moveevent",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/calendars/{{ record.calId }}/events/{{ record.eventId }}/move",
+      "path_fields": [
+        "calId",
+        "eventId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "calId": {
+            "type": "string"
+          },
+          "eventId": {
+            "type": "string"
+          },
+          "destination": {
+            "type": "string"
+          },
+          "sendUpdates": {
+            "type": "string",
+            "enum": [
+              "all",
+              "externalOnly",
+              "none"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "calId",
+          "eventId",
+          "destination"
+        ]
+      },
+      "risk": "high: Move the specified event from a calendar to another specified calendar",
+      "query": {
+        "destination": {
+          "template": "{{ record.destination }}"
+        },
+        "sendUpdates": {
+          "template": "{{ record.sendUpdates }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "zoom_calendar_quickaddevent",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/calendars/{{ record.calId }}/events/quickAdd",
+      "path_fields": [
+        "calId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "calId": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "sendUpdates": {
+            "type": "string",
+            "enum": [
+              "all",
+              "externalOnly",
+              "none"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "calId",
+          "text"
+        ]
+      },
+      "risk": "high: Quick add an event to the specified calendar",
+      "query": {
+        "text": {
+          "template": "{{ record.text }}"
+        },
+        "sendUpdates": {
+          "template": "{{ record.sendUpdates }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "zoom_canvas_deleteblock",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/docs/files/{{ record.fileId }}/blocks/{{ record.blockId }}",
+      "path_fields": [
+        "fileId",
+        "blockId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string"
+          },
+          "blockId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "fileId",
+          "blockId"
+        ]
+      },
+      "risk": "high: Delete a specific block",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_canvas_deletefile",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/docs/files/{{ record.fileId }}",
+      "path_fields": [
+        "fileId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "fileId"
+        ]
+      },
+      "risk": "high: Delete a file",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_canvas_removeacollaborator",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/docs/files/{{ record.fileId }}/collaborators/{{ record.collaboratorId }}",
+      "path_fields": [
+        "fileId",
+        "collaboratorId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string"
+          },
+          "collaboratorId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "fileId",
+          "collaboratorId"
+        ]
+      },
+      "risk": "high: Remove a collaborator from a file",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_batchdeletechannelsaccountlevel",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/users/{{ record.userId }}/channels",
+      "path_fields": [
+        "userId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "channel_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userId",
+          "channel_ids"
+        ]
+      },
+      "risk": "high: Batch delete channels",
+      "query": {
+        "channel_ids": {
+          "template": "{{ record.channel_ids }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_batchdemotechanneladministrators",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/users/{{ record.userId }}/channels/{{ record.channelId }}/admins",
+      "path_fields": [
+        "userId",
+        "channelId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "channelId": {
+            "type": "string"
+          },
+          "admin_ids": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userId",
+          "channelId",
+          "admin_ids",
+          "user_ids"
+        ]
+      },
+      "risk": "high: Batch demote channel administrators",
+      "query": {
+        "admin_ids": {
+          "template": "{{ record.admin_ids }}"
+        },
+        "user_ids": {
+          "template": "{{ record.user_ids }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_batchremovechannelmembers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/channels/{{ record.channelId }}/members",
+      "path_fields": [
+        "channelId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          },
+          "member_ids": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "channelId",
+          "member_ids",
+          "user_ids"
+        ]
+      },
+      "risk": "high: Batch remove members from a channel",
+      "query": {
+        "member_ids": {
+          "template": "{{ record.member_ids }}"
+        },
+        "user_ids": {
+          "template": "{{ record.user_ids }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_batchremoveuserchannelmembers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/users/{{ record.userId }}/channels/{{ record.channelId }}/members",
+      "path_fields": [
+        "channelId",
+        "userId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "identifiers": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "channelId",
+          "userId",
+          "identifiers"
+        ]
+      },
+      "risk": "high: Batch remove members from a user's channel",
+      "query": {
+        "identifiers": {
+          "template": "{{ record.identifiers }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_deleteachannelmentiongroup",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/channels/{{ record.channelId }}/mention_group/{{ record.mentionGroupId }}",
+      "path_fields": [
+        "channelId",
+        "mentionGroupId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          },
+          "mentionGroupId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "channelId",
+          "mentionGroupId"
+        ]
+      },
+      "risk": "high: Delete a channel mention group",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_deletechannel",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/users/{{ record.userId }}/channels/{{ record.channelId }}",
+      "path_fields": [
+        "channelId",
+        "userId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "channelId",
+          "userId"
+        ]
+      },
+      "risk": "high: Delete a channel",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_deletechatfile",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/files/{{ record.fileId }}",
+      "path_fields": [
+        "fileId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "fileId"
+        ]
+      },
+      "risk": "high: Delete a chat file",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_deletecustomemoji",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/emoji/{{ record.fileId }}",
+      "path_fields": [
+        "fileId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "fileId"
+        ]
+      },
+      "risk": "high: Delete a custom emoji",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_deletelegalholdmatters",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/legalhold/matters/{{ record.matterId }}",
+      "path_fields": [
+        "matterId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "matterId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "matterId"
+        ]
+      },
+      "risk": "high: Delete legal hold matters",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_deletereminderformessage",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/messages/{{ record.messageId }}/reminder",
+      "path_fields": [
+        "messageId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "messageId": {
+            "type": "string"
+          },
+          "to_contact": {
+            "type": "string"
+          },
+          "to_channel": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "messageId"
+        ]
+      },
+      "risk": "high: Delete a reminder for a message",
+      "query": {
+        "to_contact": {
+          "template": "{{ record.to_contact }}",
+          "omit_when_absent": true
+        },
+        "to_channel": {
+          "template": "{{ record.to_channel }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_deleteschedulemessage",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/messages/schedule/{{ record.draftId }}",
+      "path_fields": [
+        "draftId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "draftId": {
+            "type": "string"
+          },
+          "to_contact": {
+            "type": "string"
+          },
+          "to_channel": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "draftId"
+        ]
+      },
+      "risk": "high: Delete a scheduled message",
+      "query": {
+        "to_contact": {
+          "template": "{{ record.to_contact }}",
+          "omit_when_absent": true
+        },
+        "to_channel": {
+          "template": "{{ record.to_channel }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_deletespace",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/spaces/{{ record.spaceId }}",
+      "path_fields": [
+        "spaceId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId"
+        ]
+      },
+      "risk": "high: Delete a shared space",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_deletespacemembers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/spaces/{{ record.spaceId }}/members",
+      "path_fields": [
+        "spaceId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string"
+          },
+          "identifiers": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "identifiers"
+        ]
+      },
+      "risk": "high: Remove members from a shared space",
+      "query": {
+        "identifiers": {
+          "template": "{{ record.identifiers }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_deleteuserlevelchannel",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/channels/{{ record.channelId }}",
+      "path_fields": [
+        "channelId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "channelId"
+        ]
+      },
+      "risk": "high: Delete a channel",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_demotespaceadmins",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/spaces/{{ record.spaceId }}/admins",
+      "path_fields": [
+        "spaceId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string"
+          },
+          "identifiers": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "identifiers"
+        ]
+      },
+      "risk": "high: Demote shared space administrators to members",
+      "query": {
+        "identifiers": {
+          "template": "{{ record.identifiers }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_imgroupdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/im/groups/{{ record.groupId }}",
+      "path_fields": [
+        "groupId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "groupId"
+        ]
+      },
+      "risk": "high: Delete an IM directory group",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_imgroupmembersdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/im/groups/{{ record.groupId }}/members/{{ record.memberId }}",
+      "path_fields": [
+        "groupId",
+        "memberId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string"
+          },
+          "memberId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "groupId",
+          "memberId"
+        ]
+      },
+      "risk": "high: Delete IM directory group member",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_joinchannel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/chat/channels/{{ record.channelId }}/members/me",
+      "path_fields": [
+        "channelId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "channelId"
+        ]
+      },
+      "risk": "high: Join a channel"
+    },
+    {
+      "name": "zoom_chat_leavechannel",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/channels/{{ record.channelId }}/members/me",
+      "path_fields": [
+        "channelId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "channelId"
+        ]
+      },
+      "risk": "high: Leave a channel",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_reassignchannelowner",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/chat/channels/{{ record.channelId }}/owner/{{ record.identifier }}",
+      "path_fields": [
+        "channelId",
+        "identifier"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "channelId",
+          "identifier"
+        ]
+      },
+      "risk": "high: Assign a new channel owner"
+    },
+    {
+      "name": "zoom_chat_removeamembergroup",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/channels/{{ record.channelId }}/members/groups/{{ record.groupId }}",
+      "path_fields": [
+        "channelId",
+        "groupId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          },
+          "groupId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "channelId",
+          "groupId"
+        ]
+      },
+      "risk": "high: Remove a member (group)",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_removeauserlevelchannelmember",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/channels/{{ record.channelId }}/members/{{ record.identifier }}",
+      "path_fields": [
+        "channelId",
+        "identifier"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "channelId",
+          "identifier"
+        ]
+      },
+      "risk": "high: Remove a member",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_removechannelmentiongroupmembers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/chat/channels/{{ record.channelId }}/mention_group/{{ record.mentionGroupId }}/members",
+      "path_fields": [
+        "channelId",
+        "mentionGroupId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          },
+          "mentionGroupId": {
+            "type": "string"
+          },
+          "identifiers": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "channelId",
+          "mentionGroupId",
+          "identifiers"
+        ]
+      },
+      "risk": "high: Remove channel mention group members",
+      "query": {
+        "identifiers": {
+          "template": "{{ record.identifiers }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_chat_transferspaceowner",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/chat/spaces/{{ record.spaceId }}/owner",
+      "path_fields": [
+        "spaceId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "spaceId": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "spaceId",
+          "identifier"
+        ]
+      },
+      "risk": "high: Transfer shared space ownership",
+      "query": {
+        "identifier": {
+          "template": "{{ record.identifier }}"
+        }
+      }
+    },
+    {
+      "name": "zoom_chatbot_deleteachatbotmessage",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/im/chat/messages/{{ record.message_id }}",
+      "path_fields": [
+        "message_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "message_id": {
+            "type": "string"
+          },
+          "account_id": {
+            "type": "string"
+          },
+          "user_jid": {
+            "type": "string"
+          },
+          "robot_jid": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "message_id",
+          "account_id",
+          "robot_jid"
+        ]
+      },
+      "risk": "high: Delete a Chatbot message",
+      "query": {
+        "account_id": {
+          "template": "{{ record.account_id }}"
+        },
+        "user_jid": {
+          "template": "{{ record.user_jid }}",
+          "omit_when_absent": true
+        },
+        "robot_jid": {
+          "template": "{{ record.robot_jid }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_clips_deleteacomment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/clips/{{ record.clipId }}/comments/{{ record.commentId }}",
+      "path_fields": [
+        "clipId",
+        "commentId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "clipId": {
+            "type": "string"
+          },
+          "commentId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "clipId",
+          "commentId"
+        ]
+      },
+      "risk": "high: Delete a comment",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_clips_deleteclip",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/clips/{{ record.clipId }}",
+      "path_fields": [
+        "clipId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "clipId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "clipId"
+        ]
+      },
+      "risk": "high: Delete a clip(soft delete)",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_clips_deletecollaborator",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/clips/{{ record.clipId }}/collaborators",
+      "path_fields": [
+        "clipId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "clipId": {
+            "type": "string"
+          },
+          "user_key": {
+            "type": "string"
+          },
+          "channel_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "clipId"
+        ]
+      },
+      "risk": "high: Remove the collaborator from a clip",
+      "query": {
+        "user_key": {
+          "template": "{{ record.user_key }}",
+          "omit_when_absent": true
+        },
+        "channel_id": {
+          "template": "{{ record.channel_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_businesshourdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/business_hours/{{ record.businessHourId }}",
+      "path_fields": [
+        "businessHourId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "businessHourId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "businessHourId"
+        ]
+      },
+      "risk": "high: Delete business hours",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_closuresetdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/closures/{{ record.closureSetId }}",
+      "path_fields": [
+        "closureSetId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "closureSetId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "closureSetId"
+        ]
+      },
+      "risk": "high: Delete a closure set",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_contactdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/address_books/{{ record.addressBookId }}/contacts/{{ record.contactId }}",
+      "path_fields": [
+        "addressBookId",
+        "contactId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "addressBookId": {
+            "type": "string"
+          },
+          "contactId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "addressBookId",
+          "contactId"
+        ]
+      },
+      "risk": "high: Delete an address book contact",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteacampaigncustomfield",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/outbound_campaign/contact_list_custom_fields/{{ record.customFieldId }}",
+      "path_fields": [
+        "customFieldId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customFieldId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "customFieldId"
+        ]
+      },
+      "risk": "high: Delete a campaign contact list's custom field",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteaconsumerroutingprofile",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/consumer_routing_profiles/{{ record.consumerRoutingProfileId }}",
+      "path_fields": [
+        "consumerRoutingProfileId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "consumerRoutingProfileId": {
+            "type": "string"
+          },
+          "consumer_routing_profile_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "consumerRoutingProfileId"
+        ]
+      },
+      "risk": "high: Delete a consumer routing profile",
+      "query": {
+        "consumer_routing_profile_identifier_type": {
+          "template": "{{ record.consumer_routing_profile_identifier_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteaddressbook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/address_books/{{ record.addressBookId }}",
+      "path_fields": [
+        "addressBookId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "addressBookId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "addressBookId"
+        ]
+      },
+      "risk": "high: Delete an address book",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteanagentroutingprofile",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/agent_routing_profiles/{{ record.agentRoutingProfileId }}",
+      "path_fields": [
+        "agentRoutingProfileId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "agentRoutingProfileId": {
+            "type": "string"
+          },
+          "agent_routing_profile_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "agentRoutingProfileId"
+        ]
+      },
+      "risk": "high: Delete an agent routing profile",
+      "query": {
+        "agent_routing_profile_identifier_type": {
+          "template": "{{ record.agent_routing_profile_identifier_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteanasset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/asset_library/assets/{{ record.assetId }}",
+      "path_fields": [
+        "assetId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "assetId": {
+            "type": "string"
+          },
+          "archive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "assetId"
+        ]
+      },
+      "risk": "high: Delete an asset",
+      "query": {
+        "archive": {
+          "template": "{{ record.archive }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteanassetcategory",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/asset_library/categories/{{ record.categoryId }}",
+      "path_fields": [
+        "categoryId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "categoryId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "categoryId"
+        ]
+      },
+      "risk": "high: Delete an asset category",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteancustomfield",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/address_books/custom_fields/{{ record.customFieldId }}",
+      "path_fields": [
+        "customFieldId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customFieldId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "customFieldId"
+        ]
+      },
+      "risk": "high: Delete an address book custom field",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletearegion",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/regions/{{ record.regionId }}",
+      "path_fields": [
+        "regionId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "regionId": {
+            "type": "string"
+          },
+          "region_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name"
+            ]
+          },
+          "move_to_region_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "regionId",
+          "move_to_region_id"
+        ]
+      },
+      "risk": "high: Delete a region",
+      "query": {
+        "region_identifier_type": {
+          "template": "{{ record.region_identifier_type }}",
+          "omit_when_absent": true
+        },
+        "move_to_region_id": {
+          "template": "{{ record.move_to_region_id }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteaskill",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/users/{{ record.userId }}/skills/{{ record.skillId }}",
+      "path_fields": [
+        "userId",
+        "skillId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "skillId": {
+            "type": "string"
+          },
+          "user_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "email"
+            ]
+          },
+          "skill_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userId",
+          "skillId"
+        ]
+      },
+      "risk": "high: Unassign a user's skill",
+      "query": {
+        "user_identifier_type": {
+          "template": "{{ record.user_identifier_type }}",
+          "omit_when_absent": true
+        },
+        "skill_identifier_type": {
+          "template": "{{ record.skill_identifier_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteausertemplate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/users/templates/{{ record.templateId }}",
+      "path_fields": [
+        "templateId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "templateId": {
+            "type": "string"
+          },
+          "user_template_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "templateId"
+        ]
+      },
+      "risk": "high: Delete a user template",
+      "query": {
+        "user_template_identifier_type": {
+          "template": "{{ record.user_template_identifier_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletecampaigncontactlist",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/outbound_campaign/contact_lists/{{ record.contactListId }}",
+      "path_fields": [
+        "contactListId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contactListId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "contactListId"
+        ]
+      },
+      "risk": "high: Remove a campaign contact list",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletecampaigncontactlistcontact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/outbound_campaign/contact_lists/{{ record.contactListId }}/contacts/{{ record.contactId }}",
+      "path_fields": [
+        "contactListId",
+        "contactId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contactListId": {
+            "type": "string"
+          },
+          "contactId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "contactListId",
+          "contactId"
+        ]
+      },
+      "risk": "high: Remove campaign contact list's contact",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletedisposition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/dispositions/{{ record.dispositionId }}",
+      "path_fields": [
+        "dispositionId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "dispositionId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "dispositionId"
+        ]
+      },
+      "risk": "high: Delete a disposition",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteengagementrecordings",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/engagements/{{ record.engagementId }}/recordings",
+      "path_fields": [
+        "engagementId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "engagementId": {
+            "type": "string"
+          },
+          "delete_all_recordings": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "engagementId"
+        ]
+      },
+      "risk": "high: Delete engagement recordings",
+      "query": {
+        "delete_all_recordings": {
+          "template": "{{ record.delete_all_recordings }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteflow",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/flows/{{ record.flowId }}",
+      "path_fields": [
+        "flowId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "flowId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "flowId"
+        ]
+      },
+      "risk": "high: Delete a flow",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletegroup",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/variables/groups/{{ record.variableGroupId }}",
+      "path_fields": [
+        "variableGroupId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "variableGroupId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "variableGroupId"
+        ]
+      },
+      "risk": "high: Delete a variable group",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteoutboundcampaign",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/outbound_campaign/campaigns/{{ record.campaignId }}",
+      "path_fields": [
+        "campaignId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "campaignId"
+        ]
+      },
+      "risk": "high: Delete an outbound campaign",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletequeueagent",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/queues/{{ record.queueId }}/agents/{{ record.userId }}",
+      "path_fields": [
+        "queueId",
+        "userId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "queueId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "queueId",
+          "userId"
+        ]
+      },
+      "risk": "high: Unassign a queue agent",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletequeuedisposition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/queues/{{ record.queueId }}/dispositions/{{ record.dispositionId }}",
+      "path_fields": [
+        "queueId",
+        "dispositionId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "queueId": {
+            "type": "string"
+          },
+          "dispositionId": {
+            "type": "string"
+          },
+          "queue_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name"
+            ]
+          },
+          "disposition_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name"
+            ]
+          },
+          "assign_type": {
+            "type": "string",
+            "enum": [
+              "inbound",
+              "outbound"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "queueId",
+          "dispositionId"
+        ]
+      },
+      "risk": "high: Unassign a queue disposition",
+      "query": {
+        "queue_identifier_type": {
+          "template": "{{ record.queue_identifier_type }}",
+          "omit_when_absent": true
+        },
+        "disposition_identifier_type": {
+          "template": "{{ record.disposition_identifier_type }}",
+          "omit_when_absent": true
+        },
+        "assign_type": {
+          "template": "{{ record.assign_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletequeuedispositionset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/queues/{{ record.queueId }}/dispositions/sets/{{ record.dispositionSetId }}",
+      "path_fields": [
+        "queueId",
+        "dispositionSetId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "queueId": {
+            "type": "string"
+          },
+          "dispositionSetId": {
+            "type": "string"
+          },
+          "assign_type": {
+            "type": "string",
+            "enum": [
+              "inbound",
+              "outbound"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "queueId",
+          "dispositionSetId"
+        ]
+      },
+      "risk": "high: Unassign a queue disposition set",
+      "query": {
+        "assign_type": {
+          "template": "{{ record.assign_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletequeueinterruptmenu",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/queues/{{ record.queueId }}/interrupt_menu",
+      "path_fields": [
+        "queueId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "queueId": {
+            "type": "string"
+          },
+          "bucket_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "queueId"
+        ]
+      },
+      "risk": "high: Delete a queue's interrupt menu configuration",
+      "query": {
+        "bucket_id": {
+          "template": "{{ record.bucket_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletequeuerecordings",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/queues/{{ record.queueId }}/recordings",
+      "path_fields": [
+        "queueId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "queueId": {
+            "type": "string"
+          },
+          "delete_all_recordings": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "queueId"
+        ]
+      },
+      "risk": "high: Delete queue recordings",
+      "query": {
+        "delete_all_recordings": {
+          "template": "{{ record.delete_all_recordings }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletequeuesupervisor",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/queues/{{ record.queueId }}/supervisors/{{ record.userId }}",
+      "path_fields": [
+        "queueId",
+        "userId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "queueId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "queueId",
+          "userId"
+        ]
+      },
+      "risk": "high: Unassign a queue supervisor",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletequeueteam",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/queues/{{ record.queueId }}/teams/{{ record.teamId }}",
+      "path_fields": [
+        "queueId",
+        "teamId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "queueId": {
+            "type": "string"
+          },
+          "teamId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "queueId",
+          "teamId"
+        ]
+      },
+      "risk": "high: Unassign a queue team",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletequeuetemplate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/queue_templates/{{ record.queueTemplateId }}",
+      "path_fields": [
+        "queueTemplateId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "queueTemplateId": {
+            "type": "string"
+          },
+          "queue_template_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "queueTemplateId"
+        ]
+      },
+      "risk": "high: Delete a queue template",
+      "query": {
+        "queue_template_identifier_type": {
+          "template": "{{ record.queue_template_identifier_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletequeuewaitingexperienceinterruptmenustrategy",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/queue_waiting_experiences/{{ record.queueId }}/interrupt_menu",
+      "path_fields": [
+        "queueId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "queueId": {
+            "type": "string"
+          },
+          "bucket_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "queueId"
+        ]
+      },
+      "risk": "high: Delete a queue waiting experience interrupt menu strategy",
+      "query": {
+        "bucket_id": {
+          "template": "{{ record.bucket_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleterecording",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/recordings/{{ record.recordingId }}",
+      "path_fields": [
+        "recordingId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "recordingId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "recordingId"
+        ]
+      },
+      "risk": "high: Delete a recording",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleterole",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/roles/{{ record.roleId }}",
+      "path_fields": [
+        "roleId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "roleId": {
+            "type": "string"
+          },
+          "role_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name"
+            ]
+          },
+          "transfer_role_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "roleId",
+          "transfer_role_id"
+        ]
+      },
+      "risk": "high: Delete a role",
+      "query": {
+        "role_identifier_type": {
+          "template": "{{ record.role_identifier_type }}",
+          "omit_when_absent": true
+        },
+        "transfer_role_id": {
+          "template": "{{ record.transfer_role_id }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteroleuser",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/roles/{{ record.roleId }}/users/{{ record.userId }}",
+      "path_fields": [
+        "roleId",
+        "userId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "roleId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "roleId",
+          "userId"
+        ]
+      },
+      "risk": "high: Unassign a user from a role",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/dispositions/sets/{{ record.dispositionSetId }}",
+      "path_fields": [
+        "dispositionSetId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "dispositionSetId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "dispositionSetId"
+        ]
+      },
+      "risk": "high: Delete a disposition set",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletesystemstatus",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/system_statuses/{{ record.statusId }}",
+      "path_fields": [
+        "statusId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "statusId": {
+            "type": "string"
+          },
+          "status_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "statusId"
+        ]
+      },
+      "risk": "high: Delete a system status",
+      "query": {
+        "status_identifier_type": {
+          "template": "{{ record.status_identifier_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteteam",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/teams/{{ record.teamId }}",
+      "path_fields": [
+        "teamId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "teamId"
+        ]
+      },
+      "risk": "high: Delete a team",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteunit",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/address_books/units/{{ record.unitId }}",
+      "path_fields": [
+        "unitId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "unitId"
+        ]
+      },
+      "risk": "high: Delete an address book unit",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deleteuserrecordings",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/users/{{ record.user_id }}/recordings",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "delete_all_recordings": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high: Delete a user's recordings",
+      "query": {
+        "delete_all_recordings": {
+          "template": "{{ record.delete_all_recordings }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_deletevariablelog",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/variable_logs/{{ record.variableLogId }}",
+      "path_fields": [
+        "variableLogId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "variableLogId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "variableLogId"
+        ]
+      },
+      "risk": "high: Delete a variable log",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_engagementrecordingcontrol",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/contact_center/engagements/{{ record.engagementId }}/recording/{{ record.command }}",
+      "path_fields": [
+        "engagementId",
+        "command"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "engagementId": {
+            "type": "string"
+          },
+          "command": {
+            "type": "string",
+            "enum": [
+              "pause",
+              "resume"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "engagementId",
+          "command"
+        ]
+      },
+      "risk": "high: Control an engagement's recording"
+    },
+    {
+      "name": "zoom_contact_center_inboxmessagedelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/inboxes/{{ record.inboxId }}/messages/{{ record.messageId }}",
+      "path_fields": [
+        "inboxId",
+        "messageId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "inboxId": {
+            "type": "string"
+          },
+          "messageId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "inboxId",
+          "messageId"
+        ]
+      },
+      "risk": "high: Delete an inbox message",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_inboxmessagesdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/inboxes/{{ record.inboxId }}/messages",
+      "path_fields": [
+        "inboxId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "inboxId": {
+            "type": "string"
+          },
+          "delete_all_messages": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "inboxId"
+        ]
+      },
+      "risk": "high: Delete an inbox's messages",
+      "query": {
+        "delete_all_messages": {
+          "template": "{{ record.delete_all_messages }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_publishflow",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/contact_center/flows/{{ record.flowId }}/publish",
+      "path_fields": [
+        "flowId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "flowId": {
+            "type": "string"
+          },
+          "flow_version": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "flowId"
+        ]
+      },
+      "risk": "high: Publish a flow",
+      "query": {
+        "flow_version": {
+          "template": "{{ record.flow_version }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "zoom_contact_center_queuedelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/queues/{{ record.queueId }}",
+      "path_fields": [
+        "queueId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "queueId": {
+            "type": "string"
+          },
+          "queue_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "queueId"
+        ]
+      },
+      "risk": "high: Delete a queue",
+      "query": {
+        "queue_identifier_type": {
+          "template": "{{ record.queue_identifier_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_skillcategorydelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/skills/categories/{{ record.skillCategoryId }}",
+      "path_fields": [
+        "skillCategoryId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "skillCategoryId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "skillCategoryId"
+        ]
+      },
+      "risk": "high: Delete a skill category",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_skilldelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/skills/{{ record.skillId }}",
+      "path_fields": [
+        "skillId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "skillId": {
+            "type": "string"
+          },
+          "skill_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "skillId"
+        ]
+      },
+      "risk": "high: Delete a skill",
+      "query": {
+        "skill_identifier_type": {
+          "template": "{{ record.skill_identifier_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_unassignteamagents",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/teams/{{ record.teamId }}/agents",
+      "path_fields": [
+        "teamId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "teamId",
+          "user_ids"
+        ]
+      },
+      "risk": "high: Unassign team agents",
+      "query": {
+        "user_ids": {
+          "template": "{{ record.user_ids }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_unassignteamsupervisors",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/teams/{{ record.teamId }}/supervisors",
+      "path_fields": [
+        "teamId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "teamId",
+          "user_ids"
+        ]
+      },
+      "risk": "high: Unassign team supervisors",
+      "query": {
+        "user_ids": {
+          "template": "{{ record.user_ids }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_userdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/users/{{ record.user_id }}",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user_identifier_type": {
+            "type": "string",
+            "enum": [
+              "id",
+              "email"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high: Delete a user's profile",
+      "query": {
+        "user_identifier_type": {
+          "template": "{{ record.user_identifier_type }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_contact_center_variabledelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contact_center/variables/{{ record.variableId }}",
+      "path_fields": [
+        "variableId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "variableId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "variableId"
+        ]
+      },
+      "risk": "high: Delete a variable",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_crc_deleteamanagedroom",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/crc/managed_rooms/{{ record.deviceId }}",
+      "path_fields": [
+        "deviceId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "deviceId"
+        ]
+      },
+      "risk": "high: Delete a managed room",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_crc_deleteapiconnector",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/crc/api_connectors/{{ record.connectorId }}",
+      "path_fields": [
+        "connectorId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "connectorId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "connectorId"
+        ]
+      },
+      "risk": "high: Delete an API Connector",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_crc_deletearoomtemplate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/crc/room_templates/{{ record.templateId }}",
+      "path_fields": [
+        "templateId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "templateId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "templateId"
+        ]
+      },
+      "risk": "high: Delete a room template",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_crc_updateapiconnectorprivatekey",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/crc/api_connectors/{{ record.connectorId }}/private_key",
+      "path_fields": [
+        "connectorId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "connectorId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "connectorId"
+        ]
+      },
+      "risk": "high: Update an API Connector's private key"
+    },
+    {
+      "name": "zoom_events_deleteevent",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zoom_events/events/{{ record.eventId }}",
+      "path_fields": [
+        "eventId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "eventId"
+        ]
+      },
+      "risk": "high: Delete an event",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_events_deleteeventaccesslink",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zoom_events/events/{{ record.eventId }}/access_links/{{ record.accessLinkId }}",
+      "path_fields": [
+        "eventId",
+        "accessLinkId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          },
+          "accessLinkId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "eventId",
+          "accessLinkId"
+        ]
+      },
+      "risk": "high: Delete event access link",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_events_deleteeventsession",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zoom_events/events/{{ record.eventId }}/sessions/{{ record.sessionId }}",
+      "path_fields": [
+        "eventId",
+        "sessionId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          },
+          "sessionId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "eventId",
+          "sessionId"
+        ]
+      },
+      "risk": "high: Delete a session",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_events_deleteeventtickettype",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zoom_events/events/{{ record.eventId }}/ticket_types/{{ record.ticketTypeId }}",
+      "path_fields": [
+        "eventId",
+        "ticketTypeId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          },
+          "ticketTypeId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "eventId",
+          "ticketTypeId"
+        ]
+      },
+      "risk": "high: Delete a ticket type",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_events_deleteexhibitor",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zoom_events/events/{{ record.eventId }}/exhibitors/{{ record.exhibitorId }}",
+      "path_fields": [
+        "eventId",
+        "exhibitorId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          },
+          "exhibitorId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "eventId",
+          "exhibitorId"
+        ]
+      },
+      "risk": "high: Delete an exhibitor",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_events_deletehubhost",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zoom_events/hubs/{{ record.hubId }}/hosts/{{ record.hostUserId }}",
+      "path_fields": [
+        "hubId",
+        "hostUserId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "hubId": {
+            "type": "string"
+          },
+          "hostUserId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "hubId",
+          "hostUserId"
+        ]
+      },
+      "risk": "high: Remove hub host",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_events_deletespeaker",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zoom_events/events/{{ record.eventId }}/speakers/{{ record.speakerId }}",
+      "path_fields": [
+        "eventId",
+        "speakerId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          },
+          "speakerId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "eventId",
+          "speakerId"
+        ]
+      },
+      "risk": "high: Delete a speaker",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_events_deleteticket",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zoom_events/events/{{ record.eventId }}/tickets/{{ record.ticketId }}",
+      "path_fields": [
+        "eventId",
+        "ticketId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          },
+          "ticketId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "eventId",
+          "ticketId"
+        ]
+      },
+      "risk": "high: Delete a ticket",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_events_deletevodchannel",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zoom_events/hubs/{{ record.hubId }}/vod_channels/{{ record.channelId }}",
+      "path_fields": [
+        "hubId",
+        "channelId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "hubId": {
+            "type": "string"
+          },
+          "channelId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "hubId",
+          "channelId"
+        ]
+      },
+      "risk": "high: Delete VOD Channel",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_events_deletevodchannelvideo",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zoom_events/hubs/{{ record.hubId }}/vod_channels/{{ record.channelId }}/videos/{{ record.videoId }}",
+      "path_fields": [
+        "hubId",
+        "channelId",
+        "videoId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "hubId": {
+            "type": "string"
+          },
+          "channelId": {
+            "type": "string"
+          },
+          "videoId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "hubId",
+          "channelId",
+          "videoId"
+        ]
+      },
+      "risk": "high: Delete VOD channel video",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_iq_deleteactivityfromdeal",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zra/deals/{{ record.dealId }}/activities",
+      "path_fields": [
+        "dealId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "dealId": {
+            "type": "string"
+          },
+          "conversation_id": {
+            "type": "string"
+          },
+          "message_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "dealId"
+        ]
+      },
+      "risk": "high: Delete activity from the deal",
+      "query": {
+        "conversation_id": {
+          "template": "{{ record.conversation_id }}",
+          "omit_when_absent": true
+        },
+        "message_id": {
+          "template": "{{ record.message_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_iq_deleteconversationbyid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zra/conversations/{{ record.conversationId }}",
+      "path_fields": [
+        "conversationId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "conversationId"
+        ]
+      },
+      "risk": "high: Delete conversation by conversation ID",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_iq_deleteconversationcommentbyid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zra/conversations/{{ record.conversationId }}/comments/{{ record.commentId }}",
+      "path_fields": [
+        "conversationId",
+        "commentId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "conversationId": {
+            "type": "string"
+          },
+          "commentId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "conversationId",
+          "commentId"
+        ]
+      },
+      "risk": "high: Delete conversation's comment",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_iq_deletesharedfromteams",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zra/team/{{ record.teamId }}/access/granted-from",
+      "path_fields": [
+        "teamId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string"
+          },
+          "team_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "teamId"
+        ]
+      },
+      "risk": "high: Remove additional access from current team",
+      "query": {
+        "team_ids": {
+          "template": "{{ record.team_ids }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_iq_deletesharedtoteams",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zra/team/{{ record.teamId }}/access/granted-to",
+      "path_fields": [
+        "teamId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string"
+          },
+          "team_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "teamId"
+        ]
+      },
+      "risk": "high: Remove additional access from target teams",
+      "query": {
+        "team_ids": {
+          "template": "{{ record.team_ids }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_iq_deleteteam",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zra/team/{{ record.teamId }}",
+      "path_fields": [
+        "teamId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "teamId"
+        ]
+      },
+      "risk": "high: Delete Team",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_iq_unassignteammanagers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zra/team/{{ record.teamId }}/team_managers",
+      "path_fields": [
+        "teamId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "teamId",
+          "user_ids"
+        ]
+      },
+      "risk": "high: Unassign Team Managers",
+      "query": {
+        "user_ids": {
+          "template": "{{ record.user_ids }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_iq_unassignteammembers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zra/team/{{ record.teamId }}/team_members",
+      "path_fields": [
+        "teamId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "teamId",
+          "user_ids"
+        ]
+      },
+      "risk": "high: Unassign Team Members",
+      "query": {
+        "user_ids": {
+          "template": "{{ record.user_ids }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_iq_unregistercrm",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/zra/crm/settings",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "remove_all": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: Unregister CRM API connection",
+      "query": {
+        "remove_all": {
+          "template": "{{ record.remove_all }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_mail_delete_draft_email",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/emails/mailboxes/{{ record.email }}/drafts/{{ record.draftId }}",
+      "path_fields": [
+        "email",
+        "draftId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "draftId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "draftId"
+        ]
+      },
+      "risk": "high: Delete an existing draft email",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_mail_delete_email",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/emails/mailboxes/{{ record.email }}/messages/{{ record.messageId }}",
+      "path_fields": [
+        "email",
+        "messageId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "messageId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "messageId"
+        ]
+      },
+      "risk": "high: Delete an existing email",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_mail_delete_email_filter",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/emails/mailboxes/{{ record.email }}/settings/filters/{{ record.filterId }}",
+      "path_fields": [
+        "email",
+        "filterId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "filterId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "filterId"
+        ]
+      },
+      "risk": "high: Delete the specified email filter",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_mail_delete_email_thread",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/emails/mailboxes/{{ record.email }}/threads/{{ record.threadId }}",
+      "path_fields": [
+        "email",
+        "threadId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "threadId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "threadId"
+        ]
+      },
+      "risk": "high: Delete an existing email thread",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_mail_delete_label_from_mailbox",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/emails/mailboxes/{{ record.email }}/labels/{{ record.labelId }}",
+      "path_fields": [
+        "email",
+        "labelId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "labelId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "labelId"
+        ]
+      },
+      "risk": "high: Delete an existing label from mailbox",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_mail_revoke_mailbox_delegate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/emails/mailboxes/{{ record.email }}/settings/delegates/{{ record.delegateEmail }}",
+      "path_fields": [
+        "email",
+        "delegateEmail"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "delegateEmail": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "delegateEmail"
+        ]
+      },
+      "risk": "high: Revoke an existing delegate access from the mailbox",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_mail_trash_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/emails/mailboxes/{{ record.email }}/messages/{{ record.messageId }}/trash",
+      "path_fields": [
+        "email",
+        "messageId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "messageId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "messageId"
+        ]
+      },
+      "risk": "high: Move the specified email to TRASH folder"
+    },
+    {
+      "name": "zoom_mail_trash_email_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/emails/mailboxes/{{ record.email }}/threads/{{ record.threadId }}/trash",
+      "path_fields": [
+        "email",
+        "threadId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "threadId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "threadId"
+        ]
+      },
+      "risk": "high: Move the specified thread to TRASH folder"
+    },
+    {
+      "name": "zoom_mail_untrash_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/emails/mailboxes/{{ record.email }}/messages/{{ record.messageId }}/untrash",
+      "path_fields": [
+        "email",
+        "messageId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "messageId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "messageId"
+        ]
+      },
+      "risk": "high: Move the specified email out of TRASH folder"
+    },
+    {
+      "name": "zoom_mail_untrash_email_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/emails/mailboxes/{{ record.email }}/threads/{{ record.threadId }}/untrash",
+      "path_fields": [
+        "email",
+        "threadId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "threadId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "threadId"
+        ]
+      },
+      "risk": "high: Move the specified thread out of TRASH folder"
+    },
+    {
+      "name": "zoom_marketplace_deleteapp",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/marketplace/apps/{{ record.appId }}",
+      "path_fields": [
+        "appId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "appId"
+        ]
+      },
+      "risk": "high: Deletes an app",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_marketplace_deleteeventsubscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/marketplace/app/event_subscription/{{ record.eventSubscriptionId }}",
+      "path_fields": [
+        "eventSubscriptionId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "eventSubscriptionId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "eventSubscriptionId"
+        ]
+      },
+      "risk": "high: Delete an event subscription",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_marketplace_unsubscribeeventsubscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/marketplace/app/event_subscription",
+      "path_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "event_subscription_id": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": "string"
+          },
+          "account_id": {
+            "type": "string"
+          },
+          "team_ids": {
+            "type": "string"
+          },
+          "user_group_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "event_subscription_id",
+          "account_id"
+        ]
+      },
+      "risk": "high: Unsubscribe to an app event subscription",
+      "query": {
+        "event_subscription_id": {
+          "template": "{{ record.event_subscription_id }}"
+        },
+        "user_ids": {
+          "template": "{{ record.user_ids }}",
+          "omit_when_absent": true
+        },
+        "account_id": {
+          "template": "{{ record.account_id }}"
+        },
+        "team_ids": {
+          "template": "{{ record.team_ids }}",
+          "omit_when_absent": true
+        },
+        "user_group_ids": {
+          "template": "{{ record.user_group_ids }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_assgingroup",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/devices/{{ record.deviceId }}/assign_group",
+      "path_fields": [
+        "deviceId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "string"
+          },
+          "group_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "deviceId",
+          "group_id"
+        ]
+      },
+      "risk": "high: Assign a device to a group",
+      "query": {
+        "group_id": {
+          "template": "{{ record.group_id }}"
+        }
+      }
+    },
+    {
+      "name": "zoom_meetings_deletearchivedfiles",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/past_meetings/{{ record.meetingUUID }}/archive_files",
+      "path_fields": [
+        "meetingUUID"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingUUID": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meetingUUID"
+        ]
+      },
+      "risk": "high: Delete a meeting's archived files",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_deletedevice",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/devices/{{ record.deviceId }}",
+      "path_fields": [
+        "deviceId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "deviceId"
+        ]
+      },
+      "risk": "high: Delete device",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_deletemeetingchatmessagebyid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/live_meetings/{{ record.meetingId }}/chat/messages/{{ record.messageId }}",
+      "path_fields": [
+        "meetingId",
+        "messageId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "integer"
+          },
+          "messageId": {
+            "type": "string"
+          },
+          "file_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meetingId",
+          "messageId"
+        ]
+      },
+      "risk": "high: Delete a live meeting message",
+      "query": {
+        "file_ids": {
+          "template": "{{ record.file_ids }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_deletemeetingorwebinarsummary",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/meetings/{{ record.meetingId }}/meeting_summary",
+      "path_fields": [
+        "meetingId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meetingId"
+        ]
+      },
+      "risk": "high: Delete a meeting or webinar summary",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_deletemeetingtranscript",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/meetings/{{ record.meetingId }}/transcript",
+      "path_fields": [
+        "meetingId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meetingId"
+        ]
+      },
+      "risk": "high: Delete a meeting or webinar transcript",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_deletesipphonephones",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/sip_phones/phones/{{ record.phoneId }}",
+      "path_fields": [
+        "phoneId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "phoneId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "phoneId"
+        ]
+      },
+      "risk": "high: Delete SIP phone",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_deletewebinarbrandingnametag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/webinars/{{ record.webinarId }}/branding/name_tags",
+      "path_fields": [
+        "webinarId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "webinarId": {
+            "type": "integer"
+          },
+          "name_tag_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "webinarId"
+        ]
+      },
+      "risk": "high: Delete a webinar's branding name tag",
+      "query": {
+        "name_tag_ids": {
+          "template": "{{ record.name_tag_ids }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_deletewebinarbrandingvb",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/webinars/{{ record.webinarId }}/branding/virtual_backgrounds",
+      "path_fields": [
+        "webinarId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "webinarId": {
+            "type": "integer"
+          },
+          "ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "webinarId"
+        ]
+      },
+      "risk": "high: Delete a webinar's branding virtual backgrounds",
+      "query": {
+        "ids": {
+          "template": "{{ record.ids }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_deletewebinarbrandingwallpaper",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/webinars/{{ record.webinarId }}/branding/wallpaper",
+      "path_fields": [
+        "webinarId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "webinarId": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "webinarId"
+        ]
+      },
+      "risk": "high: Delete a webinar's branding wallpaper",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_deletewebinarchatmessagebyid",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/live_webinars/{{ record.webinarId }}/chat/messages/{{ record.messageId }}",
+      "path_fields": [
+        "webinarId",
+        "messageId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "webinarId": {
+            "type": "integer"
+          },
+          "messageId": {
+            "type": "string"
+          },
+          "file_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "webinarId",
+          "messageId"
+        ]
+      },
+      "risk": "high: Delete a live webinar message",
+      "query": {
+        "file_ids": {
+          "template": "{{ record.file_ids }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_deletewebinarregistrant",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/webinars/{{ record.webinarId }}/registrants/{{ record.registrantId }}",
+      "path_fields": [
+        "webinarId",
+        "registrantId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "webinarId": {
+            "type": "integer"
+          },
+          "registrantId": {
+            "type": "string"
+          },
+          "occurrence_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "webinarId",
+          "registrantId"
+        ]
+      },
+      "risk": "high: Delete a webinar registrant",
+      "query": {
+        "occurrence_id": {
+          "template": "{{ record.occurrence_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_deletezpadevicebyvendorandmacaddress",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/devices/zpa/vendors/{{ record.vendor }}/mac_addresses/{{ record.macAddress }}",
+      "path_fields": [
+        "vendor",
+        "macAddress"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "vendor": {
+            "type": "string"
+          },
+          "macAddress": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "vendor",
+          "macAddress"
+        ]
+      },
+      "risk": "high: Delete ZPA device by vendor and mac address",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_devicedelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/h323/devices/{{ record.deviceId }}",
+      "path_fields": [
+        "deviceId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "deviceId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "deviceId"
+        ]
+      },
+      "risk": "high: Delete a H.323/SIP device",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_meetingappadd",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/meetings/{{ record.meetingId }}/open_apps",
+      "path_fields": [
+        "meetingId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meetingId"
+        ]
+      },
+      "risk": "high: Add a meeting app"
+    },
+    {
+      "name": "zoom_meetings_meetingappdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/meetings/{{ record.meetingId }}/open_apps",
+      "path_fields": [
+        "meetingId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meetingId"
+        ]
+      },
+      "risk": "high: Delete a meeting app",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_meetingcreate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/users/{{ record.user_id }}/meetings",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "type": {
+            "type": "integer",
+            "enum": [
+              2
+            ]
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "type": "integer"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "agenda": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "user_id",
+          "topic",
+          "type",
+          "start_time"
+        ]
+      },
+      "risk": "high: Create a scheduled meeting",
+      "redact_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "zoom_meetings_meetingdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/meetings/{{ record.meetingId }}",
+      "path_fields": [
+        "meetingId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "integer"
+          },
+          "occurrence_id": {
+            "type": "string"
+          },
+          "schedule_for_reminder": {
+            "type": "boolean"
+          },
+          "cancel_meeting_reminder": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meetingId"
+        ]
+      },
+      "risk": "high: Delete a meeting",
+      "query": {
+        "occurrence_id": {
+          "template": "{{ record.occurrence_id }}",
+          "omit_when_absent": true
+        },
+        "schedule_for_reminder": {
+          "template": "{{ record.schedule_for_reminder }}",
+          "omit_when_absent": true
+        },
+        "cancel_meeting_reminder": {
+          "template": "{{ record.cancel_meeting_reminder }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_meetingupdate",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/meetings/{{ record.meeting_id }}",
+      "path_fields": [
+        "meeting_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meeting_id": {
+            "type": "integer"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "start_time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "type": "integer"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "agenda": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meeting_id",
+          "topic"
+        ]
+      },
+      "risk": "high: Update a meeting",
+      "redact_fields": [
+        "meeting_id"
+      ]
+    },
+    {
+      "name": "zoom_meetings_meetingpolldelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/meetings/{{ record.meetingId }}/polls/{{ record.pollId }}",
+      "path_fields": [
+        "meetingId",
+        "pollId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "integer"
+          },
+          "pollId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meetingId",
+          "pollId"
+        ]
+      },
+      "risk": "high: Delete a meeting poll",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_meetingregistrantdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/meetings/{{ record.meetingId }}/registrants/{{ record.registrantId }}",
+      "path_fields": [
+        "meetingId",
+        "registrantId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "integer"
+          },
+          "registrantId": {
+            "type": "string"
+          },
+          "occurrence_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meetingId",
+          "registrantId"
+        ]
+      },
+      "risk": "high: Delete a meeting registrant",
+      "query": {
+        "occurrence_id": {
+          "template": "{{ record.occurrence_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_meetingsurveydelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/meetings/{{ record.meetingId }}/survey",
+      "path_fields": [
+        "meetingId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meetingId"
+        ]
+      },
+      "risk": "high: Delete a meeting survey",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_recordingdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/meetings/{{ record.meetingId }}/recordings",
+      "path_fields": [
+        "meetingId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "trash",
+              "delete"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meetingId"
+        ]
+      },
+      "risk": "high: Delete meeting or webinar recordings",
+      "query": {
+        "action": {
+          "template": "{{ record.action }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_recordingdeleteone",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/meetings/{{ record.meetingId }}/recordings/{{ record.recordingId }}",
+      "path_fields": [
+        "meetingId",
+        "recordingId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "string"
+          },
+          "recordingId": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "trash",
+              "delete"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "meetingId",
+          "recordingId"
+        ]
+      },
+      "risk": "high: Delete a recording file for a meeting or webinar",
+      "query": {
+        "action": {
+          "template": "{{ record.action }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_setwebinarbrandingvb",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/webinars/{{ record.webinarId }}/branding/virtual_backgrounds",
+      "path_fields": [
+        "webinarId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "webinarId": {
+            "type": "integer"
+          },
+          "id": {
+            "type": "string"
+          },
+          "set_default_for_all_panelists": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "webinarId"
+        ]
+      },
+      "risk": "high: Set webinar's default branding virtual background",
+      "query": {
+        "id": {
+          "template": "{{ record.id }}",
+          "omit_when_absent": true
+        },
+        "set_default_for_all_panelists": {
+          "template": "{{ record.set_default_for_all_panelists }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "zoom_meetings_usertspdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/users/{{ record.userId }}/tsp/{{ record.tspId }}",
+      "path_fields": [
+        "userId",
+        "tspId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "tspId": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userId",
+          "tspId"
+        ]
+      },
+      "risk": "high: Delete a user's TSP account",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_meetings_webinarpolldelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/webinars/{{ record.webinarId }}/polls/{{ record.pollId }}",
+      "path_fields": [
+        "webinarId",
+        "pollId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "webinarId": {
+            "type": "integer"
+          },
+          "pollId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "webinarId",
+          "pollId"
+        ]
+      },
+      "risk": "high: Delete a webinar poll",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_rooms_checkinvisitor",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/visitor/invitation/{{ record.invitationId }}/checkin",
+      "path_fields": [
+        "invitationId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invitationId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "invitationId"
+        ]
+      },
+      "risk": "high: Check in a visitor"
+    },
+    {
+      "name": "zoom_rooms_deleteadeskassignment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/workspaces/{{ record.workspaceId }}/assignment",
+      "path_fields": [
+        "workspaceId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspaceId"
+        ]
+      },
+      "risk": "high: Delete a desk assignment",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_rooms_deleteadigitalsignagecontentfolder",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/rooms/content/digital_signage/folders/{{ record.folderId }}",
+      "path_fields": [
+        "folderId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "folderId": {
+            "type": "string"
+          },
+          "remove_from_library_only": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "folderId"
+        ]
+      },
+      "risk": "high: Delete a Digital Signage content folder",
+      "query": {
+        "remove_from_library_only": {
+          "template": "{{ record.remove_from_library_only }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_rooms_deleteadigitalsignagecontentitem",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/rooms/content/digital_signage/contents/{{ record.contentId }}",
+      "path_fields": [
+        "contentId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contentId": {
+            "type": "string"
+          },
+          "remove_from_library_only": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "contentId"
+        ]
+      },
+      "risk": "high: Delete a Digital Signage content item",
+      "query": {
+        "remove_from_library_only": {
+          "template": "{{ record.remove_from_library_only }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_rooms_deleteaworkspaceasset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/workspaces/assets/{{ record.assetId }}",
+      "path_fields": [
+        "assetId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "assetId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "assetId"
+        ]
+      },
+      "risk": "high: Delete a workspace asset",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_rooms_deleteazrlocation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/rooms/locations/{{ record.locationId }}",
+      "path_fields": [
+        "locationId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "locationId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "locationId"
+        ]
+      },
+      "risk": "high: Delete a location",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_rooms_deletedigitalsignagelibraryplaylist",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/rooms/content/digital_signage/playlists/{{ record.playlistId }}",
+      "path_fields": [
+        "playlistId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "playlistId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "playlistId"
+        ]
+      },
+      "risk": "high: Delete Digital Signage library playlist",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_rooms_deleteinvitation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/visitor/invitation/{{ record.invitationId }}",
+      "path_fields": [
+        "invitationId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invitationId": {
+            "type": "string"
+          },
+          "cancel": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "invitationId"
+        ]
+      },
+      "risk": "high: Delete an Invitation",
+      "query": {
+        "cancel": {
+          "template": "{{ record.cancel }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_rooms_deletereservation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/workspaces/{{ record.workspaceId }}/reservations/{{ record.reservationId }}",
+      "path_fields": [
+        "workspaceId",
+        "reservationId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "reservationId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspaceId",
+          "reservationId"
+        ]
+      },
+      "risk": "high: Delete a reservation",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_rooms_deleteworkspace",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/workspaces/{{ record.workspaceId }}",
+      "path_fields": [
+        "workspaceId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "workspaceId"
+        ]
+      },
+      "risk": "high: Delete a workspace",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_rooms_deleteworkspacefloormap",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/workspaces/{{ record.locationId }}/background",
+      "path_fields": [
+        "locationId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "locationId": {
+            "type": "string"
+          },
+          "remove_child": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "locationId"
+        ]
+      },
+      "risk": "high: Delete Workspace floor map",
+      "query": {
+        "remove_child": {
+          "template": "{{ record.remove_child }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_rooms_deletezoomroomsbackgroundimagelibrarycontent",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/rooms/content/background/contents/{{ record.contentId }}",
+      "path_fields": [
+        "contentId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "contentId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "contentId"
+        ]
+      },
+      "risk": "high: Delete Zoom Rooms Background Image Library Content",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_rooms_deletezoomroomsbackgroundlibraryfolder",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/rooms/content/background/folders/{{ record.folderId }}",
+      "path_fields": [
+        "folderId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "folderId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "folderId"
+        ]
+      },
+      "risk": "high: Delete Zoom Rooms Background Image Library Folder",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_scheduler_delete_availability",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/scheduler/availability/{{ record.availabilityId }}",
+      "path_fields": [
+        "availabilityId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "availabilityId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "availabilityId"
+        ]
+      },
+      "risk": "high: Delete availability",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_scheduler_delete_scheduled_events",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/scheduler/events/{{ record.eventId }}",
+      "path_fields": [
+        "eventId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "eventId"
+        ]
+      },
+      "risk": "high: Delete scheduled events",
+      "query": {
+        "user_id": {
+          "template": "{{ record.user_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_scheduler_delete_schedules",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/scheduler/schedules/{{ record.scheduleId }}",
+      "path_fields": [
+        "scheduleId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "scheduleId": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "scheduleId"
+        ]
+      },
+      "risk": "high: Delete schedules",
+      "query": {
+        "user_id": {
+          "template": "{{ record.user_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_scim2_groupscim2delete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/scim2/Groups/{{ record.groupId }}",
+      "path_fields": [
+        "groupId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "groupId"
+        ]
+      },
+      "risk": "high: Delete a group",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_scim2_userscim2delete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/scim2/Users/{{ record.user_id }}",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high: Delete a user",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_tasks_deletetask",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/tasks/items/{{ record.taskId }}",
+      "path_fields": [
+        "taskId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "taskId"
+        ]
+      },
+      "risk": "high: Delete a task",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_tasks_deletetaskcomment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/tasks/items/{{ record.taskId }}/comments/{{ record.commentId }}",
+      "path_fields": [
+        "taskId",
+        "commentId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string"
+          },
+          "commentId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "taskId",
+          "commentId"
+        ]
+      },
+      "risk": "high: Delete a task's comment",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_tasks_removetaskassignee",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/tasks/items/{{ record.taskId }}/assignees/{{ record.userId }}",
+      "path_fields": [
+        "taskId",
+        "userId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "taskId",
+          "userId"
+        ]
+      },
+      "risk": "high: Remove Assignee from task",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_tasks_removetaskcollaborator",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/tasks/items/{{ record.taskId }}/collaborators/{{ record.userId }}",
+      "path_fields": [
+        "taskId",
+        "userId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "taskId",
+          "userId"
+        ]
+      },
+      "risk": "high: Remove collaborator from task",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_users_contactgroupdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contacts/groups/{{ record.groupId }}",
+      "path_fields": [
+        "groupId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "groupId"
+        ]
+      },
+      "risk": "high: Delete a contact group",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_users_contactgroupmemberremove",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/contacts/groups/{{ record.groupId }}/members",
+      "path_fields": [
+        "groupId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string"
+          },
+          "member_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "groupId",
+          "member_ids"
+        ]
+      },
+      "risk": "high: Remove members in a contact group",
+      "query": {
+        "member_ids": {
+          "template": "{{ record.member_ids }}"
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_users_deletedivision",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/divisions/{{ record.divisionId }}",
+      "path_fields": [
+        "divisionId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "divisionId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "divisionId"
+        ]
+      },
+      "risk": "high: Delete a division",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_users_delgroupvb",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/groups/{{ record.groupId }}/settings/virtual_backgrounds",
+      "path_fields": [
+        "groupId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "string"
+          },
+          "file_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "groupId"
+        ]
+      },
+      "risk": "high: Delete Virtual Background files",
+      "query": {
+        "file_ids": {
+          "template": "{{ record.file_ids }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_users_deluservb",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/users/{{ record.user_id }}/settings/virtual_backgrounds",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "file_ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high: Delete Virtual Background files",
+      "query": {
+        "file_ids": {
+          "template": "{{ record.file_ids }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_users_userdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/users/{{ record.user_id }}",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "encrypted_email": {
+            "type": "boolean"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "disassociate",
+              "delete"
+            ]
+          },
+          "transfer_email": {
+            "type": "string"
+          },
+          "transfer_meeting": {
+            "type": "boolean"
+          },
+          "transfer_webinar": {
+            "type": "boolean"
+          },
+          "transfer_recording": {
+            "type": "boolean"
+          },
+          "transfer_whiteboard": {
+            "type": "boolean"
+          },
+          "transfer_clipfiles": {
+            "type": "boolean"
+          },
+          "transfer_notes": {
+            "type": "boolean"
+          },
+          "transfer_visitors": {
+            "type": "boolean"
+          },
+          "transfer_docs": {
+            "type": "boolean"
+          },
+          "transfer_events": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high: Delete a user",
+      "query": {
+        "encrypted_email": {
+          "template": "{{ record.encrypted_email }}",
+          "omit_when_absent": true
+        },
+        "action": {
+          "template": "{{ record.action }}",
+          "omit_when_absent": true
+        },
+        "transfer_email": {
+          "template": "{{ record.transfer_email }}",
+          "omit_when_absent": true
+        },
+        "transfer_meeting": {
+          "template": "{{ record.transfer_meeting }}",
+          "omit_when_absent": true
+        },
+        "transfer_webinar": {
+          "template": "{{ record.transfer_webinar }}",
+          "omit_when_absent": true
+        },
+        "transfer_recording": {
+          "template": "{{ record.transfer_recording }}",
+          "omit_when_absent": true
+        },
+        "transfer_whiteboard": {
+          "template": "{{ record.transfer_whiteboard }}",
+          "omit_when_absent": true
+        },
+        "transfer_clipfiles": {
+          "template": "{{ record.transfer_clipfiles }}",
+          "omit_when_absent": true
+        },
+        "transfer_notes": {
+          "template": "{{ record.transfer_notes }}",
+          "omit_when_absent": true
+        },
+        "transfer_visitors": {
+          "template": "{{ record.transfer_visitors }}",
+          "omit_when_absent": true
+        },
+        "transfer_docs": {
+          "template": "{{ record.transfer_docs }}",
+          "omit_when_absent": true
+        },
+        "transfer_events": {
+          "template": "{{ record.transfer_events }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_users_userpicturedelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/users/{{ record.user_id }}/picture",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high: Delete a user's profile picture",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_users_userschedulerdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/users/{{ record.userId }}/schedulers/{{ record.schedulerId }}",
+      "path_fields": [
+        "userId",
+        "schedulerId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "schedulerId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "userId",
+          "schedulerId"
+        ]
+      },
+      "risk": "high: Delete a scheduler",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_users_userschedulersdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/users/{{ record.user_id }}/schedulers",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high: Delete user schedulers",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_users_userssotokendelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/users/{{ record.user_id }}/token",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high: Revoke a user's SSO token",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_video_management_deletechannel",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/video_management/channels/{{ record.channelId }}",
+      "path_fields": [
+        "channelId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channelId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "channelId"
+        ]
+      },
+      "risk": "high: Delete channel",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_video_management_deleteplaylist",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/video_management/playlists/{{ record.playlistId }}",
+      "path_fields": [
+        "playlistId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "playlistId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "playlistId"
+        ]
+      },
+      "risk": "high: Delete playlist",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_video_sdk_byosstoragedetaildelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/videosdk/settings/storage/location/{{ record.storageLocationId }}",
+      "path_fields": [
+        "storageLocationId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "storageLocationId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "storageLocationId"
+        ]
+      },
+      "risk": "high: Delete storage location detail",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_video_sdk_recordingdelete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/videosdk/sessions/{{ record.sessionId }}/recordings",
+      "path_fields": [
+        "sessionId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "trash",
+              "delete"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sessionId"
+        ]
+      },
+      "risk": "high: Delete session's recordings",
+      "query": {
+        "action": {
+          "template": "{{ record.action }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_video_sdk_recordingdeleteone",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/videosdk/sessions/{{ record.sessionId }}/recordings/{{ record.recordingId }}",
+      "path_fields": [
+        "sessionId",
+        "recordingId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string"
+          },
+          "recordingId": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "trash",
+              "delete"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "sessionId",
+          "recordingId"
+        ]
+      },
+      "risk": "high: Delete session's recording file",
+      "query": {
+        "action": {
+          "template": "{{ record.action }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_virtual_agent_createsyncrequest",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/km/kbs/{{ record.kbId }}/sync",
+      "path_fields": [
+        "kbId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "kbId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "kbId"
+        ]
+      },
+      "risk": "high: Create sync request"
+    },
+    {
+      "name": "zoom_virtual_agent_deletearticle",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/km/kbs/{{ record.kbId }}/articles/{{ record.articleId }}",
+      "path_fields": [
+        "kbId",
+        "articleId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "kbId": {
+            "type": "string"
+          },
+          "articleId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "kbId",
+          "articleId"
+        ]
+      },
+      "risk": "high: Delete article",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_whiteboard_deleteawhiteboard",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/whiteboards/{{ record.whiteboardId }}",
+      "path_fields": [
+        "whiteboardId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "whiteboardId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "whiteboardId"
+        ]
+      },
+      "risk": "high: Delete a whiteboard",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_whiteboard_deleteawhiteboardcollaborator",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/whiteboards/{{ record.whiteboardId }}/collaborator/{{ record.collaboratorId }}",
+      "path_fields": [
+        "whiteboardId",
+        "collaboratorId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "whiteboardId": {
+            "type": "string"
+          },
+          "collaboratorId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "whiteboardId",
+          "collaboratorId"
+        ]
+      },
+      "risk": "high: Remove the collaborator from a whiteboard",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_whiteboard_deleteclassificationlabel",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/whiteboards/classification_labels/{{ record.classificationId }}",
+      "path_fields": [
+        "classificationId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "classificationId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "classificationId"
+        ]
+      },
+      "risk": "high: Delete classification label",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_whiteboard_deleteproject",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/whiteboards/projects/{{ record.projectId }}",
+      "path_fields": [
+        "projectId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "projectId"
+        ]
+      },
+      "risk": "high: Delete a project",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_whiteboard_removethecollaboratorfromaproject",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/whiteboards/projects/{{ record.projectId }}/collaborators/{{ record.collaboratorId }}",
+      "path_fields": [
+        "projectId",
+        "collaboratorId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string"
+          },
+          "collaboratorId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "projectId",
+          "collaboratorId"
+        ]
+      },
+      "risk": "high: Remove the collaborator from a project",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_whiteboard_removewhiteboardclassification",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/whiteboards/{{ record.whiteboardId }}/classification",
+      "path_fields": [
+        "whiteboardId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "whiteboardId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "whiteboardId"
+        ]
+      },
+      "risk": "high: Remove classification from whiteboard",
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "zoom_workforce_management_deleteorganizationalgroup",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/workforce-management/organizational-groups/{{ record.organizationalGroupId }}",
+      "path_fields": [
+        "organizationalGroupId"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "organizationalGroupId": {
+            "type": "string"
+          },
+          "division_id": {
+            "type": "string"
+          },
+          "wfm_cluster_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "organizationalGroupId"
+        ]
+      },
+      "risk": "high: Delete organizational group",
+      "query": {
+        "division_id": {
+          "template": "{{ record.division_id }}",
+          "omit_when_absent": true
+        },
+        "wfm_cluster_id": {
+          "template": "{{ record.wfm_cluster_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "confirm": "destructive",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    }
+  ]
+}
