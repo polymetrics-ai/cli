@@ -182,18 +182,18 @@ func proveCommandEndpointEquivalence(b Bundle, runtime commandRuntimeEndpoint, c
 	}
 
 	runtimeComparable, runtimeChange := commandBindingComparablePathWithProof(runtime.path)
-	canonicalComparable, canonicalChange := commandBindingComparablePathWithProof(canonicalPath)
-	if commandBindingSlots(runtimeComparable) == commandBindingSlots(canonicalComparable) {
-		return commandBindingEquivalenceProof(runtime.path, canonicalPath, runtimeChange, canonicalChange), nil
+	declaredComparable, declaredChange := commandBindingComparablePathWithProof(canonicalPath)
+	if commandBindingSlots(runtimeComparable) == commandBindingSlots(declaredComparable) {
+		return commandBindingEquivalenceProof(runtime.path, canonicalPath, runtimeChange, declaredChange), nil
 	}
 	for _, basePath := range commandBindingBasePaths(b, runtime.route, runtime.baseURL) {
 		combined := strings.TrimRight(basePath, "/") + "/" + strings.TrimLeft(runtimeComparable, "/")
-		if strings.TrimRight(commandBindingSlots(combined), "/") == strings.TrimRight(commandBindingSlots(canonicalComparable), "/") {
+		if strings.TrimRight(commandBindingSlots(combined), "/") == strings.TrimRight(commandBindingSlots(declaredComparable), "/") {
 			return CommandEndpointBasePath, nil
 		}
 	}
 	if commandBindingUsesConfigurableBase(b, runtime.route, runtime.baseURL) &&
-		strings.HasSuffix(commandBindingSlots(canonicalComparable), commandBindingSlots(runtimeComparable)) {
+		strings.HasSuffix(commandBindingSlots(declaredComparable), commandBindingSlots(runtimeComparable)) {
 		return CommandEndpointBasePath, nil
 	}
 	return "", fmt.Errorf("runtime endpoint %s %s is not canonically equivalent to %s %s", runtime.method, runtime.path, canonicalMethod, canonicalPath)
