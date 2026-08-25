@@ -14,9 +14,9 @@
     "exact_source_rows": 73,
     "declared_operations": 73,
     "declared_percent": 100,
-    "enabled_operations": 0,
-    "enabled_percent": 0,
-    "disabled_operations": 73,
+    "enabled_operations": 10,
+    "enabled_percent": 13.7,
+    "disabled_operations": 63,
     "documented_deletes": 6,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -47,14 +47,14 @@
     ],
     "stream_bindings": 10,
     "writes_actions": 0,
-    "terminal_commands": 0,
+    "terminal_commands": 10,
     "live_certification": "pending",
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 73
+        "count": 63
       }
     ],
     "transport": {
@@ -77,16 +77,11 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-braintree",
       "sync-transport-destination-definition-braintree",
       "sync-transport-source-definition-braintree",
       "typed-operation-contract-braintree"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-braintree",
-        "count": 10
-      },
       {
         "id": "typed-operation-contract-braintree",
         "count": 63
@@ -96,16 +91,17 @@
         "count": 45
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 10,
     "typed_write_actions": 0,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 10,
     "endpoint_bound_typed_write_actions": 0
   },
   "source_only_dispositions": [],
   "notes": [
     "Complete six-class source-locked map. Each source operation has exactly one primary parity class.",
     "An enabled source operation has an API-surface command or typed write-action binding; unbound streams and operations are declaration-pending.",
-    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped."
+    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 10 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
   ],
   "ledger_dispositions": [
     {
@@ -128,25 +124,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braintree",
-          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[0] is bound to ETL stream \"transactions\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"transactions list\" binds GET /merchants/{merchant_id}/transactions; streams.json stream \"transactions\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[0] is bound to ETL stream \"transactions\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braintree",
-        "contract": null
+        "status": "enabled; runnable ETL command \"transactions list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdTransactions0",
+        "command": {
+          "path": "transactions list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/transactions",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
       }
     },
     {
@@ -247,25 +251,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braintree",
-          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[3] is bound to ETL stream \"customers\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"customers list\" binds GET /merchants/{merchant_id}/customers; streams.json stream \"customers\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[3] is bound to ETL stream \"customers\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braintree",
-        "contract": null
+        "status": "enabled; runnable ETL command \"customers list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdCustomers3",
+        "command": {
+          "path": "customers list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/customers",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
       }
     },
     {
@@ -366,25 +378,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braintree",
-          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[6] is bound to ETL stream \"subscriptions\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"subscriptions list\" binds GET /merchants/{merchant_id}/subscriptions; streams.json stream \"subscriptions\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[6] is bound to ETL stream \"subscriptions\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braintree",
-        "contract": null
+        "status": "enabled; runnable ETL command \"subscriptions list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdSubscriptions6",
+        "command": {
+          "path": "subscriptions list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/subscriptions",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
       }
     },
     {
@@ -485,25 +505,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braintree",
-          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[9] is bound to ETL stream \"add_ons\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"add-ons list\" binds GET /merchants/{merchant_id}/add_ons; streams.json stream \"add_ons\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[9] is bound to ETL stream \"add_ons\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braintree",
-        "contract": null
+        "status": "enabled; runnable ETL command \"add-ons list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdAddOns9",
+        "command": {
+          "path": "add-ons list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/add_ons",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
       }
     },
     {
@@ -526,25 +554,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braintree",
-          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[10] is bound to ETL stream \"discounts\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"discounts list\" binds GET /merchants/{merchant_id}/discounts; streams.json stream \"discounts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[10] is bound to ETL stream \"discounts\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braintree",
-        "contract": null
+        "status": "enabled; runnable ETL command \"discounts list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdDiscounts10",
+        "command": {
+          "path": "discounts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/discounts",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
       }
     },
     {
@@ -567,25 +603,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braintree",
-          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[11] is bound to ETL stream \"plans\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"plans list\" binds GET /merchants/{merchant_id}/plans; streams.json stream \"plans\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[11] is bound to ETL stream \"plans\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braintree",
-        "contract": null
+        "status": "enabled; runnable ETL command \"plans list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdPlans11",
+        "command": {
+          "path": "plans list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/plans",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
       }
     },
     {
@@ -647,25 +691,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braintree",
-          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[13] is bound to ETL stream \"merchant_accounts\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"merchant-accounts list\" binds GET /merchants/{merchant_id}/merchant_accounts; streams.json stream \"merchant_accounts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[13] is bound to ETL stream \"merchant_accounts\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braintree",
-        "contract": null
+        "status": "enabled; runnable ETL command \"merchant-accounts list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdMerchantAccounts13",
+        "command": {
+          "path": "merchant-accounts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/merchant_accounts",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
       }
     },
     {
@@ -727,25 +779,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braintree",
-          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[15] is bound to ETL stream \"payment_methods\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"payment-methods list\" binds GET /merchants/{merchant_id}/payment_methods; streams.json stream \"payment_methods\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[15] is bound to ETL stream \"payment_methods\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braintree",
-        "contract": null
+        "status": "enabled; runnable ETL command \"payment-methods list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdPaymentMethods15",
+        "command": {
+          "path": "payment-methods list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/payment_methods",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
       }
     },
     {
@@ -807,25 +867,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braintree",
-          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[17] is bound to ETL stream \"disputes\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"disputes list\" binds GET /merchants/{merchant_id}/disputes; streams.json stream \"disputes\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[17] is bound to ETL stream \"disputes\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braintree",
-        "contract": null
+        "status": "enabled; runnable ETL command \"disputes list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdDisputes17",
+        "command": {
+          "path": "disputes list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/disputes",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
       }
     },
     {
@@ -887,25 +955,33 @@
         "operation_id": null,
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this row; the missing work is a connector-local declaration bound to the pinned operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-braintree",
-          "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[19] is bound to ETL stream \"apple_pay_domains\" but has no runnable cli_surface command or typed write action binding.",
-          "minimal_change": "Add a connector-owned runnable command or typed action binding for this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/braintree/cli_surface.json: implemented ETL command \"apple-pay-domains list\" binds GET /merchants/{merchant_id}/apple_pay/registered_domains; streams.json stream \"apple_pay_domains\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The source operation has no runnable command or typed action binding.",
-        "evidence": "internal/connectors/defs/braintree/api_surface.json endpoints[19] is bound to ETL stream \"apple_pay_domains\" but has no runnable cli_surface command or typed write action binding."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-braintree",
-        "contract": null
+        "status": "enabled; runnable ETL command \"apple-pay-domains list\" binds pinned source operation braintree.rest.get.MerchantsMerchantIdApplePayRegisteredDomains19",
+        "command": {
+          "path": "apple-pay-domains list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /merchants/{merchant_id}/apple_pay/registered_domains",
+          "source_url": "https://developer.paypal.com/braintree/docs"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/braintree/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "rendered_reference",
+          "published_source_url": "https://developer.paypal.com/braintree/docs",
+          "citation_url": "https://developer.paypal.com/braintree/docs"
+        }
       }
     },
     {

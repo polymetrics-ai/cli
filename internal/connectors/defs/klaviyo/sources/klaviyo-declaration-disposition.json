@@ -23,9 +23,9 @@
       "level": "complete_machine_readable_specification",
       "basis": "Parsed every HTTP operation in the provider-published OpenAPI artifact at https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json."
     },
-    "enabled_operations": 0,
-    "enabled_percent": 0,
-    "disabled_operations": 345,
+    "enabled_operations": 6,
+    "enabled_percent": 1.74,
+    "disabled_operations": 339,
     "documented_deletes": 30,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -56,13 +56,13 @@
     ],
     "stream_bindings": 6,
     "writes_actions": 0,
-    "terminal_commands": 0,
+    "terminal_commands": 6,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 345
+        "count": 339
       }
     ],
     "transport": {
@@ -85,16 +85,11 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-klaviyo",
       "sync-transport-destination-definition-klaviyo",
       "sync-transport-source-definition-klaviyo",
       "typed-operation-contract-klaviyo"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-klaviyo",
-        "count": 6
-      },
       {
         "id": "typed-operation-contract-klaviyo",
         "count": 339
@@ -104,14 +99,15 @@
         "count": 141
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 6,
     "typed_write_actions": 0,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 6,
     "endpoint_bound_typed_write_actions": 0
   },
   "notes": [
     "Complete six-class source-locked map regenerated from the provider's official machine-readable specification; every 345 pinned operation has exactly one primary parity class.",
-    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped."
+    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 6 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
   ],
   "ledger_dispositions": [
     {
@@ -2174,25 +2170,33 @@
         "operation_id": "get_campaigns",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-klaviyo",
-          "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[42] is bound to the pinned provider operation; internal/connectors/defs/klaviyo/sources/klaviyo-operation-source-lock.json: paths[\"/api/campaigns\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/klaviyo/cli_surface.json: implemented ETL command \"campaigns list\" binds GET /api/campaigns; streams.json stream \"campaigns\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[42] is bound to the pinned provider operation; internal/connectors/defs/klaviyo/sources/klaviyo-operation-source-lock.json: paths[\"/api/campaigns\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-klaviyo",
-        "contract": null
+        "status": "enabled; runnable ETL command \"campaigns list\" binds pinned source operation klaviyo.rest.get.get_campaigns",
+        "command": {
+          "path": "campaigns list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/campaigns",
+          "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/klaviyo/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4510,25 +4514,33 @@
         "operation_id": "get_events",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-klaviyo",
-          "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[94] is bound to the pinned provider operation; internal/connectors/defs/klaviyo/sources/klaviyo-operation-source-lock.json: paths[\"/api/events\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/klaviyo/cli_surface.json: implemented ETL command \"events list\" binds GET /api/events; streams.json stream \"events\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[94] is bound to the pinned provider operation; internal/connectors/defs/klaviyo/sources/klaviyo-operation-source-lock.json: paths[\"/api/events\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-klaviyo",
-        "contract": null
+        "status": "enabled; runnable ETL command \"events list\" binds pinned source operation klaviyo.rest.get.get_events",
+        "command": {
+          "path": "events list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/events",
+          "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/klaviyo/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -5901,25 +5913,33 @@
         "operation_id": "get_lists",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-klaviyo",
-          "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[125] is bound to the pinned provider operation; internal/connectors/defs/klaviyo/sources/klaviyo-operation-source-lock.json: paths[\"/api/lists\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/klaviyo/cli_surface.json: implemented ETL command \"lists list\" binds GET /api/lists; streams.json stream \"lists\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[125] is bound to the pinned provider operation; internal/connectors/defs/klaviyo/sources/klaviyo-operation-source-lock.json: paths[\"/api/lists\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-klaviyo",
-        "contract": null
+        "status": "enabled; runnable ETL command \"lists list\" binds pinned source operation klaviyo.rest.get.get_lists",
+        "command": {
+          "path": "lists list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/lists",
+          "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/klaviyo/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -6662,25 +6682,33 @@
         "operation_id": "get_metrics",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-klaviyo",
-          "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[142] is bound to the pinned provider operation; internal/connectors/defs/klaviyo/sources/klaviyo-operation-source-lock.json: paths[\"/api/metrics\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/klaviyo/cli_surface.json: implemented ETL command \"metrics list\" binds GET /api/metrics; streams.json stream \"metrics\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[142] is bound to the pinned provider operation; internal/connectors/defs/klaviyo/sources/klaviyo-operation-source-lock.json: paths[\"/api/metrics\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-klaviyo",
-        "contract": null
+        "status": "enabled; runnable ETL command \"metrics list\" binds pinned source operation klaviyo.rest.get.get_metrics",
+        "command": {
+          "path": "metrics list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/metrics",
+          "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/klaviyo/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -8323,25 +8351,33 @@
         "operation_id": "get_profiles",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-klaviyo",
-          "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[179] is bound to the pinned provider operation; internal/connectors/defs/klaviyo/sources/klaviyo-operation-source-lock.json: paths[\"/api/profiles\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/klaviyo/cli_surface.json: implemented ETL command \"profiles list\" binds GET /api/profiles; streams.json stream \"profiles\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[179] is bound to the pinned provider operation; internal/connectors/defs/klaviyo/sources/klaviyo-operation-source-lock.json: paths[\"/api/profiles\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-klaviyo",
-        "contract": null
+        "status": "enabled; runnable ETL command \"profiles list\" binds pinned source operation klaviyo.rest.get.get_profiles",
+        "command": {
+          "path": "profiles list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/profiles",
+          "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/klaviyo/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -9129,25 +9165,33 @@
         "operation_id": "get_segments",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-klaviyo",
-          "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[197] is bound to the pinned provider operation; internal/connectors/defs/klaviyo/sources/klaviyo-operation-source-lock.json: paths[\"/api/segments\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/klaviyo/cli_surface.json: implemented ETL command \"segments list\" binds GET /api/segments; streams.json stream \"segments\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/klaviyo/api_surface.json endpoints[197] is bound to the pinned provider operation; internal/connectors/defs/klaviyo/sources/klaviyo-operation-source-lock.json: paths[\"/api/segments\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-klaviyo",
-        "contract": null
+        "status": "enabled; runnable ETL command \"segments list\" binds pinned source operation klaviyo.rest.get.get_segments",
+        "command": {
+          "path": "segments list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /api/segments",
+          "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/klaviyo/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+          "citation_url": null
+        }
       }
     },
     {

@@ -90,3 +90,17 @@ This advances the prior 3,254 schema-v3-reader-gated rows by 26 without changing
 blocked from generated validation by the shared evidence reader, while the 26 independently declarable
 stream commands are source-backed and binary-reachable. `api_surface.json` served only as an exact
 checked-in projection consistency check, not as a provider-boundary substitute.
+
+## Increment 7 — schema-v3 declaration-first ETL cohort 2
+
+Forty more source-backed ETL commands are installed for Braintree (10), Close (14), Intercom (5),
+Salesloft (5), and Klaviyo (6). Their clean-project binary result is consistently the credential
+preflight, and their generated website catalog projections are current. The 3,932-row split is now
+**738 enabled**, **3,188 declaration-pending**, **5 foundation-gap**, and **1 provider-contract-
+unavailable**.
+
+Copper's five apparent ETL streams are not in this increment: the checked-in execution component is a
+`__legacy_hook` path but the exact source operation is a POST search request. A GET CLI declaration would
+misrepresent method and body semantics, so the deferred row must name the connector-owned POST-search
+stream declaration instead. That is ordinary declaration work, not a reason to omit the provider API or
+mislabel an engine gap.

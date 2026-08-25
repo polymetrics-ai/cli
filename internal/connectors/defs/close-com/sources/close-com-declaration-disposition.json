@@ -23,9 +23,9 @@
       "level": "complete_machine_readable_specification",
       "basis": "Parsed every operation in the provider-published OpenAPI 3.1.0 document at https://api.close.com/api/openapi.json."
     },
-    "enabled_operations": 12,
-    "enabled_percent": 4,
-    "disabled_operations": 288,
+    "enabled_operations": 26,
+    "enabled_percent": 8.67,
+    "disabled_operations": 274,
     "documented_deletes": 52,
     "enabled_deletes": 4,
     "parity_class_counts": [
@@ -56,13 +56,13 @@
     ],
     "stream_bindings": 14,
     "writes_actions": 12,
-    "terminal_commands": 0,
+    "terminal_commands": 14,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 288
+        "count": 274
       }
     ],
     "transport": {
@@ -83,22 +83,17 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-close-com",
       "typed-operation-contract-close-com"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-close-com",
-        "count": 14
-      },
       {
         "id": "typed-operation-contract-close-com",
         "count": 274
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 14,
     "typed_write_actions": 12,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 14,
     "endpoint_bound_typed_write_actions": 12
   },
   "ledger_dispositions": [
@@ -2674,25 +2669,33 @@
         "operation_id": "activities_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[52] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/activity/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"activities list\" binds GET /activity/; streams.json stream \"activities\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[52] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/activity/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"activities list\" binds pinned source operation close-com.rest.get.ActivitiesList52",
+        "command": {
+          "path": "activities list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /activity/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -4830,25 +4833,33 @@
         "operation_id": "contacts_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[100] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/contact/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"contacts list\" binds GET /contact/; streams.json stream \"contacts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[100] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/contact/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"contacts list\" binds pinned source operation close-com.rest.get.ContactsList100",
+        "command": {
+          "path": "contacts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /contact/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -5141,25 +5152,33 @@
         "operation_id": "custom_fields.contact_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[107] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/custom_field/contact/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"custom-fields-contact list\" binds GET /custom_field/contact/; streams.json stream \"custom_fields_contact\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[107] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/custom_field/contact/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"custom-fields-contact list\" binds pinned source operation close-com.rest.get.CustomFieldsContactList107",
+        "command": {
+          "path": "custom-fields-contact list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /custom_field/contact/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -5317,25 +5336,33 @@
         "operation_id": "custom_fields.lead_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[111] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/custom_field/lead/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"custom-fields-lead list\" binds GET /custom_field/lead/; streams.json stream \"custom_fields_lead\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[111] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/custom_field/lead/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"custom-fields-lead list\" binds pinned source operation close-com.rest.get.CustomFieldsLeadList111",
+        "command": {
+          "path": "custom-fields-lead list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /custom_field/lead/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -5403,25 +5430,33 @@
         "operation_id": "custom_fields.opportunity_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[113] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/custom_field/opportunity/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"custom-fields-opportunity list\" binds GET /custom_field/opportunity/; streams.json stream \"custom_fields_opportunity\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[113] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/custom_field/opportunity/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"custom-fields-opportunity list\" binds pinned source operation close-com.rest.get.CustomFieldsOpportunityList113",
+        "command": {
+          "path": "custom-fields-opportunity list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /custom_field/opportunity/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -6479,25 +6514,33 @@
         "operation_id": "groups_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[137] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/group/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"groups list\" binds GET /group/; streams.json stream \"groups\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[137] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/group/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"groups list\" binds pinned source operation close-com.rest.get.GroupsList137",
+        "command": {
+          "path": "groups list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /group/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -6655,25 +6698,33 @@
         "operation_id": "leads_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[141] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/lead/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"leads list\" binds GET /lead/; streams.json stream \"leads\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[141] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/lead/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"leads list\" binds pinned source operation close-com.rest.get.LeadsList141",
+        "command": {
+          "path": "leads list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /lead/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -6831,25 +6882,33 @@
         "operation_id": "opportunities_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[145] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/opportunity/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"opportunities list\" binds GET /opportunity/; streams.json stream \"opportunities\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[145] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/opportunity/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"opportunities list\" binds pinned source operation close-com.rest.get.OpportunitiesList145",
+        "command": {
+          "path": "opportunities list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /opportunity/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -7142,25 +7201,33 @@
         "operation_id": "pipelines_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[152] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/pipeline/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"pipelines list\" binds GET /pipeline/; streams.json stream \"pipelines\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[152] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/pipeline/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"pipelines list\" binds pinned source operation close-com.rest.get.PipelinesList152",
+        "command": {
+          "path": "pipelines list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /pipeline/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -7543,25 +7610,33 @@
         "operation_id": "roles_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[161] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/role/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"roles list\" binds GET /role/; streams.json stream \"roles\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[161] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/role/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"roles list\" binds pinned source operation close-com.rest.get.RolesList161",
+        "command": {
+          "path": "roles list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /role/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -8259,25 +8334,33 @@
         "operation_id": "lead_statuses_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[177] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/status/lead/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"lead-statuses list\" binds GET /status/lead/; streams.json stream \"lead_statuses\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[177] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/status/lead/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"lead-statuses list\" binds pinned source operation close-com.rest.get.LeadStatusesList177",
+        "command": {
+          "path": "lead-statuses list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /status/lead/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -8345,25 +8428,33 @@
         "operation_id": "opportunity_statuses_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[179] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/status/opportunity/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"opportunity-statuses list\" binds GET /status/opportunity/; streams.json stream \"opportunity_statuses\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[179] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/status/opportunity/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"opportunity-statuses list\" binds pinned source operation close-com.rest.get.OpportunityStatusesList179",
+        "command": {
+          "path": "opportunity-statuses list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /status/opportunity/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -8431,25 +8522,33 @@
         "operation_id": "tasks_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[181] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/task/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"tasks list\" binds GET /task/; streams.json stream \"tasks\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[181] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/task/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"tasks list\" binds pinned source operation close-com.rest.get.TasksList181",
+        "command": {
+          "path": "tasks list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /task/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -8562,25 +8661,33 @@
         "operation_id": "users_list",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-close-com",
-          "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[184] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/user/\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/close-com/cli_surface.json: implemented ETL command \"users list\" binds GET /user/; streams.json stream \"users\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/close-com/api_surface.json endpoints[184] is bound to the pinned provider operation; internal/connectors/defs/close-com/sources/close-com-operation-source-lock.json: .paths[\"/user/\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-close-com",
-        "contract": null
+        "status": "enabled; runnable ETL command \"users list\" binds pinned source operation close-com.rest.get.UsersList184",
+        "command": {
+          "path": "users list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /user/",
+          "source_url": "https://api.close.com/api/openapi.json"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/close-com/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://api.close.com/api/openapi.json",
+          "citation_url": null
+        }
       }
     },
     {
@@ -14223,6 +14330,7 @@
     "Complete six-class source-locked map regenerated from the provider OpenAPI 3.1.0 document; every 300 pinned operation has exactly one primary parity class.",
     "An operation is enabled only when its exact refreshed method/path still resolves to an actual typed write action or runtime-preflight runnable command. Stream-only mappings remain ETL but declaration-pending.",
     "Direct writes remain direct_write operations. Reverse-ETL eligibility is a separate attribute and remains foundation-gapped because destination execution is GitHub issue-label bound.",
-    "2026-08-20 reconciliation: source transport declares all 14 streams; update_lead is the exact typed-destination proof. Every other typed action is explicitly eligible pending closed exact-action selection. Direct writes without a typed action are declaration-pending, not a foundation or safety gap."
+    "2026-08-20 reconciliation: source transport declares all 14 streams; update_lead is the exact typed-destination proof. Every other typed action is explicitly eligible pending closed exact-action selection. Direct writes without a typed action are declaration-pending, not a foundation or safety gap.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 14 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
   ]
 }

@@ -1,0 +1,167 @@
+{
+  "tagline": "Read Klaviyo source-locked ETL records.",
+  "usage": "pm klaviyo <command> [flags]",
+  "source_cli": {
+    "name": "Klaviyo provider API",
+    "docs": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "profiles",
+        "events",
+        "campaigns",
+        "lists",
+        "metrics",
+        "segments"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Klaviyo request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "profiles list",
+      "summary": "Read Profiles as Klaviyo ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "profiles",
+      "source_cli_path": "GET /api/profiles",
+      "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/profiles"
+        }
+      ],
+      "examples": [
+        "pm klaviyo profiles list --json"
+      ],
+      "notes": "Pinned source operation klaviyo.rest.get.get_profiles from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "events list",
+      "summary": "Read Events as Klaviyo ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_cli_path": "GET /api/events",
+      "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/events"
+        }
+      ],
+      "examples": [
+        "pm klaviyo events list --json"
+      ],
+      "notes": "Pinned source operation klaviyo.rest.get.get_events from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Read Campaigns as Klaviyo ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_cli_path": "GET /api/campaigns",
+      "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/campaigns"
+        }
+      ],
+      "examples": [
+        "pm klaviyo campaigns list --json"
+      ],
+      "notes": "Pinned source operation klaviyo.rest.get.get_campaigns from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "lists list",
+      "summary": "Read Lists as Klaviyo ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lists",
+      "source_cli_path": "GET /api/lists",
+      "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/lists"
+        }
+      ],
+      "examples": [
+        "pm klaviyo lists list --json"
+      ],
+      "notes": "Pinned source operation klaviyo.rest.get.get_lists from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "metrics list",
+      "summary": "Read Metrics as Klaviyo ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "metrics",
+      "source_cli_path": "GET /api/metrics",
+      "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/metrics"
+        }
+      ],
+      "examples": [
+        "pm klaviyo metrics list --json"
+      ],
+      "notes": "Pinned source operation klaviyo.rest.get.get_metrics from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "segments list",
+      "summary": "Read Segments as Klaviyo ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segments",
+      "source_cli_path": "GET /api/segments",
+      "source_url": "https://raw.githubusercontent.com/klaviyo/openapi/main/openapi/stable.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/segments"
+        }
+      ],
+      "examples": [
+        "pm klaviyo segments list --json"
+      ],
+      "notes": "Pinned source operation klaviyo.rest.get.get_segments from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}

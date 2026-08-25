@@ -527,6 +527,27 @@ foundation gaps are not enabled and cannot contribute to a merge-ready verdict.
   per-operation citation), while `go run ./cmd/connectorgen surface-sync --check` stops first at
   ActiveCampaign's missing descriptor. These checks cannot reach generated-surface comparison until the
   shared v3 evidence-reader/citation foundation lands; no connector-local shim or lock rewrite was used.
+
+## V3 declaration-first ETL cohort 2 — 2026-08-25
+
+- **RED:** the binary created for the preceding cohort returned `error: unknown command` for
+  `braintree transactions list`, `close-com leads list`, `intercom contacts list`, `salesloft people
+  list`, and `klaviyo profiles list`. The source-lock-first selector also refused Copper: its five
+  `streams.json` paths are `__legacy_hook` placeholders while the corresponding documented ETL routes
+  are `POST /v1/*/search`; declaring those as ordinary GET streams would be false provider evidence.
+- **GREEN:** the same deterministic generator materialized 40 exact stream/source commands — Braintree
+  (10), Close (14), Intercom (5), Salesloft (5), and Klaviyo (6). Every command retains the source
+  document/operation identity, cited provider route, canonical command path, ETL lane, and
+  `streams.json` execution component. Copper stays declaration-pending for an explicit
+  legacy-hook-to-source-POST-search declaration, not a foundation gap and not an invented command.
+- **Installed binary proof:** `go build -o /tmp/cli-map-batch67-r1-v3-etl-cohort2-proof ./cmd/pm`
+  succeeded. In a fresh initialized temporary project all 40 commands exited `1` with exactly
+  `error: missing --credential`, before provider I/O. `go test -timeout 20m
+  ./internal/connectors/commandrunner -run '^TestEveryImplementedCommandPassesRuntimePreflight$'
+  -count=1` passed.
+- **Generated projection proof:** `npm --prefix website run gen:website-data` and `git diff --check`
+  passed. The source-lock reader remains the only blocker to global `connectorgen validate` and
+  `surface-sync --check`; this cohort does not change that shared foundation or any held lock.
 # Stale typed-destination gap reconciliation — increment 1 (2026-08-20)
 
 - **RED:** The operation-evidence ledger exposed 1,111 direct-write rows that still named

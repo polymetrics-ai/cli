@@ -1,0 +1,247 @@
+{
+  "tagline": "Read Braintree source-locked ETL records.",
+  "usage": "pm braintree <command> [flags]",
+  "source_cli": {
+    "name": "Braintree provider API",
+    "docs": "https://developer.paypal.com/braintree/docs",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "transactions",
+        "customers",
+        "subscriptions",
+        "add-ons",
+        "discounts",
+        "plans",
+        "merchant-accounts",
+        "payment-methods",
+        "disputes",
+        "apple-pay-domains"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Braintree request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "transactions list",
+      "summary": "Read Transactions as Braintree ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactions",
+      "source_cli_path": "GET /merchants/{merchant_id}/transactions",
+      "source_url": "https://developer.paypal.com/braintree/docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/merchants/{merchant_id}/transactions"
+        }
+      ],
+      "examples": [
+        "pm braintree transactions list --json"
+      ],
+      "notes": "Pinned source operation braintree.rest.get.MerchantsMerchantIdTransactions0 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "customers list",
+      "summary": "Read Customers as Braintree ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_cli_path": "GET /merchants/{merchant_id}/customers",
+      "source_url": "https://developer.paypal.com/braintree/docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/merchants/{merchant_id}/customers"
+        }
+      ],
+      "examples": [
+        "pm braintree customers list --json"
+      ],
+      "notes": "Pinned source operation braintree.rest.get.MerchantsMerchantIdCustomers3 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "subscriptions list",
+      "summary": "Read Subscriptions as Braintree ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscriptions",
+      "source_cli_path": "GET /merchants/{merchant_id}/subscriptions",
+      "source_url": "https://developer.paypal.com/braintree/docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/merchants/{merchant_id}/subscriptions"
+        }
+      ],
+      "examples": [
+        "pm braintree subscriptions list --json"
+      ],
+      "notes": "Pinned source operation braintree.rest.get.MerchantsMerchantIdSubscriptions6 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "add-ons list",
+      "summary": "Read Add Ons as Braintree ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "add_ons",
+      "source_cli_path": "GET /merchants/{merchant_id}/add_ons",
+      "source_url": "https://developer.paypal.com/braintree/docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/merchants/{merchant_id}/add_ons"
+        }
+      ],
+      "examples": [
+        "pm braintree add-ons list --json"
+      ],
+      "notes": "Pinned source operation braintree.rest.get.MerchantsMerchantIdAddOns9 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "discounts list",
+      "summary": "Read Discounts as Braintree ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "discounts",
+      "source_cli_path": "GET /merchants/{merchant_id}/discounts",
+      "source_url": "https://developer.paypal.com/braintree/docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/merchants/{merchant_id}/discounts"
+        }
+      ],
+      "examples": [
+        "pm braintree discounts list --json"
+      ],
+      "notes": "Pinned source operation braintree.rest.get.MerchantsMerchantIdDiscounts10 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "plans list",
+      "summary": "Read Plans as Braintree ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "plans",
+      "source_cli_path": "GET /merchants/{merchant_id}/plans",
+      "source_url": "https://developer.paypal.com/braintree/docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/merchants/{merchant_id}/plans"
+        }
+      ],
+      "examples": [
+        "pm braintree plans list --json"
+      ],
+      "notes": "Pinned source operation braintree.rest.get.MerchantsMerchantIdPlans11 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "merchant-accounts list",
+      "summary": "Read Merchant Accounts as Braintree ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "merchant_accounts",
+      "source_cli_path": "GET /merchants/{merchant_id}/merchant_accounts",
+      "source_url": "https://developer.paypal.com/braintree/docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/merchants/{merchant_id}/merchant_accounts"
+        }
+      ],
+      "examples": [
+        "pm braintree merchant-accounts list --json"
+      ],
+      "notes": "Pinned source operation braintree.rest.get.MerchantsMerchantIdMerchantAccounts13 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "payment-methods list",
+      "summary": "Read Payment Methods as Braintree ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payment_methods",
+      "source_cli_path": "GET /merchants/{merchant_id}/payment_methods",
+      "source_url": "https://developer.paypal.com/braintree/docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/merchants/{merchant_id}/payment_methods"
+        }
+      ],
+      "examples": [
+        "pm braintree payment-methods list --json"
+      ],
+      "notes": "Pinned source operation braintree.rest.get.MerchantsMerchantIdPaymentMethods15 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "disputes list",
+      "summary": "Read Disputes as Braintree ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "disputes",
+      "source_cli_path": "GET /merchants/{merchant_id}/disputes",
+      "source_url": "https://developer.paypal.com/braintree/docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/merchants/{merchant_id}/disputes"
+        }
+      ],
+      "examples": [
+        "pm braintree disputes list --json"
+      ],
+      "notes": "Pinned source operation braintree.rest.get.MerchantsMerchantIdDisputes17 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "apple-pay-domains list",
+      "summary": "Read Apple Pay Domains as Braintree ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "apple_pay_domains",
+      "source_cli_path": "GET /merchants/{merchant_id}/apple_pay/registered_domains",
+      "source_url": "https://developer.paypal.com/braintree/docs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/merchants/{merchant_id}/apple_pay/registered_domains"
+        }
+      ],
+      "examples": [
+        "pm braintree apple-pay-domains list --json"
+      ],
+      "notes": "Pinned source operation braintree.rest.get.MerchantsMerchantIdApplePayRegisteredDomains19 from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}

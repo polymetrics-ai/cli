@@ -1,0 +1,327 @@
+{
+  "tagline": "Read Close-com source-locked ETL records.",
+  "usage": "pm close-com <command> [flags]",
+  "source_cli": {
+    "name": "Close-com provider API",
+    "docs": "https://api.close.com/api/openapi.json",
+    "reference": "Pinned schema-v3 source documents; each ETL command retains its exact provider operation route and citation.",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "etl",
+      "title": "ETL streams",
+      "commands": [
+        "leads",
+        "contacts",
+        "opportunities",
+        "activities",
+        "users",
+        "tasks",
+        "lead-statuses",
+        "opportunity-statuses",
+        "pipelines",
+        "roles",
+        "groups",
+        "custom-fields-lead",
+        "custom-fields-contact",
+        "custom-fields-opportunity"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the Close-com request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit."
+    }
+  ],
+  "commands": [
+    {
+      "path": "leads list",
+      "summary": "Read Leads as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leads",
+      "source_cli_path": "GET /lead/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lead/"
+        }
+      ],
+      "examples": [
+        "pm close-com leads list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.LeadsList141 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "contacts list",
+      "summary": "Read Contacts as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_cli_path": "GET /contact/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contact/"
+        }
+      ],
+      "examples": [
+        "pm close-com contacts list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.ContactsList100 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "opportunities list",
+      "summary": "Read Opportunities as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunities",
+      "source_cli_path": "GET /opportunity/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/opportunity/"
+        }
+      ],
+      "examples": [
+        "pm close-com opportunities list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.OpportunitiesList145 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "activities list",
+      "summary": "Read Activities as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activities",
+      "source_cli_path": "GET /activity/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activity/"
+        }
+      ],
+      "examples": [
+        "pm close-com activities list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.ActivitiesList52 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "users list",
+      "summary": "Read Users as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_cli_path": "GET /user/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/user/"
+        }
+      ],
+      "examples": [
+        "pm close-com users list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.UsersList184 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "tasks list",
+      "summary": "Read Tasks as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "source_cli_path": "GET /task/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/task/"
+        }
+      ],
+      "examples": [
+        "pm close-com tasks list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.TasksList181 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "lead-statuses list",
+      "summary": "Read Lead Statuses as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_statuses",
+      "source_cli_path": "GET /status/lead/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/status/lead/"
+        }
+      ],
+      "examples": [
+        "pm close-com lead-statuses list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.LeadStatusesList177 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "opportunity-statuses list",
+      "summary": "Read Opportunity Statuses as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunity_statuses",
+      "source_cli_path": "GET /status/opportunity/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/status/opportunity/"
+        }
+      ],
+      "examples": [
+        "pm close-com opportunity-statuses list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.OpportunityStatusesList179 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "pipelines list",
+      "summary": "Read Pipelines as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pipelines",
+      "source_cli_path": "GET /pipeline/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipeline/"
+        }
+      ],
+      "examples": [
+        "pm close-com pipelines list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.PipelinesList152 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "roles list",
+      "summary": "Read Roles as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "roles",
+      "source_cli_path": "GET /role/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/role/"
+        }
+      ],
+      "examples": [
+        "pm close-com roles list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.RolesList161 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "groups list",
+      "summary": "Read Groups as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_cli_path": "GET /group/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/group/"
+        }
+      ],
+      "examples": [
+        "pm close-com groups list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.GroupsList137 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "custom-fields-lead list",
+      "summary": "Read Custom Fields Lead as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields_lead",
+      "source_cli_path": "GET /custom_field/lead/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_field/lead/"
+        }
+      ],
+      "examples": [
+        "pm close-com custom-fields-lead list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.CustomFieldsLeadList111 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "custom-fields-contact list",
+      "summary": "Read Custom Fields Contact as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields_contact",
+      "source_cli_path": "GET /custom_field/contact/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_field/contact/"
+        }
+      ],
+      "examples": [
+        "pm close-com custom-fields-contact list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.CustomFieldsContactList107 from source document primary; streams.json is the declared execution component."
+    },
+    {
+      "path": "custom-fields-opportunity list",
+      "summary": "Read Custom Fields Opportunity as Close-com ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields_opportunity",
+      "source_cli_path": "GET /custom_field/opportunity/",
+      "source_url": "https://api.close.com/api/openapi.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_field/opportunity/"
+        }
+      ],
+      "examples": [
+        "pm close-com custom-fields-opportunity list --json"
+      ],
+      "notes": "Pinned source operation close-com.rest.get.CustomFieldsOpportunityList113 from source document primary; streams.json is the declared execution component."
+    }
+  ]
+}

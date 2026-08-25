@@ -23,9 +23,9 @@
       "level": "complete_machine_readable_specification",
       "basis": "Parsed every HTTP operation in the provider-published OpenAPI artifact at https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml."
     },
-    "enabled_operations": 0,
-    "enabled_percent": 0,
-    "disabled_operations": 231,
+    "enabled_operations": 5,
+    "enabled_percent": 2.16,
+    "disabled_operations": 226,
     "documented_deletes": 31,
     "enabled_deletes": 0,
     "parity_class_counts": [
@@ -56,13 +56,13 @@
     ],
     "stream_bindings": 5,
     "writes_actions": 0,
-    "terminal_commands": 0,
+    "terminal_commands": 5,
     "gap_ids": [],
     "foundation_gaps": [],
     "rejected_by_reason": [
       {
         "key": "declaration-pending",
-        "count": 231
+        "count": 226
       }
     ],
     "transport": {
@@ -85,16 +85,11 @@
       }
     },
     "declaration_pending_ids": [
-      "runnable-command-binding-intercom",
       "sync-transport-destination-definition-intercom",
       "sync-transport-source-definition-intercom",
       "typed-operation-contract-intercom"
     ],
     "declaration_pending": [
-      {
-        "id": "runnable-command-binding-intercom",
-        "count": 5
-      },
       {
         "id": "typed-operation-contract-intercom",
         "count": 226
@@ -104,14 +99,15 @@
         "count": 123
       }
     ],
-    "runnable_cli_surface_commands": 0,
+    "runnable_cli_surface_commands": 5,
     "typed_write_actions": 0,
-    "endpoint_bound_cli_commands": 0,
+    "endpoint_bound_cli_commands": 5,
     "endpoint_bound_typed_write_actions": 0
   },
   "notes": [
     "Complete six-class source-locked map regenerated from the provider's official machine-readable specification; every 231 pinned operation has exactly one primary parity class.",
-    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped."
+    "Direct writes remain direct_write operations. #4304 now provides the connector-neutral typed-destination foundation; no connector-owned typed writes.json action exists for these rows, so reverse-ETL declaration remains pending rather than foundation-gapped.",
+    "2026-08-25 declaration-first ETL command materialization: enabled 5 exact stream/source pairs. Every command has its provider operation ID, canonical method/path, source citation, and streams.json execution component; persisted source transport remains declaration-pending until connector-owned transport/conformance evidence exists."
   ],
   "ledger_dispositions": [
     {
@@ -1684,25 +1680,33 @@
         "operation_id": "listAdmins",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-intercom",
-          "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[31] is bound to the pinned provider operation; internal/connectors/defs/intercom/sources/intercom-operation-source-lock.json: paths[\"/admins\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/intercom/cli_surface.json: implemented ETL command \"admins list\" binds GET /admins; streams.json stream \"admins\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[31] is bound to the pinned provider operation; internal/connectors/defs/intercom/sources/intercom-operation-source-lock.json: paths[\"/admins\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-intercom",
-        "contract": null
+        "status": "enabled; runnable ETL command \"admins list\" binds pinned source operation intercom.rest.get.listAdmins",
+        "command": {
+          "path": "admins list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /admins",
+          "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/intercom/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+          "citation_url": null
+        }
       }
     },
     {
@@ -2715,25 +2719,33 @@
         "operation_id": "retrieveCompany",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-intercom",
-          "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[54] is bound to the pinned provider operation; internal/connectors/defs/intercom/sources/intercom-operation-source-lock.json: paths[\"/companies\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/intercom/cli_surface.json: implemented ETL command \"companies list\" binds GET /companies; streams.json stream \"companies\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[54] is bound to the pinned provider operation; internal/connectors/defs/intercom/sources/intercom-operation-source-lock.json: paths[\"/companies\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-intercom",
-        "contract": null
+        "status": "enabled; runnable ETL command \"companies list\" binds pinned source operation intercom.rest.get.retrieveCompany",
+        "command": {
+          "path": "companies list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /companies",
+          "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/intercom/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+          "citation_url": null
+        }
       }
     },
     {
@@ -2981,25 +2993,33 @@
         "operation_id": "ListContacts",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-intercom",
-          "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[60] is bound to the pinned provider operation; internal/connectors/defs/intercom/sources/intercom-operation-source-lock.json: paths[\"/contacts\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/intercom/cli_surface.json: implemented ETL command \"contacts list\" binds GET /contacts; streams.json stream \"contacts\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[60] is bound to the pinned provider operation; internal/connectors/defs/intercom/sources/intercom-operation-source-lock.json: paths[\"/contacts\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-intercom",
-        "contract": null
+        "status": "enabled; runnable ETL command \"contacts list\" binds pinned source operation intercom.rest.get.ListContacts",
+        "command": {
+          "path": "contacts list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /contacts",
+          "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/intercom/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+          "citation_url": null
+        }
       }
     },
     {
@@ -3562,25 +3582,33 @@
         "operation_id": "listConversations",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-intercom",
-          "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[73] is bound to the pinned provider operation; internal/connectors/defs/intercom/sources/intercom-operation-source-lock.json: paths[\"/conversations\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/intercom/cli_surface.json: implemented ETL command \"conversations list\" binds GET /conversations; streams.json stream \"conversations\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[73] is bound to the pinned provider operation; internal/connectors/defs/intercom/sources/intercom-operation-source-lock.json: paths[\"/conversations\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-intercom",
-        "contract": null
+        "status": "enabled; runnable ETL command \"conversations list\" binds pinned source operation intercom.rest.get.listConversations",
+        "command": {
+          "path": "conversations list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /conversations",
+          "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/intercom/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+          "citation_url": null
+        }
       }
     },
     {
@@ -6078,25 +6106,33 @@
         "operation_id": "listTags",
         "deprecated": false
       },
-      "state": "disabled",
+      "state": "enabled",
       "foundation": {
         "state": "present",
-        "evidence": "No shared engine change is requested for this direct operation; the missing work is a connector-local declaration bound to the pinned provider operation.",
-        "declaration_pending": {
-          "id": "runnable-command-binding-intercom",
-          "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[129] is bound to the pinned provider operation; internal/connectors/defs/intercom/sources/intercom-operation-source-lock.json: paths[\"/tags\"].get.",
-          "minimal_change": "Add a connector-owned runnable command bound to this pinned stream operation, or retain it as declaration-pending; no engine change is required."
-        }
+        "evidence": "internal/connectors/defs/intercom/cli_surface.json: implemented ETL command \"tags list\" binds GET /tags; streams.json stream \"tags\" is the execution component and the built binary must stop at missing --credential before provider I/O."
       },
-      "rejection": {
-        "reason": "declaration-pending",
-        "recoverable": true,
-        "detail": "The engine shape is already available; this source operation awaits its connector-local typed contract and/or runnable command declaration.",
-        "evidence": "internal/connectors/defs/intercom/api_surface.json endpoints[129] is bound to the pinned provider operation; internal/connectors/defs/intercom/sources/intercom-operation-source-lock.json: paths[\"/tags\"].get."
-      },
+      "rejection": null,
       "declaration": {
-        "status": "disabled; declaration-pending runnable-command-binding-intercom",
-        "contract": null
+        "status": "enabled; runnable ETL command \"tags list\" binds pinned source operation intercom.rest.get.listTags",
+        "command": {
+          "path": "tags list",
+          "intent": "etl",
+          "availability": "implemented",
+          "source_cli_path": "GET /tags",
+          "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml"
+        },
+        "transport": {
+          "source_transport": {
+            "state": "declaration-pending",
+            "evidence": "internal/connectors/defs/intercom/sync_transport.json is absent; this executable ETL command uses the existing streams.json component, while persisted source transport remains connector-owned declaration work."
+          }
+        },
+        "source_document": {
+          "id": "primary",
+          "kind": "openapi",
+          "published_source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.16/api.intercom.io.yaml",
+          "citation_url": null
+        }
       }
     },
     {

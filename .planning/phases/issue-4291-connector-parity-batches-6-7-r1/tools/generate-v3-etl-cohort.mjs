@@ -10,7 +10,11 @@ import { resolve } from "node:path";
 
 const phase = resolve(import.meta.dirname, "..");
 const root = resolve(phase, "../../..");
-const cohort = ["activecampaign", "freshdesk", "iterable", "segment", "square"];
+const defaultCohort = ["activecampaign", "freshdesk", "iterable", "segment", "square"];
+const cohort = process.argv.slice(2);
+if (cohort.length === 0) {
+  cohort.push(...defaultCohort);
+}
 
 async function readJSON(file) {
   return JSON.parse(await readFile(file, "utf8"));
@@ -54,6 +58,7 @@ function sourceIndex(lock, connector) {
 }
 
 const commandEvidence = new Map();
+const surfacesByConnector = new Map();
 
 for (const connector of cohort) {
   const definitionRoot = resolve(root, "internal/connectors/defs", connector);
@@ -121,6 +126,10 @@ for (const connector of cohort) {
     ],
     commands,
   };
+  surfacesByConnector.set(connector, { definitionRoot, surface });
+}
+
+for (const { definitionRoot, surface } of surfacesByConnector.values()) {
   await writeJSON(resolve(definitionRoot, "cli_surface.json"), surface);
 }
 
