@@ -4352,11 +4352,75 @@ func TestSentryCitedMutationCommandsPassRuntimePreflight(t *testing.T) {
 	if got, want := len(commands), 32; got != want {
 		t.Fatalf("implemented Sentry reverse-ETL commands = %d, want %d source-cited mutation actions", got, want)
 	}
+	bundle, err := engine.Load(defs.FS, "sentry")
+	if err != nil {
+		t.Fatalf("load Sentry bundle: %v", err)
+	}
+	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actions[action.Name] = action
+	}
+	writePathForSource := func(sourcePath string) string {
+		var path strings.Builder
+		for remaining := sourcePath; remaining != ""; {
+			start := strings.IndexByte(remaining, '{')
+			if start < 0 {
+				path.WriteString(remaining)
+				break
+			}
+			path.WriteString(remaining[:start])
+			remaining = remaining[start+1:]
+			end := strings.IndexByte(remaining, '}')
+			if end < 0 {
+				t.Fatalf("source endpoint %q has an unclosed path variable", sourcePath)
+			}
+			path.WriteString("{{ record.")
+			path.WriteString(remaining[:end])
+			path.WriteString(" }}")
+			remaining = remaining[end+1:]
+		}
+		return path.String()
+	}
 
 	for _, command := range commands {
-		if err := Preflight(connector, strings.Fields(command.Path)); err != nil {
-			t.Fatalf("Preflight(%q): %v", command.Path, err)
+		command := command
+		t.Run(command.Path, func(t *testing.T) {
+			if command.SourceURL == "" || command.Write == "" || len(command.APISurface) != 1 {
+				t.Fatalf("source-cited command %q has source=%q write=%q endpoints=%#v", command.Path, command.SourceURL, command.Write, command.APISurface)
+			}
+			if err := Preflight(connector, strings.Fields(command.Path)); err != nil {
+				t.Fatalf("Preflight(%q): %v", command.Path, err)
+			}
+			action, found := actions[command.Write]
+			if !found {
+				t.Fatalf("command %q write action %q is missing", command.Path, command.Write)
+			}
+			endpoint := command.APISurface[0]
+			if action.Method != endpoint.Method || action.Path != writePathForSource(endpoint.Path) {
+				t.Fatalf("action %q = %s %s, want source endpoint %s %s", action.Name, action.Method, action.Path, endpoint.Method, endpoint.Path)
+			}
+		})
+	}
+
+	var projects connectors.CommandSurfaceCommand
+	for _, command := range provider.CommandSurface().Commands {
+		if command.Path == "projects list" {
+			projects = command
+			break
 		}
+	}
+	if projects.Path == "" {
+		t.Fatal("Sentry projects list command is missing")
+	}
+	if projects.Availability != "implemented" || projects.Intent != "etl" || projects.Stream != "projects" || projects.SourceURL == "" {
+		t.Fatalf("projects list = availability=%q intent=%q stream=%q source=%q", projects.Availability, projects.Intent, projects.Stream, projects.SourceURL)
+	}
+	wantProjectsEndpoint := []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/api/0/organizations/{organization_id_or_slug}/projects/"}}
+	if !reflect.DeepEqual(projects.APISurface, wantProjectsEndpoint) {
+		t.Fatalf("projects list api surface = %#v, want %#v", projects.APISurface, wantProjectsEndpoint)
+	}
+	if err := Preflight(connector, strings.Fields(projects.Path)); err != nil {
+		t.Fatalf("Preflight(%q): %v", projects.Path, err)
 	}
 }
 

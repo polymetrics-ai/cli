@@ -15,6 +15,7 @@
 | Jira scalar direct-write subset | The manifest-reserved reset path is unknown to real `commandrunner.Preflight` | That exact source-cited reset path passes preflight and reaches the no-credential boundary; schema and query map remain closed/source-derived | Focused commandrunner test, Jira importer/validator, surface-sync, binary probes | green for `resetUserColumns`; `removeGroup` remains held for conditional-query projection and `addWatcher` for scalar JSON body support |
 | Asana no-body mutation cohort | 21 source-cited planned commands have no action binding and do not pass real preflight | Each keeps its existing canonical path, is bound to a no-body source-derived action, and reaches credential preflight; 24 unrelated source-schema gaps remain | Table-driven commandrunner regression; importer/check; targeted validation; surface/help probes | green for all 21 actions; global gates remain pending |
 | CircleCI mapping reconciliation | 24 source rows are recorded declarable despite existing implemented CLI/action/endpoint triples | Exact source ID/path/action tuples pass real preflight; only then their existing current-CLI rows are promoted in the manifest | Source-import/check, targeted validate, table-driven commandrunner regression, binary probes | green: 24/24 paths reach the credential boundary; canonical action spelling corrected in evidence |
+| Sentry mapping reconciliation | 33 existing implemented source paths remain deferred in the manifest: 32 `action_binding` rows and `projects list` as `cli_projection` | Exact source ID/path/action/method/endpoint tuples, plus the ETL source endpoint, pass runtime preflight; only those existing rows are promoted | Source-import/check, targeted validate, table-driven commandrunner regression, binary probes | green: all 33 paths reach the credential boundary |
 
 ### 2026-08-25 Asana no-body mutation execution
 
@@ -439,8 +440,8 @@
   5,262 implemented commands and found 21 failures, all Docker Hub; no other
   batch-one connector failed runtime preflight.
 - **Canonical source-operation denominator:** the ten current source locks
-  retain 4,341 provider REST operations. The three-way split is **813 already
-  runnable**, **1,618 declarable now**, and **1,910 genuinely blocked**. The
+  retain 4,341 provider REST operations. The three-way split is **846 already
+  runnable**, **1,585 declarable now**, and **1,910 genuinely blocked**. The
   runnable number starts from exact source-to-command crosswalk bindings and
   excludes Docker Hub's two crosswalk-bound commands that fail preflight. A
   declarable operation has no source gap except
@@ -452,7 +453,7 @@
   until an existing declaration contract can represent it.
 - **Per connector (runnable / declarable / blocked):** Docker Hub 4 / 0 / 50;
   Notion 42 / 0 / 7; Stripe 8 / 0 / 581; Bitbucket 50 / 136 / 111; GitLab 0 /
-  917 / 835; CircleCI 40 / 51 / 20; Sentry 3 / 144 / 76; Vercel 0 / 261 /
+  917 / 835; CircleCI 40 / 51 / 20; Sentry 36 / 111 / 76; Vercel 0 / 261 /
   139; Asana 103 / 109 / 37; Jira 563 / 0 / 54. The Docker Hub, Notion, and
   Stripe blocked counts are their respectively 54, 49, and 589 locked
   operations less the still-working currently declared commands: each source
@@ -465,8 +466,9 @@
 
 - **2026-08-25 count reconciliation:** the earlier `767 / 1,666 / 1,908`
   measurement, the interim Jira `768 / 1,663 / 1,910` measurement, the Asana
-  `789 / 1,642 / 1,910` measurement, and the current
-  `813 / 1,618 / 1,910` measurement retain the same 4,341 source
+  `789 / 1,642 / 1,910` measurement, the CircleCI
+  `813 / 1,618 / 1,910` measurement, and the current
+  `846 / 1,585 / 1,910` measurement retain the same 4,341 source
   identities. The first delta is Jira: (1)
   `jira:jira.rest.resetUserColumns` moved declarable → runnable after its
   source-derived DELETE action and exact CLI projection passed real preflight
@@ -487,6 +489,11 @@
   are unchanged source-bound request-schema gaps, not missing actions.
 - **CircleCI reconciliation:** the 24 existing implemented direct-write
   commands/action/source triples passed `TestCircleCISourceCitedImplementedWriteCommandsPassRuntimePreflight` and all 24 built-binary no-credential probes. The red table initially named `remove_url_orb_allow_list_entry`; the real declared binding is `remove_u_r_l_orb_allow_list_entry`, which the test now pins. These records move runnable +24 / declarable -24 with no connector JSON or source-lock change.
+- **Sentry reconciliation:** the 32 existing source-bound write commands and
+  `projects list` ETL path passed the expanded source endpoint/action runtime
+  regression and all 33 built-binary no-credential probes. The manifest moves
+  exactly those current command rows runnable +33 / declarable -33 without a
+  Sentry JSON, source-lock, executor, or body-schema change.
 
 Every red/green command and its result is appended when it executes. No test is
 weakened or skipped to advance a row.

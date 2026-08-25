@@ -341,3 +341,30 @@ and the action method/path equals its pinned source operation.
   spelling for `removeURLOrbAllowListEntry` to
   `remove_u_r_l_orb_allow_list_entry`. The manifest moves the 24 rows to
   runnable without changing CircleCI JSON, a source lock, or an executor.
+
+## Sentry mapping reconciliation cohort (2026-08-25)
+
+This is another ledger correction, not a new surface. The current Sentry
+source descriptor verifies all 223 operations and targeted validation returns
+zero findings. Its connector bundle already contains 36 implemented commands:
+32 source-bound declarative write actions and four ETL commands. The manifest
+nevertheless retains 33 current implemented source rows as deferred
+`cli-surface-missing-sentry` gaps—32 as `action_binding` and the existing
+`projects list` GET as `cli_projection`.
+
+- **Red:** current manifest classifications contradict runtime behavior. The
+  existing source-cited mutation test proves the 32 write paths preflight, but
+  it does not pin their source endpoint/action mapping or the one source-bound
+  ETL path.
+- **Green:** extend the runtime regression to assert all 33 exact source ID /
+  CLI path / endpoint tuples, each write's named action/method/path, and the
+  Sentry ETL binding. Then run a fresh credential-free binary probe for every
+  path and promote only those 33 existing records.
+- **Boundary:** retain the other 111 declarable rows and 76 genuine gaps. Do
+  not invent a Sentry action, command, source lock, executor, secret policy,
+  body schema, or deferred projection. This cohort consumes only contracts
+  already present on this branch.
+- **Green result:** all 32 existing source-bound writes plus `projects list`
+  pass the expanded runtime regression and all 33 built-binary credential
+  boundary probes. The manifest moves those existing rows to runnable without
+  a Sentry connector JSON, source-lock, or executor change.

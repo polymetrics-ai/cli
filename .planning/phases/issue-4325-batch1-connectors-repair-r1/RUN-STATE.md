@@ -107,6 +107,27 @@ The built baseline binary returned `error: unknown command "circleci"` (exit
   Batch 1 is `813 runnable / 1,618 declarable / 1,910 deferred` over the same
   4,341 source operations. The 51 reservations and 20 genuine gaps remain.
 
+## Current connector slice (2026-08-25, Sentry reconciliation)
+
+- Target: 33 current Sentry source paths that are already `implemented` in
+  `cli_surface.json` but are recorded as deferred in the manifest. Thirty-two
+  bind existing write actions; `projects list` is the existing source-bound
+  ETL command.
+- Red observed: the manifest still cites `cli-surface-missing-sentry`, despite
+  source import verifying 223 operations, targeted validation returning zero,
+  and the existing 32-write runtime preflight test passing.
+- Boundary: prove every exact command/action/source tuple and credential
+  boundary first. Do not alter Sentry JSON or promote the other 111 declarable
+  rows or 76 genuine gaps.
+- Outcome: source import verified all 223 Sentry operations and targeted
+  validation returned zero findings. The expanded runtime test passes all 32
+  source-bound write actions and `projects list`; a built binary in an
+  isolated credential-free project returned exactly `error: missing
+  --credential` for all 33 paths.
+- Manifest result: Sentry is now `36 runnable / 111 declarable / 76 deferred`;
+  Batch 1 is `846 runnable / 1,585 declarable / 1,910 deferred` over the same
+  4,341 source operations. No Sentry connector declaration changed.
+
 ## Jira red evidence
 
 - `go run ./cmd/connectorgen source-import jira --check` exited 1 because the

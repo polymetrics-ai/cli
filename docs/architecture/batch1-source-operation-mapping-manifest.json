@@ -1,6 +1,6 @@
 {
   "invariants": {
-    "declarable": 1618,
+    "declarable": 1585,
     "deferred": 1910,
     "deferred_has_exactly_one_concrete_missing_component": true,
     "every_record_has_cli_path": true,
@@ -16,7 +16,7 @@
       "retained_bytes",
       "live_certification"
     ],
-    "runnable": 813,
+    "runnable": 846,
     "same_path_promotion": "implemented reaches the credential boundary; deferred returns typed missing_foundation; after the named component exists, the same path and arguments reach the credential boundary",
     "source_operations": 4341,
     "zero_denominator_forbidden": true
@@ -65,10 +65,10 @@
       "source_operations": 111
     },
     {
-      "declarable": 144,
+      "declarable": 111,
       "deferred": 76,
       "provider": "sentry",
-      "runnable": 3,
+      "runnable": 36,
       "source_operations": 223
     },
     {
@@ -143,10 +143,10 @@
       "source_operations": 111
     },
     {
-      "current_nonrunnable_surface": 33,
+      "current_nonrunnable_surface": 0,
       "declaration_disposition_only": 0,
       "manifest_reservation_only": 187,
-      "materialized_runnable": 3,
+      "materialized_runnable": 36,
       "provider": "sentry",
       "source_operations": 223
     },
@@ -115735,24 +115735,14 @@
         },
         "operation_key": "rest:delete:/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f6973737565732f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/issues/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.Bulk Remove a List of Issues",
       "source": {
@@ -115899,24 +115889,14 @@
         },
         "operation_key": "rest:delete:/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f73656e7472792d6170702d696e7374616c6c6174696f6e732f7b757569647d2f65787465726e616c2d6973737565732f7b65787465726e616c5f69737375655f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/sentry-app-installations/{uuid}/external-issues/{external_issue_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.Delete an External Issue",
       "source": {
@@ -116299,24 +116279,14 @@
         },
         "operation_key": "rest:delete:/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f686f6f6b732f7b686f6f6b5f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/{hook_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.Remove a Service Hook",
       "source": {
@@ -116545,24 +116515,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6973737565732f7b69737375655f69647d2f696e746567726174696f6e732f7b696e746567726174696f6e5f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/integrations/{integration_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.Unlink an External Issue from an Issue",
       "source": {
@@ -116668,24 +116628,14 @@
         },
         "operation_key": "rest:post:/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-504f5354202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6d656d626572732f7b6d656d6265725f69647d2f7465616d732f7b7465616d5f69645f6f725f736c75677d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/\"].post.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.addOrganizationMemberTeam",
       "source": {
@@ -116750,24 +116700,14 @@
         },
         "operation_key": "rest:post:/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-504f5354202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f7465616d732f7b7465616d5f69645f6f725f736c75677d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/\"].post.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.addProjectTeam",
       "source": {
@@ -117529,24 +117469,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f64617368626f617264732f7b64617368626f6172645f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/dashboards/{dashboard_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationDashboard",
       "source": {
@@ -117570,24 +117500,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6465746563746f72732f7b6465746563746f725f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/detectors/{detector_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationDetector",
       "source": {
@@ -117652,24 +117572,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f646973636f7665722f73617665642f7b71756572795f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/discover/saved/{query_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationDiscoverSavedQuery",
       "source": {
@@ -117693,24 +117603,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f65787465726e616c2d75736572732f7b65787465726e616c5f757365725f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/external-users/{external_user_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationExternalUser",
       "source": {
@@ -117734,24 +117634,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f666f7277617264696e672f7b646174615f666f727761726465725f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/forwarding/{data_forwarder_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationForwarding",
       "source": {
@@ -117775,24 +117665,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f696e746567726174696f6e732f7b696e746567726174696f6e5f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/integrations/{integration_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationIntegration",
       "source": {
@@ -117816,24 +117696,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6973737565732f7b69737375655f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/issues/{issue_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationIssue",
       "source": {
@@ -117898,24 +117768,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/members/{member_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6d656d626572732f7b6d656d6265725f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationMember",
       "source": {
@@ -117939,24 +117799,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6d656d626572732f7b6d656d6265725f69647d2f7465616d732f7b7465616d5f69645f6f725f736c75677d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationMemberTeam",
       "source": {
@@ -118021,24 +117871,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f6e6f74696669636174696f6e732f616374696f6e732f7b616374696f6e5f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/notifications/actions/{action_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationNotificationsAction",
       "source": {
@@ -118062,24 +117902,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f70726570726f646172746966616374732f736e617073686f74732f7b736e617073686f745f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/preprodartifacts/snapshots/{snapshot_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationPreprodArtifactSnapshot",
       "source": {
@@ -118103,24 +117933,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/releases/{version}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f72656c65617365732f7b76657273696f6e7d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/releases/{version}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationRelease",
       "source": {
@@ -118144,24 +117964,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f72656c65617365732f7b76657273696f6e7d2f66696c65732f7b66696c655f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/releases/{version}/files/{file_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationReleaseFile",
       "source": {
@@ -118185,24 +117995,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7363696d2f76322f47726f7570732f7b7465616d5f69645f6f725f736c75677d",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/scim/v2/Groups/{team_id_or_slug}\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationScimV2Group",
       "source": {
@@ -118226,24 +118026,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7363696d2f76322f55736572732f7b6d656d6265725f69647d",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/scim/v2/Users/{member_id}\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationScimV2User",
       "source": {
@@ -118267,24 +118057,14 @@
         },
         "operation_key": "rest:delete:/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f6f7267616e697a6174696f6e732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f776f726b666c6f77732f7b776f726b666c6f775f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/workflows/{workflow_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteOrganizationWorkflow",
       "source": {
@@ -118349,24 +118129,14 @@
         },
         "operation_key": "rest:delete:/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteProject",
       "source": {
@@ -118390,24 +118160,14 @@
         },
         "operation_key": "rest:delete:/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f6b6579732f7b6b65795f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteProjectKey",
       "source": {
@@ -118472,24 +118232,14 @@
         },
         "operation_key": "rest:delete:/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f72656c65617365732f7b76657273696f6e7d2f66696c65732f7b66696c655f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/releases/{version}/files/{file_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteProjectReleaseFile",
       "source": {
@@ -118513,24 +118263,14 @@
         },
         "operation_key": "rest:delete:/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f7265706c6179732f7b7265706c61795f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/replays/{replay_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteProjectReplay",
       "source": {
@@ -118554,24 +118294,14 @@
         },
         "operation_key": "rest:delete:/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f73796d626f6c2d736f75726365732f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/symbol-sources/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteProjectSymbolSource",
       "source": {
@@ -118595,24 +118325,14 @@
         },
         "operation_key": "rest:delete:/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f7465616d732f7b7465616d5f69645f6f725f736c75677d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteProjectTeam",
       "source": {
@@ -118636,24 +118356,14 @@
         },
         "operation_key": "rest:delete:/api/0/sentry-apps/{sentry_app_id_or_slug}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f73656e7472792d617070732f7b73656e7472795f6170705f69645f6f725f736c75677d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/sentry-apps/{sentry_app_id_or_slug}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteSentryApp",
       "source": {
@@ -118677,24 +118387,14 @@
         },
         "operation_key": "rest:delete:/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f7465616d732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b7465616d5f69645f6f725f736c75677d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteTeam",
       "source": {
@@ -118718,24 +118418,14 @@
         },
         "operation_key": "rest:delete:/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-44454c455445202f6170692f302f7465616d732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b7465616d5f69645f6f725f736c75677d2f65787465726e616c2d7465616d732f7b65787465726e616c5f7465616d5f69647d2f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/external-teams/{external_team_id}/\"].delete.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.deleteTeamExternalTeam",
       "source": {
@@ -121506,24 +121196,14 @@
         },
         "operation_key": "rest:get:/api/0/organizations/{organization_id_or_slug}/projects/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "projects list",
         "source": "current_cli_surface"
       },
       "lane": "direct_read",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "cli_projection",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/organizations/{organization_id_or_slug}/projects/\"].get.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.listOrganizationProjects",
       "source": {
@@ -124725,24 +124405,14 @@
         },
         "operation_key": "rest:post:/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/"
       },
-      "declaration_state": "deferred",
+      "declaration_state": "implemented",
       "intended_cli_path": {
         "current_availability": "implemented",
         "path": "api op-504f5354202f6170692f302f70726f6a656374732f7b6f7267616e697a6174696f6e5f69645f6f725f736c75677d2f7b70726f6a6563745f69645f6f725f736c75677d2f70726570726f646172746966616374732f736e617073686f74732f",
         "source": "current_cli_surface"
       },
       "lane": "direct_write",
-      "mapping_state": "declarable",
-      "missing_implementation": {
-        "component": "action_binding",
-        "evidence": "cmd/connectorgen/surfacesync.go:63-64 never invents a command; internal/connectors/defs/sentry/cli_surface.json is absent. internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json: paths paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/preprodartifacts/snapshots/\"].post.",
-        "foundation": "cli-surface-missing-sentry",
-        "projection_prerequisite": {
-          "kind": "runtime_deferred_command_projection",
-          "same_cli_path_required": true,
-          "status": "required"
-        }
-      },
+      "mapping_state": "runnable",
       "provider": "sentry",
       "record_key": "sentry:sentry.rest.uploadProjectPreprodArtifactSnapshot",
       "source": {

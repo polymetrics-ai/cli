@@ -40,11 +40,11 @@ claimed for the manifest itself.
 | Bitbucket | 50 | 136 | 111 | 297 |
 | GitLab | 0 | 917 | 835 | 1,752 |
 | CircleCI | 40 | 51 | 20 | 111 |
-| Sentry | 3 | 144 | 76 | 223 |
+| Sentry | 36 | 111 | 76 | 223 |
 | Vercel | 0 | 261 | 139 | 400 |
 | Asana | 103 | 109 | 37 | 249 |
 | Jira | 563 | 0 | 54 | 617 |
-| **Total** | **813** | **1,618** | **1,910** | **4,341** |
+| **Total** | **846** | **1,585** | **1,910** | **4,341** |
 
 The split above is the canonical source accounting in
 `.planning/phases/issue-4325-batch1-connectors-repair-r1/TDD-LEDGER.md:379-398`.
@@ -56,7 +56,7 @@ The manifest never has a zero denominator.
 ### Count reconciliation (2026-08-25)
 
 The initial working report, `767 / 1,666 / 1,908`, and the current canonical
-`813 / 1,618 / 1,910` split have the same 4,341 source-lock rows. There is no
+`846 / 1,585 / 1,910` split have the same 4,341 source-lock rows. There is no
 denominator or provider-lock change. The Jira rows below were the first
 reconciliation, producing the interim `768 / 1,663 / 1,910` split.
 
@@ -84,6 +84,14 @@ declarable -24`; deferred remains 1,910. The test also caught and recorded
 the real action spelling for `removeURLOrbAllowListEntry`:
 `remove_u_r_l_orb_allow_list_entry`.
 
+The fourth reconciliation promotes 33 Sentry source identities from
+declarable to runnable: the 32 existing source-bound write actions plus the
+existing `projects list` ETL command. Their source descriptor check and
+targeted validation pass; the runtime regression checks every write
+action/method/path against its one source endpoint and checks the ETL endpoint.
+All 33 isolated built-binary probes reach exactly `error: missing
+--credential`. This is `runnable +33; declarable -33`; deferred remains 1,910.
+
 `materialization_counts` in the JSON is the machine-readable companion to this
 reconciliation. It classifies every source operation without treating an
 existing but non-runnable declaration as materialized.
@@ -103,11 +111,11 @@ for each row remain in the corresponding `records[]` element.
 | Bitbucket | 50 | 1 | 0 | 246 | 297 |
 | GitLab | 0 | 0 | 4 | 1,748 | 1,752 |
 | CircleCI | 40 | 0 | 0 | 71 | 111 |
-| Sentry | 3 | 33 | 0 | 187 | 223 |
+| Sentry | 36 | 0 | 0 | 187 | 223 |
 | Vercel | 0 | 0 | 0 | 400 | 400 |
 | Asana | 103 | 146 | 0 | 0 | 249 |
 | Jira | 563 | 28 | 0 | 26 | 617 |
-| **Total** | **813** | **253** | **4** | **3,271** | **4,341** |
+| **Total** | **846** | **220** | **4** | **3,271** | **4,341** |
 
 “Materialized runnable” means the record has both
 `intended_cli_path.source: current_cli_surface` and
@@ -134,7 +142,7 @@ Every record has this shape:
 | `lane` | Source-ledger parity lane for the operation. |
 | `canonical_target` | `rest:<lowercase-method>:<exact-provider-path>` plus the same endpoint as structured method/path. |
 | `intended_cli_path` | A nonempty, unique provider command path with the source of that mapping and its current availability. `manifest_reservation` is an exact future command projection, not an executable generic HTTP surface. |
-| `declaration_state` | `implemented` only for the 813 already runnable rows; otherwise `deferred`. |
+| `declaration_state` | `implemented` only for the 846 already runnable rows; otherwise `deferred`. |
 | `mapping_state` | `runnable`, `declarable`, or `deferred`. `declarable` means the current source shape needs connector-owned materialization, not a shared provider/importer fix. |
 | `missing_implementation` | Absent only when `declaration_state` is `implemented`; otherwise present exactly once, with one concrete component, source-cited foundation/evidence, and a machine-readable `projection_prerequisite`. |
 
@@ -174,7 +182,7 @@ does not depend on PR #4351 being merged.
 
 ## Materialization order
 
-The 1,618 `declarable` rows are the immediate connector-mapping queue. Their
+The 1,585 `declarable` rows are the immediate connector-mapping queue. Their
 manifest records already provide one source citation, lane, canonical target,
 path, and a concrete connector-owned component. Materialize a bounded
 connector slice by consuming those fields into the provider definition, then
@@ -194,7 +202,7 @@ three transitions rather than only a declaration count:
 
 1. Read the provider source lock and manifest together; reject a missing,
    duplicate, mismatched, or empty-path record. Assert the expected nonzero
-provider denominator and the aggregate `4,341 / 813 / 1,618 / 1,910`
+provider denominator and the aggregate `4,341 / 846 / 1,585 / 1,910`
    split.
 2. For every `implemented` record, run the built binary in its own
    credential-free project and assert the exact credential-boundary result;
