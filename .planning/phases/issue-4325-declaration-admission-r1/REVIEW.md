@@ -100,6 +100,11 @@ in this PR's committed diff.
    methods, absolute URLs, queries/fragments, controls, traversal, backslashes,
    and repeated separators. Legacy implemented provider-specific identities are
    not silently reclassified by this new admission-only constraint.
+9. **Fleet compatibility red accepted:** the first shared resolver compared
+   runtime-relative paths literally with provider-facing command endpoints,
+   rejecting 243 valid base-path and placeholder aliases. Binding existence
+   and identity remain exact, while the command projection retains the cited
+   provider endpoint. The complete implemented-preflight and CLI suites pass.
 
 ## Automated review route
 

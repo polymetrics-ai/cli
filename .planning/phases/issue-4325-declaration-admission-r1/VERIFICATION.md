@@ -84,6 +84,50 @@ certificate evidence.
 | `go test -timeout 20m ./internal/cli -run '^TestShippedDeclarationTargetReachesPublicMissingFoundationEnvelopeWithoutAPISurface$'` | pass; `defs.FS` compact ledger and public `internal/missing_foundation` envelope work with no API-surface manifest |
 | `go test -timeout 20m ./internal/connectors/commandrunner -run '^TestPreflightDeferredCommand'` | pass; oversized foundation text retains typed `system/missing_foundation` |
 
+### Final clean-checkout audit-repair verification
+
+The complete generic tree immediately before this evidence-only update was
+verified from a detached clean worktree. The dirty Stripe and Docker Hub
+handoffs were absent from that tree.
+
+| Exact command | Result |
+| --- | --- |
+| `gofmt -w cmd internal && go mod tidy && git diff --exit-code -- go.mod go.sum && git diff --exit-code` | pass; no formatting, module, or generated working-tree drift |
+| `go test -count=1 -timeout 20m ./cmd/connectorgen ./internal/connectors/engine ./internal/connectors` | pass (`cmd/connectorgen` 299.793s; engine 20.632s; connectors 7.269s) |
+| `go test -count=1 -timeout 20m ./internal/connectors/commandrunner` | pass (32.889s), including all 5,149 commands claimed implemented |
+| `go test -count=1 -timeout 20m ./internal/app` | pass (376.835s) |
+| `go test -count=1 -timeout 20m ./internal/cli` | pass (636.213s; 83 real local certify invocations) |
+| `go vet ./...` | pass |
+| `go build -o pm ./cmd/pm` | pass |
+| `make tidy-check` | pass |
+| `make lint` | pass (`0 issues`) |
+| `make docs-check-no-build` | pass (`Validated connector docs in docs/connectors`) |
+| `make smoke-no-build` | pass (`smoke ok`) |
+| `make agent-contract-check` | pass; canonical contract and projections current |
+| `make connectorgen-validate` | pass; 553 connectors, 0 findings |
+| `make connectorgen-surface-sync` | pass; 553 connectors, 0 changes |
+| `make connectorgen-declaration-admission` | pass; 1 required connector, 1 source operation, 0 findings |
+| `make connectorgen-operation-evidence` | pass; 1,525 rows, 5 rollups, fixed-100 passed |
+| `make github-parity-artifacts-check` | pass; 17 Node tests and both generated ledgers current |
+| `make connectorgen-certification-subject` | pass; current subject current |
+| `make connectorgen-certification-matrix` | pass; 3 connector shards current |
+| `make connectorgen-certification-candidates` | pass; GitHub candidates current |
+| `make connectorgen-certification-sweep` | pass; GitHub sweep current (1,616 rows, 1,612 commands) |
+| `make connector-boundary` | pass; 322 files, 553 connectors, 0 findings |
+| `make connector-canon-check` | pass |
+| `make release-workflow-check` | pass, including pinned dependencies, release parity/tooling/size/layout, and installed GitHub certification proof |
+| `scripts/verify-gsd-workflow origin/main` | pass; implementation changes have GSD/TDD evidence |
+| Fresh local project: `./pm github label delete --root "$project_root" --json` | exit 1 at `missing --credential`; no provider I/O |
+
+The first clean candidate exposed a real red regression: a literal comparison
+between a runtime-relative declaration path and the provider-facing command
+endpoint rejected 243 already-runnable commands. The green resolver now proves
+the exact stream/write/operation identity while retaining the command
+projection's provider endpoint; the full 5,149-command runtime-preflight sweep
+and CLI suite pass. The boundary gate also caught a neutral helper spelling
+whose normalized text contained the provider token `cal-com`; the helper was
+renamed and the whole-tree boundary rerun passed.
+
 The aggregate `go test -timeout 20m ./...` and serial `make verify` are not
 run as one process: the repository's `AGENTS.md` explicitly says a per-command
 timeout routinely cuts off the full suite and directs agents to run changed
