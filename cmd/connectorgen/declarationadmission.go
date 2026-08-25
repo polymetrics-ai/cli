@@ -537,12 +537,7 @@ func declarationAdmissionCommand(bundle engine.Bundle, path string) (engine.CLIC
 }
 
 func declarationAdmissionCommandCitesEndpoint(command engine.CLICommand, endpoint declarationAdmissionEndpoint) bool {
-	for _, reference := range command.APISurface {
-		if strings.EqualFold(reference.Method, endpoint.Method) && reference.Path == endpoint.Path {
-			return true
-		}
-	}
-	return false
+	return len(command.APISurface) == 1 && strings.EqualFold(command.APISurface[0].Method, endpoint.Method) && command.APISurface[0].Path == endpoint.Path
 }
 
 func declarationAdmissionSurfaceHasEndpoint(surface *engine.APISurface, endpoint declarationAdmissionEndpoint) bool {

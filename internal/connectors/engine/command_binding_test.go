@@ -11,7 +11,7 @@ func TestResolveImplementedCommandBindingCoversEveryAdmissionRuntimeKind(t *test
 	bundle := Bundle{
 		Name: "acme",
 		Streams: []StreamSpec{{
-			Name: "widgets", Method: http.MethodGet, Path: "/accounts/{{ config.account }}/widgets",
+			Name: "widgets", Method: http.MethodGet, Path: "/widgets",
 		}},
 		Writes: []WriteAction{
 			{Name: "create_widget", Kind: "create", Method: http.MethodPost, Path: "/widgets", RecordSchema: []byte(`{"type":"object"}`)},
@@ -37,11 +37,11 @@ func TestResolveImplementedCommandBindingCoversEveryAdmissionRuntimeKind(t *test
 			name: "templated ETL stream",
 			command: connectors.CommandSurfaceCommand{
 				Path: "widget list", Intent: "etl", Availability: "implemented", Stream: "widgets",
-				APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/accounts/{account}/widgets"}},
+				APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/v2/accounts/{account_id}/widgets"}},
 			},
 			wantBinding: connectors.CommandBindingIdentity{Kind: connectors.CommandBindingStream, ID: "widgets"},
 			wantMethod:  http.MethodGet,
-			wantPath:    "/accounts/{account}/widgets",
+			wantPath:    "/v2/accounts/{account_id}/widgets",
 		},
 		{
 			name: "operation-free direct read",

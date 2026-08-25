@@ -123,7 +123,7 @@ func TestDeclarationAdmissionRejectsCompletenessAndBindingDefects(t *testing.T) 
 				bundle.CLISurface.Commands[1].Availability = declarationAdmissionStateImplemented
 				bundle.CLISurface.Commands[1].Foundation = nil
 				bundle.CLISurface.Commands[1].Write = "create_widget"
-				bundle.Writes = []engine.WriteAction{{Name: "create_widget", Method: "POST", Path: "/v1/other-widgets"}}
+				bundle.Writes = []engine.WriteAction{{Name: "different_create_widget", Method: "POST", Path: "/v1/widgets"}}
 			},
 			want: "runtime binding",
 		},
@@ -285,6 +285,13 @@ func TestDeclarationAdmissionAuditRepairRejectsWeakIdentityCitationAndDeferredTa
 			name: "implemented target is duplicated",
 			edit: func(_ *declarationAdmissionDocument, bundle *engine.Bundle) {
 				bundle.Surface.Endpoints = append(bundle.Surface.Endpoints, bundle.Surface.Endpoints[0])
+			},
+			want: "does not map to the canonical API surface endpoint",
+		},
+		{
+			name: "command target reference is duplicated",
+			edit: func(_ *declarationAdmissionDocument, bundle *engine.Bundle) {
+				bundle.CLISurface.Commands[0].APISurface = append(bundle.CLISurface.Commands[0].APISurface, bundle.CLISurface.Commands[0].APISurface[0])
 			},
 			want: "does not map to the canonical API surface endpoint",
 		},

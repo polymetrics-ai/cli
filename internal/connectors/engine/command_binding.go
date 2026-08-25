@@ -87,10 +87,17 @@ func ResolveImplementedCommandBinding(b Bundle, cmd connectors.CommandSurfaceCom
 
 	if len(cmd.APISurface) == 1 {
 		reference := cmd.APISurface[0]
-		// A GRAPHQL API-surface identity names the fixed document/field rather
-		// than the POST transport. The binding ID disambiguates it.
-		if reference.Method != "GRAPHQL" && (!strings.EqualFold(reference.Method, resolved.Method) || reference.Path != resolved.Path) {
-			return ResolvedCommandBinding{}, fmt.Errorf("implemented command %q runtime binding resolves to %s %s, not %s %s", cmd.Path, resolved.Method, resolved.Path, reference.Method, reference.Path)
+		// The command projection owns the provider-document endpoint identity.
+		// Runtime declarations frequently keep a path relative to a configurable
+		// base URL, or use a different local placeholder name for the same path
+		// slot. Those are intentionally valid runtime bindings and must not be
+		// reclassified by a literal comparison that commandrunner never made.
+		// A GRAPHQL reference can instead name the fixed document/field; retain
+		// the POST transport in that representation and let Binding disambiguate
+		// operations sharing it.
+		if reference.Method != "GRAPHQL" {
+			resolved.Method = strings.ToUpper(strings.TrimSpace(reference.Method))
+			resolved.Path = reference.Path
 		}
 	}
 	return resolved, nil
